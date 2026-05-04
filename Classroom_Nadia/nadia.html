@@ -63,13 +63,17 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html, body { min-height: 100%; }
+    html { min-height: 100%; background: var(--Surface-general-default, #fff); }
 
     body {
       font-family: 'Poppins', sans-serif;
       background: var(--Surface-general-default, #fff);
       max-width: 1440px;
       margin: 0 auto;
+    }
+
+    /* Page content — padded area below navbar */
+    .page-content {
       padding: 48px 40px;
       display: flex;
       flex-direction: column;
@@ -77,7 +81,194 @@
     }
 
     @media (max-width: 425px) {
-      body { padding: 24px 16px; gap: 16px; }
+      .page-content { padding: 24px 16px; gap: 16px; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       Navbar 1.5 — node 1777:13566
+       Spec: flex-col gap-12px, two bars stacked
+       ══════════════════════════════════════════════════════════════ */
+    .navbar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;             /* DS gap between brand-bar and nav-bar */
+      width: 100%;
+    }
+
+    /* ── Brand Bar (top row, 64px) ──────────────────────────────── */
+    .navbar__brand {
+      background: var(--Surface-general-default, #fff);
+      border-bottom: 1px solid var(--og-500);  /* border/primary/default */
+      border-left:   1px solid var(--og-500);
+      border-right:  1px solid var(--og-500);
+      border-radius: 0 0 24px 24px;            /* corner-4xl bottom only */
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 28px;             /* spacing/space-2xl */
+      padding: 8px 24px;    /* spacing/space-xs  spacing/space-xl */
+    }
+
+    /* Pandai logo — 116.5 × 28px */
+    .navbar__logo {
+      width: 116.5px;
+      height: 28px;
+      position: relative;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+    .navbar__logo-mark {
+      width: 27px;
+      height: 28px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .navbar__logo-word {
+      flex: 1;
+      height: 70%;    /* inset 15% top/bottom */
+      object-fit: contain;
+      object-position: left center;
+      margin-left: 4px;
+    }
+
+    /* Actions area — grows to fill, aligns right */
+    .navbar__actions {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 24px;             /* spacing/space-xl */
+    }
+
+    /* Icon row — search, maximize, smartphone, bell, EN, waffle */
+    .navbar__icons {
+      display: flex;
+      align-items: center;
+      gap: 28px;             /* spacing/space-2xl */
+    }
+    .navbar__icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .navbar__icon img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+
+    /* Avatar (L = 48px) + notification badge */
+    .navbar__avatar-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .navbar__avatar-l {
+      width: 48px;
+      height: 48px;
+      border-radius: 60px;           /* corner-rounded */
+      border: 1px solid var(--og-500); /* border/default */
+      background: var(--Surface-general-default, #fff);
+      overflow: hidden;
+      display: flex;
+      align-items: flex-start;
+    }
+    .navbar__avatar-l img {
+      /* Figma spec: left-[-7px] right-[-7px] top-[-1px] → overflow avatar */
+      width: calc(100% + 14px);
+      margin-left: -7px;
+      margin-top: -1px;
+    }
+    /* Badges - Number - 1.5 */
+    .navbar__notif {
+      position: absolute;
+      top: 0;
+      right: -0.5px;
+      min-width: 20px;
+      height: 20px;
+      background: var(--og-500);            /* surface/primary/default */
+      border-radius: 60px;                  /* corner-rounded */
+      padding: 4px;                         /* spacing/space-xxs */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;                      /* Body/B7 */
+      font-weight: 600;
+      line-height: 12px;                    /* spacing/space-s */
+      color: #e9fbf5;                       /* text/primary/on-color */
+      white-space: nowrap;
+    }
+
+    /* ── Nav Content Bar (bottom row, 56px pill) ────────────────── */
+    .navbar__content {
+      background: var(--Surface-general-default, #fff);
+      border: 1px solid var(--og-500);   /* border/default */
+      border-radius: 999px;              /* corner-pill */
+      height: 56px;
+      max-height: 64px;
+      display: flex;
+      align-items: flex-start;
+      padding: 8px;                      /* spacing/space-xs */
+    }
+
+    .navbar__nav-items {
+      display: flex;
+      align-items: center;
+      gap: 8px;                          /* spacing/space-xs */
+    }
+
+    /* Button - NavBar - Dropdown - 1.5 (inactive) */
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;                          /* spacing/space-xs */
+      padding: 8px 12px;                 /* spacing/space-xs  spacing/space-s */
+      border-radius: 999px;              /* corner-pill */
+      border: none;
+      background: transparent;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;                   /* Body/B1 */
+      font-weight: 600;
+      line-height: 20px;
+      color: #666;                       /* text/default/body */
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      height: 40px;
+      flex-shrink: 0;
+    }
+    .nav-btn .nav-icon {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .nav-btn .nav-chevron {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    /* Active state — Class button */
+    .nav-btn--active {
+      background: var(--og-500);         /* surface/primary/default */
+      border: 1px solid var(--og-600);   /* border/primary/focus */
+      color: #e9fbf5;                    /* text/primary/on-color */
+    }
+    /* Active chevron rotates 180° (points up) */
+    .nav-btn--active .nav-chevron { transform: rotate(180deg); }
+    /* Invert icon colour to white on green bg */
+    .nav-btn--active .nav-icon { filter: brightness(0) invert(1); }
+
+    @media (max-width: 425px) {
+      .navbar__content { border-radius: 16px; height: auto; }
+      .navbar__nav-items { flex-wrap: wrap; gap: 4px; }
+      .navbar__icons { gap: 16px; }
     }
 
     /* ── DS Avatar 1.5 ──────────────────────────────────────────── */
@@ -338,6 +529,100 @@
 </head>
 <body>
 
+  <!-- ══════════════════════════════════════════════════════════
+       Navbar 1.5 — node 1777:13566
+       ══════════════════════════════════════════════════════════ -->
+  <nav class="navbar" aria-label="Main navigation">
+
+    <!-- Brand Bar -->
+    <div class="navbar__brand">
+      <!-- Logo/Pandai/Logo Horizontal -->
+      <div class="navbar__logo">
+        <img class="navbar__logo-mark" src="navbar/logo-mark.png" alt="">
+        <img class="navbar__logo-word"  src="navbar/logo-wordmark.png" alt="Pandai">
+      </div>
+
+      <!-- Actions: icons + avatar -->
+      <div class="navbar__actions">
+        <div class="navbar__icons">
+          <div class="navbar__icon"><img src="navbar/icon-search.png"     alt="Search"></div>
+          <div class="navbar__icon"><img src="navbar/icon-maximize.png"   alt="Fullscreen"></div>
+          <div class="navbar__icon"><img src="navbar/icon-smartphone.png" alt="Mobile app"></div>
+          <div class="navbar__icon"><img src="navbar/icon-bell.png"       alt="Notifications"></div>
+          <div class="navbar__icon"><img src="navbar/icon-en.png"         alt="Language"></div>
+          <div class="navbar__icon"><img src="navbar/icon-waffle.png"     alt="Apps menu"></div>
+        </div>
+        <!-- Avatar L (48px) + Badges - Number - 1.5 -->
+        <div class="navbar__avatar-wrap">
+          <div class="navbar__avatar-l">
+            <img src="navbar/icon-avatar-user.png" alt="User profile">
+          </div>
+          <div class="navbar__notif">15</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navbar Content Bar (pill) -->
+    <div class="navbar__content">
+      <div class="navbar__nav-items">
+        <!-- Quiz -->
+        <a href="#" class="nav-btn">
+          <img class="nav-icon" src="navbar/icon-check-circle.png" alt="">
+          Quiz
+        </a>
+        <!-- Quiz (second instance) -->
+        <a href="#" class="nav-btn">
+          <img class="nav-icon" src="navbar/icon-check-circle.png" alt="">
+          Quiz
+        </a>
+        <!-- Battle -->
+        <a href="#" class="nav-btn">
+          <img class="nav-icon" src="navbar/icon-battle.png" alt="">
+          Battle
+        </a>
+        <!-- Practice -->
+        <a href="#" class="nav-btn">
+          <img class="nav-icon" src="navbar/icon-book-open.png" alt="">
+          Practice
+        </a>
+        <!-- Class — active state -->
+        <button class="nav-btn nav-btn--active">
+          <img class="nav-icon" src="navbar/icon-users.png" alt="">
+          Class
+          <img class="nav-chevron" src="navbar/icon-chevron-down.png" alt="">
+        </button>
+        <!-- Learn -->
+        <a href="#" class="nav-btn">
+          <img class="nav-icon" src="navbar/icon-book.png" alt="">
+          Learn
+          <img class="nav-chevron" src="navbar/icon-chevron-down.png" alt="">
+        </a>
+        <!-- Achievement -->
+        <a href="#" class="nav-btn">
+          <img class="nav-icon" src="navbar/icon-book-open.png" alt="">
+          Achievement
+          <img class="nav-chevron" src="navbar/icon-chevron-down.png" alt="">
+        </a>
+        <!-- Potential -->
+        <a href="#" class="nav-btn">
+          <img class="nav-icon" src="navbar/icon-star.png" alt="">
+          Potential
+          <img class="nav-chevron" src="navbar/icon-chevron-down.png" alt="">
+        </a>
+        <!-- Rewards -->
+        <a href="#" class="nav-btn">
+          <img class="nav-icon" src="navbar/icon-gift.png" alt="">
+          Rewards
+          <img class="nav-chevron" src="navbar/icon-chevron-down.png" alt="">
+        </a>
+      </div>
+    </div>
+
+  </nav>
+
+  <!-- Page content — padded area ──────────────────────────── -->
+  <div class="page-content">
+
   <!-- ── School Header Card ──────────────────────────────────── -->
   <div class="school-card">
     <div class="ds-avatar ds-avatar--xxl">
@@ -563,6 +848,8 @@
     </div>
 
   </div><!-- /.cards-grid -->
+
+  </div><!-- /.page-content -->
 
 </body>
 </html>
