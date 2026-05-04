@@ -74,7 +74,7 @@
 
     /* Page content — padded area below navbar */
     .page-content {
-      padding: 48px 40px;
+      padding: 48px 60px;
       display: flex;
       flex-direction: column;
       gap: 24px;
@@ -155,11 +155,17 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      color: #666;             /* text/default/body */
     }
-    .navbar__icon img {
+    .navbar__icon svg {
       width: 24px;
       height: 24px;
-      object-fit: contain;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
     }
 
     /* Avatar (L = 48px) + notification badge */
@@ -241,29 +247,27 @@
       height: 40px;
       flex-shrink: 0;
     }
-    .nav-btn .nav-icon {
+    .nav-btn svg.nav-icon,
+    .nav-btn svg.nav-chevron {
       width: 20px;
       height: 20px;
-      object-fit: contain;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
       flex-shrink: 0;
     }
-    .nav-btn .nav-chevron {
-      width: 20px;
-      height: 20px;
-      object-fit: contain;
-      flex-shrink: 0;
-    }
+    .nav-btn svg.nav-chevron { width: 18px; height: 18px; }
 
     /* Active state — Class button */
     .nav-btn--active {
       background: var(--og-500);         /* surface/primary/default */
       border: 1px solid var(--og-600);   /* border/primary/focus */
-      color: #e9fbf5;                    /* text/primary/on-color */
+      color: #e9fbf5;                    /* text/primary/on-color — cascades to SVG stroke */
     }
-    /* Active chevron rotates 180° (points up) */
-    .nav-btn--active .nav-chevron { transform: rotate(180deg); }
-    /* Invert icon colour to white on green bg */
-    .nav-btn--active .nav-icon { filter: brightness(0) invert(1); }
+    /* Active chevron rotates 180° (points up — open state) */
+    .nav-btn--active svg.nav-chevron { transform: rotate(180deg); }
 
     @media (max-width: 425px) {
       .navbar__content { border-radius: 16px; height: auto; }
@@ -545,12 +549,34 @@
       <!-- Actions: icons + avatar -->
       <div class="navbar__actions">
         <div class="navbar__icons">
-          <div class="navbar__icon"><img src="navbar/icon-search.png"     alt="Search"></div>
-          <div class="navbar__icon"><img src="navbar/icon-maximize.png"   alt="Fullscreen"></div>
-          <div class="navbar__icon"><img src="navbar/icon-smartphone.png" alt="Mobile app"></div>
-          <div class="navbar__icon"><img src="navbar/icon-bell.png"       alt="Notifications"></div>
-          <div class="navbar__icon"><img src="navbar/icon-en.png"         alt="Language"></div>
-          <div class="navbar__icon"><img src="navbar/icon-waffle.png"     alt="Apps menu"></div>
+          <!-- Outline/search — node 260:1103 -->
+          <div class="navbar__icon" title="Search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <!-- Outline/maximize — node 260:915 -->
+          <div class="navbar__icon" title="Fullscreen">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+          </div>
+          <!-- Outline/smartphone — node 260:1178 -->
+          <div class="navbar__icon" title="Mobile app">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          </div>
+          <!-- Outline/bell — node 260:491 -->
+          <div class="navbar__icon" title="Notifications">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <!-- Outline/EN — node 1104:2538 (DS export) -->
+          <div class="navbar__icon" title="Language: English">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6125 6V17.2519L13.0858 6V17.2519M9.12861 6.05025H3V11.6511M3 11.6511V17.2519H9.12861M3 11.6511H9.1812 11.6511"/></svg>
+          </div>
+          <!-- Outline/waffle-menu — node 1070:2215 (DS export) -->
+          <div class="navbar__icon" title="Apps">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="5"  cy="5"  r="1"/><circle cx="12" cy="5"  r="1"/><circle cx="19" cy="5"  r="1"/>
+              <circle cx="5"  cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>
+              <circle cx="5"  cy="19" r="1"/><circle cx="12" cy="19" r="1"/><circle cx="19" cy="19" r="1"/>
+            </svg>
+          </div>
         </div>
         <!-- Avatar L (48px) + Badges - Number - 1.5 -->
         <div class="navbar__avatar-wrap">
@@ -565,55 +591,60 @@
     <!-- Navbar Content Bar (pill) -->
     <div class="navbar__content">
       <div class="navbar__nav-items">
-        <!-- Quiz -->
+        <!-- Quiz — Outline/check-circle node 260:527 -->
         <a href="#" class="nav-btn">
-          <img class="nav-icon" src="navbar/icon-check-circle.png" alt="">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
           Quiz
         </a>
         <!-- Quiz (second instance) -->
         <a href="#" class="nav-btn">
-          <img class="nav-icon" src="navbar/icon-check-circle.png" alt="">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
           Quiz
         </a>
-        <!-- Battle -->
+        <!-- Battle — Outline/battle node 1070:8064 (DS export) -->
         <a href="#" class="nav-btn">
-          <img class="nav-icon" src="navbar/icon-battle.png" alt="">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 3V8L10 17L6 21L3 18L7 14L16 3H21Z"/>
+            <path d="M5 13L11 19"/>
+            <path d="M14.3199 17.32L17.9999 21L20.9999 18L17.6349 14.635"/>
+            <path d="M10 5.5L8 3H3V8L6 10.5"/>
+          </svg>
           Battle
         </a>
-        <!-- Practice -->
+        <!-- Practice — Outline/book-open node 260:498 -->
         <a href="#" class="nav-btn">
-          <img class="nav-icon" src="navbar/icon-book-open.png" alt="">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
           Practice
         </a>
-        <!-- Class — active state -->
+        <!-- Class — active — Outline/users node 260:1321 -->
         <button class="nav-btn nav-btn--active">
-          <img class="nav-icon" src="navbar/icon-users.png" alt="">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           Class
-          <img class="nav-chevron" src="navbar/icon-chevron-down.png" alt="">
+          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <!-- Learn -->
+        <!-- Learn — Outline/book node 260:501 -->
         <a href="#" class="nav-btn">
-          <img class="nav-icon" src="navbar/icon-book.png" alt="">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
           Learn
-          <img class="nav-chevron" src="navbar/icon-chevron-down.png" alt="">
+          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
         </a>
-        <!-- Achievement -->
+        <!-- Achievement — Outline/book-open node 260:498 -->
         <a href="#" class="nav-btn">
-          <img class="nav-icon" src="navbar/icon-book-open.png" alt="">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
           Achievement
-          <img class="nav-chevron" src="navbar/icon-chevron-down.png" alt="">
+          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
         </a>
-        <!-- Potential -->
+        <!-- Potential — Outline/star node 260:1192 -->
         <a href="#" class="nav-btn">
-          <img class="nav-icon" src="navbar/icon-star.png" alt="">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           Potential
-          <img class="nav-chevron" src="navbar/icon-chevron-down.png" alt="">
+          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
         </a>
-        <!-- Rewards -->
+        <!-- Rewards — Outline/gift node 260:765 -->
         <a href="#" class="nav-btn">
-          <img class="nav-icon" src="navbar/icon-gift.png" alt="">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
           Rewards
-          <img class="nav-chevron" src="navbar/icon-chevron-down.png" alt="">
+          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
         </a>
       </div>
     </div>
