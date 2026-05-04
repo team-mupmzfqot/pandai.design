@@ -21,6 +21,112 @@
 
 ---
 
+## Claude Code — Design Development Rules
+
+> These rules are **non-negotiable** and apply to every design implementation session.
+> They are derived from explicit instructions + mistakes made during the modal development session (May 2026).
+
+---
+
+### 1. Always use the DS — never assume or generate
+
+- Every component, token, color, spacing value, radius, icon, and asset **must come from the Pandai DS 1.5 file (`TLVKe3bgJTdVvuPAzgDq2f`)**.
+- Never guess, approximate, or invent any design value. If a value is unknown, use `get_design_context` or `use_figma` to pull it live from Figma before writing any code.
+- Never create a custom component when a DS equivalent exists. Always check the component pages first.
+
+**Mistake made:** Primary color was guessed as `#2FAC51`. Actual DS value is `#00cc85` (`Surface/primary/default`). `Text/default/heading` was assumed as dark navy `#0F172A` — actual value is `#404040`. `Text/primary/on-color` was assumed as pure white — actual value is `#e9fbf5`.
+
+---
+
+### 2. Always refer to Component Variants & States for interactions
+
+- Every interactive state (**Default, Hover, Pressed/Active, Selected, Disabled, Focus**) is a distinct Figma variant with its own token bindings. **Do not approximate.**
+- Pull each state's node via `get_design_context` separately. Never derive hover/pressed colors by manually darkening or lightening a default color.
+- Transitions between states must use the exact token values from the DS variant, not CSS color manipulation.
+
+**Mistake made:**
+- Primary button hover was assumed to be a darker green. Actual DS: Primary hover transitions to the **Secondary palette** — `Surface/secondary/default` (`#b5f291`) bg, `Border/secondary/focus` (`#70bc6f`) border, `Text/secondary/focus` (`#70bc6f`) text.
+- Secondary button Pressed state was not implemented. Actual DS: Secondary pressed **fills solid** — `Surface/primary/default` bg + `Text/primary/on-color` text.
+- Disabled state was invented. Actual DS: `Surface/disabled/primary` (`#f2f2f2`) bg, `Border/disabled/disabled` (`#bfbfbf`) border, `Icon/disabled/default` (`#bfbfbf`) text.
+
+---
+
+### 3. Always use Semantic tokens for Radius, Padding, Gap, Spacing & Scaling
+
+- **Never hardcode px values.** Every spatial value must resolve through a Semantic token.
+- Token names must **mirror the Figma token path exactly** — no renaming, no abbreviations.
+  - Figma path: `Surface/primary/default` → CSS variable: `--surface-primary-default`
+- Layout padding must consistently use `Spacing/space-m` = **16px**.
+- Layout gap must consistently use `Spacing/space-xs` = **8px**.
+- Button radius is `Corner Radius/corner-rounded` = **60px** (pill) — not a standard radius step like `md` or `lg`.
+- `Surface/general/default` is the correct Semantic name for white backgrounds — not `Surface/default`.
+
+**Mistake made:**
+- Button border-radius was set to `12px` — actual is `60px` pill shape.
+- Button horizontal padding was set to `20px` — actual is `Spacing/space-s = 12px` for Size=L.
+- Modal body padding was set to `24px` — must be `16px` (`Spacing/space-m`).
+- Modal body gap was set to `16px` — must be `8px` (`Spacing/space-xs`).
+- Footer padding was mixed `12px / 24px` — must be `16px` all sides.
+- Invented tokens (`--surface-success-subtle`, `--pd-` prefix) instead of using actual Semantic token names.
+
+---
+
+### 4. Icons must always come from the DS Iconography page
+
+- **Never write custom SVG paths or use third-party icon sets.** All icons must be sourced from the `🔰 Iconography` page in the DS file.
+- Use `use_figma` to extract the exact vector paths from the icon node before implementing.
+- Icons always render at their **DS native size (24×24)**. No scaling up or overriding with `width`/`height` in CSS.
+- Icon containers must **hug content** — use `width: fit-content; height: fit-content; padding: <token>` — never a fixed pixel wrapper size.
+- SVG `viewBox` must include a **1px buffer** on all sides (e.g., `viewBox="-1 -1 22 22"` for a 0–20 coordinate space) to prevent stroke clipping at path boundaries.
+
+**Mistake made:**
+- Used a hand-written `<polyline points="20 6 9 17 4 12"/>` checkmark instead of the DS `Outline/check-circle` (node `260:527`).
+- Icon container was fixed `64×64` — must hug content.
+- SVG was forced to `32×32` — DS native size is `24×24`.
+- `viewBox="0 0 20 20"` clipped the 1.5px stroke at `x=20` / `y=-0.23` path edges — fixed to `viewBox="-1 -1 22 22"`.
+
+---
+
+### 5. Never use gradients — DS colors only
+
+- **Gradients are strictly prohibited.** All colors must be flat values from the DS token system.
+- Never use `linear-gradient`, `radial-gradient`, `conic-gradient`, or any CSS gradient function.
+- All color values must resolve through Semantic tokens — no hardcoded hex values in rule declarations.
+
+---
+
+### 6. Never use drop shadows on cards or containers
+
+- **Elevation/box-shadow is prohibited on cards, modals, and containers.**
+- Cards and modal containers must use a `1px solid Border/primary/default` border for depth instead of shadow.
+- The Elevation effect styles exist for reference only — do not apply them to UI containers in implementation.
+
+**Mistake made:** Applied `box-shadow: Elevation/overlay` to the modal card. Corrected to `border: 1px solid var(--border-primary-default)` with no shadow.
+
+---
+
+### 7. Always use the correct component variant for the context
+
+- Confirm which component variant applies before building. The DS has named variants for every use case.
+- For two-button modal patterns: cancel/dismiss action → `Variants=Secondary` (outlined), confirm action → `Variants=Primary` (filled). `Variants=Tertiary` (ghost) is not appropriate for modal footers.
+
+**Mistake made:** The Ignore button was implemented as `Variants=Tertiary` — actual correct variant is `Variants=Secondary` (white bg, green outline border, green text).
+
+---
+
+### Mandatory workflow before implementing any component
+
+```
+1. search_design_system  → confirm component exists in DS, get component key
+2. use_figma             → find node ID across pages
+3. get_design_context    → pull exact token bindings, dimensions, structure per variant
+4. get_variable_defs     → confirm Semantic token names used on the node
+5. Implement             → use only token values from steps 3–4, no assumptions
+6. Validate              → compare against get_screenshot
+```
+
+---
+
 ## Project identity
 
 - **Product:** Pandai — educational platform (Student / Teacher / Parent user roles)
