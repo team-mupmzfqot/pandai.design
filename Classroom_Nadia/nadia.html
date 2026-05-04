@@ -93,6 +93,7 @@
       flex-direction: column;
       gap: 12px;             /* DS gap between brand-bar and nav-bar */
       width: 100%;
+      padding: 12px 60px 0;  /* align with page-content 60px gutters */
     }
 
     /* ── Brand Bar (top row, 64px) ──────────────────────────────── */
@@ -106,30 +107,21 @@
       display: flex;
       align-items: center;
       gap: 28px;             /* spacing/space-2xl */
-      padding: 8px 24px;    /* spacing/space-xs  spacing/space-xl */
+      padding: 8px 0;        /* horizontal handled by .navbar padding */
     }
 
-    /* Pandai logo — 116.5 × 28px */
+    /* Pandai logo — node 1898:6911, Normal, 200×48px */
     .navbar__logo {
-      width: 116.5px;
-      height: 28px;
-      position: relative;
       flex-shrink: 0;
       display: flex;
       align-items: center;
     }
-    .navbar__logo-mark {
-      width: 27px;
-      height: 28px;
-      object-fit: contain;
-      flex-shrink: 0;
-    }
-    .navbar__logo-word {
-      flex: 1;
-      height: 70%;    /* inset 15% top/bottom */
+    .navbar__logo-img {
+      width: 100px;
+      height: 24px;
       object-fit: contain;
       object-position: left center;
-      margin-left: 4px;
+      display: block;
     }
 
     /* Actions area — grows to fill, aligns right */
@@ -260,6 +252,12 @@
     }
     .nav-btn svg.nav-chevron { width: 18px; height: 18px; }
 
+    /* icon/primary/default (#00cc85) on inactive nav icons */
+    .nav-btn:not(.nav-btn--active) svg.nav-icon,
+    .nav-btn:not(.nav-btn--active) svg.nav-chevron {
+      stroke: var(--og-500);
+    }
+
     /* Active state — Class button */
     .nav-btn--active {
       background: var(--og-500);         /* surface/primary/default */
@@ -270,6 +268,7 @@
     .nav-btn--active svg.nav-chevron { transform: rotate(180deg); }
 
     @media (max-width: 425px) {
+      .navbar { padding: 12px 16px 0; }
       .navbar__content { border-radius: 16px; height: auto; }
       .navbar__nav-items { flex-wrap: wrap; gap: 4px; }
       .navbar__icons { gap: 16px; }
@@ -540,10 +539,9 @@
 
     <!-- Brand Bar -->
     <div class="navbar__brand">
-      <!-- Logo/Pandai/Logo Horizontal -->
+      <!-- Logo/Pandai/Logo Horizontal — node 1898:6911 Normal -->
       <div class="navbar__logo">
-        <img class="navbar__logo-mark" src="navbar/logo-mark.png" alt="">
-        <img class="navbar__logo-word"  src="navbar/logo-wordmark.png" alt="Pandai">
+        <img class="navbar__logo-img" src="navbar/logo.png" alt="Pandai">
       </div>
 
       <!-- Actions: icons + avatar -->
