@@ -34,7 +34,7 @@
       --r-rounded: 60px;  --r-4xl: 24px;  --r-2xl: 18px;
 
       /* DS Spacing */
-      --sp-xxxs: 2px;  --sp-xxs: 4px;  --sp-xs: 8px;  --sp-m: 16px;
+      --sp-xxxs: 2px;  --sp-xxs: 4px;  --sp-xs: 8px;  --sp-s: 12px;  --sp-m: 16px;
 
       /* Subject — B-Melayu */
       --bm-50:  #f6f9ff;  --bm-100: #dbe4ff;  --bm-200: #b8c9ff;
@@ -100,14 +100,11 @@
     .navbar__brand {
       background: var(--Surface-general-default, #fff);
       border-bottom: 1px solid var(--og-500);  /* border/primary/default */
-      border-left:   1px solid var(--og-500);
-      border-right:  1px solid var(--og-500);
-      border-radius: 0 0 24px 24px;            /* corner-4xl bottom only */
       height: 64px;
       display: flex;
       align-items: center;
       gap: 28px;             /* spacing/space-2xl */
-      padding: 8px 0;        /* horizontal handled by .navbar padding */
+      padding: 8px 0;        /* horizontal handled by .navbar 60px padding */
     }
 
     /* Pandai logo — node 1898:6911, Normal, 200×48px */
@@ -282,50 +279,122 @@
       display: flex; align-items: center; justify-content: center;
       overflow: hidden; flex-shrink: 0;
     }
-    .ds-avatar--xxl { width: 100px; height: 100px; }
     .ds-avatar--xl  { width: 64px;  height: 64px;  }
     .ds-avatar svg { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-    .ds-avatar--xxl svg { width: 60px; height: 60px; stroke: var(--og-500); }
     .ds-avatar--xl  svg { width: 38px; height: 38px; stroke: var(--og-500); }
 
     /* ══════════════════════════════════════════════════════════════
-       School Header Card — Teacher / Pink
+       Breadcrumb 1.5 — node 1777:18856
        ══════════════════════════════════════════════════════════════ */
-    .school-card {
-      background: var(--pk-50); border: 1.5px solid var(--pk-200);
-      border-radius: 16px; padding: 28px 32px;
-      display: flex; align-items: center; gap: 28px;
-      width: 100%;
-      box-shadow: 0 2px 16px rgba(255,92,152,.10), 0 1px 4px rgba(0,0,0,.05);
+    .bc-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 36px;
+    }
+    .bc-left {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: var(--sp-m);  /* spacing/space-m = 16px */
+    }
+    .bc-title {
+      font-size: 24px;           /* Header/H3 */
+      font-weight: 500;
+      line-height: 36px;
+      color: #00564c;            /* text/tertiary/default */
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .bc-sep {
+      width: 1px;
+      height: 20px;
+      background: #d9d9d9;
+      flex-shrink: 0;
+    }
+    .bc-trail {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-xs);         /* 8px */
+      flex-wrap: wrap;
+    }
+    .bc-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-xs);         /* spacing/scale-200 = 8px */
+      font-size: 14px;           /* Body/B3 */
+      font-weight: 400;
+      line-height: 20px;
+      color: #666;               /* text/default/body */
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .bc-link svg {
+      width: 20px; height: 20px;
+      stroke: #666;
+      fill: none; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+    .bc-chevron {
+      width: 16px; height: 16px;
+      stroke: #bfbfbf;
+      fill: none; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+    .bc-link--current {
+      color: #4d4d4d;
     }
 
+    /* Breadcrumb action buttons */
+    .bc-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-xs);         /* spacing/space-xs = 8px */
+      flex-shrink: 0;
+    }
+    .btn-browse, .btn-join {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-xs);
+      border-radius: var(--r-rounded);   /* corner-rounded = 60px */
+      padding: var(--sp-xs) var(--sp-s); /* 8px 12px */
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;           /* Body/B1 */
+      font-weight: 600;
+      line-height: 20px;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      border: 1px solid;
+    }
+    .btn-browse svg, .btn-join svg {
+      width: 20px; height: 20px;
+      fill: none; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+    .btn-browse {
+      background: var(--og-500);         /* surface/primary/default */
+      border-color: var(--og-600);       /* border/primary/focus */
+      color: #e9fbf5;                    /* text/primary/on-color */
+    }
+    .btn-browse svg { stroke: #e9fbf5; }
+    .btn-join {
+      background: var(--Surface-general-default, #fff);
+      border-color: var(--og-500);       /* border/primary/default */
+      color: var(--og-500);              /* text/primary/default */
+    }
+    .btn-join svg { stroke: var(--og-500); }
+
     @media (max-width: 425px) {
-      .school-card {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 20px;
-        gap: 16px;
-      }
-      .school-name { white-space: normal; }
+      .bc-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .bc-left { flex-wrap: wrap; }
+      .bc-actions { width: 100%; }
+      .btn-browse, .btn-join { flex: 1; justify-content: center; }
     }
-    .school-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
-    .school-name {
-      font-size: 20px; font-weight: 700; color: var(--pk-800);
-      line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .school-subhead {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 14px; font-weight: 500; color: var(--pk-600); margin-top: -6px;
-    }
-    .school-subhead svg { width: 16px; height: 16px; stroke: var(--pk-500); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
-    .stats-row { display: flex; flex-wrap: wrap; gap: 8px; }
-    .stat-chip {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--pk-100); border: 1px solid var(--pk-200); border-radius: 8px;
-      padding: 6px 12px; font-size: 13px; color: var(--pk-700); white-space: nowrap;
-    }
-    .stat-chip svg { width: 15px; height: 15px; stroke: var(--pk-500); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
-    .stat-chip strong { font-weight: 600; color: var(--pk-800); }
 
     /* ══════════════════════════════════════════════════════════════
        Class Cards Grid
@@ -652,36 +721,38 @@
   <!-- Page content — padded area ──────────────────────────── -->
   <div class="page-content">
 
-  <!-- ── School Header Card ──────────────────────────────────── -->
-  <div class="school-card">
-    <div class="ds-avatar ds-avatar--xxl">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
-      </svg>
+  <!-- ── Breadcrumb 1.5 — node 1777:18856 ──────────────────── -->
+  <div class="bc-row">
+    <div class="bc-left">
+      <span class="bc-title">My Class</span>
+      <span class="bc-sep" aria-hidden="true"></span>
+      <nav class="bc-trail" aria-label="Breadcrumb">
+        <a href="#" class="bc-link">
+          <!-- Outline/home -->
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Home
+          <svg class="bc-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="#" class="bc-link">
+          Class
+          <svg class="bc-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <span class="bc-link bc-link--current" aria-current="page">My Class</span>
+      </nav>
     </div>
-    <div class="school-content">
-      <div>
-        <div class="school-name">Sekolah Menengah Kebangsaan Damansara</div>
-        <div class="school-subhead">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Petaling Jaya, Selangor
-        </div>
-      </div>
-      <div class="stats-row">
-        <div class="stat-chip">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
-          <strong>Code</strong> BF0001
-        </div>
-        <div class="stat-chip">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.59 3.41 2 2 0 0 1 3.55 1.25h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.83a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <strong>Tel</strong> +603-7727 1234
-        </div>
-        <div class="stat-chip">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          No. 12, Jalan Damansara
-        </div>
-      </div>
+    <div class="bc-actions">
+      <!-- Button 1.5 Primary — Browse Class -->
+      <a href="#" class="btn-browse">
+        <!-- Outline/image -->
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Browse Class
+      </a>
+      <!-- Button 1.5 Secondary — Join Class -->
+      <a href="#" class="btn-join">
+        <!-- Outline/image -->
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Join Class
+      </a>
     </div>
   </div>
 
