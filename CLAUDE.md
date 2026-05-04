@@ -4,26 +4,25 @@
 
 ---
 
-> ## ⚠️ ACTION REQUIRED — START HERE
+> ## ⚠️ RESUME HERE — Cleanup in progress
 >
-> **The next session must begin with the original DS file cleanup.**
->
-> The decision was made to clean up and consolidate everything into the **original DS file** (`TLVKe3bgJTdVvuPAzgDq2f`) so it becomes the single source of truth for designers, front-end, and back-end developers.
+> **Session paused during Fix 5. Resume from Fix 5.**
 >
 > **Tell Claude at the start of the next session:**
-> *"I'm sharing this context file to resume our Pandai DS work. We decided to clean up the original DS file (TLVKe3bgJTdVvuPAzgDq2f) to make it the standalone single source of truth. Please start the cleanup now."*
+> *"Resume the Pandai DS cleanup on file TLVKe3bgJTdVvuPAzgDq2f. Fixes 1–4 are done. Continue from Fix 5: remove duplicates in Nadia Exploration and Syakila Components pages."*
 >
-> **Cleanup tasks to execute on the original file (in order):**
-> 1. Fix ALL_SCOPES on all 878 variables — assign correct scopes per type (scriptable, ~30 min)
-> 2. Add Semantic spacing and radius float aliases — missing from original Semantic collection
-> 3. Add 6 elevation effect styles (xs → overlay) — original has zero effect styles
-> 4. Create the 20 dedicated component pages
-> 5. Move (not copy) v1.5 components from Zul's Dungeon into their correct pages
-> 6. Resolve duplicates — remove older versions from Nadia Exploration and Syakila Components
-> 7. Add component descriptions to all component sets
-> 8. Build Colors, Typography, and Spacing & Layout documentation pages
-> 9. Add paint styles for key Semantic color tokens
-> 10. Publish as Figma Team Library
+> **Cleanup task status:**
+> 1. ✅ Fix ALL_SCOPES — 791 variables fixed, 125 already correct, 0 errors
+> 2. ✅ Add Semantic spacing + radius float aliases — 22 new variables created (Spacing/component/*, Spacing/layout/*, Radius/*)
+> 3. ✅ Add 6 elevation effect styles — Elevation/xs → sm → md → lg → xl → overlay all created
+> 4. ✅ Move 43 component sections from Zul's Dungeon to correct pages — 0 errors
+> 5. 🔲 Resolve duplicates in Nadia Exploration + Syakila Components — **START HERE**
+> 6. 🔲 (Skipped per user) Component descriptions
+> 7. 🔲 Build Colors, Typography, Spacing & Layout documentation pages
+> 8. 🔲 Add paint styles for Semantic color tokens
+> 9. 🔲 Publish as Figma Team Library
+>
+> **Note on Fix 5:** The Figma MCP `use_figma` tool times out when switching pages via `setCurrentPageAsync` on large pages. Workaround: open Nadia Exploration page manually in Figma first (make it the active page), then run the duplicate-removal script without page switching.
 
 ---
 
@@ -61,35 +60,32 @@
 
 ---
 
-## Variable collections — 234 vars, 0 ALL_SCOPES violations (target state)
+## Variable collections — actual state after Fix 1 + Fix 2
 
-#### Atomic (113 vars, 1 mode: Value)
-- Color scopes: `FRAME_FILL, SHAPE_FILL, TEXT_FILL, STROKE_COLOR, EFFECT_COLOR`
-- Spacing scopes: `GAP, WIDTH_HEIGHT, PARAGRAPH_SPACING`
-- Radius scopes: `CORNER_RADIUS`
-- Palettes: Foundation, Grey (50–950), Slate, OG Green, Lime, Teal, Pink, Yellow, Purple, Sky, Neon
-- Spacing tokens: `Spacing/0` through `Spacing/120`
-- Radius tokens: `Radius/none, xs, sm, md, lg, xl, 2xl, 3xl, full`
+> **Note:** Actual collection names differ from earlier audit estimates. Counts below are from live file read.
 
-#### Semantic (60 vars, 2 modes: Light / Dark)
-- Aliases into Atomic
-- Color groups: Text, Surface, Border, Icon (with default/subtle/strong/disabled/semantic states)
-- Float groups: `Spacing/component/*`, `Spacing/layout/*`, `Radius/*`
-- Key tokens:
-  - `Surface/default` → white (Light) / Slate/900 (Dark)
-  - `Text/default/heading` → Grey/900 (Light) / Foundation/white (Dark)
-  - `Border/default` → Grey/200 (Light) / Slate/600 (Dark)
-  - `Surface/primary` → OG Green/500 (Base) both modes
+#### Primitives (429 vars, 1 mode: Value) — formerly called "Atomic"
+- Colors: Grey (50–950), Orange, Red, OG-Green, Blue, Pink, Yellow, Purple, Lime, Teal, Sky, Neon, Green, Slate, Foundation, Vanilla, Minion, Azure, Mustard, Subject/* palettes
+- Scale/0–1k: spacing raw values (0, 1, 2, 4, 8, 12, 16, 18, 20, 24, 28, 60, 108, 999)
+- Corner Radius/xs–circle, pill, pill, lg, xxl, xxxl
+- Typeface: Font Family, Font Weight, Font Size (50–900), Line Height (50–800)
+- Border Width: xs, sm, md, lg
+- Scopes fixed: colors → `FRAME_FILL SHAPE_FILL TEXT_FILL STROKE_COLOR EFFECT_COLOR`, Scale → `GAP WIDTH_HEIGHT PARAGRAPH_SPACING`, Radius → `CORNER_RADIUS`, Font Size → `FONT_SIZE`, Line Height → `LINE_HEIGHT`, Font Family → `FONT_FAMILY`, Font Weight → `FONT_STYLE`
 
-#### Product (20 vars, 3 modes: Student / Teacher / Parent)
-- Primary/50–900 per role: Student=OG Green, Teacher=Pink, Parent=Yellow
-- Secondary/50–900 per role: Student=Teal, Teacher=Purple, Parent=OG Green
-- All alias into Atomic
+#### Semantic (255 vars + 22 new = 277 vars, 2 modes: Light / Dark)
+- Color groups: Text/*, Icon/*, Surface/*, Border/*, Overlay/* — scopes set per group
+- **New float aliases added (Fix 2):**
+  - `Spacing/component/none–2xl` → aliases into Primitives Scale/*
+  - `Spacing/layout/sm–xl` → aliases into Primitives Scale/*
+  - `Radius/none–full` → aliases into Primitives Corner Radius/*
 
-#### Responsives (41 vars, 3 modes: Desktop / Tablet / Mobile)
-- Frame Width: 1440 / 687 / 390
-- Font size tokens per style per breakpoint (`FONT_SIZE` scope)
-- Line height tokens per style per breakpoint (`LINE_HEIGHT` scope)
+#### Product (174 vars, 3 modes: Student / Teacher / Parent)
+- Primary, Secondary, Tertiary (50–900), Success, Alert, Warning, Informative, Neutral
+- Spacing/space-none → space-3xl, Border Width, Corner Radius, Overlay, Font/* tokens
+- ALL_SCOPES removed — correct scopes assigned per type
+
+#### Responsives (if present)
+- Check file directly — not loaded during this session
 
 ### Text styles — 21 (Poppins)
 ```
