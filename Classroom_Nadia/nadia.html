@@ -3,9 +3,375 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nadia</title>
+  <title>Pandai DS — Component Preview</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ─── DS Primitives ─────────────────────────────────────────── */
+    :root {
+      /* OG-Green (Student) */
+      --og-green-50:  #e9fbf5;
+      --og-green-100: #ccf5e7;
+      --og-green-200: #99ebce;
+      --og-green-300: #66e0b6;
+      --og-green-400: #33d69d;
+      --og-green-500: #00cc85;
+      --og-green-600: #00a36a;
+      --og-green-700: #007a50;
+      --og-green-800: #005235;
+
+      /* Pink (Teacher) */
+      --pink-50:  #ffebf2;
+      --pink-100: #ffdeea;
+      --pink-200: #ffbed6;
+      --pink-300: #ff9dc1;
+      --pink-400: #ff7dad;
+      --pink-500: #ff5c98;
+      --pink-600: #cc4a7a;
+      --pink-700: #99375b;
+      --pink-800: #66253d;
+
+      /* Neutral */
+      --gray-50:  #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-600: #6b7280;
+      --gray-700: #374151;
+      --gray-900: #111827;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--gray-100);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 24px;
+      gap: 48px;
+    }
+
+    .page-title {
+      text-align: center;
+    }
+    .page-title h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+    .page-title p {
+      font-size: 14px;
+      color: var(--gray-600);
+      margin-top: 4px;
+    }
+
+    .section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 760px;
+    }
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      align-self: flex-start;
+    }
+
+    /* ─── Student Progress Card ─────────────────────────────────── */
+    .student-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(0,204,133,0.10), 0 1px 4px rgba(0,0,0,0.06);
+      padding: 24px;
+      width: 340px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .student-card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .avatar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--og-green-100);
+      border: 2.5px solid var(--og-green-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--og-green-700);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .student-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray-900);
+      line-height: 1.3;
+    }
+    .student-id {
+      font-size: 12px;
+      color: var(--gray-600);
+      margin-top: 1px;
+    }
+
+    /* Label Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .badge--solid   { background: var(--og-green-500); color: #fff; }
+    .badge--subtle  { background: var(--og-green-100); color: var(--og-green-700); }
+    .badge--warning { background: #fff7ed; color: #b45309; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--og-green-100);
+    }
+
+    .lesson-label {
+      font-size: 11px;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .lesson-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    /* Progress Bar */
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .progress-header__label { font-size: 12px; color: var(--gray-600); }
+    .progress-header__value { font-size: 12px; font-weight: 700; color: var(--og-green-600); }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: var(--og-green-100);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--og-green-500);
+      border-radius: 99px;
+      transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: flex;
+      gap: 8px;
+    }
+    .stat-chip {
+      flex: 1;
+      background: var(--og-green-50);
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+    .stat-chip__value {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--og-green-700);
+    }
+    .stat-chip__label {
+      font-size: 11px;
+      color: var(--gray-600);
+      margin-top: 2px;
+    }
+
+    /* ─── School Header Card ────────────────────────────────────── */
+    .school-card {
+      background: var(--pink-50);
+      border: 1.5px solid var(--pink-200);
+      border-radius: 16px;
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      width: 100%;
+      max-width: 720px;
+      box-shadow: 0 2px 16px rgba(255,92,152,0.08), 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    .school-avatar {
+      flex-shrink: 0;
+      width: 80px;
+      height: 80px;
+      border-radius: 14px;
+      background: var(--pink-100);
+      border: 2.5px solid var(--pink-400);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--pink-600);
+      overflow: hidden;
+    }
+    .school-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .school-content { flex: 1; min-width: 0; }
+
+    .school-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--pink-800);
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .school-subhead {
+      font-size: 14px;
+      color: var(--pink-600);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .school-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .school-stat {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--pink-100);
+      border: 1px solid var(--pink-200);
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 12px;
+      color: var(--pink-700);
+      white-space: nowrap;
+    }
+    .school-stat strong { font-weight: 600; }
+  </style>
 </head>
 <body>
-  <h1>Hello, Nadia!</h1>
+
+  <div class="page-title">
+    <h1>Pandai Design System 1.5</h1>
+    <p>Component Preview — DS tokens only</p>
+  </div>
+
+  <!-- ── Student Progress Card ─────────────────────────────────── -->
+  <div class="section">
+    <span class="section-label">Student · Lesson Progress Dashboard Card</span>
+
+    <div class="student-card">
+      <!-- Header: Avatar + Badge -->
+      <div class="student-card__header">
+        <div class="avatar-row">
+          <div class="avatar">NN</div>
+          <div>
+            <div class="student-name">Nur Nadia</div>
+            <div class="student-id">STD-2026-001</div>
+          </div>
+        </div>
+        <span class="badge badge--subtle">In Progress</span>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Lesson info -->
+      <div>
+        <div class="lesson-label">Mathematics</div>
+        <div class="lesson-title">Quadratic Equations</div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div>
+        <div class="progress-header">
+          <span class="progress-header__label">Lesson Progress</span>
+          <span class="progress-header__value">72%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width: 72%"></div>
+        </div>
+      </div>
+
+      <!-- Stats chips -->
+      <div class="stats-row">
+        <div class="stat-chip">
+          <div class="stat-chip__value">9/12</div>
+          <div class="stat-chip__label">Lessons Done</div>
+        </div>
+        <div class="stat-chip">
+          <div class="stat-chip__value">7 🔥</div>
+          <div class="stat-chip__label">Day Streak</div>
+        </div>
+        <div class="stat-chip">
+          <div class="stat-chip__value">72%</div>
+          <div class="stat-chip__label">Completion</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── School Header Card ─────────────────────────────────────── -->
+  <div class="section">
+    <span class="section-label">Teacher · School Header Card</span>
+
+    <div class="school-card">
+      <!-- Avatar -->
+      <div class="school-avatar">SM</div>
+
+      <!-- Content -->
+      <div class="school-content">
+        <div class="school-name">Sekolah Menengah Kebangsaan Damansara</div>
+        <div class="school-subhead">
+          <span>📍</span> Petaling Jaya, Selangor
+        </div>
+        <div class="school-stats">
+          <div class="school-stat"><span>🏫</span> <strong>Code:</strong> BF0001</div>
+          <div class="school-stat"><span>📞</span> <strong>Tel:</strong> +603-7727 1234</div>
+          <div class="school-stat"><span>📌</span> No. 12, Jalan Damansara</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
