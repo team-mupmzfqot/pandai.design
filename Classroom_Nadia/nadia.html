@@ -20,6 +20,7 @@
       --pk-700: #99375b;  --pk-800: #66253d;
 
       /* DS Semantic */
+      --Surface-general-default:  #fff;
       --surface-primary:          var(--og-500);
       --surface-primary-subtle:   var(--og-100);
       --surface-secondary-subtle: #e8fbe8;
@@ -62,22 +63,22 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html, body { min-height: 100%; }
+
     body {
       font-family: 'Poppins', sans-serif;
-      background: #f3f4f6;
-      padding: 48px 24px;
+      background: var(--Surface-general-default, #fff);
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 48px 40px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 12px;
+      gap: 24px;
     }
 
-    .section-label {
-      font-size: 11px; font-weight: 600; letter-spacing: .08em;
-      text-transform: uppercase; color: #9ca3af;
-      align-self: flex-start; width: 100%; max-width: 1260px;
+    @media (max-width: 425px) {
+      body { padding: 24px 16px; gap: 16px; }
     }
-    .section-label + .section-label { margin-top: 32px; }
 
     /* ── DS Avatar 1.5 ──────────────────────────────────────────── */
     .ds-avatar {
@@ -100,8 +101,18 @@
       background: var(--pk-50); border: 1.5px solid var(--pk-200);
       border-radius: 16px; padding: 28px 32px;
       display: flex; align-items: center; gap: 28px;
-      width: 100%; max-width: 720px;
+      width: 100%;
       box-shadow: 0 2px 16px rgba(255,92,152,.10), 0 1px 4px rgba(0,0,0,.05);
+    }
+
+    @media (max-width: 425px) {
+      .school-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+        gap: 16px;
+      }
+      .school-name { white-space: normal; }
     }
     .school-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
     .school-name {
@@ -127,10 +138,13 @@
        ══════════════════════════════════════════════════════════════ */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 390px));
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       width: 100%;
-      max-width: 1260px;
+    }
+
+    @media (max-width: 425px) {
+      .cards-grid { grid-template-columns: 1fr; }
     }
 
     /* ── Class Card shell ───────────────────────────────────────── */
@@ -325,8 +339,6 @@
 <body>
 
   <!-- ── School Header Card ──────────────────────────────────── -->
-  <span class="section-label">Teacher · School Header Card — Pandai DS 1.5</span>
-
   <div class="school-card">
     <div class="ds-avatar ds-avatar--xxl">
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -360,8 +372,6 @@
   </div>
 
   <!-- ── Class Cards 1.5 ─────────────────────────────────────── -->
-  <span class="section-label" style="margin-top:32px">Class Card 1.5 — Pandai DS 1.5 · Subject Colour Tokens</span>
-
   <div class="cards-grid">
 
     <!-- ① B-Melayu | Form 4 ──────────────────────────────────── -->
