@@ -141,55 +141,9 @@
       background: #fff;
     }
 
-    /* ── Cover area ─────────────────────────────────────────────── */
-    .cc__cover {
-      width: 100%; aspect-ratio: 1000 / 435;
-      position: relative; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-    /* Subject-specific cover gradients */
-    .cc--bm .cc__cover  { background: radial-gradient(circle at 20% 60%, var(--bm-200) 0%,transparent 45%), radial-gradient(circle at 80% 30%, var(--bm-100) 0%,transparent 40%), linear-gradient(135deg, var(--bm-50) 0%, var(--bm-100) 60%, var(--bm-50) 100%); }
-    .cc--en .cc__cover  { background: radial-gradient(circle at 20% 60%, var(--en-200) 0%,transparent 45%), radial-gradient(circle at 80% 30%, var(--en-100) 0%,transparent 40%), linear-gradient(135deg, var(--en-50) 0%, var(--en-100) 60%, var(--en-50) 100%); }
-    .cc--mt .cc__cover  { background: radial-gradient(circle at 20% 60%, var(--mt-200) 0%,transparent 45%), radial-gradient(circle at 80% 30%, var(--mt-100) 0%,transparent 40%), linear-gradient(135deg, var(--mt-50) 0%, var(--mt-100) 60%, var(--mt-50) 100%); }
-    .cc--sc .cc__cover  { background: radial-gradient(circle at 20% 60%, var(--sc-200) 0%,transparent 45%), radial-gradient(circle at 80% 30%, var(--sc-100) 0%,transparent 40%), linear-gradient(135deg, var(--sc-50) 0%, var(--sc-100) 60%, var(--sc-50) 100%); }
-    .cc--bio .cc__cover { background: radial-gradient(circle at 20% 60%, var(--bi-200) 0%,transparent 45%), radial-gradient(circle at 80% 30%, var(--bi-100) 0%,transparent 40%), linear-gradient(135deg, var(--bi-50) 0%, var(--bi-100) 60%, var(--bi-50) 100%); }
-    .cc--hs .cc__cover  { background: radial-gradient(circle at 20% 60%, var(--hs-200) 0%,transparent 45%), radial-gradient(circle at 80% 30%, var(--hs-100) 0%,transparent 40%), linear-gradient(135deg, var(--hs-50) 0%, var(--hs-100) 60%, var(--hs-50) 100%); }
-
-    /* Decorative circles */
-    .cc__cover::before {
-      content: ''; position: absolute;
-      width: 110px; height: 110px; border-radius: 50%;
-      top: -22px; left: -28px; opacity: .45;
-    }
-    .cc__cover::after {
-      content: ''; position: absolute;
-      width: 72px; height: 72px; border-radius: 50%;
-      bottom: -8px; right: 18px; opacity: .40;
-    }
-    .cc--bm  .cc__cover::before, .cc--bm  .cc__cover::after  { border: 12px solid var(--bm-500); }
-    .cc--en  .cc__cover::before, .cc--en  .cc__cover::after  { border: 12px solid var(--en-500); }
-    .cc--mt  .cc__cover::before, .cc--mt  .cc__cover::after  { border: 12px solid var(--mt-500); }
-    .cc--sc  .cc__cover::before, .cc--sc  .cc__cover::after  { border: 12px solid var(--sc-500); }
-    .cc--bio .cc__cover::before, .cc--bio .cc__cover::after  { border: 12px solid var(--bi-500); }
-    .cc--hs  .cc__cover::before, .cc--hs  .cc__cover::after  { border: 12px solid var(--hs-500); }
-
-    /* Logo card (white pill in cover) */
-    .cc__logo-card {
-      background: #fff; border-radius: 14px;
-      padding: 10px 18px;
-      display: flex; align-items: center; gap: 7px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.10);
-      z-index: 1; position: relative;
-    }
-    .cc__logo-card svg { width: 26px; height: 26px; flex-shrink: 0; }
-    .cc__logo-card span { font-size: 18px; font-weight: 700; color: var(--text-heading); letter-spacing: -.3px; }
-
-    /* Sparkles */
-    .sparkle { position: absolute; border-radius: 50%; background: #f5c842; z-index: 1; }
-    .sp1 { width: 9px;  height: 9px;  top: 22%; left: 16%;  }
-    .sp2 { width: 6px;  height: 6px;  top: 58%; left: 9%;   }
-    .sp3 { width: 7px;  height: 7px;  top: 14%; right: 20%; }
-    .sp4 { width: 11px; height: 11px; bottom: 18%; right: 9%; }
+    /* ── Cover area — DS Class Subject Cover Image component ───── */
+    .cc__cover { width: 100%; overflow: hidden; display: block; }
+    .cc__cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     /* ── Card outer border ──────────────────────────────────────── */
     .cc--bm  { border: 1px solid var(--bm-500); }
@@ -366,13 +320,6 @@
     .cc--hs  .ds-avatar { border-color: var(--hs-500); }
     .cc--hs  .ds-avatar svg { stroke: var(--hs-500); }
 
-    /* Pandai logo mark in cover — subject-coloured stroke */
-    .cc--bm  .cc__logo-card svg path, .cc--bm  .cc__logo-card svg line { stroke: var(--bm-500); }
-    .cc--en  .cc__logo-card svg path, .cc--en  .cc__logo-card svg line { stroke: var(--en-500); }
-    .cc--mt  .cc__logo-card svg path, .cc--mt  .cc__logo-card svg line { stroke: var(--mt-500); }
-    .cc--sc  .cc__logo-card svg path, .cc--sc  .cc__logo-card svg line { stroke: var(--sc-500); }
-    .cc--bio .cc__logo-card svg path, .cc--bio .cc__logo-card svg line { stroke: var(--bi-500); }
-    .cc--hs  .cc__logo-card svg path, .cc--hs  .cc__logo-card svg line { stroke: var(--hs-500); }
   </style>
 </head>
 <body>
@@ -419,14 +366,7 @@
 
     <!-- ① B-Melayu | Form 4 ──────────────────────────────────── -->
     <div class="cc cc--bm">
-      <div class="cc__cover">
-        <div class="sparkle sp1"></div><div class="sparkle sp2"></div>
-        <div class="sparkle sp3"></div><div class="sparkle sp4"></div>
-        <div class="cc__logo-card">
-          <svg viewBox="0 0 32 32" fill="none"><path d="M16 4C9.37 4 4 9.37 4 16s5.37 12 12 12 12-5.37 12-12S22.63 4 16 4z" stroke-width="2"/><path d="M11 16a5 5 0 1 1 10 0 5 5 0 0 1-10 0z" stroke-width="2"/><line x1="16" y1="6" x2="16" y2="11" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="21" x2="16" y2="26" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="16" x2="11" y2="16" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="16" x2="26" y2="16" stroke-width="2" stroke-linecap="round"/></svg>
-          <span>Pandai</span>
-        </div>
-      </div>
+      <div class="cc__cover"><img src="covers/bm.png" alt="Bahasa Melayu cover"></div>
       <div class="cc__body">
         <div class="cc__inner">
           <div class="cc__hdr">
@@ -456,13 +396,7 @@
 
     <!-- ② English | Form 4 ──────────────────────────────────── -->
     <div class="cc cc--en">
-      <div class="cc__cover">
-        <div class="sparkle sp1"></div><div class="sparkle sp3"></div><div class="sparkle sp4"></div>
-        <div class="cc__logo-card">
-          <svg viewBox="0 0 32 32" fill="none"><path d="M16 4C9.37 4 4 9.37 4 16s5.37 12 12 12 12-5.37 12-12S22.63 4 16 4z" stroke-width="2"/><path d="M11 16a5 5 0 1 1 10 0 5 5 0 0 1-10 0z" stroke-width="2"/><line x1="16" y1="6" x2="16" y2="11" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="21" x2="16" y2="26" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="16" x2="11" y2="16" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="16" x2="26" y2="16" stroke-width="2" stroke-linecap="round"/></svg>
-          <span>Pandai</span>
-        </div>
-      </div>
+      <div class="cc__cover"><img src="covers/en.png" alt="English cover"></div>
       <div class="cc__body">
         <div class="cc__inner">
           <div class="cc__hdr">
@@ -496,13 +430,7 @@
 
     <!-- ③ Mathematics | Form 4 ──────────────────────────────── -->
     <div class="cc cc--mt">
-      <div class="cc__cover">
-        <div class="sparkle sp1"></div><div class="sparkle sp2"></div><div class="sparkle sp4"></div>
-        <div class="cc__logo-card">
-          <svg viewBox="0 0 32 32" fill="none"><path d="M16 4C9.37 4 4 9.37 4 16s5.37 12 12 12 12-5.37 12-12S22.63 4 16 4z" stroke-width="2"/><path d="M11 16a5 5 0 1 1 10 0 5 5 0 0 1-10 0z" stroke-width="2"/><line x1="16" y1="6" x2="16" y2="11" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="21" x2="16" y2="26" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="16" x2="11" y2="16" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="16" x2="26" y2="16" stroke-width="2" stroke-linecap="round"/></svg>
-          <span>Pandai</span>
-        </div>
-      </div>
+      <div class="cc__cover"><img src="covers/math.png" alt="Mathematics cover"></div>
       <div class="cc__body">
         <div class="cc__inner">
           <div class="cc__hdr">
@@ -532,13 +460,7 @@
 
     <!-- ④ Science | Form 4 ──────────────────────────────────── -->
     <div class="cc cc--sc">
-      <div class="cc__cover">
-        <div class="sparkle sp1"></div><div class="sparkle sp2"></div><div class="sparkle sp3"></div>
-        <div class="cc__logo-card">
-          <svg viewBox="0 0 32 32" fill="none"><path d="M16 4C9.37 4 4 9.37 4 16s5.37 12 12 12 12-5.37 12-12S22.63 4 16 4z" stroke-width="2"/><path d="M11 16a5 5 0 1 1 10 0 5 5 0 0 1-10 0z" stroke-width="2"/><line x1="16" y1="6" x2="16" y2="11" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="21" x2="16" y2="26" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="16" x2="11" y2="16" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="16" x2="26" y2="16" stroke-width="2" stroke-linecap="round"/></svg>
-          <span>Pandai</span>
-        </div>
-      </div>
+      <div class="cc__cover"><img src="covers/science.png" alt="Science cover"></div>
       <div class="cc__body">
         <div class="cc__inner">
           <div class="cc__hdr">
@@ -572,13 +494,7 @@
 
     <!-- ⑤ Biology | Form 5 ──────────────────────────────────── -->
     <div class="cc cc--bio">
-      <div class="cc__cover">
-        <div class="sparkle sp1"></div><div class="sparkle sp3"></div><div class="sparkle sp4"></div>
-        <div class="cc__logo-card">
-          <svg viewBox="0 0 32 32" fill="none"><path d="M16 4C9.37 4 4 9.37 4 16s5.37 12 12 12 12-5.37 12-12S22.63 4 16 4z" stroke-width="2"/><path d="M11 16a5 5 0 1 1 10 0 5 5 0 0 1-10 0z" stroke-width="2"/><line x1="16" y1="6" x2="16" y2="11" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="21" x2="16" y2="26" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="16" x2="11" y2="16" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="16" x2="26" y2="16" stroke-width="2" stroke-linecap="round"/></svg>
-          <span>Pandai</span>
-        </div>
-      </div>
+      <div class="cc__cover"><img src="covers/biology.png" alt="Biology cover"></div>
       <div class="cc__body">
         <div class="cc__inner">
           <div class="cc__hdr">
@@ -608,13 +524,7 @@
 
     <!-- ⑥ History | Form 5 ──────────────────────────────────── -->
     <div class="cc cc--hs">
-      <div class="cc__cover">
-        <div class="sparkle sp1"></div><div class="sparkle sp2"></div><div class="sparkle sp4"></div>
-        <div class="cc__logo-card">
-          <svg viewBox="0 0 32 32" fill="none"><path d="M16 4C9.37 4 4 9.37 4 16s5.37 12 12 12 12-5.37 12-12S22.63 4 16 4z" stroke-width="2"/><path d="M11 16a5 5 0 1 1 10 0 5 5 0 0 1-10 0z" stroke-width="2"/><line x1="16" y1="6" x2="16" y2="11" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="21" x2="16" y2="26" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="16" x2="11" y2="16" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="16" x2="26" y2="16" stroke-width="2" stroke-linecap="round"/></svg>
-          <span>Pandai</span>
-        </div>
-      </div>
+      <div class="cc__cover"><img src="covers/history.png" alt="History cover"></div>
       <div class="cc__body">
         <div class="cc__inner">
           <div class="cc__hdr">
