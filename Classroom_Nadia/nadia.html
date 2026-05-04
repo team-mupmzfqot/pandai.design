@@ -8,23 +8,50 @@
   <style>
     /* ── Pandai DS 1.5 Primitives ───────────────────────────────── */
     :root {
+      /* OG-Green */
+      --og-green-50:  #e9fbf5;
+      --og-green-100: #ccf5e7;
+      --og-green-200: #99ebce;
       --og-green-500: #00cc85;
       --og-green-600: #00a36a;
+      --og-green-700: #007a50;
 
+      /* Pink (Teacher) */
       --pink-50:  #ffebf2;
       --pink-100: #ffdeea;
       --pink-200: #ffbed6;
-      --pink-300: #ff9dc1;
       --pink-400: #ff7dad;
       --pink-500: #ff5c98;
       --pink-600: #cc4a7a;
       --pink-700: #99375b;
       --pink-800: #66253d;
 
+      /* Neutral */
+      --neutral-850: #262626;
       --gray-400: #9ca3af;
       --gray-600: #6b7280;
-      --gray-800: #1f2937;
       --white: #ffffff;
+
+      /* DS Semantic */
+      --surface-primary:        #00cc85;
+      --surface-primary-subtle: #ccf5e7;
+      --surface-secondary-subtle: #e8fbe8;
+      --border-primary:         #00cc85;
+      --border-primary-focus:   #00a36a;
+      --text-heading:           #404040;
+      --text-body:              #666666;
+      --text-primary-on-color:  #e9fbf5;
+
+      /* DS Corner Radius */
+      --radius-rounded: 60px;
+      --radius-4xl:     24px;
+      --radius-2xl:     18px;
+
+      /* DS Spacing */
+      --space-xxxs: 2px;
+      --space-xxs:  4px;
+      --space-xs:   8px;
+      --space-m:    16px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,7 +63,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       padding: 48px 24px;
       gap: 12px;
     }
@@ -52,39 +78,35 @@
       max-width: 720px;
     }
 
-    /* ── DS Avatar 1.5 — XXL (100px) ───────────────────────────── */
-    /*
-      Spec from Figma node 2333:39093:
-      - Size XXL = 100 × 100 px
-      - Shape: circle (border-radius: 60px per DS corner-radius token)
-      - Background: var(--surface/general/default) = white
-      - Border: 1px solid var(--border/default) = #00cc85
-      - Icon: Outline/user, centred, OG-Green fill
-    */
+    /* ════════════════════════════════════════════════════════════
+       DS Avatar 1.5 — spec from node 2333:39093
+       ════════════════════════════════════════════════════════════ */
     .ds-avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 60px;          /* DS corner-radius/corner-rounded */
+      border-radius: var(--radius-rounded);
       background: var(--white);
-      border: 1.5px solid var(--og-green-500);
+      border: 1.5px solid var(--border-primary);
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
       overflow: hidden;
+      flex-shrink: 0;
     }
+    .ds-avatar--xxl { width: 100px; height: 100px; }
+    .ds-avatar--xl  { width: 64px;  height: 64px;  }
 
     .ds-avatar svg {
-      width: 60px;
-      height: 60px;
       stroke: var(--og-green-500);
       fill: none;
       stroke-width: 1.5;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
+    .ds-avatar--xxl svg { width: 60px; height: 60px; }
+    .ds-avatar--xl  svg { width: 38px; height: 38px; }
 
-    /* ── School Header Card — Teacher / Pink palette ────────────── */
+    /* ════════════════════════════════════════════════════════════
+       School Header Card — Teacher / Pink
+       ════════════════════════════════════════════════════════════ */
     .school-card {
       background: var(--pink-50);
       border: 1.5px solid var(--pink-200);
@@ -95,12 +117,9 @@
       gap: 28px;
       width: 100%;
       max-width: 720px;
-      box-shadow:
-        0 2px 16px rgba(255, 92, 152, 0.10),
-        0 1px 4px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 2px 16px rgba(255,92,152,.10), 0 1px 4px rgba(0,0,0,.06);
     }
 
-    /* ── Content ─────────────────────────────────────────────────── */
     .school-content {
       flex: 1;
       min-width: 0;
@@ -119,7 +138,7 @@
       white-space: nowrap;
     }
 
-    .school-location {
+    .school-subhead {
       display: flex;
       align-items: center;
       gap: 6px;
@@ -128,24 +147,14 @@
       color: var(--pink-600);
       margin-top: -6px;
     }
-
-    .school-location svg {
+    .school-subhead svg {
+      width: 16px; height: 16px;
+      stroke: var(--pink-500); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
       flex-shrink: 0;
-      width: 16px;
-      height: 16px;
-      stroke: var(--pink-500);
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
     }
 
-    /* ── Stat chips ──────────────────────────────────────────────── */
-    .stats-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+    .stats-row { display: flex; flex-wrap: wrap; gap: 8px; }
 
     .stat-chip {
       display: inline-flex;
@@ -159,46 +168,293 @@
       color: var(--pink-700);
       white-space: nowrap;
     }
-
     .stat-chip svg {
-      width: 15px;
-      height: 15px;
-      stroke: var(--pink-500);
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      width: 15px; height: 15px;
+      stroke: var(--pink-500); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
       flex-shrink: 0;
     }
+    .stat-chip strong { font-weight: 600; color: var(--pink-800); }
 
-    .stat-chip strong {
+    /* ════════════════════════════════════════════════════════════
+       Class Card 1.5 — spec from node 2126:37826
+       ════════════════════════════════════════════════════════════ */
+    .class-cards-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      width: 100%;
+      max-width: 720px;
+      justify-content: flex-start;
+    }
+
+    /* Outer card shell */
+    .class-card {
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-4xl);   /* corner-4xl = 24px */
+      overflow: hidden;
+      width: 100%;
+      max-width: 390px;
+      display: flex;
+      flex-direction: column;
+      background: var(--white);
+    }
+
+    /* Cover image area */
+    .class-card__cover {
+      width: 100%;
+      aspect-ratio: 1000 / 435;
+      background:
+        radial-gradient(circle at 20% 60%, #a8f0c6 0%, transparent 45%),
+        radial-gradient(circle at 80% 30%, #a8f0c6 0%, transparent 40%),
+        linear-gradient(135deg, #d4faea 0%, #b8f5d6 50%, #cffce9 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative circles on cover */
+    .class-card__cover::before {
+      content: '';
+      position: absolute;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      border: 12px solid rgba(0,204,133,.25);
+      top: -20px; left: -30px;
+    }
+    .class-card__cover::after {
+      content: '';
+      position: absolute;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      border: 10px solid rgba(0,204,133,.20);
+      bottom: -10px; right: 20px;
+    }
+
+    /* Pandai logo mark in cover */
+    .class-card__cover-logo {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.10);
+      z-index: 1;
+      position: relative;
+    }
+    .class-card__cover-logo svg {
+      width: 28px; height: 28px;
+      flex-shrink: 0;
+    }
+    .class-card__cover-logo span {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-heading);
+      letter-spacing: -0.5px;
+    }
+
+    /* Sparkle dots */
+    .sparkle {
+      position: absolute;
+      border-radius: 50%;
+      background: #f5c842;
+    }
+    .sparkle--1 { width: 10px; height: 10px; top: 20%; left: 18%; }
+    .sparkle--2 { width: 7px;  height: 7px;  top: 55%; left: 10%; }
+    .sparkle--3 { width: 8px;  height: 8px;  top: 15%; right: 22%; }
+    .sparkle--4 { width: 12px; height: 12px; bottom: 20%; right: 10%; }
+
+    /* Outer content area (light green bg) */
+    .class-card__body {
+      background: var(--surface-secondary-subtle);  /* #e8fbe8 */
+      padding: var(--space-m);
+    }
+
+    /* Inner bordered panel */
+    .class-card__inner {
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-2xl);   /* corner-2xl = 18px */
+      overflow: hidden;
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Green header strip */
+    .class-card__header {
+      background: var(--surface-primary);
+      padding: var(--space-xs) var(--space-m);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-m);
+      min-height: 44px;
+    }
+    .class-card__header-title {
+      font-size: 18px;        /* Title/T2 */
       font-weight: 600;
-      color: var(--pink-800);
+      line-height: 28px;
+      color: var(--white);
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* DLP badge */
+    .dlp-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #ff5c98;
+      border-radius: 99px;
+      padding: 3px 8px 3px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--white);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .dlp-badge svg {
+      width: 14px; height: 14px;
+      stroke: var(--white); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* Main content: avatar + text */
+    .class-card__main {
+      background: var(--white);
+      padding: var(--space-m);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-m);
+      min-height: 96px;
+    }
+
+    .class-card__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+
+    .class-card__teacher-name {
+      font-size: 14px;          /* Body/B1 */
+      font-weight: 600;
+      line-height: 20px;
+      color: var(--text-heading);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .class-card__schedule {
+      font-size: 14px;          /* Body/B3 */
+      font-weight: 400;
+      line-height: 20px;
+      color: var(--text-body);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      align-items: center;
+    }
+    .class-card__schedule strong { font-weight: 600; color: var(--text-heading); }
+
+    /* Live Tuition badge — Label Badge 1.5 */
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xxs);
+      background: var(--surface-primary-subtle);  /* #ccf5e7 */
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-rounded);
+      padding: var(--space-xxxs) var(--space-xs);
+      margin-top: 2px;
+      align-self: flex-start;
+    }
+    .live-badge svg {
+      width: 10px; height: 10px;
+      stroke: var(--og-green-500); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .live-badge span {
+      font-size: 10px;           /* Body/B8 */
+      font-weight: 500;
+      line-height: 12px;
+      color: var(--og-green-500);
+      white-space: nowrap;
+    }
+
+    /* Divider */
+    .class-card__divider {
+      height: 1px;
+      background: var(--og-green-100);
+      margin: 0;
+    }
+
+    /* CTA footer */
+    .class-card__cta {
+      background: var(--white);
+      padding: var(--space-m);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* Enter Class button — Button 1.5 */
+    .btn-enter {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      background: var(--surface-primary);
+      border: 1px solid var(--border-primary-focus);
+      border-radius: var(--radius-rounded);
+      padding: 2px 8px 2px 12px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-enter__label {
+      font-size: 12px;           /* Body/B5 */
+      font-weight: 600;
+      line-height: 18px;
+      color: var(--text-primary-on-color);
+      white-space: nowrap;
+      padding-right: 4px;
+    }
+    .btn-enter__arrow {
+      width: 20px; height: 20px;
+      background: var(--og-green-200);
+      border-radius: var(--radius-rounded);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .btn-enter__arrow svg {
+      width: 12px; height: 12px;
+      stroke: var(--og-green-700); fill: none;
+      stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
     }
   </style>
 </head>
 <body>
 
+  <!-- ── School Header Card ──────────────────────────────────────── -->
   <span class="section-label">Teacher · School Header Card — Pandai DS 1.5</span>
 
   <div class="school-card">
-
     <!-- DS Avatar 1.5 — XXL / Icon variant (node 2333:39094) -->
-    <div class="ds-avatar">
-      <!-- Outline/user — DS icon node 1503:7259 -->
+    <div class="ds-avatar ds-avatar--xxl">
+      <!-- Outline/user — node 1503:7259 -->
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
         <circle cx="12" cy="7" r="4"/>
       </svg>
     </div>
 
-    <!-- Content: title + subhead + stats -->
     <div class="school-content">
-
       <div>
         <div class="school-name">Sekolah Menengah Kebangsaan Damansara</div>
-        <div class="school-location">
-          <!-- Outline/map-pin — DS icon node 1503:7428 -->
+        <div class="school-subhead">
+          <!-- Outline/map-pin — node 1503:7428 -->
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
             <circle cx="12" cy="10" r="3"/>
@@ -208,27 +464,22 @@
       </div>
 
       <div class="stats-row">
-
-        <!-- School code — Outline/hash (node 1503:7332) -->
+        <!-- Outline/hash — node 1503:7332 -->
         <div class="stat-chip">
           <svg viewBox="0 0 24 24" aria-hidden="true">
-            <line x1="4" y1="9" x2="20" y2="9"/>
-            <line x1="4" y1="15" x2="20" y2="15"/>
-            <line x1="10" y1="3" x2="8" y2="21"/>
-            <line x1="16" y1="3" x2="14" y2="21"/>
+            <line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/>
+            <line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/>
           </svg>
           <strong>Code</strong> BF0001
         </div>
-
-        <!-- Tel — Outline/phone (node 1503:7333) -->
+        <!-- Outline/phone — node 1503:7333 -->
         <div class="stat-chip">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.59 3.41 2 2 0 0 1 3.55 1.25h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.83a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
           </svg>
           <strong>Tel</strong> +603-7727 1234
         </div>
-
-        <!-- Address — Outline/map-pin (node 1503:7428) -->
+        <!-- Outline/map-pin — node 1503:7428 -->
         <div class="stat-chip">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
@@ -236,10 +487,171 @@
           </svg>
           No. 12, Jalan Damansara
         </div>
-
       </div>
     </div>
   </div>
+
+  <!-- ── Class Card 1.5 (node 2126:37826) ──────────────────────── -->
+  <span class="section-label" style="margin-top:24px;">Class Card 1.5 — Pandai DS 1.5</span>
+
+  <div class="class-cards-row">
+
+    <!-- Card 1 -->
+    <div class="class-card">
+      <!-- Cover image area -->
+      <div class="class-card__cover">
+        <div class="sparkle sparkle--1"></div>
+        <div class="sparkle sparkle--2"></div>
+        <div class="sparkle sparkle--3"></div>
+        <div class="sparkle sparkle--4"></div>
+        <div class="class-card__cover-logo">
+          <!-- Pandai logo mark (simplified) -->
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 4C9.37 4 4 9.37 4 16s5.37 12 12 12 12-5.37 12-12S22.63 4 16 4z" stroke="#00cc85" stroke-width="2" fill="none"/>
+            <path d="M11 16a5 5 0 1 1 10 0 5 5 0 0 1-10 0z" stroke="#00cc85" stroke-width="2" fill="none"/>
+            <path d="M16 11v-5M16 26v-5M11 16H6M26 16h-5" stroke="#00cc85" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span>Pandai</span>
+        </div>
+      </div>
+
+      <!-- Body: light green bg wrapping inner card -->
+      <div class="class-card__body">
+        <div class="class-card__inner">
+
+          <!-- Green header -->
+          <div class="class-card__header">
+            <div class="class-card__header-title">Mathematics | Form 4</div>
+            <!-- DLP badge -->
+            <div class="dlp-badge">
+              <!-- Outline/wifi — node 1503:7248 -->
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+                <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                <circle cx="12" cy="20" r="1" fill="white" stroke="none"/>
+              </svg>
+              DLP
+            </div>
+          </div>
+
+          <!-- Main content -->
+          <div class="class-card__main">
+            <!-- DS Avatar 1.5 — XL / Icon variant (node 2333:39102) -->
+            <div class="ds-avatar ds-avatar--xl">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+
+            <div class="class-card__text">
+              <div class="class-card__teacher-name">Cikgu Aminah binti Yusoff</div>
+              <div class="class-card__schedule">
+                <span>Everyday</span>
+                <strong>Tuesday</strong>
+                <span>at</span>
+                <strong>8am</strong>
+              </div>
+              <!-- Live Tuition — Label Badge 1.5 -->
+              <div class="live-badge">
+                <!-- Outline/video — node used in badge -->
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <polygon points="23 7 16 12 23 17 23 7"/>
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                </svg>
+                <span>Live Tuition</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="class-card__divider"></div>
+
+          <!-- CTA -->
+          <div class="class-card__cta">
+            <a href="#" class="btn-enter">
+              <span class="btn-enter__label">Enter Class</span>
+              <div class="btn-enter__arrow">
+                <!-- Outline/chevron-right — node 1503:7457 -->
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="class-card">
+      <div class="class-card__cover">
+        <div class="sparkle sparkle--1"></div>
+        <div class="sparkle sparkle--3"></div>
+        <div class="sparkle sparkle--4"></div>
+        <div class="class-card__cover-logo">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 4C9.37 4 4 9.37 4 16s5.37 12 12 12 12-5.37 12-12S22.63 4 16 4z" stroke="#00cc85" stroke-width="2" fill="none"/>
+            <path d="M11 16a5 5 0 1 1 10 0 5 5 0 0 1-10 0z" stroke="#00cc85" stroke-width="2" fill="none"/>
+            <path d="M16 11v-5M16 26v-5M11 16H6M26 16h-5" stroke="#00cc85" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span>Pandai</span>
+        </div>
+      </div>
+
+      <div class="class-card__body">
+        <div class="class-card__inner">
+
+          <div class="class-card__header">
+            <div class="class-card__header-title">Bahasa Melayu | Form 5</div>
+          </div>
+
+          <div class="class-card__main">
+            <div class="ds-avatar ds-avatar--xl">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+
+            <div class="class-card__text">
+              <div class="class-card__teacher-name">Cikgu Hafizah Zulkifli</div>
+              <div class="class-card__schedule">
+                <span>Everyday</span>
+                <strong>Thursday</strong>
+                <span>at</span>
+                <strong>10am</strong>
+              </div>
+              <div class="live-badge">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <polygon points="23 7 16 12 23 17 23 7"/>
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                </svg>
+                <span>Live Tuition</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="class-card__divider"></div>
+
+          <div class="class-card__cta">
+            <a href="#" class="btn-enter">
+              <span class="btn-enter__label">Enter Class</span>
+              <div class="btn-enter__arrow">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.class-cards-row -->
 
 </body>
 </html>
