@@ -20,7 +20,8 @@
       --surface-general-default:         #FFFFFF;
       --surface-subtle:                  #F8FAFC;
       --surface-primary-default:         #00cc85;
-      --surface-primary-default-subtle:  #e9fbf5;
+      --surface-primary-default-subtle:        #e9fbf5;
+      --surface-primary-default-subtle-hover:  #99ebce;
       --surface-disabled-primary:        #f2f2f2;
 
       /* Text */
@@ -579,13 +580,12 @@
       transition:    box-shadow 0.15s;
     }
 
-    /* Image left column */
+    /* Image — aspect-ratio 1:1, fills card height (DS: aspect-[128/128] self-stretch) */
     .quiz-card__image {
-      width:      128px;
-      min-width:  128px;
-      height:     100%;
-      position:   relative;
-      flex-shrink: 0;
+      aspect-ratio: 1 / 1;
+      align-self:   stretch;
+      flex-shrink:  0;
+      position:     relative;
     }
 
     .quiz-card__image img {
@@ -674,6 +674,14 @@
     .subject-badge--moral     { --badge-border: #005BA2; --badge-bg: #0072CA; }
     .subject-badge--biology   { --badge-border: #6A27AD; --badge-bg: #8431D8; }
 
+    /* Badge inside quiz card uses Size=M (h-24px), not Table size (h-32px) */
+    .quiz-card__header .subject-badge {
+      height:     24px;
+      max-height: 24px;
+    }
+    .quiz-card__header .subject-badge__icon  { padding: 4px 8px 4px 12px; }
+    .quiz-card__header .subject-badge__text  { font-size: 12px; line-height: 12px; }
+
     /* Pill Badge - 1.5 (metadata tags inside quiz card) */
     .pill-badge-sm {
       display:       inline-flex;
@@ -742,11 +750,11 @@
     }
 
     .btn-quiz-cta__arrow {
-      background:    var(--surface-primary-default-subtle);
-      border-radius: var(--corner-radius-corner-rounded);
-      padding:       2px;
-      display:       flex;
-      align-items:   center;
+      background:      var(--surface-primary-default-subtle-hover);  /* #99ebce */
+      border-radius:   var(--corner-radius-corner-rounded);
+      padding:         2px;
+      display:         flex;
+      align-items:     center;
       justify-content: center;
     }
 
