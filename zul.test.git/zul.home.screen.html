@@ -235,29 +235,21 @@
       border-radius: var(--corner-radius-corner-pill);
     }
 
-    /* State=Hover — Surface/secondary/default bg + Border/primary/focus border + Text/secondary/focus text */
+    /* State=Hover — Surface/secondary/default bg + Border/primary/focus border + Text/secondary/focus */
     .nav-btn:hover .nav-btn__inner {
-      background: var(--surface-secondary-default);  /* #b5f291 */
-      border:     1px solid var(--border-primary-focus);  /* #00a36a */
+      background: var(--surface-secondary-default);     /* #b5f291 */
+      border:     1px solid var(--border-primary-focus); /* #00a36a */
     }
-    .nav-btn:hover .nav-btn__label {
-      color: var(--text-secondary-focus);  /* #70bc6f */
-    }
-    .nav-btn:hover .nav-btn__icon-wrap img {
-      filter: brightness(0) saturate(100%) invert(68%) sepia(14%) saturate(600%) hue-rotate(75deg);
-    }
+    .nav-btn:hover .nav-btn__label          { color: var(--text-secondary-focus); }  /* #70bc6f */
+    .nav-btn:hover .nav-btn__icon-wrap      { color: var(--text-secondary-focus); }  /* #70bc6f */
 
-    /* State=Selected — Surface/primary/default bg + Border/primary/focus border + Text/primary/on-color text */
+    /* State=Selected — Surface/primary/default bg + Border/primary/focus border + Text/primary/on-color */
     .nav-btn.is-active .nav-btn__inner {
-      background: var(--surface-primary-default);  /* #00cc85 */
-      border:     1px solid var(--border-primary-focus);  /* #00a36a */
+      background: var(--surface-primary-default);       /* #00cc85 */
+      border:     1px solid var(--border-primary-focus); /* #00a36a */
     }
-    .nav-btn.is-active .nav-btn__label {
-      color: var(--text-primary-on-color);  /* #e9fbf5 */
-    }
-    .nav-btn.is-active .nav-btn__icon-wrap img {
-      filter: brightness(0) invert(1);  /* → near-white #e9fbf5 */
-    }
+    .nav-btn.is-active .nav-btn__label      { color: var(--text-primary-on-color); }  /* #e9fbf5 */
+    .nav-btn.is-active .nav-btn__icon-wrap  { color: var(--text-primary-on-color); }  /* #e9fbf5 */
 
     .nav-btn__label {
       font-size:   14px;
@@ -273,6 +265,7 @@
       justify-content: center;
       width:           24px;
       height:          24px;
+      color:           var(--surface-primary-default);  /* State=Default icon: #00cc85 */
     }
 
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -901,7 +894,7 @@
       <div class="nav-btn is-active">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <img src="icons/ic-home.svg" class="icon-ds-20" alt="">
+            <svg width="20" height="20" viewBox="0 0 18.1667 18.1667" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.4167 8.32144V9.0881C17.4156 10.8851 16.8338 12.6337 15.7578 14.073C14.6818 15.5122 13.1694 16.5652 11.4461 17.0747C9.72286 17.5842 7.88105 17.523 6.19539 16.9003C4.50974 16.2775 3.07055 15.1265 2.09247 13.619C1.11439 12.1115 0.649827 10.3282 0.768065 8.53503C0.886303 6.74191 1.58101 5.03504 2.74857 3.669C3.91613 2.30295 5.49399 1.35092 7.24683 0.954892C8.99966 0.558862 10.8336 0.740051 12.475 1.47144M17.4167 2.42144L9.08334 10.7631L6.58334 8.2631"/></svg>
           </div>
           <span class="nav-btn__label">Home</span>
         </div>
@@ -910,7 +903,7 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <img src="icons/ic-quiz.svg" class="icon-ds-20" alt="">
+            <svg width="20" height="20" viewBox="0 0 16.5 16.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.75 0.75V4.91667L6.58333 12.4167L3.25 15.75L0.75 13.25L4.08333 9.91667L11.5833 0.75H15.75Z"/></svg>
           </div>
           <span class="nav-btn__label">Quiz</span>
         </div>
@@ -919,7 +912,7 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <img src="icons/ic-battle.svg" class="icon-ds-20" alt="">
+            <svg width="20" height="20" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3L21 8L10 17L6 21L3 18L7 14L16 3Z"/><path d="M5 13L11 19"/><path d="M14.32 17.33L18 21L21 18L17.64 14.64"/><path d="M10 5.5L8 3L3 3L3 8L6 10.5"/></svg>
           </div>
           <span class="nav-btn__label">Battle</span>
         </div>
@@ -928,7 +921,7 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <img src="icons/ic-practice.svg" class="icon-ds-20" alt="">
+            <svg width="20" height="20" viewBox="0 0 18.1667 16.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.08333 4.08333C9.08333 3.19928 8.73214 2.35143 8.10702 1.72631C7.4819 1.10119 6.63405 0.75 5.75 0.75H0.75V13.25H6.58333C7.24637 13.25 7.88226 13.5134 8.3511 13.9822C8.81994 14.4511 9.08333 15.087 9.08333 15.75M9.08333 4.08333V15.75M9.08333 4.08333C9.08333 3.19928 9.43452 2.35143 10.0596 1.72631C10.6848 1.10119 11.5326 0.75 12.4167 0.75H17.4167V13.25H11.5833C10.9203 13.25 10.2844 13.5134 9.81557 13.9822C9.34672 14.4511 9.08333 15.087 9.08333 15.75"/></svg>
           </div>
           <span class="nav-btn__label">Practice</span>
         </div>
@@ -937,11 +930,11 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <img src="icons/ic-class.svg" class="icon-ds-20" alt="">
+            <svg width="20" height="20" viewBox="0 0 19.8333 16.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.0833 15.75V14.0833C14.0833 13.1993 13.7321 12.3514 13.107 11.7263C12.4819 11.1012 11.6341 10.75 10.75 10.75H4.08333C3.19928 10.75 2.35143 11.1012 1.72631 11.7263C1.10119 12.3514 0.75 13.1993 0.75 14.0833V15.75M19.0833 15.75V14.0833C19.0828 13.3448 18.837 12.6273 18.3845 12.0436C17.932 11.4599 17.2984 11.043 16.5833 10.8583M13.25 0.858333C13.967 1.04192 14.6025 1.45892 15.0564 2.04359C15.5102 2.62827 15.7565 3.34736 15.7565 4.0875C15.7565 4.82764 15.5102 5.54673 15.0564 6.13141C14.6025 6.71608 13.967 7.13308 13.25 7.31667M10.75 4.08333C10.75 5.92428 9.25762 7.41667 7.41667 7.41667C5.57572 7.41667 4.08333 5.92428 4.08333 4.08333C4.08333 2.24238 5.57572 0.75 7.41667 0.75C9.25762 0.75 10.75 2.24238 10.75 4.08333Z"/></svg>
           </div>
           <span class="nav-btn__label">Class</span>
           <div class="nav-btn__icon-wrap">
-            <img src="icons/ic-chevron-down.svg" class="icon-ds-20" alt="">
+            <svg width="20" height="20" viewBox="0 0 11.5 6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M0.75 0.75L5.75 5.75L10.75 0.75"/></svg>
           </div>
         </div>
       </div>
@@ -949,11 +942,11 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <img src="icons/ic-learn.svg" class="icon-ds-20" alt="">
+            <svg width="20" height="20" viewBox="0 0 14.8333 18.1667" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M0.75 15.3333C0.75 14.7808 0.969493 14.2509 1.36019 13.8602C1.75089 13.4695 2.2808 13.25 2.83333 13.25H14.0833M0.75 15.3333C0.75 15.8859 0.969493 16.4158 1.36019 16.8065C1.75089 17.1972 2.2808 17.4167 2.83333 17.4167H14.0833V0.75H2.83333C2.2808 0.75 1.75089 0.969493 1.36019 1.36019C0.969493 1.75089 0.75 2.2808 0.75 2.83333V15.3333Z"/></svg>
           </div>
           <span class="nav-btn__label">Learn</span>
           <div class="nav-btn__icon-wrap">
-            <img src="icons/ic-chevron-down.svg" class="icon-ds-20" alt="">
+            <svg width="20" height="20" viewBox="0 0 11.5 6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M0.75 0.75L5.75 5.75L10.75 0.75"/></svg>
           </div>
         </div>
       </div>
@@ -961,11 +954,11 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <img src="icons/ic-practice.svg" class="icon-ds-20" alt="">
+            <svg width="20" height="20" viewBox="0 0 18.1667 16.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.08333 4.08333C9.08333 3.19928 8.73214 2.35143 8.10702 1.72631C7.4819 1.10119 6.63405 0.75 5.75 0.75H0.75V13.25H6.58333C7.24637 13.25 7.88226 13.5134 8.3511 13.9822C8.81994 14.4511 9.08333 15.087 9.08333 15.75M9.08333 4.08333V15.75M9.08333 4.08333C9.08333 3.19928 9.43452 2.35143 10.0596 1.72631C10.6848 1.10119 11.5326 0.75 12.4167 0.75H17.4167V13.25H11.5833C10.9203 13.25 10.2844 13.5134 9.81557 13.9822C9.34672 14.4511 9.08333 15.087 9.08333 15.75"/></svg>
           </div>
           <span class="nav-btn__label">Achievement</span>
           <div class="nav-btn__icon-wrap">
-            <img src="icons/ic-chevron-down.svg" class="icon-ds-20" alt="">
+            <svg width="20" height="20" viewBox="0 0 11.5 6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M0.75 0.75L5.75 5.75L10.75 0.75"/></svg>
           </div>
         </div>
       </div>
@@ -973,11 +966,11 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <img src="icons/ic-star.svg" class="icon-ds-20" alt="">
+            <svg width="20" height="20" viewBox="0 0 18.1667 17.35" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.08336 0.75L11.6584 5.96667L17.4167 6.80833L13.25 10.8667L14.2334 16.6L9.08336 13.8917L3.93336 16.6L4.91669 10.8667L0.750022 6.80833L6.50835 5.96667L9.08336 0.75Z"/></svg>
           </div>
           <span class="nav-btn__label">Potential</span>
           <div class="nav-btn__icon-wrap">
-            <img src="icons/ic-chevron-down.svg" class="icon-ds-20" alt="">
+            <svg width="20" height="20" viewBox="0 0 11.5 6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M0.75 0.75L5.75 5.75L10.75 0.75"/></svg>
           </div>
         </div>
       </div>
@@ -985,11 +978,11 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <img src="icons/ic-gift.svg" class="icon-ds-20" alt="">
+            <svg width="20" height="20" viewBox="0 0 18.1667 18.1667" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.75 9.08333V17.4167H2.41667V9.08333M9.08333 17.4167V4.91667M9.08333 4.91667H5.33333C4.7808 4.91667 4.25089 4.69717 3.86019 4.30647C3.46949 3.91577 3.25 3.38587 3.25 2.83333C3.25 2.2808 3.46949 1.75089 3.86019 1.36019C4.25089 0.969493 4.7808 0.75 5.33333 0.75C8.25 0.75 9.08333 4.91667 9.08333 4.91667ZM9.08333 4.91667H12.8333C13.3859 4.91667 13.9158 4.69717 14.3065 4.30647C14.6972 3.91577 14.9167 3.38587 14.9167 2.83333C14.9167 2.2808 14.6972 1.75089 14.3065 1.36019C13.9158 0.969493 13.3859 0.75 12.8333 0.75C9.91667 0.75 9.08333 4.91667 9.08333 4.91667ZM0.75 4.91667H17.4167V9.08333H0.75V4.91667Z"/></svg>
           </div>
           <span class="nav-btn__label">Rewards</span>
           <div class="nav-btn__icon-wrap">
-            <img src="icons/ic-chevron-down.svg" class="icon-ds-20" alt="">
+            <svg width="20" height="20" viewBox="0 0 11.5 6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M0.75 0.75L5.75 5.75L10.75 0.75"/></svg>
           </div>
         </div>
       </div>
