@@ -124,7 +124,6 @@
        Total height: ~132px
     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .navbar {
-      background: var(--surface-general-default);
       padding:    var(--spacing-space-xs) var(--page-padding-x);
       display:    flex;
       flex-direction: column;
@@ -134,7 +133,6 @@
     /* Row 1 â€” Brand bar */
     .navbar-brand {
       height:          64px;
-      min-height:      48px;
       background:      var(--surface-general-default);
       border-bottom:   1px solid var(--border-primary-default);
       border-left:     1px solid var(--border-primary-default);
@@ -144,7 +142,7 @@
       align-items:     center;
       justify-content: space-between;
       padding:         var(--spacing-space-xs) var(--spacing-space-xl);
-      overflow:        visible;
+      overflow: hidden;
     }
 
     .navbar-logo {
@@ -160,6 +158,7 @@
 
     .navbar-actions {
       display:     flex;
+      position:   relative;
       align-items: center;
       gap:         var(--spacing-space-xl);  /* gap-[24px] DS: gap-[var(--spacing/space-xl,24px)] */
     }
@@ -187,8 +186,8 @@
     .navbar-avatar__img  { width: 62px; height: 50px; object-fit: cover; position: absolute; }
     .navbar-badge {
       position:         absolute;
-      top:              -2px;
-      right:            -2px;
+      top:              0;
+      right:            -0.5px;
       min-width:        20px;
       height:           20px;
       background:       var(--surface-primary-default);
@@ -882,8 +881,8 @@
         <!-- Avatar 1.5 (node 684:621): 48Ã—48, pill border, user icon -->
         <div class="navbar-avatar">
           <img src="icons/ic-user.png" class="navbar-avatar__img" alt="Zulfadhli Azizan">
-          <span class="navbar-badge">15</span>
         </div>
+        <span class="navbar-badge">15</span>
       </div>
     </div><!-- end row 1 -->
 
