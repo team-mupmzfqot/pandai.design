@@ -22,6 +22,7 @@
       --surface-primary-default:         #00cc85;
       --surface-primary-default-subtle:        #e9fbf5;
       --surface-primary-default-subtle-hover:  #99ebce;
+      --surface-secondary-default:             #b5f291;  /* Surface/secondary/default */
       --surface-disabled-primary:        #f2f2f2;
 
       /* Text */
@@ -31,6 +32,7 @@
       --text-default-placeholder: #f2f2f2;   /* Text/default/placeholder â€” subject badge label */
       --text-primary-default:     #00cc85;
       --text-primary-on-color:    #e9fbf5;
+      --text-secondary-focus:     #70bc6f;  /* Text/secondary/focus */
       --text-on-color-heading:    #FFFFFF;   /* Text/on-color/heading â€” status pill */
       --text-disabled-default:    #bfbfbf;
 
@@ -233,16 +235,35 @@
       border-radius: var(--corner-radius-corner-pill);
     }
 
-    .nav-btn.is-active .nav-btn__inner,
+    /* State=Hover — Surface/secondary/default bg + Border/primary/focus border + Text/secondary/focus text */
     .nav-btn:hover .nav-btn__inner {
-      background: var(--surface-primary-default-subtle);
+      background: var(--surface-secondary-default);  /* #b5f291 */
+      border:     1px solid var(--border-primary-focus);  /* #00a36a */
+    }
+    .nav-btn:hover .nav-btn__label {
+      color: var(--text-secondary-focus);  /* #70bc6f */
+    }
+    .nav-btn:hover .nav-btn__icon-wrap img {
+      filter: brightness(0) saturate(100%) invert(68%) sepia(14%) saturate(600%) hue-rotate(75deg);
+    }
+
+    /* State=Selected — Surface/primary/default bg + Border/primary/focus border + Text/primary/on-color text */
+    .nav-btn.is-active .nav-btn__inner {
+      background: var(--surface-primary-default);  /* #00cc85 */
+      border:     1px solid var(--border-primary-focus);  /* #00a36a */
+    }
+    .nav-btn.is-active .nav-btn__label {
+      color: var(--text-primary-on-color);  /* #e9fbf5 */
+    }
+    .nav-btn.is-active .nav-btn__icon-wrap img {
+      filter: brightness(0) invert(1);  /* → near-white #e9fbf5 */
     }
 
     .nav-btn__label {
       font-size:   14px;
       font-weight: 600;
       line-height: 20px;
-      color:       var(--text-default-body);
+      color:       var(--text-default-body);  /* State=Default: #666666 */
       white-space: nowrap;
     }
 
