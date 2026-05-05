@@ -289,7 +289,7 @@
     /* Status Pill â€” 1.5, Type=Score */
     .status-pill {
       min-width:     122px;
-      background:    var(--surface-primary-default);   /* OG-Green/500 */
+      background:    var(--surface-primary-default);
       border:        1px solid var(--border-primary-focus);
       border-radius: 40.5px;
       padding:       var(--spacing-space-xs);
@@ -340,7 +340,19 @@
       flex-shrink:     0;
     }
 
-    .status-pill__icon img { width: 24px; height: 24px; }
+    .status-pill__icon img { max-height: 24px; max-width: 24px; width: auto; height: auto; }
+    /* Status Badge variants (DS Status Badge - 1.5, node 2312:10653) */
+    .status-badges {
+      display:  flex;
+      gap:      var(--spacing-space-xs);
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .status-pill--score  { background: #00cc85; border-color: #00a36a; }
+    .status-pill--coins  { background: #fece00; border-color: #cba500; }
+    .status-pill--streak { background: #7367f0; border-color: #5c52c0; }
+    .status-pill--lives  { background: #ff5c98; border-color: #cc4a7a; }
+    .status-pill--ruby   { background: #ff4c51; border-color: #b23539; }
 
     /* Welcome text */
     .welcome-text { text-align: right; }
@@ -1003,20 +1015,66 @@
         â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
         <section class="section-welcome" aria-label="Welcome">
 
-          <!-- Status Pill â€” 1.5 (Type=Score) -->
-          <div class="status-pill">
-            <div class="status-pill__content">
-              <div class="status-pill__texts">
-                <span class="status-pill__label">Score</span>
-                <span class="status-pill__value">8,450</span>
-              </div>
-              <!-- P.Trophy icon (from DS Status Pill asset) -->
-              <div class="status-pill__icon">
-                <img src="icons/ic-trophy.svg" alt="Trophy">
+
+          <!-- Status Badge - 1.5 (node 2312:10653) — all 5 variants -->
+          <div class="status-badges">
+
+            <!-- Type=Score -->
+            <div class="status-pill status-pill--score">
+              <div class="status-pill__content">
+                <div class="status-pill__texts">
+                  <span class="status-pill__label">Score</span>
+                  <span class="status-pill__value">8,450</span>
+                </div>
+                <div class="status-pill__icon"><img src="icons/ic-status-trophy.svg" alt="Trophy"></div>
               </div>
             </div>
-          </div>
 
+            <!-- Type=Coins -->
+            <div class="status-pill status-pill--coins">
+              <div class="status-pill__content">
+                <div class="status-pill__texts">
+                  <span class="status-pill__label">Coins</span>
+                  <span class="status-pill__value">1,250</span>
+                </div>
+                <div class="status-pill__icon"><img src="icons/ic-status-coin.svg" alt="Coins"></div>
+              </div>
+            </div>
+
+            <!-- Type=Straek -->
+            <div class="status-pill status-pill--streak">
+              <div class="status-pill__content">
+                <div class="status-pill__texts">
+                  <span class="status-pill__label">Streak</span>
+                  <span class="status-pill__value">12</span>
+                </div>
+                <div class="status-pill__icon"><img src="icons/ic-status-streak.svg" alt="Streak"></div>
+              </div>
+            </div>
+
+            <!-- Type=Lives -->
+            <div class="status-pill status-pill--lives">
+              <div class="status-pill__content">
+                <div class="status-pill__texts">
+                  <span class="status-pill__label">Lives</span>
+                  <span class="status-pill__value">3</span>
+                </div>
+                <div class="status-pill__icon"><img src="icons/ic-status-heart.svg" alt="Lives"></div>
+              </div>
+            </div>
+
+            <!-- Type=Ruby -->
+            <div class="status-pill status-pill--ruby">
+              <div class="status-pill__content">
+                <div class="status-pill__texts">
+                  <span class="status-pill__label">Ruby</span>
+                  <span class="status-pill__value">450</span>
+                </div>
+                <div class="status-pill__icon"><img src="icons/ic-status-ruby.svg" alt="Ruby"></div>
+              </div>
+            </div>
+
+          </div>
           <!-- Welcome Text -->
           <div class="welcome-text">
             <p class="welcome-text__greeting">Good Morning!</p>
