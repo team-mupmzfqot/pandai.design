@@ -92,11 +92,12 @@
     button { font-family: var(--font-family); cursor: pointer; }
 
     body {
-      font-family: var(--font-family);
-      background:  var(--surface-subtle);
-      color:       var(--text-default-heading);
-      width:       var(--page-max-width);
-      margin:      0 auto;
+      font-family:    var(--font-family);
+      background:     var(--surface-subtle);
+      color:          var(--text-default-heading);
+      width:          var(--page-max-width);
+      margin:         0 auto;
+      padding-bottom: 60px;
     }
 
     .page-container {
@@ -351,33 +352,40 @@
        Prev/Next buttons: Surface/primary/default, pill-shaped
        Indicator dots at bottom
     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* Carousel - 1.5  (node 1200:1789) */
     .carousel {
       display:        flex;
       flex-direction: column;
-      gap:            var(--spacing-space-xs);
       align-items:    center;
-      position:       relative;
-      overflow:       hidden;
+      gap:            var(--spacing-space-xs);   /* gap-[8px] */
+      width:          100%;
     }
 
-    .carousel__viewport {
-      width:        100%;
-      overflow:     hidden;
-      position:     relative;
+    /* Content = overflow container holding track + buttons */
+    .carousel__content {
+      position:        relative;
+      width:           100%;
+      overflow:        hidden;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
     }
 
+    /* Track — flex row of cards */
     .carousel__track {
       display:    flex;
-      gap:        var(--spacing-space-m);   /* 16px */
+      align-items: center;
+      gap:        var(--spacing-space-m);   /* gap-[16px] */
+      flex-shrink: 0;
       transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    /* Each slide = Carousel Parts (node 1376:2259): 428Ã—186px, corner-xl */
+    /* Carousel Parts (node 1376:2259): 428×186px, corner-xl */
     .carousel__card {
-      min-width:     428px;
+      width:         428px;
       height:        186px;
-      border-radius: var(--corner-radius-corner-xl);   /* corner-xl = 16px */
-      border:        1px solid var(--border-general-default);  /* Border/general/default = #d9d9d9 */
+      border-radius: var(--corner-radius-corner-xl);
+      border:        1px solid var(--border-general-default);
       background:    var(--surface-general-default);
       overflow:      hidden;
       flex-shrink:   0;
@@ -385,43 +393,53 @@
     }
 
     .carousel__card img {
+      position:   absolute;
+      inset:      0;
       width:      100%;
       height:     100%;
       object-fit: cover;
-      position:   absolute;
-      inset:      0;
     }
 
-    /* Prev/Next buttons: Button Icon - 1.5 / S / Default */
+    /* Button wrapper — absolute at left/right edges, padding 16px creates inset */
+    .carousel__btn-wrap {
+      position:    absolute;
+      top:         0;
+      bottom:      0;
+      display:     flex;
+      align-items: center;
+      padding:     var(--spacing-space-m);   /* p-[16px] */
+      z-index:     2;
+    }
+    .carousel__btn-wrap--prev { left: 0; }
+    .carousel__btn-wrap--next { right: 0; }
+
+    /* Button Icon - 1.5/S/Default: pill, full height of wrapper content */
     .carousel__btn {
-      position:        absolute;
-      top:             50%;
-      transform:       translateY(calc(-50% - 14px)); /* offset above indicator */
-      width:           28px;
       height:          100%;
-      max-height:      170px;
-      min-height:      0;
+      padding:         2px;
       background:      var(--surface-primary-default);
       border:          1px solid var(--border-primary-focus);
-      border-radius:   var(--corner-radius-corner-pill);
+      border-radius:   var(--corner-radius-corner-pill);   /* 108px */
       display:         flex;
       align-items:     center;
       justify-content: center;
-      padding:         2px;
       cursor:          pointer;
-      z-index:         2;
     }
 
-    .carousel__btn--prev { left: 0; }
-    .carousel__btn--next { right: 0; }
-
-    .carousel__btn img { width: 20px; height: 20px; }
-    .carousel__btn--next img { transform: scaleX(-1); }
-
-    .carousel__dots img {
-      width:  108px;
-      height: 20px;
+    .carousel__btn__icon {
+      width:           24px;
+      height:          24px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
     }
+
+    .carousel__btn__icon img { width: 20px; height: 20px; display: block; }
+    .carousel__btn-wrap--next .carousel__btn__icon img { transform: scaleX(-1); }
+
+    /* Indicator (node 1376:2406): 108×20px */
+    .carousel__indicator { flex-shrink: 0; }
+    .carousel__indicator img { width: 108px; height: 20px; display: block; }
 
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        SECTION FRAME â€” Shared by Sections 3 & 4
@@ -753,8 +771,10 @@
        Left: copyright + link  |  Right: made with heart
     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .footer {
-      position:   sticky;
+      position:   fixed;
       bottom:     0;
+      left:       0;
+      right:      0;
       z-index:    100;
       background: var(--surface-general-default);
       border-top: 1px solid var(--border-default);
@@ -765,8 +785,8 @@
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      padding-top:     var(--spacing-space-l);     /* py-20px */
-      padding-bottom:  var(--spacing-space-l);
+      padding-left:    var(--page-padding-x);
+      padding-right:   var(--page-padding-x);
     }
 
     .footer__left {
@@ -969,20 +989,23 @@
              5 image cards (428Ã—186px), gap-16px, corner-xl
              Green prev/next buttons + indicator dots
         â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+        <!-- Carousel - 1.5 (node 1200:1789) -->
         <section aria-label="Featured" class="carousel">
 
-          <div class="carousel__viewport">
-            <div class="carousel__track" id="carouselTrack">
+          <!-- Content area: overflow-clip container for track + button overlays -->
+          <div class="carousel__content">
 
-              <!-- Carousel Parts (node 1376:2259): 428Ã—186, corner-xl, border general/default -->
+            <!-- Cards track -->
+            <div class="carousel__track" id="carouselTrack">
+              <!-- Carousel Parts (node 1376:2259): 428×186, corner-xl, border general/default -->
               <div class="carousel__card">
                 <img src="icons/carousel-slide.png" alt="Pandai Score sudah sedia!">
               </div>
               <div class="carousel__card">
                 <img src="icons/carousel-slide.png" alt="SPM English Paper Bank">
               </div>
-              <div class="carousel__card" style="background: var(--surface-subtle);">
-                <!-- No-image placeholder (matching DS Carousel Parts with showImage=false) -->
+              <div class="carousel__card">
+                <!-- showImage=false: no image, shows placeholder bg -->
               </div>
               <div class="carousel__card">
                 <img src="icons/carousel-slide.png" alt="Matematik SPM Maraton">
@@ -990,23 +1013,30 @@
               <div class="carousel__card">
                 <img src="icons/carousel-slide.png" alt="Cabaran Minggu Ini">
               </div>
-
             </div>
 
-            <!-- Button Icon - 1.5 / S / Default (prev) -->
-            <button class="carousel__btn carousel__btn--prev" id="carouselPrev" aria-label="Previous">
-              <img src="icons/ic-chevron-left.svg" class="icon-ds-20" alt="">
-            </button>
+            <!-- Left Button (node 1200:1837): absolute, p-16px wrapper + pill icon button -->
+            <div class="carousel__btn-wrap carousel__btn-wrap--prev">
+              <button class="carousel__btn" id="carouselPrev" aria-label="Previous">
+                <span class="carousel__btn__icon">
+                  <img src="icons/ic-chevron-left.svg" alt="">
+                </span>
+              </button>
+            </div>
 
-            <!-- Button Icon - 1.5 / S / Default (next) -->
-            <button class="carousel__btn carousel__btn--next" id="carouselNext" aria-label="Next">
-              <!-- Reuse chevron-left and flip via CSS -->
-              <img src="icons/ic-chevron-left.svg" class="icon-ds-20" alt="">
-            </button>
-          </div>
+            <!-- Right Button (node 1200:1861): absolute, p-16px wrapper + pill icon button -->
+            <div class="carousel__btn-wrap carousel__btn-wrap--next">
+              <button class="carousel__btn" id="carouselNext" aria-label="Next">
+                <span class="carousel__btn__icon">
+                  <img src="icons/ic-chevron-left.svg" alt="">
+                </span>
+              </button>
+            </div>
 
-          <!-- Indicator dots (image from DS, node 1376:2406) -->
-          <div class="carousel__dots">
+          </div><!-- end carousel__content -->
+
+          <!-- Indicator (node 1376:2406): 108×20px -->
+          <div class="carousel__indicator">
             <img src="icons/carousel-dots.svg" id="carouselDots" alt="Slide indicator">
           </div>
 
@@ -1574,16 +1604,15 @@
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        FOOTER â€” Footer - 1.5  (node 2338:10430)
        60px, border-top: Border/default, padding py-20 px-28
-       Left: Â© 2026 Pandai.org All Rights Reserved
+       Left: &copy; 2026 Pandai.org All Rights Reserved
        Right: Made with â™¥ in Malaysia
   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <footer class="footer">
-    <div class="page-container">
-      <div class="footer__inner">
+    <div class="footer__inner">
 
         <!-- Left text group -->
         <div class="footer__left">
-          <span class="footer__text">Â© 2026</span>
+          <span class="footer__text">&copy; 2026</span>
           <a class="footer__link" href="#">Pandai.org</a>
           <span class="footer__text">All Rights Reserved</span>
         </div>
@@ -1596,7 +1625,6 @@
           <span class="footer__text">in Malaysia</span>
         </div>
 
-      </div>
     </div>
   </footer>
 
