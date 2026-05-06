@@ -32,7 +32,7 @@
       --border-primary-default:  #00cc85;
       --border-primary-focus:    #00a36a;
       --border-default:          #00cc85;
-      --border-general-default:  #d9d9d9;z
+      --border-general-default:  #d9d9d9;
       --border-secondary-focus:  #70bc6f;
       --border-tertiary-focus:   #00453d;
       --border-disabled:         #bfbfbf;
@@ -540,29 +540,41 @@
 
         <!-- Outline/search  DS 260:1103 -->
         <button class="pd-icon-btn" aria-label="Search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(3,3)">
+              <path d="M 8 16 C 12.418 16 16 12.418 16 8 C 16 3.582 12.418 0 8 0 C 3.582 0 0 3.582 0 8 C 0 12.418 3.582 16 8 16 Z"/>
+              <path d="M 18 18 L 13.65 13.65"/>
+            </g>
           </svg>
         </button>
 
         <!-- Outline/maximize  DS 260:915 -->
         <button class="pd-icon-btn" aria-label="Fullscreen">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(3,3)">
+              <path d="M 0 13 L 0 16 C 0 16.530 0.211 17.039 0.586 17.414 C 0.961 17.789 1.470 18 2 18 L 5 18"/>
+              <path d="M 5 0 L 2 0 C 1.470 0 0.961 0.211 0.586 0.586 C 0.211 0.961 0 1.470 0 2 L 0 5 M 18 5 L 18 2 C 18 1.470 17.789 0.961 17.414 0.586 C 17.039 0.211 16.530 0 16 0 L 13 0 M 13 18 L 16 18 C 16.530 18 17.039 17.789 17.414 17.414 C 17.789 17.039 18 16.530 18 16 L 18 13"/>
+            </g>
           </svg>
         </button>
 
         <!-- Outline/smartphone  DS 260:1178 -->
         <button class="pd-icon-btn" aria-label="Mobile app">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(5,2)">
+              <path d="M 12 0 L 2 0 C 0.895 0 0 0.895 0 2 L 0 18 C 0 19.105 0.895 20 2 20 L 12 20 C 13.105 20 14 19.105 14 18 L 14 2 C 14 0.895 13.105 0 12 0 Z"/>
+              <path d="M 7 16 L 7.01 16"/>
+            </g>
           </svg>
         </button>
 
         <!-- Outline/bell  DS 260:491 -->
         <button class="pd-icon-btn" aria-label="Notifications">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(2,2)">
+              <path d="M 20 15 L 0 15 C 0.796 15 1.559 14.684 2.121 14.121 C 2.684 13.559 3 12.796 3 12 L 3 7 C 3 5.143 3.737 3.363 5.050 2.050 C 6.363 0.737 8.143 0 10 0 C 11.857 0 13.637 0.737 14.950 2.050 C 16.263 3.363 17 5.143 17 7 L 17 12 C 17 12.796 17.316 13.559 17.879 14.121 C 18.441 14.684 19.204 15 20 15 Z"/>
+              <path d="M 11.730 19 C 11.554 19.303 11.302 19.555 10.998 19.730 C 10.695 19.904 10.350 19.996 10 19.996 C 9.650 19.996 9.305 19.904 9.002 19.730 C 8.698 19.555 8.446 19.303 8.270 19"/>
+            </g>
           </svg>
         </button>
 
@@ -580,18 +592,20 @@
           </svg>
         </button>
 
-        <!-- Outline/waffle-menu  DS 1070:2215 — 3×3 dot grid -->
+        <!-- Outline/waffle-menu  DS 1070:2215 -->
         <button class="pd-icon-btn" aria-label="Apps">
-          <svg viewBox="0 0 20 20" fill="currentColor" stroke="none">
-            <circle cx="4"  cy="4"  r="1.5"/>
-            <circle cx="10" cy="4"  r="1.5"/>
-            <circle cx="16" cy="4"  r="1.5"/>
-            <circle cx="4"  cy="10" r="1.5"/>
-            <circle cx="10" cy="10" r="1.5"/>
-            <circle cx="16" cy="10" r="1.5"/>
-            <circle cx="4"  cy="16" r="1.5"/>
-            <circle cx="10" cy="16" r="1.5"/>
-            <circle cx="16" cy="16" r="1.5"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(4,4)">
+              <path d="M 8 9 C 8.552 9 9 8.552 9 8 C 9 7.448 8.552 7 8 7 C 7.448 7 7 7.448 7 8 C 7 8.552 7.448 9 8 9 Z"/>
+              <path d="M 15 9 C 15.552 9 16 8.552 16 8 C 16 7.448 15.552 7 15 7 C 14.448 7 14 7.448 14 8 C 14 8.552 14.448 9 15 9 Z"/>
+              <path d="M 1 9 C 1.552 9 2 8.552 2 8 C 2 7.448 1.552 7 1 7 C 0.448 7 0 7.448 0 8 C 0 8.552 0.448 9 1 9 Z"/>
+              <path d="M 8 2 C 8.552 2 9 1.552 9 1 C 9 0.448 8.552 0 8 0 C 7.448 0 7 0.448 7 1 C 7 1.552 7.448 2 8 2 Z"/>
+              <path d="M 15 2 C 15.552 2 16 1.552 16 1 C 16 0.448 15.552 0 15 0 C 14.448 0 14 0.448 14 1 C 14 1.552 14.448 2 15 2 Z"/>
+              <path d="M 1 2 C 1.552 2 2 1.552 2 1 C 2 0.448 1.552 0 1 0 C 0.448 0 0 0.448 0 1 C 0 1.552 0.448 2 1 2 Z"/>
+              <path d="M 8 16 C 8.552 16 9 15.552 9 15 C 9 14.448 8.552 14 8 14 C 7.448 14 7 14.448 7 15 C 7 15.552 7.448 16 8 16 Z"/>
+              <path d="M 15 16 C 15.552 16 16 15.552 16 15 C 16 14.448 15.552 14 15 14 C 14.448 14 14 14.448 14 15 C 14 15.552 14.448 16 15 16 Z"/>
+              <path d="M 1 16 C 1.552 16 2 15.552 2 15 C 2 14.448 1.552 14 1 14 C 0.448 14 0 14.448 0 15 C 0 15.552 0.448 16 1 16 Z"/>
+            </g>
           </svg>
         </button>
 
@@ -612,8 +626,8 @@
       <!-- Home  Outline/home  DS 260:822 -->
       <div class="pd-navbtn"><button class="pd-navbtn__main"><div class="pd-navbtn__content">
         <div class="pd-navbtn__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(3,2)"><path d="M 0 7 L 9 0 L 18 7 L 18 18 C 18 18.530 17.789 19.039 17.414 19.414 C 17.039 19.789 16.530 20 16 20 L 2 20 C 1.470 20 0.961 19.789 0.586 19.414 C 0.211 19.039 0 18.530 0 18 L 0 7 Z"/><path d="M 6 20 L 6 10 L 12 10 L 12 20"/></g>
           </svg>
         </div>
         <span class="pd-navbtn__label">Home</span>
@@ -622,31 +636,18 @@
       <!-- Quiz  Outline/check-circle  DS 260:527 -->
       <div class="pd-navbtn"><button class="pd-navbtn__main"><div class="pd-navbtn__content">
         <div class="pd-navbtn__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(2,1.994)"><path d="M 20 9.086 L 20 10.006 C 19.999 12.162 19.301 14.260 18.009 15.988 C 16.718 17.715 14.903 18.978 12.835 19.590 C 10.767 20.201 8.557 20.128 6.534 19.380 C 4.512 18.633 2.785 17.252 1.611 15.443 C 0.437 13.634 -0.120 11.494 0.022 9.342 C 0.164 7.190 0.997 5.142 2.398 3.503 C 3.799 1.864 5.693 0.721 7.796 0.246 C 9.900 -0.229 12.100 -0.012 14.070 0.866"/><path d="M 20 2.006 L 10 12.016 L 7 9.016"/></g>
           </svg>
         </div>
         <span class="pd-navbtn__label">Quiz</span>
       </div></button></div>
 
-      <!-- Battle  Outline/battle  DS 1070:8064 — inline SVG from actual DS paths -->
+      <!-- Battle  Outline/battle  DS 1070:8064 -->
       <div class="pd-navbtn"><button class="pd-navbtn__main"><div class="pd-navbtn__content">
         <div class="pd-navbtn__icon">
-          <!-- Composed from 4 DS SVG vectors. Each nested <svg> maps to its exact DS inset within 24×24 grid.
-               V1=sword diagonal | V2=crossing line | V3=guard | V4=handle -->
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;overflow:hidden">
-            <svg x="3" y="3" width="18" height="18" viewBox="0 0 19.5 19.5" overflow="visible">
-              <path d="M18.75 0.75V5.75L7.75 14.75L3.75 18.75L0.75 15.75L4.75 11.75L13.75 0.75H18.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            </svg>
-            <svg x="5" y="13" width="6" height="6" viewBox="0 0 7.5 7.5" overflow="visible">
-              <path d="M0.75 0.75L6.75 6.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <svg x="14.32" y="14.64" width="6.68" height="6.36" viewBox="0 0 8.18 7.865" overflow="visible">
-              <path d="M0.75 3.435L4.43 7.115L7.43 4.115L4.065 0.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            </svg>
-            <svg x="3" y="3" width="7" height="7.5" viewBox="0 0 8.50003 9.00002" overflow="visible">
-              <path d="M7.75 3.25L5.75 0.75H0.75V5.75L3.75 8.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            </svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(3,3)"><path d="M 18 0 L 18 5 L 7 14 L 3 18 L 0 15 L 4 11 L 13 0 L 18 0 Z"/><path d="M 2 10 L 8 16"/><path d="M 11.32 14.32 L 15 18 L 18 15 L 14.635 11.635"/><path d="M 7 2.5 L 5 0 L 0 0 L 0 5 L 3 7.5"/></g>
           </svg>
         </div>
         <span class="pd-navbtn__label">Battle</span>
@@ -655,8 +656,8 @@
       <!-- Practice  Outline/book-open  DS 260:498 -->
       <div class="pd-navbtn"><button class="pd-navbtn__main"><div class="pd-navbtn__content">
         <div class="pd-navbtn__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(2,3)"><path d="M 0 0 L 6 0 C 7.061 0 8.078 0.421 8.828 1.172 C 9.579 1.922 10 2.939 10 4 L 10 18 C 10 17.204 9.684 16.441 9.121 15.879 C 8.559 15.316 7.796 15 7 15 L 0 15 L 0 0 Z"/><path d="M 20 0 L 14 0 C 12.939 0 11.922 0.421 11.172 1.172 C 10.421 1.922 10 2.939 10 4 L 10 18 C 10 17.204 10.316 16.441 10.879 15.879 C 11.441 15.316 12.204 15 13 15 L 20 15 L 20 0 Z"/></g>
           </svg>
         </div>
         <span class="pd-navbtn__label">Practice</span>
@@ -665,15 +666,14 @@
       <!-- Class ▼  Outline/users  DS 260:1321 -->
       <div class="pd-navbtn"><button class="pd-navbtn__main"><div class="pd-navbtn__content">
         <div class="pd-navbtn__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(1,3)"><path d="M 16 18 L 16 16 C 16 14.939 15.579 13.922 14.828 13.172 C 14.078 12.421 13.061 12 12 12 L 4 12 C 2.939 12 1.922 12.421 1.172 13.172 C 0.421 13.922 0 14.939 0 16 L 0 18"/><path d="M 8 8 C 10.209 8 12 6.209 12 4 C 12 1.791 10.209 0 8 0 C 5.791 0 4 1.791 4 4 C 4 6.209 5.791 8 8 8 Z"/><path d="M 22 18 L 22 16 C 21.999 15.114 21.704 14.253 21.161 13.552 C 20.618 12.852 19.858 12.352 19 12.130"/><path d="M 15 0.130 C 15.860 0.350 16.623 0.851 17.168 1.552 C 17.712 2.254 18.008 3.117 18.008 4.005 C 18.008 4.893 17.712 5.756 17.168 6.458 C 16.623 7.159 15.860 7.660 15 7.880"/></g>
           </svg>
         </div>
         <span class="pd-navbtn__label">Class</span>
         <div class="pd-navbtn__chevron">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(6,9)"><path d="M 0 0 L 6 6 L 12 0"/></g>
           </svg>
         </div>
       </div></button></div>
@@ -681,31 +681,29 @@
       <!-- Learn ▼  Outline/book  DS 260:501 -->
       <div class="pd-navbtn"><button class="pd-navbtn__main"><div class="pd-navbtn__content">
         <div class="pd-navbtn__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(4,2)"><path d="M 0 17.5 C 0 16.837 0.263 16.201 0.732 15.732 C 1.201 15.263 1.837 15 2.5 15 L 16 15"/><path d="M 2.5 0 L 16 0 L 16 20 L 2.5 20 C 1.837 20 1.201 19.737 0.732 19.268 C 0.263 18.799 0 18.163 0 17.5 L 0 2.5 C 0 1.837 0.263 1.201 0.732 0.732 C 1.201 0.263 1.837 0 2.5 0 Z"/></g>
           </svg>
         </div>
         <span class="pd-navbtn__label">Learn</span>
         <div class="pd-navbtn__chevron">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(6,9)"><path d="M 0 0 L 6 6 L 12 0"/></g>
           </svg>
         </div>
       </div></button></div>
 
-      <!-- Achievement ▼  Outline/bar-chart-2  DS 260:473  ← correct icon from iconography page -->
+      <!-- Achievement ▼  Outline/bar-chart-2  DS 260:473 -->
       <div class="pd-navbtn pd-navbtn--active"><button class="pd-navbtn__main"><div class="pd-navbtn__content">
         <div class="pd-navbtn__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="20" x2="18" y2="10"/>
-            <line x1="12" y1="20" x2="12" y2="4"/>
-            <line x1="6"  y1="20" x2="6"  y2="14"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(6,4)"><path d="M 12 16 L 12 6 M 6 16 L 6 0 M 0 16 L 0 10"/></g>
           </svg>
         </div>
         <span class="pd-navbtn__label">Achievement</span>
         <div class="pd-navbtn__chevron">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(6,9)"><path d="M 0 0 L 6 6 L 12 0"/></g>
           </svg>
         </div>
       </div></button></div>
@@ -713,14 +711,14 @@
       <!-- Potential ▼  Outline/star  DS 260:1192 -->
       <div class="pd-navbtn"><button class="pd-navbtn__main"><div class="pd-navbtn__content">
         <div class="pd-navbtn__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(2,2)"><path d="M 10 0 L 13.090 6.260 L 20 7.270 L 15 12.140 L 16.180 19.020 L 10 15.770 L 3.820 19.020 L 5 12.140 L 0 7.270 L 6.910 6.260 L 10 0 Z"/></g>
           </svg>
         </div>
         <span class="pd-navbtn__label">Potential</span>
         <div class="pd-navbtn__chevron">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(6,9)"><path d="M 0 0 L 6 6 L 12 0"/></g>
           </svg>
         </div>
       </div></button></div>
@@ -728,18 +726,14 @@
       <!-- Rewards ▼  Outline/gift  DS 260:765 -->
       <div class="pd-navbtn"><button class="pd-navbtn__main"><div class="pd-navbtn__content">
         <div class="pd-navbtn__icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 12 20 22 4 22 4 12"/>
-            <rect x="2" y="7" width="20" height="5"/>
-            <line x1="12" y1="22" x2="12" y2="7"/>
-            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
-            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(2,2)"><path d="M 18 10 L 18 20 L 2 20 L 2 10"/><path d="M 20 5 L 0 5 L 0 10 L 20 10 L 20 5 Z"/><path d="M 10 5 L 5.5 5 C 4.837 5 4.201 4.737 3.732 4.268 C 3.263 3.799 3 3.163 3 2.5 C 3 1.837 3.263 1.201 3.732 0.732 C 4.201 0.263 4.837 0 5.5 0 C 9 0 10 5 10 5 Z"/><path d="M 10 5 L 14.5 5 C 15.163 5 15.799 4.737 16.268 4.268 C 16.737 3.799 17 3.163 17 2.5 C 17 1.837 16.737 1.201 16.268 0.732 C 15.799 0.263 15.163 0 14.5 0 C 11 0 10 5 10 5 Z"/><path d="M 10 20 L 10 5"/></g>
           </svg>
         </div>
         <span class="pd-navbtn__label">Rewards</span>
         <div class="pd-navbtn__chevron">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(6,9)"><path d="M 0 0 L 6 6 L 12 0"/></g>
           </svg>
         </div>
       </div></button></div>
@@ -763,20 +757,20 @@
 
       <!-- Link 1.5: Home button  DS 260:822 -->
       <button class="pd-link15" type="button" aria-label="Home">
-        <svg class="pd-link15__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        <svg class="pd-link15__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <g transform="translate(3,2)"><path d="M 0 7 L 9 0 L 18 7 L 18 18 C 18 18.530 17.789 19.039 17.414 19.414 C 17.039 19.789 16.530 20 16 20 L 2 20 C 1.470 20 0.961 19.789 0.586 19.414 C 0.211 19.039 0 18.530 0 18 L 0 7 Z"/><path d="M 6 20 L 6 10 L 12 10 L 12 20"/></g>
         </svg>
         <!-- Outline/chevron-right  DS 260:539 -->
-        <svg class="pd-link15__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 18 15 12 9 6"/>
+        <svg class="pd-link15__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <g transform="translate(9,6)"><path d="M 0 12 L 6 6 L 0 0"/></g>
         </svg>
       </button>
 
       <!-- Link 1.5: "Achievement" parent button -->
       <button class="pd-link15" type="button">
         <span class="pd-link15__text" style="color:var(--text-primary-default)">Achievement</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 18 15 12 9 6"/>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <g transform="translate(9,6)"><path d="M 0 12 L 6 6 L 0 0"/></g>
         </svg>
       </button>
 
@@ -798,10 +792,8 @@
       <button class="pd-btn15-secondary" type="button">
         <div class="pd-btn15-secondary__icon">
           <!-- Outline/download  DS 260:686 -->
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(3,3)"><path d="M 18 12 L 18 16 C 18 16.530 17.789 17.039 17.414 17.414 C 17.039 17.789 16.530 18 16 18 L 2 18 C 1.470 18 0.961 17.789 0.586 17.414 C 0.211 17.039 0 16.530 0 16 L 0 12"/><path d="M 4 7 L 9 12 L 14 7"/><path d="M 9 12 L 9 0"/></g>
           </svg>
         </div>
         <div class="pd-btn15-secondary__text-wrap">
@@ -1175,8 +1167,8 @@
     <span class="pd-footer15__text">Made with</span>
     <!-- Outline/heart  DS 260:815 -->
     <div class="pd-footer15__heart">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <g transform="translate(1.549,2.998)"><path d="M 19.291 1.612 C 18.781 1.101 18.174 0.695 17.507 0.419 C 16.839 0.142 16.124 0 15.401 0 C 14.679 0 13.963 0.142 13.296 0.419 C 12.628 0.695 12.022 1.101 11.511 1.612 L 10.451 2.672 L 9.391 1.612 C 8.360 0.580 6.960 0.001 5.501 0.001 C 4.042 0.001 2.643 0.580 1.611 1.612 C 0.580 2.644 0 4.043 0 5.502 C 0 6.961 0.580 8.360 1.611 9.392 L 2.671 10.452 L 10.451 18.232 L 18.231 10.452 L 19.291 9.392 C 19.802 8.881 20.208 8.275 20.484 7.607 C 20.761 6.940 20.903 6.224 20.903 5.502 C 20.903 4.779 20.761 4.064 20.484 3.396 C 20.208 2.729 19.802 2.123 19.291 1.612 Z"/></g>
       </svg>
     </div>
     <span class="pd-footer15__text">in Malaysia</span>
