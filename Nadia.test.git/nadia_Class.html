@@ -412,68 +412,58 @@
       .cards-grid { grid-template-columns: 1fr; }
     }
 
-    /* ── Class Card shell ───────────────────────────────────────── */
+    /* ── Class Card 1.5 — node 4104:83963
+       Uniform OG-green palette per DS spec
+       ──────────────────────────────────────────────────────────── */
     .cc {
-      border-radius: var(--r-4xl);
+      border-radius: var(--r-4xl);           /* corner-4xl = 24px */
+      border: 1px solid var(--og-500);       /* border/primary/default */
       overflow: hidden;
       display: flex; flex-direction: column;
       background: #fff;
     }
 
-    /* ── Cover area — DS Class Subject Cover Image component ───── */
-    .cc__cover { width: 100%; overflow: hidden; display: block; }
-    .cc__cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* Cover — aspect 1000:435 per DS SubjectCoverImage */
+    .cc__cover { width: 100%; display: block; overflow: hidden; }
+    .cc__cover img {
+      width: 100%;
+      aspect-ratio: 1000 / 435;
+      object-fit: cover;
+      display: block;
+    }
 
-    /* ── Card outer border ──────────────────────────────────────── */
-    .cc--bm  { border: 1px solid var(--bm-500); }
-    .cc--en  { border: 1px solid var(--en-500); }
-    .cc--mt  { border: 1px solid var(--mt-500); }
-    .cc--sc  { border: 1px solid var(--sc-500); }
-    .cc--bio { border: 1px solid var(--bi-500); }
-    .cc--hs  { border: 1px solid var(--hs-500); }
+    /* Body wrap — surface/secondary/default-subtle */
+    .cc__body {
+      padding: var(--sp-m);                  /* 16px */
+      background: #e8fbe8;
+    }
 
-    /* ── Body (light subject bg) ────────────────────────────────── */
-    .cc__body { padding: var(--sp-m); }
-    .cc--bm  .cc__body { background: var(--bm-50);  }
-    .cc--en  .cc__body { background: var(--en-50);  }
-    .cc--mt  .cc__body { background: var(--mt-50);  }
-    .cc--sc  .cc__body { background: var(--sc-50);  }
-    .cc--bio .cc__body { background: var(--bi-50);  }
-    .cc--hs  .cc__body { background: var(--hs-50);  }
+    /* Inner card */
+    .cc__inner {
+      border-radius: var(--r-2xl);           /* corner-2xl = 18px */
+      border: 1px solid var(--og-500);       /* border/primary/default */
+      overflow: hidden;
+      background: #fff;
+      display: flex; flex-direction: column;
+    }
 
-    /* ── Inner card ─────────────────────────────────────────────── */
-    .cc__inner { border-radius: var(--r-2xl); overflow: hidden; background: #fff; display: flex; flex-direction: column; }
-    .cc--bm  .cc__inner { border: 1px solid var(--bm-500); }
-    .cc--en  .cc__inner { border: 1px solid var(--en-500); }
-    .cc--mt  .cc__inner { border: 1px solid var(--mt-500); }
-    .cc--sc  .cc__inner { border: 1px solid var(--sc-500); }
-    .cc--bio .cc__inner { border: 1px solid var(--bi-500); }
-    .cc--hs  .cc__inner { border: 1px solid var(--hs-500); }
-
-    /* ── Header strip ───────────────────────────────────────────── */
+    /* Header strip — surface/primary/default */
     .cc__hdr {
-      padding: var(--sp-xs) var(--sp-m);
+      background: var(--og-500);
+      padding: var(--sp-xs) var(--sp-m);     /* 8px 16px */
       display: flex; align-items: center; justify-content: space-between;
       gap: var(--sp-m); min-height: 44px;
     }
-    .cc--bm  .cc__hdr { background: var(--bm-500); }
-    .cc--en  .cc__hdr { background: var(--en-500); }
-    .cc--mt  .cc__hdr { background: var(--mt-500); }
-    .cc--sc  .cc__hdr { background: var(--sc-500); }
-    .cc--bio .cc__hdr { background: var(--bi-500); }
-    .cc--hs  .cc__hdr { background: var(--hs-500); }
-
     .cc__hdr-title {
-      font-size: 16px; font-weight: 600; line-height: 26px;
+      font-size: 18px;                       /* Title/T2 */
+      font-weight: 600;
+      line-height: 28px;
+      color: #fff;
       flex: 1; min-width: 0;
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
-    /* Science has yellow bg so needs dark text */
-    .cc--bm .cc__hdr-title, .cc--en .cc__hdr-title, .cc--mt .cc__hdr-title,
-    .cc--bio .cc__hdr-title, .cc--hs .cc__hdr-title { color: #fff; }
-    .cc--sc .cc__hdr-title { color: var(--sc-700); }
 
-    /* DLP badge */
+    /* DLP badge — LT-DLP, pink pill */
     .dlp-badge {
       display: inline-flex; align-items: center; gap: 4px;
       background: var(--pk-500); border-radius: 99px;
@@ -483,121 +473,89 @@
     }
     .dlp-badge svg { width: 13px; height: 13px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* ── Main content ───────────────────────────────────────────── */
+    /* Main content — h:96px */
     .cc__main {
       background: #fff; padding: var(--sp-m);
-      display: flex; align-items: flex-start; gap: var(--sp-m); min-height: 96px;
+      display: flex; align-items: flex-start; gap: var(--sp-m);
+      height: 96px;
     }
-    .cc__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+    .cc__text {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: column;
+      gap: var(--sp-xxxs);                   /* 2px */
+      height: 100%;
+    }
     .cc__teacher {
-      font-size: 14px; font-weight: 600; line-height: 20px;
-      color: var(--text-heading);
+      font-size: 14px; font-weight: 600; line-height: 20px; /* Body/B1 */
+      color: var(--text-heading);            /* #404040 */
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
     .cc__schedule {
-      font-size: 13px; font-weight: 400; line-height: 20px;
-      color: var(--text-body);
-      display: flex; flex-wrap: wrap; gap: 3px; align-items: center;
+      font-size: 14px; font-weight: 400; line-height: 20px; /* Body/B3 */
+      color: var(--text-body);               /* #666 */
+      display: flex; flex-wrap: wrap; gap: var(--sp-xxxs); align-items: center;
     }
     .cc__schedule strong { font-weight: 600; color: var(--text-heading); }
 
-    /* Live badge — Label Badge 1.5 */
+    /* Live badge — Label Badge 1.5, surface/primary/default-subtle */
     .live-badge {
-      display: inline-flex; align-items: center; gap: var(--sp-xxs);
+      display: inline-flex; align-items: center; gap: var(--sp-xxs); /* 4px */
       border-radius: var(--r-rounded);
-      padding: var(--sp-xxxs) var(--sp-xs);
-      margin-top: 3px; align-self: flex-start;
-      font-size: 10px; font-weight: 500; line-height: 12px; white-space: nowrap;
+      padding: var(--sp-xxxs) var(--sp-xs);  /* 2px 8px */
+      background: #ccf5e7;                   /* surface/primary/default-subtle */
+      border: 1px solid var(--og-500);
+      align-self: flex-start;
+      font-size: 10px; font-weight: 500; line-height: 12px; /* Body/B8 */
+      color: var(--og-500);                  /* text/primary/default */
+      white-space: nowrap;
     }
-    .live-badge svg { width: 10px; height: 10px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .live-badge svg {
+      width: 10px; height: 10px;
+      fill: none; stroke-width: 2;
+      stroke-linecap: round; stroke-linejoin: round;
+      stroke: var(--og-500);
+    }
 
-    .cc--bm  .live-badge { background: var(--bm-100); border: 1px solid var(--bm-500); color: var(--bm-700); }
-    .cc--bm  .live-badge svg { stroke: var(--bm-500); }
-    .cc--en  .live-badge { background: var(--en-100); border: 1px solid var(--en-500); color: var(--en-700); }
-    .cc--en  .live-badge svg { stroke: var(--en-500); }
-    .cc--mt  .live-badge { background: var(--mt-100); border: 1px solid var(--mt-500); color: var(--mt-700); }
-    .cc--mt  .live-badge svg { stroke: var(--mt-500); }
-    .cc--sc  .live-badge { background: var(--sc-100); border: 1px solid var(--sc-500); color: var(--sc-700); }
-    .cc--sc  .live-badge svg { stroke: var(--sc-500); }
-    .cc--bio .live-badge { background: var(--bi-100); border: 1px solid var(--bi-500); color: var(--bi-700); }
-    .cc--bio .live-badge svg { stroke: var(--bi-500); }
-    .cc--hs  .live-badge { background: var(--hs-100); border: 1px solid var(--hs-500); color: var(--hs-700); }
-    .cc--hs  .live-badge svg { stroke: var(--hs-500); }
+    /* Divider */
+    .cc__divider { height: 1px; background: #ccf5e7; }
 
-    /* ── Divider ────────────────────────────────────────────────── */
-    .cc__divider { height: 1px; }
-    .cc--bm  .cc__divider { background: var(--bm-100); }
-    .cc--en  .cc__divider { background: var(--en-100); }
-    .cc--mt  .cc__divider { background: var(--mt-100); }
-    .cc--sc  .cc__divider { background: var(--sc-100); }
-    .cc--bio .cc__divider { background: var(--bi-100); }
-    .cc--hs  .cc__divider { background: var(--hs-100); }
-
-    /* ── CTA ────────────────────────────────────────────────────── */
+    /* CTA */
     .cc__cta {
       background: #fff; padding: var(--sp-m);
       display: flex; justify-content: flex-end;
     }
 
-    /* Enter Class button — Button 1.5 */
+    /* Enter Class — Button 1.5 primary */
     .btn-enter {
       display: inline-flex; align-items: center;
-      border-radius: var(--r-rounded); padding: 2px 8px 2px 12px;
+      border-radius: var(--r-rounded);
+      padding: 2px 8px 2px 12px;
+      background: var(--og-500);             /* surface/primary/default */
+      border: 1px solid var(--og-600);       /* border/primary/focus */
       cursor: pointer; text-decoration: none;
     }
     .btn-enter__label {
-      font-size: 12px; font-weight: 600; line-height: 18px; white-space: nowrap; padding-right: 4px;
+      font-size: 12px; font-weight: 600; line-height: 18px; /* Body/B5 */
+      color: #e9fbf5;                        /* text/primary/on-color */
+      white-space: nowrap;
+      padding-right: var(--sp-xxs);          /* 4px */
     }
     .btn-enter__arrow {
-      width: 20px; height: 20px; border-radius: var(--r-rounded);
+      width: 20px; height: 20px;
+      border-radius: var(--r-rounded);
+      background: #99ebce;                   /* surface/primary/default-subtle-hover */
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-    .btn-enter__arrow svg { width: 12px; height: 12px; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .btn-enter__arrow svg {
+      width: 12px; height: 12px;
+      fill: none; stroke-width: 2.5;
+      stroke-linecap: round; stroke-linejoin: round;
+      stroke: var(--og-700);
+    }
 
-    /* Subject-specific button colours */
-    .cc--bm .btn-enter  { background: var(--bm-500); border: 1px solid var(--bm-600); }
-    .cc--bm .btn-enter__label { color: #fff; }
-    .cc--bm .btn-enter__arrow { background: var(--bm-200); }
-    .cc--bm .btn-enter__arrow svg { stroke: var(--bm-700); }
-
-    .cc--en .btn-enter  { background: var(--en-500); border: 1px solid var(--en-600); }
-    .cc--en .btn-enter__label { color: #fff; }
-    .cc--en .btn-enter__arrow { background: var(--en-200); }
-    .cc--en .btn-enter__arrow svg { stroke: var(--en-700); }
-
-    .cc--mt .btn-enter  { background: var(--mt-500); border: 1px solid var(--mt-600); }
-    .cc--mt .btn-enter__label { color: #fff; }
-    .cc--mt .btn-enter__arrow { background: var(--mt-200); }
-    .cc--mt .btn-enter__arrow svg { stroke: var(--mt-700); }
-
-    .cc--sc .btn-enter  { background: var(--sc-500); border: 1px solid var(--sc-600); }
-    .cc--sc .btn-enter__label { color: var(--sc-700); }
-    .cc--sc .btn-enter__arrow { background: var(--sc-200); }
-    .cc--sc .btn-enter__arrow svg { stroke: var(--sc-700); }
-
-    .cc--bio .btn-enter  { background: var(--bi-500); border: 1px solid var(--bi-600); }
-    .cc--bio .btn-enter__label { color: #fff; }
-    .cc--bio .btn-enter__arrow { background: var(--bi-200); }
-    .cc--bio .btn-enter__arrow svg { stroke: var(--bi-700); }
-
-    .cc--hs .btn-enter  { background: var(--hs-500); border: 1px solid var(--hs-600); }
-    .cc--hs .btn-enter__label { color: #fff; }
-    .cc--hs .btn-enter__arrow { background: var(--hs-200); }
-    .cc--hs .btn-enter__arrow svg { stroke: var(--hs-700); }
-
-    /* DS Avatar — subject-border override inside class cards */
-    .cc--bm  .ds-avatar { border-color: var(--bm-500); }
-    .cc--bm  .ds-avatar svg { stroke: var(--bm-500); }
-    .cc--en  .ds-avatar { border-color: var(--en-500); }
-    .cc--en  .ds-avatar svg { stroke: var(--en-500); }
-    .cc--mt  .ds-avatar { border-color: var(--mt-500); }
-    .cc--mt  .ds-avatar svg { stroke: var(--mt-500); }
-    .cc--sc  .ds-avatar { border-color: var(--sc-500); }
-    .cc--sc  .ds-avatar svg { stroke: var(--sc-500); }
-    .cc--bio .ds-avatar { border-color: var(--bi-500); }
-    .cc--bio .ds-avatar svg { stroke: var(--bi-500); }
-    .cc--hs  .ds-avatar { border-color: var(--hs-500); }
-    .cc--hs  .ds-avatar svg { stroke: var(--hs-500); }
+    /* Avatar inside cards — og-500 border */
+    .cc .ds-avatar { border-color: var(--og-500); }
+    .cc .ds-avatar svg { stroke: var(--og-500); }
 
   </style>
 </head>
@@ -762,7 +720,7 @@
   <div class="cards-grid">
 
     <!-- ① B-Melayu | Form 4 ──────────────────────────────────── -->
-    <div class="cc cc--bm">
+    <div class="cc">
       <div class="cc__cover"><img src="covers/bm.png" alt="Bahasa Melayu cover"></div>
       <div class="cc__body">
         <div class="cc__inner">
@@ -792,7 +750,7 @@
     </div>
 
     <!-- ② English | Form 4 ──────────────────────────────────── -->
-    <div class="cc cc--en">
+    <div class="cc">
       <div class="cc__cover"><img src="covers/en.png" alt="English cover"></div>
       <div class="cc__body">
         <div class="cc__inner">
@@ -826,7 +784,7 @@
     </div>
 
     <!-- ③ Mathematics | Form 4 ──────────────────────────────── -->
-    <div class="cc cc--mt">
+    <div class="cc">
       <div class="cc__cover"><img src="covers/math.png" alt="Mathematics cover"></div>
       <div class="cc__body">
         <div class="cc__inner">
@@ -856,7 +814,7 @@
     </div>
 
     <!-- ④ Science | Form 4 ──────────────────────────────────── -->
-    <div class="cc cc--sc">
+    <div class="cc">
       <div class="cc__cover"><img src="covers/science.png" alt="Science cover"></div>
       <div class="cc__body">
         <div class="cc__inner">
@@ -890,7 +848,7 @@
     </div>
 
     <!-- ⑤ Biology | Form 5 ──────────────────────────────────── -->
-    <div class="cc cc--bio">
+    <div class="cc">
       <div class="cc__cover"><img src="covers/biology.png" alt="Biology cover"></div>
       <div class="cc__body">
         <div class="cc__inner">
@@ -920,7 +878,7 @@
     </div>
 
     <!-- ⑥ History | Form 5 ──────────────────────────────────── -->
-    <div class="cc cc--hs">
+    <div class="cc">
       <div class="cc__cover"><img src="covers/history.png" alt="History cover"></div>
       <div class="cc__body">
         <div class="cc__inner">
