@@ -153,26 +153,26 @@
     .pd-navbtn__content { display: flex; align-items: center; justify-content: center; gap: var(--space-xs); min-height: 24px; }
     /* Default: icon/chevron green, label grey */
     .pd-navbtn__icon    { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--text-primary-default); transition: color 0.15s ease; }
-    .pd-navbtn__label   { font-size: 14px; font-weight: 600; line-height: 20px; white-space: nowrap; color: var(--text-default-body); transition: color 0.15s ease; }
+    .pd-navbtn__label   { font-size: 14px; font-weight: 600; line-height: 20px; white-space: nowrap; color: #404040; transition: color 0.15s ease; }
     .pd-navbtn__chevron { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--text-primary-default); transition: color 0.15s ease; }
 
-    /* Hover — DS Button 1.5 Primary: bg #b5f291 | border #70bc6f | text/icon #70bc6f */
-    .pd-navbtn__main:hover { background: var(--surface-secondary-default); border-color: var(--border-secondary-focus); }
+    /* Hover — Button 1.5 Primary Hover: bg #b5f291 | border #70bc6f | text/icon #70bc6f */
+    .pd-navbtn__main:hover { background: #b5f291; border-color: #70bc6f; }
     .pd-navbtn__main:hover .pd-navbtn__icon,
-    .pd-navbtn__main:hover .pd-navbtn__chevron { color: var(--text-secondary-focus); }
-    .pd-navbtn__main:hover .pd-navbtn__label   { color: var(--text-secondary-focus); }
+    .pd-navbtn__main:hover .pd-navbtn__chevron { color: #70bc6f; }
+    .pd-navbtn__main:hover .pd-navbtn__label   { color: #70bc6f; }
 
-    /* Pressed — surface/secondary/default-subtle (#e8fbe8) */
-    .pd-navbtn__main:active { background: var(--surface-secondary-default-subtle); border-color: var(--border-secondary-focus); }
+    /* Pressed — Button 1.5 Primary Pressed: bg #00564c | border #00453d | text/icon #00cc85 */
+    .pd-navbtn__main:active { background: #00564c; border-color: #00453d; }
     .pd-navbtn__main:active .pd-navbtn__icon,
     .pd-navbtn__main:active .pd-navbtn__label,
-    .pd-navbtn__main:active .pd-navbtn__chevron { color: #fff; }
+    .pd-navbtn__main:active .pd-navbtn__chevron { color: #00cc85; }
 
-    /* Selected/Active — green background, all elements white */
-    .pd-navbtn--active .pd-navbtn__main    { background: var(--surface-primary-default); border-color: var(--border-primary-focus); }
-    .pd-navbtn--active .pd-navbtn__icon    { color: #fff; }
-    .pd-navbtn--active .pd-navbtn__label   { color: #fff; }
-    .pd-navbtn--active .pd-navbtn__chevron { color: #fff; }
+    /* Selected/Active — Button 1.5 Primary Default: bg #00cc85 | border #00a36a | text #e9fbf5 */
+    .pd-navbtn--active .pd-navbtn__main    { background: #00cc85; border-color: #00a36a; }
+    .pd-navbtn--active .pd-navbtn__icon    { color: #e9fbf5; }
+    .pd-navbtn--active .pd-navbtn__label   { color: #e9fbf5; }
+    .pd-navbtn--active .pd-navbtn__chevron { color: #e9fbf5; }
 
     /* ───────────────────────────────────────────────
        PAGE + BREADCRUMBS + CARD — same as before
