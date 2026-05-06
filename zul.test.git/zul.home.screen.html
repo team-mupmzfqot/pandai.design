@@ -167,8 +167,27 @@
     .navbar-action-icons {
       display:     flex;
       align-items: center;
-      gap:         var(--spacing-space-2xl);
-      color:       var(--surface-primary-default);  /* green — DS stroke-0 on navbar icons */
+      gap:         var(--spacing-space-2xl);  /* gap-[28px] */
+      flex-shrink: 0;
+    }
+
+    /* DS: each action icon is overflow-clip relative size-[24px] */
+    .navbar-action-icon {
+      width:       24px;
+      height:      24px;
+      overflow:    hidden;
+      position:    relative;
+      flex-shrink: 0;
+      display:     flex;
+      align-items: center;
+      justify-content: center;
+      color:       var(--surface-primary-default);  /* DS icon stroke color */
+    }
+    .navbar-action-icon svg {
+      width:  24px;
+      height: 24px;
+      display: block;
+      flex-shrink: 0;
     }
 
     .navbar-avatar {
@@ -217,23 +236,44 @@
       padding:       var(--spacing-space-xs);
     }
 
-    /* Nav items use Button - NavBar - Dropdown - 1.5 structure */
+    /* DS: Button - NavBar - Dropdown - 1.5 — flex-col gap-[20px] h-[40px] overflow-clip */
     .nav-btn {
-      display:         flex;
-      align-items:     center;
-      height:          40px;
-      overflow:        hidden;
-      flex-shrink:     0;
-      position:        relative;
+      display:        flex;
+      flex-direction: column;
+      gap:            20px;         /* gap-[20px] separates Main Button and hidden Dropdown */
+      height:         40px;
+      overflow:       hidden;
+      flex-shrink:    0;
+      align-items:    flex-start;
     }
 
+    /* DS: Main Button inner — px-[12px] py-[8px] rounded-[999px] */
     .nav-btn__inner {
       display:       flex;
       align-items:   center;
       justify-content: center;
-      gap:           var(--spacing-space-xs);
-      padding:       var(--spacing-space-xs) var(--spacing-space-s);
+      gap:           var(--spacing-space-xs);   /* gap-[8px] */
+      padding:       var(--spacing-space-xs) var(--spacing-space-s);   /* py-8 px-12 */
       border-radius: var(--corner-radius-corner-pill);
+      min-height:    24px;
+    }
+
+    /* DS: icon 20×20 overflow-clip container inside 24×24 wrapper */
+    .nav-btn__icon-clip {
+      width:       20px;
+      height:      20px;
+      overflow:    hidden;
+      position:    relative;
+      flex-shrink: 0;
+      display:     flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-btn__icon-clip svg {
+      width:  20px;
+      height: 20px;
+      display: block;
+      flex-shrink: 0;
     }
 
     /* State=Hover — Surface/secondary/default bg + Border/primary/focus border + Text/secondary/focus */
@@ -1094,17 +1134,17 @@
       <div class="navbar-actions">
         <div class="navbar-action-icons">
           <!-- Outline/search Â· node 260:1103 -->
-          <svg class="icon-ds" aria-hidden="true"><use href="#ic-search"/></svg>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
           <!-- Outline/maximize Â· node 260:915 -->
-          <svg class="icon-ds" aria-hidden="true"><use href="#ic-maximize"/></svg>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-maximize"/></svg></div>
           <!-- Outline/smartphone Â· node 260:1178 -->
-          <svg class="icon-ds" aria-hidden="true"><use href="#ic-smartphone"/></svg>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
           <!-- Outline/bell Â· node 260:491 -->
-          <svg class="icon-ds" aria-hidden="true"><use href="#ic-bell"/></svg>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
           <!-- Outline/EN Â· node 1104:2538 -->
-          <svg class="icon-ds" aria-hidden="true"><use href="#ic-en"/></svg>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
           <!-- Outline/waffle-menu Â· node 1070:2215 -->
-          <svg class="icon-ds" aria-hidden="true"><use href="#ic-waffle"/></svg>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-waffle"/></svg></div>
         </div>
 
         <!-- Avatar 1.5 (node 684:621): 48Ã—48, pill border, user icon -->
@@ -1122,7 +1162,7 @@
       <div class="nav-btn is-active">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-home"/></svg>
+            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-home"/></svg></div>
           </div>
           <span class="nav-btn__label">Home</span>
         </div>
@@ -1131,7 +1171,7 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-check-circle"/></svg>
+            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div>
           </div>
           <span class="nav-btn__label">Quiz</span>
         </div>
@@ -1140,7 +1180,7 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-battle"/></svg>
+            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div>
           </div>
           <span class="nav-btn__label">Battle</span>
         </div>
@@ -1149,7 +1189,7 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-book-open"/></svg>
+            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div>
           </div>
           <span class="nav-btn__label">Practice</span>
         </div>
@@ -1158,11 +1198,11 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-users"/></svg>
+            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-users"/></svg></div>
           </div>
           <span class="nav-btn__label">Class</span>
           <div class="nav-btn__icon-wrap">
-            <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-chevron-down"/></svg>
+            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
           </div>
         </div>
       </div>
@@ -1170,11 +1210,11 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-book"/></svg>
+            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-book"/></svg></div>
           </div>
           <span class="nav-btn__label">Learn</span>
           <div class="nav-btn__icon-wrap">
-            <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-chevron-down"/></svg>
+            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
           </div>
         </div>
       </div>
@@ -1182,11 +1222,11 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-book-open"/></svg>
+            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div>
           </div>
           <span class="nav-btn__label">Achievement</span>
           <div class="nav-btn__icon-wrap">
-            <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-chevron-down"/></svg>
+            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
           </div>
         </div>
       </div>
@@ -1194,11 +1234,11 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-star"/></svg>
+            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-star"/></svg></div>
           </div>
           <span class="nav-btn__label">Potential</span>
           <div class="nav-btn__icon-wrap">
-            <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-chevron-down"/></svg>
+            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
           </div>
         </div>
       </div>
@@ -1206,11 +1246,11 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-gift"/></svg>
+            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div>
           </div>
           <span class="nav-btn__label">Rewards</span>
           <div class="nav-btn__icon-wrap">
-            <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-chevron-down"/></svg>
+            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
           </div>
         </div>
       </div>
@@ -1890,9 +1930,9 @@
                  Structure: Outline/info (20×20) + text + Outline/chevron-right (20×20), gap 8px -->
             <a class="link-view-activity" href="#">
               <!-- Outline/info · node 260:832 -->
-              <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-info"/></svg>
+              <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-info"/></svg></div>
               <span class="link-view-activity__text">View activity history</span>
-              <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+              <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
             </a>
           </div>
 
