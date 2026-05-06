@@ -277,6 +277,21 @@
       inset: 37.5% 25%;  /* overrides general 8.33% — top/bottom 37.5%, left/right 25% */
     }
 
+    /* Per-icon inset overrides for nav buttons (20px clip) — exact values from DS node 866:5576 */
+    .nav-btn__icon-clip[data-icon="home"]        svg { inset: 8.33% 12.5%; }
+    .nav-btn__icon-clip[data-icon="battle"]      svg { inset: 12.5%; }
+    .nav-btn__icon-clip[data-icon="practice"]    svg { inset: 12.5% 8.33%; }
+    .nav-btn__icon-clip[data-icon="class"]       svg { inset: 12.5% 4.17%; }
+    .nav-btn__icon-clip[data-icon="learn"]       svg { inset: 8.33% 16.67%; }
+    .nav-btn__icon-clip[data-icon="achievement"] svg { inset: 12.5% 8.33%; }
+    .nav-btn__icon-clip[data-icon="potential"]   svg { inset: 8.33% 8.33% 12.42% 8.33%; }
+
+    /* Per-icon inset overrides for action icons (24px clip) — exact values from DS node 866:5576 */
+    .navbar-action-icon[data-icon="smartphone"] svg { inset: 8.33% 20.83%; }
+    .navbar-action-icon[data-icon="bell"]       svg { inset: 8.33%; }
+    .navbar-action-icon[data-icon="en"]         svg { top: 25%; right: 9.95%; bottom: 28.12%; left: 12.5%; }
+    .navbar-action-icon[data-icon="waffle"]     svg { inset: 16.67%; }
+
     /* State=Hover — Surface/secondary/default bg + Border/primary/focus border + Text/secondary/focus */
     .nav-btn:hover .nav-btn__inner {
       background: var(--surface-secondary-default);     /* #b5f291 */
@@ -1139,13 +1154,13 @@
           <!-- Outline/maximize Â· node 260:915 -->
           <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-maximize"/></svg></div>
           <!-- Outline/smartphone Â· node 260:1178 -->
-          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
+          <div class="navbar-action-icon" data-icon="smartphone"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
           <!-- Outline/bell Â· node 260:491 -->
-          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+          <div class="navbar-action-icon" data-icon="bell"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
           <!-- Outline/EN Â· node 1104:2538 -->
-          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
+          <div class="navbar-action-icon" data-icon="en"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
           <!-- Outline/waffle-menu Â· node 1070:2215 -->
-          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-waffle"/></svg></div>
+          <div class="navbar-action-icon" data-icon="waffle"><svg aria-hidden="true"><use href="#ic-waffle"/></svg></div>
         </div>
 
         <!-- Avatar 1.5 (node 684:621): 48Ã—48, pill border, user icon -->
@@ -1163,7 +1178,7 @@
       <div class="nav-btn is-active">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-home"/></svg></div>
+            <div class="nav-btn__icon-clip" data-icon="home"><svg aria-hidden="true"><use href="#ic-home"/></svg></div>
           </div>
           <span class="nav-btn__label">Home</span>
         </div>
@@ -1181,7 +1196,7 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div>
+            <div class="nav-btn__icon-clip" data-icon="battle"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div>
           </div>
           <span class="nav-btn__label">Battle</span>
         </div>
@@ -1190,7 +1205,7 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div>
+            <div class="nav-btn__icon-clip" data-icon="practice"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div>
           </div>
           <span class="nav-btn__label">Practice</span>
         </div>
@@ -1199,7 +1214,7 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-users"/></svg></div>
+            <div class="nav-btn__icon-clip" data-icon="class"><svg aria-hidden="true"><use href="#ic-users"/></svg></div>
           </div>
           <span class="nav-btn__label">Class</span>
           <div class="nav-btn__icon-wrap">
@@ -1211,7 +1226,7 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-book"/></svg></div>
+            <div class="nav-btn__icon-clip" data-icon="learn"><svg aria-hidden="true"><use href="#ic-book"/></svg></div>
           </div>
           <span class="nav-btn__label">Learn</span>
           <div class="nav-btn__icon-wrap">
@@ -1223,7 +1238,7 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div>
+            <div class="nav-btn__icon-clip" data-icon="achievement"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div>
           </div>
           <span class="nav-btn__label">Achievement</span>
           <div class="nav-btn__icon-wrap">
@@ -1235,7 +1250,7 @@
       <div class="nav-btn">
         <div class="nav-btn__inner">
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-star"/></svg></div>
+            <div class="nav-btn__icon-clip" data-icon="potential"><svg aria-hidden="true"><use href="#ic-star"/></svg></div>
           </div>
           <span class="nav-btn__label">Potential</span>
           <div class="nav-btn__icon-wrap">
