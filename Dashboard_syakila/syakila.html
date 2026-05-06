@@ -32,7 +32,7 @@
       --border-primary-default:  #00cc85;
       --border-primary-focus:    #00a36a;
       --border-default:          #00cc85;
-      --border-general-default:  #d9d9d9;
+      --border-general-default:  #d9d9d9;z
       --border-secondary-focus:  #70bc6f;
       --border-tertiary-focus:   #00453d;
       --border-disabled:         #bfbfbf;
@@ -107,11 +107,6 @@
     .pd-icon-btn:hover  { background: var(--surface-secondary-default-subtle); color: var(--text-primary-default); }
     .pd-icon-btn:active { background: var(--surface-secondary-default); }
 
-    /* EN language text badge (replaces Outline/EN icon) */
-    .pd-lang-badge {
-      font-size: 11px; font-weight: 700; letter-spacing: 0.03em;
-      color: var(--icon-default); line-height: 1; white-space: nowrap;
-    }
 
     /* Avatar  48 × 48 px */
     .pd-avatar-wrap { position: relative; flex-shrink: 0; }
@@ -571,9 +566,18 @@
           </svg>
         </button>
 
-        <!-- Outline/EN  DS 1104:2538 — rendered as styled text (matches DS icon output) -->
-        <button class="pd-icon-btn" aria-label="Language: English" style="width:auto;padding:0 2px">
-          <span class="pd-lang-badge">EN</span>
+        <!-- Outline/EN  DS 1104:2538 — exact vector paths from Figma node, inline SVG -->
+        <button class="pd-icon-btn" aria-label="Language: English">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(3,6)">
+              <!-- E: spine + top/bottom arms -->
+              <path d="M 6.129 0.050 L 0 0.050 L 0 5.651 L 0 11.252 L 6.129 11.252"/>
+              <!-- E: middle arm -->
+              <path d="M 0 5.651 L 6.181 5.651"/>
+              <!-- N -->
+              <path d="M 10.086 0 L 10.086 11.252 L 18.613 0 L 18.613 11.252"/>
+            </g>
+          </svg>
         </button>
 
         <!-- Outline/waffle-menu  DS 1070:2215 — 3×3 dot grid -->
