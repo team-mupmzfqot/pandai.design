@@ -172,22 +172,20 @@
     }
 
     /* DS: each action icon is overflow-clip relative size-[24px] */
+    /* DS: overflow-clip relative size-[24px] → icon at absolute inset-[12.5%] */
     .navbar-action-icon {
       width:       24px;
       height:      24px;
       overflow:    hidden;
       position:    relative;
       flex-shrink: 0;
-      display:     flex;
-      align-items: center;
-      justify-content: center;
-      color:       var(--surface-primary-default);  /* DS icon stroke color */
+      color:       var(--surface-primary-default);
     }
     .navbar-action-icon svg {
-      width:  24px;
-      height: 24px;
-      display: block;
-      flex-shrink: 0;
+      position: absolute;
+      inset:    12.5%;   /* 3px margin in 24px = ~18px effective — matches DS */
+      width:    auto;
+      height:   auto;
     }
 
     .navbar-avatar {
@@ -259,21 +257,24 @@
     }
 
     /* DS: icon 20×20 overflow-clip container inside 24×24 wrapper */
+    /* DS: overflow-clip relative size-[20px] → icon at absolute inset-[8.33%] (~16.67px effective) */
     .nav-btn__icon-clip {
       width:       20px;
       height:      20px;
       overflow:    hidden;
       position:    relative;
       flex-shrink: 0;
-      display:     flex;
-      align-items: center;
-      justify-content: center;
     }
     .nav-btn__icon-clip svg {
-      width:  20px;
-      height: 20px;
-      display: block;
-      flex-shrink: 0;
+      position: absolute;
+      inset:    8.33%;   /* 1.67px margin in 20px = 16.67px effective — matches DS */
+      width:    auto;
+      height:   auto;
+    }
+
+    /* DS chevron-down: top/bottom-[37.5%] left/right-[25%] = 10×5px visible in 20px clip */
+    .nav-btn__chevron-clip svg {
+      inset: 37.5% 25%;  /* overrides general 8.33% — top/bottom 37.5%, left/right 25% */
     }
 
     /* State=Hover — Surface/secondary/default bg + Border/primary/focus border + Text/secondary/focus */
@@ -1202,7 +1203,7 @@
           </div>
           <span class="nav-btn__label">Class</span>
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
+            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
           </div>
         </div>
       </div>
@@ -1214,7 +1215,7 @@
           </div>
           <span class="nav-btn__label">Learn</span>
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
+            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
           </div>
         </div>
       </div>
@@ -1226,7 +1227,7 @@
           </div>
           <span class="nav-btn__label">Achievement</span>
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
+            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
           </div>
         </div>
       </div>
@@ -1238,7 +1239,7 @@
           </div>
           <span class="nav-btn__label">Potential</span>
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
+            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
           </div>
         </div>
       </div>
@@ -1250,7 +1251,7 @@
           </div>
           <span class="nav-btn__label">Rewards</span>
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
+            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
           </div>
         </div>
       </div>
