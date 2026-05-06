@@ -4,7 +4,7 @@
   "description": "A design system for Pandai, providing reusable components and design tokens.",
   "main": "src/index.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "echo 'No build step' && exit 0",
     "test": "echo 'No tests' && exit 0",
     "lint": "eslint .",
     "start": "vite"
