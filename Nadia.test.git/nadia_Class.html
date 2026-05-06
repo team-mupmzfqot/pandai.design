@@ -85,28 +85,26 @@
     }
 
     /* ══════════════════════════════════════════════════════════════
-       Navbar 1.5 — node 1777:13566
-       Spec: flex-col gap-12px, two bars stacked
+       Navbar 1.5 — node 4115:97698
+       Spec: flex-col gap-12px, two bars stacked, inside 60px page padding
        ══════════════════════════════════════════════════════════════ */
     .navbar {
       display: flex;
       flex-direction: column;
       gap: 12px;             /* DS gap between brand-bar and nav-bar */
       width: 100%;
+      padding: 12px 60px 0;  /* inside page padding — aligns with content below */
     }
 
     /* ── Brand Bar (top row, 64px) ──────────────────────────────── */
     .navbar__brand {
       background: var(--Surface-general-default, #fff);
       border-bottom: 1px solid var(--og-500);  /* border/primary/default */
-      border-left:   1px solid var(--og-500);
-      border-right:  1px solid var(--og-500);
-      border-radius: 0 0 24px 24px;            /* corner-4xl bottom only */
       height: 64px;
       display: flex;
       align-items: center;
       gap: 28px;             /* spacing/space-2xl */
-      padding: 8px 24px;     /* space-xs vertical, space-xl horizontal — DS spec */
+      padding: 8px 0;        /* horizontal handled by .navbar 60px padding */
     }
 
     /* Pandai logo — node 1898:6911 Normal, 116.5×28px per DS */
@@ -269,7 +267,7 @@
     .nav-btn--active svg.nav-chevron { transform: rotate(180deg); }
 
     @media (max-width: 425px) {
-      .navbar__brand { padding: 8px 16px; border-radius: 0 0 16px 16px; }
+      .navbar { padding: 12px 16px 0; }
       .navbar__content { border-radius: 16px; height: auto; }
       .navbar__nav-items { flex-wrap: wrap; gap: 4px; }
       .navbar__icons { gap: 16px; }
@@ -606,7 +604,7 @@
 <body>
 
   <!-- ══════════════════════════════════════════════════════════
-       Navbar 1.5 — node 1777:13566
+       Navbar 1.5 — node 4115:97698
        ══════════════════════════════════════════════════════════ -->
   <nav class="navbar" aria-label="Main navigation">
 
@@ -662,17 +660,17 @@
     <!-- Navbar Content Bar (pill) -->
     <div class="navbar__content">
       <div class="navbar__nav-items">
-        <!-- Quiz — Outline/check-circle node 260:527 -->
+        <!-- Home — Outline/home -->
         <a href="#" class="nav-btn">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Home
+        </a>
+        <!-- Quiz — active — Outline/check-circle -->
+        <button class="nav-btn nav-btn--active">
           <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
           Quiz
-        </a>
-        <!-- Quiz (second instance) -->
-        <a href="#" class="nav-btn">
-          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          Quiz
-        </a>
-        <!-- Battle — Outline/battle node 1070:8064 (DS export) -->
+        </button>
+        <!-- Battle — Outline/battle (DS custom) -->
         <a href="#" class="nav-btn">
           <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M21 3V8L10 17L6 21L3 18L7 14L16 3H21Z"/>
@@ -682,36 +680,36 @@
           </svg>
           Battle
         </a>
-        <!-- Practice — Outline/book-open node 260:498 -->
+        <!-- Practice — Outline/book-open -->
         <a href="#" class="nav-btn">
           <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
           Practice
         </a>
-        <!-- Class — active — Outline/users node 260:1321 -->
-        <button class="nav-btn nav-btn--active">
+        <!-- Class — Outline/users + chevron -->
+        <a href="#" class="nav-btn">
           <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           Class
           <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <!-- Learn — Outline/book node 260:501 -->
+        </a>
+        <!-- Learn — Outline/book + chevron -->
         <a href="#" class="nav-btn">
           <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
           Learn
           <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
         </a>
-        <!-- Achievement — Outline/book-open node 260:498 -->
+        <!-- Achievement — Outline/book-open + chevron -->
         <a href="#" class="nav-btn">
           <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
           Achievement
           <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
         </a>
-        <!-- Potential — Outline/star node 260:1192 -->
+        <!-- Potential — Outline/star + chevron -->
         <a href="#" class="nav-btn">
           <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           Potential
           <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
         </a>
-        <!-- Rewards — Outline/gift node 260:765 -->
+        <!-- Rewards — Outline/gift + chevron -->
         <a href="#" class="nav-btn">
           <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
           Rewards
