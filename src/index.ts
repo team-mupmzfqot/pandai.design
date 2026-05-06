@@ -1,3 +1,3 @@
-export * from './components';
-export * from './tokens';
-export * from './utils';
+// Main entry point for Pandai Design System
+
+export * from './components'

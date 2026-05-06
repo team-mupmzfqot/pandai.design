@@ -1,39 +1,49 @@
 {
-  "name": "pandai-design-system-2026",
-  "version": "1.0.0",
-  "description": "A design system for Pandai, providing reusable components and design tokens.",
-  "main": "src/index.ts",
+  "name": "pandai-design-system",
+  "version": "1.5.0",
+  "description": "Pandai Design System 1.5 - A comprehensive design system for modern web applications",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsc",
-    "test": "vitest",
-    "lint": "eslint .",
-    "start": "vite"
+    "build": "vite build",
+    "dev": "vite",
+    "test": "jest",
+    "lint": "eslint src --ext .ts,.tsx",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yourusername/pandai-design-system-2026.git"
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@storybook/react": "^7.0.0",
+    "@storybook/react-vite": "^7.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^4.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "keywords": [
     "design-system",
     "react",
+    "typescript",
     "components",
-    "pandai"
+    "ui"
   ],
-  "author": "Your Name",
-  "license": "MIT",
-  "dependencies": {
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
-    "styled-components": "^5.3.0"
-  },
-  "devDependencies": {
-    "typescript": "^4.0.0",
-    "vite": "^2.0.0",
-    "vitest": "^0.0.0",
-    "eslint": "^7.0.0"
-  },
-  "homepage": "https://github.com/yourusername/pandai-design-system-2026#readme",
-  "bugs": {
-    "url": "https://github.com/yourusername/pandai-design-system-2026/issues"
-  }
+  "author": "",
+  "license": "MIT"
 }
