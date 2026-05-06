@@ -1,0 +1,39 @@
+{
+  "name": "pandai-design-system-2026",
+  "version": "1.0.0",
+  "description": "A design system for Pandai, providing reusable components and design tokens.",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest",
+    "lint": "eslint .",
+    "start": "vite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/pandai-design-system-2026.git"
+  },
+  "keywords": [
+    "design-system",
+    "react",
+    "components",
+    "pandai"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "styled-components": "^5.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.0",
+    "vite": "^2.0.0",
+    "vitest": "^0.0.0",
+    "eslint": "^7.0.0"
+  },
+  "homepage": "https://github.com/yourusername/pandai-design-system-2026#readme",
+  "bugs": {
+    "url": "https://github.com/yourusername/pandai-design-system-2026/issues"
+  }
+}
