@@ -825,13 +825,21 @@
       flex-shrink:   0;
     }
     .subject-badge__icon {
-      width:           40px;
       background:      #fff;
       display:         flex;
       align-items:     center;
       justify-content: center;
-      padding:         4px 8px 4px 12px;
+      padding:         4px 8px 4px 12px;  /* pl-12 pr-8 py-4 → total width: 12+16+8=36px */
       flex-shrink:     0;
+    }
+    /* DS Subject Badge - 1.5: icon slot is w-[16px] max-h-[20px] */
+    .subject-badge__icon svg,
+    .subject-badge__icon img {
+      width:       16px;
+      height:      auto;
+      max-height:  20px;
+      display:     block;
+      flex-shrink: 0;
     }
     .subject-badge__label-panel {
       background:  var(--badge-bg);
@@ -874,7 +882,7 @@
     .quiz-card__header .subject-badge__icon  { padding: 4px 8px 4px 12px; }
     .quiz-card__header .subject-badge__text  { font-size: 12px; line-height: 12px; }
 
-    /* Pill Badge - 1.5 Size=M Type=Tertiary (node 602:460) */
+    /* Pill Badge - 1.5 (node 602:460) — quiz card uses 10px/12px per DS QuizCard-1.5 spec */
     .pill-badge-sm {
       display:       inline-flex;
       align-items:   center;
@@ -882,9 +890,9 @@
       padding:       2px var(--spacing-space-xs);  /* py-[2px] px-[8px] */
       border-radius: var(--corner-radius-corner-rounded);  /* rounded-[60px] */
       background:    var(--surface-disabled-primary);  /* #f2f2f2 */
-      font-size:     12px;   /* 12px Medium — DS spec */
+      font-size:     10px;   /* DS QuizCard-1.5: text-[10px] */
       font-weight:   500;
-      line-height:   18px;
+      line-height:   12px;   /* DS: leading-[12px] */
       color:         var(--text-disabled-default);     /* #bfbfbf */
       white-space:   nowrap;
       overflow:      hidden;
@@ -952,7 +960,9 @@
       color:           var(--surface-primary-default);  /* #00cc85 chevron on #99ebce bg */
     }
 
-    /* DS Primary Size=S: arrow icon is 12×12 Outline/chevron-right */
+    /* DS Primary Size=S: arrow is 12×12 clip with chevron at ~37.5% side margins */
+    /* Chevron path (0-6 × 0-12) scaled to ~6px wide inside 12px clip = 50% fill */
+    .btn-quiz-cta__arrow { overflow: hidden; }
     .btn-quiz-cta__arrow svg { width: 12px; height: 12px; display: block; flex-shrink: 0; }
 
     /* â”€â”€ Subject class â€” sets local CSS vars â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
