@@ -1,10 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(start \"c:\\\\Users\\\\zulfa\\\\OneDrive\\\\Desktop\\\\pandai.design\\\\zul.test.git\\\\zul.home.screen.html\")",
+      "Bash(*)",
       "mcp__claude_ai_Figma__get_screenshot",
-      "PowerShell(Get-Content \"c:\\\\Users\\\\zulfa\\\\OneDrive\\\\Desktop\\\\pandai.design\\\\zul.test.git\\\\icons\\\\ic-bookmark.svg\" -Raw | Select-String -Pattern \"^.{0,200}\" | ForEach-Object { $_.Matches[0].Value })",
-      "Bash(git commit -m ' *)"
+      "PowerShell(Get-Content \"c:\\\\Users\\\\zulfa\\\\OneDrive\\\\Desktop\\\\pandai.design\\\\zul.test.git\\\\icons\\\\ic-bookmark.svg\" -Raw | Select-String -Pattern \"^.{0,200}\" | ForEach-Object { $_.Matches[0].Value })"
     ]
   }
 }
