@@ -39,6 +39,7 @@
 
       --text-secondary-focus:    #70bc6f;
       --text-disabled-default:   #bfbfbf;
+      --icon-default:            #d9d9d9;
 
       --corner-pill:    999px;
       --corner-rounded: 60px;
@@ -60,7 +61,7 @@
       --scale-500: 20px;
 
       --font:    'Poppins', sans-serif;
-      --page-bg: #f5f5f5;
+      --page-bg: var(--surface-general-default);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -99,7 +100,7 @@
     .pd-icon-btn {
       width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
       flex-shrink: 0; background: none; border: none; cursor: pointer; padding: 2px;
-      color: var(--text-default-body); border-radius: var(--corner-pill);
+      color: var(--icon-default); border-radius: var(--corner-pill);
       transition: background 0.15s ease, color 0.15s ease;
     }
     .pd-icon-btn svg { display: block; width: 20px; height: 20px; }
@@ -109,7 +110,7 @@
     /* EN language text badge (replaces Outline/EN icon) */
     .pd-lang-badge {
       font-size: 11px; font-weight: 700; letter-spacing: 0.03em;
-      color: var(--text-default-body); line-height: 1; white-space: nowrap;
+      color: var(--icon-default); line-height: 1; white-space: nowrap;
     }
 
     /* Avatar  48 × 48 px */
@@ -155,14 +156,14 @@
     .pd-navbtn__label   { font-size: 14px; font-weight: 600; line-height: 20px; white-space: nowrap; color: var(--text-default-body); transition: color 0.15s ease; }
     .pd-navbtn__chevron { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--text-primary-default); transition: color 0.15s ease; }
 
-    /* Hover — surface/secondary/default bg + border/primary/focus border + secondary/focus text */
-    .pd-navbtn__main:hover { background: var(--surface-secondary-default); border-color: var(--border-primary-focus); }
+    /* Hover — DS Button 1.5 Primary: bg #b5f291 | border #70bc6f | text/icon #70bc6f */
+    .pd-navbtn__main:hover { background: var(--surface-secondary-default); border-color: var(--border-secondary-focus); }
     .pd-navbtn__main:hover .pd-navbtn__icon,
     .pd-navbtn__main:hover .pd-navbtn__chevron { color: var(--text-secondary-focus); }
     .pd-navbtn__main:hover .pd-navbtn__label   { color: var(--text-secondary-focus); }
 
-    /* Pressed */
-    .pd-navbtn__main:active { background: var(--surface-tertiary-default); border-color: var(--border-tertiary-focus); }
+    /* Pressed — surface/secondary/default-subtle (#e8fbe8) */
+    .pd-navbtn__main:active { background: var(--surface-secondary-default-subtle); border-color: var(--border-secondary-focus); }
     .pd-navbtn__main:active .pd-navbtn__icon,
     .pd-navbtn__main:active .pd-navbtn__label,
     .pd-navbtn__main:active .pd-navbtn__chevron { color: #fff; }
@@ -182,7 +183,7 @@
     .pd-breadcrumbs__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
     .pd-breadcrumbs__sep   { width: 1px; align-self: stretch; background: var(--border-general-default); flex-shrink: 0; }
     .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--space-xs); color: var(--text-default-body); }
-    .pd-link15 { display: flex; align-items: flex-end; gap: var(--space-xs); }
+    .pd-link15 { display: flex; align-items: flex-end; gap: var(--space-xs); background: none; border: none; padding: 0; cursor: pointer; }
     .pd-link15 svg { display: block; width: 20px; height: 20px; }
     .pd-link15__icon { color: var(--text-primary-default); }
     .pd-link15__text         { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
@@ -190,7 +191,7 @@
 
     .pd-card          { background: var(--surface-secondary-50); border-radius: var(--corner-4xl); border: var(--scale-25) solid var(--border-default); overflow: hidden; }
     .pd-card__header  { display: flex; align-items: center; justify-content: space-between; padding: var(--space-m) var(--space-m) 0; }
-    .pd-card__title   { font-size: 16px; font-weight: 500; line-height: 24px; color: var(--text-default-body); }
+    .pd-card__title   { font-size: 18px; font-weight: 600; line-height: 28px; color: var(--text-tertiary-default); }
 
     /* Button – 1.5 · Secondary · L  DS 538:1891
        Default → Hover → Pressed → Disabled                                    */
@@ -279,10 +280,12 @@
     .pd-body-row  { display: flex; align-items: stretch; width: 100%; }
     .pd-body-cell {
       display: flex; align-items: center;
-      background: var(--row-bg, var(--surface-general-default));
+      background: var(--surface-general-default);
       border-bottom: var(--scale-25) solid var(--border-general-default);
       min-height: 64px;
     }
+    /* Subject column only gets the per-row subject tint */
+    .pd-body-cell.pd-col-subject { background: var(--row-bg, var(--surface-general-default)); }
     /* border/general always visible on every row */
     .pd-body-cell__inner { display: flex; align-items: center; gap: var(--space-xs); padding: var(--space-m); flex-shrink: 0; }
     .pd-body-cell__text  { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
@@ -295,9 +298,9 @@
     .pd-col-questions { flex: 1; min-width: 0; }
     .pd-col-analysis  { flex: 1; min-width: 0; }
 
-    /* Right divider on all cells except the last column */
-    .pd-heading-cell:not(.pd-col-analysis),
-    .pd-body-cell:not(.pd-col-analysis) { border-right: var(--scale-25) solid var(--border-general-default); }
+    /* Right divider on all cells except the last column and subject column */
+    .pd-heading-cell:not(.pd-col-analysis):not(.pd-col-subject),
+    .pd-body-cell:not(.pd-col-analysis):not(.pd-col-subject) { border-right: var(--scale-25) solid var(--border-general-default); }
 
     .pd-heading-cell.pd-col-score .pd-heading-cell__inner,
     .pd-heading-cell.pd-col-grade .pd-heading-cell__inner,
@@ -644,8 +647,8 @@
     <div class="pd-breadcrumbs__sep"></div>
     <div class="pd-breadcrumbs__links">
 
-      <!-- Link 1.5: Outline/home  DS 260:822 -->
-      <span class="pd-link15">
+      <!-- Link 1.5: Home button  DS 260:822 -->
+      <button class="pd-link15" type="button" aria-label="Home">
         <svg class="pd-link15__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
         </svg>
@@ -653,18 +656,18 @@
         <svg class="pd-link15__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="9 18 15 12 9 6"/>
         </svg>
-      </span>
+      </button>
 
-      <!-- Link 1.5: "Achievement" (parent, #4d4d4d) -->
-      <span class="pd-link15">
+      <!-- Link 1.5: "Achievement" parent button -->
+      <button class="pd-link15" type="button">
         <span class="pd-link15__text" style="color:var(--text-primary-default)">Achievement</span>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="9 18 15 12 9 6"/>
         </svg>
-      </span>
+      </button>
 
-      <!-- Link 1.5: current page (#666) -->
-      <span class="pd-link15">
+      <!-- Current page — not a button, not clickable -->
+      <span class="pd-link15" style="cursor:default">
         <span class="pd-link15__text">Report Card for Year 1</span>
       </span>
 
