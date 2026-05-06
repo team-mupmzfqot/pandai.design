@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pandai — Success Modal</title>
+
+  <!-- Poppins — Pandai DS typeface -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       Pandai DS 1.5 — Semantic Token Map  (Light / Student)
+       Every variable name mirrors the Figma token path exactly.
+       Raw hex values are fallbacks only — production resolves via
+       the published token export.
+       ─────────────────────────────────────────────────────────────── */
+    :root {
+      /* ── Surface ──────────────────────────────────────────────── */
+      --surface-general-default:         #FFFFFF;   /* Surface/general/default */
+      --surface-subtle:                  #F8FAFC;   /* Surface/subtle */
+      --surface-primary-default:         #00cc85;   /* Surface/primary/default */
+      --surface-primary-default-subtle:  #e9fbf5;   /* Surface/primary/default-subtle */
+      --surface-secondary-default:       #b5f291;   /* Surface/secondary/default */
+      --surface-disabled-primary:        #f2f2f2;   /* Surface/disabled/primary */
+
+      /* ── Text ─────────────────────────────────────────────────── */
+      --text-default-heading:    #404040;   /* Text/default/heading */
+      --text-default-secondary:  #6B7280;   /* Text/default/secondary */
+      --text-primary-default:    #00cc85;   /* Text/primary/default */
+      --text-primary-on-color:   #e9fbf5;   /* Text/primary/on-color */
+      --text-secondary-focus:    #70bc6f;   /* Text/secondary/focus */
+      --text-disabled-default:   #bfbfbf;   /* Text/disabled/default */
+
+      /* ── Border ───────────────────────────────────────────────── */
+      --border-primary-default:   #00cc85;   /* Border/primary/default */
+      --border-primary-focus:     #00a36a;   /* Border/primary/focus */
+      --border-secondary-focus:   #70bc6f;   /* Border/secondary/focus */
+      --border-disabled:          #bfbfbf;   /* Border/disabled/disabled */
+      --border-default:           #E5E7EB;   /* Border/default */
+
+      /* ── Icon ─────────────────────────────────────────────────── */
+      --icon-disabled-default:    #bfbfbf;   /* Icon/disabled/default */
+
+      /* ── Overlay ──────────────────────────────────────────────── */
+      --overlay-default:   rgba(0, 0, 0, 0.50);   /* Overlay/default */
+
+      /* ── Scale (raw spacing primitives used by the component) ─── */
+      --scale-200:   8px;    /* Scale/200-(8)  — Button vertical padding */
+
+      /* ── Spacing ──────────────────────────────────────────────── */
+      --spacing-space-xs:    8px;    /* Spacing/space-xs  — Gap (8px) + Button h-pad (Size M) */
+      --spacing-space-s:     12px;   /* Spacing/space-s   — Button h-padding (Size L) */
+      --spacing-space-m:     16px;   /* Spacing/space-m   — Padding (16px) consistently */
+
+      /* ── Corner Radius ────────────────────────────────────────── */
+      --corner-radius-corner-rounded:   60px;   /* Corner Radius/corner-rounded — Button pill */
+      --corner-radius-xxl:              24px;   /* Corner Radius/xxl            — Modal card */
+
+      /* ── Typography — Poppins ─────────────────────────────────── */
+      --font-family: 'Poppins', sans-serif;
+      /* Body/B1 → 14px SemiBold / 20px lh  (Button Size=L) */
+      /* Body/B3 → 14px Regular  / 22px lh  (Modal body text) */
+      /* Header/H3 → 22px Bold   / 140% lh  (Modal title) */
+    }
+
+    /* ── Reset ───────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family:      var(--font-family);
+      background:       var(--surface-subtle);
+      min-height:       100dvh;
+      display:          flex;
+      align-items:      center;
+      justify-content:  center;
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       OVERLAY  —  Overlay/default
+       ══════════════════════════════════════════════════════════════ */
+    .modal-overlay {
+      position:         fixed;
+      inset:            0;
+      background:       var(--overlay-default);
+      display:          flex;
+      align-items:      center;
+      justify-content:  center;
+      padding:          var(--spacing-space-m);
+      z-index:          100;
+      animation:        pd-fade-in 0.18s ease;
+    }
+
+    @keyframes pd-fade-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       MODAL CARD  —  Modal Alerts - 1.5
+       No shadow (per design rule).
+       Border: Border/primary/default token.
+       ══════════════════════════════════════════════════════════════ */
+    .modal-card {
+      background:     var(--surface-general-default);
+      border-radius:  var(--corner-radius-xxl);
+      border:         1px solid var(--border-primary-default);
+      min-width:      300px;
+      max-width:      480px;
+      width:          100%;
+      max-height:     90dvh;
+      display:        flex;
+      flex-direction: column;
+      overflow:       hidden;
+      animation:      pd-scale-in 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes pd-scale-in {
+      from { transform: scale(0.90); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+
+    /* ── Modal body ─────────────────────────────────────────────── */
+    .modal-body {
+      padding:          var(--spacing-space-m);   /* Spacing/space-m = 16px */
+      display:          flex;
+      flex-direction:   column;
+      align-items:      center;
+      gap:              var(--spacing-space-xs);  /* Spacing/space-xs = 8px */
+      text-align:       center;
+      overflow-y:       auto;
+      flex:             1;
+    }
+
+    /* ── Success icon  —  Surface/primary/default-subtle bg ─────── */
+    /* Container hugs the icon content (24×24) + padding — no fixed size */
+    .modal-icon {
+      width:            fit-content;
+      height:           fit-content;
+      padding:          var(--spacing-space-m);        /* Spacing/space-m = 16px → 56×56 total */
+      border-radius:    var(--corner-radius-corner-rounded);
+      background:       var(--surface-primary-default-subtle);
+      display:          flex;
+      align-items:      center;
+      justify-content:  center;
+      flex-shrink:      0;
+    }
+
+    /* Icon renders at DS native size (24×24) — no override */
+    .modal-icon svg {
+      color:   var(--surface-primary-default);
+      display: block;
+    }
+
+    /* ── Text group ─────────────────────────────────────────────── */
+    .modal-text {
+      display:          flex;
+      flex-direction:   column;
+      gap:              var(--spacing-space-xs);  /* Spacing/space-xs = 8px */
+    }
+
+    /* Header/H3 — 22px Bold 140% lh  →  Text/default/heading */
+    .modal-title {
+      font-size:    22px;
+      font-weight:  700;
+      line-height:  1.4;
+      color:        var(--text-default-heading);
+    }
+
+    /* Body/B3 — 14px Regular 157% lh  →  Text/default/secondary */
+    .modal-message {
+      font-size:    14px;
+      font-weight:  400;
+      line-height:  1.571;
+      color:        var(--text-default-secondary);
+    }
+
+    /* ── Divider  —  Border/default ─────────────────────────────── */
+    .modal-divider {
+      height:      1px;
+      background:  var(--border-default);
+      flex-shrink: 0;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    .modal-footer {
+      padding:     var(--spacing-space-m);        /* Spacing/space-m = 16px */
+      display:     flex;
+      gap:         var(--spacing-space-xs);       /* Spacing/space-xs = 8px */
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       BUTTON - 1.5  |  Size=L
+       Source nodes: 2333:36225 (Primary Default L)
+                     2333:36559 (Secondary Default M → same structure)
+       ─────────────────────────────────────────────────────────────
+       height:   40px  (max-h 48px, py Scale/200 = 8px)
+       h-pad:    Spacing/space-s = 12px
+       radius:   Corner Radius/corner-rounded = 60px  (pill)
+       font:     Body/B1 — Poppins SemiBold 14px / 20px lh
+       border:   1px solid
+       ══════════════════════════════════════════════════════════════ */
+    .btn {
+      flex:            1;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      max-height:      48px;
+      padding:         var(--scale-200) var(--spacing-space-s);
+      border-radius:   var(--corner-radius-corner-rounded);
+      font-family:     var(--font-family);
+      font-size:       14px;    /* Body/B1 */
+      font-weight:     600;     /* SemiBold */
+      line-height:     20px;
+      letter-spacing:  0;
+      cursor:          pointer;
+      border:          1px solid transparent;
+      white-space:     nowrap;
+      transition:      background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn:disabled {
+      /* State=Disabled — Surface/disabled/primary + Border/disabled/disabled */
+      background:    var(--surface-disabled-primary) !important;
+      border-color:  var(--border-disabled)           !important;
+      color:         var(--icon-disabled-default)     !important;
+      cursor:        not-allowed;
+    }
+
+    /* ── Variants=Primary  →  Accept ──────────────────────────────
+       Default:  Surface/primary/default  border Border/primary/focus  Text/primary/on-color
+       Hover:    Surface/secondary/default border Border/secondary/focus Text/secondary/focus
+       Pressed:  Border/primary/focus (dark)  Text/primary/on-color
+       Source:   2333:36225 (Default L) · 2333:36325 (Hover M)
+       ─────────────────────────────────────────────────────────── */
+    .btn-primary {
+      background:   var(--surface-primary-default);   /* #00cc85 */
+      border-color: var(--border-primary-focus);       /* #00a36a */
+      color:        var(--text-primary-on-color);      /* #e9fbf5 */
+    }
+
+    .btn-primary:not(:disabled):hover {
+      background:   var(--surface-secondary-default);  /* #b5f291 */
+      border-color: var(--border-secondary-focus);     /* #70bc6f */
+      color:        var(--text-secondary-focus);        /* #70bc6f */
+    }
+
+    .btn-primary:not(:disabled):active {
+      background:   var(--border-primary-focus);       /* #00a36a — pressed darker */
+      border-color: var(--border-primary-focus);
+      color:        var(--text-primary-on-color);
+    }
+
+    /* ── Variants=Secondary  →  Ignore ────────────────────────────
+       Default:  Surface/general/default  border Border/primary/default  Text/primary/default
+       Hover:    Surface/secondary/default border Border/secondary/focus Text/secondary/focus
+       Pressed:  Surface/primary/default   border Border/primary/default Text/primary/on-color
+       Source:   2333:36559 (Default M) · 2333:36531 (Hover M) · 2333:36495 (Pressed M)
+       ─────────────────────────────────────────────────────────── */
+    .btn-secondary {
+      background:   var(--surface-general-default);    /* #FFFFFF */
+      border-color: var(--border-primary-default);     /* #00cc85 */
+      color:        var(--text-primary-default);        /* #00cc85 */
+    }
+
+    .btn-secondary:not(:disabled):hover {
+      background:   var(--surface-secondary-default);  /* #b5f291 */
+      border-color: var(--border-secondary-focus);     /* #70bc6f */
+      color:        var(--text-secondary-focus);        /* #70bc6f */
+    }
+
+    .btn-secondary:not(:disabled):active {
+      background:   var(--surface-primary-default);    /* #00cc85 — fills on press */
+      border-color: var(--border-primary-default);     /* #00cc85 */
+      color:        var(--text-primary-on-color);       /* #e9fbf5 */
+    }
+
+    /* ── Focus ring ─────────────────────────────────────────────── */
+    .btn:focus-visible {
+      outline:        2px solid var(--border-primary-default);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Overlay/default -->
+  <div
+    class="modal-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    aria-describedby="modal-message"
+  >
+    <!-- Modal Alerts - 1.5 -->
+    <div class="modal-card">
+
+      <!-- Body -->
+      <div class="modal-body">
+
+        <!-- DS Icon: Outline/check-circle (🔰 Iconography › node 260:527)
+             Surface/primary/default-subtle bg  |  Surface/primary/default stroke -->
+        <div class="modal-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="-1 -1 22 22" fill="none"
+               stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round"
+               xmlns="http://www.w3.org/2000/svg">
+            <!-- Arc: open circle (path 1 of Outline/check-circle) -->
+            <path d="M 20 9.086 L 20 10.006 C 19.999 12.162 19.301 14.26 18.009 15.988 C 16.718 17.715 14.903 18.978 12.835 19.59 C 10.767 20.201 8.557 20.128 6.534 19.38 C 4.512 18.633 2.785 17.252 1.611 15.443 C 0.437 13.634 -0.12 11.494 0.022 9.342 C 0.164 7.19 0.997 5.142 2.398 3.503 C 3.799 1.864 5.693 0.721 7.796 0.246 C 9.9 -0.229 12.1 -0.012 14.07 0.866"/>
+            <!-- Checkmark (path 2 of Outline/check-circle) -->
+            <path d="M 20 2.006 L 10 12.016 L 7 9.016"/>
+          </svg>
+        </div>
+
+        <!-- Text — populated by JS -->
+        <div class="modal-text">
+          <h2 id="modal-title"   class="modal-title"></h2>
+          <p  id="modal-message" class="modal-message"></p>
+        </div>
+
+      </div>
+
+      <!-- Border/default -->
+      <div class="modal-divider" role="separator"></div>
+
+      <!-- Button row -->
+      <div class="modal-footer">
+        <!-- Button - 1.5 | Variants=Secondary | Size=L | Show Leading Icon=false | Show R Arrow=false -->
+        <button class="btn btn-secondary" onclick="handleIgnore()">Ignore</button>
+        <!-- Button - 1.5 | Variants=Primary  | Size=L | Show Leading Icon=false | Show R Arrow=false -->
+        <button class="btn btn-primary"   onclick="handleAccept()">Accept</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const messages = [
+      { title: "Great Job! 🎉",           message: "You've completed the quiz successfully. Keep up the amazing work and stay consistent!" },
+      { title: "You Nailed It! ✨",        message: "Perfect score! Your hard work and dedication are really paying off — well deserved." },
+      { title: "Achievement Unlocked! 🏆", message: "You've mastered this topic. Move on to the next challenge whenever you're ready." },
+      { title: "Excellent Work! 🌟",       message: "Spot-on answer! You're one step closer to reaching your learning goal today." },
+      { title: "Well Done! 💪",            message: "Fantastic result! Your consistency is building something truly remarkable over time." }
+    ];
+
+    const pick = messages[Math.floor(Math.random() * messages.length)];
+    document.getElementById("modal-title").textContent   = pick.title;
+    document.getElementById("modal-message").textContent = pick.message;
+
+    function handleIgnore() {
+      document.querySelector(".modal-overlay").style.display = "none";
+    }
+
+    function handleAccept() {
+      alert("Accepted!");
+      handleIgnore();
+    }
+  </script>
+
+</body>
+</html>

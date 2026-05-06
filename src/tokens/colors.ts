@@ -20,4 +20,32 @@ export const colors = {
     800: '#343a40',
     900: '#212529',
   },
+
+  // Pandai DS 1.5 — OG-Green (Student palette)
+  ogGreen: {
+    50:  '#e9fbf5',
+    100: '#ccf5e7',
+    200: '#99ebce',
+    300: '#66e0b6',
+    400: '#33d69d',
+    500: '#00cc85',
+    600: '#00a36a',
+    700: '#007a50',
+    800: '#005235',
+    900: '#00291b',
+  },
+
+  // Pandai DS 1.5 — Pink (Teacher palette)
+  pink: {
+    50:  '#ffebf2',
+    100: '#ffdeea',
+    200: '#ffbed6',
+    300: '#ff9dc1',
+    400: '#ff7dad',
+    500: '#ff5c98',
+    600: '#cc4a7a',
+    700: '#99375b',
+    800: '#66253d',
+    900: '#33121e',
+  },
 };

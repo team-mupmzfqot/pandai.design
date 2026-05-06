@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pandai DS — School Header + Class Cards</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ══════════════════════════════════════════════════════════════
+       Pandai DS 1.5 — Primitive Tokens
+       ══════════════════════════════════════════════════════════════ */
+    :root {
+      /* OG-Green (Student / Brand) */
+      --og-50:  #e9fbf5;  --og-100: #ccf5e7;  --og-200: #99ebce;
+      --og-500: #00cc85;  --og-600: #00a36a;  --og-700: #007a50;
+
+      /* Pink (Teacher) */
+      --pk-50:  #ffebf2;  --pk-100: #ffdeea;  --pk-200: #ffbed6;
+      --pk-400: #ff7dad;  --pk-500: #ff5c98;  --pk-600: #cc4a7a;
+      --pk-700: #99375b;  --pk-800: #66253d;
+
+      /* DS Semantic */
+      --Surface-general-default:  #fff;
+      --surface-primary:          var(--og-500);
+      --surface-primary-subtle:   var(--og-100);
+      --surface-secondary-subtle: #e8fbe8;
+      --border-primary:           var(--og-500);
+      --border-primary-focus:     var(--og-600);
+      --text-heading:  #404040;
+      --text-body:     #666666;
+      --text-on-color: #e9fbf5;
+
+      /* DS Corner Radius */
+      --r-rounded: 60px;  --r-4xl: 24px;  --r-2xl: 18px;
+
+      /* DS Spacing */
+      --sp-xxxs: 2px;  --sp-xxs: 4px;  --sp-xs: 8px;  --sp-s: 12px;  --sp-m: 16px;
+
+      /* Subject — B-Melayu */
+      --bm-50:  #f6f9ff;  --bm-100: #dbe4ff;  --bm-200: #b8c9ff;
+      --bm-500: #4d77ff;  --bm-600: #3e5fcc;  --bm-700: #2e4799;
+
+      /* Subject — English */
+      --en-50:  #ffedee;  --en-100: #ffdbdd;  --en-200: #ffb8bb;
+      --en-500: #ff4d56;  --en-600: #cc3e45;  --en-700: #992e34;
+
+      /* Subject — Math */
+      --mt-50:  #ecf7f2;  --mt-100: #d9eee5;  --mt-200: #b3deca;
+      --mt-500: #42ac7b;  --mt-600: #358a62;  --mt-700: #28674a;
+
+      /* Subject — Science */
+      --sc-50:  #fffbec;  --sc-100: #fff7d9;  --sc-200: #ffefb3;
+      --sc-500: #ffd641;  --sc-600: #ccab34;  --sc-700: #998027;
+
+      /* Subject — Biology */
+      --bi-50:  #f3ebfb;  --bi-100: #e6d6f7;  --bi-200: #ceadef;
+      --bi-500: #8431d8;  --bi-600: #6a27ad;  --bi-700: #4f1d82;
+
+      /* Subject — History */
+      --hs-50:  #f7f2ee;  --hs-100: #eee5dc;  --hs-200: #ddcbb9;
+      --hs-500: #a97c50;  --hs-600: #876340;  --hs-700: #654a30;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { min-height: 100%; background: var(--Surface-general-default, #fff); }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--Surface-general-default, #fff);
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    /* Page content — padded area below navbar */
+    .page-content {
+      padding: 48px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    @media (max-width: 425px) {
+      .page-content { padding: 24px 16px; gap: 16px; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       Navbar 1.5 — node 1777:13566
+       Spec: flex-col gap-12px, two bars stacked
+       ══════════════════════════════════════════════════════════════ */
+    .navbar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;             /* DS gap between brand-bar and nav-bar */
+      width: 100%;
+    }
+
+    /* ── Brand Bar (top row, 64px) ──────────────────────────────── */
+    .navbar__brand {
+      background: var(--Surface-general-default, #fff);
+      border-bottom: 1px solid var(--og-500);  /* border/primary/default */
+      border-left:   1px solid var(--og-500);
+      border-right:  1px solid var(--og-500);
+      border-radius: 0 0 24px 24px;            /* corner-4xl bottom only */
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 28px;             /* spacing/space-2xl */
+      padding: 8px 24px;     /* space-xs vertical, space-xl horizontal — DS spec */
+    }
+
+    /* Pandai logo — node 1898:6911 Normal, 116.5×28px per DS */
+    .navbar__logo {
+      width: 116.5px;
+      height: 28px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+    .navbar__logo-img {
+      width: 116.5px;
+      height: 28px;
+      object-fit: contain;
+      object-position: left center;
+      display: block;
+    }
+
+    /* Actions area — grows to fill, aligns right */
+    .navbar__actions {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 24px;             /* spacing/space-xl */
+    }
+
+    /* Icon row — search, maximize, smartphone, bell, EN, waffle */
+    .navbar__icons {
+      display: flex;
+      align-items: center;
+      gap: 28px;             /* spacing/space-2xl */
+    }
+    .navbar__icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #666;             /* text/default/body */
+    }
+    .navbar__icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    /* Avatar (L = 48px) + notification badge */
+    .navbar__avatar-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .navbar__avatar-l {
+      width: 48px;
+      height: 48px;
+      border-radius: 60px;           /* corner-rounded */
+      border: 1px solid var(--og-500); /* border/default */
+      background: var(--Surface-general-default, #fff);
+      overflow: hidden;
+      display: flex;
+      align-items: flex-start;
+    }
+    .navbar__avatar-l img {
+      /* Figma spec: left-[-7px] right-[-7px] top-[-1px] → overflow avatar */
+      width: calc(100% + 14px);
+      margin-left: -7px;
+      margin-top: -1px;
+    }
+    /* Badges - Number - 1.5 */
+    .navbar__notif {
+      position: absolute;
+      top: 0;
+      right: -0.5px;
+      min-width: 20px;
+      height: 20px;
+      background: var(--og-500);            /* surface/primary/default */
+      border-radius: 60px;                  /* corner-rounded */
+      padding: 4px;                         /* spacing/space-xxs */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;                      /* Body/B7 */
+      font-weight: 600;
+      line-height: 12px;                    /* spacing/space-s */
+      color: #e9fbf5;                       /* text/primary/on-color */
+      white-space: nowrap;
+    }
+
+    /* ── Nav Content Bar (bottom row, 56px pill) ────────────────── */
+    .navbar__content {
+      background: var(--Surface-general-default, #fff);
+      border: 1px solid var(--og-500);   /* border/default */
+      border-radius: 999px;              /* corner-pill */
+      height: 56px;
+      max-height: 64px;
+      display: flex;
+      align-items: flex-start;
+      padding: 8px;                      /* spacing/space-xs */
+    }
+
+    .navbar__nav-items {
+      display: flex;
+      align-items: center;
+      gap: 8px;                          /* spacing/space-xs */
+    }
+
+    /* Button - NavBar - Dropdown - 1.5 (inactive) */
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;                          /* spacing/space-xs */
+      padding: 8px 12px;                 /* spacing/space-xs  spacing/space-s */
+      border-radius: 999px;              /* corner-pill */
+      border: none;
+      background: transparent;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;                   /* Body/B1 */
+      font-weight: 600;
+      line-height: 20px;
+      color: #666;                       /* text/default/body */
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      height: 40px;
+      flex-shrink: 0;
+    }
+    .nav-btn svg.nav-icon,
+    .nav-btn svg.nav-chevron {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+    .nav-btn svg.nav-chevron { width: 18px; height: 18px; }
+
+    /* icon/primary/default (#00cc85) on inactive nav icons */
+    .nav-btn:not(.nav-btn--active) svg.nav-icon,
+    .nav-btn:not(.nav-btn--active) svg.nav-chevron {
+      stroke: var(--og-500);
+    }
+
+    /* Active state — Class button */
+    .nav-btn--active {
+      background: var(--og-500);         /* surface/primary/default */
+      border: 1px solid var(--og-600);   /* border/primary/focus */
+      color: #e9fbf5;                    /* text/primary/on-color — cascades to SVG stroke */
+    }
+    /* Active chevron rotates 180° (points up — open state) */
+    .nav-btn--active svg.nav-chevron { transform: rotate(180deg); }
+
+    @media (max-width: 425px) {
+      .navbar__brand { padding: 8px 16px; border-radius: 0 0 16px 16px; }
+      .navbar__content { border-radius: 16px; height: auto; }
+      .navbar__nav-items { flex-wrap: wrap; gap: 4px; }
+      .navbar__icons { gap: 16px; }
+    }
+
+    /* ── DS Avatar 1.5 ──────────────────────────────────────────── */
+    .ds-avatar {
+      border-radius: var(--r-rounded);
+      background: #fff;
+      border: 1.5px solid var(--og-500);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .ds-avatar--xl  { width: 64px;  height: 64px;  }
+    .ds-avatar svg { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .ds-avatar--xl  svg { width: 38px; height: 38px; stroke: var(--og-500); }
+
+    /* ══════════════════════════════════════════════════════════════
+       Breadcrumb 1.5 — node 1777:18856
+       ══════════════════════════════════════════════════════════════ */
+    .bc-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 36px;
+    }
+    .bc-left {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: var(--sp-m);  /* spacing/space-m = 16px */
+    }
+    .bc-title {
+      font-size: 24px;           /* Header/H3 */
+      font-weight: 500;
+      line-height: 36px;
+      color: #00564c;            /* text/tertiary/default */
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .bc-sep {
+      width: 1px;
+      height: 20px;
+      background: #d9d9d9;
+      flex-shrink: 0;
+    }
+    .bc-trail {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-xs);         /* 8px */
+      flex-wrap: wrap;
+    }
+    .bc-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-xs);         /* spacing/scale-200 = 8px */
+      font-size: 14px;           /* Body/B3 */
+      font-weight: 400;
+      line-height: 20px;
+      color: #666;               /* text/default/body */
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .bc-link svg {
+      width: 20px; height: 20px;
+      stroke: #666;
+      fill: none; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+    .bc-chevron {
+      width: 16px; height: 16px;
+      stroke: #bfbfbf;
+      fill: none; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+    .bc-link--current {
+      color: #4d4d4d;
+    }
+
+    /* Breadcrumb action buttons */
+    .bc-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-xs);         /* spacing/space-xs = 8px */
+      flex-shrink: 0;
+    }
+    .btn-browse, .btn-join {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-xs);
+      border-radius: var(--r-rounded);   /* corner-rounded = 60px */
+      padding: var(--sp-xs) var(--sp-s); /* 8px 12px */
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;           /* Body/B1 */
+      font-weight: 600;
+      line-height: 20px;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      border: 1px solid;
+    }
+    .btn-browse svg, .btn-join svg {
+      width: 20px; height: 20px;
+      fill: none; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+    .btn-browse {
+      background: var(--og-500);         /* surface/primary/default */
+      border-color: var(--og-600);       /* border/primary/focus */
+      color: #e9fbf5;                    /* text/primary/on-color */
+    }
+    .btn-browse svg { stroke: #e9fbf5; }
+    .btn-join {
+      background: var(--Surface-general-default, #fff);
+      border-color: var(--og-500);       /* border/primary/default */
+      color: var(--og-500);              /* text/primary/default */
+    }
+    .btn-join svg { stroke: var(--og-500); }
+
+    @media (max-width: 425px) {
+      .bc-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .bc-left { flex-wrap: wrap; }
+      .bc-actions { width: 100%; }
+      .btn-browse, .btn-join { flex: 1; justify-content: center; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       Class Cards Grid
+       ══════════════════════════════════════════════════════════════ */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+    }
+
+    @media (max-width: 425px) {
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Class Card shell ───────────────────────────────────────── */
+    .cc {
+      border-radius: var(--r-4xl);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      background: #fff;
+    }
+
+    /* ── Cover area — DS Class Subject Cover Image component ───── */
+    .cc__cover { width: 100%; overflow: hidden; display: block; }
+    .cc__cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* ── Card outer border ──────────────────────────────────────── */
+    .cc--bm  { border: 1px solid var(--bm-500); }
+    .cc--en  { border: 1px solid var(--en-500); }
+    .cc--mt  { border: 1px solid var(--mt-500); }
+    .cc--sc  { border: 1px solid var(--sc-500); }
+    .cc--bio { border: 1px solid var(--bi-500); }
+    .cc--hs  { border: 1px solid var(--hs-500); }
+
+    /* ── Body (light subject bg) ────────────────────────────────── */
+    .cc__body { padding: var(--sp-m); }
+    .cc--bm  .cc__body { background: var(--bm-50);  }
+    .cc--en  .cc__body { background: var(--en-50);  }
+    .cc--mt  .cc__body { background: var(--mt-50);  }
+    .cc--sc  .cc__body { background: var(--sc-50);  }
+    .cc--bio .cc__body { background: var(--bi-50);  }
+    .cc--hs  .cc__body { background: var(--hs-50);  }
+
+    /* ── Inner card ─────────────────────────────────────────────── */
+    .cc__inner { border-radius: var(--r-2xl); overflow: hidden; background: #fff; display: flex; flex-direction: column; }
+    .cc--bm  .cc__inner { border: 1px solid var(--bm-500); }
+    .cc--en  .cc__inner { border: 1px solid var(--en-500); }
+    .cc--mt  .cc__inner { border: 1px solid var(--mt-500); }
+    .cc--sc  .cc__inner { border: 1px solid var(--sc-500); }
+    .cc--bio .cc__inner { border: 1px solid var(--bi-500); }
+    .cc--hs  .cc__inner { border: 1px solid var(--hs-500); }
+
+    /* ── Header strip ───────────────────────────────────────────── */
+    .cc__hdr {
+      padding: var(--sp-xs) var(--sp-m);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: var(--sp-m); min-height: 44px;
+    }
+    .cc--bm  .cc__hdr { background: var(--bm-500); }
+    .cc--en  .cc__hdr { background: var(--en-500); }
+    .cc--mt  .cc__hdr { background: var(--mt-500); }
+    .cc--sc  .cc__hdr { background: var(--sc-500); }
+    .cc--bio .cc__hdr { background: var(--bi-500); }
+    .cc--hs  .cc__hdr { background: var(--hs-500); }
+
+    .cc__hdr-title {
+      font-size: 16px; font-weight: 600; line-height: 26px;
+      flex: 1; min-width: 0;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    /* Science has yellow bg so needs dark text */
+    .cc--bm .cc__hdr-title, .cc--en .cc__hdr-title, .cc--mt .cc__hdr-title,
+    .cc--bio .cc__hdr-title, .cc--hs .cc__hdr-title { color: #fff; }
+    .cc--sc .cc__hdr-title { color: var(--sc-700); }
+
+    /* DLP badge */
+    .dlp-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--pk-500); border-radius: 99px;
+      padding: 2px 8px 2px 6px;
+      font-size: 11px; font-weight: 700; color: #fff;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .dlp-badge svg { width: 13px; height: 13px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Main content ───────────────────────────────────────────── */
+    .cc__main {
+      background: #fff; padding: var(--sp-m);
+      display: flex; align-items: flex-start; gap: var(--sp-m); min-height: 96px;
+    }
+    .cc__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+    .cc__teacher {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--text-heading);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .cc__schedule {
+      font-size: 13px; font-weight: 400; line-height: 20px;
+      color: var(--text-body);
+      display: flex; flex-wrap: wrap; gap: 3px; align-items: center;
+    }
+    .cc__schedule strong { font-weight: 600; color: var(--text-heading); }
+
+    /* Live badge — Label Badge 1.5 */
+    .live-badge {
+      display: inline-flex; align-items: center; gap: var(--sp-xxs);
+      border-radius: var(--r-rounded);
+      padding: var(--sp-xxxs) var(--sp-xs);
+      margin-top: 3px; align-self: flex-start;
+      font-size: 10px; font-weight: 500; line-height: 12px; white-space: nowrap;
+    }
+    .live-badge svg { width: 10px; height: 10px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .cc--bm  .live-badge { background: var(--bm-100); border: 1px solid var(--bm-500); color: var(--bm-700); }
+    .cc--bm  .live-badge svg { stroke: var(--bm-500); }
+    .cc--en  .live-badge { background: var(--en-100); border: 1px solid var(--en-500); color: var(--en-700); }
+    .cc--en  .live-badge svg { stroke: var(--en-500); }
+    .cc--mt  .live-badge { background: var(--mt-100); border: 1px solid var(--mt-500); color: var(--mt-700); }
+    .cc--mt  .live-badge svg { stroke: var(--mt-500); }
+    .cc--sc  .live-badge { background: var(--sc-100); border: 1px solid var(--sc-500); color: var(--sc-700); }
+    .cc--sc  .live-badge svg { stroke: var(--sc-500); }
+    .cc--bio .live-badge { background: var(--bi-100); border: 1px solid var(--bi-500); color: var(--bi-700); }
+    .cc--bio .live-badge svg { stroke: var(--bi-500); }
+    .cc--hs  .live-badge { background: var(--hs-100); border: 1px solid var(--hs-500); color: var(--hs-700); }
+    .cc--hs  .live-badge svg { stroke: var(--hs-500); }
+
+    /* ── Divider ────────────────────────────────────────────────── */
+    .cc__divider { height: 1px; }
+    .cc--bm  .cc__divider { background: var(--bm-100); }
+    .cc--en  .cc__divider { background: var(--en-100); }
+    .cc--mt  .cc__divider { background: var(--mt-100); }
+    .cc--sc  .cc__divider { background: var(--sc-100); }
+    .cc--bio .cc__divider { background: var(--bi-100); }
+    .cc--hs  .cc__divider { background: var(--hs-100); }
+
+    /* ── CTA ────────────────────────────────────────────────────── */
+    .cc__cta {
+      background: #fff; padding: var(--sp-m);
+      display: flex; justify-content: flex-end;
+    }
+
+    /* Enter Class button — Button 1.5 */
+    .btn-enter {
+      display: inline-flex; align-items: center;
+      border-radius: var(--r-rounded); padding: 2px 8px 2px 12px;
+      cursor: pointer; text-decoration: none;
+    }
+    .btn-enter__label {
+      font-size: 12px; font-weight: 600; line-height: 18px; white-space: nowrap; padding-right: 4px;
+    }
+    .btn-enter__arrow {
+      width: 20px; height: 20px; border-radius: var(--r-rounded);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .btn-enter__arrow svg { width: 12px; height: 12px; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* Subject-specific button colours */
+    .cc--bm .btn-enter  { background: var(--bm-500); border: 1px solid var(--bm-600); }
+    .cc--bm .btn-enter__label { color: #fff; }
+    .cc--bm .btn-enter__arrow { background: var(--bm-200); }
+    .cc--bm .btn-enter__arrow svg { stroke: var(--bm-700); }
+
+    .cc--en .btn-enter  { background: var(--en-500); border: 1px solid var(--en-600); }
+    .cc--en .btn-enter__label { color: #fff; }
+    .cc--en .btn-enter__arrow { background: var(--en-200); }
+    .cc--en .btn-enter__arrow svg { stroke: var(--en-700); }
+
+    .cc--mt .btn-enter  { background: var(--mt-500); border: 1px solid var(--mt-600); }
+    .cc--mt .btn-enter__label { color: #fff; }
+    .cc--mt .btn-enter__arrow { background: var(--mt-200); }
+    .cc--mt .btn-enter__arrow svg { stroke: var(--mt-700); }
+
+    .cc--sc .btn-enter  { background: var(--sc-500); border: 1px solid var(--sc-600); }
+    .cc--sc .btn-enter__label { color: var(--sc-700); }
+    .cc--sc .btn-enter__arrow { background: var(--sc-200); }
+    .cc--sc .btn-enter__arrow svg { stroke: var(--sc-700); }
+
+    .cc--bio .btn-enter  { background: var(--bi-500); border: 1px solid var(--bi-600); }
+    .cc--bio .btn-enter__label { color: #fff; }
+    .cc--bio .btn-enter__arrow { background: var(--bi-200); }
+    .cc--bio .btn-enter__arrow svg { stroke: var(--bi-700); }
+
+    .cc--hs .btn-enter  { background: var(--hs-500); border: 1px solid var(--hs-600); }
+    .cc--hs .btn-enter__label { color: #fff; }
+    .cc--hs .btn-enter__arrow { background: var(--hs-200); }
+    .cc--hs .btn-enter__arrow svg { stroke: var(--hs-700); }
+
+    /* DS Avatar — subject-border override inside class cards */
+    .cc--bm  .ds-avatar { border-color: var(--bm-500); }
+    .cc--bm  .ds-avatar svg { stroke: var(--bm-500); }
+    .cc--en  .ds-avatar { border-color: var(--en-500); }
+    .cc--en  .ds-avatar svg { stroke: var(--en-500); }
+    .cc--mt  .ds-avatar { border-color: var(--mt-500); }
+    .cc--mt  .ds-avatar svg { stroke: var(--mt-500); }
+    .cc--sc  .ds-avatar { border-color: var(--sc-500); }
+    .cc--sc  .ds-avatar svg { stroke: var(--sc-500); }
+    .cc--bio .ds-avatar { border-color: var(--bi-500); }
+    .cc--bio .ds-avatar svg { stroke: var(--bi-500); }
+    .cc--hs  .ds-avatar { border-color: var(--hs-500); }
+    .cc--hs  .ds-avatar svg { stroke: var(--hs-500); }
+
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════
+       Navbar 1.5 — node 1777:13566
+       ══════════════════════════════════════════════════════════ -->
+  <nav class="navbar" aria-label="Main navigation">
+
+    <!-- Brand Bar -->
+    <div class="navbar__brand">
+      <!-- Logo/Pandai/Logo Horizontal — node 1898:6911 Normal -->
+      <div class="navbar__logo">
+        <img class="navbar__logo-img" src="navbar/logo.png" alt="Pandai">
+      </div>
+
+      <!-- Actions: icons + avatar -->
+      <div class="navbar__actions">
+        <div class="navbar__icons">
+          <!-- Outline/search — node 260:1103 -->
+          <div class="navbar__icon" title="Search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <!-- Outline/maximize — node 260:915 -->
+          <div class="navbar__icon" title="Fullscreen">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+          </div>
+          <!-- Outline/smartphone — node 260:1178 -->
+          <div class="navbar__icon" title="Mobile app">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          </div>
+          <!-- Outline/bell — node 260:491 -->
+          <div class="navbar__icon" title="Notifications">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <!-- Outline/EN — node 1104:2538 (DS export) -->
+          <div class="navbar__icon" title="Language: English">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6125 6V17.2519L13.0858 6V17.2519M9.12861 6.05025H3V11.6511M3 11.6511V17.2519H9.12861M3 11.6511H9.1812 11.6511"/></svg>
+          </div>
+          <!-- Outline/waffle-menu — node 1070:2215 (DS export) -->
+          <div class="navbar__icon" title="Apps">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="5"  cy="5"  r="1"/><circle cx="12" cy="5"  r="1"/><circle cx="19" cy="5"  r="1"/>
+              <circle cx="5"  cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>
+              <circle cx="5"  cy="19" r="1"/><circle cx="12" cy="19" r="1"/><circle cx="19" cy="19" r="1"/>
+            </svg>
+          </div>
+        </div>
+        <!-- Avatar L (48px) + Badges - Number - 1.5 -->
+        <div class="navbar__avatar-wrap">
+          <div class="navbar__avatar-l">
+            <img src="navbar/icon-avatar-user.png" alt="User profile">
+          </div>
+          <div class="navbar__notif">15</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navbar Content Bar (pill) -->
+    <div class="navbar__content">
+      <div class="navbar__nav-items">
+        <!-- Quiz — Outline/check-circle node 260:527 -->
+        <a href="#" class="nav-btn">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Quiz
+        </a>
+        <!-- Quiz (second instance) -->
+        <a href="#" class="nav-btn">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Quiz
+        </a>
+        <!-- Battle — Outline/battle node 1070:8064 (DS export) -->
+        <a href="#" class="nav-btn">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 3V8L10 17L6 21L3 18L7 14L16 3H21Z"/>
+            <path d="M5 13L11 19"/>
+            <path d="M14.3199 17.32L17.9999 21L20.9999 18L17.6349 14.635"/>
+            <path d="M10 5.5L8 3H3V8L6 10.5"/>
+          </svg>
+          Battle
+        </a>
+        <!-- Practice — Outline/book-open node 260:498 -->
+        <a href="#" class="nav-btn">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          Practice
+        </a>
+        <!-- Class — active — Outline/users node 260:1321 -->
+        <button class="nav-btn nav-btn--active">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Class
+          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <!-- Learn — Outline/book node 260:501 -->
+        <a href="#" class="nav-btn">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Learn
+          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+        <!-- Achievement — Outline/book-open node 260:498 -->
+        <a href="#" class="nav-btn">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          Achievement
+          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+        <!-- Potential — Outline/star node 260:1192 -->
+        <a href="#" class="nav-btn">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Potential
+          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+        <!-- Rewards — Outline/gift node 260:765 -->
+        <a href="#" class="nav-btn">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+          Rewards
+          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </nav>
+
+  <!-- Page content — padded area ──────────────────────────── -->
+  <div class="page-content">
+
+  <!-- ── Breadcrumb 1.5 — node 1777:18856 ──────────────────── -->
+  <div class="bc-row">
+    <div class="bc-left">
+      <span class="bc-title">My Class</span>
+      <span class="bc-sep" aria-hidden="true"></span>
+      <nav class="bc-trail" aria-label="Breadcrumb">
+        <a href="#" class="bc-link">
+          <!-- Outline/home -->
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Home
+          <svg class="bc-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="#" class="bc-link">
+          Class
+          <svg class="bc-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <span class="bc-link bc-link--current" aria-current="page">My Class</span>
+      </nav>
+    </div>
+    <div class="bc-actions">
+      <!-- Button 1.5 Primary — Browse Class -->
+      <a href="#" class="btn-browse">
+        <!-- Outline/image -->
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Browse Class
+      </a>
+      <!-- Button 1.5 Secondary — Join Class -->
+      <a href="#" class="btn-join">
+        <!-- Outline/image -->
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Join Class
+      </a>
+    </div>
+  </div>
+
+  <!-- ── Class Cards 1.5 ─────────────────────────────────────── -->
+  <div class="cards-grid">
+
+    <!-- ① B-Melayu | Form 4 ──────────────────────────────────── -->
+    <div class="cc cc--bm">
+      <div class="cc__cover"><img src="covers/bm.png" alt="Bahasa Melayu cover"></div>
+      <div class="cc__body">
+        <div class="cc__inner">
+          <div class="cc__hdr">
+            <div class="cc__hdr-title">Bahasa Melayu | Form 4</div>
+          </div>
+          <div class="cc__main">
+            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="cc__text">
+              <div class="cc__teacher">Cikgu Aminah binti Yusoff</div>
+              <div class="cc__schedule"><span>Everyday</span><strong>Tuesday</strong><span>at</span><strong>8am</strong></div>
+              <div class="live-badge">
+                <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                Live Tuition
+              </div>
+            </div>
+          </div>
+          <div class="cc__divider"></div>
+          <div class="cc__cta">
+            <a href="#" class="btn-enter">
+              <span class="btn-enter__label">Enter Class</span>
+              <div class="btn-enter__arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ② English | Form 4 ──────────────────────────────────── -->
+    <div class="cc cc--en">
+      <div class="cc__cover"><img src="covers/en.png" alt="English cover"></div>
+      <div class="cc__body">
+        <div class="cc__inner">
+          <div class="cc__hdr">
+            <div class="cc__hdr-title">English | Form 4</div>
+            <div class="dlp-badge">
+              <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="white" stroke="none"/></svg>
+              DLP
+            </div>
+          </div>
+          <div class="cc__main">
+            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="cc__text">
+              <div class="cc__teacher">Puan Sarah binti Abdullah</div>
+              <div class="cc__schedule"><span>Everyday</span><strong>Wednesday</strong><span>at</span><strong>9am</strong></div>
+              <div class="live-badge">
+                <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                Live Tuition
+              </div>
+            </div>
+          </div>
+          <div class="cc__divider"></div>
+          <div class="cc__cta">
+            <a href="#" class="btn-enter">
+              <span class="btn-enter__label">Enter Class</span>
+              <div class="btn-enter__arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ Mathematics | Form 4 ──────────────────────────────── -->
+    <div class="cc cc--mt">
+      <div class="cc__cover"><img src="covers/math.png" alt="Mathematics cover"></div>
+      <div class="cc__body">
+        <div class="cc__inner">
+          <div class="cc__hdr">
+            <div class="cc__hdr-title">Mathematics | Form 4</div>
+          </div>
+          <div class="cc__main">
+            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="cc__text">
+              <div class="cc__teacher">En. Hafiz bin Zulkifli</div>
+              <div class="cc__schedule"><span>Everyday</span><strong>Thursday</strong><span>at</span><strong>10am</strong></div>
+              <div class="live-badge">
+                <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                Live Tuition
+              </div>
+            </div>
+          </div>
+          <div class="cc__divider"></div>
+          <div class="cc__cta">
+            <a href="#" class="btn-enter">
+              <span class="btn-enter__label">Enter Class</span>
+              <div class="btn-enter__arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ④ Science | Form 4 ──────────────────────────────────── -->
+    <div class="cc cc--sc">
+      <div class="cc__cover"><img src="covers/science.png" alt="Science cover"></div>
+      <div class="cc__body">
+        <div class="cc__inner">
+          <div class="cc__hdr">
+            <div class="cc__hdr-title">Science | Form 4</div>
+            <div class="dlp-badge">
+              <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="white" stroke="none"/></svg>
+              DLP
+            </div>
+          </div>
+          <div class="cc__main">
+            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="cc__text">
+              <div class="cc__teacher">Cikgu Norliza binti Kassim</div>
+              <div class="cc__schedule"><span>Everyday</span><strong>Monday</strong><span>at</span><strong>7am</strong></div>
+              <div class="live-badge">
+                <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                Live Tuition
+              </div>
+            </div>
+          </div>
+          <div class="cc__divider"></div>
+          <div class="cc__cta">
+            <a href="#" class="btn-enter">
+              <span class="btn-enter__label">Enter Class</span>
+              <div class="btn-enter__arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⑤ Biology | Form 5 ──────────────────────────────────── -->
+    <div class="cc cc--bio">
+      <div class="cc__cover"><img src="covers/biology.png" alt="Biology cover"></div>
+      <div class="cc__body">
+        <div class="cc__inner">
+          <div class="cc__hdr">
+            <div class="cc__hdr-title">Biology | Form 5</div>
+          </div>
+          <div class="cc__main">
+            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="cc__text">
+              <div class="cc__teacher">Dr. Rashidah binti Ismail</div>
+              <div class="cc__schedule"><span>Everyday</span><strong>Friday</strong><span>at</span><strong>2pm</strong></div>
+              <div class="live-badge">
+                <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                Live Tuition
+              </div>
+            </div>
+          </div>
+          <div class="cc__divider"></div>
+          <div class="cc__cta">
+            <a href="#" class="btn-enter">
+              <span class="btn-enter__label">Enter Class</span>
+              <div class="btn-enter__arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⑥ History | Form 5 ──────────────────────────────────── -->
+    <div class="cc cc--hs">
+      <div class="cc__cover"><img src="covers/history.png" alt="History cover"></div>
+      <div class="cc__body">
+        <div class="cc__inner">
+          <div class="cc__hdr">
+            <div class="cc__hdr-title">History | Form 5</div>
+          </div>
+          <div class="cc__main">
+            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="cc__text">
+              <div class="cc__teacher">En. Fadzillah bin Omar</div>
+              <div class="cc__schedule"><span>Everyday</span><strong>Saturday</strong><span>at</span><strong>11am</strong></div>
+              <div class="live-badge">
+                <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                Live Tuition
+              </div>
+            </div>
+          </div>
+          <div class="cc__divider"></div>
+          <div class="cc__cta">
+            <a href="#" class="btn-enter">
+              <span class="btn-enter__label">Enter Class</span>
+              <div class="btn-enter__arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.cards-grid -->
+
+  </div><!-- /.page-content -->
+
+</body>
+</html>
