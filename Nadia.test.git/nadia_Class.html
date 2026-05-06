@@ -273,17 +273,28 @@
       .navbar__icons { gap: 16px; }
     }
 
-    /* ── DS Avatar 1.5 ──────────────────────────────────────────── */
+    /* ── DS Avatar 1.5 — node 4104:81442 ───────────────────────── */
     .ds-avatar {
-      border-radius: var(--r-rounded);
-      background: #fff;
-      border: 1.5px solid var(--og-500);
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden; flex-shrink: 0;
+      border-radius: var(--r-rounded);     /* corner-rounded = 60px */
+      background: var(--Surface-general-default, #fff);
+      border: 1px solid var(--og-500);     /* border/default */
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;                  /* needed for absolute img child */
     }
-    .ds-avatar--xl  { width: 64px;  height: 64px;  }
-    .ds-avatar svg { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-    .ds-avatar--xl  svg { width: 38px; height: 38px; stroke: var(--og-500); }
+    .ds-avatar--xl { width: 64px; height: 64px; }
+    /* Avatar image — DS spec: overflows -7px left, -8px right, -1px top */
+    .ds-avatar--xl img {
+      position: absolute;
+      left: -7px;
+      right: -8px;
+      top: -1px;
+      width: calc(100% + 15px);
+      aspect-ratio: 1;
+      object-fit: cover;
+      pointer-events: none;
+      display: block;
+    }
 
     /* ══════════════════════════════════════════════════════════════
        Breadcrumb 1.5 — node 1777:18856
@@ -820,7 +831,7 @@
             <div class="cc__hdr-title">Bahasa Melayu | Form 4</div>
           </div>
           <div class="cc__main">
-            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
             <div class="cc__text">
               <div class="cc__teacher">Cikgu Aminah binti Yusoff</div>
               <div class="cc__schedule"><span>Everyday</span><strong>Tuesday</strong><span>at</span><strong>8am</strong></div>
@@ -854,7 +865,7 @@
             </div>
           </div>
           <div class="cc__main">
-            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
             <div class="cc__text">
               <div class="cc__teacher">Puan Sarah binti Abdullah</div>
               <div class="cc__schedule"><span>Everyday</span><strong>Wednesday</strong><span>at</span><strong>9am</strong></div>
@@ -884,7 +895,7 @@
             <div class="cc__hdr-title">Mathematics | Form 4</div>
           </div>
           <div class="cc__main">
-            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
             <div class="cc__text">
               <div class="cc__teacher">En. Hafiz bin Zulkifli</div>
               <div class="cc__schedule"><span>Everyday</span><strong>Thursday</strong><span>at</span><strong>10am</strong></div>
@@ -918,7 +929,7 @@
             </div>
           </div>
           <div class="cc__main">
-            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
             <div class="cc__text">
               <div class="cc__teacher">Cikgu Norliza binti Kassim</div>
               <div class="cc__schedule"><span>Everyday</span><strong>Monday</strong><span>at</span><strong>7am</strong></div>
@@ -948,7 +959,7 @@
             <div class="cc__hdr-title">Biology | Form 5</div>
           </div>
           <div class="cc__main">
-            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
             <div class="cc__text">
               <div class="cc__teacher">Dr. Rashidah binti Ismail</div>
               <div class="cc__schedule"><span>Everyday</span><strong>Friday</strong><span>at</span><strong>2pm</strong></div>
@@ -978,7 +989,7 @@
             <div class="cc__hdr-title">History | Form 4</div>
           </div>
           <div class="cc__main">
-            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
             <div class="cc__text">
               <div class="cc__teacher">En. Fadzillah bin Omar</div>
               <div class="cc__schedule"><span>Everyday</span><strong>Saturday</strong><span>at</span><strong>11am</strong></div>
@@ -1009,7 +1020,7 @@
             <div class="dlp-badge"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="white" stroke="none"/></svg>DLP</div>
           </div>
           <div class="cc__main">
-            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
             <div class="cc__text">
               <div class="cc__teacher">Cikgu Ramlah binti Aziz</div>
               <div class="cc__schedule"><span>Mon &</span><strong>Wed</strong><span>at</span><strong>10am</strong></div>
@@ -1032,7 +1043,7 @@
             <div class="dlp-badge"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="white" stroke="none"/></svg>DLP</div>
           </div>
           <div class="cc__main">
-            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
             <div class="cc__text">
               <div class="cc__teacher">Ms. Jessica Lee</div>
               <div class="cc__schedule"><span>Mon &</span><strong>Thu</strong><span>at</span><strong>2pm</strong></div>
@@ -1054,7 +1065,7 @@
             <div class="cc__hdr-title">Mathematics | Form 5</div>
           </div>
           <div class="cc__main">
-            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
             <div class="cc__text">
               <div class="cc__teacher">En. Nazri bin Hassan</div>
               <div class="cc__schedule"><span>Tue &</span><strong>Fri</strong><span>at</span><strong>11am</strong></div>
@@ -1077,7 +1088,7 @@
             <div class="dlp-badge"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="white" stroke="none"/></svg>DLP</div>
           </div>
           <div class="cc__main">
-            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
             <div class="cc__text">
               <div class="cc__teacher">Cikgu Suraya binti Mohd</div>
               <div class="cc__schedule"><span>Wed &</span><strong>Sat</strong><span>at</span><strong>9am</strong></div>
@@ -1099,7 +1110,7 @@
             <div class="cc__hdr-title">Biology | Form 5</div>
           </div>
           <div class="cc__main">
-            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
             <div class="cc__text">
               <div class="cc__teacher">Dr. Rashdan bin Ismail</div>
               <div class="cc__schedule"><span>Mon &</span><strong>Thu</strong><span>at</span><strong>3pm</strong></div>
@@ -1121,7 +1132,7 @@
             <div class="cc__hdr-title">History | Form 5</div>
           </div>
           <div class="cc__main">
-            <div class="ds-avatar ds-avatar--xl"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
             <div class="cc__text">
               <div class="cc__teacher">En. Hafizuddin bin Arshad</div>
               <div class="cc__schedule"><span>Tue &</span><strong>Fri</strong><span>at</span><strong>1pm</strong></div>
