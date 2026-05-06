@@ -168,6 +168,7 @@
       display:     flex;
       align-items: center;
       gap:         var(--spacing-space-2xl);
+      color:       var(--surface-primary-default);  /* green — DS stroke-0 on navbar icons */
     }
 
     .navbar-avatar {
@@ -533,6 +534,7 @@
       display:         flex;
       align-items:     center;
       justify-content: center;
+      color:           var(--text-primary-on-color);  /* white chevron on green btn */
     }
 
     .carousel__btn__icon img { width: 20px; height: 20px; display: block; }
@@ -618,7 +620,7 @@
       align-items:     center;
       justify-content: center;
       flex-shrink:     0;
-      color:           var(--text-primary-on-color);
+      color:           var(--surface-primary-default);  /* #00cc85 chevron on #99ebce bg */
     }
 
     .static-card__btn-label {
@@ -656,11 +658,10 @@
       gap:         var(--spacing-space-xs);
     }
 
-    .section-header__bookmark { display: flex; align-items: center; }
-
-    .section-header__bookmark img {
-      /* Tint to primary green using CSS filter */
-      filter: invert(56%) sepia(82%) saturate(417%) hue-rotate(109deg) brightness(95%) contrast(94%);
+    .section-header__bookmark {
+      display: flex;
+      align-items: center;
+      color: var(--surface-primary-default);  /* green — DS icon tint for section bookmark */
     }
 
     .section-header__title {
@@ -698,6 +699,7 @@
       align-items:     center;
       justify-content: center;
       flex-shrink:     0;
+      color:           var(--text-primary-default);  /* green icon in Secondary btn */
     }
     .btn-add-classes__text {
       font-size:   12px;
@@ -717,6 +719,7 @@
       justify-content: center;
       flex-shrink:     0;
       overflow:        hidden;
+      color:           var(--text-primary-default);  /* green chevron in Secondary btn arrow */
     }
 
     /* Link 1.5  State=Default, Type=Default (node 701:524) */
@@ -946,9 +949,11 @@
       display:         flex;
       align-items:     center;
       justify-content: center;
+      color:           var(--surface-primary-default);  /* #00cc85 chevron on #99ebce bg */
     }
 
-    .btn-quiz-cta__arrow img { width: 12px; height: 12px; }
+    /* DS Primary Size=S: arrow icon is 12×12 Outline/chevron-right */
+    .btn-quiz-cta__arrow svg { width: 12px; height: 12px; display: block; flex-shrink: 0; }
 
     /* â”€â”€ Subject class â€” sets local CSS vars â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .subject-bm       { --card-subject-color: var(--subjects-b-melayu-default); }
@@ -1453,7 +1458,7 @@
                   <button class="btn-quiz-cta">
                     <span class="btn-quiz-cta__text">Mula</span>
                     <span class="btn-quiz-cta__arrow">
-                      <svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg>
+                      <svg aria-hidden="true"><use href="#ic-chevron-right"/></svg>
                     </span>
                   </button>
                 </div>
