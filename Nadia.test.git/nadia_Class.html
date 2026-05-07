@@ -221,14 +221,15 @@
       gap: 8px;                          /* spacing/space-xs */
     }
 
-    /* Button - NavBar - Dropdown - 1.5 (inactive) */
+    /* Button - NavBar - Dropdown - 1.5 — DS node 857:1236
+       Default / Hover / Selected (active) states                   */
     .nav-btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;                          /* spacing/space-xs */
       padding: 8px 12px;                 /* spacing/space-xs  spacing/space-s */
       border-radius: 999px;              /* corner-pill */
-      border: none;
+      border: 1px solid transparent;     /* reserve border space so hover doesn't shift layout */
       background: transparent;
       font-family: 'Poppins', sans-serif;
       font-size: 14px;                   /* Body/B1 */
@@ -240,6 +241,7 @@
       white-space: nowrap;
       height: 40px;
       flex-shrink: 0;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
     }
     .nav-btn svg.nav-icon,
     .nav-btn svg.nav-chevron {
@@ -251,22 +253,38 @@
       stroke-linecap: round;
       stroke-linejoin: round;
       flex-shrink: 0;
+      transition: stroke 0.15s ease, transform 0.15s ease;
     }
     .nav-btn svg.nav-chevron { width: 18px; height: 18px; }
 
-    /* icon/primary/default (#00cc85) on inactive nav icons */
+    /* Default — icon/primary/default on inactive icons */
     .nav-btn:not(.nav-btn--active) svg.nav-icon,
     .nav-btn:not(.nav-btn--active) svg.nav-chevron {
       stroke: var(--og-500);
     }
 
-    /* Active state — Class button */
+    /* Hover — surface/secondary/default (#b5f291) */
+    .nav-btn:not(.nav-btn--active):hover {
+      background: #b5f291;               /* surface/secondary/default */
+      border-color: #00a36a;             /* border/primary/focus */
+      color: #70bc6f;                    /* text/secondary/focus */
+    }
+    .nav-btn:not(.nav-btn--active):hover svg.nav-icon,
+    .nav-btn:not(.nav-btn--active):hover svg.nav-chevron {
+      stroke: #70bc6f;
+    }
+
+    /* Selected / Active — surface/primary/default (#00cc85) */
     .nav-btn--active {
       background: var(--og-500);         /* surface/primary/default */
-      border: 1px solid var(--og-600);   /* border/primary/focus */
-      color: #e9fbf5;                    /* text/primary/on-color — cascades to SVG stroke */
+      border-color: var(--og-600);       /* border/primary/focus */
+      color: #e9fbf5;                    /* text/primary/on-color */
     }
-    /* Active chevron rotates 180° (points up — open state) */
+    .nav-btn--active svg.nav-icon,
+    .nav-btn--active svg.nav-chevron {
+      stroke: #e9fbf5;
+    }
+    /* Active chevron rotates 180° (points up — open/selected state) */
     .nav-btn--active svg.nav-chevron { transform: rotate(180deg); }
 
     @media (max-width: 425px) {
