@@ -474,15 +474,21 @@
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
 
-    /* DLP badge — LT-DLP, pink pill */
+    /* DLP — LT-DLP component, 57×24px image asset */
     .dlp-badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      background: var(--pk-500); border-radius: 99px;
-      padding: 2px 8px 2px 6px;
-      font-size: 11px; font-weight: 700; color: #fff;
-      white-space: nowrap; flex-shrink: 0;
+      width: 57px;
+      height: 24px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: block;
     }
-    .dlp-badge svg { width: 13px; height: 13px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .dlp-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
 
     /* Main content — h:96px */
     .cc__main {
@@ -823,10 +829,7 @@
         <div class="cc__inner">
           <div class="cc__hdr">
             <div class="cc__hdr-title">English | Form 4</div>
-            <div class="dlp-badge">
-              <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="white" stroke="none"/></svg>
-              DLP
-            </div>
+            <div class="dlp-badge"><img src="covers/dlp.png" alt="DLP"></div>
           </div>
           <div class="cc__main">
             <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
@@ -887,10 +890,7 @@
         <div class="cc__inner">
           <div class="cc__hdr">
             <div class="cc__hdr-title">Science | Form 4</div>
-            <div class="dlp-badge">
-              <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="white" stroke="none"/></svg>
-              DLP
-            </div>
+            <div class="dlp-badge"><img src="covers/dlp.png" alt="DLP"></div>
           </div>
           <div class="cc__main">
             <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
@@ -981,7 +981,7 @@
         <div class="cc__inner">
           <div class="cc__hdr">
             <div class="cc__hdr-title">Bahasa Melayu | Form 5</div>
-            <div class="dlp-badge"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="white" stroke="none"/></svg>DLP</div>
+            <div class="dlp-badge"><img src="covers/dlp.png" alt="DLP"></div>
           </div>
           <div class="cc__main">
             <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
@@ -1004,7 +1004,7 @@
         <div class="cc__inner">
           <div class="cc__hdr">
             <div class="cc__hdr-title">English | Form 5</div>
-            <div class="dlp-badge"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="white" stroke="none"/></svg>DLP</div>
+            <div class="dlp-badge"><img src="covers/dlp.png" alt="DLP"></div>
           </div>
           <div class="cc__main">
             <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
@@ -1049,7 +1049,7 @@
         <div class="cc__inner">
           <div class="cc__hdr">
             <div class="cc__hdr-title">Science | Form 5</div>
-            <div class="dlp-badge"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="white" stroke="none"/></svg>DLP</div>
+            <div class="dlp-badge"><img src="covers/dlp.png" alt="DLP"></div>
           </div>
           <div class="cc__main">
             <div class="ds-avatar ds-avatar--xl"><img src="navbar/avatar-teacher.png" alt="Teacher avatar"></div>
