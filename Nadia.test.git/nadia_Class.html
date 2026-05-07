@@ -284,8 +284,72 @@
     .nav-btn--active svg.nav-chevron {
       stroke: #e9fbf5;
     }
-    /* Active chevron rotates 180° (points up — open/selected state) */
-    .nav-btn--active svg.nav-chevron { transform: rotate(180deg); }
+    /* Active chevron: DOWN by default; UP only on hover/open */
+    .nav-btn--active svg.nav-chevron { transform: none; }
+
+    /* ── Dropdown group wrapper ─────────────────────────────────── */
+    .nav-btn-group {
+      position: relative;
+      flex-shrink: 0;
+    }
+    /* Chevron rotates UP when group is hovered */
+    .nav-btn-group:hover .nav-btn--active svg.nav-chevron,
+    .nav-btn-group:focus-within .nav-btn--active svg.nav-chevron {
+      transform: rotate(180deg);
+    }
+
+    /* Dropdown panel — DS node 890:2465 */
+    .nav-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);            /* 6px gap below button */
+      left: 0;
+      z-index: 100;
+      background: var(--Surface-general-default, #fff);
+      border: 1px solid var(--og-500);  /* border/default */
+      border-radius: var(--r-2xl);      /* corner-2xl = 18px */
+      padding: 12px;
+      flex-direction: column;
+      gap: 4px;                          /* spacing/space-xxs */
+      min-width: 160px;
+      white-space: nowrap;
+    }
+    .nav-btn-group:hover .nav-dropdown,
+    .nav-btn-group:focus-within .nav-dropdown {
+      display: flex;
+    }
+
+    /* Sub-menu item — Button - NavBar - Sub Menu - Parts */
+    .nav-submenu-item {
+      display: flex;
+      align-items: center;
+      height: 24px;
+      border-radius: var(--r-rounded);   /* corner-rounded = 60px */
+      cursor: pointer;
+      text-decoration: none;
+      flex-shrink: 0;
+      padding: 0 4px;
+      transition: background 0.1s ease;
+    }
+    .nav-submenu-item:hover {
+      background: var(--og-50, #e9fbf5);
+    }
+    .nav-submenu-item svg {
+      width: 20px; height: 20px;
+      flex-shrink: 0;
+      fill: none;
+      stroke: var(--og-500);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .nav-submenu-item span {
+      font-size: 14px;                   /* Body/B1 */
+      font-weight: 600;
+      line-height: 20px;
+      color: #666;                       /* text/default/body */
+      padding: 0 8px;
+    }
 
     @media (max-width: 425px) {
       .navbar { padding: 0 16px; }
@@ -772,12 +836,35 @@
           <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
           Practice
         </a>
-        <!-- Class — active — Outline/users + chevron (up = open) -->
-        <button class="nav-btn nav-btn--active">
-          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          Class
-          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
+        <!-- Class — active — with dropdown (node 890:2457 + 890:2465) -->
+        <div class="nav-btn-group">
+          <button class="nav-btn nav-btn--active">
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Class
+            <!-- chevron: DOWN by default, UP on hover -->
+            <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <!-- Dropdown List — DS node 890:2465 -->
+          <div class="nav-dropdown" role="menu">
+            <a href="#" class="nav-submenu-item" role="menuitem">
+              <!-- Outline/corner-down-right -->
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>
+              <span>My Classes</span>
+            </a>
+            <a href="#" class="nav-submenu-item" role="menuitem">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>
+              <span>Browse Classes</span>
+            </a>
+            <a href="#" class="nav-submenu-item" role="menuitem">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>
+              <span>Join Class</span>
+            </a>
+            <a href="#" class="nav-submenu-item" role="menuitem">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>
+              <span>Timetable</span>
+            </a>
+          </div>
+        </div>
         <!-- Learn — Outline/book + chevron -->
         <a href="#" class="nav-btn">
           <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
