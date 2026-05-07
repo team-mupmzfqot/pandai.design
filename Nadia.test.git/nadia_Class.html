@@ -542,7 +542,7 @@
       display: flex; justify-content: flex-end;
     }
 
-    /* Enter Class — Button 1.5 primary */
+    /* Enter Class — Button 1.5 primary — DS node 2333:36279 */
     .btn-enter {
       display: inline-flex; align-items: center;
       border-radius: var(--r-rounded);
@@ -550,24 +550,58 @@
       background: var(--og-500);             /* surface/primary/default */
       border: 1px solid var(--og-600);       /* border/primary/focus */
       cursor: pointer; text-decoration: none;
+      transition: background 0.15s ease, border-color 0.15s ease;
     }
     .btn-enter__label {
       font-size: 12px; font-weight: 600; line-height: 18px; /* Body/B5 */
       color: #e9fbf5;                        /* text/primary/on-color */
       white-space: nowrap;
       padding-right: var(--sp-xxs);          /* 4px */
+      transition: color 0.15s ease;
     }
     .btn-enter__arrow {
       width: 20px; height: 20px;
       border-radius: var(--r-rounded);
       background: #99ebce;                   /* surface/primary/default-subtle-hover */
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: background 0.15s ease;
     }
     .btn-enter__arrow svg {
       width: 12px; height: 12px;
       fill: none; stroke-width: 2.5;
       stroke-linecap: round; stroke-linejoin: round;
       stroke: var(--og-700);
+      transition: stroke 0.15s ease;
+    }
+
+    /* Hover — surface/secondary/default (#b5f291) */
+    .btn-enter:hover {
+      background: #b5f291;                   /* surface/secondary/default */
+      border-color: #70bc6f;                 /* border/secondary/focus */
+    }
+    .btn-enter:hover .btn-enter__label {
+      color: #70bc6f;                        /* text/secondary/focus */
+    }
+    .btn-enter:hover .btn-enter__arrow {
+      background: #e8fbe8;                   /* surface/secondary/default-subtle */
+    }
+    .btn-enter:hover .btn-enter__arrow svg {
+      stroke: #70bc6f;
+    }
+
+    /* Pressed — surface/tertiary/default (#00564c) */
+    .btn-enter:active {
+      background: #00564c;                   /* surface/tertiary/default */
+      border-color: #00453d;                 /* border/tertiary/focus */
+    }
+    .btn-enter:active .btn-enter__label {
+      color: var(--og-500);                  /* text/primary/default */
+    }
+    .btn-enter:active .btn-enter__arrow {
+      background: var(--og-500);             /* surface/primary/default */
+    }
+    .btn-enter:active .btn-enter__arrow svg {
+      stroke: #e9fbf5;                       /* contrast on og-500 bg */
     }
 
     /* Avatar inside cards — og-500 border (default) */
