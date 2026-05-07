@@ -339,13 +339,13 @@
       font-size: 14px;           /* Body/B3 */
       font-weight: 400;
       line-height: 20px;
-      color: #666;               /* text/default/body */
+      color: var(--og-500);      /* text/primary/default — active trail links */
       text-decoration: none;
       white-space: nowrap;
     }
     .bc-link svg {
       width: 20px; height: 20px;
-      stroke: #666;
+      stroke: var(--og-500);
       fill: none; stroke-width: 1.5;
       stroke-linecap: round; stroke-linejoin: round;
       flex-shrink: 0;
@@ -358,7 +358,7 @@
       flex-shrink: 0;
     }
     .bc-link--current {
-      color: #4d4d4d;
+      color: #666;               /* text/default/body — current page */
     }
 
     /* Breadcrumb action buttons */
@@ -764,7 +764,7 @@
           Class
           <svg class="bc-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
-        <span class="bc-link bc-link--current" aria-current="page">Browse Classes</span>
+        <span class="bc-link bc-link--current" aria-current="page">My Classes</span>
       </nav>
     </div>
     <div class="bc-actions">
