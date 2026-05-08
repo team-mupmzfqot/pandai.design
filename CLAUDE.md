@@ -34,7 +34,16 @@
 - Never guess, approximate, or invent any design value. If a value is unknown, use `get_design_context` or `use_figma` to pull it live from Figma before writing any code.
 - Never create a custom component when a DS equivalent exists. Always check the component pages first.
 
-**Mistake made:** Primary color was guessed as `#2FAC51`. Actual DS value is `#00cc85` (`Surface/primary/default`). `Text/default/heading` was assumed as dark navy `#0F172A` — actual value is `#404040`. `Text/primary/on-color` was assumed as pure white — actual value is `#e9fbf5`.
+**CRITICAL — File identity:**
+- **Only file**: `TLVKe3bgJTdVvuPAzgDq2f` = "Pandai Design System 1.5" ← the ONLY valid source
+- **Never use**: `Y0DLhf2MGdGwG0jyjN7EbQ` = "Pandai Design System 1.5 (WIP) (BACKUP)" ← forbidden
+- **Never use**: Any file or library named "Zul's Dungeon", "Nadia Exploration", "Syakila Components"
+- When `search_design_system` returns results from "WIP (BACKUP)" or any other library, **ignore those results entirely** and look harder in the main DS file.
+- The WIP Backup is a historical snapshot only. All authoritative component and token definitions live in the main DS.
+
+**Mistake made:** Primary color was guessed as `#2FAC51`. Actual DS value is `#00cc85` (`Surface/primary/default`). `Text/default/heading` was assumed as dark navy `#0F172A` — actual value is `#404040`. `Text/primary/on-color` was assumed as pure white — actual value is `#f6fdfb`.
+
+**Mistake made (May 2026):** Kept accessing `Y0DLhf2MGdGwG0jyjN7EbQ` (WIP Backup) for component state lookups because `search_design_system` returned it. Correct behaviour: ignore WIP Backup results, use only `TLVKe3bgJTdVvuPAzgDq2f`.
 
 ---
 
@@ -162,6 +171,87 @@ A component's spec values can differ depending on where it appears. The same ele
 **Mistake made:** Pill Badge font-size was changed to `12px` based on the standalone Pill Badge DS spec — but inside Quiz Card the correct value is `10px` (`Body/B8`). Had to revert after fetching the actual Quiz Card node spec.
 
 **Rule:** When implementing an element that appears inside a larger component, always `get_design_context` on the **parent component node**, not the standalone element node.
+
+---
+
+### 10. Every page section must be a named `<section>` — never a bare `<div>`
+
+Every major content block on a page must be wrapped in `<section id="SectionName-Desktop">`. This applies to Navbar, Welcome, Carousel, Static Cards, and every content section below.
+
+**Naming convention:** `id="[ComponentName]-Desktop"` — e.g. `NavBar-Desktop`, `Welcome-Desktop`, `Carousel-Desktop`, `static-newscards`.
+
+**Mistake made:** Static cards were in a plain `<div>`, carousel had no `id`, welcome section had no `id`. All were missing the named section wrapper.
+
+---
+
+### 11. Inter-section gap is always `Spacing/space-m` (16px) — never custom values
+
+The gap between every section on `.main-content` must be `gap: var(--spacing-space-m)` = **16px**.
+
+**Mistake made:** Had `--section-gap: 40px` hardcoded — corrected to `var(--spacing-space-m)`.
+
+**Rule:** Set `--section-gap: var(--spacing-space-m)` in `:root` and use it on the `.main-content` flex container. Never use `40px`, `24px`, or any other value for inter-section gaps.
+
+---
+
+### 12. Get `get_variable_defs` on the exact sub-node — never the parent
+
+When a component has nested interactive elements (e.g. button arrow, icon circle), the color token on the sub-node is **different** from what the parent node reports. Always call `get_variable_defs` on the specific sub-node you are styling.
+
+**Mistake made:** Called `get_variable_defs` on the Button - 1.5 node (`479:344`) to find the arrow chevron color — it returned `Icon/primary/on-color #f6fdfb` which is WRONG for the arrow. The correct token (`Surface/primary/focus #00a36a`) only appears when calling `get_variable_defs` on the arrow sub-node (`479:351`).
+
+**Rule:** For any icon or sub-element inside a component, always call `get_variable_defs` on that element's own node ID, not the parent.
+
+---
+
+### 13. Interactive `<div>` elements must have `cursor: pointer` and `user-select: none`
+
+Any `<div>` used as a button or nav item — not a native `<button>` or `<a>` — **must** have:
+```css
+cursor:      pointer;
+user-select: none;
+```
+
+Without `cursor: pointer`, users see no visual interactivity signal and perceive the element as broken, even when hover CSS is correctly defined.
+
+**Mistake made:** All `.nav-btn` divs were missing `cursor: pointer`. Users reported hover and click not working.
+
+---
+
+### 14. JS defensive pattern — critical handlers before non-critical JS
+
+Always register critical click/interaction handlers **before** any other JS that could throw. Wrap non-critical JS (carousels, animations, complex inits) in `try/catch` so a single error never silently blocks all handlers registered after it.
+
+```html
+<script>
+  // Critical handlers first — always run regardless
+  document.querySelectorAll('.nav-btn').forEach(btn => { ... });
+
+  // Non-critical wrapped in try/catch
+  try {
+    (function() { /* carousel, etc. */ })();
+  } catch(e) { console.warn('init error:', e); }
+</script>
+```
+
+**Mistake made:** Nav click handler was placed after the carousel IIFE. A carousel error would have silently prevented nav buttons from ever becoming interactive.
+
+---
+
+### 15. Figma image fill placeholders → `<div>` not `<img>`
+
+When a DS component uses a Figma Image fill (shows checkerboard in DS), implement it as a `<div class="...__bg">` with CSS `background-image`, **not** an `<img src="">`. An `<img>` with a missing or empty src shows a broken icon in the browser.
+
+```css
+/* Image placeholder — set background-image per instance when real images are available */
+.__bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center; background-repeat: no-repeat;
+  pointer-events: none;
+}
+```
+
+**Mistake made:** Used `<img class="static-card__bg" src="icons/static-card-bg-1.png">` — file didn't exist, showed broken image icon. Corrected to `<div class="static-card__bg">`.
 
 ---
 
@@ -430,6 +520,91 @@ Static HTML/CSS prototype of the Pandai home screen, implemented against DS 1.5.
 - Per-icon clip insets via `data-icon` attribute selectors on clip containers
 - All spacing, radius, and color values use CSS custom properties mapped to DS Semantic tokens
 - No gradients, no box-shadows on containers — border only for depth
+- Figma image fill placeholders are `<div class="...__bg">` + CSS `background-image`, never `<img>`
+
+**Page section structure (confirmed May 2026):**
+```html
+<section id="NavBar-Desktop">      <!-- Navbar 1.5 -->
+<main>
+  <div class="page-container">
+    <div class="main-content">     <!-- gap: var(--spacing-space-m) = 16px between sections -->
+      <section id="Welcome-Desktop" class="section-welcome">
+      <section id="Carousel-Desktop" aria-label="Featured" class="carousel">
+      <section id="static-newscards" class="static-cards-row">
+      <section class="section-frame" aria-label="Your Selected Subjects">
+      <section class="section-frame" aria-label="Recent Activity">
+    </div>
+  </div>
+</main>
+```
+
+**Navbar — confirmed implementation notes (May 2026):**
+- `.nav-btn` is a `<div>` — MUST have `cursor: pointer; user-select: none` or it feels unresponsive
+- Hover state: `background: #b5f291; box-shadow: inset 0 0 0 1px #70bc6f` on `.nav-btn__inner`
+- Selected state: `is-active` class toggled via JS click handler on each `.nav-btn`
+- Hover border is `box-shadow: inset 0 0 0 1px` (not `border:`) to avoid layout shift inside pill
+- Icon clip is `overflow:hidden` + `padding` approach — NOT `position:absolute; inset` (collapses to 0×0 in Chromium)
+- Dropdown mechanism: `.nav-btn` is `flex-col; gap:20px; height:40px; overflow:hidden` — dropdown hidden below
+
+**JS architecture (confirmed May 2026):**
+- Nav click handler registered FIRST before any other script
+- Carousel and all other init JS wrapped in `try/catch`
+- This ensures nav interactivity is never blocked by a carousel or other JS error
+```js
+// Always first
+document.querySelectorAll('.nav-btn').forEach(btn => { ... });
+// Non-critical after, wrapped
+try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
+```
+
+**Welcome section — confirmed (May 2026):**
+- `id="Welcome-Desktop"`, `class="section-welcome"` — wraps all three components
+- Contains: Status Badge row (5 pills) + Welcome Text + Check-In Card
+- No extra layout rules — relies on `.main-content` gap for spacing from Navbar
+
+**Carousel - 1.5 (node 1200:1789) — confirmed (May 2026):**
+- Outer `.carousel` must have `overflow: hidden` — DS uses `overflow-clip`
+- `.carousel__content` must NOT have `justify-content: center` — JS controls centering via `offsetFor()`
+- Every card always contains an `Outline/image` placeholder (128×128 div, `padding: 16px`), grey `Border/general/default` color — covered by image overlay when image loads
+- Image overlay is `position: absolute; inset: -1px` (bleeds 1px to cover card border edge)
+- Button chevron clip: 20px container, `padding: 5px 7.5px` for chevron-left/right (DS inset: 25% top/bottom, 37.5% left/right on 20px)
+- Infinite loop JS: clone 5 cards before + after, center active card via `-(i×STEP) + (containerWidth/2 - CARD_W/2)`, silent jump on `transitionend` when in clone region
+- Indicator (`108×20px`) is hidden by default — `display: none`
+
+**Mistake made (carousel):** Used `position:absolute; inset` on SVG inside clip — collapses to 0×0 in Chromium. Must use `padding` on clip container + `width:100%; height:100%` on SVG.
+
+---
+
+**Static Card - 1.5 (node 2616:2959) — confirmed (May 2026):**
+- Card: `height: 220px`, `border: 1px solid Border/default (#00cc85)`, `border-radius: corner-4xl (24px)`, `overflow: hidden`, `display: flex`, `background: Surface/general/default` (white)
+- Content: `flex: 1 0 0; min-width: 0; height: 100%; position: relative` — NOT `position: absolute; inset: 0`
+- Background image: `<div class="static-card__bg">` — `position: absolute; inset: 0; background-size: cover`. Set via CSS `background-image`, never `<img>`
+- Content padding: `20px 60px` (`space-l` / `space-3xl` — 60px horizontal, NOT 24px)
+- Texts: right-aligned — `align-items: flex-end; text-align: right; width: 100%`
+- Title: `Title/T1` — Poppins Bold 18px, `line-height: 28px`, `Text/default/heading #404040`
+- Description: `Body/B1` — Poppins SemiBold 14px, `line-height: 20px`, `Text/default/heading #404040`
+- Two cards side by side: `display: flex; gap: var(--spacing-space-m)` (16px)
+
+**Button inside Static Card — Primary/M states (node 473:529):**
+
+| State | btn bg | border | label | arrow bg | arrow chevron |
+|---|---|---|---|---|---|
+| Default | `#00cc85` | `#00a36a` | `#f6fdfb` | `#99ebce` | `#00a36a` |
+| Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` |
+| Pressed | `#00564c` | `#00453d` | `#00cc85` | `#00cc85` | `#00564c` |
+| Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` |
+
+- Arrow chevron color comes from arrow sub-node (`479:351`) variable defs — NOT the parent button node
+- Arrow structure: 20px outer circle (`justify-content: flex-end; padding: 2px`) → 16px clip (`padding: 4px 6px`) → SVG
+- Button height: `32px; max-height: 32px`
+
+**Mistake made (static card):**
+- Content was `position: absolute; inset: 0` — should be `flex: 1 0 0; height: 100%; position: relative`
+- Used `<img src="...">` for bg placeholder — showed broken icon. Use `<div>` + CSS `background-image`
+- Content padding was `20px 24px` — actual DS is `20px 60px`
+- Arrow chevron color was inferred from parent button node (wrong: `#f6fdfb`) — must get from arrow sub-node (`#00a36a`)
+
+---
 
 **Dev server (Windows):**
 ```powershell
