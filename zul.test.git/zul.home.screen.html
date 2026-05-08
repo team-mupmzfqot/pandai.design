@@ -20,28 +20,43 @@
       --surface-general-default:         #FFFFFF;
       --surface-subtle:                  #F8FAFC;
       --surface-primary-default:         #00cc85;
+      --surface-primary-focus:           #00a36a;   /* Surface/primary/focus — pressed state bg */
       --surface-primary-default-subtle:        #e9fbf5;
       --surface-primary-default-subtle-hover:  #99ebce;
       --surface-secondary-default:             #b5f291;  /* Surface/secondary/default */
       --surface-secondary-default-subtle:      #e8fbe8;  /* Surface/secondary/default-subtle */
       --surface-disabled-primary:        #f2f2f2;
+      --surface-tertiary-default:        #00564c;   /* Surface/tertiary/default — pressed state bg */
+
+      /* Border */
 
       /* Text */
       --text-default-heading:     #404040;
+      --text-tertiary-default:    #00564c;   /* Text/tertiary/default — Primary Card header title */
       --text-default-body:        #666666;   /* Text/default/body â€” used in navbar, footer */
       --text-default-secondary:   #6B7280;
       --text-default-placeholder: #f2f2f2;   /* Text/default/placeholder â€” subject badge label */
       --text-primary-default:     #00cc85;
-      --text-primary-on-color:    #e9fbf5;
+      --text-primary-on-color:    #f6fdfb;   /* Text/primary/on-color — confirmed via get_variable_defs */
       --text-secondary-focus:     #70bc6f;  /* Text/secondary/focus */
       --text-on-color-heading:    #FFFFFF;   /* Text/on-color/heading â€” status pill */
       --text-disabled-default:    #bfbfbf;
 
+      /* Icon */
+      --icon-default-default:     #d9d9d9;   /* Icon/default/default — action icons, inactive */
+      --icon-primary-default:     #00cc85;   /* Icon/primary/default — nav button icons, default */
+      --icon-secondary-hover:     #70bc6f;   /* Icon/secondary/hover — nav button icons, hover state */
+      --icon-primary-on-color:    #f6fdfb;   /* Icon/primary/on-color — nav button icons, active/pressed */
+      --icon-tertiary-default:    #00564c;   /* Icon/tertiary/default — pressed arrow chevron */
+
       /* Border */
       --border-primary-default:   #00cc85;   /* Border/primary/default */
       --border-primary-focus:     #00a36a;   /* Border/primary/focus */
+      --border-secondary-focus:   #70bc6f;   /* Border/secondary/focus — hover border on all buttons */
       --border-default:           #00cc85;   /* Border/default â€” navbar, footer, quiz card */
-      --border-general-default:   #d9d9d9;   /* Border/general/default â€” carousel cards */
+      --border-general-default:   #d9d9d9;   /* Border/general/default — carousel cards */
+      --border-tertiary-focus:    #00453d;   /* Border/tertiary/focus — pressed state border */
+      --border-disabled-disabled: #bfbfbf;   /* Border/disabled/disabled */
 
       /* Corner Radius (confirmed from design contexts) */
       --corner-radius-corner-pill:    999px;  /* Corner Radius/corner-pill â€” nav row 2 */
@@ -79,6 +94,13 @@
       --subjects-islamic-default:    #de4d7f;   /* Subjects/islamic/default */
       --subjects-moral-default:      #0072ca;   /* Subjects/moral/default */
       --subjects-biology-default:    #8431d8;   /* Subjects/biology/default */
+      --subjects-add-math-default:   #1D3A8A;
+      --subjects-economy-default:    #F97316;
+      --subjects-account-default:    #3B82F6;
+      --subjects-business-default:   #F59E0B;
+      --subjects-cs-default:         #DB2777;
+      --subjects-kafa-default:       #0D9488;
+      --subjects-rbt-default:        #475569;
 
       /* Typography */
       --font-family: 'Poppins', sans-serif;
@@ -86,7 +108,7 @@
       /* Layout */
       --page-max-width: 1440px;
       --page-padding-x: 60px;
-      --section-gap:    40px;
+      --section-gap:    var(--spacing-space-m);   /* Spacing/space-m = 16px */
     }
 
     /* â”€â”€ Reset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -171,21 +193,22 @@
       flex-shrink: 0;
     }
 
-    /* DS: each action icon is overflow-clip relative size-[24px] */
-    /* DS: overflow-clip relative size-[24px] → icon at absolute inset-[12.5%] */
+    /* DS: each action icon is overflow-clip size-[24px].
+       Default padding = 12.5% × 24px = 3px (search, maximize).
+       Default color = Text/default/body (#666) per DS screenshot — not primary green. */
     .navbar-action-icon {
-      width:       24px;
-      height:      24px;
-      overflow:    hidden;
-      position:    relative;
-      flex-shrink: 0;
-      color:       var(--surface-primary-default);
+      width:        24px;
+      height:       24px;
+      box-sizing:   border-box;
+      padding:      3px;
+      overflow:     hidden;
+      flex-shrink:  0;
+      color:        var(--icon-default-default);  /* Icon/default/default = #d9d9d9 */
     }
     .navbar-action-icon svg {
-      position: absolute;
-      inset:    12.5%;   /* 3px margin in 24px = ~18px effective — matches DS */
-      width:    auto;
-      height:   auto;
+      display: block;
+      width:   100%;
+      height:  100%;
     }
 
     .navbar-avatar {
@@ -243,6 +266,8 @@
       overflow:       hidden;
       flex-shrink:    0;
       align-items:    flex-start;
+      cursor:         pointer;
+      user-select:    none;
     }
 
     /* DS: Main Button inner — px-[12px] py-[8px] rounded-[999px] */
@@ -256,57 +281,56 @@
       min-height:    24px;
     }
 
-    /* DS: icon 20×20 overflow-clip container inside 24×24 wrapper */
-    /* DS: overflow-clip relative size-[20px] → icon at absolute inset-[8.33%] (~16.67px effective) */
+    /* DS: icon 20×20 overflow-clip container inside 24×24 wrapper.
+       SVG fills content area; padding controls per-icon framing (DS inset % × 20px).
+       Default padding = 8.33% × 20px = 1.67px (most icons). */
     .nav-btn__icon-clip {
-      width:       20px;
-      height:      20px;
-      overflow:    hidden;
-      position:    relative;
-      flex-shrink: 0;
+      width:        20px;
+      height:       20px;
+      box-sizing:   border-box;
+      padding:      1.67px;
+      overflow:     hidden;
+      flex-shrink:  0;
     }
     .nav-btn__icon-clip svg {
-      position: absolute;
-      inset:    8.33%;   /* 1.67px margin in 20px = 16.67px effective — matches DS */
-      width:    auto;
-      height:   auto;
+      display: block;
+      width:   100%;
+      height:  100%;
     }
 
-    /* DS chevron-down: top/bottom-[37.5%] left/right-[25%] = 10×5px visible in 20px clip */
-    .nav-btn__chevron-clip svg {
-      inset: 37.5% 25%;  /* overrides general 8.33% — top/bottom 37.5%, left/right 25% */
-    }
+    /* DS chevron-down: 37.5% × 20 = 7.5px top/bottom, 25% × 20 = 5px left/right */
+    .nav-btn__chevron-clip { padding: 7.5px 5px; }
 
-    /* Per-icon inset overrides for nav buttons (20px clip) — exact values from DS node 866:5576 */
-    .nav-btn__icon-clip[data-icon="home"]        svg { inset: 8.33% 12.5%; }
-    .nav-btn__icon-clip[data-icon="battle"]      svg { inset: 12.5%; }
-    .nav-btn__icon-clip[data-icon="practice"]    svg { inset: 12.5% 8.33%; }
-    .nav-btn__icon-clip[data-icon="class"]       svg { inset: 12.5% 4.17%; }
-    .nav-btn__icon-clip[data-icon="learn"]       svg { inset: 8.33% 16.67%; }
-    .nav-btn__icon-clip[data-icon="achievement"] svg { inset: 12.5% 8.33%; }
-    .nav-btn__icon-clip[data-icon="potential"]   svg { inset: 8.33% 8.33% 12.42% 8.33%; }
+    /* Per-icon padding overrides — DS inset % × 20px, exact from DS node 866:5576 */
+    .nav-btn__icon-clip[data-icon="home"]        { padding: 1.67px 2.5px; }
+    .nav-btn__icon-clip[data-icon="battle"]      { padding: 2.5px; }
+    .nav-btn__icon-clip[data-icon="practice"]    { padding: 2.5px 1.67px; }
+    .nav-btn__icon-clip[data-icon="class"]       { padding: 2.5px 0.83px; }
+    .nav-btn__icon-clip[data-icon="learn"]       { padding: 1.67px 3.33px; }
+    .nav-btn__icon-clip[data-icon="achievement"] { padding: 2.5px 1.67px; }
+    .nav-btn__icon-clip[data-icon="potential"]   { padding: 1.67px 1.67px 2.48px 1.67px; }
 
-    /* Per-icon inset overrides for action icons (24px clip) — exact values from DS node 866:5576 */
-    .navbar-action-icon[data-icon="smartphone"] svg { inset: 8.33% 20.83%; }
-    .navbar-action-icon[data-icon="bell"]       svg { inset: 8.33%; }
-    .navbar-action-icon[data-icon="en"]         svg { top: 25%; right: 9.95%; bottom: 28.12%; left: 12.5%; }
-    .navbar-action-icon[data-icon="waffle"]     svg { inset: 16.67%; }
+    /* Per-icon padding overrides for action icons — DS inset % × 24px, exact from DS node 866:5576 */
+    .navbar-action-icon[data-icon="smartphone"] { padding: 2px 5px; }
+    .navbar-action-icon[data-icon="bell"]       { padding: 2px; }
+    .navbar-action-icon[data-icon="en"]         { padding: 6px 2.4px 6.75px 3px; }
+    .navbar-action-icon[data-icon="waffle"]     { padding: 4px; }
 
-    /* State=Hover — Surface/secondary/default bg + Border/primary/focus border + Text/secondary/focus */
+    /* State=Hover — DS confirmed via 538:2091 (Tertiary M Hover), 538:2059 (Tertiary L Hover) */
     .nav-btn:hover .nav-btn__inner {
-      background: var(--surface-secondary-default);     /* #b5f291 */
-      box-shadow: inset 0 0 0 1px var(--border-primary-focus); /* #00a36a */
+      background: var(--surface-secondary-default);         /* Surface/secondary/default = #b5f291 */
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus); /* Border/secondary/focus = #70bc6f */
     }
-    .nav-btn:hover .nav-btn__label          { color: var(--text-secondary-focus); }  /* #70bc6f */
-    .nav-btn:hover .nav-btn__icon-wrap      { color: var(--text-secondary-focus); }  /* #70bc6f */
+    .nav-btn:hover .nav-btn__label     { color: var(--text-secondary-focus); }   /* Text/secondary/focus = #70bc6f */
+    .nav-btn:hover .nav-btn__icon-wrap { color: var(--icon-secondary-hover); }   /* Icon/secondary/hover = #70bc6f */
 
     /* State=Selected — Surface/primary/default bg + Border/primary/focus border + Text/primary/on-color */
     .nav-btn.is-active .nav-btn__inner {
       background: var(--surface-primary-default);       /* #00cc85 */
       box-shadow: inset 0 0 0 1px var(--border-primary-focus); /* #00a36a */
     }
-    .nav-btn.is-active .nav-btn__label      { color: var(--text-primary-on-color); }  /* #e9fbf5 */
-    .nav-btn.is-active .nav-btn__icon-wrap  { color: var(--text-primary-on-color); }  /* #e9fbf5 */
+    .nav-btn.is-active .nav-btn__label      { color: var(--text-primary-on-color); }    /* Text/primary/on-color = #f6fdfb */
+    .nav-btn.is-active .nav-btn__icon-wrap  { color: var(--icon-primary-on-color); }   /* Icon/primary/on-color = #f6fdfb */
 
     .nav-btn__label {
       font-size:   14px;
@@ -322,7 +346,7 @@
       justify-content: center;
       width:           24px;
       height:          24px;
-      color:           var(--surface-primary-default);  /* State=Default icon: #00cc85 */
+      color:           var(--icon-primary-default);  /* Icon/primary/default = #00cc85 */
     }
 
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -517,16 +541,16 @@
       align-items:    center;
       gap:            var(--spacing-space-xs);   /* gap-[8px] */
       width:          100%;
+      overflow:       hidden;
     }
 
     /* Content = overflow container holding track + buttons */
     .carousel__content {
-      position:        relative;
-      width:           100%;
-      overflow:        hidden;
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
+      position:    relative;
+      width:       100%;
+      overflow:    hidden;
+      display:     flex;
+      align-items: center;
     }
 
     /* Track — flex row of cards */
@@ -540,21 +564,37 @@
 
     /* Carousel Parts (node 1376:2259): 428×186px, corner-xl */
     .carousel__card {
-      width:         428px;
-      height:        186px;
-      border-radius: var(--corner-radius-corner-xl);
-      border:        1px solid var(--border-general-default);
-      background:    var(--surface-general-default);
-      overflow:      hidden;
-      flex-shrink:   0;
-      position:      relative;
+      width:           428px;
+      height:          186px;
+      border-radius:   var(--corner-radius-corner-xl);
+      border:          1px solid var(--border-general-default);
+      background:      var(--surface-general-default);
+      overflow:        hidden;
+      flex-shrink:     0;
+      position:        relative;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
     }
 
+    /* Outline/image placeholder (DS: 128×128, inset 12.5% = 16px padding) */
+    .carousel__card__placeholder {
+      width:       128px;
+      height:      128px;
+      box-sizing:  border-box;
+      padding:     16px;
+      overflow:    hidden;
+      flex-shrink: 0;
+      color:       var(--border-general-default);
+    }
+    .carousel__card__placeholder svg { display: block; width: 100%; height: 100%; }
+
+    /* Image overlay — inset -1px to cover the card border (DS: absolute inset[-1px]) */
     .carousel__card img {
       position:   absolute;
-      inset:      0;
-      width:      100%;
-      height:     100%;
+      inset:      -1px;
+      width:      calc(100% + 2px);
+      height:     calc(100% + 2px);
       object-fit: cover;
     }
 
@@ -590,14 +630,22 @@
       display:         flex;
       align-items:     center;
       justify-content: center;
-      color:           var(--text-primary-on-color);  /* white chevron on green btn */
+      color:           var(--text-primary-on-color);
     }
 
-    .carousel__btn__icon img { width: 20px; height: 20px; display: block; }
-    /* carousel next btn uses ic-chevron-right symbol directly */
+    /* 20px clip container for chevron-left/right (DS: inset 25% top/bottom, 37.5% left/right) */
+    .carousel__btn__icon-clip {
+      width:      20px;
+      height:     20px;
+      box-sizing: border-box;
+      padding:    5px 7.5px;
+      overflow:   hidden;
+      flex-shrink: 0;
+    }
+    .carousel__btn__icon-clip svg { display: block; width: 100%; height: 100%; }
 
     /* Indicator (node 1376:2406): 108×20px */
-    .carousel__indicator { flex-shrink: 0; }
+    .carousel__indicator { flex-shrink: 0; display: none; }
     .carousel__indicator img { width: 108px; height: 20px; display: block; }
 
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -614,35 +662,50 @@
     .static-card {
       flex:          1;
       height:        220px;
-      border:        1px solid var(--border-primary-default);  /* primary green border */
+      border:        1px solid var(--border-default);   /* Border/default #00cc85 */
       border-radius: var(--corner-radius-corner-4xl);   /* 24px */
       overflow:      hidden;
-      position:      relative;
-      background:    var(--surface-secondary-default-subtle);  /* #e8fbe8 Surface/secondary/default-subtle */
+      display:       flex;
+      background:    var(--surface-general-default);   /* white base */
     }
 
     .static-card__content {
-      position:        absolute;
-      inset:           0;
+      flex:            1 0 0;   /* fills card width */
+      min-width:       0;
+      height:          100%;
+      position:        relative;   /* contains the absolute bg image */
       display:         flex;
       flex-direction:  column;
-      align-items:     flex-end;   /* DS: items-end */
+      align-items:     flex-end;
       justify-content: center;
-      gap:             12px;
-      padding:         var(--spacing-space-l) var(--spacing-space-xl);  /* 20px 24px */
-      text-align:      right;
+      gap:             var(--spacing-space-s);   /* 12px */
+      padding:         var(--spacing-space-l) var(--page-padding-x);   /* 20px 60px */
+    }
+
+    /* Background image placeholder — absolute, covers full content area (DS: inset-0 object-cover) */
+    /* Set background-image per card when real images are available */
+    .static-card__bg {
+      position:            absolute;
+      inset:               0;
+      background-size:     cover;
+      background-position: center;
+      background-repeat:   no-repeat;
+      pointer-events:      none;
     }
 
     .static-card__texts {
       display:        flex;
       flex-direction: column;
-      gap:            12px;
+      gap:            var(--spacing-space-s);   /* 12px */
+      align-items:    flex-end;
+      text-align:     right;
+      width:          100%;
     }
 
     .static-card__title {
       font-size:   18px;
       font-weight: 700;
-      line-height: 1.4;
+      line-height: 28px;   /* DS: Title/T1 */
       color:       var(--text-default-heading);
     }
 
@@ -655,16 +718,52 @@
 
     /* Button — DS Button-1.5 with left-arrow + icon + label + right-arrow */
     .static-card__btn {
-      display:       inline-flex;
-      align-items:   center;
-      gap:           0;
-      width:         fit-content;
-      background:    var(--surface-primary-default);
-      border:        1px solid var(--border-primary-focus);
-      border-radius: var(--corner-radius-corner-rounded);
-      padding:       2px var(--spacing-space-xs);
-      cursor:        pointer;
-      font-family:   var(--font-family);
+      display:        inline-flex;
+      align-items:    center;
+      gap:            0;
+      width:          fit-content;
+      height:         32px;
+      max-height:     32px;
+      background:     var(--surface-primary-default);
+      border:         1px solid var(--border-primary-focus);
+      border-radius:  var(--corner-radius-corner-rounded);
+      padding:        2px var(--spacing-space-xs);
+      cursor:         pointer;
+      font-family:    var(--font-family);
+    }
+
+    /* Hover — DS 479:335 */
+    .static-card__btn:hover {
+      background:   var(--surface-secondary-default);   /* #b5f291 */
+      border-color: var(--border-secondary-focus);      /* #70bc6f */
+    }
+    .static-card__btn:hover .static-card__btn-label { color: var(--text-secondary-focus); }   /* #70bc6f */
+    .static-card__btn:hover .static-card__btn-arrow {
+      background: var(--surface-secondary-default-subtle);   /* #e8fbe8 */
+      color:      var(--icon-secondary-hover);               /* #70bc6f */
+    }
+
+    /* Pressed — DS 479:326 */
+    .static-card__btn:active {
+      background:   var(--surface-tertiary-default);   /* #00564c */
+      border-color: var(--border-tertiary-focus);      /* #00453d */
+    }
+    .static-card__btn:active .static-card__btn-label { color: var(--text-primary-default); }   /* #00cc85 */
+    .static-card__btn:active .static-card__btn-arrow {
+      background: var(--surface-primary-default);   /* #00cc85 */
+      color:      var(--icon-tertiary-default);      /* #00564c */
+    }
+
+    /* Disabled — DS 479:317 */
+    .static-card__btn:disabled {
+      background:   var(--surface-disabled-primary);    /* #f2f2f2 */
+      border-color: var(--border-disabled-disabled);    /* #bfbfbf */
+      cursor:       not-allowed;
+    }
+    .static-card__btn:disabled .static-card__btn-label { color: var(--text-disabled-default); }   /* #bfbfbf */
+    .static-card__btn:disabled .static-card__btn-arrow {
+      background: var(--surface-disabled-primary);   /* #f2f2f2 */
+      color:      var(--icon-disabled-default);      /* #bfbfbf */
     }
 
     .static-card__btn-arrow {
@@ -674,10 +773,23 @@
       border-radius:   var(--corner-radius-corner-rounded);
       display:         flex;
       align-items:     center;
-      justify-content: center;
+      justify-content: flex-end;   /* DS: justify-end — chevron pushed to right edge */
+      padding:         2px;
+      box-sizing:      border-box;
       flex-shrink:     0;
-      color:           var(--surface-primary-default);  /* #00cc85 chevron on #99ebce bg */
+      color:           var(--surface-primary-focus);   /* Surface/primary/focus #00a36a — DS: get_variable_defs 479:351 */
     }
+
+    /* 16px clip container for chevron-right (DS: inset 25% top/bottom, 37.5% left/right) */
+    .static-card__btn-arrow-clip {
+      width:       16px;
+      height:      16px;
+      box-sizing:  border-box;
+      padding:     4px 6px;
+      overflow:    hidden;
+      flex-shrink: 0;
+    }
+    .static-card__btn-arrow-clip svg { display: block; width: 100%; height: 100%; }
 
     .static-card__btn-label {
       font-size:   12px;
@@ -692,14 +804,17 @@
        SECTION FRAME â€” Shared by Sections 3 & 4
        White card, Border/general/default, corner-4xl (24px)
     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* Primary Card - 1.5 / Type=Secondary Card (node 2881:36272) */
     .section-frame {
-      background:     var(--surface-general-default);
-      border:         1px solid var(--border-general-default);
+      background:     var(--surface-secondary-default-subtle);
+      border:         1px solid var(--border-default);
       border-radius:  var(--corner-radius-corner-4xl);
       padding:        var(--spacing-space-m);
       display:        flex;
       flex-direction: column;
-      gap:            var(--spacing-space-m);
+      align-items:    stretch;
+      gap:            var(--spacing-space-xs);
+      overflow:       hidden;
     }
 
     .section-header {
@@ -715,19 +830,30 @@
     }
 
     .section-header__bookmark {
-      display: flex;
+      display:     flex;
       align-items: center;
-      color: var(--surface-primary-default);  /* green — DS icon tint for section bookmark */
+      color:       var(--text-tertiary-default);   /* Text/tertiary/default #00564c — matches title */
     }
 
     .section-header__title {
       font-size:   18px;
-      font-weight: 700;
-      line-height: 1.4;
-      color:       var(--text-default-heading);
+      font-weight: 600;                          /* Title/T2 — SemiBold, not Bold */
+      line-height: 28px;
+      color:       var(--text-tertiary-default); /* Text/tertiary/default #00564c */
     }
 
-/* Button - 1.5  Variants=Secondary, Size=M, State=Default (node 538:1923) */
+    /* Primary Card - 1.5 content area — white box (DS node 2881:36281) */
+    .primary-card__content {
+      background:             var(--surface-general-default);
+      border:                 1px solid var(--border-general-default);
+      border-radius:          var(--corner-radius-corner-xl);
+      padding:                var(--spacing-space-m);
+      display:                grid;
+      grid-template-columns:  repeat(3, 1fr);
+      gap:                    var(--spacing-space-m);
+    }
+
+    /* Button - 1.5  Variants=Secondary, Size=M, State=Default (node 538:1923) */
     .btn-add-classes {
       display:         inline-flex;
       align-items:     center;
@@ -765,17 +891,54 @@
       padding:     0 var(--spacing-space-xxs);
       white-space: nowrap;
     }
+    /* Arrow circle: 18px total (16px clip + 1px padding each side) */
     .btn-add-classes__arrow {
+      width:           18px;
+      height:          18px;
       background:      var(--surface-general-default);
       border:          1px solid var(--border-primary-default);
       border-radius:   var(--corner-radius-corner-rounded);
       padding:         1px;
+      box-sizing:      border-box;
       display:         flex;
       align-items:     center;
-      justify-content: center;
+      justify-content: flex-end;
       flex-shrink:     0;
-      overflow:        hidden;
-      color:           var(--text-primary-default);  /* green chevron in Secondary btn arrow */
+      color:           var(--text-primary-default);
+    }
+    /* 16px clip for chevron-right (DS: inset 25% top/bottom, 37.5% left/right) */
+    .btn-add-classes__arrow-clip {
+      width:      16px;
+      height:     16px;
+      box-sizing: border-box;
+      padding:    4px 6px;
+      overflow:   hidden;
+    }
+    .btn-add-classes__arrow-clip svg { display: block; width: 100%; height: 100%; }
+
+    /* Hover */
+    .btn-add-classes:hover {
+      background:   var(--surface-secondary-default);
+      border-color: var(--border-secondary-focus);
+    }
+    .btn-add-classes:hover .btn-add-classes__text,
+    .btn-add-classes:hover .btn-add-classes__icon  { color: var(--text-secondary-focus); }
+    .btn-add-classes:hover .btn-add-classes__arrow {
+      background:   var(--surface-secondary-default-subtle);
+      border-color: var(--border-secondary-focus);
+      color:        var(--icon-secondary-hover);
+    }
+    /* Pressed */
+    .btn-add-classes:active {
+      background:   var(--surface-primary-default);
+      border-color: var(--border-primary-focus);
+    }
+    .btn-add-classes:active .btn-add-classes__text,
+    .btn-add-classes:active .btn-add-classes__icon { color: var(--text-primary-on-color); }
+    .btn-add-classes:active .btn-add-classes__arrow {
+      background:   var(--surface-primary-default-subtle-hover);
+      border-color: var(--border-primary-focus);
+      color:        var(--surface-primary-focus);
     }
 
     /* Link 1.5  State=Default, Type=Default (node 701:524) */
@@ -799,49 +962,37 @@
        QUIZ CARDS GRID
        gap: 16px (Spacing/space-m)  â€” per DS spec
     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-    .cards-grid {
-      display:   flex;
-      flex-wrap: wrap;
-      gap:       var(--spacing-space-m);
-    }
-
-    /* 3 per row inside section frame (inner width = 1320 - 32 = 1288px) */
-    .cards-grid--3col .quiz-card {
-      width: calc((100% - 2 * var(--spacing-space-m)) / 3);
-    }
-
     /* â”€â”€ Quiz Card - 1.5  (node 2339:5346)
        148px tall, horizontal: image-left (128px) + content-right
        border: 1px --card-subject-color (per user spec for subject border)
        border-radius: corner-2xl (18px)                            â”€â”€ */
     .quiz-card {
-      height:        148px;
-      min-height:    148px;
-      max-height:    148px;
-      background:    var(--surface-general-default);
-      border:        1px solid var(--card-subject-color, var(--border-default));
-      border-radius: var(--corner-radius-corner-2xl);
-      display:       flex;
-      overflow:      hidden;
-      flex-shrink:   0;
-      cursor:        pointer;
-      transition:    box-shadow 0.15s;
+      height:         148px;
+      min-height:     148px;
+      max-height:     148px;
+      min-width:      0;
+      background:     var(--surface-general-default);
+      border:         1px solid var(--card-subject-color, var(--border-default));
+      border-radius:  var(--corner-radius-corner-2xl);
+      display:        flex;
+      flex-direction: row;
+      align-items:    flex-start;
+      overflow:       hidden;
+      cursor:         pointer;
+      transition:     box-shadow 0.15s;
     }
 
-    /* Image — aspect-ratio 1:1, fills card height (DS: aspect-[128/128] self-stretch) */
+    /* Image — explicit 148×148px square, grey bg placeholder (DS: aspect-[128/128] self-stretch) */
     .quiz-card__image {
-      aspect-ratio: 1 / 1;
-      align-self:   stretch;
-      flex-shrink:  0;
-      position:     relative;
-    }
-
-    .quiz-card__image img {
-      position:   absolute;
-      inset:      0;
-      width:      100%;
-      height:     100%;
-      object-fit: cover;
+      width:               148px;
+      min-width:           148px;
+      flex-shrink:         0;
+      align-self:          stretch;
+      background-color:    var(--border-general-default);  /* #d9d9d9 placeholder */
+      background-size:     cover;
+      background-position: center;
+      background-repeat:   no-repeat;
+      overflow:            hidden;
     }
 
     /* Content right column */
@@ -929,6 +1080,13 @@
     .subject-badge--islamic   { --badge-border: #B23E66; --badge-bg: #DE4D7F; }
     .subject-badge--moral     { --badge-border: #005BA2; --badge-bg: #0072CA; }
     .subject-badge--biology   { --badge-border: #6A27AD; --badge-bg: #8431D8; }
+    .subject-badge--add-math  { --badge-border: #162E70; --badge-bg: #1D3A8A; }
+    .subject-badge--economy   { --badge-border: #C75C0A; --badge-bg: #F97316; }
+    .subject-badge--account   { --badge-border: #1D4ED8; --badge-bg: #3B82F6; }
+    .subject-badge--business  { --badge-border: #B45309; --badge-bg: #F59E0B; --badge-text: #78350F; }
+    .subject-badge--cs        { --badge-border: #9D174D; --badge-bg: #DB2777; }
+    .subject-badge--kafa      { --badge-border: #0F766E; --badge-bg: #0D9488; }
+    .subject-badge--rbt       { --badge-border: #1E293B; --badge-bg: #475569; }
 
     /* Badge inside quiz card uses Size=M (h-24px), not Table size (h-32px) */
     .quiz-card__header .subject-badge {
@@ -996,7 +1154,18 @@
       transition:      opacity 0.15s;
     }
 
-    .btn-quiz-cta:hover { opacity: 0.85; }
+    /* Hover — Secondary palette */
+    .btn-quiz-cta:hover {
+      background: var(--surface-secondary-default);   /* #b5f291 */
+      border-color: var(--border-secondary-focus);    /* #70bc6f */
+    }
+    .btn-quiz-cta:hover .btn-quiz-cta__text { color: var(--text-secondary-focus); }  /* #70bc6f */
+    /* Pressed — Primary/focus */
+    .btn-quiz-cta:active {
+      background: var(--surface-primary-focus);       /* #00a36a */
+      border-color: var(--border-primary-focus);
+    }
+    .btn-quiz-cta:active .btn-quiz-cta__text { color: var(--text-primary-on-color); }
 
     .btn-quiz-cta__text {
       font-size:   12px;
@@ -1033,6 +1202,13 @@
     .subject-islamic  { --card-subject-color: var(--subjects-islamic-default); }
     .subject-moral    { --card-subject-color: var(--subjects-moral-default); }
     .subject-biology  { --card-subject-color: var(--subjects-biology-default); }
+    .subject-add-math { --card-subject-color: var(--subjects-add-math-default); }
+    .subject-economy  { --card-subject-color: var(--subjects-economy-default); }
+    .subject-account  { --card-subject-color: var(--subjects-account-default); }
+    .subject-business { --card-subject-color: var(--subjects-business-default); }
+    .subject-cs       { --card-subject-color: var(--subjects-cs-default); }
+    .subject-kafa     { --card-subject-color: var(--subjects-kafa-default); }
+    .subject-rbt      { --card-subject-color: var(--subjects-rbt-default); }
 
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        FOOTER â€” Footer - 1.5  (node 2338:10430)
@@ -1118,6 +1294,7 @@
       <!-- Outline/award (260:470) - Achievement --><symbol id="ic-award" viewBox="-1 -1 16 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 7 14 C 10.866 14 14 10.866 14 7 C 14 3.134 10.866 0 7 0 C 3.134 0 0 3.134 0 7 C 0 10.866 3.134 14 7 14 Z"/><path d="M 3.21 12.89 L 2 22 L 7 19 L 12 22 L 10.79 12.88"/></symbol>
       <!-- Outline/star (260:1192) - Potential --><symbol id="ic-star" viewBox="-1 -1 22 21" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 10 0 L 13.09 6.26 L 20 7.27 L 15 12.14 L 16.18 19.02 L 10 15.77 L 3.82 19.02 L 5 12.14 L 0 7.27 L 6.91 6.26 L 10 0 Z"/></symbol>
       <!-- Outline/gift (260:765) - Rewards --><symbol id="ic-gift" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 18 10 L 18 20 L 2 20 L 2 10"/><path d="M 20 5 L 0 5 L 0 10 L 20 10 L 20 5 Z"/><path d="M 10 5 L 5.5 5 C 4.837 5 4.201 4.737 3.732 4.268 C 3.263 3.799 3 3.163 3 2.5 C 3 1.837 3.263 1.201 3.732 0.732 C 4.201 0.263 4.837 0 5.5 0 C 9 0 10 5 10 5 Z"/><path d="M 10 5 L 14.5 5 C 15.163 5 15.799 4.737 16.268 4.268 C 16.737 3.799 17 3.163 17 2.5 C 17 1.837 16.737 1.201 16.268 0.732 C 15.799 0.263 15.163 0 14.5 0 C 11 0 10 5 10 5 Z"/><path d="M 10 20 L 10 5"/></symbol>
+      <!-- Outline/image (611:3075) --><symbol id="ic-image" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="18" height="18" rx="2" ry="2"/><circle cx="6.5" cy="6.5" r="1.5"/><polyline points="19 13.5 14 8.5 3 19.5"/></symbol>
       <!-- Outline/chevron-down (260:535) --><symbol id="ic-chevron-down" viewBox="-1 -1 14 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 0 L 6 6 L 12 0"/></symbol>
       <!-- Outline/chevron-left (260:537) --><symbol id="ic-chevron-left" viewBox="-1 -1 8 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 6 12 L 0 6 L 6 0"/></symbol>
       <!-- Outline/chevron-right (260:539) --><symbol id="ic-chevron-right" viewBox="-1 -1 8 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 12 L 6 6 L 0 0"/></symbol>
@@ -1135,6 +1312,7 @@
     </defs>
   </svg>
 
+  <section id="NavBar-Desktop">
   <nav class="navbar">
 
     <!-- Row 1 â€” Brand bar (64px) -->
@@ -1273,6 +1451,7 @@
 
     </div><!-- end row 2 -->
   </nav><!-- end navbar -->
+  </section><!-- end NavBar-Desktop -->
 
 
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -1286,7 +1465,7 @@
              SECTION 1 â€” Status Pill (left) Â· Welcome (right)
              Status Pill - 1.5, Type=Score  (node 2312:10652)
         â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
-        <section class="section-welcome" aria-label="Welcome">
+        <section id="Welcome-Desktop" class="section-welcome" aria-label="Welcome">
 
 
           <!-- Status Badge - 1.5 (node 2312:10653) — all 5 variants -->
@@ -1377,7 +1556,7 @@
              Green prev/next buttons + indicator dots
         â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
         <!-- Carousel - 1.5 (node 1200:1789) -->
-        <section aria-label="Featured" class="carousel">
+        <section id="Carousel-Desktop" aria-label="Featured" class="carousel">
 
           <!-- Content area: overflow-clip container for track + button overlays -->
           <div class="carousel__content">
@@ -1386,18 +1565,23 @@
             <div class="carousel__track" id="carouselTrack">
               <!-- Carousel Parts (node 1376:2259): 428×186, corner-xl, border general/default -->
               <div class="carousel__card">
+                <div class="carousel__card__placeholder"><svg aria-hidden="true"><use href="#ic-image"/></svg></div>
                 <img src="icons/carousel-slide.png" alt="Pandai Score sudah sedia!">
               </div>
               <div class="carousel__card">
+                <div class="carousel__card__placeholder"><svg aria-hidden="true"><use href="#ic-image"/></svg></div>
                 <img src="icons/carousel-slide.png" alt="SPM English Paper Bank">
               </div>
               <div class="carousel__card">
-                <!-- showImage=false: no image, shows placeholder bg -->
+                <!-- showImage=false: placeholder visible -->
+                <div class="carousel__card__placeholder"><svg aria-hidden="true"><use href="#ic-image"/></svg></div>
               </div>
               <div class="carousel__card">
+                <div class="carousel__card__placeholder"><svg aria-hidden="true"><use href="#ic-image"/></svg></div>
                 <img src="icons/carousel-slide.png" alt="Matematik SPM Maraton">
               </div>
               <div class="carousel__card">
+                <div class="carousel__card__placeholder"><svg aria-hidden="true"><use href="#ic-image"/></svg></div>
                 <img src="icons/carousel-slide.png" alt="Cabaran Minggu Ini">
               </div>
             </div>
@@ -1406,7 +1590,9 @@
             <div class="carousel__btn-wrap carousel__btn-wrap--prev">
               <button class="carousel__btn" id="carouselPrev" aria-label="Previous">
                 <span class="carousel__btn__icon">
-                  <svg class="icon-ds" aria-hidden="true"><use href="#ic-chevron-left"/></svg>
+                  <span class="carousel__btn__icon-clip">
+                    <svg aria-hidden="true"><use href="#ic-chevron-left"/></svg>
+                  </span>
                 </span>
               </button>
             </div>
@@ -1415,7 +1601,9 @@
             <div class="carousel__btn-wrap carousel__btn-wrap--next">
               <button class="carousel__btn" id="carouselNext" aria-label="Next">
                 <span class="carousel__btn__icon">
-                  <svg class="icon-ds" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+                  <span class="carousel__btn__icon-clip">
+                    <svg aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+                  </span>
                 </span>
               </button>
             </div>
@@ -1429,27 +1617,20 @@
 
         </section><!-- end section 2 -->
 
-        <!-- ───────────────────────────────────────────────────────
-             NEW SECTION — Static Card - 1.5  (node 2616:2895)
-             Two side-by-side promotional banner cards
-        ─────────────────────────────────────────────────────────── -->
-
-        <!-- ─────────────────────────────────────────────────────────────
-             NEW SECTION — Static Card - 1.5  (node 2616:2895)
-             Two side-by-side promotional banner cards
-        ──────────────────────────────────────────────────────────────── -->
-        <div class="static-cards-row">
+        <!-- Static Card - 1.5  (node 2616:2895) — two side-by-side promotional banner cards -->
+        <section id="StaticNewsCard-Desktop" aria-label="Static Newscards" class="static-cards-row">
 
           <!-- Static Card 1 -->
           <div class="static-card">
             <div class="static-card__content">
+              <div class="static-card__bg"></div>
               <div class="static-card__texts">
                 <h2 class="static-card__title">Mula Belajar Hari Ini</h2>
                 <p class="static-card__desc">Kembali ke topik yang belum selesai</p>
               </div>
               <button class="static-card__btn">
                 <span class="static-card__btn-label">Teruskan</span>
-                <span class="static-card__btn-arrow"><svg class="icon-ds-16" aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+                <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span>
               </button>
             </div>
           </div>
@@ -1457,576 +1638,22 @@
           <!-- Static Card 2 -->
           <div class="static-card">
             <div class="static-card__content">
+              <div class="static-card__bg"></div>
               <div class="static-card__texts">
                 <h2 class="static-card__title">Cabaran Minggu Ini</h2>
                 <p class="static-card__desc">Selesaikan 5 latihan untuk earn coins</p>
               </div>
               <button class="static-card__btn">
                 <span class="static-card__btn-label">Cuba Sekarang</span>
-                <span class="static-card__btn-arrow"><svg class="icon-ds-16" aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+                <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span>
               </button>
             </div>
           </div>
 
-        </div><!-- end static cards row -->
+        </section><!-- end StaticNewsCard-Desktop -->
 
 
 
-        <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-             SECTION 3 â€” Your Selected Subjects (18 Quiz Cards)
-             Section frame Â· header Â· Secondary Button Â· wrap grid
-        â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
-        <section class="section-frame" aria-label="Your Selected Subjects">
-
-          <div class="section-header">
-            <div class="section-header__left">
-              <!-- Outline/bookmark Â· node 260:504 â€” downloaded from DS Iconography page -->
-              <span class="section-header__bookmark">
-                <svg class="icon-ds" aria-hidden="true"><use href="#ic-bookmark"/></svg>
-              </span>
-              <h2 class="section-header__title">Your Selected Subjects</h2>
-            </div>
-
-            <!-- Button - 1.5  Variants=Secondary, Size=M, State=Default (node 538:1923) -->
-            <button class="btn-add-classes" type="button">
-              <span class="btn-add-classes__inner">
-                <span class="btn-add-classes__icon">
-                  <svg class="icon-ds-16" aria-hidden="true"><use href="#ic-plus"/></svg>
-                </span>
-                <span class="btn-add-classes__text">Add Classes</span>
-                <span class="btn-add-classes__arrow">
-                  <svg class="icon-ds-16" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
-                </span>
-              </span>
-            </button>
-          </div>
-
-          <!-- 18 Quiz Cards â€” flex-wrap, gap 16px -->
-          <div class="cards-grid cards-grid--3col">
-
-            <!-- Card 1 â€” BM -->
-            <article class="quiz-card subject-bm">
-              <div class="quiz-card__image">
-                <img src="icons/quiz-card-img.png" alt="">
-              </div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--bm"><span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.884 3.19891H7.91943L10.658 17.5823H15.8829C18.1557 17.5812 19.998 15.7389 19.9991 13.4661V7.3151C19.998 5.04234 18.1557 3.20002 15.8829 3.19891H15.884Z" fill="#D0D8E8"/><path d="M11.7785 16.1284H11.7719H10.3633L10.6532 17.5978L11.7785 16.1284Z" fill="#214090"/><path d="M11.7721 16.1283L9.3267 3.29514V3.27854C9.14744 2.41769 8.4083 1.78698 7.52974 1.74493H4.11286C3.97787 1.74493 3.84177 1.74493 3.71121 1.76485C1.60553 1.97509 0 3.74659 0 5.86333V12.0088C-0.00221 14.2816 1.83901 16.1261 4.11176 16.1283H11.7732Z" fill="#4D77FF"/><path d="M6.26264 11.9834H3.52295V5.62878H6.14536C7.47426 5.62878 8.2123 6.32035 8.2123 7.26751C8.2123 8.04096 7.74757 8.52339 7.12903 8.72367C7.84826 8.85091 8.35836 9.51592 8.35836 10.2628C8.35836 11.273 7.58491 11.9834 6.26486 11.9834H6.26264ZM5.96278 6.65783H4.79764V8.25119H5.96278C6.56361 8.25119 6.90995 7.97789 6.90995 7.45894C6.90995 6.93999 6.56361 6.65783 5.96278 6.65783ZM6.05352 9.23376H4.79764V10.9455H6.08118C6.69971 10.9455 7.06375 10.6446 7.06375 10.1079C7.06375 9.57125 6.67205 9.23376 6.05352 9.23376Z" fill="#D0D8E8"/><path d="M11.752 6.50067H13.1993L15.2197 11.2254L17.2413 6.50067H18.6798V12.8553H17.4051V8.72252L15.7033 12.8553H14.7384L13.0266 8.72252V12.8553H11.752V6.50067Z" fill="#4D77FF"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Bahasa Melayu</span></span></span>
-                    <span class="pill-badge-sm">Tg. 4</span>
-                    <span class="pill-badge-sm">Bab 3</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Karangan Argumentatif &amp; Penulisan</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow">
-                      <svg aria-hidden="true"><use href="#ic-chevron-right"/></svg>
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 2 â€” English -->
-            <article class="quiz-card subject-english">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--english"><span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.8818 3.17676H7.91943L10.6591 17.5546H15.8807C18.1524 17.5568 19.9969 15.7167 19.9991 13.4451V7.29294C19.9991 5.02129 18.159 3.17786 15.8873 3.17676H15.8818Z" fill="#D0D8E8"/><path d="M11.7698 16.1029L9.3278 3.27303V3.25754C9.14744 2.39668 8.40719 1.76598 7.52752 1.72504H4.12725C3.99336 1.72504 3.86058 1.73168 3.7278 1.74717C1.61549 1.94744 0.002213 3.72006 0 5.84122V11.9889C0 14.2628 1.84454 16.1051 4.1184 16.1051H11.7698V16.1029Z" fill="#FF4D56"/><path d="M6.26411 12.0078H3.52441V5.65424H6.14571C7.47462 5.65424 8.21155 6.3458 8.21155 7.29296C8.21155 8.06641 7.74682 8.54884 7.12829 8.74912C7.84751 8.87637 8.3565 9.54137 8.3565 10.2872C8.3565 11.2974 7.58306 12.0078 6.263 12.0078H6.26411ZM5.96425 6.68328H4.7991V8.27664H5.96425C6.56508 8.27664 6.91141 8.00334 6.91141 7.48439C6.91141 6.96544 6.56508 6.68328 5.96425 6.68328ZM6.05498 9.25921H4.7991V10.9699H6.08264C6.70118 10.9699 7.06522 10.67 7.06522 10.1322C7.06522 9.59448 6.67351 9.25811 6.05498 9.25811V9.25921Z" fill="#D0D8E8"/><path d="M14.1255 6.52393H15.4002V12.8775H14.1255V6.52393Z" fill="#FF4D56"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">English</span></span></span>
-                    <span class="pill-badge-sm">Form 5</span>
-                    <span class="pill-badge-sm">Chap 2</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Reading Comprehension &amp; Inference</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 3 â€” Math -->
-            <article class="quiz-card subject-math">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--math"><span class="subject-badge__icon"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.5707 13.5247H3.76904V13.9828H11.5707V13.5247Z" fill="#283589"/><path d="M8.08331 12.6241H7.25977V14.8824H8.08331V12.6241Z" fill="#283589"/><path d="M5.09814 7.88825L2.11085 14.5195C1.29834 14.4066 0.507915 14.8415 0.16569 15.5884C-0.165495 16.3563 0.0089293 17.2504 0.60727 17.8357L0.450509 18.1809L2.25547 19.0031L6.9031 8.70928L5.09814 7.88715V7.88825Z" fill="#42AC7B"/><path d="M8.50684 8.70928L13.1467 19.0086L14.9517 18.1865L14.8038 17.8346C15.4076 17.2515 15.5865 16.3541 15.2509 15.584C14.9097 14.8426 14.127 14.4111 13.3201 14.5206L10.3129 7.88715L8.50794 8.70928H8.50684Z" fill="#42AC7B"/><path d="M7.6791 4.57206C7.13816 4.56542 6.69989 4.12946 6.68885 3.58727L6.65684 1.0047C6.64911 0.456985 7.08738 0.006639 7.63384 0H7.65039C8.19464 0 8.63953 0.434855 8.65278 0.98036L8.67486 3.56625C8.67486 4.11397 8.2377 4.55989 7.69234 4.57095H7.67799L7.6791 4.57206Z" fill="#42AC7B"/><path d="M7.66692 9.90319C5.75929 9.90319 4.21155 8.35409 4.21045 6.44205C4.21045 4.53002 5.75598 2.97871 7.66361 2.9776C9.57123 2.9776 11.119 4.5267 11.1201 6.43873C11.1201 7.35602 10.758 8.2368 10.1111 8.88631C9.46415 9.53804 8.5843 9.90429 7.66692 9.90319ZM7.66692 4.97373C6.85772 4.97594 6.20308 5.63541 6.20529 6.44648C6.20529 6.83154 6.35763 7.20001 6.627 7.47442C7.20657 8.0321 8.12285 8.0321 8.70242 7.47442C9.27096 6.89904 9.27096 5.9729 8.70242 5.39862C8.42864 5.12421 8.05551 4.97041 7.66802 4.97483L7.66692 4.97373Z" fill="#283589"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Mathematics</span></span></span>
-                    <span class="pill-badge-sm">Tg. 4</span>
-                    <span class="pill-badge-sm">Bab 1</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Persamaan Kuadratik</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 4 â€” Science -->
-            <article class="quiz-card subject-science">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--science"><span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.77719 4.15601C7.09145 3.99667 7.41899 3.86279 7.75539 3.75656L6.55587 1.09211C6.40649 0.839827 6.08116 0.755733 5.82776 0.904004C5.57435 1.05117 5.48583 1.37427 5.62747 1.62987L6.77719 4.15601Z" fill="#FF9A00"/><path d="M9.76701 3.43679C9.92303 3.43679 10.0768 3.44232 10.2296 3.4545V0.514523C10.2296 -0.171508 9.16504 -0.171508 9.16504 0.514523V3.46445C9.36311 3.44675 9.56451 3.43679 9.76701 3.43679Z" fill="#FF9A00"/><path d="M14.9369 10.0238C14.9369 12.9394 12.571 15.3029 9.65525 15.3018C6.73946 15.3018 4.37585 12.9361 4.37695 10.0205C4.37695 7.10484 6.74278 4.74136 9.65857 4.74246C12.5733 4.74246 14.9369 7.10595 14.9369 10.0205V10.0238Z" fill="#FFD641"/><path d="M9.72852 4.74246V15.2985C12.6432 15.2985 15.0068 12.935 15.0068 10.0205C15.0068 7.10595 12.6432 4.74246 9.72852 4.74246Z" fill="#FF9900"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Science</span></span></span>
-                    <span class="pill-badge-sm">Tg. 4</span>
-                    <span class="pill-badge-sm">Bab 2</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Sel &amp; Organisasi Sel</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 5 â€” History -->
-            <article class="quiz-card subject-history">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--history"><span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.6583 2.00941C15.699 1.89654 14.2008 2.36349 14.2008 2.36349C14.8691 1.84675 15.9623 1.62434 15.9623 1.62434C10.5958 -0.00553218 6.39665 4.83983 6.39665 4.83983C8.52223 3.54302 13.0987 3.51203 14.847 4.23347C12.8973 3.89378 10.9012 3.92476 8.96262 4.3242C7.9889 4.55989 7.06165 4.95602 6.2185 5.49599C5.15294 6.15768 4.1925 6.97538 3.36705 7.92033C3.23537 8.06971 3.10481 8.22573 2.97867 8.38506C2.65114 8.83209 2.45972 9.21936 1.85889 10.0703C3.04948 8.97372 4.60522 8.35961 6.22293 8.34633C8.5853 8.27773 9.59886 8.90401 10.8182 9.10761L10.9942 9.13416C12.0188 9.26916 13.2326 9.07552 15.5098 7.92144L13.0002 7.05505L16.0675 7.64149C17.4594 6.89018 18.9366 5.89212 19.9978 4.67497C19.1812 3.60055 17.6011 2.44647 16.6561 2.0083L16.6583 2.00941Z" fill="#D89D00"/><path d="M8.52116 8.94828C5.42407 7.90153 1.87109 10.0681 1.86113 10.0681C1.68299 9.7007 1.6 8.79337 1.6 8.79337C-0.697095 12.8343 0.761272 15.1867 0.761272 15.1867C0.409405 16.3386 0.15491 17.5181 0 18.7132C1.04675 16.1107 2.4852 12.7325 4.84979 10.3558C4.98479 10.2163 5.1242 10.0824 5.26584 9.95188C5.16293 10.0858 5.06335 10.223 4.96044 10.3558C3.7112 12.0432 2.65781 13.8667 1.81798 15.7909C1.81798 15.7909 4.53112 16.8011 6.62462 14.8349C6.19862 14.9046 5.76376 14.9046 5.33776 14.8349C7.42683 13.5878 9.63209 11.9369 10.7585 10.3535C10.8559 10.2163 11.1624 9.82463 11.2476 9.69296C10.2008 9.48936 10.338 9.5635 8.52006 8.94939L8.52116 8.94828Z" fill="#9F7C50"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">History</span></span></span>
-                    <span class="pill-badge-sm">Tg. 4</span>
-                    <span class="pill-badge-sm">Bab 4</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Kemunculan Islam di Semenanjung</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 6 â€” Chemistry -->
-            <article class="quiz-card subject-chemistry">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--chemistry"><span class="subject-badge__icon"><svg width="13" height="20" viewBox="0 0 13 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.28806 5.40747H9.21147C9.58856 5.38755 9.87811 5.06888 9.85791 4.6971C9.83883 4.35298 9.5605 4.07856 9.21147 4.05975H3.28806C2.91097 4.07967 2.62142 4.39834 2.64162 4.77013C2.6607 5.11425 2.93903 5.38866 3.28806 5.40747Z" fill="#7E0082"/><path d="M12.1913 17.1961L9.07468 12.7159C8.86594 12.4183 8.75595 11.7024V6.75519C8.75708 6.63348 8.65832 6.53389 8.53486 6.53279H3.97054C3.84708 6.53168 3.74608 6.62905 3.74496 6.75077V11.7024C3.74496 12.0642 3.63385 12.4183 3.42398 12.7159L0.308523 17.1961C-0.252619 18.0238 -0.0270401 19.1436 0.812428 19.6968C1.10871 19.8927 1.45662 19.9978 1.81351 20.0011H10.6885C11.6986 19.9923 12.5089 19.1779 12.4999 18.182C12.4965 17.8313 12.3899 17.4894 12.1913 17.1972V17.1961Z" fill="#E20082"/><path d="M7.83264 2.19308C7.83264 2.69322 7.42188 3.0982 6.91461 3.0982C6.40734 3.0982 5.99658 2.69322 5.99658 2.19308C5.99658 1.69294 6.40734 1.28796 6.91461 1.28796C7.42301 1.28796 7.83264 1.69184 7.83264 2.19308Z" fill="#E20082"/><path d="M4.75049 17.2802C4.75049 17.849 5.2196 18.3093 5.79646 18.3082C6.37331 18.3082 6.84018 17.8456 6.83906 17.2769C6.83906 16.7093 6.37107 16.249 5.79533 16.249C5.21848 16.249 4.75161 16.7104 4.75161 17.278H4.75049V17.2802Z" fill="#7E0082"/><path d="M5.33984 13.943C5.33984 14.3015 5.63276 14.5925 5.99638 14.5937C6.36 14.5937 6.65516 14.3049 6.65628 13.9464C6.65628 13.5878 6.36337 13.2968 5.99975 13.2957H5.9975C5.63613 13.2935 5.34209 13.5801 5.33984 13.943V13.943Z" fill="#7E0082"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Chemistry</span></span></span>
-                    <span class="pill-badge-sm">Tg. 5</span>
-                    <span class="pill-badge-sm">Bab 11</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Kimia Organik &amp; Hidrokarbons</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 7 â€” Physics -->
-            <article class="quiz-card subject-physics">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--physics"><span class="subject-badge__icon"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.96877 8.46141C8.12487 8.46141 7.44141 9.14965 7.44141 9.99945C7.44141 10.8492 8.12487 11.5375 8.96877 11.5375C9.81266 11.5375 10.4961 10.8492 10.4961 9.99945C10.4961 9.14965 9.81266 8.46141 8.96877 8.46141Z" fill="#27A0D7"/><path d="M15.8882 9.95187C16.0585 9.76155 16.3772 9.37981C17.7496 7.65588 18.1507 6.08797 17.5068 4.96155C17.1727 4.37732 16.4069 3.67137 14.6685 3.62932C14.2532 3.61272 13.9026 3.93804 13.8862 4.35629V4.37842C13.8763 4.80332 14.2092 5.15519 14.6312 5.16625C15.4256 5.18617 15.9882 5.38645 16.1838 5.73057C16.4783 6.24509 16.0948 7.27303 15.1905 8.41272C15.0674 8.56653 14.9366 8.72033 14.7938 8.87303C14.2762 8.40719 13.7356 7.96902 13.173 7.55851C12.7785 3.73997 11.3523 0 8.96893 0C7.38003 0 6.21418 1.62988 5.49116 3.92144C5.23293 3.8639 4.97911 3.81521 4.73077 3.77759C2.56389 3.44122 1.01236 3.87607 0.361855 4.99917C0.0157258 5.61328 -0.198544 6.69101 0.745344 8.32531C0.939835 8.70263 1.40134 8.84979 1.77604 8.65394C2.15074 8.45809 2.29688 7.99336 2.10239 7.61604L2.06393 7.54965C1.61891 6.78174 1.48375 6.13333 1.69253 5.76929C1.98701 5.25477 3.06056 5.07552 4.50112 5.29682C4.7 5.32669 5.09668 5.41079C4.95273 6.08797 4.84395 6.77178 4.77143 7.46113C1.65627 9.7184 -0.898494 12.8664 0.303617 14.9621C0.837645 15.896 1.91998 16.2921 3.28252 16.2921C4.01874 16.2777 4.75165 16.1848 5.46698 16.0122C6.19221 18.338 7.37014 20 8.96893 20C9.69635 20 10.7567 19.6337 11.7083 17.8877C11.9204 17.5203 11.7973 17.049 11.4325 16.8343C11.0677 16.6207 10.5996 16.7447 10.3864 17.112L10.3655 17.1519C9.91501 17.9817 9.40626 18.462 8.97552 18.462C8.33051 18.462 7.52727 17.4263 6.95149 15.5994C7.61078 15.3804 8.25909 15.127 8.89421 14.8415C10.8281 15.7234 12.9082 16.3154 14.5861 16.3154C15.9443 16.3154 17.0387 15.9292 17.565 14.9909C18.3694 13.5989 17.5255 11.7444 15.8882 9.95076V9.95187ZM1.6266 14.1997C1.17828 13.4152 2.22216 11.5054 4.64506 9.50373V10.0061C4.64177 11.5286 4.7934 13.0467 5.09778 14.5383C3.23637 14.9344 1.94746 14.7519 1.6266 14.2008V14.1997ZM8.97442 1.54357C9.86447 1.54357 10.971 3.37925 11.4863 6.43762C11.371 6.36791 11.2545 6.2971 11.1391 6.23734C9.81722 5.46169 8.41952 4.82545 6.96797 4.3397C7.54595 2.55159 8.3404 1.53804 8.96783 1.53804L8.97442 1.54357ZM16.2376 14.2296C15.7893 15.0141 13.6202 15.055 10.6765 13.9441C10.8018 13.8744 10.9292 13.808 11.0523 13.7438C12.3918 12.9759 13.6488 12.0686 14.8004 11.0362C16.075 12.4548 16.5662 13.6719 16.2464 14.2307H16.2387L16.2376 14.2296Z" fill="#0844C0"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Physics</span></span></span>
-                    <span class="pill-badge-sm">Tg. 4</span>
-                    <span class="pill-badge-sm">Bab 2</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Daya dan Gerakan</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 8 â€” Biology -->
-            <article class="quiz-card subject-biology">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--biology"><span class="subject-badge__icon"><svg width="14" height="20" viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.20197 7.69569C4.20197 8.04203 4.087 8.3784 3.8755 8.6495L5.72367 10.535C6.12281 10.9433 6.77032 10.9444 7.17054 10.5372L10.3387 7.30842C10.7378 6.89901 10.7378 6.23733 10.3387 5.82792L5.80068 1.195C5.55989 0.951572 5.21824 0.844241 4.88527 0.906205L4.00674 1.07439C3.67268 1.13968 3.32777 1.03013 3.08916 0.782277L2.61952 0.307588C2.22039 -0.10071 1.57288 -0.101817 1.17266 0.305375L0.312563 1.18283C-0.0876572 1.59002 -0.0887418 2.2506 0.310394 2.6589L0.782198 3.14023C1.0219 3.38477 1.1271 3.73442 1.06528 4.07412L0.90042 4.96817C0.837513 5.30787 0.943805 5.65752 1.1835 5.90206L1.75292 6.48518C2.40911 5.95738 3.35923 6.07135 3.87767 6.74078C4.08591 7.01077 4.20088 7.34383 4.20305 7.68795V7.69569H4.20197Z" fill="#8431D8"/><path d="M13.0684 15.6714H5.66274C3.38181 15.6714 1.53797 13.912 1.53797 11.7477V11.2243C1.54014 10.4797 1.76249 9.75379 2.17681 9.13968C1.63993 8.9383 1.26031 8.4448 1.19415 7.86499C0.425166 8.80994 0.00325382 9.99722 0 11.2243V11.7477C0 14.2871 1.78743 16.4205 4.20611 17.0478C3.48701 17.6907 3.07595 18.618 3.07703 19.5928V19.7355C3.07703 19.8783 3.18766 19.9945 3.32649 20H11.0164C11.1584 19.9978 11.2712 19.8805 11.2712 19.7355V19.5928C11.2712 18.7153 10.9372 17.8722 10.3406 17.2404H13.0695C13.4947 17.2625 13.8559 16.9283 13.8776 16.4957C13.8992 16.0619 13.5717 15.6935 13.1476 15.6714H13.0684Z" fill="#8431D8"/><path d="M8.71173 11.1845L8.98831 11.4667C9.38961 11.8739 10.0371 11.8739 10.4384 11.4667L11.3538 10.5328C11.7541 10.1234 11.7541 9.46058 11.3538 9.05228L11.0783 8.77012C10.9775 8.67054 10.8159 8.67054 10.715 8.77012L8.71173 10.8138C8.61737 10.9156 8.62171 11.0794 8.71173 11.1845Z" fill="#8780FF"/><path d="M5.63135 13.0567C5.20619 13.0788 4.87972 13.4473 4.90141 13.881C4.92093 14.2838 5.23656 14.6058 5.63135 14.6257H11.2713C11.6965 14.6036 12.0229 14.2351 12.0013 13.8014C11.9817 13.3986 11.6661 13.0766 11.2713 13.0567H5.63135Z" fill="#8780FF"/><path d="M3.6126 7.69574C3.6126 7.17568 3.20154 6.753 2.69177 6.75189C2.18201 6.75189 1.76769 7.17126 1.7666 7.69131C1.7666 8.21137 2.17767 8.63405 2.68743 8.63516H2.69177C3.19937 8.63294 3.61043 8.21358 3.6126 7.69574Z" fill="#8780FF"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Biology</span></span></span>
-                    <span class="pill-badge-sm">Tg. 4</span>
-                    <span class="pill-badge-sm">Bab 9</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Ekosistem Tropika</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 9 â€” Math -->
-            <article class="quiz-card subject-math">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--math"><span class="subject-badge__icon"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.5707 13.5247H3.76904V13.9828H11.5707V13.5247Z" fill="#283589"/><path d="M8.08331 12.6241H7.25977V14.8824H8.08331V12.6241Z" fill="#283589"/><path d="M5.09814 7.88825L2.11085 14.5195C1.29834 14.4066 0.507915 14.8415 0.16569 15.5884C-0.165495 16.3563 0.0089293 17.2504 0.60727 17.8357L0.450509 18.1809L2.25547 19.0031L6.9031 8.70928L5.09814 7.88715V7.88825Z" fill="#42AC7B"/><path d="M8.50684 8.70928L13.1467 19.0086L14.9517 18.1865L14.8038 17.8346C15.4076 17.2515 15.5865 16.3541 15.2509 15.584C14.9097 14.8426 14.127 14.4111 13.3201 14.5206L10.3129 7.88715L8.50794 8.70928H8.50684Z" fill="#42AC7B"/><path d="M7.6791 4.57206C7.13816 4.56542 6.69989 4.12946 6.68885 3.58727L6.65684 1.0047C6.64911 0.456985 7.08738 0.006639 7.63384 0H7.65039C8.19464 0 8.63953 0.434855 8.65278 0.98036L8.67486 3.56625C8.67486 4.11397 8.2377 4.55989 7.69234 4.57095H7.67799L7.6791 4.57206Z" fill="#42AC7B"/><path d="M7.66692 9.90319C5.75929 9.90319 4.21155 8.35409 4.21045 6.44205C4.21045 4.53002 5.75598 2.97871 7.66361 2.9776C9.57123 2.9776 11.119 4.5267 11.1201 6.43873C11.1201 7.35602 10.758 8.2368 10.1111 8.88631C9.46415 9.53804 8.5843 9.90429 7.66692 9.90319ZM7.66692 4.97373C6.85772 4.97594 6.20308 5.63541 6.20529 6.44648C6.20529 6.83154 6.35763 7.20001 6.627 7.47442C7.20657 8.0321 8.12285 8.0321 8.70242 7.47442C9.27096 6.89904 9.27096 5.9729 8.70242 5.39862C8.42864 5.12421 8.05551 4.97041 7.66802 4.97483L7.66692 4.97373Z" fill="#283589"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Mathematics</span></span></span>
-                    <span class="pill-badge-sm">Tg. 5</span>
-                    <span class="pill-badge-sm">Bab 7</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Statistik Lanjutan</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 10 â€” Geography -->
-            <article class="quiz-card subject-geo">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--geo"><span class="subject-badge__icon"><svg width="26" height="21" viewBox="0 0 26 21" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="geo-clip"><path d="M20.4614 10.091C20.4614 14.3996 16.9894 17.8943 12.7046 17.8954C8.41982 17.8954 4.94447 14.4041 4.94336 10.0955C4.94336 5.78686 8.41538 2.29219 12.7002 2.29108C16.9894 2.29443 20.4603 5.78575 20.4614 10.091Z"/></clipPath></defs><g opacity="0.15"><path d="M22.7431 10.091C22.7431 15.6635 18.2507 20.1809 12.709 20.1809C7.16735 20.1809 2.67383 15.6635 2.67383 10.091C2.67383 4.51851 7.16624 0 12.709 0C18.2518 0 22.7431 4.51739 22.7431 10.091Z" fill="#0054E0"/><g opacity="0.75"><path d="M22.7431 10.091C22.7431 15.6635 18.2507 20.1809 12.709 20.1809C7.16735 20.1809 2.67383 15.6635 2.67383 10.091C2.67383 4.51851 7.16624 0 12.709 0C18.2518 0 22.7431 4.51739 22.7431 10.091Z" fill="#47C400"/></g></g><path d="M20.4614 10.091C20.4614 14.3996 16.9894 17.8943 12.7046 17.8954C8.41982 17.8954 4.94447 14.4041 4.94336 10.0955C4.94336 5.78686 8.41538 2.29219 12.7002 2.29108C16.9894 2.29443 20.4603 5.78575 20.4614 10.091Z" fill="#4FB4E7"/><g clip-path="url(#geo-clip)"><path d="M15.6691 14.633C15.6258 14.2076 15.3982 13.8224 15.0473 13.5812C14.5999 13.282 14.4977 12.6288 14.4455 12.1566C14.3956 11.7769 14.1568 11.4822 13.7893 11.7535C12.9421 12.3586 11.7163 11.4409 11.4754 10.5611C11.2744 9.62431 11.4876 8.80145 11.9606 8.00426C12.2882 7.46275 12.9766 7.26737 13.5384 7.55654C14.1924 7.87921 15.2139 6.88217 15.3205 6.23013C15.054 5.39052 14.1469 5.3559 13.8415 5.91304C13.6694 6.25916 13.2508 6.39872 12.9077 6.22678C12.2104 5.85275 12.0017 6.15197 11.773 6.81518C11.4376 7.24727 11.1767 7.08426 10.948 6.75489C11.0801 6.4579 11.9073 4.11881 12.0072 3.99153C12.8355 3.90444 12.9099 2.23192 12.7878 1.84225C12.5324 2.00192 12.3081 1.09978 12.5491 0.77934C13.3818 0.792738C13.8348 1.09978C14.6942 0.807252C15.356 0.512494C16.0966 -0.294741C16.8994 -1.0294C17.3668 -1.50392C18.3961 -2.58581C19.1311 -2.82586C20.2581 -2.23858C21.8159 -2.40606C22.6387 -2.12916C23.578 -2.03761C24.3952 -1.62004C23.89 -0.663188C23.5525 -0.616295C23.2838 0.00559981C23.517 0.889874C22.2801 2.51663C22.0336 3.65211C21.7937 4.09202C21.8326 5.09352C21.585 5.60712C21.2297 5.56134C20.176 4.84454C19.6441 5.0645C19.3132 5.98226C18.5571 6.3295C17.5411 6.08498C17.0959 5.9577C16.7151 6.02469C16.976 6.36523C17.5556 6.76829C17.7843 7.55766C17.4978 7.97523C16.7106 7.973C15.9556 7.47838C15.7746 7.93504C17.1137 8.81484C17.4268 9.96261C17.3846 12.6445C17.6833 13.8045C17.4823 15.7696C16.6196 15.9817C15.8912 15.4994C15.668 14.6318L15.6691 14.633Z" fill="#77D836"/><path d="M-0.639406 9.23353C-0.117548 7.58109C1.10826 7.04629C3.50658 5.87172C4.09284 5.87172C4.2283 6.07046C4.15502 6.54832C4.35599 7.10323C4.65911 7.25507C5.41747 7.00274C5.41747 6.57735C5.37528 5.93313C5.70616 5.99119C6.30796 6.02803C6.47451 5.90522C6.89088 6.88439C5.775 9.87775C4.79124 10.5945C4.58028 11.4721C4.83676 11.6474C5.69616 11.8004C6.04037 12.0505C6.98526 12.1833C8.0534 12.2313C9.12932 12.5719C9.7611 14.1864C8.77179 17.1752C8.70961 18.7451C8.92613 19.5902C8.70517 20.1206C8.5686 20.0302C7.68921 18.7261C7.39386 17.5917C6.28797 15.6144C5.62621 13.1927C5.72836 12.64C5.06771 12.2704C3.64871 11.8674C2.48508 11.0601C1.49355 9.41328C0.0523328 8.41847C-0.338505 8.47653L-0.641626 9.23353H-0.639406Z" fill="#77D836"/><path d="M7.6392 1.59442C8.40311 1.17685C8.93718 0.71573C9.2181 1.21034C9.61893 1.83559C9.45127 3.31161C9.23031 3.92904C8.75509 5.25098C8.58076 5.80031C8.00672 5.56026C7.80575 5.3805C7.56481 5.21749C7.48264 4.93055C7.33941 4.47278C6.59104 3.8788C6.29014 3.76715C6.19021 3.13409C6.25794 2.76117C6.71207 2.10132C7.01297 1.94612L7.6392 1.59442Z" fill="#77D836"/></g></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Geography</span></span></span>
-                    <span class="pill-badge-sm">Tg. 4</span>
-                    <span class="pill-badge-sm">Bab 5</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Cuaca dan Iklim Tropika</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 11 â€” BM -->
-            <article class="quiz-card subject-bm">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--bm"><span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.884 3.19891H7.91943L10.658 17.5823H15.8829C18.1557 17.5812 19.998 15.7389 19.9991 13.4661V7.3151C19.998 5.04234 18.1557 3.20002 15.8829 3.19891H15.884Z" fill="#D0D8E8"/><path d="M11.7785 16.1284H11.7719H10.3633L10.6532 17.5978L11.7785 16.1284Z" fill="#214090"/><path d="M11.7721 16.1283L9.3267 3.29514V3.27854C9.14744 2.41769 8.4083 1.78698 7.52974 1.74493H4.11286C3.97787 1.74493 3.84177 1.74493 3.71121 1.76485C1.60553 1.97509 0 3.74659 0 5.86333V12.0088C-0.00221 14.2816 1.83901 16.1261 4.11176 16.1283H11.7732Z" fill="#4D77FF"/><path d="M6.26264 11.9834H3.52295V5.62878H6.14536C7.47426 5.62878 8.2123 6.32035 8.2123 7.26751C8.2123 8.04096 7.74757 8.52339 7.12903 8.72367C7.84826 8.85091 8.35836 9.51592 8.35836 10.2628C8.35836 11.273 7.58491 11.9834 6.26486 11.9834H6.26264ZM5.96278 6.65783H4.79764V8.25119H5.96278C6.56361 8.25119 6.90995 7.97789 6.90995 7.45894C6.90995 6.93999 6.56361 6.65783 5.96278 6.65783ZM6.05352 9.23376H4.79764V10.9455H6.08118C6.69971 10.9455 7.06375 10.6446 7.06375 10.1079C7.06375 9.57125 6.67205 9.23376 6.05352 9.23376Z" fill="#D0D8E8"/><path d="M11.752 6.50067H13.1993L15.2197 11.2254L17.2413 6.50067H18.6798V12.8553H17.4051V8.72252L15.7033 12.8553H14.7384L13.0266 8.72252V12.8553H11.752V6.50067Z" fill="#4D77FF"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Bahasa Melayu</span></span></span>
-                    <span class="pill-badge-sm">Tg. 5</span>
-                    <span class="pill-badge-sm">Bab 6</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Novel Komponen Sastera</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 12 â€” Islamic -->
-            <article class="quiz-card subject-islamic">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--islamic"><span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><mask id="isl-m" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20"><path d="M19.3927 8.50497C18.5938 7.69547 17.8479 6.92573 17.7583 6.79431C17.6686 6.66289 17.5945 5.39177 17.5945 4.33379C17.5923 3.26477 16.7214 2.39895 15.6501 2.40116C14.5966 2.40116 13.5974 2.37686 13.4314 2.34705C13.2654 2.31723 12.2882 1.42601 11.4749 0.605467C10.6571 -0.201822 9.33907 -0.201822 8.52128 0.605467C7.71012 1.41717 6.94102 2.14937 6.80822 2.2344C6.67543 2.31944 5.40945 2.39343 4.34267 2.39343C3.27146 2.39564 2.40497 3.26367 2.40608 4.33158C2.40608 5.39509 2.38173 6.39122 2.34964 6.54583C2.31755 6.69934 1.42671 7.69437 0.606706 8.50387C-0.202235 9.31999 -0.202235 10.6331 0.606706 11.4492C1.41786 12.2609 2.15155 13.0306 2.23898 13.1599C2.3264 13.2891 2.40497 14.5635 2.40497 15.6193C2.40497 16.6872 3.27146 17.553 4.34156 17.5552C5.40724 17.5552 6.40541 17.5806 6.56034 17.6126C6.71416 17.6447 7.70901 18.5326 8.52128 19.3498C9.33796 20.1615 10.6582 20.1615 11.4749 19.3498C12.2882 18.5525 13.0595 17.8059 13.189 17.7209C13.3185 17.6347 14.5955 17.5552 15.649 17.5552C16.7214 17.5552 17.5923 16.6894 17.5934 15.6193C17.5934 14.5547 17.6177 13.5574 17.6509 13.4039C17.6841 13.2504 18.5783 12.2609 19.3872 11.4492C20.2039 9.31888 19.3916 8.50387L19.3927 8.50497Z" fill="white"/></mask><g mask="url(#isl-m)"><path d="M19.3927 8.50497C18.5938 7.70762 17.8479 6.92573 17.7583 6.79431C17.6686 6.66289 17.5945 5.39177 17.5945 4.33379C17.5923 3.26477 16.7214 2.39895 15.6501 2.40116C14.5966 2.40116 13.5974 2.37686 13.4314 2.34705C13.2654 2.31723 12.2882 1.42601 11.4749 0.605467C10.6571 -0.201822 9.33907 -0.201822 8.52128 0.605467C7.71012 1.41717 6.94102 2.14937 6.80822 2.2344C6.67543 2.31944 5.40945 2.39343 4.34267 2.39343C3.27146 2.39564 2.40497 3.26367 2.40608 4.33158C2.40608 5.39509 2.38173 6.39122 2.34964 6.54583C2.31755 6.69934 1.42671 7.69658 0.606706 8.50387C-0.202235 9.31999 -0.202235 10.6331 0.606706 11.4492C1.41786 12.2609 2.15155 13.0306 2.23898 13.1599C2.3264 13.2891 2.40497 14.5635 2.40497 15.6193C2.40497 16.6872 3.27146 17.553 4.34156 17.5552C5.40724 17.5552 6.40541 17.5806 6.56034 17.6126C6.71416 17.6447 7.70901 18.5326 8.52128 19.3498C9.33796 20.1615 10.6582 20.1615 11.4749 19.3498C12.2882 18.5525 13.0595 17.8059 13.189 17.7187C13.3185 17.6314 14.5878 17.5596 15.649 17.5596C16.7214 17.5596 17.5923 16.6938 17.5934 15.6237V15.6193C17.5934 14.5547 17.6177 13.5574 17.6509 13.4039C17.6841 13.2504 18.5783 12.2609 19.3872 11.4492C20.2017 10.6364 20.2039 9.31888 19.3916 8.50387L19.3927 8.50497Z" fill="#DE4D7F"/><path d="M13.1505 19.0771C13.1483 19.5873 12.7333 20.0003 12.2209 20.0003H7.57312C7.06186 20.0003 6.64577 19.5873 6.64355 19.0771V13.6646C6.64355 13.1522 7.05964 12.7358 7.57312 12.7347H12.2209C12.7344 12.7347 13.1505 13.1511 13.1505 13.6646V19.0771Z" fill="#EBECFF"/><path d="M12.9986 12.4288C12.9986 14.1372 11.6131 15.5232 9.90118 15.5243C8.18923 15.5243 6.80042 14.1417 6.79932 12.4332C6.79932 10.7248 8.18481 9.33878 9.89675 9.33768C11.6087 9.33768 12.9975 10.7203 12.9986 12.4288Z" fill="#EBECFF"/><path d="M9.80059 10.1107C9.54385 10.1107 9.33691 9.90202 9.33691 9.64581V8.71814C9.35351 8.46193 9.57594 8.26756 9.83157 8.28523C10.0651 8.3007 10.2499 8.48623 10.2654 8.71814V9.64581C10.2654 9.90202 10.0562 10.1096 9.79948 10.1107H9.80059Z" fill="#EBECFF"/><path d="M9.7828 8.61875C8.64519 8.61765 7.72338 7.6955 7.72559 6.56022C7.72559 6.47739 7.73112 6.39567 7.74108 6.31395C7.84179 5.57844 8.32759 4.95227 9.01591 4.67066C9.19297 4.59887 9.37888 4.55138 9.56922 4.5293H9.61127C9.76067 4.5293 9.89457 4.62317 9.94326 4.76453C9.99195 4.90699 9.9499 5.06491 9.83481 5.1632C9.43422 5.50776 9.38884 6.11074 9.73411 6.51052C10.0794 6.9103 10.6836 6.95558 11.0842 6.61102C11.1207 6.5801 11.1539 6.54586 11.186 6.50942C11.3299 6.35702 11.57 6.34929 11.7227 6.49285C11.7393 6.50942 11.8057 6.58451 11.8256 6.78882C11.8057 6.97988 11.757 7.16651 11.6818 7.34321C11.4018 8.02902 10.7754 8.51384 10.0395 8.61212C9.9499 8.61212 9.87023 8.61985 9.78391 8.61985L9.7828 8.61875Z" fill="#EBECFF"/></g></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Islamic Studies</span></span></span>
-                    <span class="pill-badge-sm">Tg. 4</span>
-                    <span class="pill-badge-sm">Bab 3</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Solat Fardhu &amp; Waktu</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 13 â€” English -->
-            <article class="quiz-card subject-english">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--english"><span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.8818 3.17676H7.91943L10.6591 17.5546H15.8807C18.1524 17.5568 19.9969 15.7167 19.9991 13.4451V7.29294C19.9991 5.02129 18.159 3.17786 15.8873 3.17676H15.8818Z" fill="#D0D8E8"/><path d="M11.7698 16.1029L9.3278 3.27303V3.25754C9.14744 2.39668 8.40719 1.76598 7.52752 1.72504H4.12725C3.99336 1.72504 3.86058 1.73168 3.7278 1.74717C1.61549 1.94744 0.002213 3.72006 0 5.84122V11.9889C0 14.2628 1.84454 16.1051 4.1184 16.1051H11.7698V16.1029Z" fill="#FF4D56"/><path d="M6.26411 12.0078H3.52441V5.65424H6.14571C7.47462 5.65424 8.21155 6.3458 8.21155 7.29296C8.21155 8.06641 7.74682 8.54884 7.12829 8.74912C7.84751 8.87637 8.3565 9.54137 8.3565 10.2872C8.3565 11.2974 7.58306 12.0078 6.263 12.0078H6.26411ZM5.96425 6.68328H4.7991V8.27664H5.96425C6.56508 8.27664 6.91141 8.00334 6.91141 7.48439C6.91141 6.96544 6.56508 6.68328 5.96425 6.68328ZM6.05498 9.25921H4.7991V10.9699H6.08264C6.70118 10.9699 7.06522 10.67 7.06522 10.1322C7.06522 9.59448 6.67351 9.25811 6.05498 9.25811V9.25921Z" fill="#D0D8E8"/><path d="M14.1255 6.52393H15.4002V12.8775H14.1255V6.52393Z" fill="#FF4D56"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">English</span></span></span>
-                    <span class="pill-badge-sm">Form 4</span>
-                    <span class="pill-badge-sm">Chap 5</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Grammar: Passive Voice</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 14 â€” Science -->
-            <article class="quiz-card subject-science">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--science"><span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.77719 4.15601C7.09145 3.99667 7.41899 3.86279 7.75539 3.75656L6.55587 1.09211C6.40649 0.839827 6.08116 0.755733 5.82776 0.904004C5.57435 1.05117 5.48583 1.37427 5.62747 1.62987L6.77719 4.15601Z" fill="#FF9A00"/><path d="M9.76701 3.43679C9.92303 3.43679 10.0768 3.44232 10.2296 3.4545V0.514523C10.2296 -0.171508 9.16504 -0.171508 9.16504 0.514523V3.46445C9.36311 3.44675 9.56451 3.43679 9.76701 3.43679Z" fill="#FF9A00"/><path d="M14.9369 10.0238C14.9369 12.9394 12.571 15.3029 9.65525 15.3018C6.73946 15.3018 4.37585 12.9361 4.37695 10.0205C4.37695 7.10484 6.74278 4.74136 9.65857 4.74246C12.5733 4.74246 14.9369 7.10595 14.9369 10.0205V10.0238Z" fill="#FFD641"/><path d="M9.72852 4.74246V15.2985C12.6432 15.2985 15.0068 12.935 15.0068 10.0205C15.0068 7.10595 12.6432 4.74246 9.72852 4.74246Z" fill="#FF9900"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Science</span></span></span>
-                    <span class="pill-badge-sm">Tg. 5</span>
-                    <span class="pill-badge-sm">Bab 8</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Elektrik dan Tenaga</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 15 â€” Math -->
-            <article class="quiz-card subject-math">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--math"><span class="subject-badge__icon"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.5707 13.5247H3.76904V13.9828H11.5707V13.5247Z" fill="#283589"/><path d="M8.08331 12.6241H7.25977V14.8824H8.08331V12.6241Z" fill="#283589"/><path d="M5.09814 7.88825L2.11085 14.5195C1.29834 14.4066 0.507915 14.8415 0.16569 15.5884C-0.165495 16.3563 0.0089293 17.2504 0.60727 17.8357L0.450509 18.1809L2.25547 19.0031L6.9031 8.70928L5.09814 7.88715V7.88825Z" fill="#42AC7B"/><path d="M8.50684 8.70928L13.1467 19.0086L14.9517 18.1865L14.8038 17.8346C15.4076 17.2515 15.5865 16.3541 15.2509 15.584C14.9097 14.8426 14.127 14.4111 13.3201 14.5206L10.3129 7.88715L8.50794 8.70928H8.50684Z" fill="#42AC7B"/><path d="M7.6791 4.57206C7.13816 4.56542 6.69989 4.12946 6.68885 3.58727L6.65684 1.0047C6.64911 0.456985 7.08738 0.006639 7.63384 0H7.65039C8.19464 0 8.63953 0.434855 8.65278 0.98036L8.67486 3.56625C8.67486 4.11397 8.2377 4.55989 7.69234 4.57095H7.67799L7.6791 4.57206Z" fill="#42AC7B"/><path d="M7.66692 9.90319C5.75929 9.90319 4.21155 8.35409 4.21045 6.44205C4.21045 4.53002 5.75598 2.97871 7.66361 2.9776C9.57123 2.9776 11.119 4.5267 11.1201 6.43873C11.1201 7.35602 10.758 8.2368 10.1111 8.88631C9.46415 9.53804 8.5843 9.90429 7.66692 9.90319ZM7.66692 4.97373C6.85772 4.97594 6.20308 5.63541 6.20529 6.44648C6.20529 6.83154 6.35763 7.20001 6.627 7.47442C7.20657 8.0321 8.12285 8.0321 8.70242 7.47442C9.27096 6.89904 9.27096 5.9729 8.70242 5.39862C8.42864 5.12421 8.05551 4.97041 7.66802 4.97483L7.66692 4.97373Z" fill="#283589"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Mathematics</span></span></span>
-                    <span class="pill-badge-sm">Tg. 5</span>
-                    <span class="pill-badge-sm">Bab 6</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Trigonometri Lanjutan</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 16 â€” Moral -->
-            <article class="quiz-card subject-moral">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--moral"><span class="subject-badge__icon"><svg width="17" height="20" viewBox="0 0 17 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.8981 6.28714V6.1942C11.8778 4.92283 10.8244 3.90153 9.52843 3.896C8.60469 3.91591 7.77118 4.44703 7.37868 5.26806C6.98617 4.44703 6.15266 3.91591 5.22892 3.896C3.93749 3.90817 2.89194 4.92725 2.87164 6.1942V6.28714C2.87164 6.28714 2.73967 7.74994 4.39541 9.3444C5.34622 10.2462 6.3444 11.0993 7.38657 11.8982C8.42648 11.0982 9.42241 10.2462 10.3721 9.3444C12.0312 7.74883 11.8981 6.28714 11.8981 6.28714Z" fill="#0072CA"/><path d="M3.32389 16.7646L10.2491 20C10.3867 20 10.5063 19.9048 10.5322 19.7721L11.0183 17.4816C11.13 16.9505 11.6071 16.571 12.1598 16.571H14.0997C14.6761 16.571 15.143 16.1129 15.143 15.5474V12H16.007C16.3296 12.0022 16.5912 11.7477 16.5935 11.4313C16.5935 11.3494 16.5766 11.2686 16.5427 11.1945L15.143 7.99557V7.42794C15.1442 3.32614 11.7549 0 7.57264 0C3.39043 0 0 3.32503 0 7.42794C0 9.49156 0.874113 11.4622 2.41481 12.8675C3.3487 13.7107 3.74684 14.9831 3.45359 16.1947L3.32389 16.7646ZM10.3732 9.3444C9.42463 10.2462 8.42758 11.0982 7.38767 11.8982C6.3455 11.0993 5.34732 10.2462 4.39651 9.3444C2.73738 7.74882 2.87048 6.28714 2.87048 6.28714V6.19419C2.89078 4.92503 3.94084 3.90373 5.23566 3.89599C6.1594 3.91591 6.99291 4.44703 7.38541 5.26805C7.77679 4.44924 8.60692 3.91812 9.5284 3.89599C10.8255 3.90041 11.88 4.92172 11.9003 6.19419V6.28714C11.9003 6.28714 12.0323 7.74993 10.3732 9.3444Z" fill="#0072CA"/><path d="M10.3734 9.3444C9.42487 10.2462 8.42781 11.0982 7.3879 11.8982C6.34573 11.0993 5.34755 10.2462 4.39674 9.3444C2.73762 7.74883 2.87071 6.28714 2.87071 6.28714V6.1942C2.89101 4.92504 3.94107 3.90374 5.23589 3.896C6.15963 3.91591 6.99314 4.44703 7.38564 5.26806C7.77702 4.44925 8.60715 3.91813 9.52863 3.896C10.8257 3.90042 11.8803 4.92172 11.9006 6.1942V6.28714C11.9006 6.28714 12.0325 7.74994 10.3734 9.3444Z" fill="#FFD626"/><path d="M7.3898 5.26806C7.78343 4.44814 8.61581 3.91591 9.53955 3.896C10.8332 3.90374 11.8833 4.92504 11.9025 6.1942V6.28714C11.9025 6.28714 12.0356 7.74994 10.3764 9.3444C9.42677 10.2462 8.42971 11.0982 7.38867 11.8982" fill="#FFA227"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Moral Studies</span></span></span>
-                    <span class="pill-badge-sm">Tg. 4</span>
-                    <span class="pill-badge-sm">Bab 1</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Nilai Murni Malaysia</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 17 â€” Chemistry -->
-            <article class="quiz-card subject-chemistry">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--chemistry"><span class="subject-badge__icon"><svg width="13" height="20" viewBox="0 0 13 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.28806 5.40747H9.21147C9.58856 5.38755 9.87811 5.06888 9.85791 4.6971C9.83883 4.35298 9.5605 4.07856 9.21147 4.05975H3.28806C2.91097 4.07967 2.62142 4.39834 2.64162 4.77013C2.6607 5.11425 2.93903 5.38866 3.28806 5.40747Z" fill="#7E0082"/><path d="M12.1913 17.1961L9.07468 12.7159C8.86594 12.4183 8.75595 11.7024V6.75519C8.75708 6.63348 8.65832 6.53389 8.53486 6.53279H3.97054C3.84708 6.53168 3.74608 6.62905 3.74496 6.75077V11.7024C3.74496 12.0642 3.63385 12.4183 3.42398 12.7159L0.308523 17.1961C-0.252619 18.0238 -0.0270401 19.1436 0.812428 19.6968C1.10871 19.8927 1.45662 19.9978 1.81351 20.0011H10.6885C11.6986 19.9923 12.5089 19.1779 12.4999 18.182C12.4965 17.8313 12.3899 17.4894 12.1913 17.1972V17.1961Z" fill="#E20082"/><path d="M7.83264 2.19308C7.83264 2.69322 7.42188 3.0982 6.91461 3.0982C6.40734 3.0982 5.99658 2.69322 5.99658 2.19308C5.99658 1.69294 6.40734 1.28796 6.91461 1.28796C7.42301 1.28796 7.83264 1.69184 7.83264 2.19308Z" fill="#E20082"/><path d="M4.75049 17.2802C4.75049 17.849 5.2196 18.3093 5.79646 18.3082C6.37331 18.3082 6.84018 17.8456 6.83906 17.2769C6.83906 16.7093 6.37107 16.249 5.79533 16.249C5.21848 16.249 4.75161 16.7104 4.75161 17.278H4.75049V17.2802Z" fill="#7E0082"/><path d="M5.33984 13.943C5.33984 14.3015 5.63276 14.5925 5.99638 14.5937C6.36 14.5937 6.65516 14.3049 6.65628 13.9464C6.65628 13.5878 6.36337 13.2968 5.99975 13.2957H5.9975C5.63613 13.2935 5.34209 13.5801 5.33984 13.943V13.943Z" fill="#7E0082"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Chemistry</span></span></span>
-                    <span class="pill-badge-sm">Tg. 4</span>
-                    <span class="pill-badge-sm">Bab 4</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Struktur Atom</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card 18 â€” Physics -->
-            <article class="quiz-card subject-physics">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--physics"><span class="subject-badge__icon"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.96877 8.46141C8.12487 8.46141 7.44141 9.14965 7.44141 9.99945C7.44141 10.8492 8.12487 11.5375 8.96877 11.5375C9.81266 11.5375 10.4961 10.8492 10.4961 9.99945C10.4961 9.14965 9.81266 8.46141 8.96877 8.46141Z" fill="#27A0D7"/><path d="M15.8882 9.95187C16.0585 9.76155 16.3772 9.37981C17.7496 7.65588 18.1507 6.08797 17.5068 4.96155C17.1727 4.37732 16.4069 3.67137 14.6685 3.62932C14.2532 3.61272 13.9026 3.93804 13.8862 4.35629V4.37842C13.8763 4.80332 14.2092 5.15519 14.6312 5.16625C15.4256 5.18617 15.9882 5.38645 16.1838 5.73057C16.4783 6.24509 16.0948 7.27303 15.1905 8.41272C15.0674 8.56653 14.9366 8.72033 14.7938 8.87303C14.2762 8.40719 13.7356 7.96902 13.173 7.55851C12.7785 3.73997 11.3523 0 8.96893 0C7.38003 0 6.21418 1.62988 5.49116 3.92144C5.23293 3.8639 4.97911 3.81521 4.73077 3.77759C2.56389 3.44122 1.01236 3.87607 0.361855 4.99917C0.0157258 5.61328 -0.198544 6.69101 0.745344 8.32531C0.939835 8.70263 1.40134 8.84979 1.77604 8.65394C2.15074 8.45809 2.29688 7.99336 2.10239 7.61604L2.06393 7.54965C1.61891 6.78174 1.48375 6.13333 1.69253 5.76929C1.98701 5.25477 3.06056 5.07552 4.50112 5.29682C4.7 5.32669 5.09668 5.41079C4.95273 6.08797 4.84395 6.77178 4.77143 7.46113C1.65627 9.7184 -0.898494 12.8664 0.303617 14.9621C0.837645 15.896 1.91998 16.2921 3.28252 16.2921C4.01874 16.2777 4.75165 16.1848 5.46698 16.0122C6.19221 18.338 7.37014 20 8.96893 20C9.69635 20 10.7567 19.6337 11.7083 17.8877C11.9204 17.5203 11.7973 17.049 11.4325 16.8343C11.0677 16.6207 10.5996 16.7447 10.3864 17.112L10.3655 17.1519C9.91501 17.9817 9.40626 18.462 8.97552 18.462C8.33051 18.462 7.52727 17.4263 6.95149 15.5994C7.61078 15.3804 8.25909 15.127 8.89421 14.8415C10.8281 15.7234 12.9082 16.3154 14.5861 16.3154C15.9443 16.3154 17.0387 15.9292 17.565 14.9909C18.3694 13.5989 17.5255 11.7444 15.8882 9.95076V9.95187ZM1.6266 14.1997C1.17828 13.4152 2.22216 11.5054 4.64506 9.50373V10.0061C4.64177 11.5286 4.7934 13.0467 5.09778 14.5383C3.23637 14.9344 1.94746 14.7519 1.6266 14.2008V14.1997ZM8.97442 1.54357C9.86447 1.54357 10.971 3.37925 11.4863 6.43762C11.371 6.36791 11.2545 6.2971 11.1391 6.23734C9.81722 5.46169 8.41952 4.82545 6.96797 4.3397C7.54595 2.55159 8.3404 1.53804 8.96783 1.53804L8.97442 1.54357ZM16.2376 14.2296C15.7893 15.0141 13.6202 15.055 10.6765 13.9441C10.8018 13.8744 10.9292 13.808 11.0523 13.7438C12.3918 12.9759 13.6488 12.0686 14.8004 11.0362C16.075 12.4548 16.5662 13.6719 16.2464 14.2307H16.2387L16.2376 14.2296Z" fill="#0844C0"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Physics</span></span></span>
-                    <span class="pill-badge-sm">Tg. 5</span>
-                    <span class="pill-badge-sm">Bab 9</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Elektromagnetisme</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-          </div><!-- end cards-grid -->
-
-        </section><!-- end section 3 -->
-
-
-        <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-             SECTION 4 â€” Recent Activity (3 Quiz Cards)
-             Section frame Â· header Â· Link 1.5 Â· 3-col row
-        â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
-        <section class="section-frame" aria-label="Recent Activity">
-
-          <div class="section-header">
-            <div class="section-header__left">
-              <!-- Outline/bookmark Â· node 260:504 -->
-              <span class="section-header__bookmark">
-                <svg class="icon-ds" aria-hidden="true"><use href="#ic-bookmark"/></svg>
-              </span>
-              <h2 class="section-header__title">Your Selected Subjects</h2>
-            </div>
-
-            <!-- Link 1.5  State=Default, Type=Default (node 701:524)
-                 Structure: Outline/info (20×20) + text + Outline/chevron-right (20×20), gap 8px -->
-            <a class="link-view-activity" href="#">
-              <!-- Outline/info · node 260:832 -->
-              <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-info"/></svg></div>
-              <span class="link-view-activity__text">View activity history</span>
-              <div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
-            </a>
-          </div>
-
-          <!-- 3 Quiz Cards -->
-          <div class="cards-grid cards-grid--3col">
-
-            <!-- Card A â€” Physics -->
-            <article class="quiz-card subject-physics">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--physics"><span class="subject-badge__icon"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.96877 8.46141C8.12487 8.46141 7.44141 9.14965 7.44141 9.99945C7.44141 10.8492 8.12487 11.5375 8.96877 11.5375C9.81266 11.5375 10.4961 10.8492 10.4961 9.99945C10.4961 9.14965 9.81266 8.46141 8.96877 8.46141Z" fill="#27A0D7"/><path d="M15.8882 9.95187C16.0585 9.76155 16.3772 9.37981C17.7496 7.65588 18.1507 6.08797 17.5068 4.96155C17.1727 4.37732 16.4069 3.67137 14.6685 3.62932C14.2532 3.61272 13.9026 3.93804 13.8862 4.35629V4.37842C13.8763 4.80332 14.2092 5.15519 14.6312 5.16625C15.4256 5.18617 15.9882 5.38645 16.1838 5.73057C16.4783 6.24509 16.0948 7.27303 15.1905 8.41272C15.0674 8.56653 14.9366 8.72033 14.7938 8.87303C14.2762 8.40719 13.7356 7.96902 13.173 7.55851C12.7785 3.73997 11.3523 0 8.96893 0C7.38003 0 6.21418 1.62988 5.49116 3.92144C5.23293 3.8639 4.97911 3.81521 4.73077 3.77759C2.56389 3.44122 1.01236 3.87607 0.361855 4.99917C0.0157258 5.61328 -0.198544 6.69101 0.745344 8.32531C0.939835 8.70263 1.40134 8.84979 1.77604 8.65394C2.15074 8.45809 2.29688 7.99336 2.10239 7.61604L2.06393 7.54965C1.61891 6.78174 1.48375 6.13333 1.69253 5.76929C1.98701 5.25477 3.06056 5.07552 4.50112 5.29682C4.7 5.32669 5.09668 5.41079C4.95273 6.08797 4.84395 6.77178 4.77143 7.46113C1.65627 9.7184 -0.898494 12.8664 0.303617 14.9621C0.837645 15.896 1.91998 16.2921 3.28252 16.2921C4.01874 16.2777 4.75165 16.1848 5.46698 16.0122C6.19221 18.338 7.37014 20 8.96893 20C9.69635 20 10.7567 19.6337 11.7083 17.8877C11.9204 17.5203 11.7973 17.049 11.4325 16.8343C11.0677 16.6207 10.5996 16.7447 10.3864 17.112L10.3655 17.1519C9.91501 17.9817 9.40626 18.462 8.97552 18.462C8.33051 18.462 7.52727 17.4263 6.95149 15.5994C7.61078 15.3804 8.25909 15.127 8.89421 14.8415C10.8281 15.7234 12.9082 16.3154 14.5861 16.3154C15.9443 16.3154 17.0387 15.9292 17.565 14.9909C18.3694 13.5989 17.5255 11.7444 15.8882 9.95076V9.95187ZM1.6266 14.1997C1.17828 13.4152 2.22216 11.5054 4.64506 9.50373V10.0061C4.64177 11.5286 4.7934 13.0467 5.09778 14.5383C3.23637 14.9344 1.94746 14.7519 1.6266 14.2008V14.1997ZM8.97442 1.54357C9.86447 1.54357 10.971 3.37925 11.4863 6.43762C11.371 6.36791 11.2545 6.2971 11.1391 6.23734C9.81722 5.46169 8.41952 4.82545 6.96797 4.3397C7.54595 2.55159 8.3404 1.53804 8.96783 1.53804L8.97442 1.54357ZM16.2376 14.2296C15.7893 15.0141 13.6202 15.055 10.6765 13.9441C10.8018 13.8744 10.9292 13.808 11.0523 13.7438C12.3918 12.9759 13.6488 12.0686 14.8004 11.0362C16.075 12.4548 16.5662 13.6719 16.2464 14.2307H16.2387L16.2376 14.2296Z" fill="#0844C0"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Physics</span></span></span>
-                    <span class="pill-badge-sm">Tg. 5</span>
-                    <span class="pill-badge-sm">Bab 5</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Optik Geometri &amp; Cahaya</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card B â€” Chemistry -->
-            <article class="quiz-card subject-chemistry">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--chemistry"><span class="subject-badge__icon"><svg width="13" height="20" viewBox="0 0 13 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.28806 5.40747H9.21147C9.58856 5.38755 9.87811 5.06888 9.85791 4.6971C9.83883 4.35298 9.5605 4.07856 9.21147 4.05975H3.28806C2.91097 4.07967 2.62142 4.39834 2.64162 4.77013C2.6607 5.11425 2.93903 5.38866 3.28806 5.40747Z" fill="#7E0082"/><path d="M12.1913 17.1961L9.07468 12.7159C8.86594 12.4183 8.75595 11.7024V6.75519C8.75708 6.63348 8.65832 6.53389 8.53486 6.53279H3.97054C3.84708 6.53168 3.74608 6.62905 3.74496 6.75077V11.7024C3.74496 12.0642 3.63385 12.4183 3.42398 12.7159L0.308523 17.1961C-0.252619 18.0238 -0.0270401 19.1436 0.812428 19.6968C1.10871 19.8927 1.45662 19.9978 1.81351 20.0011H10.6885C11.6986 19.9923 12.5089 19.1779 12.4999 18.182C12.4965 17.8313 12.3899 17.4894 12.1913 17.1972V17.1961Z" fill="#E20082"/><path d="M7.83264 2.19308C7.83264 2.69322 7.42188 3.0982 6.91461 3.0982C6.40734 3.0982 5.99658 2.69322 5.99658 2.19308C5.99658 1.69294 6.40734 1.28796 6.91461 1.28796C7.42301 1.28796 7.83264 1.69184 7.83264 2.19308Z" fill="#E20082"/><path d="M4.75049 17.2802C4.75049 17.849 5.2196 18.3093 5.79646 18.3082C6.37331 18.3082 6.84018 17.8456 6.83906 17.2769C6.83906 16.7093 6.37107 16.249 5.79533 16.249C5.21848 16.249 4.75161 16.7104 4.75161 17.278H4.75049V17.2802Z" fill="#7E0082"/><path d="M5.33984 13.943C5.33984 14.3015 5.63276 14.5925 5.99638 14.5937C6.36 14.5937 6.65516 14.3049 6.65628 13.9464C6.65628 13.5878 6.36337 13.2968 5.99975 13.2957H5.9975C5.63613 13.2935 5.34209 13.5801 5.33984 13.943V13.943Z" fill="#7E0082"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Chemistry</span></span></span>
-                    <span class="pill-badge-sm">Tg. 4</span>
-                    <span class="pill-badge-sm">Bab 7</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Asid, Bes dan Garam</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <!-- Card C â€” Math -->
-            <article class="quiz-card subject-math">
-              <div class="quiz-card__image"><img src="icons/quiz-card-img.png" alt=""></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--math"><span class="subject-badge__icon"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.5707 13.5247H3.76904V13.9828H11.5707V13.5247Z" fill="#283589"/><path d="M8.08331 12.6241H7.25977V14.8824H8.08331V12.6241Z" fill="#283589"/><path d="M5.09814 7.88825L2.11085 14.5195C1.29834 14.4066 0.507915 14.8415 0.16569 15.5884C-0.165495 16.3563 0.0089293 17.2504 0.60727 17.8357L0.450509 18.1809L2.25547 19.0031L6.9031 8.70928L5.09814 7.88715V7.88825Z" fill="#42AC7B"/><path d="M8.50684 8.70928L13.1467 19.0086L14.9517 18.1865L14.8038 17.8346C15.4076 17.2515 15.5865 16.3541 15.2509 15.584C14.9097 14.8426 14.127 14.4111 13.3201 14.5206L10.3129 7.88715L8.50794 8.70928H8.50684Z" fill="#42AC7B"/><path d="M7.6791 4.57206C7.13816 4.56542 6.69989 4.12946 6.68885 3.58727L6.65684 1.0047C6.64911 0.456985 7.08738 0.006639 7.63384 0H7.65039C8.19464 0 8.63953 0.434855 8.65278 0.98036L8.67486 3.56625C8.67486 4.11397 8.2377 4.55989 7.69234 4.57095H7.67799L7.6791 4.57206Z" fill="#42AC7B"/><path d="M7.66692 9.90319C5.75929 9.90319 4.21155 8.35409 4.21045 6.44205C4.21045 4.53002 5.75598 2.97871 7.66361 2.9776C9.57123 2.9776 11.119 4.5267 11.1201 6.43873C11.1201 7.35602 10.758 8.2368 10.1111 8.88631C9.46415 9.53804 8.5843 9.90429 7.66692 9.90319ZM7.66692 4.97373C6.85772 4.97594 6.20308 5.63541 6.20529 6.44648C6.20529 6.83154 6.35763 7.20001 6.627 7.47442C7.20657 8.0321 8.12285 8.0321 8.70242 7.47442C9.27096 6.89904 9.27096 5.9729 8.70242 5.39862C8.42864 5.12421 8.05551 4.97041 7.66802 4.97483L7.66692 4.97373Z" fill="#283589"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></svg></span><span class="subject-badge__text">Mathematics</span></span></span>
-                    <span class="pill-badge-sm">Tg. 5</span>
-                    <span class="pill-badge-sm">Bab 3</span>
-                  </div>
-                  <div class="quiz-card__texts">
-                    <p class="quiz-card__subtitle">Janjang Aritmetik &amp; Deret</p>
-                  </div>
-                </div>
-                <div class="quiz-card__cta">
-                  <button class="btn-quiz-cta">
-                    <span class="btn-quiz-cta__text">Mula</span>
-                    <span class="btn-quiz-cta__arrow"><svg class="icon-ds" aria-hidden="true"><use href="#ic-arrow-right"/></svg></span>
-                  </button>
-                </div>
-              </div>
-            </article>
-
-          </div><!-- end cards-grid -->
-
-        </section><!-- end section 4 -->
 
       </div><!-- end main-content -->
     </div><!-- end page-container -->
@@ -2065,33 +1692,72 @@
        CAROUSEL SCRIPT
   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <script>
-    (function () {
-      const track   = document.getElementById('carouselTrack');
-      const btnPrev = document.getElementById('carouselPrev');
-      const btnNext = document.getElementById('carouselNext');
-      const slides  = track.querySelectorAll('.carousel__card');
-      const total   = slides.length;
+    // Nav button states — runs first, independently of carousel
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+      });
+    });
 
-      const CARD_W  = 428;
-      const GAP     = 16;
-      const STEP    = CARD_W + GAP;
+    // Carousel — wrapped in try/catch so any error never blocks other JS
+    try {
+      (function () {
+        const content = document.querySelector('.carousel__content');
+        const track   = document.getElementById('carouselTrack');
+        const btnPrev = document.getElementById('carouselPrev');
+        const btnNext = document.getElementById('carouselNext');
+        const CARD_W  = 428;
+        const GAP     = 16;
+        const STEP    = CARD_W + GAP;
 
-      let current = 0;
-      let timer;
+        const origCards = Array.from(track.querySelectorAll('.carousel__card'));
+        const total = origCards.length;
+        origCards.forEach(c => track.insertBefore(c.cloneNode(true), track.firstChild));
+        origCards.forEach(c => track.appendChild(c.cloneNode(true)));
 
-      function goTo(idx) {
-        current = ((idx % total) + total) % total;
-        track.style.transform = `translateX(-${current * STEP}px)`;
-      }
+        let idx  = total;
+        let busy = false;
 
-      function startAuto() { timer = setInterval(() => goTo(current + 1), 5000); }
-      function resetAuto() { clearInterval(timer); startAuto(); }
+        function offsetFor(i) {
+          return -(i * STEP) + (content.offsetWidth / 2 - CARD_W / 2);
+        }
 
-      btnPrev.addEventListener('click', () => { goTo(current - 1); resetAuto(); });
-      btnNext.addEventListener('click', () => { goTo(current + 1); resetAuto(); });
+        function jump(i) {
+          track.style.transition = 'none';
+          track.style.transform  = `translateX(${offsetFor(i)}px)`;
+          track.offsetHeight;
+          track.style.transition = '';
+        }
 
-      startAuto();
-    })();
+        function slide(i) {
+          if (busy) return;
+          busy = true;
+          idx = i;
+          track.style.transform = `translateX(${offsetFor(i)}px)`;
+        }
+
+        track.addEventListener('transitionend', () => {
+          busy = false;
+          if (idx < total)           { idx += total; jump(idx); }
+          else if (idx >= total * 2) { idx -= total; jump(idx); }
+        });
+
+        jump(idx);
+        window.addEventListener('resize', () => jump(idx));
+
+        let timer;
+        function startAuto() { timer = setInterval(() => slide(idx + 1), 5000); }
+        function resetAuto() { clearInterval(timer); startAuto(); }
+
+        btnPrev.addEventListener('click', () => { slide(idx - 1); resetAuto(); });
+        btnNext.addEventListener('click', () => { slide(idx + 1); resetAuto(); });
+
+        startAuto();
+      })();
+    } catch (e) {
+      console.warn('Carousel init error:', e);
+    }
   </script>
 
 </body>
