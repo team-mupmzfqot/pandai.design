@@ -79,6 +79,12 @@
 - Icon containers must **hug content** — use `width: fit-content; height: fit-content; padding: <token>` — never a fixed pixel wrapper size.
 - SVG `viewBox` must include a **1px buffer** on all sides (e.g., `viewBox="-1 -1 22 22"` for a 0–20 coordinate space) to prevent stroke clipping at path boundaries.
 
+**SVG implementation pattern (confirmed correct — May 2026 navbar session):**
+- Use a single hidden `<svg><defs>` block with `<symbol id="ic-*">` definitions for every icon.
+- Reference icons via `<svg><use href="#ic-*"/></svg>` — never inline the paths repeatedly.
+- All symbol paths use `stroke="currentColor"` so icon color inherits from parent CSS `color:` property.
+- This enables state changes (hover/active/disabled) to cascade via a single `color:` rule on the container.
+
 **Mistake made:**
 - Used a hand-written `<polyline points="20 6 9 17 4 12"/>` checkmark instead of the DS `Outline/check-circle` (node `260:527`).
 - Icon container was fixed `64×64` — must hug content.
@@ -111,6 +117,51 @@
 - For two-button modal patterns: cancel/dismiss action → `Variants=Secondary` (outlined), confirm action → `Variants=Primary` (filled). `Variants=Tertiary` (ghost) is not appropriate for modal footers.
 
 **Mistake made:** The Ignore button was implemented as `Variants=Tertiary` — actual correct variant is `Variants=Secondary` (white bg, green outline border, green text).
+
+---
+
+### 8. Icon clip framing is per-icon — never use blanket inset values
+
+The DS renders each icon inside an `overflow:hidden` clip container using `position:absolute; inset: X%`. These percentages are **unique per icon** based on its internal geometry. Never apply a uniform default across all icons.
+
+**Always pull the exact inset from `get_design_context` for the specific component node being implemented.**
+
+**Confirmed inset values from DS node 866:5576 (Navbar 1.5, May 2026):**
+
+Nav button icons — 20px clip container:
+| Icon | DS inset |
+|---|---|
+| `Outline/home` | `8.33% 12.5%` |
+| `Outline/check-circle` | `8.33%` |
+| `Outline/battle` | `12.5%` |
+| `Outline/book-open` | `12.5% 8.33%` |
+| `Outline/users` | `12.5% 4.17%` |
+| `Outline/book` | `8.33% 16.67%` |
+| `Outline/star` | `8.33% 8.33% 12.42% 8.33%` |
+| `Outline/gift` | `8.33%` |
+| `Outline/chevron-down` | `37.5% 25%` |
+
+Action icons — 24px clip container:
+| Icon | DS inset |
+|---|---|
+| `Outline/search` | `12.5%` |
+| `Outline/maximize` | `12.5%` |
+| `Outline/smartphone` | `8.33% 20.83%` |
+| `Outline/bell` | `8.33%` |
+| `Outline/EN` | `top:25% right:9.95% bottom:28.12% left:12.5%` |
+| `Outline/waffle-menu` | `16.67%` |
+
+**Mistake made:** Applied blanket `8.33%` to all nav icons and `12.5%` to all action icons. Had to go back and add per-icon CSS overrides (`data-icon` attribute selectors) after pulling the actual DS values.
+
+---
+
+### 9. Spec context matters — always check the parent component, not standalone specs
+
+A component's spec values can differ depending on where it appears. The same element (e.g., Pill Badge) has different typography when used standalone vs. embedded inside another component.
+
+**Mistake made:** Pill Badge font-size was changed to `12px` based on the standalone Pill Badge DS spec — but inside Quiz Card the correct value is `10px` (`Body/B8`). Had to revert after fetching the actual Quiz Card node spec.
+
+**Rule:** When implementing an element that appears inside a larger component, always `get_design_context` on the **parent component node**, not the standalone element node.
 
 ---
 
@@ -366,4 +417,29 @@ the Pandai DS with CSS Modules"
 
 ---
 
-*Generated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+## HTML prototype — `zul.test.git/zul.home.screen.html`
+
+Static HTML/CSS prototype of the Pandai home screen, implemented against DS 1.5.
+
+**Architecture decisions:**
+- Single `<svg><defs>` block at top of `<body>` holds all icon `<symbol>` definitions
+- Icons referenced via `<use href="#ic-*">` — never inlined
+- All icon colors via `color:` + `stroke="currentColor"` inheritance chain
+- Per-icon clip insets via `data-icon` attribute selectors on clip containers
+- All spacing, radius, and color values use CSS custom properties mapped to DS Semantic tokens
+- No gradients, no box-shadows on containers — border only for depth
+
+**Dev server (Windows):**
+```powershell
+# Start (bypasses PowerShell execution policy via cmd.exe)
+Start-Process -FilePath "cmd.exe" -ArgumentList '/c', 'cd /d "<repo-path>" && npx serve . --listen 3000' -PassThru -WindowStyle Hidden
+
+# Open in VS Code Simple Browser
+Start-Process "vscode://vscode.simpleBrowser/show?url=http%3A%2F%2Flocalhost%3A3000%2Fzul.home.screen.html"
+```
+
+---
+
+*Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
