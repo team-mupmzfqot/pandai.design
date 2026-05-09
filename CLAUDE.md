@@ -255,6 +255,54 @@ When a DS component uses a Figma Image fill (shows checkerboard in DS), implemen
 
 ---
 
+### 16. Button arrow chevrons — use component-specific clip symbols, never the standalone icon
+
+The standalone `Outline/chevron-right` icon (24×24) must **never** be used inside a Button - 1.5 arrow clip. The DS exports a **dedicated per-size clip node** for each button size. That clip node has the path already positioned in the clip's own coordinate space (12×12 for Size=S, 16×16 for Size=M/L).
+
+**Why this matters:** If you use the 24×24 standalone icon with CSS `padding` to simulate the DS inset percentages, the SVG scales down and `stroke-width: 1.5` collapses to ~0.5px — nearly invisible in the browser.
+
+**Rule:** Create a dedicated `<symbol>` per button size using the DS-exported clip node's exact `viewBox` and `path`. Apply **no CSS padding** to the clip container. At 1:1 scale the stroke stays at 1.5px.
+
+**Confirmed clip symbol specs — DS-exported, May 2026:**
+
+| Context | Symbol ID | Icon | ViewBox | Path | DS Clip Node |
+|---|---|---|---|---|---|
+| Button - 1.5 Size=S | `ic-chevron-btn` | chevron-right | `0 0 12 12` | `M4.5 9L7.5 6L4.5 3` | `1437:8161` |
+| Button - 1.5 Size=M + Size=L | `ic-chevron-btn-m` | chevron-right | `0 0 16 16` | `M6 12L10 8L6 4` | `479:352` |
+| Nav-btn dropdown (chevron-down) | `ic-chevron-down-nav` | chevron-down | `0 0 20 20` | `M5 7.5L10 12.5L15 7.5` | Derived from DS inset 37.5%/25% on 20px clip |
+
+**Arrow container dimensions (confirmed):**
+
+| Size | Button height | Arrow container | Clip |
+|---|---|---|---|
+| S | 24px | 16×16 (padding: 2px) | 12×12 |
+| M | 32px | 20×20 (padding: 2px) | 16×16 |
+| L | 40px | 24×24 (padding: 2px) | 16×16 (same path as M) |
+
+**Mistake made (May 2026):**
+- Quiz card buttons used `Outline/arrow-right` (→) instead of `Outline/chevron-right` (›). Always confirm icon identity from `get_design_context` on the button component node — never assume.
+- All button arrow clips had `padding: Xpx Ypx` to simulate DS inset, collapsing stroke to sub-pixel width. Correct approach: no CSS padding on clip, path position is in the viewBox.
+- Same stroke-collapse issue affected: static card buttons (Size=M, 16px clip), Add Classes button (Size=M, 16px clip), and nav-btn dropdown chevrons (20px clip).
+
+---
+
+### 17. Subject badge icons — export from DS Iconography page, not placeholder rects
+
+Subject badge icons must be exported from the `🔰 Iconography` page in the DS file using `exportAsync({ format: 'SVG_STRING' })` on the `Subject/XXX` component node. Never use placeholder `<rect>` shapes.
+
+**Lookup path:** `🔰 Iconography` page → `findAll(n => n.type === 'COMPONENT' && n.name === 'Subject/XXX')`.
+
+All known subject component names (May 2026):
+`Subject/AddMath`, `Subject/Biology`, `Subject/Economy`, `Subject/Chemistry`, `Subject/English`, `Subject/Moral Studies`, `Subject/Islamic Studies`, `Subject/Math`, `Subject/Accounting`, `Subject/Physics`, `Subject/Business`, `Subject/Computer Science`, `Subject/Science`, `Subject/History`, `Subject/KAFA`, `Subject/Geography`, `Subject/Reka Bentuk & Teknologi`, `Subject/BMelayu`
+
+**Icon sizing:** Badge icon CSS uses `width: 16px; height: auto; max-height: 20px` — the SVG exports at its native DS size (varies per subject: 12–31px wide, 16–24px tall) and CSS constrains it uniformly. No need to force a specific width/height in the SVG element.
+
+**Geography note:** The `Subject/Geography` SVG export is 27,907 chars (complex globe with masks and gradients). Use a simplified globe SVG in DS colors (`#77D836` land, `#4FB4E7 → #3683E4` ocean gradient) rather than trying to inline the full export.
+
+**Mistake made:** Used `<svg><rect fill="#COLOR"/></svg>` as placeholder for all 18 subjects. These rendered as colored rectangles instead of the actual subject icons.
+
+---
+
 ### Mandatory workflow before implementing any component
 
 ```
@@ -530,13 +578,14 @@ Static HTML/CSS prototype of the Pandai home screen, implemented against DS 1.5.
     <div class="main-content">     <!-- gap: var(--spacing-space-m) = 16px between sections -->
       <section id="Welcome-Desktop" class="section-welcome">
       <section id="Carousel-Desktop" aria-label="Featured" class="carousel">
-      <section id="static-newscards" class="static-cards-row">
-      <section class="section-frame" aria-label="Your Selected Subjects">
-      <section class="section-frame" aria-label="Recent Activity">
+      <section id="StaticNewsCard-Desktop" class="static-cards-row">
+      <section id="YourSelectedSubjects-Desktop" class="section-frame" aria-label="Your Selected Subjects">
     </div>
   </div>
 </main>
 ```
+
+**Section rename (May 2026):** Section #4 was renamed from `id="static-newscards"` to `id="StaticNewsCard-Desktop"`. Sections #5 (YourSelectedSubjects) and #6 (Recent Activity) were removed; a new #5 (YourSelectedSubjects) was rebuilt with Primary Card - 1.5 (Secondary Card variant) containing 18 Quiz Cards in a 3-column grid.
 
 **Navbar — confirmed implementation notes (May 2026):**
 - `.nav-btn` is a `<div>` — MUST have `cursor: pointer; user-select: none` or it feels unresponsive
@@ -595,14 +644,48 @@ try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` |
 
 - Arrow chevron color comes from arrow sub-node (`479:351`) variable defs — NOT the parent button node
-- Arrow structure: 20px outer circle (`justify-content: flex-end; padding: 2px`) → 16px clip (`padding: 4px 6px`) → SVG
+- Arrow structure: 20px outer circle (`justify-content: flex-end; padding: 2px`) → 16px clip (NO padding) → SVG using `ic-chevron-btn-m`
 - Button height: `32px; max-height: 32px`
+- **Arrow clip symbol:** `ic-chevron-btn-m` — `viewBox="0 0 16 16"`, path `M6 12L10 8L6 4`, DS node `479:352`. No CSS padding on clip — path position encoded in viewBox. Stroke = 1.5px at 1:1 scale.
 
 **Mistake made (static card):**
 - Content was `position: absolute; inset: 0` — should be `flex: 1 0 0; height: 100%; position: relative`
 - Used `<img src="...">` for bg placeholder — showed broken icon. Use `<div>` + CSS `background-image`
 - Content padding was `20px 24px` — actual DS is `20px 60px`
 - Arrow chevron color was inferred from parent button node (wrong: `#f6fdfb`) — must get from arrow sub-node (`#00a36a`)
+
+---
+
+**Quiz Card - 1.5 (node 2339:5345) — confirmed May 2026:**
+- Size: `min-height: 148px; max-height: 148px`, `min-width: 400px`
+- Layout: `display: flex; flex-direction: row` — image on left, content on right
+- Image: `width: 148px; min-width: 148px; flex-shrink: 0; align-self: stretch` — NOT aspect-ratio (unreliable in grid)
+- Content: `flex: 1 0 0; min-width: 0; padding: var(--spacing-space-m)` with nested `flex-col gap-4px`
+- 3-column grid: `.primary-card__content { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-space-m); }` — CSS Grid handles gap deduction automatically, use this over flexbox + calc
+- Pill Badge inside: `font-size: 10px` (`Body/B8`) — NOT 12px. Spec from parent Quiz Card node, not standalone Pill Badge node (Rule 9)
+
+**Button - 1.5 (Primary/S) inside Quiz Card — confirmed May 2026:**
+- Button: `max-height: 24px`, `px: 8px`, `py: 2px`, `border-radius: 60px` (pill)
+- Text slot: `px: 4px`, font `Body/B5` (Poppins SemiBold 12px, line-height 18px), color `Text/primary/on-color #f6fdfb`
+- Arrow: 16×16 circle (`bg: #99ebce`, `border-radius: 60px`, `padding: 2px`) → 12×12 clip (NO padding) → `ic-chevron-btn`
+- Arrow chevron: `#00a36a` (`Surface/primary/focus`) — from arrow clip sub-node, not parent button
+- **Symbol:** `ic-chevron-btn` — `viewBox="0 0 12 12"`, path `M4.5 9L7.5 6L4.5 3`, DS node `1437:8161`
+
+**Subject badge icons (18 subjects) — confirmed May 2026:**
+All sourced from `🔰 Iconography` page via `exportAsync({ format: 'SVG_STRING' })`. See Rule 17.
+Badge icon CSS: `width: 16px; height: auto; max-height: 20px` constrains all subject icons uniformly.
+
+**Mistake made (quiz card):**
+- Cards rendered as tall vertical columns. Fixed by: explicit `flex-direction: row` + `width: 148px` on image div + `<div>` placeholder instead of `<img>`
+- Button used `Outline/arrow-right` (→) — actual DS uses `Outline/chevron-right` (›). Always confirm icon from DS context.
+- Arrow clip had `padding: 3px 4.5px` — stroke collapsed to 0.56px. Correct: no padding, use `ic-chevron-btn`.
+
+---
+
+**Primary Card - 1.5 / Secondary Card variant (node 2881:36272) — confirmed May 2026:**
+- Outer card: `border: 1px solid Border/general/default`, `border-radius: corner-xl`, `background: Surface/general/default`
+- Content area (`.primary-card__content`): `display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-space-m)`
+- Section header: bookmark icon + title (`H2`) + Button - 1.5 (Secondary/M) with `ic-chevron-btn-m`
 
 ---
 
