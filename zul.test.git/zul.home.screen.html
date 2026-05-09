@@ -1094,6 +1094,14 @@
     .quiz-card__header .subject-badge__icon  { padding: 4px 8px 4px 12px; }
     .quiz-card__header .subject-badge__text  { font-size: 12px; line-height: 12px; }
 
+    /* Section 5 overrides — hide CTA + pills, upgrade badge to L (h-32px, 14px, 20px icon) */
+    #YourSelectedSubjects-Desktop .btn-quiz-cta   { display: none; }
+    #YourSelectedSubjects-Desktop .pill-badge-sm  { display: none; }
+    #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge      { height: 32px; max-height: 32px; }
+    #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__text { font-size: 14px; line-height: 20px; }
+    #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon svg,
+    #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon img { width: 20px; max-height: 24px; }
+
     /* Pill Badge - 1.5 (node 602:460) — quiz card uses 10px/12px per DS QuizCard-1.5 spec */
     .pill-badge-sm {
       display:       inline-flex;
