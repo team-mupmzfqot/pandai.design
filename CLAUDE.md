@@ -286,20 +286,67 @@ The standalone `Outline/chevron-right` icon (24×24) must **never** be used insi
 
 ---
 
-### 17. Subject badge icons — export from DS Iconography page, not placeholder rects
+### 17. Subject badge — always source both icon SVG and badge colors from DS Iconography
 
-Subject badge icons must be exported from the `🔰 Iconography` page in the DS file using `exportAsync({ format: 'SVG_STRING' })` on the `Subject/XXX` component node. Never use placeholder `<rect>` shapes.
+Both the **icon SVG** and the **badge bg/border/text colors** must come from the DS `🔰 Iconography` page. Never guess colors from Tailwind equivalents or subject brand colors.
 
-**Lookup path:** `🔰 Iconography` page → `findAll(n => n.type === 'COMPONENT' && n.name === 'Subject/XXX')`.
+#### 17a. Icon SVG
+Export from `Subject/XXX` component nodes using `exportAsync({ format: 'SVG_STRING' })`. Never use placeholder `<rect>` shapes.
 
-All known subject component names (May 2026):
+**Lookup:** `findAll(n => n.type === 'COMPONENT' && n.name === 'Subject/XXX')` on Iconography page.
+
+All known subject icon names (May 2026):
 `Subject/AddMath`, `Subject/Biology`, `Subject/Economy`, `Subject/Chemistry`, `Subject/English`, `Subject/Moral Studies`, `Subject/Islamic Studies`, `Subject/Math`, `Subject/Accounting`, `Subject/Physics`, `Subject/Business`, `Subject/Computer Science`, `Subject/Science`, `Subject/History`, `Subject/KAFA`, `Subject/Geography`, `Subject/Reka Bentuk & Teknologi`, `Subject/BMelayu`
 
-**Icon sizing:** Badge icon CSS uses `width: 16px; height: auto; max-height: 20px` — the SVG exports at its native DS size (varies per subject: 12–31px wide, 16–24px tall) and CSS constrains it uniformly. No need to force a specific width/height in the SVG element.
+**Icon sizing:** CSS uses `width: 16px; height: auto; max-height: 20px`. No forced dimensions needed on the SVG element.
 
-**Geography note:** The `Subject/Geography` SVG export is 27,907 chars (complex globe with masks and gradients). Use a simplified globe SVG in DS colors (`#77D836` land, `#4FB4E7 → #3683E4` ocean gradient) rather than trying to inline the full export.
+**Geography note:** SVG export is 27,907 chars (complex globe). Use simplified DS-colored globe SVG instead.
 
-**Mistake made:** Used `<svg><rect fill="#COLOR"/></svg>` as placeholder for all 18 subjects. These rendered as colored rectangles instead of the actual subject icons.
+#### 17b. Badge bg / border / text colors
+Source from `Subject Badge/[Name] - M` (24px) or `Subject Badge/[Name] - L` (32px) components on the Iconography page. **Never approximate with Tailwind color tokens.**
+
+**Lookup:** `findAll(n => n.type === 'COMPONENT' && n.name === 'Subject Badge/[Name] - M')` on Iconography page.
+
+**L vs M:** bg colors are identical between sizes. Border colors differ slightly for some subjects (Add Math, Account). Since quiz cards use M size (24px), always check M variants for quiz card badges.
+
+**Text color rule:** Almost all subjects use `#f2f2f2` (light text on dark bg). Exceptions — dark text on light bg:
+- `Science`: `--badge-text: #998027` (yellow bg)
+- `KAFA`: `--badge-text: #358a62` (mint green bg)
+
+**Confirmed badge colors — M variants (May 2026), all from DS Iconography:**
+
+| Subject | `--badge-bg` | `--badge-border` | Text |
+|---|---|---|---|
+| Add Math | `#283589` | `#202a6e` | `#f2f2f2` |
+| Account | `#0072ca` | `#005ba2` | `#f2f2f2` |
+| Bahasa Melayu | `#4d77ff` | `#3e5fcc` | `#f2f2f2` |
+| Biology | `#8431d8` | `#6a27ad` | `#f2f2f2` |
+| Business | `#efb42b` | `#bf9022` | `#f2f2f2` |
+| Chemistry | `#e20082` | `#b50068` | `#f2f2f2` |
+| Computer Science | `#d10070` | `#a7005a` | `#f2f2f2` |
+| Economy | `#ff5733` | `#cc4629` | `#f2f2f2` |
+| English | `#ff4d56` | `#cc3e45` | `#f2f2f2` |
+| Geography | `#77d836` | `#5fad2b` | `#f2f2f2` |
+| History | `#a97c50` | `#876340` | `#f2f2f2` |
+| Islamic Studies | `#de4d7f` | `#b23e66` | `#f2f2f2` |
+| KAFA | `#8ae3a9` | `#6eb687` | `#358a62` |
+| Mathematics | `#42ac7b` | `#358a62` | `#f2f2f2` |
+| Moral Studies | `#0072ca` | `#005ba2` | `#f2f2f2` |
+| Physics | `#27a0d7` | `#1f80ac` | `#f2f2f2` |
+| RBT | `#353535` | `#2a2a2a` | `#f2f2f2` |
+| Science | `#ffd641` | `#ccab34` | `#998027` |
+
+**Structure confirmed (DS node inspection, May 2026):**
+- Overall: `height: 24px` (M), `border-radius: 60px`, `overflow: hidden`
+- Icon slot: `padding: 4px 8px 4px 12px`, white bg, `width: 34px`
+- Label panel: `padding: 0 16px 0 12px`, `gap: 8px`, subject bg color
+- Pointer: 4×8px white SVG, `position: absolute; left: 0; top: 50%`
+- Text: Poppins Medium 12px, line-height 12px
+
+**Mistakes made (May 2026):**
+- Used Tailwind/guessed colors for 8 subjects — RBT, KAFA, Account, Add Math, Economy, Business, CS, BM all had wrong bg and/or border colors.
+- Business text was set to `#78350F` (dark) — DS actually uses `#f2f2f2` (light).
+- KAFA text was missing `--badge-text: #358a62` override — rendered white text on mint green (unreadable).
 
 ---
 
