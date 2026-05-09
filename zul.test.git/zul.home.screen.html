@@ -102,6 +102,17 @@
       --subjects-kafa-default:       #0D9488;
       --subjects-rbt-default:        #475569;
 
+      /* Product / Student primary palette — DS variable defs on Button-1.5 Primary/S (node 1644:11342) */
+      --student-primary:              #ff5c98;   /* Surface/primary/default (Student) */
+      --student-primary-focus:        #cc4a7a;   /* Surface/primary/focus (Student) */
+      --student-primary-subtle:       #ffdeea;   /* Surface/primary/default-subtle (Student) */
+      --student-primary-subtle-hover: #ffbed6;   /* Surface/primary/default-subtle-hover (Student) */
+      --student-border-focus:         #cc4a7a;   /* Border/primary/focus (Student) */
+      --student-border-default:       #ff5c98;   /* Border/primary/default (Student) */
+      --student-border-hover:         #ff9dc1;   /* Border/primary/default-hover (Student) */
+      --student-text-on-color:        #ffebf2;   /* Text/primary/on-color (Student) */
+      --student-text-hover:           #cc4a7a;   /* Text/primary/default-hover (Student) */
+
       /* Typography */
       --font-family: 'Poppins', sans-serif;
 
@@ -1138,51 +1149,66 @@
       flex-shrink:     0;
     }
 
+    /* Button - 1.5 Primary/S — Product/Student palette (node 1644:11342)
+       All state colors from DS variable defs. Semantic green tokens do NOT apply here. */
     .btn-quiz-cta {
       display:         inline-flex;
       align-items:     center;
       gap:             0;
-      background:      var(--surface-primary-default);
-      border:          1px solid var(--border-primary-focus);
+      background:      var(--student-primary);         /* #ff5c98 */
+      border:          1px solid var(--student-border-focus);  /* #cc4a7a */
       border-radius:   var(--corner-radius-corner-rounded);
       padding:         2px var(--spacing-space-xs);
       max-height:      24px;
       cursor:          pointer;
-      transition:      opacity 0.15s;
+      transition:      background 0.15s, border-color 0.15s;
     }
 
-    /* Hover — Secondary palette */
+    /* Hover */
     .btn-quiz-cta:hover {
-      background: var(--surface-secondary-default);   /* #b5f291 */
-      border-color: var(--border-secondary-focus);    /* #70bc6f */
+      background:   var(--student-primary-subtle);   /* #ffdeea */
+      border-color: var(--student-border-hover);     /* #ff9dc1 */
     }
-    .btn-quiz-cta:hover .btn-quiz-cta__text { color: var(--text-secondary-focus); }  /* #70bc6f */
-    .btn-quiz-cta:hover .btn-quiz-cta__arrow { background: #e8fbe8; color: var(--border-secondary-focus); }
-    /* Pressed — Primary/focus */
+    .btn-quiz-cta:hover .btn-quiz-cta__text  { color: var(--student-text-hover); }         /* #cc4a7a */
+    .btn-quiz-cta:hover .btn-quiz-cta__arrow { background: var(--student-primary-subtle-hover); color: var(--student-primary-focus); }  /* #ffbed6 / #cc4a7a */
+
+    /* Pressed */
     .btn-quiz-cta:active {
-      background: var(--surface-primary-focus);       /* #00a36a */
-      border-color: var(--border-primary-focus);
+      background:   var(--student-primary-focus);    /* #cc4a7a */
+      border-color: var(--student-border-default);   /* #ff5c98 */
     }
-    .btn-quiz-cta:active .btn-quiz-cta__text { color: var(--text-primary-on-color); }
-    .btn-quiz-cta:active .btn-quiz-cta__arrow { background: var(--surface-primary-default); color: #00564c; }
+    .btn-quiz-cta:active .btn-quiz-cta__text  { color: var(--student-text-on-color); }     /* #ffebf2 */
+    .btn-quiz-cta:active .btn-quiz-cta__arrow { background: var(--student-primary); color: var(--student-primary-focus); }  /* #ff5c98 / #cc4a7a */
+
+    /* Disabled */
+    .btn-quiz-cta:disabled,
+    .btn-quiz-cta.is-disabled {
+      background:   var(--surface-disabled-primary);    /* #f2f2f2 */
+      border-color: var(--border-disabled-disabled);    /* #bfbfbf */
+      cursor:       not-allowed;
+    }
+    .btn-quiz-cta:disabled .btn-quiz-cta__text,
+    .btn-quiz-cta.is-disabled .btn-quiz-cta__text  { color: var(--text-disabled-default); }   /* #bfbfbf */
+    .btn-quiz-cta:disabled .btn-quiz-cta__arrow,
+    .btn-quiz-cta.is-disabled .btn-quiz-cta__arrow { background: var(--surface-disabled-primary); color: var(--border-disabled-disabled); }
 
     .btn-quiz-cta__text {
       font-size:   12px;
       font-weight: 600;
       line-height: 18px;
-      color:       var(--text-primary-on-color);
+      color:       var(--student-text-on-color);    /* #ffebf2 */
       padding:     0 var(--spacing-space-xxs);
     }
 
     .btn-quiz-cta__arrow {
-      background:      var(--surface-primary-default-subtle-hover);  /* #99ebce */
+      background:      var(--student-primary-subtle);  /* #ffdeea — DS: Surface/primary/default-subtle */
       border-radius:   var(--corner-radius-corner-rounded);
       padding:         2px;
       display:         flex;
       align-items:     center;
       justify-content: center;
       flex-shrink:     0;
-      color:           var(--surface-primary-focus);  /* Surface/primary/focus #00a36a — DS arrow sub-node 479:351 */
+      color:           var(--student-primary-focus);   /* #cc4a7a — DS chevron sub-node 1644:11349 */
     }
 
     /* 12×12 clip — DS node 1437:8161 exports viewBox="0 0 12 12" with path already positioned,
