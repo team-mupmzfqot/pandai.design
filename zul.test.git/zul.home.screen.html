@@ -1189,12 +1189,11 @@
       color:           var(--surface-primary-focus);  /* Surface/primary/focus #00a36a — DS arrow sub-node 479:351 */
     }
 
-    /* 12×12 clip for chevron-right (DS: inset top/bottom 25%, left/right 37.5% of 12px = 3px/4.5px) */
+    /* 12×12 clip — DS node 1437:8161 exports viewBox="0 0 12 12" with path already positioned,
+       stroke-width 1.5 renders at 1:1 scale = 1.5px. No padding needed. */
     .btn-quiz-cta__arrow-clip {
       width:       12px;
       height:      12px;
-      box-sizing:  border-box;
-      padding:     3px 4.5px;
       overflow:    hidden;
       flex-shrink: 0;
     }
@@ -1308,6 +1307,8 @@
       <!-- Outline/chevron-down (260:535) --><symbol id="ic-chevron-down" viewBox="-1 -1 14 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 0 L 6 6 L 12 0"/></symbol>
       <!-- Outline/chevron-left (260:537) --><symbol id="ic-chevron-left" viewBox="-1 -1 8 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 6 12 L 0 6 L 6 0"/></symbol>
       <!-- Outline/chevron-right (260:539) --><symbol id="ic-chevron-right" viewBox="-1 -1 8 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 12 L 6 6 L 0 0"/></symbol>
+      <!-- Outline/chevron-right — Button arrow variant: DS exports 12×12 clip node with path already in 12×12 coord space (node 1437:8161), stroke=1.5 renders at 1:1 scale = 1.5px -->
+      <symbol id="ic-chevron-btn" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 9L7.5 6L4.5 3"/></symbol>
       <!-- Outline/plus (260:1051) --><symbol id="ic-plus" viewBox="-1 -1 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 7 0 L 7 14 M 0 7 L 14 7"/></symbol>
       <!-- Outline/arrow-right (260:451) --><symbol id="ic-arrow-right" viewBox="-1 -1 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 7 0 L 14 7 L 7 14"/><path d="M 0 7 L 14 7"/></symbol>
       <!-- Outline/search (260:1103) --><symbol id="ic-search" viewBox="-1 -1 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 8 16 C 12.418 16 16 12.418 16 8 C 16 3.582 12.418 0 8 0 C 3.582 0 0 3.582 0 8 C 0 12.418 3.582 16 8 16 Z"/><path d="M 18 18 L 13.65 13.65"/></symbol>
@@ -1706,7 +1707,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Fungsi dan Graf Trigonometri</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1721,7 +1722,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Sistem Peredaran Darah Manusia</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1736,7 +1737,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Teori Pengeluaran dan Kos</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1751,7 +1752,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Kadar Tindak Balas Kimia</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1766,7 +1767,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Reading Comprehension: Narrative Text</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1781,7 +1782,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Hak Asasi Manusia dan Tanggungjawab</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1796,7 +1797,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Akhlak Mulia dalam Kehidupan Harian</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1811,7 +1812,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Janjang Aritmetik dan Geometri</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1826,7 +1827,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Penyata Kewangan Syarikat Berhad</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1841,7 +1842,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Daya Elektromagnet dan Induksi</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1856,7 +1857,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Strategi Pemasaran dan Promosi</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1871,7 +1872,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Algoritma dan Struktur Data</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1886,7 +1887,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Fotosintesis dan Respirasi Tumbuhan</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1901,7 +1902,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Malaysia dan Perang Dunia Kedua</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1916,7 +1917,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Sirah Nabi Muhammad SAW</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1931,7 +1932,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Pembangunan Mapan dan Alam Sekitar</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1946,7 +1947,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Reka Bentuk Produk Inovatif</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -1961,7 +1962,7 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Teks Argumentatif dan Perbahasan</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span></span></button></div>
+                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Mula</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
