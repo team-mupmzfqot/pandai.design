@@ -392,6 +392,44 @@ These are the confirmed state values for the Pandai student home screen. All fro
 
 ---
 
+### 20. Subject Badge L vs M — base CSS is L; quiz card overrides to M
+
+The base `.subject-badge` CSS is always the **L size** (32px). The quiz card context applies a global override to shrink it to **M** (24px). Never build a separate "L badge" component — just remove the quiz card constraint when L is needed.
+
+**DS-confirmed specs (node `1808:17891` — Subject Badge/RBT - L):**
+
+| Property | M (24px) | L (32px) |
+|---|---|---|
+| Height | 24px | 32px |
+| Icon slot width | auto (~34px) | auto (~40px) |
+| Icon slot padding | `4px 8px 4px 12px` | `4px 8px 4px 12px` (same) |
+| Icon size (CSS) | `width: 16px; max-height: 20px` | `width: 20px; max-height: 24px` |
+| Text | 12px Medium, line-height 12px | 14px Medium, line-height 20px |
+
+**To display L size inside a quiz card:** scope-override the quiz card M constraint using the section ID:
+```css
+#SectionName-Desktop .quiz-card__header .subject-badge       { height: 32px; max-height: 32px; }
+#SectionName-Desktop .quiz-card__header .subject-badge__text  { font-size: 14px; line-height: 20px; }
+#SectionName-Desktop .quiz-card__header .subject-badge__icon svg,
+#SectionName-Desktop .quiz-card__header .subject-badge__icon img { width: 20px; max-height: 24px; }
+```
+
+**Mistake made:** Tried to build a new L badge class. Correct approach: the global `.subject-badge` is already L — just lift the quiz card M override per section.
+
+---
+
+### 21. Never put `cursor: pointer` on card or container elements
+
+`cursor: pointer` belongs **only on interactive elements** — `<button>`, `<a>`, and `<div role="button">`. Card containers (`<article>`, `<div class="card">`) must use `cursor: default`, even when they contain buttons.
+
+Putting `cursor: pointer` on a card gives users the false impression that the entire card surface is one clickable unit, which conflicts with having a distinct button inside the card.
+
+**Rule:** Set `cursor: default` on card containers. The browser renders the hand cursor automatically on `<button>` and `<a>` children — no override needed.
+
+**Mistake made:** `.quiz-card { cursor: pointer }` caused the entire quiz card surface (including the image area and text) to show a hand cursor. The correct pattern: `cursor: default` on the card, `cursor: pointer` is inherited by the `<button>` inside.
+
+---
+
 ### Mandatory workflow before implementing any component
 
 ```
