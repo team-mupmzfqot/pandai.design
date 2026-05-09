@@ -430,6 +430,41 @@ Putting `cursor: pointer` on a card gives users the false impression that the en
 
 ---
 
+### 22. Figma text strokes → CSS `-webkit-text-stroke` + `paint-order`
+
+Some DS components apply a **stroke on TEXT nodes** to create a character outline effect. This is distinct from a border on a container — the stroke outlines each individual glyph. Always check for strokes on TEXT nodes when inspecting a component, not just on FRAME/INSTANCE nodes.
+
+**CSS pattern:**
+```css
+-webkit-text-stroke: 1px <stroke-color>;
+paint-order:         stroke fill;
+```
+`paint-order: stroke fill` is mandatory — without it the stroke renders on top of the fill, covering the text interior and making it illegible.
+
+**Confirmed instance — Status Badge Coins (DS node `2312:10654`):**
+- Both "Coins" label (10px) and value (16px) TEXT nodes have `stroke: #cba500, weight: 1`
+- No other badge variants (Score, Streak, Lives, Ruby) have text strokes — this is Coins-specific
+
+**Mistake made:** Coins label and value were rendered without text stroke. The DS applies the stroke to make white text legible on the bright yellow (`#fece00`) background with a subtle gold outline.
+
+---
+
+### 23. Fixed footer — body padding-bottom = footer height + DS content gap
+
+When the footer is `position: fixed`, the scrollable content needs `padding-bottom` equal to **footer height + DS-specified gap** so the last section is never obscured.
+
+**DS reference (Screen page, home + footer frame `1867:17694`):**
+- Home content frame `1740:9670`: `padding-bottom: 30` (raw value — **not variable-bound**)
+- Footer - 1.5 height: 60px
+
+**Rule:** `body { padding-bottom: 90px; }` — 60px (footer) + 30px (DS gap).
+
+**Important:** Not all spacing values in DS screen frames are token-bound. Always check `boundVariables` on a node before assuming a raw px value maps to a Semantic token. If absent from `boundVariables`, treat it as a hardcoded design decision and use the raw value.
+
+**Mistake made:** `body` had `padding-bottom: 60px` (footer height only), cutting off 30px of breathing room. Corrected to 90px after reading DS screen frame.
+
+---
+
 ### Mandatory workflow before implementing any component
 
 ```
