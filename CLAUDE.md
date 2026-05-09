@@ -303,6 +303,48 @@ All known subject component names (May 2026):
 
 ---
 
+### 18. Product collection role-to-palette mapping — Student ≠ pink
+
+The DS Product collection has **3 modes: Student / Teacher / Parent**. Each maps `Primary/Base` to a different Primitive color. **Student is OG-Green, not pink.**
+
+| Role | Primary palette | `Surface/primary/default` |
+|---|---|---|
+| **Student** | OG-Green | `#00cc85` |
+| **Teacher** | Pink | `#ff5c98` |
+| **Parent** | Yellow | (yellow) |
+
+**Token resolution chain:** Semantic `Surface/primary/default` → aliases `Primary/Base` in Product → Product resolves by mode → Primitive hex value.
+
+This means:
+- Components using **Semantic tokens** (navbar, cards, borders) always show `#00cc85` regardless of role — they're not role-specific.
+- Components using **Product tokens** (Button - 1.5, role-specific UI) resolve to the role's palette. On the **student home screen**, these resolve to OG-Green (#00cc85).
+
+**Mistake made (May 2026):** Queried wrong node `1644:11342` (Type=Teacher variant) when looking up quiz card button states — got pink colors and incorrectly concluded Student=pink. Always verify which `Type=` variant a node belongs to before trusting its variable defs. The quiz card button uses `Type=Student` (node `1437:8154`) which is green.
+
+---
+
+### 19. Button - 1.5 Primary/S — all confirmed Student states (node 1437:8154)
+
+These are the confirmed state values for the Pandai student home screen. All from DS `get_variable_defs` on each state node (May 2026).
+
+| State | Btn bg | Border | Label | Arrow bg | Chevron | DS node |
+|---|---|---|---|---|---|---|
+| Default | `#00cc85` | `#00a36a` | `#f6fdfb` | `#99ebce` | `#00a36a` | `1437:8154` |
+| Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` | `1437:8146` |
+| Pressed | `#00564c` | `#00453d` | `#00cc85` | `#00cc85` | `#00564c` | `1437:8138` |
+| Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` | `1437:8130` |
+
+**Pressed state tokens (confirmed from node `1437:8138`):**
+- Btn bg: `Surface/tertiary/default` (#00564c) — NOT `Surface/primary/focus` (#00a36a)
+- Border: `Border/tertiary/focus` (#00453d)
+- Label: `Text/primary/default` (#00cc85) — NOT `Text/primary/on-color` (#f6fdfb)
+- Arrow bg: `Surface/primary/default` (#00cc85)
+- Chevron: `Icon/tertiary/default` (#00564c)
+
+**Mistake made:** Pressed state used `Surface/primary/focus` (#00a36a) for bg and `Text/primary/on-color` (#f6fdfb) for label. DS uses Tertiary palette for Pressed — darker bg (`#00564c`) with the primary green as the label color — the inverse of Default.
+
+---
+
 ### Mandatory workflow before implementing any component
 
 ```
@@ -664,12 +706,13 @@ try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 - 3-column grid: `.primary-card__content { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-space-m); }` — CSS Grid handles gap deduction automatically, use this over flexbox + calc
 - Pill Badge inside: `font-size: 10px` (`Body/B8`) — NOT 12px. Spec from parent Quiz Card node, not standalone Pill Badge node (Rule 9)
 
-**Button - 1.5 (Primary/S) inside Quiz Card — confirmed May 2026:**
+**Button - 1.5 (Primary/S, Type=Student) inside Quiz Card — confirmed May 2026:**
 - Button: `max-height: 24px`, `px: 8px`, `py: 2px`, `border-radius: 60px` (pill)
 - Text slot: `px: 4px`, font `Body/B5` (Poppins SemiBold 12px, line-height 18px), color `Text/primary/on-color #f6fdfb`
 - Arrow: 16×16 circle (`bg: #99ebce`, `border-radius: 60px`, `padding: 2px`) → 12×12 clip (NO padding) → `ic-chevron-btn`
 - Arrow chevron: `#00a36a` (`Surface/primary/focus`) — from arrow clip sub-node, not parent button
 - **Symbol:** `ic-chevron-btn` — `viewBox="0 0 12 12"`, path `M4.5 9L7.5 6L4.5 3`, DS node `1437:8161`
+- **All states:** see Rule 19. Pressed uses Tertiary palette (`#00564c`), not Primary/focus (`#00a36a`).
 
 **Subject badge icons (18 subjects) — confirmed May 2026:**
 All sourced from `🔰 Iconography` page via `exportAsync({ format: 'SVG_STRING' })`. See Rule 17.
@@ -679,6 +722,8 @@ Badge icon CSS: `width: 16px; height: auto; max-height: 20px` constrains all sub
 - Cards rendered as tall vertical columns. Fixed by: explicit `flex-direction: row` + `width: 148px` on image div + `<div>` placeholder instead of `<img>`
 - Button used `Outline/arrow-right` (→) — actual DS uses `Outline/chevron-right` (›). Always confirm icon from DS context.
 - Arrow clip had `padding: 3px 4.5px` — stroke collapsed to 0.56px. Correct: no padding, use `ic-chevron-btn`.
+- Pressed state used `Surface/primary/focus` (#00a36a) for bg and `Text/primary/on-color` (#f6fdfb) for label — both wrong. DS Pressed = `Surface/tertiary/default` (#00564c) bg + `Text/primary/default` (#00cc85) label (see Rule 19).
+- Queried wrong DS node `1644:11342` (Type=Teacher) instead of `1437:8154` (Type=Student) — led to thinking Student=pink. Always verify the `Type=` variant name before trusting variable defs.
 
 ---
 
