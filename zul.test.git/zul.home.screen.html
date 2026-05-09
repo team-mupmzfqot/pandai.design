@@ -298,8 +298,8 @@
       height:  100%;
     }
 
-    /* DS chevron-down: 37.5% × 20 = 7.5px top/bottom, 25% × 20 = 5px left/right */
-    .nav-btn__chevron-clip { padding: 7.5px 5px; }
+    /* DS chevron-down: 37.5%/25% inset encoded in ic-chevron-down-nav viewBox. No padding needed. */
+    .nav-btn__chevron-clip { padding: 0; }
 
     /* Per-icon padding overrides — DS inset % × 20px, exact from DS node 866:5576 */
     .nav-btn__icon-clip[data-icon="home"]        { padding: 1.67px 2.5px; }
@@ -1307,6 +1307,8 @@
       <symbol id="ic-chevron-btn" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 9L7.5 6L4.5 3"/></symbol>
       <!-- Outline/chevron-right — Button arrow Size=M (node 479:352): 16×16 coord space, stroke=1.5 at 1:1 = 1.5px -->
       <symbol id="ic-chevron-btn-m" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12L10 8L6 4"/></symbol>
+      <!-- Outline/chevron-down — nav-btn dropdown: DS inset 37.5%/25% on 20px clip → path in 20×20 coord space, stroke=1.5 at 1:1 = 1.5px -->
+      <symbol id="ic-chevron-down-nav" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5L10 12.5L15 7.5"/></symbol>
       <!-- Outline/plus (260:1051) --><symbol id="ic-plus" viewBox="-1 -1 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 7 0 L 7 14 M 0 7 L 14 7"/></symbol>
       <!-- Outline/arrow-right (260:451) --><symbol id="ic-arrow-right" viewBox="-1 -1 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 7 0 L 14 7 L 7 14"/><path d="M 0 7 L 14 7"/></symbol>
       <!-- Outline/search (260:1103) --><symbol id="ic-search" viewBox="-1 -1 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 8 16 C 12.418 16 16 12.418 16 8 C 16 3.582 12.418 0 8 0 C 3.582 0 0 3.582 0 8 C 0 12.418 3.582 16 8 16 Z"/><path d="M 18 18 L 13.65 13.65"/></symbol>
@@ -1405,7 +1407,7 @@
           </div>
           <span class="nav-btn__label">Class</span>
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
+            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div>
           </div>
         </div>
       </div>
@@ -1417,7 +1419,7 @@
           </div>
           <span class="nav-btn__label">Learn</span>
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
+            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div>
           </div>
         </div>
       </div>
@@ -1429,7 +1431,7 @@
           </div>
           <span class="nav-btn__label">Achievement</span>
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
+            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div>
           </div>
         </div>
       </div>
@@ -1441,7 +1443,7 @@
           </div>
           <span class="nav-btn__label">Potential</span>
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
+            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div>
           </div>
         </div>
       </div>
@@ -1453,7 +1455,7 @@
           </div>
           <span class="nav-btn__label">Rewards</span>
           <div class="nav-btn__icon-wrap">
-            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down"/></svg></div>
+            <div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div>
           </div>
         </div>
       </div>
