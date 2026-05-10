@@ -154,7 +154,7 @@
       gap:        var(--spacing-space-s);  /* gap-[12px] from DS */
     }
 
-    /* Row 1 â€” Brand bar */
+    /* Row 1 â€” Brand bar — DS h:64, pad t:8 r:24 b:8 l:24 */
     .navbar-brand {
       height:          64px;
       background:      var(--surface-general-default);
@@ -166,7 +166,6 @@
       align-items:     center;
       justify-content: space-between;
       padding:         var(--spacing-space-xs) var(--spacing-space-xl);
-      overflow: hidden;
     }
 
     .navbar-logo {
@@ -242,10 +241,9 @@
       line-height:      var(--spacing-space-s);
     }
 
-    /* Row 2 â€” Nav content pill */
+    /* Row 2 â€” Nav content pill — DS h:56, pad:8 all, cornerRadius:999 */
     .navbar-nav {
       height:        56px;
-      max-height:    64px;
       background:    var(--surface-general-default);
       border:        1px solid var(--border-default);
       border-radius: var(--corner-radius-corner-pill);
