@@ -1037,12 +1037,11 @@
       padding:         4px 8px 4px 12px;  /* pl-12 pr-8 py-4 → total width: 12+16+8=36px */
       flex-shrink:     0;
     }
-    /* DS Subject Badge - 1.5: icon slot is w-[16px] max-h-[20px] */
+    /* DS Size=L: icon 20×20 — base is always L. M override below sets 16×16. */
     .subject-badge__icon svg,
     .subject-badge__icon img {
-      width:       16px;
-      height:      auto;
-      max-height:  20px;
+      width:       20px;
+      height:      20px;
       display:     block;
       flex-shrink: 0;
     }
@@ -1087,12 +1086,14 @@
     .subject-badge--kafa      { --badge-border: #6eb687; --badge-bg: #8ae3a9; --badge-text: #358a62; }
     .subject-badge--rbt       { --badge-border: #2a2a2a; --badge-bg: #353535; }
 
-    /* Badge inside quiz card uses Size=M (h-24px), not Table size (h-32px) */
+    /* Badge inside quiz card uses Size=M (h-24px) — DS icon 16×16, text 12px */
     .quiz-card__header .subject-badge {
       height:     24px;
       max-height: 24px;
     }
     .quiz-card__header .subject-badge__icon  { padding: 4px 8px 4px 12px; }
+    .quiz-card__header .subject-badge__icon svg,
+    .quiz-card__header .subject-badge__icon img { width: 16px; height: 16px; }
     .quiz-card__header .subject-badge__text  { font-size: 12px; line-height: 12px; }
 
     /* Section 5 overrides — hide CTA + pills, upgrade badge to L (h-32px, 14px, 20px icon) */
@@ -1101,7 +1102,7 @@
     #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge      { height: 32px; max-height: 32px; }
     #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__text { font-size: 14px; line-height: 20px; }
     #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon svg,
-    #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon img { width: 20px; max-height: 24px; }
+    #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon img { width: 20px; height: 20px; }
 
     /* Pill Badge - 1.5 (node 602:460) — quiz card uses 10px/12px per DS QuizCard-1.5 spec */
     .pill-badge-sm {
