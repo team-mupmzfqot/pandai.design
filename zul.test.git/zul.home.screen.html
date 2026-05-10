@@ -125,7 +125,7 @@
       min-width:      400px;
       max-width:      var(--page-max-width);
       margin:         0 auto;
-      padding-bottom: 90px; /* 60px fixed footer + 30px DS gap (DS Home frame pad-bottom) */
+      padding-bottom: 90px; /* 60px fixed footer + 30px DS gap */
     }
 
     .page-container {
@@ -1249,10 +1249,8 @@
     .footer {
       position:   fixed;
       bottom:     0;
-      left:       50%;
-      transform:  translateX(-50%);
-      width:      100%;
-      max-width:  var(--page-max-width);
+      left:       0;
+      right:      0;
       z-index:    100;
       background: var(--surface-general-default);
       border-top: 1px solid var(--border-default);
@@ -1263,8 +1261,8 @@
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      padding-left:    var(--spacing-space-2xl);   /* 28px — DS Footer-1.5 px-28px */
-      padding-right:   var(--spacing-space-2xl);
+      padding-left:    var(--spacing-space-2xl);   /* DS: padLeft:28 */
+      padding-right:   var(--spacing-space-2xl);   /* DS: padRight:28 */
     }
 
     .footer__left {
@@ -1303,7 +1301,7 @@
       height:      20px;
       flex-shrink: 0;
       display:     block;
-      color:       var(--surface-primary-default);  /* #00cc85 */
+      color:       var(--icon-primary-default);   /* Icon/primary/default #00cc85 */
     }
 
     /* ─────────────────────────────────────────────────────
@@ -1365,8 +1363,8 @@
     #NavBar-Desktop { display: block; }
     #NavBar-Mobile  { display: none; padding-left: var(--page-padding-x); padding-right: var(--page-padding-x); }
 
-    /* < 1440px: swap to mobile navbar */
-    @media (max-width: 1439px) {
+    /* < 1320px: swap to mobile navbar */
+    @media (max-width: 1319px) {
       #NavBar-Desktop { display: none; }
       #NavBar-Mobile  { display: block; }
     }
@@ -1381,6 +1379,16 @@
       }
       /* DS Responsives: H1 28px → 24px at tablet */
       .welcome-text__name { font-size: 24px; line-height: 36px; }
+
+
+      /* Welcome section — stack vertically, left-aligned, reorder items */
+      .section-welcome {
+        flex-direction: column;
+        align-items:    flex-start;
+      }
+      .welcome-text         { order: 1; text-align: left; flex: unset; }
+      .status-badges        { order: 2; }
+      .check-in-card        { order: 3; width: 100%; }
     }
 
     /* Mobile */
@@ -1422,6 +1430,24 @@
       .quiz-card {
         min-width: 0;
       }
+
+      /* Status badges: allow wrapping when pills don't fit in a single row */
+      .status-badges { flex-wrap: wrap; }
+
+      /* Taller stacked footer: 12+20+8+20+12 = 72px; body needs 72px + 30px DS gap */
+      body { padding-bottom: 102px; }
+
+      /* Footer — stack vertically, center both groups */
+      .footer__inner {
+        flex-direction: column;
+        justify-content: center;
+        align-items:     center;
+        gap:             var(--spacing-space-xs);   /* 8px between rows */
+        height:          auto;
+        padding:         var(--spacing-space-s) var(--spacing-space-2xl);  /* 12px 28px — DS padLeft/padRight:28 */
+      }
+      .footer__left  { justify-content: center; }
+      .footer__right { justify-content: center; }
     }
   </style>
 </head>
@@ -2232,8 +2258,8 @@
         <!-- Right: Made with heart -->
         <div class="footer__right">
           <span class="footer__text">Made with</span>
-          <!-- Outline/heart · node 260:815 — inline SVG DS path, currentColor -->
-          <svg class="footer__heart" viewBox="0 0 22.4031 19.7318" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20.0413 2.36183C19.5305 1.85083 18.9241 1.44547 18.2566 1.16891C17.5892 0.892347 16.8738 0.75 16.1513 0.75C15.4288 0.75 14.7134 0.892347 14.0459 1.16891C13.3785 1.44547 12.772 1.85083 12.2613 2.36183L11.2013 3.42183L10.1413 2.36183C9.1096 1.33013 7.71032 0.750535 6.25129 0.750535C4.79226 0.750535 3.39298 1.33013 2.36129 2.36183C1.3296 3.39352 0.75 4.79279 0.75 6.25183C0.75 7.71086 1.3296 9.11013 2.36129 10.1418L3.42129 11.2018L11.2013 18.9818L18.9813 11.2018L20.0413 10.1418C20.5523 9.63107 20.9576 9.02464 21.2342 8.35718C21.5108 7.68972 21.6531 6.97431 21.6531 6.25183C21.6531 5.52934 21.5108 4.81393 21.2342 4.14647C20.9576 3.47901 20.5523 2.87258 20.0413 2.36183Z"/></svg>
+          <!-- Outline/heart · node 260:815 -->
+          <svg class="footer__heart" aria-hidden="true"><use href="#ic-heart"/></svg>
           <span class="footer__text">in Malaysia</span>
         </div>
 

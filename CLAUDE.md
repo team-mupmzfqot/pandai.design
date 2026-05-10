@@ -690,6 +690,89 @@ The DS has a **Responsives** variable collection with 3 modes: Desktop / Tablet 
 
 ---
 
+### 34. Responsive reordering — use CSS `order`, never rewrite HTML
+
+When the mobile layout order differs from the desktop HTML source order, use CSS `order` on flex children. Never rearrange HTML elements to satisfy a mobile layout — that breaks the desktop.
+
+**Pattern — horizontal row → vertical stack with reordered children:**
+```css
+/* Desktop: row layout, source order = A → B → C */
+
+/* Tablet/Mobile: column, desired order = B → A → C */
+@media (max-width: 1279px) {
+  .section {
+    flex-direction: column;
+    align-items:    flex-start;   /* left-align stacked children */
+  }
+  .child-b { order: 1; }   /* moves to top */
+  .child-a { order: 2; }
+  .child-c { order: 3; width: 100%; }  /* full-width card-like children */
+}
+```
+
+**Checklist when switching a flex row to a column:**
+- `flex-direction: column` — stack children
+- `align-items: flex-start` — left-align (default `stretch` is usually wrong)
+- `order` — reassign source-order children to desired visual order
+- `flex: unset` — reset any `flex: 1` grow rules on children that shouldn't stretch vertically
+- `width: 100%` — card/container children need this to fill the column width
+- `flex-wrap: wrap` on any inner row that holds many fixed-width items (e.g. pill badges) so they wrap before overflowing at narrow widths
+
+**Confirmed instance — Welcome section (May 2026):**
+- Desktop: `status-badges` (left) → `welcome-text` (center, `flex:1`) → `check-in-card` (right)
+- Tablet/Mobile target: welcome-text (top) → status-badges (middle) → check-in-card (bottom, full-width)
+- Fix: `order: 1/2/3` on each child + `welcome-text { flex: unset; text-align: left }` + `check-in-card { width: 100% }` + `status-badges { flex-wrap: wrap }` at mobile (5 pills × 122px = 610px overflows at 400px min-width)
+
+---
+
+### 35. Fixed elements — use `left:0; right:0` not `left:50%; transform`
+
+`position: fixed` with `left: 50%; transform: translateX(-50%); max-width: 1440px` centers the element in the viewport but leaves the left and right of the viewport uncovered when the viewport is wider than 1440px. This causes the fixed bar to appear as a narrower floating strip instead of edge-to-edge.
+
+**Rule:** Always use `left: 0; right: 0` for fixed bars (footer, sticky header, toast) that must fill the full viewport width. Never use the centering hack on fixed elements.
+
+```css
+/* Wrong — leaves gaps on wide viewports */
+.footer { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 1440px; }
+
+/* Correct — fills full viewport width at all sizes */
+.footer { position: fixed; bottom: 0; left: 0; right: 0; }
+```
+
+**Mistake made (May 2026):** Footer used `left:50%; transform:translateX(-50%); max-width:1440px` — appeared correct on narrow viewports but had visible side gaps on wider screens. Fixed with `left:0; right:0`.
+
+---
+
+### 36. Always use `<use href="#ic-*">` — never duplicate inline SVG paths
+
+Every icon used in the prototype has a `<symbol>` definition in the SVG defs block at the top of `<body>`. Referencing it via `<svg><use href="#ic-*"/></svg>` is the only correct pattern. Never paste the raw SVG path inline in the HTML — it creates a silent duplicate that drifts out of sync if the symbol is ever updated, and wastes significant HTML bytes.
+
+**Rule:** If a `<symbol id="ic-*">` exists for an icon, always use `<use href="#ic-*">`. Only add an inline SVG if no symbol exists yet (then add the symbol to the defs block first, and reference it from there).
+
+**Semantic token rule:** Always pick the token whose *name* matches the usage context, even when multiple tokens share the same hex value. Icon strokes → `--icon-primary-default`. Container fills → `--surface-primary-default`. Both are `#00cc85` but only one is semantically correct.
+
+**Confirmed mistake (May 2026):** Footer heart used a 22-line inline SVG duplicate of `ic-heart`. The `<symbol id="ic-heart">` already existed in the defs. Also used `--surface-primary-default` instead of `--icon-primary-default` for the stroke color.
+
+---
+
+### Footer - 1.5 confirmed DS specs (node 2073:6579, May 2026)
+
+| Property | Value |
+|---|---|
+| Height | 60px |
+| Padding | `t:20 r:28 b:20 l:28` → CSS `height:60px` + `align-items:center` + `padding:0 28px` |
+| Border | top only, 1px `#00cc85` (`--border-default`) — stroke is full INSIDE but only top is visible |
+| Background | white (`--surface-general-default`) |
+| Layout | `HORIZONTAL`, `SPACE_BETWEEN`, `crossAlign:CENTER` |
+| Left group gap | 4px (`--spacing-space-xxs`) |
+| Right group gap | 4px (`--spacing-space-xxs`) |
+| All text | 14px / weight:500 / `#666666` (`--text-default-body`) |
+| Link "Pandai.org" | 14px / weight:500 / `#00cc85` (`--text-primary-default`) — `visible:false` on both icons, text only |
+| Heart icon | `<use href="#ic-heart">`, 20×20, `color:var(--icon-primary-default)` (`#00cc85`) |
+| Positioning | `position:fixed; bottom:0; left:0; right:0; z-index:100` |
+
+---
+
 ### Mandatory workflow before implementing any component
 
 ```
