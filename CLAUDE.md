@@ -967,6 +967,74 @@ The Content frame itself: `overflow:hidden; border-radius:24px` — **no border 
 
 ---
 
+### 43. DS component variants per breakpoint — always check for Mobile/Tablet variants before implementing responsive
+
+Many DS components have named variants like `Type=Desktop` and `Type=Mobile`. These variants differ in structure (not just size), so responsive CSS overrides are not enough — the Mobile variant may have completely different children, spacing, and layout.
+
+**Always `use_figma` to list all variants in a component set before writing any responsive CSS.**
+
+**Confirmed — Carousel - 1.5 (component set `3060:868`, May 2026):**
+
+| Variant | Node | Width | Height | Notes |
+|---|---|---|---|---|
+| `Type=Desktop` | `1200:1789` | 1559px | 263px | Nav buttons, 186px cards, gap 16px, content border-radius 24px |
+| `Type=Mobile` | `3060:869` | 350px | 152px | No nav buttons, 152px cards, gap 8px, no border-radius on content frame |
+
+**Mobile variant spec differences (DS confirmed):**
+- No Left/Right button containers — no nav buttons at all
+- Card height: **152px** (vs 186px desktop)
+- Cards row gap: **8px** (`Spacing/space-xs`, vs 16px desktop)
+- Content frame: **no `border-radius`** (vs 24px desktop)
+- No composite 3-side border frame (follows from no button containers)
+- Indicator: 88×12px (vs 108×20px desktop)
+
+**Full-width bleed pattern — escape page padding for edge-to-edge sections:**
+```css
+@media (max-width: 767px) {
+  #SectionName {
+    width:       100vw;
+    min-width:   400px;
+    margin-left: calc(-1 * var(--page-padding-x));
+  }
+}
+```
+This escapes the `.page-container`'s horizontal padding without changing the container itself. Works as long as the parent does not have `overflow: hidden`.
+
+---
+
+### 44. JS carousel centering — never hardcode card width or gap, always read from DOM
+
+If the carousel JS hardcodes `CARD_W` and `GAP` as constants, the centering breaks whenever CSS changes the card size at a different breakpoint (e.g. mobile variant with `aspect-ratio` gives a narrower card).
+
+**Rule:** `offsetFor()` must always read card width and gap from the live DOM — never use hardcoded pixel values.
+
+```js
+// WRONG — breaks when CSS changes card size at mobile
+const CARD_W = 428;
+const GAP    = 16;
+function offsetFor(i) {
+  return -(i * (CARD_W + GAP)) + (content.offsetWidth / 2 - CARD_W / 2);
+}
+
+// CORRECT — always reads actual rendered dimensions
+function offsetFor(i) {
+  const cw  = track.querySelector('.carousel__card').offsetWidth;
+  const gap = parseFloat(getComputedStyle(track).columnGap) || 16;
+  return -(i * (cw + gap)) + (content.offsetWidth / 2 - cw / 2);
+}
+```
+
+**Why `columnGap`:** `getComputedStyle(el).gap` is a shorthand and may return `"normal"` in some browsers. `columnGap` reliably returns the computed pixel value for the horizontal gap in a flex row.
+
+**Resize handler is also required** — call `jump(idx)` on `window.resize` so centering recalculates if the viewport changes:
+```js
+window.addEventListener('resize', () => jump(idx));
+```
+
+**Mistake made:** `CARD_W = 428` was hardcoded. At mobile, CSS `aspect-ratio: 428/186; height: 152px` makes the card ≈349px wide. `offsetFor` calculated center using 428, placing the card ~39px off-center.
+
+---
+
 ### Mandatory workflow before implementing any component
 
 ```

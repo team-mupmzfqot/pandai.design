@@ -1452,10 +1452,27 @@
       .static-cards-row { flex-wrap: wrap; }
       .static-cards-row .static-card { flex-basis: 100%; }
 
-      /* Carousel cards: narrower to show prev/next cards peeking behind button wrappers */
+      /* Carousel — Mobile variant (DS Type=Mobile, node 3060:869)
+         Full-width bleed (no page padding), no nav buttons, no rounded frame, 152px height */
+      #Carousel-Desktop {
+        width:       100vw;
+        min-width:   400px;
+        margin-left: calc(-1 * var(--page-padding-x));
+      }
+      .carousel__content {
+        border-radius: 0;
+      }
+      .carousel__btn-wrap {
+        display: none;
+      }
       .carousel__card {
-        width: calc(100vw - 64px);
-        max-width: 428px;
+        height:        152px;
+        width:         auto;
+        aspect-ratio:  428 / 186;
+        max-width:     calc(100vw - 32px);
+      }
+      .carousel__track {
+        gap: var(--spacing-space-xs);   /* 8px — DS mobile gap */
       }
 
       /* Nav row: allow horizontal scroll on narrow screens */
@@ -2340,10 +2357,6 @@
         const track   = document.getElementById('carouselTrack');
         const btnPrev = document.getElementById('carouselPrev');
         const btnNext = document.getElementById('carouselNext');
-        const CARD_W  = 428;
-        const GAP     = 16;
-        const STEP    = CARD_W + GAP;
-
         const origCards = Array.from(track.querySelectorAll('.carousel__card'));
         const total = origCards.length;
         origCards.forEach(c => track.insertBefore(c.cloneNode(true), track.firstChild));
@@ -2353,7 +2366,9 @@
         let busy = false;
 
         function offsetFor(i) {
-          return -(i * STEP) + (content.offsetWidth / 2 - CARD_W / 2);
+          const cw  = track.querySelector('.carousel__card').offsetWidth;
+          const gap = parseFloat(getComputedStyle(track).columnGap) || 16;
+          return -(i * (cw + gap)) + (content.offsetWidth / 2 - cw / 2);
         }
 
         const dots = document.querySelectorAll('.carousel__dot');
