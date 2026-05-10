@@ -1330,6 +1330,19 @@ Badge icon CSS: `width: 16px; height: auto; max-height: 20px` constrains all sub
 
 ---
 
+**Prototype layout configuration (current as of May 2026):**
+
+| Setting | Value | Notes |
+|---|---|---|
+| `--page-max-width` | `100%` | Fluid — fills full viewport, no desktop cap |
+| `--page-padding-x` | `60px` desktop / `32px` tablet / `16px` mobile | Scales via media queries |
+| `body min-width` | `400px` | Minimum mobile layout width |
+| Navbar breakpoint | `< 1320px` → mobile navbar | Desktop navbar at ≥ 1320px |
+| Tablet breakpoint | `≤ 1279px` | 2-col quiz grid, 32px padding |
+| Mobile breakpoint | `≤ 767px` | 1-col quiz grid, 16px padding, stacked sections |
+
+**`--page-max-width` as a single-variable control:** The page width constraint is stored in one CSS custom property (`--page-max-width`) applied to `body`. Changing it propagates everywhere — body, page container, footer. Set to `100%` for a fully fluid layout. Set to `1440px` to cap at a fixed desktop container.
+
 **Responsive typography — applied to prototype (May 2026):**
 - Tablet `@media (max-width: 1279px)`: `.welcome-text__name` → 24px/36lh
 - Mobile `@media (max-width: 767px)`: `.welcome-text__name` → 20px/32lh · `.static-card__title` → 16px/24lh · `.section-header__title` → 16px/24lh · `.status-pill__value` → 14px/20lh
