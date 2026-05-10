@@ -121,7 +121,8 @@
       font-family:    var(--font-family);
       background:     var(--surface-subtle);
       color:          var(--text-default-heading);
-      width:          var(--page-max-width);
+      width:          100%;
+      max-width:      var(--page-max-width);
       margin:         0 auto;
       padding-bottom: 90px; /* 60px fixed footer + 30px DS gap (DS Home frame pad-bottom) */
     }
@@ -1249,8 +1250,10 @@
     .footer {
       position:   fixed;
       bottom:     0;
-      left:       0;
-      right:      0;
+      left:       50%;
+      transform:  translateX(-50%);
+      width:      100%;
+      max-width:  var(--page-max-width);
       z-index:    100;
       background: var(--surface-general-default);
       border-top: 1px solid var(--border-default);
@@ -1302,6 +1305,58 @@
       flex-shrink: 0;
       display:     block;
       color:       var(--surface-primary-default);  /* #00cc85 */
+    }
+
+    /* ─────────────────────────────────────────────────────
+       RESPONSIVE LAYOUT
+       Tablet  : 768px – 1279px  → 2-col quiz grid, 32px padding
+       Mobile  : < 768px         → 1-col quiz grid, 16px padding
+    ───────────────────────────────────────────────────── */
+
+    /* Tablet */
+    @media (max-width: 1279px) {
+      :root {
+        --page-padding-x: 32px;
+      }
+      .primary-card__content {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 767px) {
+      :root {
+        --page-padding-x: var(--spacing-space-m);   /* 16px */
+      }
+
+      /* Single-column quiz grid */
+      .primary-card__content {
+        grid-template-columns: 1fr;
+      }
+
+      /* Stack static cards vertically */
+      .static-cards-row {
+        flex-direction: column;
+      }
+
+      /* Carousel cards: narrower */
+      .carousel__card {
+        width: calc(100vw - 64px);
+        max-width: 428px;
+      }
+
+      /* Nav row: allow horizontal scroll on narrow screens */
+      .navbar-nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .navbar-nav::-webkit-scrollbar { display: none; }
+
+      /* Quiz card: allow narrower on mobile */
+      .quiz-card {
+        min-width: 0;
+      }
     }
   </style>
 </head>
