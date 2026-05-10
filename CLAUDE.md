@@ -586,6 +586,53 @@ When overriding a component to a different size (e.g. M inside a quiz card when 
 
 ---
 
+### 30. Figma frame strokes ≠ CSS `border` — use `box-shadow: inset` to match
+
+Figma frame **strokes** render visually on the boundary but **do not consume layout space**. A 18×18 frame with a 1px stroke is still 18×18 — the stroke doesn't push content inward.
+
+CSS `border` consumes box-model space. With `box-sizing: border-box; width: 18px; border: 1px; padding: 1px`, content = 18−2−2 = **14px** — smaller than expected and may cause children to overflow.
+
+**Rule:** Replicate Figma stroke with `box-shadow: inset 0 0 0 <weight>px <color>` — this renders a visible ring inside the element without affecting layout. Then size with content-box math.
+
+**CSS pattern for Secondary/M button arrow (DS node `538:1929` — 18×18, 1px stroke, 1px padding):**
+```css
+.arrow {
+  width:      16px;          /* content width */
+  height:     16px;          /* content height */
+  padding:    1px;           /* +1 each side = 18px total */
+  box-shadow: inset 0 0 0 1px var(--border-primary-default);  /* Figma stroke */
+  /* NO border — border would consume space and shrink content to 14px */
+}
+```
+
+**Confirmed mistake:** Secondary/M button arrow used `border: 1px solid; padding: 1px; box-sizing: border-box; width: 18px` → 14px content area. The 16px clip overflowed. Corrected to `box-shadow: inset`, `width: 16px; padding: 1px` → 18px total, 16px content.
+
+**Applies whenever:** a DS node has both a stroke AND padding, and you need the content area to be exactly `frame_size − 2×padding`.
+
+---
+
+### 31. Button - 1.5 confirmed DS specs (Student Type)
+
+All specs from `use_figma` inspection of component nodes. Arrow circle fills/strokes from `node.fills`/`node.strokes`.
+
+| Property | Primary/S | Primary/M | Secondary/M |
+|---|---|---|---|
+| Height | 24px | 32px | 32px |
+| Outer padding | `2px 8px` | `2px 8px` | `2px 8px` |
+| Border-radius | 60px (pill) | 60px | 60px |
+| Text | 12px SemiBold | 12px SemiBold | 12px SemiBold |
+| Text slot padding | `0 4px` | `0 4px` | `0 4px` |
+| Arrow circle size | 16×16 | 20×20 | 18×18 |
+| Arrow padding | 2px (content-box) | 2px (content-box) | 1px (content-box) |
+| Arrow clip | 12×12 | 16×16 | 16×16 |
+| Arrow fill | `#99ebce` | `#99ebce` | white |
+| Arrow stroke | none | none | 1px `#00cc85` → use `box-shadow:inset` |
+| DS node (Default) | `1437:8154` | `479:344` | `538:1923` |
+
+**All button sizes share the same outer padding `2px 8px` and text size `12px SemiBold`.** Height and arrow size are the only things that change between S/M/L.
+
+---
+
 ### Mandatory workflow before implementing any component
 
 ```
