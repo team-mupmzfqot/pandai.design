@@ -841,6 +841,64 @@ Lottie plays keyframe data exported from After Effects as `.json`. CSS animation
 
 ---
 
+### 38. DS state naming — `State=Active` ≠ `State=Pressed`, verify visually before implementing
+
+The DS `Button - 1.5` has 5 states: **Default, Hover, Pressed, Active, Selected, Disabled**. Their names are NOT self-explanatory for interactive feedback:
+
+| DS State | Visual | When to use |
+|---|---|---|
+| `State=Default` | White bg, grey label, green icon | Resting |
+| `State=Hover` | Light green bg (`#b5f291`) | Mouse over |
+| `State=Pressed` | Primary green (`#00cc85`) — **same as Selected** | Momentary click (indistinguishable from selected) |
+| `State=Active` | Dark teal bg (`#00564c`), green label/icon | **Use this as the press feedback** — clearly distinct |
+| `State=Selected` | Primary green (`#00cc85`) | Currently active page/tab |
+| `State=Disabled` | Grey bg (`#f2f2f2`) | Non-interactive |
+
+**Rule:** Always take a screenshot of EVERY state variant before deciding which to map to which interaction. `State=Pressed` in the DS Tertiary button is visually identical to `State=Selected` — using it as pressed feedback gives no visual change. `State=Active` (dark teal) is the correct choice for a perceptible press.
+
+**Confirmed — Navbar button Active/Pressed (DS node `3029:20022`, Tertiary/L/Student):**
+- bg: `#00564c` → `var(--surface-tertiary-default)`
+- border: `#00453d` → `var(--border-tertiary-focus)`
+- text: `#00cc85` → `var(--text-primary-default)`
+- icon: `#00cc85` → `var(--icon-primary-default)`
+
+---
+
+### 39. CSS `:active` on `<div>` is unreliable — use JS `mousedown`/`mouseup` instead
+
+CSS `:active` on a non-native interactive element (`<div>`) fires only while the mouse button is physically held down — typically 50–150ms. Users clicking at normal speed rarely see the state. It can also fail in Electron-based webviews (VS Code Simple Browser).
+
+**Rule:** Always implement pressed state on `<div>` elements via JS class toggle, not CSS `:active`.
+
+```js
+btn.addEventListener('mousedown',  () => btn.classList.add('is-pressed'));
+btn.addEventListener('mouseup',    () => btn.classList.remove('is-pressed'));
+btn.addEventListener('mouseleave', () => btn.classList.remove('is-pressed'));
+```
+
+`mouseleave` cleanup is mandatory — prevents the button getting stuck in pressed state if the cursor moves away while the mouse button is held.
+
+**Use CSS `:active` only on native interactive elements** (`<button>`, `<a>`) where browser handling is reliable.
+
+**Mistake made (May 2026):** First implemented `:active` CSS on `.nav-btn` (a `<div>`). User reported "still same" — state was not visible. Replaced with JS mousedown/mouseup.
+
+---
+
+### Always trace instances to their main component before looking up states
+
+When looking up states for a component used inside a larger DS assembly (e.g. a button inside the Navbar), always inspect the **instance's mainComponent** to identify the exact component set and variant. Never guess from the assembly's component set name.
+
+**Confirmed mistake (May 2026):** Searched `Menu Button - Parts` (a nav-level component set) for the pressed state — found none. The actual component the navbar uses is `Button - 1.5, Variants=Tertiary, Size=L` (confirmed via `instance.mainComponent` inspection on node `866:5576`).
+
+**Workflow:**
+```
+1. use_figma → inspect the parent assembly node
+2. findAll(n => n.type === 'INSTANCE') → read mainComponent.name + mainComponent.parent.name
+3. Navigate to THAT component set to find all states
+```
+
+---
+
 ### Mandatory workflow before implementing any component
 
 ```
