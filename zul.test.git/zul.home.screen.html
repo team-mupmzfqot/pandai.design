@@ -432,7 +432,9 @@
       flex-shrink:     0;
     }
 
-    .status-pill__icon img { max-height: 24px; max-width: 24px; width: auto; height: auto; }
+    /* DS icon heights are all 24px but widths vary per icon (Trophy:20, Coin:24, Streak:17, Heart:22, Ruby:24).
+       Constrain height only — never max-width, which forces non-square icons into a square and squishes them. */
+    .status-pill__icon img { height: 24px; width: auto; display: block; }
     /* Status Badge variants (DS Status Badge - 1.5, node 2312:10653) */
     .status-badges {
       display:  flex;
