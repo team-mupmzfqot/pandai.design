@@ -477,6 +477,46 @@ Explicit `min-height` values on card content areas create phantom blank space wh
 
 ---
 
+### 25. Status Badge icon sizing — DS natural dimensions, use `object-fit: contain`
+
+All 5 Status Badge icons are **24px tall** but have different natural widths confirmed from DS node `2312:10653`:
+
+| Icon | DS width | DS height |
+|---|---|---|
+| Streak (P.Streak) | 17px | 24px |
+| Trophy (P.Trophy) | 20px | 24px |
+| Heart (P.Heart) | 22px | 24px |
+| Coin (P.Coin) | 24px | 24px |
+| Ruby (P.Ruby) | 24px | 23px |
+
+**CSS rule:** `width: 24px; height: 24px; object-fit: contain` — fixes both overflow (from unconstrained width) and squish (from square forcing). `object-fit: contain` letterboxes non-square icons correctly within the 24×24 box.
+
+**Never use `height: auto; width: auto` on `<img>` SVGs** — SVGs without explicit pixel dimensions don't provide reliable intrinsic size for the browser. `object-fit: contain` with explicit box dimensions is the safe cross-browser pattern.
+
+---
+
+### 26. SVG `preserveAspectRatio="none"` squishes non-square icons — always check exported SVGs
+
+Figma exports SVG icons with `preserveAspectRatio="none" width="100%" height="100%"`. This instructs the browser to **stretch the SVG content to fill the CSS box** regardless of `object-fit` on the `<img>` element. Non-square icons (Streak 17×24, Trophy 20×24, Heart 22×24) get horizontally distorted — Streak was the most visible (41% stretch).
+
+**Fix:** Replace `preserveAspectRatio="none" width="100%" height="100%"` with explicit pixel dimensions from the `viewBox`:
+```html
+<!-- Before (broken) -->
+<svg preserveAspectRatio="none" width="100%" height="100%" viewBox="0 0 17 24" ...>
+
+<!-- After (correct) -->
+<svg width="17" height="24" viewBox="0 0 17 24" ...>
+```
+
+The default `preserveAspectRatio="xMidYMid meet"` (applied when the attribute is absent) combined with explicit pixel dimensions lets `object-fit: contain` work correctly.
+
+**Rule:** When importing any SVG icon file, check the opening `<svg>` tag for `preserveAspectRatio="none"`. Remove it and replace `width="100%" height="100%"` with the pixel values from the `viewBox` attribute.
+
+**Figma text stroke `strokeAlign` — CSS doubling rule:**
+When DS TEXT node has `strokeAlign: OUTSIDE` weight 1px, use `-webkit-text-stroke: 2px` (not 1px). CSS `-webkit-text-stroke` is centered (half inside, half outside). With `paint-order: stroke fill`, the fill covers the inner half — only the outer half is visible. To get 1px visible outside, use 2px total so 1px inside is covered and 1px outside remains. Confirmed: Coins badge label+value.
+
+---
+
 ### Mandatory workflow before implementing any component
 
 ```
