@@ -396,22 +396,25 @@ These are the confirmed state values for the Pandai student home screen. All fro
 
 The base `.subject-badge` CSS is always the **L size** (32px). The quiz card context applies a global override to shrink it to **M** (24px). Never build a separate "L badge" component — just remove the quiz card constraint when L is needed.
 
-**DS-confirmed specs (node `1808:17891` — Subject Badge/RBT - L):**
+**DS-confirmed specs — from Subject Badge - 1.5 component nodes `2339:1349` (M) and `2339:1343` (L):**
 
 | Property | M (24px) | L (32px) |
 |---|---|---|
 | Height | 24px | 32px |
-| Icon slot width | auto (~34px) | auto (~40px) |
-| Icon slot padding | `4px 8px 4px 12px` | `4px 8px 4px 12px` (same) |
-| Icon size (CSS) | `width: 16px; max-height: 20px` | `width: 20px; max-height: 24px` |
+| Icon slot width | 36px (12+16+8) | 40px (12+20+8) |
+| Icon slot padding | `t:4 r:8 b:4 l:12` | `t:4 r:8 b:4 l:12` (same) |
+| **Icon size (exact)** | **`width: 16px; height: 16px`** | **`width: 20px; height: 20px`** |
+| Label padding | `t:0 r:16 b:0 l:12` | `t:0 r:16 b:0 l:12` (same) |
 | Text | 12px Medium, line-height 12px | 14px Medium, line-height 20px |
+
+**Icon sizes are exact px — never use `max-height` approximations.** The DS component defines icons as fixed 16×16 (M) and 20×20 (L) instances, not auto-height.
 
 **To display L size inside a quiz card:** scope-override the quiz card M constraint using the section ID:
 ```css
 #SectionName-Desktop .quiz-card__header .subject-badge       { height: 32px; max-height: 32px; }
 #SectionName-Desktop .quiz-card__header .subject-badge__text  { font-size: 14px; line-height: 20px; }
 #SectionName-Desktop .quiz-card__header .subject-badge__icon svg,
-#SectionName-Desktop .quiz-card__header .subject-badge__icon img { width: 20px; max-height: 24px; }
+#SectionName-Desktop .quiz-card__header .subject-badge__icon img { width: 20px; height: 20px; }
 ```
 
 **Mistake made:** Tried to build a new L badge class. Correct approach: the global `.subject-badge` is already L — just lift the quiz card M override per section.
@@ -557,6 +560,28 @@ The Iconography page shows raw icon frames. The rendering context — clip size,
 2. use_figma → inspect that component → find the icon instance → read its parent container
 3. Check: clipsContent, paddingTop/Right/Bottom/Left, width, height on the parent
 4. Implement CSS to match that container — not the raw Iconography insets
+```
+
+---
+
+### 29. CSS size overrides must be complete — never rely on cascade from a different size
+
+When overriding a component to a different size (e.g. M inside a quiz card when the base is L), every property that differs between sizes needs its own explicit override. Never assume a property will inherit correctly from the base if you only override some properties.
+
+**Confirmed case — Subject Badge M quiz card override:**
+- `height: 24px` ✓ — overridden
+- `font-size: 12px` ✓ — overridden
+- `icon width/height: 16×16` ✗ — **missing** — fell through to base L (20px wide icon) making icons too large in M badges
+
+**Rule:** When writing a size override, list every property that differs and override all of them. Check against the DS component spec for the target size — don't guess which properties change.
+
+**Checklist for Subject Badge M override:**
+```css
+.quiz-card__header .subject-badge               { height: 24px; max-height: 24px; }
+.quiz-card__header .subject-badge__icon         { padding: 4px 8px 4px 12px; }
+.quiz-card__header .subject-badge__icon svg,
+.quiz-card__header .subject-badge__icon img     { width: 16px; height: 16px; }   /* ← was missing */
+.quiz-card__header .subject-badge__text         { font-size: 12px; line-height: 12px; }
 ```
 
 ---
