@@ -448,6 +448,25 @@
     .status-pill--lives  { background: #ff5c98; border-color: #cc4a7a; }
     .status-pill--ruby   { background: #ff4c51; border-color: #b23539; }
 
+    /* Lives/Ruby flip badge */
+    .status-pill-flipper { perspective: 800px; flex-shrink: 0; }
+    .status-pill-flipper__inner {
+      position:          relative;
+      transform-style:   preserve-3d;
+      transition:        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change:       transform;
+    }
+    .status-pill-flipper__inner.is-flipped { transform: rotateY(180deg); }
+    .status-pill-face {
+      backface-visibility:         hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .status-pill-face--back {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      transform: rotateY(180deg);
+    }
+
     /* Check-In Card - 1.5 (node 2600:82) */
     .check-in-card {
       background:    #b5f291;  /* Surface/secondary/default */
@@ -1701,25 +1720,29 @@
               </div>
             </div>
 
-            <!-- Type=Lives -->
-            <div class="status-pill status-pill--lives">
-              <div class="status-pill__content">
-                <div class="status-pill__texts">
-                  <span class="status-pill__label">Lives</span>
-                  <span class="status-pill__value">3</span>
+            <!-- Lives / Ruby — flip every 4s -->
+            <div class="status-pill-flipper">
+              <div class="status-pill-flipper__inner">
+                <!-- Front: Lives -->
+                <div class="status-pill status-pill--lives status-pill-face status-pill-face--front">
+                  <div class="status-pill__content">
+                    <div class="status-pill__texts">
+                      <span class="status-pill__label">Lives</span>
+                      <span class="status-pill__value">3</span>
+                    </div>
+                    <div class="status-pill__icon"><img src="icons/ic-status-heart.svg" alt="Lives"></div>
+                  </div>
                 </div>
-                <div class="status-pill__icon"><img src="icons/ic-status-heart.svg" alt="Lives"></div>
-              </div>
-            </div>
-
-            <!-- Type=Ruby -->
-            <div class="status-pill status-pill--ruby">
-              <div class="status-pill__content">
-                <div class="status-pill__texts">
-                  <span class="status-pill__label">Ruby</span>
-                  <span class="status-pill__value">450</span>
+                <!-- Back: Ruby -->
+                <div class="status-pill status-pill--ruby status-pill-face status-pill-face--back">
+                  <div class="status-pill__content">
+                    <div class="status-pill__texts">
+                      <span class="status-pill__label">Ruby</span>
+                      <span class="status-pill__value">450</span>
+                    </div>
+                    <div class="status-pill__icon"><img src="icons/ic-status-ruby.svg" alt="Ruby"></div>
+                  </div>
                 </div>
-                <div class="status-pill__icon"><img src="icons/ic-status-ruby.svg" alt="Ruby"></div>
               </div>
             </div>
 
@@ -2277,6 +2300,10 @@
         btn.classList.add('is-active');
       });
     });
+
+    // Lives/Ruby badge flip — every 4s
+    const flipper = document.querySelector('.status-pill-flipper__inner');
+    if (flipper) setInterval(() => flipper.classList.toggle('is-flipped'), 3000);
 
     // Carousel — wrapped in try/catch so any error never blocks other JS
     try {

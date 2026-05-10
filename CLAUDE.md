@@ -788,6 +788,59 @@ Every icon used in the prototype has a `<symbol>` definition in the SVG defs blo
 
 ---
 
+### 37. CSS 3D flip pattern — two-face badge/card flip
+
+Use pure CSS `transform-style: preserve-3d` + `backface-visibility: hidden` for any flip animation between two states. No Lottie, no JS animation libraries needed.
+
+**Structure:**
+```html
+<div class="flipper">                          <!-- perspective host -->
+  <div class="flipper__inner">                 <!-- rotates -->
+    <div class="face face--front">...</div>    <!-- normal flow, sizes container -->
+    <div class="face face--back">...</div>     <!-- position:absolute, pre-rotated 180deg -->
+  </div>
+</div>
+```
+
+**CSS:**
+```css
+.flipper          { perspective: 800px; }
+.flipper__inner   { position: relative; transform-style: preserve-3d;
+                    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    will-change: transform; }
+.flipper__inner.is-flipped { transform: rotateY(180deg); }
+.face             { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.face--back       { position: absolute; top:0; left:0; right:0; bottom:0;
+                    transform: rotateY(180deg); }
+```
+
+**JS (register before carousel/non-critical JS):**
+```js
+const flipper = document.querySelector('.flipper__inner');
+if (flipper) setInterval(() => flipper.classList.toggle('is-flipped'), 3000);
+```
+
+**Key rules:**
+- Front face is in normal flow — it sizes the container. Back face is `position: absolute` overlaying the front.
+- `will-change: transform` promotes the element to its own GPU layer — eliminates jank on transition start.
+- `perspective` goes on the **parent** of the rotating element, not on the element itself.
+- Snappy feel = short duration (0.3s) + `cubic-bezier(0.4, 0, 0.2, 1)`. Longer (0.5s+) feels sluggish for small UI elements.
+
+**CSS animation vs Lottie — choose by complexity:**
+| Use case | Tool |
+|---|---|
+| Single-transform: flip, fade, slide, scale | Pure CSS transition / `@keyframes` |
+| Multi-step icon morph, illustrated sequence, After Effects export | Lottie (`.json` + `lottie.js`) |
+
+Lottie plays keyframe data exported from After Effects as `.json`. CSS animations are rendered directly by the browser from the stylesheet — no file format, no library. A simple `rotateY` flip never needs Lottie.
+
+**Confirmed instance — Lives/Ruby status badge flip (May 2026):**
+- Two pills merged into one flipper; flips every 3s
+- Front: Lives (`#ff5c98`), Back: Ruby (`#ff4c51`)
+- `setInterval` registered immediately after nav handler, before carousel `try/catch`
+
+---
+
 ### Mandatory workflow before implementing any component
 
 ```
