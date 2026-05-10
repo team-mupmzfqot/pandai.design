@@ -723,6 +723,21 @@ When the mobile layout order differs from the desktop HTML source order, use CSS
 - Tablet/Mobile target: welcome-text (top) → status-badges (middle) → check-in-card (bottom, full-width)
 - Fix: `order: 1/2/3` on each child + `welcome-text { flex: unset; text-align: left }` + `check-in-card { width: 100% }` + `status-badges { flex-wrap: wrap }` at mobile (5 pills × 122px = 610px overflows at 400px min-width)
 
+**`flex-wrap: wrap` vs `flex-direction: column` — choose by intent:**
+
+| Goal | Pattern |
+|---|---|
+| "Stack vertically, reorder children" | `flex-direction: column` + `order` |
+| "Wrap downward, preserve row context" | `flex-wrap: wrap` + `flex-basis: 100%` on children |
+
+Use `flex-wrap: wrap` + `flex-basis: 100%` when the user says "wrap downward" or when a multi-column row should collapse to single-column by wrapping. The flex row context is preserved, gap works on both axes, and partial wrapping (e.g. 2-per-row at tablet → 1-per-row at mobile) is easy to add later by changing `flex-basis`.
+
+Use `flex-direction: column` when the stack is intentional and reordering via `order` is also needed (e.g. the Welcome section where items swap positions).
+
+**Confirmed instance — Static Cards Section #4 (May 2026):**
+- Desktop: 2 cards side-by-side (`flex: 1` each)
+- Mobile: `flex-wrap: wrap` + `.static-card { flex-basis: 100% }` → each card fills full row width and wraps to next line
+
 ---
 
 ### 35. Fixed elements — use `left:0; right:0` not `left:50%; transform`

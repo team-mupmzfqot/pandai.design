@@ -1407,10 +1407,9 @@
         grid-template-columns: 1fr;
       }
 
-      /* Stack static cards vertically */
-      .static-cards-row {
-        flex-direction: column;
-      }
+      /* Wrap static cards downward — each card full width, wraps to next row */
+      .static-cards-row { flex-wrap: wrap; }
+      .static-cards-row .static-card { flex-basis: 100%; }
 
       /* Carousel cards: narrower */
       .carousel__card {
