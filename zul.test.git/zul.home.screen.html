@@ -442,10 +442,12 @@
     }
     .status-pill--score  { background: #00cc85; border-color: #00a36a; }
     .status-pill--coins  { background: #fece00; border-color: #cba500; }
-    /* DS node 2312:10654 — Coins label + value TEXT nodes have stroke: #cba500 weight:1 */
+    /* DS node 2312:10654 — Coins label + value TEXT nodes: stroke #cba500, weight:1, align:OUTSIDE
+       CSS -webkit-text-stroke is centered (half inside fill, half outside). With paint-order:stroke fill
+       the fill covers the inner half → must use 2px so 1px outside remains visible, matching DS. */
     .status-pill--coins .status-pill__label,
     .status-pill--coins .status-pill__value {
-      -webkit-text-stroke: 1px #cba500;
+      -webkit-text-stroke: 2px #cba500;
       paint-order:         stroke fill;
     }
     .status-pill--streak { background: #7367f0; border-color: #5c52c0; }
