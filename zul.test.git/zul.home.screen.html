@@ -953,18 +953,13 @@
       box-shadow:  inset 0 0 0 1px var(--border-secondary-focus);
       color:       var(--icon-secondary-hover);
     }
-    /* Pressed */
+    /* Pressed — DS node 538:1907 (Secondary/M/Student/Pressed): dark teal, same as Tertiary pressed */
     .btn-add-classes:active {
-      background:   var(--surface-primary-default);
-      border-color: var(--border-primary-focus);
+      background:   var(--surface-tertiary-default);   /* #00564c */
+      border-color: var(--border-tertiary-focus);      /* #00453d */
     }
     .btn-add-classes:active .btn-add-classes__text,
-    .btn-add-classes:active .btn-add-classes__icon { color: var(--text-primary-on-color); }
-    .btn-add-classes:active .btn-add-classes__arrow {
-      background:  var(--surface-primary-default-subtle-hover);
-      box-shadow:  inset 0 0 0 1px var(--border-primary-focus);
-      color:       var(--surface-primary-focus);
-    }
+    .btn-add-classes:active .btn-add-classes__icon { color: var(--text-primary-default); }  /* #00cc85 */
 
     /* Link 1.5  State=Default, Type=Default (node 701:524) */
     .link-view-activity {

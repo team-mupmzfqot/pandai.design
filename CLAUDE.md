@@ -55,7 +55,7 @@
 
 **Mistake made:**
 - Primary button hover was assumed to be a darker green. Actual DS: Primary hover transitions to the **Secondary palette** — `Surface/secondary/default` (`#b5f291`) bg, `Border/secondary/focus` (`#70bc6f`) border, `Text/secondary/focus` (`#70bc6f`) text.
-- Secondary button Pressed state was not implemented. Actual DS: Secondary pressed **fills solid** — `Surface/primary/default` bg + `Text/primary/on-color` text.
+- Secondary button Pressed state was incorrectly noted as "fills solid with Surface/primary/default". Actual DS node `538:1907` (Secondary/M/Student/Pressed): bg `#00564c` (`Surface/tertiary/default`), border `#00453d` (`Border/tertiary/focus`), text `#00cc85` (`Text/primary/default`) — same dark teal palette as Tertiary Pressed.
 - Disabled state was invented. Actual DS: `Surface/disabled/primary` (`#f2f2f2`) bg, `Border/disabled/disabled` (`#bfbfbf`) border, `Icon/disabled/default` (`#bfbfbf`) text.
 
 ---
@@ -896,6 +896,35 @@ When looking up states for a component used inside a larger DS assembly (e.g. a 
 2. findAll(n => n.type === 'INSTANCE') → read mainComponent.name + mainComponent.parent.name
 3. Navigate to THAT component set to find all states
 ```
+
+---
+
+### 40. Button - 1.5 Pressed palette is consistent across all variants
+
+All three variants (Primary, Secondary, Tertiary) share the **same Pressed state colour palette** — dark teal. The variant only changes the Default/Hover appearance, not the Pressed.
+
+**Confirmed Pressed state — all variants, Student type (May 2026):**
+
+| Property | Value | Token |
+|---|---|---|
+| Background | `#00564c` | `Surface/tertiary/default` |
+| Border | `#00453d` | `Border/tertiary/focus` |
+| Label/icon | `#00cc85` | `Text/primary/default` / `Icon/primary/default` |
+
+This applies to: `Primary/S`, `Primary/M`, `Primary/L`, `Secondary/M`, `Tertiary/M`, `Tertiary/L`.
+
+**Mistake corrected (May 2026):** CLAUDE.md Rule 2 previously stated Secondary/M Pressed = "fills solid with `Surface/primary/default` (#00cc85)". This was wrong — actual DS node `538:1907` shows dark teal (#00564c), not primary green. Never rely on old notes for pressed state colours — always pull from DS.
+
+---
+
+### 41. Always check `visible` on component children — hidden elements = no HTML/CSS needed
+
+When inspecting DS component children via `use_figma`, check the `visible` property on each child. If `visible: false`, that element is not rendered in the DS and must NOT be added to the HTML or styled in CSS.
+
+**Confirmed — Secondary/M button arrow (`arrowVisible: false` across all states):**
+The DS Secondary/M button (`538:1923`) has an Arrow frame that is `visible: false` in every state — Default, Hover, Pressed, Active, Disabled. The arrow must not be added to the HTML for Secondary buttons. Any CSS targeting `.btn-secondary__arrow` is dead code.
+
+**Rule:** Before implementing any structural element (icon, badge, arrow, label), confirm `visible: true` on that node in the DS. `visible: false` = intentionally hidden = exclude from implementation.
 
 ---
 
