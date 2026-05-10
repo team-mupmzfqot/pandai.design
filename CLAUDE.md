@@ -517,6 +517,50 @@ When DS TEXT node has `strokeAlign: OUTSIDE` weight 1px, use `-webkit-text-strok
 
 ---
 
+### 27. SVG icon viewBox must match the DS 24×24 frame, not the path bounds
+
+Figma exports icon SVG paths in **local coordinates** (0-based, tight to the path). But every DS icon lives inside a 24×24 frame, and the vector is positioned at some (x, y) offset within that frame. If the `viewBox` wraps only the path (e.g. `-1 -1 20 22`), the SVG scales up when rendered at 24×24 CSS — making the stroke visually thicker than intended.
+
+**Rule:** Always translate path coordinates by the vector's DS frame offset `(+x, +y)` and set `viewBox="-1 -1 26 26"` (24px frame + 1px buffer each side).
+
+**Formula:**
+```
+new path coords = original local coords + (vec.x, vec.y)
+viewBox = "-1 -1 26 26"
+```
+
+**How to get the offset:** `use_figma` → `findOne(n => n.id === '<icon-node-id>')` → `findAll(n => n.type === 'VECTOR')` → read `.x` and `.y` on the vector node.
+
+**Scale math:** With `viewBox="-1 -1 26 26"` at 24×24 CSS: scale = 24/26 = 0.923×, stroke = 1.5 × 0.923 = **1.38px** — consistent across all icons. A tight `-1 -1 20 22` viewBox at 24px = 24/20 = 1.2× → stroke = **1.8px** (visually thicker).
+
+**Exception — non-circular glyphs (e.g. EN text icon):** Landscape/portrait icons that are NOT 24×24 squares still use the translated viewBox approach when rendered without a clip container. The path translation to DS absolute coords + `-1 -1 26 26` viewBox gives the correct visual spacing within the 24×24 CSS box.
+
+**Navbar action icons confirmed (DS node 1084:1909):**
+- All 6 action icons (search, maximize, smartphone, bell, EN, waffle) are plain 24×24 — no CSS clip, no padding.
+- All use `viewBox="-1 -1 26 26"` with translated paths.
+
+**Navbar nav button icons (Row 2):** These ARE inside clip containers (`.nav-btn__icon-clip`) with per-icon DS inset padding — leave those viewBoxes as-is (tight to path), the clip handles sizing.
+
+---
+
+### 28. Always check the DS component, not just the Iconography page
+
+The Iconography page shows raw icon frames. The rendering context — clip size, padding, no-clip — is defined by the **component that uses the icon**, not by the Iconography page itself.
+
+**Rule:** Before implementing an icon's CSS container (size, padding, overflow), always inspect the actual DS component node that uses it via `use_figma`. The component defines the ground truth for how the icon should render.
+
+**Confirmed mistake:** Action icons in the navbar were implemented with `padding: 3px; overflow: hidden` based on inset percentages from the Iconography page. The actual DS Navbar component (node `1084:1909`) renders all action icons as plain 24×24 with `padding: 0, clipsContent: false` — no clip at all.
+
+**Workflow:**
+```
+1. Find the component that uses the icon (e.g. Navbar, Button, Badge)
+2. use_figma → inspect that component → find the icon instance → read its parent container
+3. Check: clipsContent, paddingTop/Right/Bottom/Left, width, height on the parent
+4. Implement CSS to match that container — not the raw Iconography insets
+```
+
+---
+
 ### Mandatory workflow before implementing any component
 
 ```
