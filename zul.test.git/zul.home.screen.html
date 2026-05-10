@@ -575,11 +575,12 @@
 
     /* Content = overflow container holding track + buttons */
     .carousel__content {
-      position:    relative;
-      width:       100%;
-      overflow:    hidden;
-      display:     flex;
-      align-items: center;
+      position:     relative;
+      width:        100%;
+      overflow:     hidden;
+      display:      flex;
+      align-items:  center;
+      border-radius: var(--corner-radius-corner-4xl);   /* DS Content frame radius:24 */
     }
 
     /* Track — flex row of cards */
@@ -591,12 +592,15 @@
       transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    /* Carousel Parts (node 1376:2259): 428×186px, corner-xl */
+    /* Carousel Parts (node 1376:2259): 428×186px, corner-xl
+       Outer border: #00cc85 (DS stroke on component)
+       Inner grey border: DS "No Image" inner frame stroke #d9d9d9 w:1 INSIDE → box-shadow:inset */
     .carousel__card {
       width:           428px;
       height:          186px;
       border-radius:   var(--corner-radius-corner-xl);
-      border:          1px solid var(--border-general-default);
+      border:          1px solid var(--border-default);
+      box-shadow:      inset 0 0 0 1px var(--border-general-default);   /* DS inner grey border */
       background:      var(--surface-general-default);
       overflow:        hidden;
       flex-shrink:     0;
@@ -606,17 +610,6 @@
       justify-content: center;
     }
 
-    /* Outline/image placeholder (DS: 128×128, inset 12.5% = 16px padding) */
-    .carousel__card__placeholder {
-      width:       128px;
-      height:      128px;
-      box-sizing:  border-box;
-      padding:     16px;
-      overflow:    hidden;
-      flex-shrink: 0;
-      color:       var(--border-general-default);
-    }
-    .carousel__card__placeholder svg { display: block; width: 100%; height: 100%; }
 
     /* Image overlay — inset -1px to cover the card border (DS: absolute inset[-1px]) */
     .carousel__card img {
@@ -637,8 +630,21 @@
       padding:     var(--spacing-space-m);   /* p-[16px] */
       z-index:     2;
     }
-    .carousel__btn-wrap--prev { left: 0; }
-    .carousel__btn-wrap--next { right: 0; }
+    /* 3-side borders on button wrappers form the carousel outer frame (DS: no border on Content frame) */
+    .carousel__btn-wrap--prev {
+      left:          0;
+      border-top:    1px solid var(--border-default);
+      border-left:   1px solid var(--border-default);
+      border-bottom: 1px solid var(--border-default);
+      border-radius: var(--corner-radius-corner-4xl) 0 0 var(--corner-radius-corner-4xl);
+    }
+    .carousel__btn-wrap--next {
+      right:         0;
+      border-top:    1px solid var(--border-default);
+      border-right:  1px solid var(--border-default);
+      border-bottom: 1px solid var(--border-default);
+      border-radius: 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl) 0;
+    }
 
     /* Button Icon - 1.5/S/Default: pill, full height of wrapper content */
     .carousel__btn {
@@ -673,9 +679,22 @@
     }
     .carousel__btn__icon-clip svg { display: block; width: 100%; height: 100%; }
 
-    /* Indicator (node 1376:2406): 108×20px */
-    .carousel__indicator { flex-shrink: 0; display: none; }
-    .carousel__indicator img { width: 108px; height: 20px; display: block; }
+    /* Indicator (node 1376:2406): 5 dots, 12×12, gap:10, padding:4 */
+    .carousel__indicator {
+      flex-shrink: 0;
+      display:     flex;
+      align-items: center;
+      gap:         10px;
+      padding:     4px;
+    }
+    .carousel__dot {
+      width:         12px;
+      height:        12px;
+      border-radius: 50%;
+      flex-shrink:   0;
+      background:    var(--border-general-default);   /* inactive: #d9d9d9 */
+    }
+    .carousel__dot.is-active { background: var(--surface-primary-default); }  /* active: #00cc85 */
 
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
@@ -1433,7 +1452,7 @@
       .static-cards-row { flex-wrap: wrap; }
       .static-cards-row .static-card { flex-basis: 100%; }
 
-      /* Carousel cards: narrower */
+      /* Carousel cards: narrower to show prev/next cards peeking behind button wrappers */
       .carousel__card {
         width: calc(100vw - 64px);
         max-width: 428px;
@@ -1788,23 +1807,20 @@
             <div class="carousel__track" id="carouselTrack">
               <!-- Carousel Parts (node 1376:2259): 428×186, corner-xl, border general/default -->
               <div class="carousel__card">
-                <div class="carousel__card__placeholder"><svg aria-hidden="true"><use href="#ic-image"/></svg></div>
+
                 <img src="icons/carousel-slide.png" alt="Pandai Score is Ready!">
               </div>
               <div class="carousel__card">
-                <div class="carousel__card__placeholder"><svg aria-hidden="true"><use href="#ic-image"/></svg></div>
+
                 <img src="icons/carousel-slide.png" alt="SPM English Paper Bank">
               </div>
+
               <div class="carousel__card">
-                <!-- showImage=false: placeholder visible -->
-                <div class="carousel__card__placeholder"><svg aria-hidden="true"><use href="#ic-image"/></svg></div>
-              </div>
-              <div class="carousel__card">
-                <div class="carousel__card__placeholder"><svg aria-hidden="true"><use href="#ic-image"/></svg></div>
+
                 <img src="icons/carousel-slide.png" alt="SPM Mathematics Marathon">
               </div>
               <div class="carousel__card">
-                <div class="carousel__card__placeholder"><svg aria-hidden="true"><use href="#ic-image"/></svg></div>
+
                 <img src="icons/carousel-slide.png" alt="This Week's Challenge">
               </div>
             </div>
@@ -1833,9 +1849,13 @@
 
           </div><!-- end carousel__content -->
 
-          <!-- Indicator (node 1376:2406): 108×20px -->
-          <div class="carousel__indicator">
-            <img src="icons/carousel-dots.svg" id="carouselDots" alt="Slide indicator">
+          <!-- Indicator (node 1376:2406): 5 dots, active dot synced by JS -->
+          <div class="carousel__indicator" id="carouselIndicator">
+            <span class="carousel__dot"></span>
+            <span class="carousel__dot"></span>
+            <span class="carousel__dot"></span>
+            <span class="carousel__dot"></span>
+            <span class="carousel__dot"></span>
           </div>
 
         </section><!-- end section 2 -->
@@ -2336,11 +2356,18 @@
           return -(i * STEP) + (content.offsetWidth / 2 - CARD_W / 2);
         }
 
+        const dots = document.querySelectorAll('.carousel__dot');
+        function updateDots(i) {
+          const active = ((i - total) % total + total) % total;
+          dots.forEach((d, n) => d.classList.toggle('is-active', n === active));
+        }
+
         function jump(i) {
           track.style.transition = 'none';
           track.style.transform  = `translateX(${offsetFor(i)}px)`;
           track.offsetHeight;
           track.style.transition = '';
+          updateDots(i);
         }
 
         function slide(i) {
@@ -2348,6 +2375,7 @@
           busy = true;
           idx = i;
           track.style.transform = `translateX(${offsetFor(i)}px)`;
+          updateDots(i);
         }
 
         track.addEventListener('transitionend', () => {

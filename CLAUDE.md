@@ -928,6 +928,45 @@ The DS Secondary/M button (`538:1923`) has an Arrow frame that is `visible: fals
 
 ---
 
+### 42. Composite borders — a component's visual frame may come from child elements, not the container
+
+A DS component's visible border outline is not always a single `border` on the outer container. It can be **composed from multiple child elements**, each contributing part of the outline. Never assume the container has the border — always inspect the actual DS node tree.
+
+**Confirmed instance — Carousel - 1.5 (node 1200:1789, May 2026):**
+
+The carousel's green rounded frame has NO border on the Content frame. It is composed from:
+- **Left Button container** (`1200:1837`): `position:absolute; left:0; top:0; bottom:0; padding:16px; border-top:1px #00cc85; border-left:1px #00cc85; border-bottom:1px #00cc85; border-radius: 24px 0 0 24px`
+- **Right Button container** (`1200:1861`): `position:absolute; right:0; top:0; bottom:0; padding:16px; border-top:1px #00cc85; border-right:1px #00cc85; border-bottom:1px #00cc85; border-radius: 0 24px 24px 0`
+- **Card top/bottom borders**: each card has `border:1px solid #00cc85; height:100%`, so their top/bottom edges visually complete the top/bottom of the outer frame in the middle section
+
+The Content frame itself: `overflow:hidden; border-radius:24px` — **no border property at all**.
+
+**CSS pattern for the button wrapper borders:**
+```css
+.carousel__btn-wrap--prev {
+  left: 0;
+  border-top:    1px solid var(--border-default);
+  border-left:   1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+  border-radius: 24px 0 0 24px;
+}
+.carousel__btn-wrap--next {
+  right: 0;
+  border-top:    1px solid var(--border-default);
+  border-right:  1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+  border-radius: 0 24px 24px 0;
+}
+```
+
+**Why this works:** The button wrappers are `position:absolute` inside the Content frame (`overflow:hidden; border-radius:24px`). Their 3-side borders (at `left:0` / `right:0`) land on the content frame boundary and get clipped at the matching 24px corner radius — creating a seamless visual frame.
+
+**Mistake made:** Added `border: 1px solid #00cc85` to the Content frame OR the card, and tried adjusting card width to expose card edges. Neither addressed the missing left/right sides of the outer frame. The fix was adding the DS-correct 3-side borders to the button wrapper elements.
+
+**Rule:** When a "border" appears to be missing from a component, use `get_design_context` to inspect which child node actually carries the border strokes — never guess that it belongs to the outermost container.
+
+---
+
 ### Mandatory workflow before implementing any component
 
 ```
