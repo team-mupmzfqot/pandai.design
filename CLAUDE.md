@@ -633,6 +633,63 @@ All specs from `use_figma` inspection of component nodes. Arrow circle fills/str
 
 ---
 
+### 32. Always reset `<button>` default browser styles
+
+Native `<button>` elements carry browser-default styles: grey background, visible border, and padding. These render as a grey box around the content — completely overriding any icon-only or transparent button design from the DS.
+
+**Required reset for every custom-styled `<button>`:**
+```css
+.my-btn {
+  background: none;
+  border:     none;
+  padding:    0;
+  cursor:     pointer;
+}
+```
+
+**Rule:** Any `<button>` used to wrap a DS icon (hamburger, close, chevron, etc.) must have all three resets — `background: none`, `border: none`, `padding: 0` — or the browser will render a grey box around the icon.
+
+**Confirmed mistake (May 2026):** Mobile navbar hamburger button rendered with a grey rounded box because `background/border/padding` resets were missing. The DS Menu Icon frame has `fills: []` (transparent) — the box came entirely from browser defaults.
+
+**When to use `<button>` vs `<div>`:** Prefer `<button>` for icon-only tap targets (semantic, gets focus/keyboard for free). Prefer `<div>` for complex nav items like `.nav-btn` (multi-child layout that doesn't suit button flow). Always add the reset above when using `<button>`.
+
+---
+
+### 33. Responsive typography — DS Responsives collection defines the scale
+
+The DS has a **Responsives** variable collection with 3 modes: Desktop / Tablet / Mobile. Frame widths: Desktop=1440px, Tablet=687px, Mobile=390px. Only **Heading and some Title** styles change across breakpoints — Body (14px and below) and Caption never change.
+
+**Resolved type scale per breakpoint (DS Responsives, confirmed May 2026):**
+
+| Style | Desktop | Tablet | Mobile |
+|---|---|---|---|
+| Header/H1 | 28px / lh:42 | 24px / lh:36 | 20px / lh:32 |
+| Header/H2 | 24px / lh:36 | 24px (same) | 20px / lh:32 |
+| Header/H3 | 24px / lh:36 | 20px / lh:32 | 20px (same) |
+| Header/H4 | 20px / lh:32 | 20px (same) | 18px / lh:28 |
+| Title/T1 | 18px / lh:28 | 18px (same) | 16px / lh:24 |
+| Title/T2 | 18px / lh:28 | 18px (same) | 16px / lh:24 |
+| Title/T3 | 16px / lh:24 | 16px (same) | 16px (same) |
+| Title/T4 | 16px / lh:24 | 16px (same) | 14px / lh:20 |
+| Title/T5 | 16px / lh:24 | 16px (same) | 14px / lh:20 |
+| Body B1–B8 | 14px–10px | no change | no change |
+| Caption C1–C2 | 12px–10px | no change | no change |
+
+**CSS breakpoint mapping (prototype):**
+
+| DS mode | CSS breakpoint |
+|---|---|
+| Tablet (687px) | `@media (max-width: 1279px)` |
+| Mobile (390px) | `@media (max-width: 767px)` |
+
+**Rule:** Always override both `font-size` AND `line-height` together in the media query — never just font-size. Line height must scale with the type or text becomes cramped/loose.
+
+**Only apply to elements that actually use those styles.** Don't add generic `h1, h2` tag overrides — scope overrides to the specific class using that text style (e.g. `.welcome-text__name`, `.static-card__title`, `.section-header__title`).
+
+**Mistake made (May 2026):** `.welcome-text__name` was set to 26px (not a DS value). Correct base is 28px (Header/H1). Always use the exact DS text style value at desktop — never approximate.
+
+---
+
 ### Mandatory workflow before implementing any component
 
 ```
@@ -902,7 +959,8 @@ Static HTML/CSS prototype of the Pandai home screen, implemented against DS 1.5.
 
 **Page section structure (confirmed May 2026):**
 ```html
-<section id="NavBar-Desktop">      <!-- Navbar 1.5 -->
+<section id="NavBar-Desktop">      <!-- Navbar 1.5 desktop — shown at ≥1440px -->
+<section id="NavBar-Mobile">       <!-- Navbar 1.5 mobile  — shown at <1440px  -->
 <main>
   <div class="page-container">
     <div class="main-content">     <!-- gap: var(--spacing-space-m) = 16px between sections -->
@@ -917,7 +975,19 @@ Static HTML/CSS prototype of the Pandai home screen, implemented against DS 1.5.
 
 **Section rename (May 2026):** Section #4 was renamed from `id="static-newscards"` to `id="StaticNewsCard-Desktop"`. Sections #5 (YourSelectedSubjects) and #6 (Recent Activity) were removed; a new #5 (YourSelectedSubjects) was rebuilt with Primary Card - 1.5 (Secondary Card variant) containing 18 Quiz Cards in a 3-column grid.
 
-**Navbar — confirmed implementation notes (May 2026):**
+**Mobile Navbar — confirmed DS specs (node `1943:22641`, May 2026):**
+- Height: **64px** (not 68px — earlier session note was wrong; always re-inspect)
+- Padding: `t:16 r:24 b:16 l:24` → CSS `padding: var(--spacing-space-m) 24px`
+- Layout: `HORIZONTAL`, `mainAlign: SPACE_BETWEEN`, `crossAlign: CENTER`
+- Fill: white; stroke: `#00cc85` (1px, INSIDE align); radius: `0 0 24 24`
+- Children: Logo `116×28` (left) + Menu Icon frame `24×24` (right, `fills:[]` transparent)
+- `Outline/menu` icon: `viewBox="-1 -1 26 26"`, path `M3 12H21M3 6H21M3 18H21`, stroke `var(--icon-primary-default)` = `#00cc85`
+- Hamburger uses `<button>` — **must reset** `background:none; border:none; padding:0` (Rule 32)
+- Outer layout padding: `#NavBar-Mobile { padding: 0 var(--page-padding-x) }` — same as `.navbar` desktop
+- Default CSS: `#NavBar-Desktop { display:block } #NavBar-Mobile { display:none }` — then `@media (max-width:1439px)` swaps them. Never rely on media-query-only visibility (causes flash of both on load).
+- `body { min-width: 400px }` — minimum mobile layout width
+
+**Desktop Navbar — confirmed implementation notes (May 2026):**
 - `.nav-btn` is a `<div>` — MUST have `cursor: pointer; user-select: none` or it feels unresponsive
 - Hover state: `background: #b5f291; box-shadow: inset 0 0 0 1px #70bc6f` on `.nav-btn__inner`
 - Selected state: `is-active` class toggled via JS click handler on each `.nav-btn`
@@ -1019,6 +1089,14 @@ Badge icon CSS: `width: 16px; height: auto; max-height: 20px` constrains all sub
 - Outer card: `border: 1px solid Border/general/default`, `border-radius: corner-xl`, `background: Surface/general/default`
 - Content area (`.primary-card__content`): `display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-space-m)`
 - Section header: bookmark icon + title (`H2`) + Button - 1.5 (Secondary/M) with `ic-chevron-btn-m`
+
+---
+
+**Responsive typography — applied to prototype (May 2026):**
+- Tablet `@media (max-width: 1279px)`: `.welcome-text__name` → 24px/36lh
+- Mobile `@media (max-width: 767px)`: `.welcome-text__name` → 20px/32lh · `.static-card__title` → 16px/24lh · `.section-header__title` → 16px/24lh · `.status-pill__value` → 14px/20lh
+- Body text (14px and below) unchanged at all breakpoints — matches DS Responsives spec
+- Base `.welcome-text__name` corrected from 26px → **28px** (Header/H1, DS confirmed)
 
 ---
 
