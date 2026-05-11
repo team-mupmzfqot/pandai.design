@@ -425,40 +425,40 @@
       display: block;
     }
 
-    /* ── Responsive Layout — matches zul.home.screen breakpoints ── */
+    /* ── Responsive Layout ─────────────────────────────────────────
+       Website  ≥ 1320px : desktop navbar · 3-col cards · 60px padding
+       Tablet  < 1320px  : mobile navbar  · 2-col cards · 32px padding
+       Mobile  ≤  767px  : mobile navbar  · 1-col cards · 16px padding
+    ─────────────────────────────────────────────────────────────── */
     #NavBar-Desktop { display: block; }
     #NavBar-Mobile  { display: none; padding: 0 var(--page-padding-x); }
 
-    /* < 1320px: swap to mobile navbar */
+    /* Tablet — swap navbar + 2-col cards + 32px padding */
     @media (max-width: 1319px) {
+      :root           { --page-padding-x: 32px; }
       #NavBar-Desktop { display: none; }
       #NavBar-Mobile  { display: block; }
+      .cards-grid     { grid-template-columns: repeat(2, 1fr); }
+      .bc-row         { flex-wrap: wrap; gap: 12px; }
     }
 
-    /* Tablet ≤ 1279px: 32px padding, 2-col cards */
-    @media (max-width: 1279px) {
-      :root { --page-padding-x: 32px; }
-      .cards-grid { grid-template-columns: repeat(2, 1fr); }
-      .bc-row     { flex-wrap: wrap; gap: 12px; }
-    }
-
-    /* Mobile ≤ 767px: 16px padding, 1-col cards */
+    /* Mobile — 1-col cards + 16px padding */
     @media (max-width: 767px) {
-      :root { --page-padding-x: var(--sp-m); }   /* 16px */
+      :root         { --page-padding-x: var(--sp-m); }   /* 16px */
       .cards-grid   { grid-template-columns: 1fr; }
       .bc-row       { flex-direction: column; align-items: flex-start; gap: 12px; }
       .bc-left      { flex-wrap: wrap; }
       .bc-actions   { width: 100%; }
       .btn-secondary, .btn-primary { flex: 1; justify-content: center; }
-      /* Footer — stack vertically, center both groups */
+      /* Footer — stack vertically */
       body { padding-bottom: 102px; }
       .footer__inner {
         flex-direction: column;
         justify-content: center;
         align-items:     center;
-        gap:             var(--sp-xs);       /* 8px between rows */
+        gap:             var(--sp-xs);
         height:          auto;
-        padding:         var(--sp-s) 28px;   /* 12px 28px — DS padLeft/padRight:28 */
+        padding:         var(--sp-s) 28px;
       }
       .footer__left  { justify-content: center; }
       .footer__right { justify-content: center; }
