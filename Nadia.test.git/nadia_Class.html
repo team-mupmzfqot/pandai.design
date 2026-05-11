@@ -900,8 +900,8 @@
     <!-- Row 1 — Brand bar (64px) -->
     <div class="navbar-brand">
       <a class="navbar-logo" href="#">
-        <img src="navbar/logo-mark.svg" class="navbar-logo__mark" alt="Pandai mark">
-        <img src="navbar/logo-text.svg" class="navbar-logo__text" alt="Pandai">
+        <img src="navbar/logo-mark.png" class="navbar-logo__mark" alt="Pandai mark">
+        <img src="navbar/logo-wordmark.png" class="navbar-logo__text" alt="Pandai">
       </a>
       <div class="navbar-actions">
         <div class="navbar-action-icons">
@@ -1006,8 +1006,8 @@
   <section id="NavBar-Mobile">
     <div class="navbar-mobile">
       <a class="navbar-mobile__logo" href="#">
-        <img src="navbar/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
-        <img src="navbar/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
+        <img src="navbar/logo-mark.png" class="navbar-mobile__logo-mark" alt="Pandai mark">
+        <img src="navbar/logo-wordmark.png" class="navbar-mobile__logo-text" alt="Pandai">
       </a>
       <button class="navbar-mobile__menu-btn" aria-label="Open menu" type="button">
         <svg aria-hidden="true"><use href="#ic-menu"/></svg>
@@ -1400,6 +1400,16 @@
 
     </div>
   </footer>
+
+  <script>
+    // Nav button pressed state — mousedown/mouseup so visible regardless of click speed
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('mousedown', () => btn.classList.add('is-pressed'));
+      const clearPressed = () => btn.classList.remove('is-pressed');
+      btn.addEventListener('mouseup', clearPressed);
+      btn.addEventListener('mouseleave', clearPressed);
+    });
+  </script>
 
 </body>
 </html>
