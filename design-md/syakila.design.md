@@ -1470,3 +1470,167 @@ Start-Process "vscode://vscode.simpleBrowser/show?url=http%3A%2F%2Flocalhost%3A3
 ---
 
 *Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+
+---
+
+## HTML prototype — `Dashboard_syakila/syakila.html`
+
+Static HTML/CSS prototype of Syakila's **Report Card Summary** dashboard, implemented against DS 1.5.
+
+**File:** `Dashboard_syakila/syakila.html`
+**Branch:** `staging`
+**Active page:** Achievement → Report Card for Year 1
+
+---
+
+### Syakila Navbar — confirmed implementation (May 2026)
+
+Aligned to `zul.home.screen.html` for cross-page consistency. Same class names, same CSS pattern.
+
+**Structure (two-row, identical to Zul's):**
+```html
+<div class="pd-navbar15" id="NavBar-Desktop">   <!-- flex-col, gap:12px, padding:0 60px 12px -->
+  <div class="pd-topbar">                        <!-- 64px, white, border b/l/r green, radius 0 0 24 24 -->
+  <nav class="pd-navcontent">                    <!-- 56px pill, flex row, gap:8px -->
+</div>
+<section id="NavBar-Mobile">                     <!-- shown at <1320px -->
+  <div class="navbar-mobile">                    <!-- 64px, logo left + hamburger right -->
+```
+
+**Visibility swap breakpoint:** `max-width: 1319px` — below this, `#NavBar-Desktop` hides, `#NavBar-Mobile` shows.
+
+**Critical CSS bug fixed:** `#NavBar-Desktop { display: block }` was overriding `display: flex` from `.pd-navbar15` (ID specificity 1,0,0 beats class 0,1,0). `gap` only works on flex containers — this silently removed the 12px gap between the two navbar rows. Fix: remove the `display: block` default rule and let `.pd-navbar15` keep `display: flex`.
+
+**Nav button structure (matches Zul exactly):**
+```html
+<div class="nav-btn [is-active]">        <!-- flex-col, height:40px, overflow:hidden, cursor:pointer -->
+  <div class="nav-btn__inner">           <!-- flex-row, gap:8px, padding:8px 12px, border-radius:999px -->
+    <div class="nav-btn__icon-wrap">     <!-- 24×24, color:--icon-primary-default -->
+      <div class="nav-btn__icon-clip" data-icon="*">  <!-- 20×20, overflow:hidden, per-icon padding -->
+        <svg><use href="#ic-*"/></svg>
+      </div>
+    </div>
+    <span class="nav-btn__label">Label</span>
+    <!-- Dropdown buttons also have a second icon-wrap with ic-chevron-down-nav -->
+  </div>
+</div>
+```
+
+**Nav button states:**
+
+| State | CSS class | Inner bg | Border (box-shadow inset) | Label | Icon-wrap |
+|---|---|---|---|---|---|
+| Default | — | transparent | none | `#666` | `#00cc85` |
+| Hover | `:hover` | `#b5f291` | `1px #70bc6f` | `#70bc6f` | `#70bc6f` |
+| Pressed | `.is-pressed` (JS mousedown) | `#00564c` | `1px #00453d` | `#00cc85` | `#00cc85` |
+| Active/Selected | `.is-active` | `#00cc85` | `1px #00a36a` | `#f6fdfb` | `#f6fdfb` |
+
+**JS pattern — nav handlers registered FIRST:**
+```js
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click',     () => { /* toggle is-active */ });
+  btn.addEventListener('mousedown',  () => btn.classList.add('is-pressed'));
+  btn.addEventListener('mouseup',    () => btn.classList.remove('is-pressed'));
+  btn.addEventListener('mouseleave', () => btn.classList.remove('is-pressed'));
+});
+```
+
+**Per-icon clip padding (DS inset % × 20px):**
+| data-icon | padding |
+|---|---|
+| `home` | `1.67px 2.5px` |
+| `battle` | `2.5px` |
+| `practice` | `2.5px 1.67px` |
+| `class` | `2.5px 0.83px` |
+| `learn` | `1.67px 3.33px` |
+| `achievement` | `2.5px 1.67px` |
+| `potential` | `1.67px 1.67px 2.48px 1.67px` |
+
+**SVG icon symbols (in hidden `<svg><defs>` block before navbar):**
+`ic-home`, `ic-check-circle`, `ic-battle`, `ic-book-open`, `ic-users`, `ic-book`, `ic-achievement` (bar-chart-2), `ic-star`, `ic-gift`, `ic-chevron-down-nav`, `ic-menu`, `ic-heart`
+
+**Mobile navbar (`#NavBar-Mobile`):**
+- 64px, white bg, `border-b/l/r: 1px #00cc85`, `border-radius: 0 0 24px 24px`
+- Logo (`assets/logo-pandai.svg`) left, hamburger (`ic-menu`, green) right
+- `<button>` with `background:none; border:none; padding:0` reset (Rule 32)
+- Padding: `0 60px` desktop → `0 32px` tablet → `0 16px` mobile
+
+---
+
+### Syakila Footer — confirmed implementation (May 2026)
+
+Aligned to `zul.home.screen.html` exactly. `position: fixed`.
+
+```html
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__left">
+      <span class="footer__text">© 2026</span>
+      <a class="footer__link" href="#">Pandai.org</a>
+      <span class="footer__text">All Rights Reserved</span>
+    </div>
+    <div class="footer__right">
+      <span class="footer__text">Made with</span>
+      <svg class="footer__heart" aria-hidden="true"><use href="#ic-heart"/></svg>
+      <span class="footer__text">in Malaysia</span>
+    </div>
+  </div>
+</footer>
+```
+
+**CSS:**
+- `.footer`: `position:fixed; bottom:0; left:0; right:0; z-index:100; background:white; border-top:1px #00cc85`
+- `.footer__inner`: `height:60px; display:flex; justify-content:space-between; padding:0 28px`
+- `.footer__heart`: `width:20px; height:20px; color:var(--icon-primary-default)` — color via `currentColor`
+- `body { padding-bottom: 90px }` — 60px footer + 30px DS gap
+- Mobile: footer stacks vertically, `body { padding-bottom: 102px }`
+
+---
+
+### Syakila Breadcrumb — confirmed implementation (May 2026)
+
+**DS source:** Breadcrumbs 1.5, node `837:1033`, main DS file `TLVKe3bgJTdVvuPAzgDq2f`
+
+**Structure:** `[icon + subtopic] > [active page]`
+
+```html
+<div class="pd-breadcrumbs15">
+  <h1 class="pd-breadcrumbs__title">Report Card for Year 1</h1>
+  <div class="pd-breadcrumbs__sep"></div>
+  <div class="pd-breadcrumbs__links">
+    <!-- Link: icon + subtopic + chevron -->
+    <button class="pd-link15" type="button">
+      <svg class="pd-link15__icon-home"><!-- bar-chart-2, GREEN --></svg>
+      <span class="pd-link15__text pd-link15__text--parent">Achievement</span>
+      <svg><!-- chevron-right, GREY --></svg>
+    </button>
+    <!-- Active/current page -->
+    <span class="pd-link15" style="cursor:default">
+      <span class="pd-link15__text" style="color:var(--text-primary-default)">Report Card for Year 1</span>
+    </span>
+  </div>
+</div>
+```
+
+**DS-confirmed color rules (node `837:1033`):**
+| Element | Color | Token |
+|---|---|---|
+| Icon (bar-chart-2) | `#00cc85` green | `Text/primary/default` via `.pd-link15__icon-home` |
+| Chevron-right | `#666` grey | inherits `Text/default/body` from `.pd-link15` |
+| Parent link text ("Achievement") | `#4d4d4d` dark grey | `.pd-link15__text--parent` |
+| Active/current page text | `#00cc85` green | `Text/primary/default` inline style |
+
+**Critical bug fixed — `<button>` resets `color` to browser black:**
+`<button>` elements don't inherit `color` from their parent in all browsers (OS default = black). Chevrons were appearing black even though `.pd-breadcrumbs__links { color: #666 }` was set on the container. Fix: add `color: var(--text-default-body)` explicitly on `.pd-link15`.
+
+**Breadcrumb icon:** `Outline/bar-chart-2` (DS 260:473) — the same icon used for the Achievement nav button (`ic-achievement`).
+
+---
+
+### Page background
+
+`body { background: var(--surface-subtle); }` = `#f8fafc` — matches `zul.home.screen.html`. This makes the 12px gap between navbar rows visible (light grey showing between white elements).
+
+---
+
+*Last updated: May 2026*
