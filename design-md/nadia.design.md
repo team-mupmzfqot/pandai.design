@@ -1684,4 +1684,73 @@ Moved `.cards-grid { grid-template-columns }` into the responsive section (befor
 
 ---
 
+---
+
+### Updates — May 2026 (Session 3)
+
+**Navbar fully replaced with Zul's exact implementation (node 2339:2617):**
+
+Previous custom navbar removed entirely. Now uses Zul's structure verbatim.
+
+**SVG sprite block** — added at top of `<body>` as hidden `<svg>`:
+All icon symbols defined once and referenced via `<use href="#ic-xxx"/>`. Symbols included:
+`ic-home`, `ic-check-circle`, `ic-battle`, `ic-book-open`, `ic-users`, `ic-book`, `ic-award`, `ic-star`, `ic-gift`, `ic-chevron-down-nav`, `ic-search`, `ic-maximize`, `ic-smartphone`, `ic-bell`, `ic-en`, `ic-waffle`, `ic-menu`, `ic-corner-down-right`
+
+**DS semantic tokens added to `:root`** (Zul naming convention):
+```css
+--surface-general-default, --surface-primary-default, --surface-secondary-default,
+--surface-tertiary-default, --border-default, --border-primary-default,
+--border-primary-focus, --border-secondary-focus, --border-tertiary-focus,
+--text-default-body, --text-primary-default, --text-primary-on-color (#f6fdfb),
+--text-secondary-focus, --icon-default-default (#d9d9d9), --icon-primary-default,
+--icon-primary-on-color, --icon-secondary-hover, --corner-radius-corner-4xl (24px),
+--corner-radius-corner-rounded (60px), --corner-radius-corner-pill (999px),
+--spacing-space-xxs/xs/s/m/xl/2xl
+```
+
+**Desktop navbar CSS — Zul's exact classes:**
+- `.navbar` → `padding: 0 var(--page-padding-x)`, `flex-col`, `gap: spacing-space-s`
+- `.navbar-brand` → `height: 64px`, 3-sided `border-primary-default`, `border-radius: 0 0 corner-4xl corner-4xl`, `padding: space-xs space-xl`
+- `.navbar-logo` → flex row, `logo-mark.svg` (28px) + `logo-text.svg` (18px)
+- `.navbar-actions` → `gap: space-xl`; `.navbar-action-icons` → `gap: space-2xl`
+- `.navbar-action-icon` → `24×24`, `color: icon-default-default (#d9d9d9)`
+- `.navbar-avatar` → `48×48`, `border-radius: corner-rounded`, `border: border-default`
+- `.navbar-avatar__img` → `width: 62px; height: 50px; object-fit: cover; position: absolute`
+- `.navbar-badge` → `position: absolute; top:0; right:-0.5px`, green pill, `font-size: 10px`
+- `.navbar-nav` → `height: 56px`, `border: border-default`, `border-radius: corner-pill`, `padding: space-xs`
+
+**Nav button structure — Zul's DS pattern (key difference from before):**
+```css
+.nav-btn {
+  display: flex; flex-direction: column;
+  gap: 20px;      /* pushes hidden dropdown below visible 40px */
+  height: 40px;
+  overflow: hidden;   /* clips dropdown — DS hidden dropdown mechanism */
+}
+```
+States use `box-shadow: inset 0 0 0 1px` for borders (no layout shift):
+
+| State | Class | bg | shadow | label/icon |
+|---|---|---|---|---|
+| Default | — | transparent | none | `#666` / `#00cc85` |
+| Hover | `:hover` | `#b5f291` | `inset … #70bc6f` | `#70bc6f` |
+| Pressed | `.is-pressed` | `#00564c` | `inset … #00453d` | `#00cc85` |
+| Active | `.is-active` | `#00cc85` | `inset … #00a36a` | `#f6fdfb` |
+
+**Class dropdown — kept absolute-positioned (node 890:2465):**
+`.nav-btn-group` has `overflow: visible` so dropdown escapes the overflow-hidden nav-btn.
+Icons use `<use href="#ic-corner-down-right"/>` from the sprite.
+
+**Mobile navbar CSS — Zul's exact classes:**
+- `.navbar-mobile` → `height: 64px`, 3-sided green border, `border-radius: 0 0 corner-4xl corner-4xl`, `padding: space-m 24px`
+- `.navbar-mobile__logo` → flex, mark (28px) + text (18px) images
+- `.navbar-mobile__menu-btn` → `40×40`, `color: icon-primary-default`, uses `<use href="#ic-menu"/>`
+
+**Logo assets used:**
+- `navbar/logo-mark.svg` (mark only, 28px height)
+- `navbar/logo-text.svg` (wordmark only, 18px height)
+- `navbar/icon-avatar-user.png` (avatar, 62×50 inside 48×48 circle)
+
+---
+
 *Last updated: 2026-05-11 | File: Nadia.test.git/nadia_Class.html | Branch: staging*
