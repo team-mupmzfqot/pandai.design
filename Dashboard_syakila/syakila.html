@@ -507,22 +507,63 @@
       color:       var(--icon-primary-default);
     }
 
+    /* Mobile Navbar — Navbar 1.5 Mobile (DS node 1943:22641)
+       Single row: logo left, hamburger right. Matches zul.home.screen.html exactly. */
+    .navbar-mobile {
+      height:          64px;
+      background:      var(--surface-general-default);
+      border-bottom:   1px solid var(--border-primary-default);
+      border-left:     1px solid var(--border-primary-default);
+      border-right:    1px solid var(--border-primary-default);
+      border-radius:   0 0 var(--corner-4xl) var(--corner-4xl);
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      padding:         var(--space-m) 24px;
+    }
+    .navbar-mobile__logo {
+      display:     flex;
+      align-items: center;
+      height:      28px;
+    }
+    .navbar-mobile__logo-img { height: 28px; width: auto; }
+    .navbar-mobile__menu-btn {
+      width:           40px;
+      height:          40px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      cursor:          pointer;
+      user-select:     none;
+      flex-shrink:     0;
+      color:           var(--icon-primary-default);
+      background:      none;
+      border:          none;
+      padding:         0;
+    }
+    .navbar-mobile__menu-btn svg { display: block; width: 24px; height: 24px; }
+
+    /* Default navbar visibility — desktop shows, mobile hidden */
+    #NavBar-Desktop { display: block; }
+    #NavBar-Mobile  { display: none; padding: 0 60px; }
+
     /* ═══════════════════════════════════════════════════
        RESPONSIVE BREAKPOINTS
+       < 1320px → mobile navbar (hamburger)
        Tablet  ≤ 1024px
        Mobile  ≤  768px
     ═══════════════════════════════════════════════════ */
 
-    /* ── Tablet ── */
-    @media (max-width: 1024px) {
-      /* Navbar */
-      .pd-navbar15 { padding: 0 32px var(--space-s); }
-      .pd-topbar   { padding: var(--space-xs) var(--space-m); gap: var(--space-m); }
-      .pd-topbar__icons { gap: var(--space-m); }
+    /* < 1320px — swap to mobile hamburger navbar */
+    @media (max-width: 1319px) {
+      #NavBar-Desktop { display: none; }
+      #NavBar-Mobile  { display: block; }
+    }
 
-      /* Nav pill: allow horizontal scroll if buttons overflow */
-      .pd-navcontent { overflow-x: auto; scrollbar-width: none; }
-      .pd-navcontent::-webkit-scrollbar { display: none; }
+    /* ── Tablet (1024px) — desktop navbar already hidden at 1319px ── */
+    @media (max-width: 1024px) {
+      /* Mobile navbar: tighter horizontal padding at tablet width */
+      #NavBar-Mobile { padding: 0 32px; }
 
       /* Page */
       .pd-page { padding: 0 32px var(--space-m); }
@@ -540,31 +581,10 @@
       .footer__inner { padding-left: var(--space-m); padding-right: var(--space-m); }
     }
 
-    /* ── Mobile ── */
+    /* ── Mobile (768px) ── */
     @media (max-width: 768px) {
-      /* Navbar */
-      .pd-navbar15 { padding: 0 var(--space-m) var(--space-xs); gap: var(--space-xs); }
-
-      /* Topbar: tighter, hide non-essential icons */
-      .pd-topbar { height: 52px; padding: var(--space-xxs) var(--space-s); gap: var(--space-s); border-radius: 0 0 var(--corner-m) var(--corner-m); }
-      .pd-logo img { width: 90px; height: 22px; }
-
-      /* Hide lower-priority topbar icons on mobile */
-      .pd-topbar__icons .pd-icon-btn:nth-child(2),
-      .pd-topbar__icons .pd-icon-btn:nth-child(3) { display: none; }
-
-      /* Avatar smaller */
-      .pd-avatar { width: 36px; height: 36px; }
-      .pd-avatar img { left: -5px; right: -5px; }
-      .pd-avatar__badge { min-width: 16px; height: 16px; }
-      .pd-avatar__badge span { font-size: 9px; }
-
-      /* Nav pill: icon-only on mobile — hide labels and chevrons */
-      .pd-navcontent { height: 48px; padding: var(--space-xxs); }
-      .nav-btn { height: 36px; }
-      .nav-btn__inner { padding: var(--space-xxs) var(--space-xs); }
-      .nav-btn__label { display: none; }
-      .nav-btn__inner > .nav-btn__icon-wrap:last-child { display: none; }
+      /* Mobile navbar: narrow horizontal padding */
+      #NavBar-Mobile { padding: 0 var(--space-m); }
 
       /* Page */
       .pd-page { padding: 0 var(--space-m) var(--space-m); }
@@ -673,6 +693,10 @@
     <symbol id="ic-chevron-down-nav" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M5 7.5L10 12.5L15 7.5"/>
     </symbol>
+    <!-- Outline/menu (260:922) — mobile navbar hamburger -->
+    <symbol id="ic-menu" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12H21M3 6H21M3 18H21"/>
+    </symbol>
     <!-- Outline/heart (260:815) — footer icon, color via currentColor -->
     <symbol id="ic-heart" viewBox="0 0 22.4031 19.7318" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M 20.0413 2.36183 C 19.5305 1.85083 18.9241 1.44547 18.2566 1.16891 C 17.5892 0.892347 16.8738 0.75 16.1513 0.75 C 15.4288 0.75 14.7134 0.892347 14.0459 1.16891 C 13.3785 1.44547 12.772 1.85083 12.2613 2.36183 L 11.2013 3.42183 L 10.1413 2.36183 C 9.1096 1.33013 7.71032 0.750535 6.25129 0.750535 C 4.79226 0.750535 3.39298 1.33013 2.36129 2.36183 C 1.3296 3.39352 0.75 4.79279 0.75 6.25183 C 0.75 7.71086 1.3296 9.11013 2.36129 10.1418 L 3.42129 11.2018 L 11.2013 18.9818 L 18.9813 11.2018 L 20.0413 10.1418 C 20.5523 9.63107 20.9576 9.02464 21.2342 8.35718 C 21.5108 7.68972 21.6531 6.97431 21.6531 6.25183 C 21.6531 5.52934 21.5108 4.81393 21.2342 4.14647 C 20.9576 3.47901 20.5523 2.87258 20.0413 2.36183 Z"/>
@@ -685,7 +709,7 @@
      Icons: Outline/* from DS iconography node 1898:16977
      Nav buttons: matches zul.home.screen.html structure exactly
 ═══════════════════════════════════════════════ -->
-<div class="pd-navbar15">
+<div class="pd-navbar15" id="NavBar-Desktop">
 
   <!-- Bar 1: Logo + Right Controls -->
   <div class="pd-topbar">
@@ -888,7 +912,23 @@
 
   </nav>
 
-</div><!-- /pd-navbar15 -->
+</div><!-- /pd-navbar15 NavBar-Desktop -->
+
+<!-- ═══════════════════════════════════════════════
+     MOBILE NAVBAR — Navbar 1.5 Mobile  DS node 1943:22641
+     Shows at < 1320px. Logo left, hamburger right.
+     Matches zul.home.screen.html #NavBar-Mobile exactly.
+═══════════════════════════════════════════════ -->
+<section id="NavBar-Mobile">
+  <div class="navbar-mobile">
+    <a class="navbar-mobile__logo" href="#" aria-label="Pandai">
+      <img src="assets/logo-pandai.svg" class="navbar-mobile__logo-img" alt="Pandai" />
+    </a>
+    <button class="navbar-mobile__menu-btn" aria-label="Open menu" type="button">
+      <svg aria-hidden="true"><use href="#ic-menu"/></svg>
+    </button>
+  </div>
+</section>
 
 
 <!-- ═══════════════════════════════════════════════
