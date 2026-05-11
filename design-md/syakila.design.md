@@ -1787,4 +1787,68 @@ All paths from `exportAsync({ format: 'SVG_STRING' })` on DS icon VECTOR nodes:
 - `ic-clock` — `viewBox="-1 -1 22 22"` — clock face with hands
 - `ic-chevron-right-sm` — breadcrumb separator (inline viewBox 0 0 24 24)
 
+---
+
+## Session — May 2026 (Session 2) — syakila.html restructure + scoreCard.html navbar alignment
+
+### syakila.html — Navbar removed
+
+The navbar (`#NavBar-Desktop` + `#NavBar-Mobile`) was **removed entirely** from `syakila.html`. This page is embedded in a larger app shell that provides its own navigation. The SVG defs block was retained (footer icons etc.).
+
+### syakila.html — Section #1 (Welcome) added
+
+Pulled the full Welcome section from `zul.home.screen.html` and integrated into `syakila.html`:
+
+```html
+<main>
+  <div class="page-container">
+    <div class="main-content">
+      <section id="Welcome-Desktop" class="section-welcome" aria-label="Welcome">
+        <div class="status-badges"><!-- Score, Coins, Streak, Lives/Ruby flipper --></div>
+        <div class="welcome-text">
+          <p class="welcome-text__greeting">Good Morning!</p>
+          <h1 class="welcome-text__name">Hi Syakila</h1>
+        </div>
+        <div class="check-in-card"><!-- progress + coin stats --></div>
+      </section>
+      <div class="pd-breadcrumbs15">...</div>
+      <div class="pd-card"><!-- score card table --></div>
+    </div>
+  </div>
+</main>
+```
+
+Status icon image paths: `../zul.test.git/icons/` (relative from Dashboard_syakila/).
+
+### syakila.html — Responsive breakpoints aligned with zul.home.screen.html
+
+Updated from old 1024/768 breakpoints to Zul-matching breakpoints:
+
+| Breakpoint | Change |
+|---|---|
+| `@media (max-width: 1319px)` | Mobile navbar, hide breadcrumbs, 16px padding-top gap |
+| `@media (max-width: 1279px)` | `--page-padding-x: 32px`, welcome stacks vertically, `welcome-text__name: 24px/36lh` |
+| `@media (max-width: 767px)` | `--page-padding-x: var(--space-m)`, `welcome-text__name: 20px/32lh`, table card layout |
+
+Lives/Ruby flipper JS added (same interval pattern from Zul).
+
+### scoreCard.html — Navbar CSS alignment with zul.home.screen.html
+
+Two CSS fixes applied:
+
+1. **`pd-icon-btn:hover` background** — `var(--surface-secondary-default)` → `var(--surface-secondary-default-subtle)` (matches Zul: light mint, not full secondary green)
+
+2. **Responsive breakpoints** — fixes to ensure 16px gap appears between mobile navbar and content:
+   - Added `.pd-breadcrumbs15 { display: none }` and `.pd-page { padding-top: var(--space-m) }` at `@media (max-width: 1319px)`
+   - Fixed padding shorthand at tablet/mobile: `padding: 0 32px var(--space-m)` → `padding: var(--space-m) 32px var(--space-m)` (was resetting padding-top to 0, killing the gap)
+
+**Root cause of missing gap bug:** CSS `padding` shorthand with 3 values sets `padding-top` to the first value. `padding: 0 32px var(--space-m)` → `padding-top: 0` which overrode the 16px gap set at 1319px.
+
+### Git rules confirmed
+
+- `.html` files → push to `staging` AND `main`: `git push origin staging && git push origin staging:main`
+- `syakila.design.md` → push to `staging` only: `git push origin staging`
+
+*Last updated: May 2026 (Session 2)*
+
 *Last updated: May 2026*
