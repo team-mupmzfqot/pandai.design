@@ -85,66 +85,53 @@
     .pd-icon svg { display: block; width: 20px; height: 20px; }
 
     /* ───────────────────────────────────────────────
-       NAVBAR 1.5  DS 2337:21975
+       NAVBAR 1.5  DS 2337:21975 — matches zul.home.screen.html exactly
     ─────────────────────────────────────────────── */
-    .pd-navbar15 { display: flex; flex-direction: column; gap: var(--space-s); padding: 0 60px var(--space-s); }
+    .navbar { padding: 0 var(--page-padding-x); display: flex; flex-direction: column; gap: var(--space-s); }
 
-    /* Bar 1 – topbar */
-    .pd-topbar {
-      display: flex; align-items: center; gap: var(--space-2xl);
-      height: 64px; padding: var(--space-xs) var(--space-xl);
+    /* Row 1 — Brand bar  DS h:64, pad t:8 r:24 b:8 l:24 */
+    .navbar-brand {
+      height: 64px;
       background: var(--surface-general-default);
-      border-bottom: var(--scale-25) solid var(--border-primary-default);
-      border-left:   var(--scale-25) solid var(--border-primary-default);
-      border-right:  var(--scale-25) solid var(--border-primary-default);
+      border-bottom: 1px solid var(--border-primary-default);
+      border-left:   1px solid var(--border-primary-default);
+      border-right:  1px solid var(--border-primary-default);
       border-radius: 0 0 var(--corner-4xl) var(--corner-4xl);
-      overflow: hidden;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-xs) var(--space-xl);
     }
+    .navbar-logo { display: flex; align-items: center; flex-shrink: 0; height: 28px; gap: 8px; text-decoration: none; }
+    .navbar-logo__mark { height: 28px; width: auto; }
+    .navbar-logo__text { height: 18px; width: auto; }
 
-    /* Logo / Pandai / Logo Horizontal  117 × 28 px — single PNG from DS node 1898:6965 */
-    .pd-logo     { display: flex; align-items: center; flex-shrink: 0; text-decoration: none; }
-    .pd-logo img { display: block; width: 117px; height: 28px; }
+    .navbar-actions { display: flex; position: relative; align-items: center; gap: var(--space-xl); }
+    .navbar-action-icons { display: flex; align-items: center; gap: var(--space-2xl); flex-shrink: 0; }
+    .navbar-action-icon { width: 24px; height: 24px; flex-shrink: 0; color: var(--icon-default); }
+    .navbar-action-icon svg { display: block; width: 100%; height: 100%; }
 
-    .pd-topbar__right  { display: flex; align-items: center; gap: var(--space-xl); flex: 1; justify-content: flex-end; position: relative; }
-    .pd-topbar__icons  { display: flex; align-items: center; gap: var(--space-2xl); }
-
-    /* Icon button (topbar) — inherits color for SVG currentColor */
-    .pd-icon-btn {
-      width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; background: none; border: none; cursor: pointer; padding: 2px;
-      color: var(--icon-default); border-radius: var(--corner-pill);
-      transition: background 0.15s ease, color 0.15s ease;
-    }
-    .pd-icon-btn svg { display: block; width: 20px; height: 20px; }
-    .pd-icon-btn:hover  { background: var(--surface-secondary-default-subtle); color: var(--text-primary-default); }
-    .pd-icon-btn:active { background: var(--surface-secondary-default); }
-
-
-    /* Avatar  48 × 48 px */
-    .pd-avatar-wrap { position: relative; flex-shrink: 0; }
-    .pd-avatar {
+    .navbar-avatar {
       width: 48px; height: 48px; border-radius: var(--corner-rounded);
-      border: var(--scale-25) solid var(--border-default);
-      background: var(--surface-general-default);
-      overflow: hidden; position: relative;
+      border: 1px solid var(--border-default); background: var(--surface-general-default);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0; position: relative;
     }
-    .pd-avatar img { position: absolute; left: -7px; right: -7px; top: -1px; width: calc(100% + 14px); max-width: none; height: auto; }
-    .pd-avatar__badge {
+    .navbar-avatar__img { width: 62px; height: 50px; object-fit: cover; position: absolute; }
+    .navbar-badge {
       position: absolute; top: 0; right: -0.5px;
-      min-width: var(--scale-500); height: var(--scale-500);
+      min-width: 20px; height: 20px;
       background: var(--surface-primary-default); border-radius: var(--corner-rounded);
-      padding: var(--space-xxs); display: flex; align-items: center; justify-content: center; overflow: hidden;
+      padding: var(--space-xxs); display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 600; color: var(--text-primary-on-color); line-height: var(--space-s);
     }
-    .pd-avatar__badge span { font-size: 10px; font-weight: 600; line-height: var(--space-s); color: var(--text-primary-on-color); white-space: nowrap; }
 
-    /* Bar 2 – navcontent pill */
-    .pd-navcontent {
-      display: flex; align-items: flex-start;
-      gap: var(--space-xs);
-      height: 56px; padding: var(--space-xs);
+    /* Row 2 — Nav content pill  DS h:56, pad:8 all, cornerRadius:999 */
+    .navbar-nav {
+      height: 56px;
       background: var(--surface-general-default);
-      border: var(--scale-25) solid var(--border-default);
-      border-radius: var(--corner-pill); overflow: hidden;
+      border: 1px solid var(--border-default);
+      border-radius: var(--corner-pill);
+      display: flex; align-items: flex-start;
+      gap: var(--space-xs); padding: var(--space-xs);
     }
 
     /* Nav button — matches zul.home.screen.html nav-btn pattern exactly */
@@ -697,8 +684,8 @@
     }
     .navbar-mobile__menu-btn svg { display: block; width: 24px; height: 24px; }
 
-    /* Default navbar visibility — desktop shows (inherits flex from .pd-navbar15), mobile hidden */
-    #NavBar-Mobile  { display: none; padding: 0 60px; }
+    /* Default navbar visibility — desktop shows (inherits flex from .navbar), mobile hidden */
+    #NavBar-Mobile  { display: none; }
 
     /* ═══════════════════════════════════════════════════
        RESPONSIVE BREAKPOINTS — matches zul.home.screen.html
@@ -869,6 +856,13 @@
     <symbol id="ic-menu" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M3 12H21M3 6H21M3 18H21"/>
     </symbol>
+    <!-- Topbar action icons — exact symbols from zul.home.screen.html -->
+    <symbol id="ic-search" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 11 19 C 15.418 19 19 15.418 19 11 C 19 6.582 15.418 3 11 3 C 6.582 3 3 6.582 3 11 C 3 15.418 6.582 19 11 19 Z"/><path d="M 21 21 L 16.65 16.65"/></symbol>
+    <symbol id="ic-maximize" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 3 16 L 3 19 C 3 19.53 3.211 20.039 3.586 20.414 C 3.961 20.789 4.47 21 5 21 L 8 21"/><path d="M 8 3 L 5 3 C 4.47 3 3.961 3.211 3.586 3.586 C 3.211 3.961 3 4.47 3 5 L 3 8 M 21 8 L 21 5 C 21 4.47 20.789 3.961 20.414 3.586 C 20.039 3.211 19.53 3 19 3 L 16 3 M 16 21 L 19 21 C 19.53 21 20.039 20.789 20.414 20.414 C 20.789 20.039 21 19.53 21 19 L 21 16"/></symbol>
+    <symbol id="ic-smartphone" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 17 2 L 7 2 C 5.895 2 5 2.895 5 4 L 5 20 C 5 21.105 5.895 22 7 22 L 17 22 C 18.105 22 19 21.105 19 20 L 19 4 C 19 2.895 18.105 2 17 2 Z"/><path d="M 12 18 L 12.01 18"/></symbol>
+    <symbol id="ic-bell" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22 17 L 2 17 C 2.796 17 3.559 16.684 4.121 16.121 C 4.684 15.559 5 14.796 5 14 L 5 9 C 5 7.143 5.737 5.363 7.05 4.05 C 8.363 2.737 10.143 2 12 2 C 13.857 2 15.637 2.737 16.95 4.05 C 18.263 5.363 19 7.143 19 9 L 19 14 C 19 14.796 19.316 15.559 19.879 16.121 C 20.441 16.684 21.204 17 22 17 Z"/><path d="M 13.73 21 C 13.554 21.303 13.302 21.555 12.998 21.73 C 12.695 21.904 12.35 21.996 12 21.996 C 11.65 21.996 11.305 21.904 11.002 21.73 C 10.698 21.555 10.446 21.303 10.27 21"/></symbol>
+    <symbol id="ic-en" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 21.613 6 L 21.613 17.252 L 13.086 6 L 13.086 17.252"/><path d="M 9.129 6.05 L 3 6.05 L 3 11.651 L 3 17.252 L 9.129 17.252"/><path d="M 3 11.651 L 9.181 11.651"/></symbol>
+    <symbol id="ic-waffle" viewBox="-1 -1 18 18" fill="currentColor" stroke="none"><path d="M 8 9 C 8.552 9 9 8.552 9 8 C 9 7.448 8.552 7 8 7 C 7.448 7 7 7.448 7 8 C 7 8.552 7.448 9 8 9 Z"/><path d="M 15 9 C 15.552 9 16 8.552 16 8 C 16 7.448 15.552 7 15 7 C 14.448 7 14 7.448 14 8 C 14 8.552 14.448 9 15 9 Z"/><path d="M 1 9 C 1.552 9 2 8.552 2 8 C 2 7.448 1.552 7 1 7 C 0.448 7 0 7.448 0 8 C 0 8.552 0.448 9 1 9 Z"/><path d="M 8 2 C 8.552 2 9 1.552 9 1 C 9 0.448 8.552 0 8 0 C 7.448 0 7 0.448 7 1 C 7 1.552 7.448 2 8 2 Z"/><path d="M 15 2 C 15.552 2 16 1.552 16 1 C 16 0.448 15.552 0 15 0 C 14.448 0 14 0.448 14 1 C 14 1.552 14.448 2 15 2 Z"/><path d="M 1 2 C 1.552 2 2 1.552 2 1 C 2 0.448 1.552 0 1 0 C 0.448 0 0 0.448 0 1 C 0 1.552 0.448 2 1 2 Z"/><path d="M 8 16 C 8.552 16 9 15.552 9 15 C 9 14.448 8.552 14 8 14 C 7.448 14 7 14.448 7 15 C 7 15.552 7.448 16 8 16 Z"/><path d="M 15 16 C 15.552 16 16 15.552 16 15 C 16 14.448 15.552 14 15 14 C 14.448 14 14 14.448 14 15 C 14 15.552 14.448 16 15 16 Z"/><path d="M 1 16 C 1.552 16 2 15.552 2 15 C 2 14.448 1.552 14 1 14 C 0.448 14 0 14.448 0 15 C 0 15.552 0.448 16 1 16 Z"/></symbol>
     <!-- Outline/heart (260:815) — footer icon, color via currentColor -->
     <symbol id="ic-heart" viewBox="0 0 22.4031 19.7318" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M 20.0413 2.36183 C 19.5305 1.85083 18.9241 1.44547 18.2566 1.16891 C 17.5892 0.892347 16.8738 0.75 16.1513 0.75 C 15.4288 0.75 14.7134 0.892347 14.0459 1.16891 C 13.3785 1.44547 12.772 1.85083 12.2613 2.36183 L 11.2013 3.42183 L 10.1413 2.36183 C 9.1096 1.33013 7.71032 0.750535 6.25129 0.750535 C 4.79226 0.750535 3.39298 1.33013 2.36129 2.36183 C 1.3296 3.39352 0.75 4.79279 0.75 6.25183 C 0.75 7.71086 1.3296 9.11013 2.36129 10.1418 L 3.42129 11.2018 L 11.2013 18.9818 L 18.9813 11.2018 L 20.0413 10.1418 C 20.5523 9.63107 20.9576 9.02464 21.2342 8.35718 C 21.5108 7.68972 21.6531 6.97431 21.6531 6.25183 C 21.6531 5.52934 21.5108 4.81393 21.2342 4.14647 C 20.9576 3.47901 20.5523 2.87258 20.0413 2.36183 Z"/>
@@ -880,100 +874,129 @@
 
 
 <!-- ═══════════════════════════════════════════════
-     PAGE CONTENT — layout matches zul.home.screen.html
+     NAVBAR 1.5 — exact section from zul.home.screen.html
+     Achievement nav button is active (is-active)
+═══════════════════════════════════════════════ -->
+<section id="NavBar-Desktop">
+<nav class="navbar">
+
+  <!-- Row 1 — Brand bar (64px) -->
+  <div class="navbar-brand">
+    <a class="navbar-logo" href="#">
+      <img src="../zul.test.git/icons/logo-mark.svg" class="navbar-logo__mark" alt="Pandai mark">
+      <img src="../zul.test.git/icons/logo-text.svg" class="navbar-logo__text" alt="Pandai">
+    </a>
+    <div class="navbar-actions">
+      <div class="navbar-action-icons">
+        <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
+        <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-maximize"/></svg></div>
+        <div class="navbar-action-icon" data-icon="smartphone"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
+        <div class="navbar-action-icon" data-icon="bell"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+        <div class="navbar-action-icon" data-icon="en"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
+        <div class="navbar-action-icon" data-icon="waffle"><svg aria-hidden="true"><use href="#ic-waffle"/></svg></div>
+      </div>
+      <div class="navbar-avatar">
+        <img src="assets/avatar-user.png" class="navbar-avatar__img" alt="Syakila">
+      </div>
+      <span class="navbar-badge">15</span>
+    </div>
+  </div><!-- end row 1 -->
+
+  <!-- Row 2 — Nav content pill (56px) -->
+  <div class="navbar-nav">
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="home"><svg aria-hidden="true"><use href="#ic-home"/></svg></div></div>
+        <span class="nav-btn__label">Home</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div></div>
+        <span class="nav-btn__label">Quiz</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="battle"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div></div>
+        <span class="nav-btn__label">Battle</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="practice"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div></div>
+        <span class="nav-btn__label">Practice</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="class"><svg aria-hidden="true"><use href="#ic-users"/></svg></div></div>
+        <span class="nav-btn__label">Class</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="learn"><svg aria-hidden="true"><use href="#ic-book"/></svg></div></div>
+        <span class="nav-btn__label">Learn</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <!-- Achievement — active (is-active) -->
+    <div class="nav-btn is-active">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="achievement"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div></div>
+        <span class="nav-btn__label">Achievement</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="potential"><svg aria-hidden="true"><use href="#ic-star"/></svg></div></div>
+        <span class="nav-btn__label">Potential</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div></div>
+        <span class="nav-btn__label">Rewards</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+  </div><!-- end row 2 -->
+</nav>
+</section><!-- end NavBar-Desktop -->
+
+<!-- MOBILE NAVBAR — DS node 1943:22641 -->
+<section id="NavBar-Mobile">
+  <div class="navbar-mobile">
+    <a class="navbar-mobile__logo" href="#">
+      <img src="../zul.test.git/icons/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
+      <img src="../zul.test.git/icons/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
+    </a>
+    <button class="navbar-mobile__menu-btn" aria-label="Open menu" type="button">
+      <svg aria-hidden="true"><use href="#ic-menu"/></svg>
+    </button>
+  </div>
+</section><!-- end NavBar-Mobile -->
+
+<!-- ═══════════════════════════════════════════════
+     PAGE CONTENT
 ═══════════════════════════════════════════════ -->
 <main>
 <div class="page-container">
 <div class="main-content">
-
-  <!-- ── SECTION 1 — Welcome (Status Badges · Welcome Text · Check-In Card)
-       Pulled from zul.home.screen.html #Welcome-Desktop
-       Status Pill - 1.5 (node 2312:10652), Check-In Card (node 2600:82) ── -->
-  <section id="Welcome-Desktop" class="section-welcome" aria-label="Welcome">
-
-    <!-- Status badges — left -->
-    <div class="status-badges">
-
-      <!-- Score -->
-      <div class="status-pill status-pill--score">
-        <div class="status-pill__content">
-          <div class="status-pill__texts">
-            <span class="status-pill__label">Score</span>
-            <span class="status-pill__value">8,450</span>
-          </div>
-          <div class="status-pill__icon"><img src="../zul.test.git/icons/ic-status-trophy.svg" alt="Trophy"></div>
-        </div>
-      </div>
-
-      <!-- Coins -->
-      <div class="status-pill status-pill--coins">
-        <div class="status-pill__content">
-          <div class="status-pill__texts">
-            <span class="status-pill__label">Coins</span>
-            <span class="status-pill__value">1,250</span>
-          </div>
-          <div class="status-pill__icon"><img src="../zul.test.git/icons/ic-status-coin.svg" alt="Coins"></div>
-        </div>
-      </div>
-
-      <!-- Streak -->
-      <div class="status-pill status-pill--streak">
-        <div class="status-pill__content">
-          <div class="status-pill__texts">
-            <span class="status-pill__label">Streak</span>
-            <span class="status-pill__value">12</span>
-          </div>
-          <div class="status-pill__icon"><img src="../zul.test.git/icons/ic-status-streak.svg" alt="Streak"></div>
-        </div>
-      </div>
-
-      <!-- Lives / Ruby — flip every 3s -->
-      <div class="status-pill-flipper">
-        <div class="status-pill-flipper__inner">
-          <div class="status-pill status-pill--lives status-pill-face status-pill-face--front">
-            <div class="status-pill__content">
-              <div class="status-pill__texts">
-                <span class="status-pill__label">Lives</span>
-                <span class="status-pill__value">3</span>
-              </div>
-              <div class="status-pill__icon"><img src="../zul.test.git/icons/ic-status-heart.svg" alt="Lives"></div>
-            </div>
-          </div>
-          <div class="status-pill status-pill--ruby status-pill-face status-pill-face--back">
-            <div class="status-pill__content">
-              <div class="status-pill__texts">
-                <span class="status-pill__label">Ruby</span>
-                <span class="status-pill__value">450</span>
-              </div>
-              <div class="status-pill__icon"><img src="../zul.test.git/icons/ic-status-ruby.svg" alt="Ruby"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Welcome text — centre -->
-    <div class="welcome-text">
-      <p class="welcome-text__greeting">Good Morning!</p>
-      <h1 class="welcome-text__name">Hi Syakila</h1>
-    </div>
-
-    <!-- Check-In Card — right -->
-    <div class="check-in-card">
-      <div class="check-in-card__content">
-        <p class="check-in-card__label">Complete 1 flashcard practice</p>
-        <div class="check-in-card__progress">
-          <div class="check-in-card__progress-fill"></div>
-        </div>
-      </div>
-      <div class="check-in-card__stats">
-        <img src="../zul.test.git/icons/ic-status-coin.svg" class="check-in-card__stats-icon" alt="Coin">
-        <span class="check-in-card__stats-value">2</span>
-      </div>
-    </div>
-
-  </section><!-- end Welcome-Desktop -->
 
   <!-- BREADCRUMBS 1.5 — Default  DS 837:1033 -->
   <div class="pd-breadcrumbs15">
@@ -1086,6 +1109,7 @@
       </div>
 
       <!-- Row 3: Bahasa Melayu  76% B 192 -->
+
       <div class="pd-body-row" style="--row-bg:rgba(77,119,255,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">3</span></div></div>
         <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
