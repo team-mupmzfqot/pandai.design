@@ -1301,6 +1301,27 @@ Static HTML/CSS prototype of the Pandai home screen, implemented against DS 1.5.
 - All spacing, radius, and color values use CSS custom properties mapped to DS Semantic tokens
 - No gradients, no box-shadows on containers — border only for depth
 - Figma image fill placeholders are `<div class="...__bg">` + CSS `background-image`, never `<img>`
+- **All image placeholder assets live in `src/image-repo/`** — referenced as `../src/image-repo/filename` from `zul.test.git/` HTML. Never use `icons/` for placeholder images.
+
+**Quiz card image area — confirmed CSS pattern (May 2026):**
+```css
+.quiz-card__image {
+  background-color:    transparent;      /* no grey fill — show image as-is */
+  background-size:     contain;          /* fit full image, no cropping */
+  background-position: center;
+  background-repeat:   no-repeat;
+}
+```
+- `background-size: contain` — always shows the full image without cropping (user confirmed)
+- `background-color: transparent` — no placeholder grey; cards without an image show white
+- Set per card via inline `style="background-image: url('../src/image-repo/filename');"` on the `<div>`
+
+**`src/image-repo/` contents (May 2026):**
+| File | Used in |
+|---|---|
+| `bm.png` | All quiz card image placeholders (sections #5 and #6) |
+| `carousel-slide.png` | Carousel card images (4 cards) |
+| `ic-user.png` | Navbar avatar |
 
 **Page section structure (confirmed May 2026):**
 ```html
