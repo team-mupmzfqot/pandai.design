@@ -1307,21 +1307,43 @@ Static HTML/CSS prototype of the Pandai home screen, implemented against DS 1.5.
 ```css
 .quiz-card__image {
   background-color:    transparent;      /* no grey fill — show image as-is */
-  background-size:     contain;          /* fit full image, no cropping */
+  background-size:     cover;            /* fill area, crop from center — no stretching */
   background-position: center;
   background-repeat:   no-repeat;
 }
 ```
-- `background-size: contain` — always shows the full image without cropping (user confirmed)
+- `background-size: cover` — fills the image area, crops from center. Use this for DS "Fill" behaviour.
+- `background-size: contain` — shows full image without cropping but leaves gaps. Use only when full image must be visible.
 - `background-color: transparent` — no placeholder grey; cards without an image show white
-- Set per card via inline `style="background-image: url('../src/image-repo/filename');"` on the `<div>`
+- Set per card via inline `style="background-image: url('../src/image-repo/subfolder/filename');"` on the `<div>`
 
-**`src/image-repo/` contents (May 2026):**
-| File | Used in |
+**`src/image-repo/` folder structure (May 2026):**
+Organised into subfolders by section. Path from `zul.test.git/` HTML: `../src/image-repo/subfolder/filename`
+
+| Folder / File | Used in |
 |---|---|
-| `bm.png` | All quiz card image placeholders (sections #5 and #6) |
-| `carousel-slide.png` | Carousel card images (4 cards) |
+| `Quiz-Card/*.png` | Section #5 quiz card image placeholders (18 cards) |
+| `Static-Card/*.jpg/png` | Section #3 carousel cards (4 cards) |
+| `bm.png` | Section #6 quiz card image placeholders |
+| `carousel-slide.png` | (legacy placeholder — replaced by Static-Card images) |
 | `ic-user.png` | Navbar avatar |
+
+**Carousel center card — always the first card in HTML (May 2026):**
+
+The JS infinite-loop cloning makes `idx = total` center **orig0** (the first original card) on load:
+```
+track order after cloning: [clone3, clone2, clone1, clone0, orig0, orig1, orig2, orig3, ...]
+idx = total = 4  →  centers orig0 = first card in HTML
+```
+**Rule:** To guarantee a specific image always appears centered on load, place it as the **first** `<div class="carousel__card">` in the HTML.
+
+**Carousel images — confirmed (May 2026):**
+| Card | Image | Note |
+|---|---|---|
+| 1 (center) | `Static-Card/jdp.jpg` | Always centered on load |
+| 2 | `Static-Card/2 (3).png` | |
+| 3 | `Static-Card/3.jpg` | |
+| 4 | `Static-Card/2 (3).png` | repeat |
 
 **Page section structure (confirmed May 2026):**
 ```html
