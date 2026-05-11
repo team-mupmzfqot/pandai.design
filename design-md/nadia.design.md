@@ -1470,3 +1470,170 @@ Start-Process "vscode://vscode.simpleBrowser/show?url=http%3A%2F%2Flocalhost%3A3
 ---
 
 *Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+
+---
+
+## nadia_Class.html — Class Page Prototype (May 2026)
+
+> Active development file. Branch: `staging`. Dev server: `npx serve /Users/nurnadia/Documents/pandai.design --listen 3000`
+> Local URL: `http://localhost:3000/Nadia.test.git/nadia_Class.html`
+
+---
+
+### File identity
+
+| File | Path | Purpose |
+|---|---|---|
+| `nadia_Class.html` | `Nadia.test.git/nadia_Class.html` | Class page prototype — single source for all Class UI |
+| Primary DS | `TLVKe3bgJTdVvuPAzgDq2f` | Pandai DS 1.5 — single source of truth |
+| Backup DS (read-only) | `Y0DLhf2MGdGwG0jyjN7EbQ` | Used ONLY for node 4104:81437 (breadcrumb action buttons) |
+
+---
+
+### Responsive layout — matches zul.home.screen.html exactly
+
+| Variable | Desktop | Tablet ≤1279px | Mobile ≤767px |
+|---|---|---|---|
+| `--page-padding-x` | `60px` | `32px` | `16px` |
+| `--page-max-width` | `100%` | `100%` | `100%` |
+| `body min-width` | `400px` | `400px` | `400px` |
+| Navbar | `#NavBar-Desktop` (≥1320px) | `#NavBar-Mobile` | `#NavBar-Mobile` |
+| Cards grid | `repeat(3, 1fr)` | `repeat(2, 1fr)` | `1fr` |
+
+**Breakpoints:**
+- `≤1319px` → swap `#NavBar-Desktop` out, show `#NavBar-Mobile`
+- `≤1279px` → `--page-padding-x: 32px`, 2-col cards grid
+- `≤767px` → `--page-padding-x: 16px`, 1-col cards, breadcrumb stack vertically
+
+**HTML structure:**
+```html
+<section id="NavBar-Desktop"> ... </section>  <!-- visible ≥ 1320px -->
+<section id="NavBar-Mobile"> ... </section>    <!-- visible < 1320px -->
+<div class="page-content"> ... </div>          <!-- padding uses --page-padding-x -->
+```
+
+---
+
+### Navbar — Desktop (node 4115:97698)
+
+Structure: `flex-col gap-12px` — brand bar (64px) + nav pill (56px), inside `--page-padding-x`.
+
+**Brand bar (`.navbar__brand`):**
+- `height: 64px`, `border-bottom/left/right: 1px solid #00cc85`, `border-radius: 0 0 24px 24px`
+- `padding: 8px 24px`, `gap: 28px`
+- Logo: `navbar/logo.png` 116.5×28px
+- Right: action icons (search, maximize, smartphone, bell, EN, waffle) + avatar 48px + notif badge
+
+**Nav pill (`.navbar__content`):**
+- `height: 56px`, `border: 1px solid #00cc85`, `border-radius: 999px`, `padding: 8px`
+- 8 items: Home, Quiz, Battle, Practice, **Class (active + dropdown)**, Learn, Achievement, Potential, Rewards
+
+**Nav button structure — Zul's DS pattern:**
+```html
+<a href="#" class="nav-btn">
+  <div class="nav-btn__inner">
+    <div class="nav-btn__icon-wrap">
+      <div class="nav-btn__icon-clip" data-icon="home"> <svg>...</svg> </div>
+    </div>
+    <span class="nav-btn__label">Home</span>
+    <!-- chevron buttons only: -->
+    <div class="nav-btn__icon-wrap">
+      <div class="nav-btn__icon-clip nav-btn__chevron-clip"> <svg>...</svg> </div>
+    </div>
+  </div>
+</a>
+```
+
+**Nav button states (box-shadow:inset, no border):**
+
+| State | Class | bg | box-shadow | label/icon color |
+|---|---|---|---|---|
+| Default | — | transparent | none | `#666` / `#00cc85` |
+| Hover | `:hover` | `#b5f291` | `inset 0 0 0 1px #70bc6f` | `#70bc6f` |
+| Active | `.is-active` | `#00cc85` | `inset 0 0 0 1px #00a36a` | `#e9fbf5` |
+
+**Per-icon clip padding (DS inset% × 20px):**
+```css
+[data-icon="home"]     { padding: 1.67px 2.5px; }
+[data-icon="battle"]   { padding: 2.5px; }
+[data-icon="practice"] { padding: 2.5px 1.67px; }
+[data-icon="class"]    { padding: 2.5px 0.83px; }
+[data-icon="learn"]    { padding: 1.67px 3.33px; }
+```
+
+**Class dropdown (node 890:2457 + 890:2465):**
+- Wrapper: `.nav-btn-group { position: relative }` — hover/focus-within shows dropdown + rotates chevron
+- Panel: `.nav-dropdown` — `border: 1px solid #00cc85`, `border-radius: 18px`, `padding: 12px`, `gap: 4px`
+- 3 items: My Classes, Browse Classes, Timetable (Outline/corner-down-right icon)
+- Chevron rotates 180° on hover: `.nav-btn-group:hover .nav-btn.is-active .nav-btn__chevron-clip svg { transform: rotate(180deg) }`
+
+---
+
+### Navbar — Mobile (node 1943:22641)
+
+```html
+<section id="NavBar-Mobile">
+  <div class="navbar-mobile">
+    <div class="navbar-mobile__logo"><img src="navbar/logo.png"></div>
+    <button class="navbar-mobile__menu-btn"><!-- hamburger svg --></button>
+  </div>
+</section>
+```
+- `height: 64px`, same 3-sided green border + `border-radius: 0 0 24px 24px`
+- `padding: 16px 24px`, logo left, hamburger right (`color: #00cc85`)
+
+---
+
+### Breadcrumb + Action Buttons (node 1777:18856 + 4104:81437)
+
+**Trail:** `Class > My Classes` — active links `#00cc85`, current page `#666`
+
+**3 action buttons (node 4104:81437) — order: Timetable → Browse Classes → Join Class:**
+
+| Button | Class | Style | Icon |
+|---|---|---|---|
+| Timetable | `.btn-secondary` | White bg, `#00cc85` border+text | Outline/calendar |
+| Browse Classes | `.btn-secondary` | White bg, `#00cc85` border+text | Outline/website (globe) |
+| Join Class | `.btn-primary` | `#00cc85` bg, `#00a36a` border, `#e9fbf5` text | Outline/plus |
+
+All buttons: `border-radius: 60px` (corner-rounded), `padding: 8px 12px`, `font: Poppins SemiBold 14px`
+
+---
+
+### Class Cards — 12 total (node 4104:83963)
+
+Grid: `repeat(3, 1fr)`, `gap: 20px`. 6 Form 4 + 6 Form 5, same 6 subjects each.
+
+**Subject modifier classes and palettes:**
+
+| Subject | Class | Border/header | Body bg | Text |
+|---|---|---|---|---|
+| Bahasa Melayu | `.cc--bm` | `#4d77ff` | `#f6f9ff` | dark |
+| English | `.cc--en` | `#ff4d56` | `#ffedee` | dark |
+| Math | `.cc--mt` | `#42ac7b` | `#ecf7f2` | dark |
+| Science | `.cc--sc` | `#ffd641` | `#fffbec` | `#998027` |
+| Biology | `.cc--bio` | `#8431d8` | `#f3ebfb` | dark |
+| History | `.cc--hs` | `#a97c50` | `#f7f2ee` | dark |
+
+**Always OG-green regardless of subject:** Live Tuition badge (`#00cc85`), Enter Class button, DLP badge (pink pill, sourced from node 2079:30493).
+
+**Avatar inside card:** DS Avatar 1.5 (node 4104:81442) — 64×64px, `border-radius: 60px`, image overflows: `left: -7px; right: -8px; top: -1px`.
+
+---
+
+### Tokens used in nadia_Class.html
+
+```css
+:root {
+  --og-50: #e9fbf5;   --og-500: #00cc85;  --og-600: #00a36a;  --og-700: #007a50;
+  --r-rounded: 60px;  --r-4xl: 24px;      --r-2xl: 18px;
+  --sp-xs: 8px;       --sp-s: 12px;       --sp-m: 16px;
+  --page-max-width: 100%;
+  --page-padding-x: 60px;  /* → 32px tablet → 16px mobile */
+  --section-gap: 16px;
+}
+```
+
+---
+
+*Last updated: 2026-05-11 | File: Nadia.test.git/nadia_Class.html | Branch: staging*

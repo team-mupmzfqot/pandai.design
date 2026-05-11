@@ -36,6 +36,11 @@
       /* DS Spacing */
       --sp-xxxs: 2px;  --sp-xxs: 4px;  --sp-xs: 8px;  --sp-s: 12px;  --sp-m: 16px;
 
+      /* Layout — matches zul.home.screen */
+      --page-max-width: 100%;
+      --page-padding-x: 60px;
+      --section-gap:    var(--sp-m);
+
       /* Subject — B-Melayu */
       --bm-50:  #f6f9ff;  --bm-100: #dbe4ff;  --bm-200: #b8c9ff;
       --bm-500: #4d77ff;  --bm-600: #3e5fcc;  --bm-700: #2e4799;
@@ -66,22 +71,21 @@
     html { min-height: 100%; background: var(--Surface-general-default, #fff); }
 
     body {
-      font-family: 'Poppins', sans-serif;
-      background: var(--Surface-general-default, #fff);
-      max-width: 1440px;
-      margin: 0 auto;
+      font-family:    'Poppins', sans-serif;
+      background:     var(--Surface-general-default, #fff);
+      width:          100%;
+      min-width:      400px;
+      max-width:      var(--page-max-width);
+      margin:         0 auto;
+      padding-bottom: 90px;   /* 60px fixed footer + 30px DS gap */
     }
 
     /* Page content — padded area below navbar */
     .page-content {
-      padding: 48px 60px;
-      display: flex;
+      padding:        48px var(--page-padding-x);
+      display:        flex;
       flex-direction: column;
-      gap: 24px;
-    }
-
-    @media (max-width: 425px) {
-      .page-content { padding: 24px 16px; gap: 16px; }
+      gap:            var(--section-gap);
     }
 
     /* ══════════════════════════════════════════════════════════════
@@ -89,11 +93,11 @@
        Spec: flex-col gap-12px, two bars stacked, inside 60px page padding
        ══════════════════════════════════════════════════════════════ */
     .navbar {
-      display: flex;
+      display:        flex;
       flex-direction: column;
-      gap: 12px;             /* DS gap between brand-bar and nav-bar */
-      width: 100%;
-      padding: 0 60px;       /* 60px horizontal so both bars align with page content */
+      gap:            12px;
+      width:          100%;
+      padding:        0 var(--page-padding-x);
     }
 
     /* ── Brand Bar (top row, 64px) ──────────────────────────────── */
@@ -222,70 +226,94 @@
     }
 
     /* Button - NavBar - Dropdown - 1.5 — DS node 857:1236
-       Default / Hover / Selected (active) states                   */
+       Zul pattern: flex-col, __inner pill, __icon-wrap/__icon-clip, __label */
     .nav-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;                          /* spacing/space-xs */
-      padding: 8px 12px;                 /* spacing/space-xs  spacing/space-s */
-      border-radius: 999px;              /* corner-pill */
-      border: 1px solid transparent;     /* reserve border space so hover doesn't shift layout */
-      background: transparent;
+      display:        flex;
+      flex-direction: column;
+      height:         40px;
+      flex-shrink:    0;
+      align-items:    flex-start;
+      cursor:         pointer;
+      user-select:    none;
+      text-decoration: none;
+    }
+
+    /* Inner pill — px-12 py-8 rounded-pill */
+    .nav-btn__inner {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      gap:             8px;              /* spacing/space-xs */
+      padding:         8px 12px;        /* spacing/space-xs + space-s */
+      border-radius:   999px;
+      min-height:      24px;
+    }
+
+    /* 24×24 icon wrapper — color cascades to SVG stroke via currentColor */
+    .nav-btn__icon-wrap {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      width:           24px;
+      height:          24px;
+      color:           var(--og-500);   /* icon/primary/default */
+    }
+
+    /* 20×20 overflow clip — pads icon per DS inset spec */
+    .nav-btn__icon-clip {
+      width:       20px;
+      height:      20px;
+      box-sizing:  border-box;
+      padding:     1.67px;              /* default: 8.33% × 20px */
+      overflow:    hidden;
+      flex-shrink: 0;
+    }
+    .nav-btn__icon-clip svg {
+      display: block;
+      width:   100%;
+      height:  100%;
+      fill:    none;
+      stroke:  currentColor;
+      stroke-width:    1.5;
+      stroke-linecap:  round;
+      stroke-linejoin: round;
+      transition: transform 0.15s ease;
+    }
+
+    /* Chevron uses zero padding — position encoded in viewBox */
+    .nav-btn__chevron-clip { padding: 0; }
+
+    /* Per-icon padding overrides (DS inset% × 20px) */
+    .nav-btn__icon-clip[data-icon="home"]        { padding: 1.67px 2.5px; }
+    .nav-btn__icon-clip[data-icon="battle"]      { padding: 2.5px; }
+    .nav-btn__icon-clip[data-icon="practice"]    { padding: 2.5px 1.67px; }
+    .nav-btn__icon-clip[data-icon="class"]       { padding: 2.5px 0.83px; }
+    .nav-btn__icon-clip[data-icon="learn"]       { padding: 1.67px 3.33px; }
+
+    .nav-btn__label {
       font-family: 'Poppins', sans-serif;
-      font-size: 14px;                   /* Body/B1 */
+      font-size:   14px;
       font-weight: 600;
       line-height: 20px;
-      color: #666;                       /* text/default/body */
-      cursor: pointer;
-      text-decoration: none;
+      color:       #666;               /* text/default/body */
       white-space: nowrap;
-      height: 40px;
-      flex-shrink: 0;
-      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-    }
-    .nav-btn svg.nav-icon,
-    .nav-btn svg.nav-chevron {
-      width: 20px;
-      height: 20px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 1.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      flex-shrink: 0;
-      transition: stroke 0.15s ease, transform 0.15s ease;
-    }
-    .nav-btn svg.nav-chevron { width: 18px; height: 18px; }
-
-    /* Default — icon/primary/default on inactive icons */
-    .nav-btn:not(.nav-btn--active) svg.nav-icon,
-    .nav-btn:not(.nav-btn--active) svg.nav-chevron {
-      stroke: var(--og-500);
     }
 
-    /* Hover — surface/secondary/default (#b5f291) */
-    .nav-btn:not(.nav-btn--active):hover {
-      background: #b5f291;               /* surface/secondary/default */
-      border-color: #00a36a;             /* border/primary/focus */
-      color: #70bc6f;                    /* text/secondary/focus */
+    /* Hover — surface/secondary/default */
+    .nav-btn:hover .nav-btn__inner {
+      background: #b5f291;                       /* surface/secondary/default */
+      box-shadow: inset 0 0 0 1px #70bc6f;       /* border/secondary/focus */
     }
-    .nav-btn:not(.nav-btn--active):hover svg.nav-icon,
-    .nav-btn:not(.nav-btn--active):hover svg.nav-chevron {
-      stroke: #70bc6f;
-    }
+    .nav-btn:hover .nav-btn__label     { color: #70bc6f; }
+    .nav-btn:hover .nav-btn__icon-wrap { color: #70bc6f; }
 
-    /* Selected / Active — surface/primary/default (#00cc85) */
-    .nav-btn--active {
-      background: var(--og-500);         /* surface/primary/default */
-      border-color: var(--og-600);       /* border/primary/focus */
-      color: #e9fbf5;                    /* text/primary/on-color */
+    /* Active/Selected — surface/primary/default */
+    .nav-btn.is-active .nav-btn__inner {
+      background: var(--og-500);                  /* surface/primary/default */
+      box-shadow: inset 0 0 0 1px var(--og-600);  /* border/primary/focus */
     }
-    .nav-btn--active svg.nav-icon,
-    .nav-btn--active svg.nav-chevron {
-      stroke: #e9fbf5;
-    }
-    /* Active chevron: DOWN by default; UP only on hover/open */
-    .nav-btn--active svg.nav-chevron { transform: none; }
+    .nav-btn.is-active .nav-btn__label     { color: #e9fbf5; }  /* text/primary/on-color */
+    .nav-btn.is-active .nav-btn__icon-wrap { color: #e9fbf5; }
 
     /* ── Dropdown group wrapper ─────────────────────────────────── */
     .nav-btn-group {
@@ -293,8 +321,8 @@
       flex-shrink: 0;
     }
     /* Chevron rotates UP when group is hovered */
-    .nav-btn-group:hover .nav-btn--active svg.nav-chevron,
-    .nav-btn-group:focus-within .nav-btn--active svg.nav-chevron {
+    .nav-btn-group:hover .nav-btn.is-active .nav-btn__chevron-clip svg,
+    .nav-btn-group:focus-within .nav-btn.is-active .nav-btn__chevron-clip svg {
       transform: rotate(180deg);
     }
 
@@ -351,12 +379,90 @@
       padding: 0 8px;
     }
 
-    @media (max-width: 425px) {
-      .navbar { padding: 0 16px; }
-      .navbar__brand { padding: 8px 16px; border-radius: 0 0 16px 16px; }
-      .navbar__content { border-radius: 16px; height: auto; }
-      .navbar__nav-items { flex-wrap: wrap; gap: 4px; }
-      .navbar__icons { gap: 16px; }
+    /* ── Mobile Navbar — DS node 1943:22641 (Type=Mobile) ─────── */
+    .navbar-mobile {
+      height:          64px;
+      background:      var(--Surface-general-default, #fff);
+      border-bottom:   1px solid var(--og-500);
+      border-left:     1px solid var(--og-500);
+      border-right:    1px solid var(--og-500);
+      border-radius:   0 0 24px 24px;
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      padding:         var(--sp-m) 24px;
+    }
+    .navbar-mobile__logo {
+      display:     flex;
+      align-items: center;
+      height:      28px;
+    }
+    .navbar-mobile__logo img {
+      height:      28px;
+      width:       auto;
+      display:     block;
+    }
+    .navbar-mobile__menu-btn {
+      width:           40px;
+      height:          40px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      cursor:          pointer;
+      background:      none;
+      border:          none;
+      padding:         0;
+      flex-shrink:     0;
+    }
+    .navbar-mobile__menu-btn svg {
+      width:  24px;
+      height: 24px;
+      stroke: var(--og-500);
+      fill:   none;
+      stroke-width:    1.5;
+      stroke-linecap:  round;
+      stroke-linejoin: round;
+      display: block;
+    }
+
+    /* ── Responsive Layout — matches zul.home.screen breakpoints ── */
+    #NavBar-Desktop { display: block; }
+    #NavBar-Mobile  { display: none; padding: 0 var(--page-padding-x); }
+
+    /* < 1320px: swap to mobile navbar */
+    @media (max-width: 1319px) {
+      #NavBar-Desktop { display: none; }
+      #NavBar-Mobile  { display: block; }
+    }
+
+    /* Tablet ≤ 1279px: 32px padding, 2-col cards */
+    @media (max-width: 1279px) {
+      :root { --page-padding-x: 32px; }
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .bc-row     { flex-wrap: wrap; gap: 12px; }
+    }
+
+    /* Mobile ≤ 767px: 16px padding, 1-col cards */
+    @media (max-width: 767px) {
+      :root { --page-padding-x: var(--sp-m); }   /* 16px */
+      .page-content { padding-top: 24px; }
+      .cards-grid   { grid-template-columns: 1fr; }
+      .bc-row       { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .bc-left      { flex-wrap: wrap; }
+      .bc-actions   { width: 100%; }
+      .btn-secondary, .btn-primary { flex: 1; justify-content: center; }
+      /* Footer — stack vertically, center both groups */
+      body { padding-bottom: 102px; }
+      .footer__inner {
+        flex-direction: column;
+        justify-content: center;
+        align-items:     center;
+        gap:             var(--sp-xs);       /* 8px between rows */
+        height:          auto;
+        padding:         var(--sp-s) 28px;   /* 12px 28px — DS padLeft/padRight:28 */
+      }
+      .footer__left  { justify-content: center; }
+      .footer__right { justify-content: center; }
     }
 
     /* ── DS Avatar 1.5 — node 4104:81442 ───────────────────────── */
@@ -493,13 +599,6 @@
     }
     .btn-primary svg { stroke: #e9fbf5; }
 
-    @media (max-width: 425px) {
-      .bc-row { flex-direction: column; align-items: flex-start; gap: 12px; }
-      .bc-left { flex-wrap: wrap; }
-      .bc-actions { width: 100%; }
-      .btn-secondary, .btn-primary { flex: 1; justify-content: center; }
-    }
-
     /* ══════════════════════════════════════════════════════════════
        Class Cards Grid
        ══════════════════════════════════════════════════════════════ */
@@ -508,10 +607,6 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       width: 100%;
-    }
-
-    @media (max-width: 425px) {
-      .cards-grid { grid-template-columns: 1fr; }
     }
 
     /* ── Class Card 1.5 — node 4104:83963
@@ -755,13 +850,81 @@
     .cc--hs .ds-avatar { border-color: var(--hs-500); }
     .cc--hs .ds-avatar svg { stroke: var(--hs-500); }
 
+    /* ══════════════════════════════════════════════════════════════
+       Footer - 1.5 — node 2338:10430
+       Fixed bottom bar, 60px, border-top Border/default
+    ══════════════════════════════════════════════════════════════ */
+    .footer {
+      position:   fixed;
+      bottom:     0;
+      left:       0;
+      right:      0;
+      z-index:    100;
+      background: var(--Surface-general-default, #fff);
+      border-top: 1px solid var(--og-500);   /* Border/default */
+    }
+
+    .footer__inner {
+      height:          60px;
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      padding-left:    28px;   /* DS: padLeft:28 (spacing/space-2xl) */
+      padding-right:   28px;   /* DS: padRight:28 */
+    }
+
+    .footer__left {
+      display:     flex;
+      align-items: center;
+      gap:         var(--sp-xxs);   /* 4px — spacing/space-xxs */
+      flex-shrink: 0;
+    }
+
+    .footer__text {
+      font-size:   14px;
+      font-weight: 500;
+      line-height: 20px;
+      color:       #666;   /* text/default/body */
+      white-space: nowrap;
+    }
+
+    .footer__link {
+      font-size:   14px;
+      font-weight: 500;
+      line-height: 20px;
+      color:       var(--og-500);   /* text/primary/default */
+      white-space: nowrap;
+      cursor:      pointer;
+      text-decoration: none;
+    }
+
+    .footer__right {
+      display:     flex;
+      align-items: center;
+      gap:         var(--sp-xxs);   /* 4px */
+      flex-shrink: 0;
+    }
+
+    .footer__heart {
+      width:       20px;
+      height:      20px;
+      flex-shrink: 0;
+      display:     block;
+      fill:        none;
+      stroke:      var(--og-500);   /* icon/primary/default */
+      stroke-width:    1.5;
+      stroke-linecap:  round;
+      stroke-linejoin: round;
+    }
+
   </style>
 </head>
 <body>
 
   <!-- ══════════════════════════════════════════════════════════
-       Navbar 1.5 — node 4115:97698
+       Desktop Navbar — node 4115:97698 (≥ 1320px)
        ══════════════════════════════════════════════════════════ -->
+  <section id="NavBar-Desktop">
   <nav class="navbar" aria-label="Main navigation">
 
     <!-- Brand Bar -->
@@ -816,43 +979,75 @@
     <!-- Navbar Content Bar (pill) -->
     <div class="navbar__content">
       <div class="navbar__nav-items">
-        <!-- Home — Outline/home -->
+
+        <!-- Home -->
         <a href="#" class="nav-btn">
-          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          Home
+          <div class="nav-btn__inner">
+            <div class="nav-btn__icon-wrap">
+              <div class="nav-btn__icon-clip" data-icon="home">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </div>
+            </div>
+            <span class="nav-btn__label">Home</span>
+          </div>
         </a>
-        <!-- Quiz — Outline/check-circle -->
+
+        <!-- Quiz -->
         <a href="#" class="nav-btn">
-          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          Quiz
+          <div class="nav-btn__inner">
+            <div class="nav-btn__icon-wrap">
+              <div class="nav-btn__icon-clip">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+            </div>
+            <span class="nav-btn__label">Quiz</span>
+          </div>
         </a>
-        <!-- Battle — Outline/battle (DS custom) -->
+
+        <!-- Battle -->
         <a href="#" class="nav-btn">
-          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M21 3V8L10 17L6 21L3 18L7 14L16 3H21Z"/>
-            <path d="M5 13L11 19"/>
-            <path d="M14.3199 17.32L17.9999 21L20.9999 18L17.6349 14.635"/>
-            <path d="M10 5.5L8 3H3V8L6 10.5"/>
-          </svg>
-          Battle
+          <div class="nav-btn__inner">
+            <div class="nav-btn__icon-wrap">
+              <div class="nav-btn__icon-clip" data-icon="battle">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3V8L10 17L6 21L3 18L7 14L16 3H21Z"/><path d="M5 13L11 19"/><path d="M14.3199 17.32L17.9999 21L20.9999 18L17.6349 14.635"/><path d="M10 5.5L8 3H3V8L6 10.5"/></svg>
+              </div>
+            </div>
+            <span class="nav-btn__label">Battle</span>
+          </div>
         </a>
-        <!-- Practice — Outline/book-open -->
+
+        <!-- Practice -->
         <a href="#" class="nav-btn">
-          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-          Practice
+          <div class="nav-btn__inner">
+            <div class="nav-btn__icon-wrap">
+              <div class="nav-btn__icon-clip" data-icon="practice">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              </div>
+            </div>
+            <span class="nav-btn__label">Practice</span>
+          </div>
         </a>
-        <!-- Class — active — with dropdown (node 890:2457 + 890:2465) -->
+
+        <!-- Class — active + dropdown (node 890:2457 + 890:2465) -->
         <div class="nav-btn-group">
-          <button class="nav-btn nav-btn--active">
-            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            Class
-            <!-- chevron: DOWN by default, UP on hover -->
-            <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
+          <div class="nav-btn is-active">
+            <div class="nav-btn__inner">
+              <div class="nav-btn__icon-wrap">
+                <div class="nav-btn__icon-clip" data-icon="class">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+              </div>
+              <span class="nav-btn__label">Class</span>
+              <div class="nav-btn__icon-wrap">
+                <div class="nav-btn__icon-clip nav-btn__chevron-clip">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- Dropdown List — DS node 890:2465 -->
           <div class="nav-dropdown" role="menu">
             <a href="#" class="nav-submenu-item" role="menuitem">
-              <!-- Outline/corner-down-right -->
               <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>
               <span>My Classes</span>
             </a>
@@ -860,41 +1055,98 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>
               <span>Browse Classes</span>
             </a>
-
             <a href="#" class="nav-submenu-item" role="menuitem">
               <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>
               <span>Timetable</span>
             </a>
           </div>
         </div>
-        <!-- Learn — Outline/book + chevron -->
+
+        <!-- Learn -->
         <a href="#" class="nav-btn">
-          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-          Learn
-          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="nav-btn__inner">
+            <div class="nav-btn__icon-wrap">
+              <div class="nav-btn__icon-clip" data-icon="learn">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              </div>
+            </div>
+            <span class="nav-btn__label">Learn</span>
+            <div class="nav-btn__icon-wrap">
+              <div class="nav-btn__icon-clip nav-btn__chevron-clip">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+          </div>
         </a>
-        <!-- Achievement — Outline/book-open + chevron -->
+
+        <!-- Achievement -->
         <a href="#" class="nav-btn">
-          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-          Achievement
-          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="nav-btn__inner">
+            <div class="nav-btn__icon-wrap">
+              <div class="nav-btn__icon-clip">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              </div>
+            </div>
+            <span class="nav-btn__label">Achievement</span>
+            <div class="nav-btn__icon-wrap">
+              <div class="nav-btn__icon-clip nav-btn__chevron-clip">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+          </div>
         </a>
-        <!-- Potential — Outline/star + chevron -->
+
+        <!-- Potential -->
         <a href="#" class="nav-btn">
-          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          Potential
-          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="nav-btn__inner">
+            <div class="nav-btn__icon-wrap">
+              <div class="nav-btn__icon-clip">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+            </div>
+            <span class="nav-btn__label">Potential</span>
+            <div class="nav-btn__icon-wrap">
+              <div class="nav-btn__icon-clip nav-btn__chevron-clip">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+          </div>
         </a>
-        <!-- Rewards — Outline/gift + chevron -->
+
+        <!-- Rewards -->
         <a href="#" class="nav-btn">
-          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
-          Rewards
-          <svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="nav-btn__inner">
+            <div class="nav-btn__icon-wrap">
+              <div class="nav-btn__icon-clip">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+              </div>
+            </div>
+            <span class="nav-btn__label">Rewards</span>
+            <div class="nav-btn__icon-wrap">
+              <div class="nav-btn__icon-clip nav-btn__chevron-clip">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+          </div>
         </a>
+
       </div>
     </div>
 
   </nav>
+  </section><!-- end NavBar-Desktop -->
+
+  <!-- Mobile Navbar — DS node 1943:22641 (< 1320px) -->
+  <section id="NavBar-Mobile">
+    <div class="navbar-mobile">
+      <div class="navbar-mobile__logo">
+        <img src="navbar/logo.png" alt="Pandai">
+      </div>
+      <button class="navbar-mobile__menu-btn" aria-label="Open menu" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </section><!-- end NavBar-Mobile -->
 
   <!-- Page content — padded area ──────────────────────────── -->
   <div class="page-content">
@@ -1254,6 +1506,33 @@
   </div><!-- /.cards-grid -->
 
   </div><!-- /.page-content -->
+
+  <!-- ══════════════════════════════════════════════════════════
+       Footer - 1.5 — node 2338:10430
+       Fixed bottom, 60px, border-top Border/default
+  ══════════════════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer__inner">
+
+      <!-- Left: © 2026 Pandai.org All Rights Reserved -->
+      <div class="footer__left">
+        <span class="footer__text">&copy; 2026</span>
+        <a class="footer__link" href="#">Pandai.org</a>
+        <span class="footer__text">All Rights Reserved</span>
+      </div>
+
+      <!-- Right: Made with ♥ in Malaysia -->
+      <div class="footer__right">
+        <span class="footer__text">Made with</span>
+        <!-- Outline/heart — node 260:815 -->
+        <svg class="footer__heart" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <span class="footer__text">in Malaysia</span>
+      </div>
+
+    </div>
+  </footer>
 
 </body>
 </html>
