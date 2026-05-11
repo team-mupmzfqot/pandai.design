@@ -703,24 +703,85 @@
       .pd-breadcrumbs15 { display: none; }
     }
 
-    /* ── Tablet ≤ 1279px ── */
+    /* ── Tablet ≤ 1279px — card-per-row table layout ── */
     @media (max-width: 1279px) {
       :root { --page-padding-x: 32px; }
       #NavBar-Mobile { padding: 0 var(--page-padding-x); }
 
-      /* Welcome: stack vertically, reorder — matches zul exactly */
-      .section-welcome { flex-direction: column; align-items: flex-start; }
-      .welcome-text    { order: 1; text-align: left; flex: unset; }
-      .status-badges   { order: 2; }
-      .check-in-card   { order: 3; width: 100%; }
-
-      /* DS Responsives: H1 28px → 24px */
-      .welcome-text__name { font-size: 24px; line-height: 36px; }
-
-      /* Card + table */
+      /* Card header */
       .pd-card__header { flex-wrap: wrap; gap: var(--space-xs); }
-      .pd-col-subject  { width: 200px; }
       .footer__inner   { padding-left: var(--space-m); padding-right: var(--space-m); }
+
+      /* ── Table → card-per-row ── */
+      .pd-scrollbar15 { display: none; }
+
+      /* Scroll container: release overflow so cards breathe */
+      .pd-table-wrapper { margin: var(--space-m); gap: 0; }
+      .pd-table-scroll  { overflow: visible; max-height: none; border-radius: 0; }
+      .pd-table-scroll::-webkit-scrollbar { display: none; }
+
+      /* Table shell: no border/radius — each row is its own card */
+      .pd-table15 { display: flex; flex-direction: column; gap: var(--space-xs); border: none; border-radius: 0; }
+
+      /* Hide the header row */
+      .pd-heading-row { display: none; }
+
+      /* Each body row = a card */
+      .pd-body-row {
+        flex-wrap: wrap;
+        border: 1px solid var(--border-general-default);
+        border-radius: var(--corner-m);
+        overflow: hidden;
+      }
+      /* Remove stale last-row corner overrides — each card has its own corners */
+      .pd-body-row:last-child .pd-body-cell:first-child { border-bottom-left-radius: 0; }
+      .pd-body-row:last-child .pd-body-cell:last-child  { border-bottom-right-radius: 0; }
+
+      /* Remove all horizontal cell dividers — card border handles the frame */
+      .pd-body-cell:not(.pd-col-analysis):not(.pd-col-subject) { border-right: none; }
+      .pd-body-cell { border-bottom: 1px solid var(--border-general-default); min-height: unset; }
+      .pd-body-row .pd-body-cell:last-child { border-bottom: none; }
+
+      /* ── Column layout inside card ── */
+      .pd-col-num       { display: none; }
+
+      /* Row 1 — Subject badge (full width, subject-tinted bg) */
+      .pd-col-subject   { order: 1; width: 100%; flex-shrink: unset; }
+      .pd-col-subject .pd-body-cell__inner { padding: var(--space-xs) var(--space-m); }
+
+      /* Row 2 — Progress bar (full width) */
+      .pd-col-progress  { order: 2; width: 100%; flex: unset; }
+      .pd-col-progress .pd-body-cell__inner { width: 100%; flex-shrink: 1; padding: var(--space-xs) var(--space-m); }
+
+      /* Row 3 — Score | Grade | Questions (3 equal columns, stacked label+value) */
+      .pd-col-score     { order: 3; width: 33.33%; flex: unset; flex-direction: column; align-items: stretch; }
+      .pd-col-grade     { order: 4; width: 33.33%; flex: unset; flex-direction: column; align-items: stretch;
+                          border-left: 1px solid var(--border-general-default);
+                          border-right: 1px solid var(--border-general-default); }
+      .pd-col-questions { order: 5; width: 33.34%; flex: unset; flex-direction: column; align-items: stretch; }
+
+      /* Column label injected via ::before (above the value) */
+      .pd-col-score::before,
+      .pd-col-grade::before,
+      .pd-col-questions::before {
+        display: block;
+        font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+        color: var(--text-default-body);
+        padding: var(--space-s) var(--space-s) 0;
+        text-align: center;
+      }
+      .pd-col-score::before     { content: "Score"; }
+      .pd-col-grade::before     { content: "Year Grade"; }
+      .pd-col-questions::before { content: "Questions"; }
+
+      /* Value cell padding — tighter since label takes the top gap */
+      .pd-col-score .pd-body-cell__inner,
+      .pd-col-grade .pd-body-cell__inner,
+      .pd-col-questions .pd-body-cell__inner { justify-content: center; width: 100%; padding: var(--space-xxs) var(--space-s) var(--space-s); }
+
+      /* Row 4 — Analysis button (full width, centered) */
+      .pd-col-analysis  { order: 6; width: 100%; flex: unset; border-bottom: none; }
+      .pd-col-analysis .pd-body-cell__inner { justify-content: center; width: 100%; padding: var(--space-s) var(--space-m); }
     }
 
     /* ── Mobile ≤ 767px ── */
@@ -728,64 +789,22 @@
       :root { --page-padding-x: var(--space-m); }
       #NavBar-Mobile { padding: 0 var(--page-padding-x); }
 
-      /* DS Responsives: H1 → 20px */
-      .welcome-text__name { font-size: 20px; line-height: 32px; }
-      .status-pill__value { font-size: 14px; line-height: 20px; }
-      .status-badges      { flex-wrap: wrap; }
-
       /* Breadcrumbs: stack */
       .pd-breadcrumbs15  { flex-direction: column; align-items: flex-start; gap: var(--space-xxs); min-height: unset; }
       .pd-breadcrumbs__sep   { display: none; }
       .pd-breadcrumbs__title { font-size: 18px; line-height: 28px; }
 
-      /* Card */
+      /* Card outer */
       .pd-card { border-radius: var(--corner-m); }
       .pd-card__header { padding: var(--space-s) var(--space-s) 0; }
       .pd-card__title  { font-size: 16px; line-height: 24px; }
 
-      /* Secondary button: icon only */
+      /* Secondary button: icon only at mobile */
       .pd-btn15-secondary__label { display: none; }
       .pd-btn15-secondary__text-wrap { display: none; }
 
-      /* Table wrapper */
-      .pd-table-wrapper { margin: var(--space-s); gap: 0; }
-
-      /* Hide DS custom scrollbar — use native */
-      .pd-scrollbar15 { display: none; }
-      .pd-table-scroll { overflow-x: auto; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--surface-primary-default) var(--surface-general-default-secondary); }
-      .pd-table-scroll::-webkit-scrollbar { display: block; height: 4px; width: 4px; }
-      .pd-table-scroll::-webkit-scrollbar-thumb { background: var(--surface-primary-default); border-radius: var(--corner-pill); }
-
-      /* Table: card layout per row */
-      .pd-table-scroll  { overflow-x: visible; overflow-y: visible; scrollbar-width: unset; }
-      .pd-table-scroll::-webkit-scrollbar { display: none; }
-      .pd-table15       { min-width: unset; }
-      .pd-heading-row   { display: none; }
-      .pd-body-row      { flex-wrap: wrap; }
-      .pd-body-cell     { border-right: none; border-bottom: 1px solid var(--border-general-default); min-height: unset; }
-      .pd-body-row .pd-body-cell:last-child { border-bottom: none; }
-      .pd-col-num       { display: none; }
-      .pd-col-subject   { order: 1; width: 100%; flex-shrink: unset; }
-      .pd-col-progress  { order: 2; width: 100%; flex: unset; }
-      .pd-col-score     { order: 3; width: 33.33%; flex: unset; border-right: 1px solid var(--border-general-default); }
-      .pd-col-grade     { order: 4; width: 33.33%; flex: unset; border-right: 1px solid var(--border-general-default); }
-      .pd-col-questions { order: 5; width: 33.34%; flex: unset; }
-      .pd-col-analysis  { order: 6; width: 100%; flex: unset; border-bottom: none; }
-      .pd-col-analysis .pd-body-cell__inner { justify-content: center; }
-      .pd-col-score::before,
-      .pd-col-grade::before,
-      .pd-col-questions::before { display: block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-default-body); padding: var(--space-xs) var(--space-s) 0; }
-      .pd-col-score::before     { content: "Score"; }
-      .pd-col-grade::before     { content: "Year Grade"; }
-      .pd-col-questions::before { content: "Questions"; }
-
-      /* Column sizes */
-      .pd-col-num     { width: 36px; }
-      .pd-col-subject { width: 160px; }
-      .pd-subject-badge__label { font-size: 12px; padding: 4px 10px 4px 8px; }
-      .pd-subject-badge__icon  { width: 32px; padding: 4px 6px 4px 8px; }
-      .pd-heading-cell__inner { padding: var(--space-s); }
-      .pd-body-cell__inner    { padding: var(--space-xs) var(--space-s); }
+      /* Tighter table margins at mobile */
+      .pd-table-wrapper { margin: var(--space-s); }
 
       /* Footer: stack */
       body { padding-bottom: 102px; }
