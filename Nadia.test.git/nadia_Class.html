@@ -367,43 +367,56 @@
     .navbar-mobile__menu-btn svg { display: block; width: 24px; height: 24px; }
 
     /* ── Responsive Layout ─────────────────────────────────────────
-       Website  ≥ 1320px : desktop navbar · 3-col cards · 60px padding
-       Tablet  < 1320px  : mobile navbar  · 2-col cards · 32px padding
-       Mobile  ≤  767px  : mobile navbar  · 1-col cards · 16px padding
+       Desktop ≥ 1320px : desktop navbar · 3-col cards · 60px padding
+       < 1320px          : mobile navbar
+       Tablet  ≤ 1279px  : 2-col cards · 32px padding
+       Mobile  ≤  767px  : 1-col cards · 16px padding
     ─────────────────────────────────────────────────────────────── */
-    #NavBar-Desktop { display: block; }
-    #NavBar-Mobile  { display: none; padding: 0 var(--page-padding-x); }
 
-    /* Desktop default — 3 col (must be before tablet override) */
+    /* Desktop default — 3 col (before all media query overrides) */
     .cards-grid { grid-template-columns: repeat(3, 1fr); }
 
-    /* Tablet — swap navbar + 2-col cards + 32px padding */
+    #NavBar-Desktop { display: block; }
+    #NavBar-Mobile  { display: none; padding-left: var(--page-padding-x); padding-right: var(--page-padding-x); }
+
+    /* < 1320px — swap to mobile navbar only */
     @media (max-width: 1319px) {
-      :root           { --page-padding-x: 32px; }
       #NavBar-Desktop { display: none; }
       #NavBar-Mobile  { display: block; }
-      .cards-grid     { grid-template-columns: repeat(2, 1fr); }
-      .bc-row         { flex-wrap: wrap; gap: 12px; align-items: flex-start; }
-      .bc-left        { align-items: flex-start; width: 100%; }
     }
 
-    /* Mobile — 1-col cards + 16px padding */
+    /* Tablet ≤ 1279px — 32px padding + 2-col cards */
+    @media (max-width: 1279px) {
+      :root       { --page-padding-x: 32px; }
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .bc-row     { flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+      .bc-left    { align-items: flex-start; width: 100%; }
+    }
+
+    /* Mobile ≤ 767px — 16px padding + 1-col cards */
     @media (max-width: 767px) {
-      :root         { --page-padding-x: var(--sp-m); }   /* 16px */
+      :root         { --page-padding-x: var(--spacing-space-m); }
       .cards-grid   { grid-template-columns: 1fr; }
       .bc-row       { flex-direction: column; align-items: flex-start; gap: 12px; }
       .bc-left      { flex-wrap: wrap; }
       .bc-actions   { width: 100%; }
       .btn-secondary, .btn-primary { flex: 1; justify-content: center; }
+      /* Nav pill — horizontal scroll on narrow screens */
+      .navbar-nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .navbar-nav::-webkit-scrollbar { display: none; }
       /* Footer — stack vertically */
       body { padding-bottom: 102px; }
       .footer__inner {
         flex-direction: column;
         justify-content: center;
         align-items:     center;
-        gap:             var(--sp-xs);
+        gap:             var(--spacing-space-xs);
         height:          auto;
-        padding:         var(--sp-s) 28px;
+        padding:         var(--spacing-space-s) var(--spacing-space-2xl);
       }
       .footer__left  { justify-content: center; }
       .footer__right { justify-content: center; }
