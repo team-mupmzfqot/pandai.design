@@ -799,11 +799,10 @@
       .pd-card__header { padding: var(--space-s) var(--space-s) 0; }
       .pd-card__title  { font-size: 16px; line-height: 24px; }
 
-      /* Secondary button → Size=S at mobile (24px height, 12px text) */
-      .pd-btn15-secondary          { height: 24px; padding: 2px var(--space-xs); }
-      .pd-btn15-secondary__icon    { width: 20px; height: 20px; }
-      .pd-btn15-secondary__icon svg{ width: 16px; height: 16px; }
-      .pd-btn15-secondary__label   { font-size: 12px; line-height: 18px; }
+      /* Secondary button → icon-only Size=S at mobile (24px, no label) */
+      .pd-btn15-secondary         { height: 24px; padding: 2px var(--space-xs); }
+      .pd-btn15-secondary__label  { display: none; }
+      .pd-btn15-secondary__text-wrap { display: none; }
 
       /* Tighter table margins at mobile */
       .pd-table-wrapper { margin: var(--space-s); }
