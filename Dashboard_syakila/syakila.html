@@ -755,10 +755,11 @@
 
       /* Row 3 — Score | Grade | Questions (3 equal columns, stacked label+value) */
       .pd-col-score     { order: 3; width: 33.33%; flex: unset; flex-direction: column; align-items: stretch; }
-      .pd-col-grade     { order: 4; width: 33.33%; flex: unset; flex-direction: column; align-items: stretch;
-                          border-left: 1px solid var(--border-general-default);
-                          border-right: 1px solid var(--border-general-default); }
+      .pd-col-grade     { order: 4; width: 33.33%; flex: unset; flex-direction: column; align-items: stretch; }
       .pd-col-questions { order: 5; width: 33.34%; flex: unset; flex-direction: column; align-items: stretch; }
+      /* Dividers between stats cells — specificity (0,3,0) to beat the border-right:none reset */
+      .pd-body-row .pd-body-cell.pd-col-score     { border-right: 1px solid var(--border-general-default); }
+      .pd-body-row .pd-body-cell.pd-col-grade     { border-right: 1px solid var(--border-general-default); }
 
       /* Column label injected via ::before (above the value) */
       .pd-col-score::before,
