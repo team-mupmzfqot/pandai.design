@@ -64,10 +64,16 @@
       --scale-200: 8px;
       --scale-500: 20px;
 
-      --surface-subtle: #f8fafc;   /* Surface/subtle — page background, same as zul.home.screen.html */
+      --surface-subtle: #f8fafc;
 
-      --font:    'Poppins', sans-serif;
-      --page-bg: var(--surface-subtle);
+      --text-on-color-heading:  #FFFFFF;
+      --text-default-secondary: #6B7280;
+
+      --font:          'Poppins', sans-serif;
+      --page-bg:       var(--surface-subtle);
+      --page-max-width: 100%;
+      --page-padding-x: 60px;
+      --section-gap:    var(--space-m);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -235,7 +241,152 @@
     /* ───────────────────────────────────────────────
        PAGE + BREADCRUMBS + CARD — same as before
     ─────────────────────────────────────────────── */
-    .pd-page { flex: 1; padding: 0 60px var(--space-m); }
+    /* Page layout — matches zul.home.screen.html */
+    .page-container {
+      max-width:     var(--page-max-width);
+      margin:        0 auto;
+      padding-left:  var(--page-padding-x);
+      padding-right: var(--page-padding-x);
+    }
+    .main-content {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--section-gap);
+      padding-top:    var(--space-m);
+      padding-bottom: var(--space-m);
+    }
+
+    /* ── Section 1 — Welcome (Status Badges · Welcome Text · Check-In Card) ── */
+    .section-welcome {
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      gap:             var(--space-m);
+      padding-top:     var(--space-m);
+      padding-bottom:  var(--space-m);
+    }
+    .welcome-text {
+      flex:       1;
+      min-width:  0;
+      text-align: center;
+    }
+    .welcome-text__greeting {
+      font-size:   14px;
+      font-weight: 400;
+      line-height: 20px;
+      color:       var(--text-default-secondary);
+    }
+    .welcome-text__name {
+      font-size:   28px;
+      font-weight: 700;
+      line-height: 42px;
+      color:       var(--text-default-heading, #404040);
+      margin-top:  4px;
+    }
+
+    /* Status Badge - 1.5 */
+    .status-badges {
+      display:     flex;
+      gap:         var(--space-xs);
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .status-pill {
+      min-width:     122px;
+      background:    var(--surface-primary-default);
+      border:        1px solid var(--border-primary-focus);
+      border-radius: 40.5px;
+      padding:       var(--space-xs);
+      display:       flex;
+      flex-shrink:   0;
+    }
+    .status-pill__content {
+      display:      flex;
+      align-items:  center;
+      gap:          var(--space-xs);
+      padding-left: var(--space-xs);
+      width:        100%;
+    }
+    .status-pill__texts {
+      display:        flex;
+      flex-direction: column;
+      flex:           1;
+      padding-bottom: 4px;
+    }
+    .status-pill__label {
+      font-size:     10px;
+      font-weight:   600;
+      line-height:   var(--space-s);
+      color:         var(--text-on-color-heading);
+      margin-bottom: -4px;
+    }
+    .status-pill__value {
+      font-size:     16px;
+      font-weight:   700;
+      line-height:   24px;
+      color:         var(--text-on-color-heading);
+      margin-bottom: -4px;
+    }
+    .status-pill__icon {
+      width:           39px;
+      height:          100%;
+      min-height:      39px;
+      background:      var(--surface-general-default);
+      border-radius:   var(--corner-pill);
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+    }
+    .status-pill__icon img { width: 24px; height: 24px; object-fit: contain; display: block; }
+    .status-pill--score  { background: #00cc85; border-color: #00a36a; }
+    .status-pill--coins  { background: #fece00; border-color: #cba500; }
+    .status-pill--coins .status-pill__label,
+    .status-pill--coins .status-pill__value { -webkit-text-stroke: 2px #cba500; paint-order: stroke fill; }
+    .status-pill--streak { background: #7367f0; border-color: #5c52c0; }
+    .status-pill--lives  { background: #ff5c98; border-color: #cc4a7a; }
+    .status-pill--ruby   { background: #ff4c51; border-color: #b23539; }
+
+    /* Lives/Ruby 3D flip */
+    .status-pill-flipper { perspective: 800px; flex-shrink: 0; }
+    .status-pill-flipper__inner {
+      position: relative; transform-style: preserve-3d;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+    .status-pill-flipper__inner.is-flipped { transform: rotateY(180deg); }
+    .status-pill-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .status-pill-face--back {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      transform: rotateY(180deg);
+    }
+
+    /* Check-In Card - 1.5 (node 2600:82) */
+    .check-in-card {
+      background:    #b5f291;
+      border:        1px solid var(--border-primary-focus);
+      border-radius: var(--corner-pill);
+      display:       flex;
+      align-items:   center;
+      gap:           var(--space-m);
+      width:         350px;
+      flex-shrink:   0;
+      padding:       var(--space-xs) var(--space-xs) var(--space-xs) var(--space-l);
+    }
+    .check-in-card__content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-xs); }
+    .check-in-card__label { font-size: 12px; font-weight: 700; line-height: 18px; color: #00564c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .check-in-card__progress { height: 4px; background: #f2f2f2; border-radius: var(--corner-pill); overflow: hidden; width: 100%; }
+    .check-in-card__progress-fill { height: 100%; width: 32%; background: var(--surface-primary-default); }
+    .check-in-card__stats {
+      background: var(--surface-general-default); border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-rounded); display: flex; align-items: center;
+      justify-content: center; gap: var(--space-xs); padding: 4px var(--space-s); flex-shrink: 0;
+    }
+    .check-in-card__stats-icon { width: 24px; height: 24px; flex-shrink: 0; }
+    .check-in-card__stats-value { font-size: 14px; font-weight: 600; line-height: 20px; color: #00564c; white-space: nowrap; }
+
+    /* Breadcrumb: remove bottom margin (main-content gap handles spacing) */
+    .pd-breadcrumbs15 { margin-bottom: 0; }
 
     .pd-breadcrumbs15 { display: flex; align-items: center; gap: var(--space-m); min-height: 36px; margin-bottom: var(--space-m); }
     .pd-breadcrumbs__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
@@ -550,52 +701,52 @@
     #NavBar-Mobile  { display: none; padding: 0 60px; }
 
     /* ═══════════════════════════════════════════════════
-       RESPONSIVE BREAKPOINTS
-       < 1320px → mobile navbar (hamburger)
-       Tablet  ≤ 1024px
-       Mobile  ≤  768px
+       RESPONSIVE BREAKPOINTS — matches zul.home.screen.html
+       < 1320px → mobile navbar
+       Tablet  ≤ 1279px
+       Mobile  ≤  767px
     ═══════════════════════════════════════════════════ */
 
-    /* < 1320px — swap to mobile hamburger navbar, hide breadcrumb (app has none) */
+    /* < 1320px — mobile navbar, hide breadcrumb (app has none) */
     @media (max-width: 1319px) {
-      #NavBar-Desktop    { display: none; }
-      #NavBar-Mobile     { display: block; }
-      .pd-breadcrumbs15  { display: none; }
-      .pd-page           { padding-top: var(--space-m); } /* 16px gap between navbar and content */
+      #NavBar-Desktop   { display: none; }
+      #NavBar-Mobile    { display: block; }
+      .pd-breadcrumbs15 { display: none; }
     }
 
-    /* ── Tablet (1024px) — desktop navbar already hidden at 1319px ── */
-    @media (max-width: 1024px) {
-      /* Mobile navbar: tighter horizontal padding at tablet width */
-      #NavBar-Mobile { padding: 0 32px; }
+    /* ── Tablet ≤ 1279px ── */
+    @media (max-width: 1279px) {
+      :root { --page-padding-x: 32px; }
+      #NavBar-Mobile { padding: 0 var(--page-padding-x); }
 
-      /* Page */
-      .pd-page { padding: var(--space-m) 32px var(--space-m); }
+      /* Welcome: stack vertically, reorder — matches zul exactly */
+      .section-welcome { flex-direction: column; align-items: flex-start; }
+      .welcome-text    { order: 1; text-align: left; flex: unset; }
+      .status-badges   { order: 2; }
+      .check-in-card   { order: 3; width: 100%; }
 
-      /* Breadcrumbs: allow wrap */
-      .pd-breadcrumbs15 { flex-wrap: wrap; gap: var(--space-xs); }
+      /* DS Responsives: H1 28px → 24px */
+      .welcome-text__name { font-size: 24px; line-height: 36px; }
 
-      /* Card header: allow wrap */
+      /* Card + table */
       .pd-card__header { flex-wrap: wrap; gap: var(--space-xs); }
-
-      /* Table: subject column narrower */
-      .pd-col-subject { width: 200px; }
-
-      /* Footer */
-      .footer__inner { padding-left: var(--space-m); padding-right: var(--space-m); }
+      .pd-col-subject  { width: 200px; }
+      .footer__inner   { padding-left: var(--space-m); padding-right: var(--space-m); }
     }
 
-    /* ── Mobile (768px) ── */
-    @media (max-width: 768px) {
-      /* Mobile navbar: narrow horizontal padding */
-      #NavBar-Mobile { padding: 0 var(--space-m); }
+    /* ── Mobile ≤ 767px ── */
+    @media (max-width: 767px) {
+      :root { --page-padding-x: var(--space-m); }
+      #NavBar-Mobile { padding: 0 var(--page-padding-x); }
 
-      /* Page */
-      .pd-page { padding: var(--space-m) var(--space-m) var(--space-m); }
+      /* DS Responsives: H1 → 20px */
+      .welcome-text__name { font-size: 20px; line-height: 32px; }
+      .status-pill__value { font-size: 14px; line-height: 20px; }
+      .status-badges      { flex-wrap: wrap; }
 
-      /* Breadcrumbs: stack title + links */
-      .pd-breadcrumbs15 { flex-direction: column; align-items: flex-start; gap: var(--space-xxs); min-height: unset; }
-      .pd-breadcrumbs__sep { display: none; }
+      /* Breadcrumbs: stack */
+      .pd-breadcrumbs15  { flex-direction: column; align-items: flex-start; gap: var(--space-xxs); min-height: unset; }
+      .pd-breadcrumbs__sep   { display: none; }
       .pd-breadcrumbs__title { font-size: 18px; line-height: 28px; }
 
       /* Card */
@@ -603,52 +754,27 @@
       .pd-card__header { padding: var(--space-s) var(--space-s) 0; }
       .pd-card__title  { font-size: 16px; line-height: 24px; }
 
-      /* Secondary button: icon only on very small screens */
+      /* Secondary button: icon only */
       .pd-btn15-secondary__label { display: none; }
       .pd-btn15-secondary__text-wrap { display: none; }
 
-      /* Table wrapper: full-width horizontal scroll */
+      /* Table wrapper */
       .pd-table-wrapper { margin: var(--space-s); gap: 0; }
 
-      /* Hide DS custom scrollbar on mobile — use native */
+      /* Hide DS custom scrollbar — use native */
       .pd-scrollbar15 { display: none; }
       .pd-table-scroll { overflow-x: auto; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--surface-primary-default) var(--surface-general-default-secondary); }
       .pd-table-scroll::-webkit-scrollbar { display: block; height: 4px; width: 4px; }
       .pd-table-scroll::-webkit-scrollbar-thumb { background: var(--surface-primary-default); border-radius: var(--corner-pill); }
 
-      /* Table min-width so it scrolls horizontally */
-      .pd-table15 { min-width: 640px; }
-
-      /* Column sizes tighter */
-      .pd-col-num     { width: 36px; }
-      .pd-col-subject { width: 160px; }
-      .pd-subject-badge__label { font-size: 12px; padding: 4px 10px 4px 8px; }
-      .pd-subject-badge__icon  { width: 32px; padding: 4px 6px 4px 8px; }
-
-      /* Heading & body cell padding smaller */
-      .pd-heading-cell__inner { padding: var(--space-s); }
-      .pd-body-cell__inner    { padding: var(--space-xs) var(--space-s); }
-      .pd-body-cell { min-height: 52px; }
-
-      /* Footer: stack on mobile */
-      body { padding-bottom: 102px; /* taller stacked footer: 12+20+8+20+12=72px + 30px DS gap */ }
-      .footer__inner { flex-direction: column; justify-content: center; align-items: center; gap: var(--space-xs); height: auto; padding: var(--space-s) var(--space-2xl); }
-      .footer__left  { justify-content: center; }
-      .footer__right { justify-content: center; }
-
-      /* ── Table: card layout ──
-         Each row stacks as a card — no horizontal scroll needed. */
+      /* Table: card layout per row */
       .pd-table-scroll  { overflow-x: visible; overflow-y: visible; scrollbar-width: unset; }
       .pd-table-scroll::-webkit-scrollbar { display: none; }
       .pd-table15       { min-width: unset; }
-      .pd-heading-row   { display: none; } /* replaced by ::before labels */
+      .pd-heading-row   { display: none; }
       .pd-body-row      { flex-wrap: wrap; }
-
-      /* All cells: full-width by default, borders reset */
-      .pd-body-cell                        { border-right: none; border-bottom: 1px solid var(--border-general-default); min-height: unset; }
+      .pd-body-cell     { border-right: none; border-bottom: 1px solid var(--border-general-default); min-height: unset; }
       .pd-body-row .pd-body-cell:last-child { border-bottom: none; }
-
-      /* Column order + widths */
       .pd-col-num       { display: none; }
       .pd-col-subject   { order: 1; width: 100%; flex-shrink: unset; }
       .pd-col-progress  { order: 2; width: 100%; flex: unset; }
@@ -657,19 +783,26 @@
       .pd-col-questions { order: 5; width: 33.34%; flex: unset; }
       .pd-col-analysis  { order: 6; width: 100%; flex: unset; border-bottom: none; }
       .pd-col-analysis .pd-body-cell__inner { justify-content: center; }
-
-      /* Column labels — replace hidden heading row */
       .pd-col-score::before,
       .pd-col-grade::before,
-      .pd-col-questions::before {
-        display: block;
-        font-size: 10px; font-weight: 600; text-transform: uppercase;
-        letter-spacing: 0.06em; color: var(--text-default-body);
-        padding: var(--space-xs) var(--space-s) 0;
-      }
+      .pd-col-questions::before { display: block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-default-body); padding: var(--space-xs) var(--space-s) 0; }
       .pd-col-score::before     { content: "Score"; }
       .pd-col-grade::before     { content: "Year Grade"; }
       .pd-col-questions::before { content: "Questions"; }
+
+      /* Column sizes */
+      .pd-col-num     { width: 36px; }
+      .pd-col-subject { width: 160px; }
+      .pd-subject-badge__label { font-size: 12px; padding: 4px 10px 4px 8px; }
+      .pd-subject-badge__icon  { width: 32px; padding: 4px 6px 4px 8px; }
+      .pd-heading-cell__inner { padding: var(--space-s); }
+      .pd-body-cell__inner    { padding: var(--space-xs) var(--space-s); }
+
+      /* Footer: stack */
+      body { padding-bottom: 102px; }
+      .footer__inner { flex-direction: column; justify-content: center; align-items: center; gap: var(--space-xs); height: auto; padding: var(--space-s) var(--space-2xl); }
+      .footer__left  { justify-content: center; }
+      .footer__right { justify-content: center; }
     }
   </style>
 </head>
@@ -747,9 +880,100 @@
 
 
 <!-- ═══════════════════════════════════════════════
-     PAGE CONTENT
+     PAGE CONTENT — layout matches zul.home.screen.html
 ═══════════════════════════════════════════════ -->
-<main class="pd-page">
+<main>
+<div class="page-container">
+<div class="main-content">
+
+  <!-- ── SECTION 1 — Welcome (Status Badges · Welcome Text · Check-In Card)
+       Pulled from zul.home.screen.html #Welcome-Desktop
+       Status Pill - 1.5 (node 2312:10652), Check-In Card (node 2600:82) ── -->
+  <section id="Welcome-Desktop" class="section-welcome" aria-label="Welcome">
+
+    <!-- Status badges — left -->
+    <div class="status-badges">
+
+      <!-- Score -->
+      <div class="status-pill status-pill--score">
+        <div class="status-pill__content">
+          <div class="status-pill__texts">
+            <span class="status-pill__label">Score</span>
+            <span class="status-pill__value">8,450</span>
+          </div>
+          <div class="status-pill__icon"><img src="../zul.test.git/icons/ic-status-trophy.svg" alt="Trophy"></div>
+        </div>
+      </div>
+
+      <!-- Coins -->
+      <div class="status-pill status-pill--coins">
+        <div class="status-pill__content">
+          <div class="status-pill__texts">
+            <span class="status-pill__label">Coins</span>
+            <span class="status-pill__value">1,250</span>
+          </div>
+          <div class="status-pill__icon"><img src="../zul.test.git/icons/ic-status-coin.svg" alt="Coins"></div>
+        </div>
+      </div>
+
+      <!-- Streak -->
+      <div class="status-pill status-pill--streak">
+        <div class="status-pill__content">
+          <div class="status-pill__texts">
+            <span class="status-pill__label">Streak</span>
+            <span class="status-pill__value">12</span>
+          </div>
+          <div class="status-pill__icon"><img src="../zul.test.git/icons/ic-status-streak.svg" alt="Streak"></div>
+        </div>
+      </div>
+
+      <!-- Lives / Ruby — flip every 3s -->
+      <div class="status-pill-flipper">
+        <div class="status-pill-flipper__inner">
+          <div class="status-pill status-pill--lives status-pill-face status-pill-face--front">
+            <div class="status-pill__content">
+              <div class="status-pill__texts">
+                <span class="status-pill__label">Lives</span>
+                <span class="status-pill__value">3</span>
+              </div>
+              <div class="status-pill__icon"><img src="../zul.test.git/icons/ic-status-heart.svg" alt="Lives"></div>
+            </div>
+          </div>
+          <div class="status-pill status-pill--ruby status-pill-face status-pill-face--back">
+            <div class="status-pill__content">
+              <div class="status-pill__texts">
+                <span class="status-pill__label">Ruby</span>
+                <span class="status-pill__value">450</span>
+              </div>
+              <div class="status-pill__icon"><img src="../zul.test.git/icons/ic-status-ruby.svg" alt="Ruby"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Welcome text — centre -->
+    <div class="welcome-text">
+      <p class="welcome-text__greeting">Good Morning!</p>
+      <h1 class="welcome-text__name">Hi Syakila</h1>
+    </div>
+
+    <!-- Check-In Card — right -->
+    <div class="check-in-card">
+      <div class="check-in-card__content">
+        <p class="check-in-card__label">Complete 1 flashcard practice</p>
+        <div class="check-in-card__progress">
+          <div class="check-in-card__progress-fill"></div>
+        </div>
+      </div>
+      <div class="check-in-card__stats">
+        <img src="../zul.test.git/icons/ic-status-coin.svg" class="check-in-card__stats-icon" alt="Coin">
+        <span class="check-in-card__stats-value">2</span>
+      </div>
+    </div>
+
+  </section><!-- end Welcome-Desktop -->
 
   <!-- BREADCRUMBS 1.5 — Default  DS 837:1033 -->
   <div class="pd-breadcrumbs15">
@@ -1145,6 +1369,8 @@
 
   </div><!-- /pd-card -->
 
+</div><!-- /main-content -->
+</div><!-- /page-container -->
 </main>
 
 
@@ -1173,6 +1399,10 @@
 </footer>
 
 <script>
+  /* Lives/Ruby flipper — flips every 3s */
+  const flipper = document.querySelector('.status-pill-flipper__inner');
+  if (flipper) setInterval(() => flipper.classList.toggle('is-flipped'), 3000);
+
   /* Nav button handlers — registered first before any other JS that could throw */
   document.querySelectorAll('.nav-btn').forEach(btn => {
     /* Click: toggle is-active */
