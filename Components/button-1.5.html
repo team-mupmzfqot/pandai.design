@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button — 1.5 · All Variants · Pandai DS 1.5</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <style>
+    /* ── DS Tokens · Pandai DS 1.5 (TLVKe3bgJTdVvuPAzgDq2f) ──────────────── */
+    :root {
+      /* Student (OG-Green) */
+      --s-primary:           #00cc85;   /* Surface/primary/default */
+      --s-primary-subtle:    #99ebce;   /* Surface/primary/default-subtle-hover */
+      --s-secondary:         #b5f291;   /* Surface/secondary/default */
+      --s-secondary-subtle:  #e8fbe8;   /* Surface/secondary/default-subtle */
+      --s-tertiary:          #00564c;   /* Surface/tertiary/default */
+      --s-focus:             #00a36a;   /* Border/primary/focus */
+      --s-focus-2:           #70bc6f;   /* Border/secondary/focus */
+      --s-focus-3:           #00453d;   /* Border/tertiary/focus */
+      --s-on-color:          #f6fdfb;   /* Text/primary/on-color */
+      --s-text:              #00cc85;   /* Text/primary/default */
+      --s-text-2:            #70bc6f;   /* Text/secondary/focus */
+
+      /* Teacher (Pink) */
+      --t-primary:           #ff5c98;   /* Surface/primary/default */
+      --t-primary-subtle:    #ffdeea;   /* Surface/primary/default-subtle-hover */
+      --t-secondary:         #ffbed6;   /* hover arrow bg */
+      --t-tertiary:          #cc4a7a;   /* Surface/tertiary/default */
+      --t-focus-2:           #ff9dc1;   /* Border/secondary/focus */
+      --t-on-color:          #ffebf2;   /* Text/primary/on-color */
+      --t-text-2:            #cc4a7a;   /* Text/secondary/focus */
+
+      /* Shared / Disabled */
+      --surface-disabled-primary:  #f2f2f2;   /* Surface/disabled/primary */
+      --border-disabled-disabled:  #bfbfbf;   /* Border/disabled/disabled */
+      --text-disabled-default:     #bfbfbf;   /* Text/disabled/default */
+      --icon-disabled-default:     #bfbfbf;   /* Icon/disabled/default */
+      --text-default-body:         #666666;   /* Text/default/body */
+
+      /* Structural */
+      --radius-pill:         60px;
+    }
+
+    /* ── Button base ───────────────────────────────────────────────────────── */
+    .btn {
+      display:            inline-flex;
+      align-items:        center;
+      justify-content:    center;
+      padding:            2px 8px;
+      border:             1px solid transparent;
+      border-radius:      var(--radius-pill);
+      background:         transparent;
+      font-family:        'Poppins', sans-serif;
+      font-size:          12px;
+      font-weight:        600;
+      line-height:        18px;
+      cursor:             pointer;
+      user-select:        none;
+      text-decoration:    none;
+      gap:                0;
+      appearance:         none;
+      -webkit-appearance: none;
+      outline:            none;
+      transition:         background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .btn--s { height: 24px; }
+    .btn--m { height: 32px; }
+    .btn--l {
+      height:      40px;
+      padding:     8px 12px;   /* spacing/space-s (12px) × scale/200 (8px) — DS node 473:528 */
+      font-size:   14px;       /* Body/B1 — 14px SemiBold */
+      line-height: 20px;
+    }
+    .btn--l .btn__label { padding: 0 8px; }   /* spacing/space-xs — DS node 473:520 */
+    .btn--l .btn__icon  { width: 24px; height: 24px; }
+
+    /* ── Slots ─────────────────────────────────────────────────────────────── */
+    .btn__content {
+      display:     inline-flex;
+      align-items: center;
+    }
+
+    .btn__icon {
+      display:         inline-flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+      width:           20px;   /* S/M — needs DS verification */
+      height:          20px;
+    }
+
+    .btn__label {
+      display:     inline-flex;
+      align-items: center;
+      padding:     0 4px;
+      white-space: nowrap;
+    }
+
+    /* Arrow circle — Primary only */
+    .btn__arrow {
+      display:         inline-flex;
+      align-items:     center;
+      justify-content: center;
+      border-radius:   var(--radius-pill);
+      flex-shrink:     0;
+      transition:      background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn--s .btn__arrow { padding: 2px; }
+    .btn--m .btn__arrow { padding: 2px; }
+    .btn--l .btn__arrow { padding: 4px; }
+
+    /* Chevron — Tertiary only, no circle wrapper */
+    .btn__chevron {
+      display:     inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       PRIMARY · STUDENT
+    ════════════════════════════════════════════════════════════════════════ */
+    .btn--primary.btn--student {
+      background:   var(--s-primary);
+      border-color: var(--s-focus);
+      color:        var(--s-on-color);
+    }
+    .btn--primary.btn--student .btn__arrow {
+      background: var(--s-primary-subtle);
+      color:      var(--s-focus);
+    }
+
+    .btn--primary.btn--student:hover:not(:disabled):not(.is-disabled),
+    .btn--primary.btn--student.is-hover {
+      background:   var(--s-secondary);
+      border-color: var(--s-focus-2);
+      color:        var(--s-text-2);
+    }
+    .btn--primary.btn--student:hover:not(:disabled):not(.is-disabled) .btn__arrow,
+    .btn--primary.btn--student.is-hover .btn__arrow {
+      background: var(--s-secondary-subtle);
+      color:      var(--s-focus-2);
+    }
+
+    .btn--primary.btn--student:active:not(:disabled):not(.is-disabled),
+    .btn--primary.btn--student.is-pressed {
+      background:   var(--s-tertiary);
+      border-color: var(--s-focus-3);
+      color:        var(--s-text);
+    }
+    .btn--primary.btn--student:active:not(:disabled):not(.is-disabled) .btn__arrow,
+    .btn--primary.btn--student.is-pressed .btn__arrow {
+      background: var(--s-primary);
+      color:      var(--s-tertiary);
+    }
+
+    .btn--primary.btn--student:disabled,
+    .btn--primary.btn--student.is-disabled {
+      background:     var(--surface-disabled-primary);
+      border-color:   var(--border-disabled-disabled);
+      color:          var(--icon-disabled-default);
+      cursor:         not-allowed;
+      pointer-events: none;
+    }
+    .btn--primary.btn--student:disabled .btn__arrow,
+    .btn--primary.btn--student.is-disabled .btn__arrow {
+      background: var(--surface-disabled-primary);
+      color:      var(--icon-disabled-default);
+      box-shadow: inset 0 0 0 1px var(--border-disabled-disabled);
+    }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       PRIMARY · TEACHER
+    ════════════════════════════════════════════════════════════════════════ */
+    .btn--primary.btn--teacher {
+      background:   var(--t-primary);
+      border-color: var(--t-tertiary);
+      color:        var(--t-on-color);
+    }
+    .btn--primary.btn--teacher .btn__arrow {
+      background: var(--t-primary-subtle);
+      color:      var(--t-tertiary);
+    }
+
+    .btn--primary.btn--teacher:hover:not(:disabled):not(.is-disabled),
+    .btn--primary.btn--teacher.is-hover {
+      background:   var(--t-primary-subtle);
+      border-color: var(--t-focus-2);
+      color:        var(--t-text-2);
+    }
+    .btn--primary.btn--teacher:hover:not(:disabled):not(.is-disabled) .btn__arrow,
+    .btn--primary.btn--teacher.is-hover .btn__arrow {
+      background: var(--t-secondary);
+      color:      var(--t-focus-2);
+    }
+
+    .btn--primary.btn--teacher:active:not(:disabled):not(.is-disabled),
+    .btn--primary.btn--teacher.is-pressed {
+      background:   var(--t-tertiary);
+      border-color: var(--t-primary);
+      color:        var(--t-on-color);
+    }
+    .btn--primary.btn--teacher:active:not(:disabled):not(.is-disabled) .btn__arrow,
+    .btn--primary.btn--teacher.is-pressed .btn__arrow {
+      background: var(--t-primary);
+      color:      var(--t-tertiary);
+    }
+
+    .btn--primary.btn--teacher:disabled,
+    .btn--primary.btn--teacher.is-disabled {
+      background:     var(--surface-disabled-primary);
+      border-color:   var(--border-disabled-disabled);
+      color:          var(--icon-disabled-default);
+      cursor:         not-allowed;
+      pointer-events: none;
+    }
+    .btn--primary.btn--teacher:disabled .btn__arrow,
+    .btn--primary.btn--teacher.is-disabled .btn__arrow {
+      background: var(--surface-disabled-primary);
+      color:      var(--icon-disabled-default);
+      box-shadow: inset 0 0 0 1px var(--border-disabled-disabled);
+    }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       SECONDARY · STUDENT  (no arrow — DS node 538:1923 arrowVisible:false)
+    ════════════════════════════════════════════════════════════════════════ */
+    .btn--secondary.btn--student {
+      background:   #ffffff;
+      border-color: var(--s-primary);
+      color:        var(--s-primary);
+    }
+
+    .btn--secondary.btn--student:hover:not(:disabled):not(.is-disabled),
+    .btn--secondary.btn--student.is-hover {
+      background:   var(--s-secondary);
+      border-color: var(--s-focus-2);
+      color:        var(--s-text-2);
+    }
+
+    .btn--secondary.btn--student:active:not(:disabled):not(.is-disabled),
+    .btn--secondary.btn--student.is-pressed {
+      background:   var(--s-tertiary);
+      border-color: var(--s-focus-3);
+      color:        var(--s-text);
+    }
+
+    .btn--secondary.btn--student:disabled,
+    .btn--secondary.btn--student.is-disabled {
+      background:     var(--surface-disabled-primary);
+      border-color:   var(--border-disabled-disabled);
+      color:          var(--icon-disabled-default);
+      cursor:         not-allowed;
+      pointer-events: none;
+    }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       SECONDARY · TEACHER  (no arrow)
+    ════════════════════════════════════════════════════════════════════════ */
+    .btn--secondary.btn--teacher {
+      background:   #ffffff;
+      border-color: var(--t-primary);
+      color:        var(--t-primary);
+    }
+
+    .btn--secondary.btn--teacher:hover:not(:disabled):not(.is-disabled),
+    .btn--secondary.btn--teacher.is-hover {
+      background:   var(--t-primary-subtle);
+      border-color: var(--t-primary);
+      color:        var(--t-text-2);
+    }
+
+    .btn--secondary.btn--teacher:active:not(:disabled):not(.is-disabled),
+    .btn--secondary.btn--teacher.is-pressed {
+      background:   var(--t-primary);
+      border-color: var(--t-tertiary);
+      color:        var(--t-on-color);
+    }
+
+    .btn--secondary.btn--teacher:disabled,
+    .btn--secondary.btn--teacher.is-disabled {
+      background:     var(--surface-disabled-primary);
+      border-color:   var(--border-disabled-disabled);
+      color:          var(--icon-disabled-default);
+      cursor:         not-allowed;
+      pointer-events: none;
+    }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       TERTIARY · STUDENT  (plain chevron, no circle)
+    ════════════════════════════════════════════════════════════════════════ */
+    .btn--tertiary.btn--student {
+      background:   #ffffff;
+      border-color: transparent;
+      color:        var(--text-default-body);
+    }
+    /* Default: grey text, green chevron */
+    .btn--tertiary.btn--student .btn__chevron {
+      color: var(--s-primary);
+    }
+
+    .btn--tertiary.btn--student:hover:not(:disabled):not(.is-disabled),
+    .btn--tertiary.btn--student.is-hover {
+      background:   var(--s-secondary);
+      border-color: var(--s-focus-2);
+      color:        var(--s-text-2);
+    }
+    /* Hover/Pressed/Disabled: chevron matches text */
+    .btn--tertiary.btn--student:hover:not(:disabled):not(.is-disabled) .btn__chevron,
+    .btn--tertiary.btn--student.is-hover .btn__chevron { color: inherit; }
+
+    .btn--tertiary.btn--student:active:not(:disabled):not(.is-disabled),
+    .btn--tertiary.btn--student.is-pressed {
+      background:   var(--s-tertiary);
+      border-color: var(--s-focus-3);
+      color:        var(--s-text);
+    }
+    .btn--tertiary.btn--student:active:not(:disabled):not(.is-disabled) .btn__chevron,
+    .btn--tertiary.btn--student.is-pressed .btn__chevron { color: inherit; }
+
+    .btn--tertiary.btn--student:disabled,
+    .btn--tertiary.btn--student.is-disabled {
+      background:     transparent;
+      border-color:   transparent;
+      color:          var(--icon-disabled-default);
+      cursor:         not-allowed;
+      pointer-events: none;
+    }
+    .btn--tertiary.btn--student:disabled .btn__chevron,
+    .btn--tertiary.btn--student.is-disabled .btn__chevron { color: inherit; }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       TERTIARY · TEACHER  (plain chevron, no circle)
+    ════════════════════════════════════════════════════════════════════════ */
+    .btn--tertiary.btn--teacher {
+      background:   #ffffff;
+      border-color: transparent;
+      color:        var(--t-primary);  /* both text + chevron are pink in default */
+    }
+
+    .btn--tertiary.btn--teacher:hover:not(:disabled):not(.is-disabled),
+    .btn--tertiary.btn--teacher.is-hover {
+      background:   var(--t-primary-subtle);
+      border-color: var(--t-tertiary);
+      color:        var(--t-text-2);
+    }
+
+    .btn--tertiary.btn--teacher:active:not(:disabled):not(.is-disabled),
+    .btn--tertiary.btn--teacher.is-pressed {
+      background:   var(--t-primary);
+      border-color: var(--t-tertiary);
+      color:        var(--t-on-color);
+    }
+
+    .btn--tertiary.btn--teacher:disabled,
+    .btn--tertiary.btn--teacher.is-disabled {
+      background:     transparent;
+      border-color:   transparent;
+      color:          var(--icon-disabled-default);
+      cursor:         not-allowed;
+      pointer-events: none;
+    }
+
+    /* ── Demo layout ───────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      display:        flex;
+      flex-direction: column;
+      gap:            32px;
+      padding:        32px;
+      background:     #f5f5f5;
+      min-height:     100vh;
+    }
+
+    .demo-section {
+      display:        flex;
+      flex-direction: column;
+      gap:            8px;
+    }
+
+    .demo-section h2 {
+      font-family:    'Poppins', sans-serif;
+      font-size:      11px;
+      font-weight:    600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color:          #999;
+      margin-bottom:  4px;
+    }
+
+    .demo-row {
+      display:     flex;
+      align-items: center;
+      gap:         16px;
+      flex-wrap:   wrap;
+    }
+
+    .demo-state {
+      font-family: 'Poppins', sans-serif;
+      font-size:   11px;
+      color:       #bbb;
+      width:       56px;
+      flex-shrink: 0;
+    }
+
+    .demo-size-group {
+      display:     flex;
+      align-items: center;
+      gap:         8px;
+    }
+
+    .demo-size-label {
+      font-family: 'Poppins', sans-serif;
+      font-size:   10px;
+      color:       #ccc;
+    }
+
+    hr { border: none; border-top: 1px solid #e5e5e5; }
+  </style>
+</head>
+<body>
+
+<!-- ── SVG Icon Symbols ──────────────────────────────────────────────────────
+     All paths sourced from Figma export → stored in Components/icons/
+     stroke changed to currentColor so CSS `color:` controls icon color.
+
+     Source file                   DS node    Usage
+     icons/ic-chevron-btn.svg      1437:8161  Button S arrow clip  (12×12)
+     icons/ic-chevron-btn-m.svg    479:352    Button M/L arrow clip (16×16)
+     icons/ic-image.svg            611:3075   Placeholder image icon (20×20)
+     icons/ic-chevron-right.svg    260:540    Standalone chevron-right (general use)
+──────────────────────────────────────────────────────────────────────────── -->
+<svg hidden aria-hidden="true">
+  <defs>
+    <!-- Source: icons/ic-chevron-btn.svg — DS node 1437:8161 -->
+    <symbol id="ic-chevron-btn" viewBox="0 0 12 12">
+      <path d="M4.5 9L7.5 6L4.5 3" fill="none" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <!-- Source: icons/ic-chevron-btn-m.svg — DS node 479:352 -->
+    <symbol id="ic-chevron-btn-m" viewBox="0 0 16 16">
+      <path d="M6 12L10 8L6 4" fill="none" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <!-- Source: icons/ic-image.svg — DS node 611:3075 — viewBox expanded 1px for stroke buffer -->
+    <symbol id="ic-image" viewBox="-1 -1 22 22">
+      <path d="M2.75 18.75H16.75C17.8546 18.75 18.75 17.8546 18.75 16.75V2.75C18.75 1.64543 17.8546 0.75 16.75 0.75H2.75C1.64543 0.75 0.75 1.64543 0.75 2.75V16.75C0.75 17.8546 1.64543 18.75 2.75 18.75ZM2.75 18.75L13.75 7.75L18.75 12.75M7.75 6.25C7.75 7.07843 7.07843 7.75 6.25 7.75C5.42157 7.75 4.75 7.07843 4.75 6.25C4.75 5.42157 5.42157 4.75 6.25 4.75C7.07843 4.75 7.75 5.42157 7.75 6.25Z"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ── Component: Button — 1.5 · Pandai DS 1.5 ──────────────────────────────
+  DS source:  TLVKe3bgJTdVvuPAzgDq2f  node 473:529
+  Variants:   Primary · Secondary · Tertiary
+  Types:      Student (OG-Green) · Teacher (Pink)
+  Sizes:      S (24px) · M (32px) · L (40px)
+  States:     Default · Hover · Pressed · Disabled
+
+  Usage:
+    <button class="btn btn--[variant] btn--[type] btn--[size]">…</button>
+    Variants: primary | secondary | tertiary
+    Types:    student | teacher
+    Sizes:    s | m | l
+
+  Force state for testing:
+    .is-hover    .is-pressed    .is-disabled
+
+  Slot structure:
+    .btn__content  — wraps icon + label
+      .btn__icon   — 24×24 leading icon (optional, omit span to hide)
+      .btn__label  — text label
+    .btn__arrow    — right arrow circle (Primary only)
+    .btn__chevron  — plain right chevron (Tertiary only, no circle)
+    Secondary has no arrow or chevron slot.
+
+  Arrow SVG per size:
+    S → <svg width="12" height="12"><use href="#ic-chevron-btn"/></svg>
+    M → <svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg>
+    L → <svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg>
+──────────────────────────────────────────────────────────────────────────── -->
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     PRIMARY · STUDENT
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="demo-section">
+  <h2>Primary · Student · DS node 1437:8154 (S) / 473:529 (M/L)</h2>
+
+  <div class="demo-row">
+    <span class="demo-state">Default</span>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--student btn--s">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--student btn--m">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--student btn--l">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Hover</span>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--student btn--s is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--student btn--m is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--student btn--l is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Pressed</span>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--student btn--s is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--student btn--m is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--student btn--l is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Disabled</span>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--student btn--s" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--student btn--m" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--student btn--l" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">With icon</span>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--student btn--m">
+        <span class="btn__content">
+          <span class="btn__icon"><svg width="20" height="20"><use href="#ic-image"/></svg></span>
+          <span class="btn__label">Button</span>
+        </span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M + icon</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--student btn--l">
+        <span class="btn__content">
+          <span class="btn__icon"><svg width="20" height="20"><use href="#ic-image"/></svg></span>
+          <span class="btn__label">Button</span>
+        </span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L + icon</span>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     PRIMARY · TEACHER
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="demo-section">
+  <h2>Primary · Teacher · DS node 473:529 (Type=Teacher)</h2>
+
+  <div class="demo-row">
+    <span class="demo-state">Default</span>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--teacher btn--s">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--teacher btn--m">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--teacher btn--l">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Hover</span>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--teacher btn--s is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--teacher btn--m is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--teacher btn--l is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Pressed</span>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--teacher btn--s is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--teacher btn--m is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--teacher btn--l is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Disabled</span>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--teacher btn--s" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--teacher btn--m" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--primary btn--teacher btn--l" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__arrow"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SECONDARY · STUDENT
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="demo-section">
+  <h2>Secondary · Student · DS node 538:1923 (no arrow in all states)</h2>
+
+  <div class="demo-row">
+    <span class="demo-state">Default</span>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--student btn--s">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--student btn--m">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--student btn--l">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Hover</span>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--student btn--s is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--student btn--m is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--student btn--l is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Pressed</span>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--student btn--s is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--student btn--m is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--student btn--l is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Disabled</span>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--student btn--s" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--student btn--m" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--student btn--l" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">With icon</span>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--student btn--m">
+        <span class="btn__content">
+          <span class="btn__icon"><svg width="20" height="20"><use href="#ic-image"/></svg></span>
+          <span class="btn__label">Button</span>
+        </span>
+      </button>
+      <span class="demo-size-label">M + icon</span>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SECONDARY · TEACHER
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="demo-section">
+  <h2>Secondary · Teacher · (no arrow in all states)</h2>
+
+  <div class="demo-row">
+    <span class="demo-state">Default</span>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--teacher btn--s">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--teacher btn--m">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--teacher btn--l">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Hover</span>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--teacher btn--s is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--teacher btn--m is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--teacher btn--l is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Pressed</span>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--teacher btn--s is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--teacher btn--m is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--teacher btn--l is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Disabled</span>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--teacher btn--s" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--teacher btn--m" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--secondary btn--teacher btn--l" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     TERTIARY · STUDENT
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="demo-section">
+  <h2>Tertiary · Student · (plain chevron, no circle)</h2>
+
+  <div class="demo-row">
+    <span class="demo-state">Default</span>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--student btn--s">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--student btn--m">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--student btn--l">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Hover</span>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--student btn--s is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--student btn--m is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--student btn--l is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Pressed</span>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--student btn--s is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--student btn--m is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--student btn--l is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Disabled</span>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--student btn--s" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--student btn--m" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--student btn--l" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">With icon</span>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--student btn--m">
+        <span class="btn__content">
+          <span class="btn__icon"><svg width="20" height="20"><use href="#ic-image"/></svg></span>
+          <span class="btn__label">Button</span>
+        </span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M + icon</span>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     TERTIARY · TEACHER
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="demo-section">
+  <h2>Tertiary · Teacher · (plain chevron, no circle)</h2>
+
+  <div class="demo-row">
+    <span class="demo-state">Default</span>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--teacher btn--s">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--teacher btn--m">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--teacher btn--l">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Hover</span>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--teacher btn--s is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--teacher btn--m is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--teacher btn--l is-hover">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Pressed</span>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--teacher btn--s is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--teacher btn--m is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--teacher btn--l is-pressed">
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Disabled</span>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--teacher btn--s" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="12" height="12"><use href="#ic-chevron-btn"/></svg></span>
+      </button>
+      <span class="demo-size-label">S</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--teacher btn--m" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">M</span>
+    </div>
+    <div class="demo-size-group">
+      <button class="btn btn--tertiary btn--teacher btn--l" disabled>
+        <span class="btn__content"><span class="btn__label">Button</span></span>
+        <span class="btn__chevron"><svg width="16" height="16"><use href="#ic-chevron-btn-m"/></svg></span>
+      </button>
+      <span class="demo-size-label">L</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

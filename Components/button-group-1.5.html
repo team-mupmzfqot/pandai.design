@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button Group — 1.5 · Pandai DS 1.5</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── DS Tokens · Pandai DS 1.5 (TLVKe3bgJTdVvuPAzgDq2f) ──────────────── */
+    :root {
+      --surface-general-default:         #ffffff;
+      --surface-secondary-default:       #b5f291;
+      --surface-primary-default:         #00cc85;
+      --surface-primary-default-hover:   #00a36a;   /* Surface/primary/default-hover (Selected) */
+      --surface-disabled-primary:        #f2f2f2;
+
+      --border-general-default:          #d9d9d9;
+
+      --text-default-body:               #666666;
+      --text-secondary-default-hover:    #70bc6f;
+      --text-primary-on-color:           #f6fdfb;
+      --icon-disabled-default:           #bfbfbf;
+
+      --corner-radius-pill:              999px;
+      --scale-25:                        1px;
+      --scale-50:                        2px;
+      --scale-200:                       8px;
+      --spacing-space-xs:                8px;
+      --spacing-space-xxs:               4px;
+    }
+
+    /* ── Button Group Part — base ──────────────────────────────────────────── */
+    /* DS nodes: L=646:762, M=1510:7832, S=1510:7902 */
+    .bgp {
+      display:        flex;
+      align-items:    center;
+      gap:            0;
+      background:     var(--surface-general-default);
+      border-right:   var(--scale-25) solid var(--border-general-default);
+      color:          var(--text-default-body);
+      font-family:    'Poppins', sans-serif;
+      font-weight:    600;
+      cursor:         pointer;
+      user-select:    none;
+      transition:     background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      position:       relative;
+      flex-shrink:    0;
+    }
+
+    /* ── Size L — DS node 646:762 ──────────────────────────────────────────── */
+    .bgp--l {
+      min-height: 40px;
+      padding:    var(--scale-200);   /* 8px all sides */
+      font-size:  14px;               /* Body/B1 */
+      line-height: 20px;
+    }
+
+    /* ── Size M — DS node 1510:7832 ───────────────────────────────────────── */
+    .bgp--m {
+      min-height: 32px;
+      padding:    var(--scale-50) var(--scale-200);   /* 2px 8px */
+      font-size:  12px;                               /* Body/B5 */
+      line-height: 18px;
+    }
+
+    /* ── Size S — DS node 1510:7902 ───────────────────────────────────────── */
+    .bgp--s {
+      max-height: 24px;
+      padding:    var(--scale-50) var(--scale-200);   /* 2px 8px */
+      font-size:  12px;                               /* Body/B5 */
+      line-height: 18px;
+    }
+
+    /* ── Icon wrapper ──────────────────────────────────────────────────────── */
+    .bgp__icon {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+    }
+    .bgp--l .bgp__icon { width: 24px; height: 24px; }
+    .bgp--m .bgp__icon,
+    .bgp--s .bgp__icon { width: 20px; height: 20px; }
+
+    /* ── Label slot ────────────────────────────────────────────────────────── */
+    .bgp__label-slot {
+      display:     flex;
+      align-items: center;
+      height:      100%;
+      white-space: nowrap;
+    }
+    .bgp--l .bgp__label-slot { padding: 0 var(--spacing-space-xs); }   /* 0 8px */
+    .bgp--m .bgp__label-slot,
+    .bgp--s .bgp__label-slot { padding: 0 var(--spacing-space-xxs); }  /* 0 4px */
+
+    /* ── Inner row (aligns icon + label) ──────────────────────────────────── */
+    .bgp__inner {
+      display:     flex;
+      align-items: center;
+      gap:         0;
+    }
+    .bgp--l .bgp__inner { min-height: 24px; }
+    .bgp--m .bgp__inner { min-height: 24px; }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       STATES
+    ════════════════════════════════════════════════════════════════════════ */
+
+    /* Hover */
+    .bgp:hover:not(.is-disabled):not(.is-active):not(.is-selected),
+    .bgp.is-hover {
+      background:   var(--surface-secondary-default);
+      border-color: transparent;
+      color:        var(--text-secondary-default-hover);
+    }
+
+    /* Active — currently active tab (bright primary green) */
+    .bgp.is-active {
+      background:   var(--surface-primary-default);
+      border-color: transparent;
+      color:        var(--text-primary-on-color);
+    }
+
+    /* Selected — selected/focused tab (darker primary green) */
+    .bgp.is-selected {
+      background:   var(--surface-primary-default-hover);
+      border-color: transparent;
+      color:        var(--text-primary-on-color);
+    }
+
+    /* Disabled */
+    .bgp.is-disabled {
+      background:     var(--surface-disabled-primary);
+      border-color:   var(--border-general-default);
+      color:          var(--icon-disabled-default);
+      cursor:         not-allowed;
+      pointer-events: none;
+    }
+
+    /* ── Button Group container ────────────────────────────────────────────── */
+    /* DS nodes: L=646:975, M=1510:7913, S=1510:7953 */
+    .btn-grp {
+      display:       inline-flex;
+      align-items:   center;
+      border:        var(--scale-25) solid var(--border-general-default);
+      border-radius: var(--corner-radius-pill);
+      overflow:      hidden;                /* clips items to pill shape */
+    }
+
+    /* Size heights */
+    .btn-grp--l { min-height: 40px; }
+    .btn-grp--m { min-height: 32px; }
+    .btn-grp--s { min-height: 24px; }
+
+    /* Fixed-width centered items — Button Group only (not Navigate) */
+    .btn-grp:not(.btn-grp--nav) .bgp {
+      width:           115px;
+      justify-content: center;
+    }
+
+    /* Navigate Group — DS nodes: L=646:1012, M=1510:7993, S=1510:8006 */
+    .btn-grp--nav .bgp {
+      width:           auto;
+      justify-content: flex-start;
+    }
+
+    /* ── Demo layout ───────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      display:        flex;
+      flex-direction: column;
+      gap:            32px;
+      padding:        32px;
+      background:     #f5f5f5;
+      min-height:     100vh;
+    }
+
+    .demo-section {
+      display:        flex;
+      flex-direction: column;
+      gap:            12px;
+    }
+
+    .demo-section h2 {
+      font-family:    'Poppins', sans-serif;
+      font-size:      11px;
+      font-weight:    600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color:          #999;
+      margin-bottom:  4px;
+    }
+
+    .demo-row {
+      display:     flex;
+      align-items: center;
+      gap:         16px;
+      flex-wrap:   wrap;
+    }
+
+    .demo-state {
+      font-family: 'Poppins', sans-serif;
+      font-size:   11px;
+      color:       #bbb;
+      width:       56px;
+      flex-shrink: 0;
+    }
+
+    hr { border: none; border-top: 1px solid #e5e5e5; }
+  </style>
+</head>
+<body>
+
+<!-- ── SVG Icon Symbols ──────────────────────────────────────────────────────
+  Per-clip versions exported from DS button group component nodes.
+  Path coords are pre-mapped to the clip window coordinate space.
+
+  Button Group image icon clips:
+    icons/ic-image-btn-l.svg  — DS node I646:765;611:3075   (L clip, 16.5×16.5)
+    icons/ic-image-btn-ms.svg — DS node I1510:7835;611:3075  (M/S clip, 13.5×13.5)
+
+  Navigate Group chevron clips:
+    icons/ic-chevron-left-l.svg   — DS node I646:1015-646:765-260:538   (L, 6.5×11.5)
+    icons/ic-chevron-right-l.svg  — DS node I646:1013-646:765-260:540   (L, 6.5×11.5)
+    icons/ic-chevron-left-ms.svg  — DS node I1510:7994-1510:7835-260:538 (M/S, 5.5×9.5)
+    icons/ic-chevron-right-ms.svg — DS node I1510:7995-1510:7835-260:540 (M/S, 5.5×9.5)
+──────────────────────────────────────────────────────────────────────────── -->
+<svg hidden aria-hidden="true">
+  <defs>
+    <!-- Source: icons/ic-image-btn-l.svg — L image clip, 16.5×16.5 -->
+    <symbol id="ic-image-btn-l" viewBox="0 0 16.5 16.5">
+      <path d="M2.41667 15.75H14.0833C15.0038 15.75 15.75 15.0038 15.75 14.0833V2.41667C15.75 1.49619 15.0038 0.75 14.0833 0.75H2.41667C1.49619 0.75 0.75 1.49619 0.75 2.41667V14.0833C0.75 15.0038 1.49619 15.75 2.41667 15.75ZM2.41667 15.75L11.5833 6.58333L15.75 10.75M6.58333 5.33333C6.58333 6.02369 6.02369 6.58333 5.33333 6.58333C4.64298 6.58333 4.08333 6.02369 4.08333 5.33333C4.08333 4.64298 4.64298 4.08333 5.33333 4.08333C6.02369 4.08333 6.58333 4.64298 6.58333 5.33333Z"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <!-- Source: icons/ic-image-btn-ms.svg — M/S image clip, 13.5×13.5 -->
+    <symbol id="ic-image-btn-ms" viewBox="0 0 13.5 13.5">
+      <path d="M2.08333 12.75H11.4167C12.153 12.75 12.75 12.153 12.75 11.4167V2.08333C12.75 1.34695 12.153 0.75 11.4167 0.75H2.08333C1.34695 0.75 0.75 1.34695 0.75 2.08333V11.4167C0.75 12.153 1.34695 12.75 2.08333 12.75ZM2.08333 12.75L9.41667 5.41667L12.75 8.75M5.41667 4.41667C5.41667 4.96895 4.96895 5.41667 4.41667 5.41667C3.86438 5.41667 3.41667 4.96895 3.41667 4.41667C3.41667 3.86438 3.86438 3.41667 4.41667 3.41667C4.96895 3.41667 5.41667 3.86438 5.41667 4.41667Z"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <!-- Source: icons/ic-chevron-left-l.svg — L navigate left, 6.5×11.5 -->
+    <symbol id="ic-chevron-left-l" viewBox="0 0 6.5 11.5">
+      <path d="M5.75 10.75L0.75 5.75L5.75 0.75"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <!-- Source: icons/ic-chevron-right-l.svg — L navigate right, 6.5×11.5 -->
+    <symbol id="ic-chevron-right-l" viewBox="0 0 6.5 11.5">
+      <path d="M0.75 10.75L5.75 5.75L0.75 0.75"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <!-- Source: icons/ic-chevron-left-ms.svg — M/S navigate left, 5.5×9.5 -->
+    <symbol id="ic-chevron-left-ms" viewBox="0 0 5.5 9.5">
+      <path d="M4.75 8.75L0.75 4.75L4.75 0.75"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <!-- Source: icons/ic-chevron-right-ms.svg — M/S navigate right, 5.5×9.5 -->
+    <symbol id="ic-chevron-right-ms" viewBox="0 0 5.5 9.5">
+      <path d="M0.75 8.75L4.75 4.75L0.75 0.75"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ── Component: Button Group — 1.5 · Pandai DS 1.5 ───────────────────────
+  DS source:  TLVKe3bgJTdVvuPAzgDq2f
+  Types:      Button Group (3-item segmented) · Button Navigate Group (2-item nav)
+  Sizes:      L (40px) · M (32px) · S (24px)
+  States:     Default · Hover · Active · Selected · Disabled
+
+  Part class pattern:  <div class="bgp bgp--[l|m|s] [state]">
+  Group class pattern: <div class="btn-grp btn-grp--[l|m|s] [btn-grp--nav]">
+
+  Icon SVG sizes per size:
+    L  — image: 16.5×16.5  chevron: 6.5×11.5
+    M/S — image: 13.5×13.5  chevron: 5.5×9.5
+
+  State classes (apply to .bgp):
+    .is-hover    .is-active    .is-selected    .is-disabled
+──────────────────────────────────────────────────────────────────────────── -->
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     BUTTON GROUP · PARTS — SIZE L
+     DS nodes: Default=646:762 · Hover=646:754 · Active=665:592
+               Selected=646:746 · Disabled=646:738
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="demo-section">
+  <h2>Button Group · Parts · L · DS node 646:762</h2>
+
+  <div class="demo-row">
+    <span class="demo-state">Default</span>
+    <div class="bgp bgp--l">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="16.5" height="16.5"><use href="#ic-image-btn-l"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Hover</span>
+    <div class="bgp bgp--l is-hover">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="16.5" height="16.5"><use href="#ic-image-btn-l"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Active</span>
+    <div class="bgp bgp--l is-active">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="16.5" height="16.5"><use href="#ic-image-btn-l"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Selected</span>
+    <div class="bgp bgp--l is-selected">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="16.5" height="16.5"><use href="#ic-image-btn-l"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Disabled</span>
+    <div class="bgp bgp--l is-disabled">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="16.5" height="16.5"><use href="#ic-image-btn-l"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     BUTTON GROUP · PARTS — SIZE M
+     DS nodes: Default=1510:7832 · Hover=1510:7826 · Active=1510:7820
+               Selected=1510:7814 · Disabled=1510:7808
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="demo-section">
+  <h2>Button Group · Parts · M · DS node 1510:7832</h2>
+
+  <div class="demo-row">
+    <span class="demo-state">Default</span>
+    <div class="bgp bgp--m">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Hover</span>
+    <div class="bgp bgp--m is-hover">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Active</span>
+    <div class="bgp bgp--m is-active">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Selected</span>
+    <div class="bgp bgp--m is-selected">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Disabled</span>
+    <div class="bgp bgp--m is-disabled">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     BUTTON GROUP · PARTS — SIZE S
+     DS nodes: Default=1510:7902 · Hover=1510:7896 · Active=1510:7890
+               Selected=1510:7884 · Disabled=1510:7878
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="demo-section">
+  <h2>Button Group · Parts · S · DS node 1510:7902</h2>
+
+  <div class="demo-row">
+    <span class="demo-state">Default</span>
+    <div class="bgp bgp--s">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Hover</span>
+    <div class="bgp bgp--s is-hover">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Active</span>
+    <div class="bgp bgp--s is-active">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Selected</span>
+    <div class="bgp bgp--s is-selected">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Disabled</span>
+    <div class="bgp bgp--s is-disabled">
+      <div class="bgp__inner">
+        <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+        <div class="bgp__label-slot"><span>Button</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">All states</span>
+    <div class="bgp bgp--s"><div class="bgp__inner"><div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div><div class="bgp__label-slot"><span>Default</span></div></div></div>
+    <div class="bgp bgp--s is-hover"><div class="bgp__inner"><div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div><div class="bgp__label-slot"><span>Hover</span></div></div></div>
+    <div class="bgp bgp--s is-active"><div class="bgp__inner"><div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div><div class="bgp__label-slot"><span>Active</span></div></div></div>
+    <div class="bgp bgp--s is-selected"><div class="bgp__inner"><div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div><div class="bgp__label-slot"><span>Selected</span></div></div></div>
+    <div class="bgp bgp--s is-disabled"><div class="bgp__inner"><div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div><div class="bgp__label-slot"><span>Disabled</span></div></div></div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     BUTTON GROUP — ASSEMBLED · L / M / S
+     DS nodes: L=646:975 · M=1510:7913 · S=1510:7953
+     Items: 3 × fixed 115px · border: 1px #d9d9d9 · border-radius: 999px
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="demo-section">
+  <h2>Button Group · Assembled · DS node 646:975 / 1510:7913 / 1510:7953</h2>
+
+  <div class="demo-row">
+    <span class="demo-state">Size L</span>
+    <div class="btn-grp btn-grp--l">
+      <div class="bgp bgp--l">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="16.5" height="16.5"><use href="#ic-image-btn-l"/></svg></div>
+          <div class="bgp__label-slot"><span>Left</span></div>
+        </div>
+      </div>
+      <div class="bgp bgp--l">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="16.5" height="16.5"><use href="#ic-image-btn-l"/></svg></div>
+          <div class="bgp__label-slot"><span>Middle</span></div>
+        </div>
+      </div>
+      <div class="bgp bgp--l">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="16.5" height="16.5"><use href="#ic-image-btn-l"/></svg></div>
+          <div class="bgp__label-slot"><span>Right</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Size M</span>
+    <div class="btn-grp btn-grp--m">
+      <div class="bgp bgp--m">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+          <div class="bgp__label-slot"><span>Left</span></div>
+        </div>
+      </div>
+      <div class="bgp bgp--m">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+          <div class="bgp__label-slot"><span>Middle</span></div>
+        </div>
+      </div>
+      <div class="bgp bgp--m">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+          <div class="bgp__label-slot"><span>Right</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Size S</span>
+    <div class="btn-grp btn-grp--s">
+      <div class="bgp bgp--s">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+          <div class="bgp__label-slot"><span>Left</span></div>
+        </div>
+      </div>
+      <div class="bgp bgp--s">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+          <div class="bgp__label-slot"><span>Middle</span></div>
+        </div>
+      </div>
+      <div class="bgp bgp--s">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="13.5" height="13.5"><use href="#ic-image-btn-ms"/></svg></div>
+          <div class="bgp__label-slot"><span>Right</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Mixed</span>
+    <div class="btn-grp btn-grp--l">
+      <div class="bgp bgp--l is-active">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="16.5" height="16.5"><use href="#ic-image-btn-l"/></svg></div>
+          <div class="bgp__label-slot"><span>Left</span></div>
+        </div>
+      </div>
+      <div class="bgp bgp--l">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="16.5" height="16.5"><use href="#ic-image-btn-l"/></svg></div>
+          <div class="bgp__label-slot"><span>Middle</span></div>
+        </div>
+      </div>
+      <div class="bgp bgp--l">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="16.5" height="16.5"><use href="#ic-image-btn-l"/></svg></div>
+          <div class="bgp__label-slot"><span>Right</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     BUTTON NAVIGATE GROUP — ASSEMBLED · L / M / S
+     DS nodes: L=646:1012 · M=1510:7993 · S=1510:8006
+     Items: 2 × icon-only · chevron-left + chevron-right
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="demo-section">
+  <h2>Button Navigate Group · DS node 646:1012 / 1510:7993 / 1510:8006</h2>
+
+  <div class="demo-row">
+    <span class="demo-state">Size L</span>
+    <div class="btn-grp btn-grp--l btn-grp--nav">
+      <div class="bgp bgp--l">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="6.5" height="11.5"><use href="#ic-chevron-left-l"/></svg></div>
+        </div>
+      </div>
+      <div class="bgp bgp--l">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="6.5" height="11.5"><use href="#ic-chevron-right-l"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Size M</span>
+    <div class="btn-grp btn-grp--m btn-grp--nav">
+      <div class="bgp bgp--m">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="5.5" height="9.5"><use href="#ic-chevron-left-ms"/></svg></div>
+        </div>
+      </div>
+      <div class="bgp bgp--m">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="5.5" height="9.5"><use href="#ic-chevron-right-ms"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Size S</span>
+    <div class="btn-grp btn-grp--s btn-grp--nav">
+      <div class="bgp bgp--s">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="5.5" height="9.5"><use href="#ic-chevron-left-ms"/></svg></div>
+        </div>
+      </div>
+      <div class="bgp bgp--s">
+        <div class="bgp__inner">
+          <div class="bgp__icon"><svg width="5.5" height="9.5"><use href="#ic-chevron-right-ms"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">States</span>
+    <div class="btn-grp btn-grp--m btn-grp--nav">
+      <div class="bgp bgp--m"><div class="bgp__inner"><div class="bgp__icon"><svg width="5.5" height="9.5"><use href="#ic-chevron-left-ms"/></svg></div></div></div>
+      <div class="bgp bgp--m"><div class="bgp__inner"><div class="bgp__icon"><svg width="5.5" height="9.5"><use href="#ic-chevron-right-ms"/></svg></div></div></div>
+    </div>
+    <div class="btn-grp btn-grp--m btn-grp--nav">
+      <div class="bgp bgp--m is-hover"><div class="bgp__inner"><div class="bgp__icon"><svg width="5.5" height="9.5"><use href="#ic-chevron-left-ms"/></svg></div></div></div>
+      <div class="bgp bgp--m is-hover"><div class="bgp__inner"><div class="bgp__icon"><svg width="5.5" height="9.5"><use href="#ic-chevron-right-ms"/></svg></div></div></div>
+    </div>
+    <div class="btn-grp btn-grp--m btn-grp--nav">
+      <div class="bgp bgp--m is-active"><div class="bgp__inner"><div class="bgp__icon"><svg width="5.5" height="9.5"><use href="#ic-chevron-left-ms"/></svg></div></div></div>
+      <div class="bgp bgp--m is-active"><div class="bgp__inner"><div class="bgp__icon"><svg width="5.5" height="9.5"><use href="#ic-chevron-right-ms"/></svg></div></div></div>
+    </div>
+    <div class="btn-grp btn-grp--m btn-grp--nav">
+      <div class="bgp bgp--m is-selected"><div class="bgp__inner"><div class="bgp__icon"><svg width="5.5" height="9.5"><use href="#ic-chevron-left-ms"/></svg></div></div></div>
+      <div class="bgp bgp--m is-selected"><div class="bgp__inner"><div class="bgp__icon"><svg width="5.5" height="9.5"><use href="#ic-chevron-right-ms"/></svg></div></div></div>
+    </div>
+    <div class="btn-grp btn-grp--m btn-grp--nav">
+      <div class="bgp bgp--m is-disabled"><div class="bgp__inner"><div class="bgp__icon"><svg width="5.5" height="9.5"><use href="#ic-chevron-left-ms"/></svg></div></div></div>
+      <div class="bgp bgp--m is-disabled"><div class="bgp__inner"><div class="bgp__icon"><svg width="5.5" height="9.5"><use href="#ic-chevron-right-ms"/></svg></div></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Segmented button groups — single-select: click moves is-active to clicked item
+  document.querySelectorAll('.btn-grp:not(.btn-grp--nav)').forEach(grp => {
+    grp.querySelectorAll('.bgp:not(.is-disabled)').forEach(btn => {
+      btn.addEventListener('click', () => {
+        grp.querySelectorAll('.bgp').forEach(b => b.classList.remove('is-active', 'is-selected'));
+        btn.classList.add('is-active');
+      });
+    });
+  });
+
+  // Navigate groups — momentary press feedback only (no persistent selected state)
+  document.querySelectorAll('.btn-grp--nav .bgp:not(.is-disabled)').forEach(btn => {
+    btn.addEventListener('mousedown',  () => btn.classList.add('is-active'));
+    btn.addEventListener('mouseup',    () => btn.classList.remove('is-active'));
+    btn.addEventListener('mouseleave', () => btn.classList.remove('is-active'));
+  });
+</script>
+
+</body>
+</html>

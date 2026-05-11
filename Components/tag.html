@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tag — 1.5 · Pandai DS 1.5</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── DS Tokens · Pandai DS 1.5 (TLVKe3bgJTdVvuPAzgDq2f) ──────────────── */
+    :root {
+      --surface-general-default:   #ffffff;   /* Surface/general/default */
+      --surface-primary-default:   #00cc85;   /* Surface/primary/default */
+      --surface-secondary-default: #b5f291;   /* Surface/secondary/default */
+      --surface-tertiary-default:  #00564c;   /* Surface/tertiary/default */
+      --surface-disabled-primary:  #f2f2f2;   /* Surface/disabled/primary */
+
+      --border-primary-default:    #00cc85;   /* Border/primary/default */
+      --border-primary-focus:      #00a36a;   /* Border/primary/focus */
+      --border-secondary-focus:    #70bc6f;   /* Border/secondary/focus */
+      --border-disabled-disabled:  #bfbfbf;   /* Border/disabled/disabled */
+
+      --text-primary-default:      #00cc85;   /* Text/primary/default */
+      --text-primary-on-color:     #f6fdfb;   /* Text/primary/on-color */
+      --text-secondary-focus:      #70bc6f;   /* Text/secondary/focus */
+      --text-disabled-default:     #bfbfbf;   /* Text/disabled/default */
+
+      --corner-radius-pill:        60px;
+      --spacing-space-xxxs:        2px;
+      --spacing-space-xxs:         4px;
+      --spacing-space-xs:          8px;
+      --spacing-space-s:           12px;
+      --scale-25:                  1px;
+    }
+
+    /* ── Tag base ──────────────────────────────────────────────────────────── */
+    .tag {
+      display:         inline-flex;
+      align-items:     center;
+      gap:             var(--spacing-space-xxxs);
+      border:          var(--scale-25) solid var(--border-primary-default);
+      border-radius:   var(--corner-radius-pill);
+      background:      var(--surface-general-default);
+      color:           var(--text-primary-default);
+      font-family:     'Poppins', sans-serif;
+      font-size:       12px;       /* Caption/C1 */
+      font-weight:     400;        /* Regular */
+      line-height:     18px;
+      cursor:          pointer;
+      user-select:     none;
+      transition:      background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    /* ── Size S — DS node 1351:1925 ────────────────────────────────────────── */
+    .tag--s {
+      height:  24px;
+      padding: 4px var(--spacing-space-xs);   /* py:4 px:8 */
+    }
+
+    /* ── Size M — DS node 1363:2713 ────────────────────────────────────────── */
+    .tag--m {
+      min-height: 40px;
+      padding:    4px var(--spacing-space-xxs) 4px var(--spacing-space-s); /* t:4 r:4 b:4 l:12 */
+    }
+
+    /* ── Label ─────────────────────────────────────────────────────────────── */
+    .tag__label {
+      display:     inline-flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+    .tag--m .tag__label { height: 24px; }
+
+    /* ── X icon — Size S (12px container, 7.5px clip icon centered) ────────── */
+    .tag--s .tag__x {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      width:           12px;
+      height:          12px;
+      flex-shrink:     0;
+      color:           inherit;
+    }
+
+    /* ── X icon button — Size M (24px circle wrapper, 16px container) ──────── */
+    .tag--m .tag__icon-btn {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      padding:         var(--spacing-space-xxs);   /* 4px → 4+9.5+4 = ~18px, max-h caps at 24px */
+      max-height:      24px;
+      border-radius:   var(--corner-radius-pill);
+      flex-shrink:     0;
+    }
+    .tag--m .tag__x {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      width:           16px;
+      height:          16px;
+      flex-shrink:     0;
+      color:           inherit;
+    }
+
+    /* ════════════════════════════════════════════════════════════════════════
+       STATES  (shared across S and M)
+    ════════════════════════════════════════════════════════════════════════ */
+
+    /* Hover */
+    .tag:hover:not(.is-disabled):not(:disabled),
+    .tag.is-hover {
+      background:   var(--surface-secondary-default);
+      border-color: var(--border-secondary-focus);
+      color:        var(--text-secondary-focus);
+    }
+
+    /* Pressed */
+    .tag:active:not(.is-disabled):not(:disabled),
+    .tag.is-pressed {
+      background:   var(--surface-tertiary-default);
+      border-color: var(--border-primary-default);
+      color:        var(--text-primary-default);
+    }
+
+    /* Active */
+    .tag.is-active {
+      background:   var(--surface-primary-default);
+      border-color: var(--border-primary-focus);
+      color:        var(--text-primary-on-color);
+    }
+
+    /* Disabled */
+    .tag.is-disabled,
+    .tag:disabled {
+      background:     var(--surface-disabled-primary);
+      border-color:   var(--border-disabled-disabled);
+      color:          var(--text-disabled-default);
+      cursor:         not-allowed;
+      pointer-events: none;
+    }
+
+    /* ── Demo layout ───────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      display:        flex;
+      flex-direction: column;
+      gap:            32px;
+      padding:        32px;
+      background:     #f5f5f5;
+      min-height:     100vh;
+    }
+
+    .demo-section {
+      display:        flex;
+      flex-direction: column;
+      gap:            12px;
+    }
+
+    .demo-section h2 {
+      font-family:    'Poppins', sans-serif;
+      font-size:      11px;
+      font-weight:    600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color:          #999;
+      margin-bottom:  4px;
+    }
+
+    .demo-row {
+      display:     flex;
+      align-items: center;
+      gap:         16px;
+      flex-wrap:   wrap;
+    }
+
+    .demo-state {
+      font-family: 'Poppins', sans-serif;
+      font-size:   11px;
+      color:       #bbb;
+      width:       56px;
+      flex-shrink: 0;
+    }
+
+    hr { border: none; border-top: 1px solid #e5e5e5; }
+  </style>
+</head>
+<body>
+
+<!-- ── SVG Icon Symbols ──────────────────────────────────────────────────────
+     Per-clip versions exported from the DS tag component node — path coords
+     already mapped to the clip window coordinate space, so stroke stays 1.5px.
+     Source files: icons/ic-x-s.svg (DS node 1343:1917) · ic-x-m.svg (DS node 1363:2717)
+──────────────────────────────────────────────────────────────────────────── -->
+<svg hidden aria-hidden="true">
+  <defs>
+    <!-- Source: icons/ic-x-s.svg — DS node 1343:1917 (S clip, 7.5×7.5) -->
+    <symbol id="ic-x-s" viewBox="0 0 7.5 7.5">
+      <path d="M6.75 0.75L0.75 6.75M0.75 0.75L6.75 6.75"
+            fill="none" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <!-- Source: icons/ic-x-m.svg — DS node 1363:2717 (M clip, 9.5×9.5) -->
+    <symbol id="ic-x-m" viewBox="0 0 9.5 9.5">
+      <path d="M8.75 0.75L0.75 8.75M0.75 0.75L8.75 8.75"
+            fill="none" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ── Component: Tag — 1.5 · Pandai DS 1.5 ────────────────────────────────
+  DS source:  TLVKe3bgJTdVvuPAzgDq2f  node 1351:1925 (S) / 1363:2713 (M)
+  Sizes:      S (24px) · M (40px)
+  States:     Default · Hover · Pressed · Active · Disabled
+
+  Usage:
+    <div class="tag tag--s">…</div>
+    <div class="tag tag--m">…</div>
+
+  Force state for testing:
+    .is-hover   .is-pressed   .is-active   .is-disabled
+
+  Slot structure — Size S:
+    .tag__label        — text
+    .tag__x            — 12px X icon clip
+
+  Slot structure — Size M:
+    .tag__label        — text (h:24px)
+    .tag__icon-btn     — 24px circle wrapper (p:4px)
+      .tag__x          — 16px X icon clip
+──────────────────────────────────────────────────────────────────────────── -->
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SIZE S — DS node 1351:1925 / 2783:3106 / 2783:3111 / 2783:3116 / 2783:32023
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="demo-section">
+  <h2>Tag · S · DS node 1351:1925</h2>
+
+  <div class="demo-row">
+    <span class="demo-state">Default</span>
+    <div class="tag tag--s">
+      <span class="tag__label">Text</span>
+      <span class="tag__x"><svg width="7.5" height="7.5"><use href="#ic-x-s"/></svg></span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Hover</span>
+    <div class="tag tag--s is-hover">
+      <span class="tag__label">Text</span>
+      <span class="tag__x"><svg width="7.5" height="7.5"><use href="#ic-x-s"/></svg></span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Pressed</span>
+    <div class="tag tag--s is-pressed">
+      <span class="tag__label">Text</span>
+      <span class="tag__x"><svg width="7.5" height="7.5"><use href="#ic-x-s"/></svg></span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Active</span>
+    <div class="tag tag--s is-active">
+      <span class="tag__label">Text</span>
+      <span class="tag__x"><svg width="7.5" height="7.5"><use href="#ic-x-s"/></svg></span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Disabled</span>
+    <div class="tag tag--s is-disabled">
+      <span class="tag__label">Text</span>
+      <span class="tag__x"><svg width="7.5" height="7.5"><use href="#ic-x-s"/></svg></span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">All states</span>
+    <div class="tag tag--s"><span class="tag__label">Default</span><span class="tag__x"><svg width="7.5" height="7.5"><use href="#ic-x-s"/></svg></span></div>
+    <div class="tag tag--s is-hover"><span class="tag__label">Hover</span><span class="tag__x"><svg width="7.5" height="7.5"><use href="#ic-x-s"/></svg></span></div>
+    <div class="tag tag--s is-pressed"><span class="tag__label">Pressed</span><span class="tag__x"><svg width="7.5" height="7.5"><use href="#ic-x-s"/></svg></span></div>
+    <div class="tag tag--s is-active"><span class="tag__label">Active</span><span class="tag__x"><svg width="7.5" height="7.5"><use href="#ic-x-s"/></svg></span></div>
+    <div class="tag tag--s is-disabled"><span class="tag__label">Disabled</span><span class="tag__x"><svg width="7.5" height="7.5"><use href="#ic-x-s"/></svg></span></div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SIZE M — DS node 1363:2713 / 1363:2718 / 1363:2723 / 1363:2728 / 1363:2926
+═══════════════════════════════════════════════════════════════════════════ -->
+<div class="demo-section">
+  <h2>Tag · M · DS node 1363:2713</h2>
+
+  <div class="demo-row">
+    <span class="demo-state">Default</span>
+    <div class="tag tag--m">
+      <span class="tag__label">Text</span>
+      <span class="tag__icon-btn">
+        <span class="tag__x"><svg width="9.5" height="9.5"><use href="#ic-x-m"/></svg></span>
+      </span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Hover</span>
+    <div class="tag tag--m is-hover">
+      <span class="tag__label">Text</span>
+      <span class="tag__icon-btn">
+        <span class="tag__x"><svg width="9.5" height="9.5"><use href="#ic-x-m"/></svg></span>
+      </span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Pressed</span>
+    <div class="tag tag--m is-pressed">
+      <span class="tag__label">Text</span>
+      <span class="tag__icon-btn">
+        <span class="tag__x"><svg width="9.5" height="9.5"><use href="#ic-x-m"/></svg></span>
+      </span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Active</span>
+    <div class="tag tag--m is-active">
+      <span class="tag__label">Text</span>
+      <span class="tag__icon-btn">
+        <span class="tag__x"><svg width="9.5" height="9.5"><use href="#ic-x-m"/></svg></span>
+      </span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">Disabled</span>
+    <div class="tag tag--m is-disabled">
+      <span class="tag__label">Text</span>
+      <span class="tag__icon-btn">
+        <span class="tag__x"><svg width="9.5" height="9.5"><use href="#ic-x-m"/></svg></span>
+      </span>
+    </div>
+  </div>
+
+  <div class="demo-row">
+    <span class="demo-state">All states</span>
+    <div class="tag tag--m"><span class="tag__label">Default</span><span class="tag__icon-btn"><span class="tag__x"><svg width="9.5" height="9.5"><use href="#ic-x-m"/></svg></span></span></div>
+    <div class="tag tag--m is-hover"><span class="tag__label">Hover</span><span class="tag__icon-btn"><span class="tag__x"><svg width="9.5" height="9.5"><use href="#ic-x-m"/></svg></span></span></div>
+    <div class="tag tag--m is-pressed"><span class="tag__label">Pressed</span><span class="tag__icon-btn"><span class="tag__x"><svg width="9.5" height="9.5"><use href="#ic-x-m"/></svg></span></span></div>
+    <div class="tag tag--m is-active"><span class="tag__label">Active</span><span class="tag__icon-btn"><span class="tag__x"><svg width="9.5" height="9.5"><use href="#ic-x-m"/></svg></span></span></div>
+    <div class="tag tag--m is-disabled"><span class="tag__label">Disabled</span><span class="tag__icon-btn"><span class="tag__x"><svg width="9.5" height="9.5"><use href="#ic-x-m"/></svg></span></span></div>
+  </div>
+</div>
+
+</body>
+</html>

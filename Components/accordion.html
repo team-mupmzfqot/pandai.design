@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accordion — Pandai DS 1.5</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── DS Tokens · Pandai DS 1.5 (TLVKe3bgJTdVvuPAzgDq2f) ──────────────── */
+    :root {
+      /* Surface */
+      --surface-general-default:          #ffffff;
+      --surface-secondary-default-subtle: #e8fbe8;
+      --surface-primary-default:          #00cc85;
+      --lime-200:                         #d1f7d1;
+      --lime-500-base:                    #b5f291;
+
+      /* Border */
+      --border-general-default:           #d9d9d9;
+      --border-default:                   #00cc85;
+
+      /* Text */
+      --text-default-heading:             #404040;
+      --text-default-body:                #666666;
+      --text-tertiary-default:            #00564c;
+      --text-on-color:                    #f6fdfb;
+      --teal-500-base:                    #00564c;
+
+      /* Radius */
+      --corner-radius-pill:               60px;
+      --corner-radius-xxxl:               18px;
+
+      /* Spacing */
+      --spacing-space-m:                  16px;
+      --spacing-space-xs:                 8px;
+      --spacing-space-xxs:                4px;
+    }
+
+    /* ── Accordion base ────────────────────────────────────────────────────── */
+    .accordion {
+      display: flex;
+      flex-direction: column;
+      width: 628px;
+    }
+
+    /* ── Header ────────────────────────────────────────────────────────────── */
+    .accordion__header {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-space-xs);
+      padding: var(--spacing-space-xs) var(--spacing-space-xs) var(--spacing-space-xs) var(--spacing-space-m);
+      border: 1px solid var(--border-general-default);
+      border-radius: var(--corner-radius-pill);
+      background: var(--surface-general-default);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.18s ease, border-color 0.18s ease, border-radius 0.18s ease;
+    }
+
+    /* ── Title area ────────────────────────────────────────────────────────── */
+    .accordion__title-area {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex: 1 0 0;
+      min-width: 0;
+    }
+
+    .accordion__title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-default-heading);
+      white-space: nowrap;
+      transition: color 0.18s ease;
+    }
+
+    .accordion__caption {
+      font-family: 'Poppins', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--text-default-heading);
+      white-space: nowrap;
+      transition: color 0.18s ease;
+    }
+
+    /* ── Plus icons ────────────────────────────────────────────────────────── */
+    .accordion__icon {
+      flex-shrink: 0;
+      color: var(--surface-primary-default); /* #00cc85 — Default closed */
+      transition: color 0.18s ease;
+    }
+
+    .accordion.is-open .accordion__icon {
+      color: var(--text-tertiary-default); /* #00564c — Default opened */
+    }
+
+    .accordion--secondary .accordion__icon {
+      color: var(--teal-500-base); /* #00564c — Secondary all states */
+    }
+
+    /* ── Arrow circle ──────────────────────────────────────────────────────── */
+    .accordion__arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      border-radius: var(--corner-radius-pill);
+      background: var(--surface-primary-default);
+      color: var(--text-on-color);        /* #f6fdfb — chevron on green */
+      transition: background 0.18s ease;
+    }
+
+    .accordion--secondary .accordion__arrow {
+      background: var(--lime-500-base);
+      color: var(--teal-500-base);        /* #00564c — chevron on lime */
+    }
+
+    .accordion__arrow svg {
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── Body ──────────────────────────────────────────────────────────────── */
+    .accordion__body {
+      display: none;
+      padding: var(--spacing-space-m);
+      border: 1px solid var(--border-general-default);
+      border-top: none;
+      border-radius: 0 0 var(--corner-radius-xxxl) var(--corner-radius-xxxl);
+      background: var(--surface-general-default);
+    }
+
+    .accordion__body p {
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--text-default-body);
+    }
+
+    /* ── Open state — Default ──────────────────────────────────────────────── */
+    .accordion.is-open .accordion__header {
+      background: var(--surface-secondary-default-subtle);
+      border-color: var(--border-general-default);
+      border-bottom-color: transparent;
+      border-radius: var(--corner-radius-xxxl) var(--corner-radius-xxxl) 0 0;
+    }
+
+    .accordion.is-open .accordion__title {
+      color: var(--text-tertiary-default);
+    }
+
+    .accordion.is-open .accordion__caption {
+      color: var(--text-tertiary-default);
+    }
+
+    .accordion.is-open .accordion__body {
+      display: block;
+    }
+
+    .accordion.is-open .accordion__arrow svg {
+      transform: rotate(180deg);
+    }
+
+    /* ── Secondary variant ─────────────────────────────────────────────────── */
+    .accordion--secondary .accordion__header {
+      background: var(--lime-200);
+      border-color: var(--border-default);
+    }
+
+    .accordion--secondary .accordion__title {
+      color: var(--teal-500-base);
+    }
+
+    .accordion--secondary .accordion__caption {
+      color: var(--teal-500-base);
+    }
+
+    .accordion--secondary .accordion__arrow {
+      background: var(--lime-500-base);
+    }
+
+    /* Secondary open */
+    .accordion--secondary.is-open .accordion__header {
+      background: var(--lime-200);
+      border-color: var(--border-default);
+      border-bottom-color: transparent;
+      border-radius: var(--corner-radius-xxxl) var(--corner-radius-xxxl) 0 0;
+    }
+
+    .accordion--secondary.is-open .accordion__body {
+      border-color: var(--border-default);
+    }
+
+    .accordion--secondary .accordion__title { color: var(--teal-500-base); }
+    .accordion--secondary .accordion__caption { color: var(--teal-500-base); }
+
+    /* ── Demo layout ───────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 32px;
+      background: #f5f5f5;
+      min-height: 100vh;
+    }
+
+    .demo-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .demo-section h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 4px;
+    }
+
+    hr { border: none; border-top: 1px solid #e5e5e5; }
+  </style>
+</head>
+<body>
+
+<!-- ── SVG Icon Symbols ─────────────────────────────────────────────────────
+     Source files (DS export, git-tracked): Components/icons/
+       ic-plus.svg          → DS node 260:1051  Outline/plus
+       ic-chevron-down.svg  → DS node 260:535   Outline/chevron-down
+
+     SVGs are inlined here (not <img src>) so stroke="currentColor"
+     inherits from the parent CSS `color:` property.
+     When hosting on Cloudflare, reference the files from icons/ directly
+     if color control is not needed, or inline at build time.
+──────────────────────────────────────────────────────────────────────────── -->
+<svg hidden aria-hidden="true">
+  <defs>
+    <!-- Source: icons/ic-plus.svg — DS node 260:1051 -->
+    <symbol id="ic-plus" viewBox="0 0 24 24">
+      <path d="M12 5V19M5 12H19"
+            fill="none" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <!-- Source: icons/ic-chevron-down.svg — DS node 260:535 -->
+    <symbol id="ic-chevron-down" viewBox="0 0 24 24">
+      <path d="M6 9L12 15L18 9"
+            fill="none" stroke="currentColor"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ── Component: Accordion — Pandai DS 1.5 ────────────────────────────────
+  DS source:  TLVKe3bgJTdVvuPAzgDq2f  node 361:726
+  Variants:   Default · Secondary · Minimal (title + chevron only)
+  States:     Closed · Opened
+
+  Usage:
+    <div class="accordion">…</div>              — Default
+    <div class="accordion accordion--secondary"> — Secondary
+
+  Toggle open/closed:
+    Add/remove class `is-open` on `.accordion`
+
+  Slots:
+    .accordion__title  — heading text
+    .accordion__caption — small label beside title (e.g. "info")
+    .accordion__body p  — expanded content
+
+  Leading/trailing icons in header are `Outline/plus` by default.
+  Replace with any DS icon via <use href="#ic-*">.
+
+  Minimal variant — showIcon1/2/3=false, caption=false:
+    Omit all .accordion__icon and .accordion__caption elements.
+    Only .accordion__title-area (title text) + .accordion__arrow remain.
+──────────────────────────────────────────────────────────────────────────── -->
+
+<!-- Default variant -->
+<div class="demo-section">
+  <h2>Default — Status=Default · DS node 1336:1837 / 1336:1853</h2>
+
+  <div class="accordion" data-variant="default">
+    <div class="accordion__header" role="button" aria-expanded="false" tabindex="0">
+      <svg class="accordion__icon" width="24" height="24"><use href="#ic-plus"/></svg>
+      <svg class="accordion__icon" width="24" height="24"><use href="#ic-plus"/></svg>
+      <div class="accordion__title-area">
+        <span class="accordion__title">Accordion Title</span>
+        <span class="accordion__caption">info</span>
+        <svg class="accordion__icon" width="24" height="24"><use href="#ic-plus"/></svg>
+      </div>
+      <div class="accordion__arrow">
+        <svg width="16" height="16"><use href="#ic-chevron-down"/></svg>
+      </div>
+    </div>
+    <div class="accordion__body">
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Secondary variant -->
+<div class="demo-section">
+  <h2>Secondary — Status=Secondary · DS node 361:725 / 361:724</h2>
+
+  <div class="accordion accordion--secondary" data-variant="secondary">
+    <div class="accordion__header" role="button" aria-expanded="false" tabindex="0">
+      <svg class="accordion__icon" width="24" height="24"><use href="#ic-plus"/></svg>
+      <svg class="accordion__icon" width="24" height="24"><use href="#ic-plus"/></svg>
+      <div class="accordion__title-area">
+        <span class="accordion__title">Accordion Title</span>
+        <span class="accordion__caption">info</span>
+        <svg class="accordion__icon" width="24" height="24"><use href="#ic-plus"/></svg>
+      </div>
+      <div class="accordion__arrow">
+        <svg width="16" height="16"><use href="#ic-chevron-down"/></svg>
+      </div>
+    </div>
+    <div class="accordion__body">
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- Minimal variant — showIcon1/showIcon2/showIcon3/caption all false -->
+<!-- Same DS node 1336:1837 with icon/caption slots hidden -->
+<div class="demo-section">
+  <h2>Minimal — showIcon1/2/3=false · caption=false · DS node 1336:1837</h2>
+
+  <div class="accordion" data-variant="minimal">
+    <div class="accordion__header" role="button" aria-expanded="false" tabindex="0">
+      <div class="accordion__title-area">
+        <span class="accordion__title">Accordion Title</span>
+      </div>
+      <div class="accordion__arrow">
+        <svg width="16" height="16"><use href="#ic-chevron-down"/></svg>
+      </div>
+    </div>
+    <div class="accordion__body">
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.accordion__header').forEach(header => {
+    header.addEventListener('click', () => {
+      const accordion = header.closest('.accordion');
+      const isOpen = accordion.classList.toggle('is-open');
+      header.setAttribute('aria-expanded', isOpen);
+    });
+    header.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        header.click();
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
