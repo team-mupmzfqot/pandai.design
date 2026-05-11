@@ -351,12 +351,34 @@
       padding: 0 8px;
     }
 
+    /* ── Mobile hamburger button ─────────────────────────────── */
+    .navbar__hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+    .navbar__hamburger svg {
+      width: 24px; height: 24px;
+      stroke: var(--og-500);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      display: block;
+    }
+
     @media (max-width: 425px) {
       .navbar { padding: 0 16px; }
       .navbar__brand { padding: 8px 16px; border-radius: 0 0 16px 16px; }
-      .navbar__content { border-radius: 16px; height: auto; }
-      .navbar__nav-items { flex-wrap: wrap; gap: 4px; }
-      .navbar__icons { gap: 16px; }
+      /* Hide desktop actions + nav pill on mobile */
+      .navbar__actions { display: none; }
+      .navbar__content { display: none; }
+      /* Show hamburger */
+      .navbar__hamburger { display: flex; align-items: center; }
     }
 
     /* ── DS Avatar 1.5 — node 4104:81442 ───────────────────────── */
@@ -770,6 +792,11 @@
       <div class="navbar__logo">
         <img class="navbar__logo-img" src="navbar/logo.png" alt="Pandai">
       </div>
+
+      <!-- Hamburger — mobile only -->
+      <button class="navbar__hamburger" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
 
       <!-- Actions: icons + avatar -->
       <div class="navbar__actions">
