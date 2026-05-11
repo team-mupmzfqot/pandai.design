@@ -433,13 +433,17 @@
     #NavBar-Desktop { display: block; }
     #NavBar-Mobile  { display: none; padding: 0 var(--page-padding-x); }
 
+    /* Desktop default — 3 col (must be before tablet override) */
+    .cards-grid { grid-template-columns: repeat(3, 1fr); }
+
     /* Tablet — swap navbar + 2-col cards + 32px padding */
     @media (max-width: 1319px) {
       :root           { --page-padding-x: 32px; }
       #NavBar-Desktop { display: none; }
       #NavBar-Mobile  { display: block; }
       .cards-grid     { grid-template-columns: repeat(2, 1fr); }
-      .bc-row         { flex-wrap: wrap; gap: 12px; }
+      .bc-row         { flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+      .bc-left        { align-items: flex-start; }
     }
 
     /* Mobile — 1-col cards + 16px padding */
@@ -603,7 +607,6 @@
        ══════════════════════════════════════════════════════════════ */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       width: 100%;
     }
