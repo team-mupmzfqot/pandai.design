@@ -1,0 +1,1472 @@
+# Pandai Design System — Session Context
+> Reusable context file for Claude Code or future chat sessions.
+> Paste the contents of this file at the start of a new session to resume exactly where we left off.
+
+---
+
+> ## ✅ CLEANUP COMPLETE — All 9 fixes done
+>
+> **Pandai DS 1.5 is published as a Figma Team Library and ready for engineer handoff.**
+>
+> **Cleanup task status:**
+> 1. ✅ Fix ALL_SCOPES — 791 variables fixed, 125 already correct, 0 errors
+> 2. ✅ Add Semantic spacing + radius float aliases — 22 new variables created (Spacing/component/*, Spacing/layout/*, Radius/*)
+> 3. ✅ Add 6 elevation effect styles — Elevation/xs → sm → md → lg → xl → overlay all created
+> 4. ✅ Move 43 component sections from Zul's Dungeon to correct pages — 0 errors
+> 5. ⏭️ (Skipped) Resolve duplicates in Nadia Exploration + Syakila Components
+> 6. ⏭️ (Skipped) Component descriptions
+> 7. ✅ Build documentation pages — Colors (255 semantic swatches), Typography (21 styles specimen), Spacing & Radius (14 scale + 9 radius + 22 semantic tokens)
+> 8. ✅ Add paint styles — 255 paint styles created, all bound to Semantic variables (variable-linked)
+> 9. ✅ Publish as Figma Team Library — published 2026-05-04 (255 paint styles, 6 effect styles, 21 text styles, 195 component sets, 938 variables)
+
+---
+
+## Claude Code — Design Development Rules
+
+> These rules are **non-negotiable** and apply to every design implementation session.
+> They are derived from explicit instructions + mistakes made during the modal development session (May 2026).
+
+---
+
+### 1. Always use the DS — never assume or generate
+
+- Every component, token, color, spacing value, radius, icon, and asset **must come from the Pandai DS 1.5 file (`TLVKe3bgJTdVvuPAzgDq2f`)**.
+- Never guess, approximate, or invent any design value. If a value is unknown, use `get_design_context` or `use_figma` to pull it live from Figma before writing any code.
+- Never create a custom component when a DS equivalent exists. Always check the component pages first.
+
+**CRITICAL — File identity:**
+- **Only file**: `TLVKe3bgJTdVvuPAzgDq2f` = "Pandai Design System 1.5" ← the ONLY valid source
+- **Never use**: `Y0DLhf2MGdGwG0jyjN7EbQ` = "Pandai Design System 1.5 (WIP) (BACKUP)" ← forbidden
+- **Never use**: Any file or library named "Zul's Dungeon", "Nadia Exploration", "Syakila Components"
+- When `search_design_system` returns results from "WIP (BACKUP)" or any other library, **ignore those results entirely** and look harder in the main DS file.
+- The WIP Backup is a historical snapshot only. All authoritative component and token definitions live in the main DS.
+
+**Mistake made:** Primary color was guessed as `#2FAC51`. Actual DS value is `#00cc85` (`Surface/primary/default`). `Text/default/heading` was assumed as dark navy `#0F172A` — actual value is `#404040`. `Text/primary/on-color` was assumed as pure white — actual value is `#f6fdfb`.
+
+**Mistake made (May 2026):** Kept accessing `Y0DLhf2MGdGwG0jyjN7EbQ` (WIP Backup) for component state lookups because `search_design_system` returned it. Correct behaviour: ignore WIP Backup results, use only `TLVKe3bgJTdVvuPAzgDq2f`.
+
+---
+
+### 2. Always refer to Component Variants & States for interactions
+
+- Every interactive state (**Default, Hover, Pressed/Active, Selected, Disabled, Focus**) is a distinct Figma variant with its own token bindings. **Do not approximate.**
+- Pull each state's node via `get_design_context` separately. Never derive hover/pressed colors by manually darkening or lightening a default color.
+- Transitions between states must use the exact token values from the DS variant, not CSS color manipulation.
+
+**Mistake made:**
+- Primary button hover was assumed to be a darker green. Actual DS: Primary hover transitions to the **Secondary palette** — `Surface/secondary/default` (`#b5f291`) bg, `Border/secondary/focus` (`#70bc6f`) border, `Text/secondary/focus` (`#70bc6f`) text.
+- Secondary button Pressed state was incorrectly noted as "fills solid with Surface/primary/default". Actual DS node `538:1907` (Secondary/M/Student/Pressed): bg `#00564c` (`Surface/tertiary/default`), border `#00453d` (`Border/tertiary/focus`), text `#00cc85` (`Text/primary/default`) — same dark teal palette as Tertiary Pressed.
+- Disabled state was invented. Actual DS: `Surface/disabled/primary` (`#f2f2f2`) bg, `Border/disabled/disabled` (`#bfbfbf`) border, `Icon/disabled/default` (`#bfbfbf`) text.
+
+---
+
+### 3. Always use Semantic tokens for Radius, Padding, Gap, Spacing & Scaling
+
+- **Never hardcode px values.** Every spatial value must resolve through a Semantic token.
+- Token names must **mirror the Figma token path exactly** — no renaming, no abbreviations.
+  - Figma path: `Surface/primary/default` → CSS variable: `--surface-primary-default`
+- Layout padding must consistently use `Spacing/space-m` = **16px**.
+- Layout gap must consistently use `Spacing/space-xs` = **8px**.
+- Button radius is `Corner Radius/corner-rounded` = **60px** (pill) — not a standard radius step like `md` or `lg`.
+- `Surface/general/default` is the correct Semantic name for white backgrounds — not `Surface/default`.
+
+**Mistake made:**
+- Button border-radius was set to `12px` — actual is `60px` pill shape.
+- Button horizontal padding was set to `20px` — actual is `Spacing/space-s = 12px` for Size=L.
+- Modal body padding was set to `24px` — must be `16px` (`Spacing/space-m`).
+- Modal body gap was set to `16px` — must be `8px` (`Spacing/space-xs`).
+- Footer padding was mixed `12px / 24px` — must be `16px` all sides.
+- Invented tokens (`--surface-success-subtle`, `--pd-` prefix) instead of using actual Semantic token names.
+
+---
+
+### 4. Icons must always come from the DS Iconography page
+
+- **Never write custom SVG paths or use third-party icon sets.** All icons must be sourced from the `🔰 Iconography` page in the DS file.
+- Use `use_figma` to extract the exact vector paths from the icon node before implementing.
+- Icons always render at their **DS native size (24×24)**. No scaling up or overriding with `width`/`height` in CSS.
+- Icon containers must **hug content** — use `width: fit-content; height: fit-content; padding: <token>` — never a fixed pixel wrapper size.
+- SVG `viewBox` must include a **1px buffer** on all sides (e.g., `viewBox="-1 -1 22 22"` for a 0–20 coordinate space) to prevent stroke clipping at path boundaries.
+
+**SVG implementation pattern (confirmed correct — May 2026 navbar session):**
+- Use a single hidden `<svg><defs>` block with `<symbol id="ic-*">` definitions for every icon.
+- Reference icons via `<svg><use href="#ic-*"/></svg>` — never inline the paths repeatedly.
+- All symbol paths use `stroke="currentColor"` so icon color inherits from parent CSS `color:` property.
+- This enables state changes (hover/active/disabled) to cascade via a single `color:` rule on the container.
+
+**Mistake made:**
+- Used a hand-written `<polyline points="20 6 9 17 4 12"/>` checkmark instead of the DS `Outline/check-circle` (node `260:527`).
+- Icon container was fixed `64×64` — must hug content.
+- SVG was forced to `32×32` — DS native size is `24×24`.
+- `viewBox="0 0 20 20"` clipped the 1.5px stroke at `x=20` / `y=-0.23` path edges — fixed to `viewBox="-1 -1 22 22"`.
+
+---
+
+### 5. Never use gradients — DS colors only
+
+- **Gradients are strictly prohibited.** All colors must be flat values from the DS token system.
+- Never use `linear-gradient`, `radial-gradient`, `conic-gradient`, or any CSS gradient function.
+- All color values must resolve through Semantic tokens — no hardcoded hex values in rule declarations.
+
+---
+
+### 6. Never use drop shadows on cards or containers
+
+- **Elevation/box-shadow is prohibited on cards, modals, and containers.**
+- Cards and modal containers must use a `1px solid Border/primary/default` border for depth instead of shadow.
+- The Elevation effect styles exist for reference only — do not apply them to UI containers in implementation.
+
+**Mistake made:** Applied `box-shadow: Elevation/overlay` to the modal card. Corrected to `border: 1px solid var(--border-primary-default)` with no shadow.
+
+---
+
+### 7. Always use the correct component variant for the context
+
+- Confirm which component variant applies before building. The DS has named variants for every use case.
+- For two-button modal patterns: cancel/dismiss action → `Variants=Secondary` (outlined), confirm action → `Variants=Primary` (filled). `Variants=Tertiary` (ghost) is not appropriate for modal footers.
+
+**Mistake made:** The Ignore button was implemented as `Variants=Tertiary` — actual correct variant is `Variants=Secondary` (white bg, green outline border, green text).
+
+---
+
+### 8. Icon clip framing is per-icon — never use blanket inset values
+
+The DS renders each icon inside an `overflow:hidden` clip container using `position:absolute; inset: X%`. These percentages are **unique per icon** based on its internal geometry. Never apply a uniform default across all icons.
+
+**Always pull the exact inset from `get_design_context` for the specific component node being implemented.**
+
+**Confirmed inset values from DS node 866:5576 (Navbar 1.5, May 2026):**
+
+Nav button icons — 20px clip container:
+| Icon | DS inset |
+|---|---|
+| `Outline/home` | `8.33% 12.5%` |
+| `Outline/check-circle` | `8.33%` |
+| `Outline/battle` | `12.5%` |
+| `Outline/book-open` | `12.5% 8.33%` |
+| `Outline/users` | `12.5% 4.17%` |
+| `Outline/book` | `8.33% 16.67%` |
+| `Outline/star` | `8.33% 8.33% 12.42% 8.33%` |
+| `Outline/gift` | `8.33%` |
+| `Outline/chevron-down` | `37.5% 25%` |
+
+Action icons — 24px clip container:
+| Icon | DS inset |
+|---|---|
+| `Outline/search` | `12.5%` |
+| `Outline/maximize` | `12.5%` |
+| `Outline/smartphone` | `8.33% 20.83%` |
+| `Outline/bell` | `8.33%` |
+| `Outline/EN` | `top:25% right:9.95% bottom:28.12% left:12.5%` |
+| `Outline/waffle-menu` | `16.67%` |
+
+**Mistake made:** Applied blanket `8.33%` to all nav icons and `12.5%` to all action icons. Had to go back and add per-icon CSS overrides (`data-icon` attribute selectors) after pulling the actual DS values.
+
+---
+
+### 9. Spec context matters — always check the parent component, not standalone specs
+
+A component's spec values can differ depending on where it appears. The same element (e.g., Pill Badge) has different typography when used standalone vs. embedded inside another component.
+
+**Mistake made:** Pill Badge font-size was changed to `12px` based on the standalone Pill Badge DS spec — but inside Quiz Card the correct value is `10px` (`Body/B8`). Had to revert after fetching the actual Quiz Card node spec.
+
+**Rule:** When implementing an element that appears inside a larger component, always `get_design_context` on the **parent component node**, not the standalone element node.
+
+---
+
+### 10. Every page section must be a named `<section>` — never a bare `<div>`
+
+Every major content block on a page must be wrapped in `<section id="SectionName-Desktop">`. This applies to Navbar, Welcome, Carousel, Static Cards, and every content section below.
+
+**Naming convention:** `id="[ComponentName]-Desktop"` — e.g. `NavBar-Desktop`, `Welcome-Desktop`, `Carousel-Desktop`, `static-newscards`.
+
+**Mistake made:** Static cards were in a plain `<div>`, carousel had no `id`, welcome section had no `id`. All were missing the named section wrapper.
+
+---
+
+### 11. Inter-section gap is always `Spacing/space-m` (16px) — never custom values
+
+The gap between every section on `.main-content` must be `gap: var(--spacing-space-m)` = **16px**.
+
+**Mistake made:** Had `--section-gap: 40px` hardcoded — corrected to `var(--spacing-space-m)`.
+
+**Rule:** Set `--section-gap: var(--spacing-space-m)` in `:root` and use it on the `.main-content` flex container. Never use `40px`, `24px`, or any other value for inter-section gaps.
+
+---
+
+### 12. Get `get_variable_defs` on the exact sub-node — never the parent
+
+When a component has nested interactive elements (e.g. button arrow, icon circle), the color token on the sub-node is **different** from what the parent node reports. Always call `get_variable_defs` on the specific sub-node you are styling.
+
+**Mistake made:** Called `get_variable_defs` on the Button - 1.5 node (`479:344`) to find the arrow chevron color — it returned `Icon/primary/on-color #f6fdfb` which is WRONG for the arrow. The correct token (`Surface/primary/focus #00a36a`) only appears when calling `get_variable_defs` on the arrow sub-node (`479:351`).
+
+**Rule:** For any icon or sub-element inside a component, always call `get_variable_defs` on that element's own node ID, not the parent.
+
+---
+
+### 13. Interactive `<div>` elements must have `cursor: pointer` and `user-select: none`
+
+Any `<div>` used as a button or nav item — not a native `<button>` or `<a>` — **must** have:
+```css
+cursor:      pointer;
+user-select: none;
+```
+
+Without `cursor: pointer`, users see no visual interactivity signal and perceive the element as broken, even when hover CSS is correctly defined.
+
+**Mistake made:** All `.nav-btn` divs were missing `cursor: pointer`. Users reported hover and click not working.
+
+---
+
+### 14. JS defensive pattern — critical handlers before non-critical JS
+
+Always register critical click/interaction handlers **before** any other JS that could throw. Wrap non-critical JS (carousels, animations, complex inits) in `try/catch` so a single error never silently blocks all handlers registered after it.
+
+```html
+<script>
+  // Critical handlers first — always run regardless
+  document.querySelectorAll('.nav-btn').forEach(btn => { ... });
+
+  // Non-critical wrapped in try/catch
+  try {
+    (function() { /* carousel, etc. */ })();
+  } catch(e) { console.warn('init error:', e); }
+</script>
+```
+
+**Mistake made:** Nav click handler was placed after the carousel IIFE. A carousel error would have silently prevented nav buttons from ever becoming interactive.
+
+---
+
+### 15. Figma image fill placeholders → `<div>` not `<img>`
+
+When a DS component uses a Figma Image fill (shows checkerboard in DS), implement it as a `<div class="...__bg">` with CSS `background-image`, **not** an `<img src="">`. An `<img>` with a missing or empty src shows a broken icon in the browser.
+
+```css
+/* Image placeholder — set background-image per instance when real images are available */
+.__bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center; background-repeat: no-repeat;
+  pointer-events: none;
+}
+```
+
+**Mistake made:** Used `<img class="static-card__bg" src="icons/static-card-bg-1.png">` — file didn't exist, showed broken image icon. Corrected to `<div class="static-card__bg">`.
+
+---
+
+### 16. Button arrow chevrons — use component-specific clip symbols, never the standalone icon
+
+The standalone `Outline/chevron-right` icon (24×24) must **never** be used inside a Button - 1.5 arrow clip. The DS exports a **dedicated per-size clip node** for each button size. That clip node has the path already positioned in the clip's own coordinate space (12×12 for Size=S, 16×16 for Size=M/L).
+
+**Why this matters:** If you use the 24×24 standalone icon with CSS `padding` to simulate the DS inset percentages, the SVG scales down and `stroke-width: 1.5` collapses to ~0.5px — nearly invisible in the browser.
+
+**Rule:** Create a dedicated `<symbol>` per button size using the DS-exported clip node's exact `viewBox` and `path`. Apply **no CSS padding** to the clip container. At 1:1 scale the stroke stays at 1.5px.
+
+**Confirmed clip symbol specs — DS-exported, May 2026:**
+
+| Context | Symbol ID | Icon | ViewBox | Path | DS Clip Node |
+|---|---|---|---|---|---|
+| Button - 1.5 Size=S | `ic-chevron-btn` | chevron-right | `0 0 12 12` | `M4.5 9L7.5 6L4.5 3` | `1437:8161` |
+| Button - 1.5 Size=M + Size=L | `ic-chevron-btn-m` | chevron-right | `0 0 16 16` | `M6 12L10 8L6 4` | `479:352` |
+| Nav-btn dropdown (chevron-down) | `ic-chevron-down-nav` | chevron-down | `0 0 20 20` | `M5 7.5L10 12.5L15 7.5` | Derived from DS inset 37.5%/25% on 20px clip |
+
+**Arrow container dimensions (confirmed):**
+
+| Size | Button height | Arrow container | Clip |
+|---|---|---|---|
+| S | 24px | 16×16 (padding: 2px) | 12×12 |
+| M | 32px | 20×20 (padding: 2px) | 16×16 |
+| L | 40px | 24×24 (padding: 2px) | 16×16 (same path as M) |
+
+**Mistake made (May 2026):**
+- Quiz card buttons used `Outline/arrow-right` (→) instead of `Outline/chevron-right` (›). Always confirm icon identity from `get_design_context` on the button component node — never assume.
+- All button arrow clips had `padding: Xpx Ypx` to simulate DS inset, collapsing stroke to sub-pixel width. Correct approach: no CSS padding on clip, path position is in the viewBox.
+- Same stroke-collapse issue affected: static card buttons (Size=M, 16px clip), Add Classes button (Size=M, 16px clip), and nav-btn dropdown chevrons (20px clip).
+
+---
+
+### 17. Subject badge — always source both icon SVG and badge colors from DS Iconography
+
+Both the **icon SVG** and the **badge bg/border/text colors** must come from the DS `🔰 Iconography` page. Never guess colors from Tailwind equivalents or subject brand colors.
+
+#### 17a. Icon SVG
+Export from `Subject/XXX` component nodes using `exportAsync({ format: 'SVG_STRING' })`. Never use placeholder `<rect>` shapes.
+
+**Lookup:** `findAll(n => n.type === 'COMPONENT' && n.name === 'Subject/XXX')` on Iconography page.
+
+All known subject icon names (May 2026):
+`Subject/AddMath`, `Subject/Biology`, `Subject/Economy`, `Subject/Chemistry`, `Subject/English`, `Subject/Moral Studies`, `Subject/Islamic Studies`, `Subject/Math`, `Subject/Accounting`, `Subject/Physics`, `Subject/Business`, `Subject/Computer Science`, `Subject/Science`, `Subject/History`, `Subject/KAFA`, `Subject/Geography`, `Subject/Reka Bentuk & Teknologi`, `Subject/BMelayu`
+
+**Icon sizing:** CSS uses `width: 16px; height: auto; max-height: 20px`. No forced dimensions needed on the SVG element.
+
+**Geography note:** SVG export is 27,907 chars (complex globe). Use simplified DS-colored globe SVG instead.
+
+#### 17b. Badge bg / border / text colors
+Source from `Subject Badge/[Name] - M` (24px) or `Subject Badge/[Name] - L` (32px) components on the Iconography page. **Never approximate with Tailwind color tokens.**
+
+**Lookup:** `findAll(n => n.type === 'COMPONENT' && n.name === 'Subject Badge/[Name] - M')` on Iconography page.
+
+**L vs M:** bg colors are identical between sizes. Border colors differ slightly for some subjects (Add Math, Account). Since quiz cards use M size (24px), always check M variants for quiz card badges.
+
+**Text color rule:** Almost all subjects use `#f2f2f2` (light text on dark bg). Exceptions — dark text on light bg:
+- `Science`: `--badge-text: #998027` (yellow bg)
+- `KAFA`: `--badge-text: #358a62` (mint green bg)
+
+**Confirmed badge colors — M variants (May 2026), all from DS Iconography:**
+
+| Subject | `--badge-bg` | `--badge-border` | Text |
+|---|---|---|---|
+| Add Math | `#283589` | `#202a6e` | `#f2f2f2` |
+| Account | `#0072ca` | `#005ba2` | `#f2f2f2` |
+| Bahasa Melayu | `#4d77ff` | `#3e5fcc` | `#f2f2f2` |
+| Biology | `#8431d8` | `#6a27ad` | `#f2f2f2` |
+| Business | `#efb42b` | `#bf9022` | `#f2f2f2` |
+| Chemistry | `#e20082` | `#b50068` | `#f2f2f2` |
+| Computer Science | `#d10070` | `#a7005a` | `#f2f2f2` |
+| Economy | `#ff5733` | `#cc4629` | `#f2f2f2` |
+| English | `#ff4d56` | `#cc3e45` | `#f2f2f2` |
+| Geography | `#77d836` | `#5fad2b` | `#f2f2f2` |
+| History | `#a97c50` | `#876340` | `#f2f2f2` |
+| Islamic Studies | `#de4d7f` | `#b23e66` | `#f2f2f2` |
+| KAFA | `#8ae3a9` | `#6eb687` | `#358a62` |
+| Mathematics | `#42ac7b` | `#358a62` | `#f2f2f2` |
+| Moral Studies | `#0072ca` | `#005ba2` | `#f2f2f2` |
+| Physics | `#27a0d7` | `#1f80ac` | `#f2f2f2` |
+| RBT | `#353535` | `#2a2a2a` | `#f2f2f2` |
+| Science | `#ffd641` | `#ccab34` | `#998027` |
+
+**Structure confirmed (DS node inspection, May 2026):**
+- Overall: `height: 24px` (M), `border-radius: 60px`, `overflow: hidden`
+- Icon slot: `padding: 4px 8px 4px 12px`, white bg, `width: 34px`
+- Label panel: `padding: 0 16px 0 12px`, `gap: 8px`, subject bg color
+- Pointer: 4×8px white SVG, `position: absolute; left: 0; top: 50%`
+- Text: Poppins Medium 12px, line-height 12px
+
+**Mistakes made (May 2026):**
+- Used Tailwind/guessed colors for 8 subjects — RBT, KAFA, Account, Add Math, Economy, Business, CS, BM all had wrong bg and/or border colors.
+- Business text was set to `#78350F` (dark) — DS actually uses `#f2f2f2` (light).
+- KAFA text was missing `--badge-text: #358a62` override — rendered white text on mint green (unreadable).
+
+---
+
+### 18. Product collection role-to-palette mapping — Student ≠ pink
+
+The DS Product collection has **3 modes: Student / Teacher / Parent**. Each maps `Primary/Base` to a different Primitive color. **Student is OG-Green, not pink.**
+
+| Role | Primary palette | `Surface/primary/default` |
+|---|---|---|
+| **Student** | OG-Green | `#00cc85` |
+| **Teacher** | Pink | `#ff5c98` |
+| **Parent** | Yellow | (yellow) |
+
+**Token resolution chain:** Semantic `Surface/primary/default` → aliases `Primary/Base` in Product → Product resolves by mode → Primitive hex value.
+
+This means:
+- Components using **Semantic tokens** (navbar, cards, borders) always show `#00cc85` regardless of role — they're not role-specific.
+- Components using **Product tokens** (Button - 1.5, role-specific UI) resolve to the role's palette. On the **student home screen**, these resolve to OG-Green (#00cc85).
+
+**Mistake made (May 2026):** Queried wrong node `1644:11342` (Type=Teacher variant) when looking up quiz card button states — got pink colors and incorrectly concluded Student=pink. Always verify which `Type=` variant a node belongs to before trusting its variable defs. The quiz card button uses `Type=Student` (node `1437:8154`) which is green.
+
+---
+
+### 19. Button - 1.5 Primary/S — all confirmed Student states (node 1437:8154)
+
+These are the confirmed state values for the Pandai student home screen. All from DS `get_variable_defs` on each state node (May 2026).
+
+| State | Btn bg | Border | Label | Arrow bg | Chevron | DS node |
+|---|---|---|---|---|---|---|
+| Default | `#00cc85` | `#00a36a` | `#f6fdfb` | `#99ebce` | `#00a36a` | `1437:8154` |
+| Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` | `1437:8146` |
+| Pressed | `#00564c` | `#00453d` | `#00cc85` | `#00cc85` | `#00564c` | `1437:8138` |
+| Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` | `1437:8130` |
+
+**Pressed state tokens (confirmed from node `1437:8138`):**
+- Btn bg: `Surface/tertiary/default` (#00564c) — NOT `Surface/primary/focus` (#00a36a)
+- Border: `Border/tertiary/focus` (#00453d)
+- Label: `Text/primary/default` (#00cc85) — NOT `Text/primary/on-color` (#f6fdfb)
+- Arrow bg: `Surface/primary/default` (#00cc85)
+- Chevron: `Icon/tertiary/default` (#00564c)
+
+**Mistake made:** Pressed state used `Surface/primary/focus` (#00a36a) for bg and `Text/primary/on-color` (#f6fdfb) for label. DS uses Tertiary palette for Pressed — darker bg (`#00564c`) with the primary green as the label color — the inverse of Default.
+
+---
+
+### 20. Subject Badge L vs M — base CSS is L; quiz card overrides to M
+
+The base `.subject-badge` CSS is always the **L size** (32px). The quiz card context applies a global override to shrink it to **M** (24px). Never build a separate "L badge" component — just remove the quiz card constraint when L is needed.
+
+**DS-confirmed specs — from Subject Badge - 1.5 component nodes `2339:1349` (M) and `2339:1343` (L):**
+
+| Property | M (24px) | L (32px) |
+|---|---|---|
+| Height | 24px | 32px |
+| Icon slot width | 36px (12+16+8) | 40px (12+20+8) |
+| Icon slot padding | `t:4 r:8 b:4 l:12` | `t:4 r:8 b:4 l:12` (same) |
+| **Icon size (exact)** | **`width: 16px; height: 16px`** | **`width: 20px; height: 20px`** |
+| Label padding | `t:0 r:16 b:0 l:12` | `t:0 r:16 b:0 l:12` (same) |
+| Text | 12px Medium, line-height 12px | 14px Medium, line-height 20px |
+
+**Icon sizes are exact px — never use `max-height` approximations.** The DS component defines icons as fixed 16×16 (M) and 20×20 (L) instances, not auto-height.
+
+**To display L size inside a quiz card:** scope-override the quiz card M constraint using the section ID:
+```css
+#SectionName-Desktop .quiz-card__header .subject-badge       { height: 32px; max-height: 32px; }
+#SectionName-Desktop .quiz-card__header .subject-badge__text  { font-size: 14px; line-height: 20px; }
+#SectionName-Desktop .quiz-card__header .subject-badge__icon svg,
+#SectionName-Desktop .quiz-card__header .subject-badge__icon img { width: 20px; height: 20px; }
+```
+
+**Mistake made:** Tried to build a new L badge class. Correct approach: the global `.subject-badge` is already L — just lift the quiz card M override per section.
+
+---
+
+### 21. Never put `cursor: pointer` on card or container elements
+
+`cursor: pointer` belongs **only on interactive elements** — `<button>`, `<a>`, and `<div role="button">`. Card containers (`<article>`, `<div class="card">`) must use `cursor: default`, even when they contain buttons.
+
+Putting `cursor: pointer` on a card gives users the false impression that the entire card surface is one clickable unit, which conflicts with having a distinct button inside the card.
+
+**Rule:** Set `cursor: default` on card containers. The browser renders the hand cursor automatically on `<button>` and `<a>` children — no override needed.
+
+**Mistake made:** `.quiz-card { cursor: pointer }` caused the entire quiz card surface (including the image area and text) to show a hand cursor. The correct pattern: `cursor: default` on the card, `cursor: pointer` is inherited by the `<button>` inside.
+
+---
+
+### 22. Figma text strokes → CSS `-webkit-text-stroke` + `paint-order`
+
+Some DS components apply a **stroke on TEXT nodes** to create a character outline effect. This is distinct from a border on a container — the stroke outlines each individual glyph. Always check for strokes on TEXT nodes when inspecting a component, not just on FRAME/INSTANCE nodes.
+
+**CSS pattern:**
+```css
+-webkit-text-stroke: 1px <stroke-color>;
+paint-order:         stroke fill;
+```
+`paint-order: stroke fill` is mandatory — without it the stroke renders on top of the fill, covering the text interior and making it illegible.
+
+**Confirmed instance — Status Badge Coins (DS node `2312:10654`):**
+- Both "Coins" label (10px) and value (16px) TEXT nodes have `stroke: #cba500, weight: 1`
+- No other badge variants (Score, Streak, Lives, Ruby) have text strokes — this is Coins-specific
+
+**Mistake made:** Coins label and value were rendered without text stroke. The DS applies the stroke to make white text legible on the bright yellow (`#fece00`) background with a subtle gold outline.
+
+---
+
+### 23. Fixed footer — body padding-bottom = footer height + DS content gap
+
+When the footer is `position: fixed`, the scrollable content needs `padding-bottom` equal to **footer height + DS-specified gap** so the last section is never obscured.
+
+**DS reference (Screen page, home + footer frame `1867:17694`):**
+- Home content frame `1740:9670`: `padding-bottom: 30` (raw value — **not variable-bound**)
+- Footer - 1.5 height: 60px
+
+**Rule:** `body { padding-bottom: 90px; }` — 60px (footer) + 30px (DS gap).
+
+**Important:** Not all spacing values in DS screen frames are token-bound. Always check `boundVariables` on a node before assuming a raw px value maps to a Semantic token. If absent from `boundVariables`, treat it as a hardcoded design decision and use the raw value.
+
+**Mistake made:** `body` had `padding-bottom: 60px` (footer height only), cutting off 30px of breathing room. Corrected to 90px after reading DS screen frame.
+
+---
+
+### 24. Never set `min-height` on content containers — let content define height
+
+Explicit `min-height` values on card content areas create phantom blank space when the actual content is shorter than the minimum. Card content containers must **hug their content** — height is determined by padding + children only.
+
+**DS reference:** Primary Card Content Placeholder (`2881:36281`) has `padding: 0`, `primaryAxisSizingMode: AUTO` — it hugs its content with no minimum height constraint.
+
+**Rule:** Do not add `min-height` to `.primary-card__content` or equivalent grid/flex containers. Uniform `padding: var(--spacing-space-m)` (16px all sides, `Spacing/space-m`) is sufficient to produce consistent spacing above and below the cards.
+
+**Mistake made:** `.primary-card__content { min-height: 200px }` forced the white box to 200px even though 3 quiz cards (148px) + padding (16px × 2) = 180px. The extra 20px appeared as uneven bottom padding.
+
+---
+
+### 25. Status Badge icon sizing — DS natural dimensions, use `object-fit: contain`
+
+All 5 Status Badge icons are **24px tall** but have different natural widths confirmed from DS node `2312:10653`:
+
+| Icon | DS width | DS height |
+|---|---|---|
+| Streak (P.Streak) | 17px | 24px |
+| Trophy (P.Trophy) | 20px | 24px |
+| Heart (P.Heart) | 22px | 24px |
+| Coin (P.Coin) | 24px | 24px |
+| Ruby (P.Ruby) | 24px | 23px |
+
+**CSS rule:** `width: 24px; height: 24px; object-fit: contain` — fixes both overflow (from unconstrained width) and squish (from square forcing). `object-fit: contain` letterboxes non-square icons correctly within the 24×24 box.
+
+**Never use `height: auto; width: auto` on `<img>` SVGs** — SVGs without explicit pixel dimensions don't provide reliable intrinsic size for the browser. `object-fit: contain` with explicit box dimensions is the safe cross-browser pattern.
+
+---
+
+### 26. SVG `preserveAspectRatio="none"` squishes non-square icons — always check exported SVGs
+
+Figma exports SVG icons with `preserveAspectRatio="none" width="100%" height="100%"`. This instructs the browser to **stretch the SVG content to fill the CSS box** regardless of `object-fit` on the `<img>` element. Non-square icons (Streak 17×24, Trophy 20×24, Heart 22×24) get horizontally distorted — Streak was the most visible (41% stretch).
+
+**Fix:** Replace `preserveAspectRatio="none" width="100%" height="100%"` with explicit pixel dimensions from the `viewBox`:
+```html
+<!-- Before (broken) -->
+<svg preserveAspectRatio="none" width="100%" height="100%" viewBox="0 0 17 24" ...>
+
+<!-- After (correct) -->
+<svg width="17" height="24" viewBox="0 0 17 24" ...>
+```
+
+The default `preserveAspectRatio="xMidYMid meet"` (applied when the attribute is absent) combined with explicit pixel dimensions lets `object-fit: contain` work correctly.
+
+**Rule:** When importing any SVG icon file, check the opening `<svg>` tag for `preserveAspectRatio="none"`. Remove it and replace `width="100%" height="100%"` with the pixel values from the `viewBox` attribute.
+
+**Figma text stroke `strokeAlign` — CSS doubling rule:**
+When DS TEXT node has `strokeAlign: OUTSIDE` weight 1px, use `-webkit-text-stroke: 2px` (not 1px). CSS `-webkit-text-stroke` is centered (half inside, half outside). With `paint-order: stroke fill`, the fill covers the inner half — only the outer half is visible. To get 1px visible outside, use 2px total so 1px inside is covered and 1px outside remains. Confirmed: Coins badge label+value.
+
+---
+
+### 27. SVG icon viewBox must match the DS 24×24 frame, not the path bounds
+
+Figma exports icon SVG paths in **local coordinates** (0-based, tight to the path). But every DS icon lives inside a 24×24 frame, and the vector is positioned at some (x, y) offset within that frame. If the `viewBox` wraps only the path (e.g. `-1 -1 20 22`), the SVG scales up when rendered at 24×24 CSS — making the stroke visually thicker than intended.
+
+**Rule:** Always translate path coordinates by the vector's DS frame offset `(+x, +y)` and set `viewBox="-1 -1 26 26"` (24px frame + 1px buffer each side).
+
+**Formula:**
+```
+new path coords = original local coords + (vec.x, vec.y)
+viewBox = "-1 -1 26 26"
+```
+
+**How to get the offset:** `use_figma` → `findOne(n => n.id === '<icon-node-id>')` → `findAll(n => n.type === 'VECTOR')` → read `.x` and `.y` on the vector node.
+
+**Scale math:** With `viewBox="-1 -1 26 26"` at 24×24 CSS: scale = 24/26 = 0.923×, stroke = 1.5 × 0.923 = **1.38px** — consistent across all icons. A tight `-1 -1 20 22` viewBox at 24px = 24/20 = 1.2× → stroke = **1.8px** (visually thicker).
+
+**Exception — non-circular glyphs (e.g. EN text icon):** Landscape/portrait icons that are NOT 24×24 squares still use the translated viewBox approach when rendered without a clip container. The path translation to DS absolute coords + `-1 -1 26 26` viewBox gives the correct visual spacing within the 24×24 CSS box.
+
+**Navbar action icons confirmed (DS node 1084:1909):**
+- All 6 action icons (search, maximize, smartphone, bell, EN, waffle) are plain 24×24 — no CSS clip, no padding.
+- All use `viewBox="-1 -1 26 26"` with translated paths.
+
+**Navbar nav button icons (Row 2):** These ARE inside clip containers (`.nav-btn__icon-clip`) with per-icon DS inset padding — leave those viewBoxes as-is (tight to path), the clip handles sizing.
+
+---
+
+### 28. Always check the DS component, not just the Iconography page
+
+The Iconography page shows raw icon frames. The rendering context — clip size, padding, no-clip — is defined by the **component that uses the icon**, not by the Iconography page itself.
+
+**Rule:** Before implementing an icon's CSS container (size, padding, overflow), always inspect the actual DS component node that uses it via `use_figma`. The component defines the ground truth for how the icon should render.
+
+**Confirmed mistake:** Action icons in the navbar were implemented with `padding: 3px; overflow: hidden` based on inset percentages from the Iconography page. The actual DS Navbar component (node `1084:1909`) renders all action icons as plain 24×24 with `padding: 0, clipsContent: false` — no clip at all.
+
+**Workflow:**
+```
+1. Find the component that uses the icon (e.g. Navbar, Button, Badge)
+2. use_figma → inspect that component → find the icon instance → read its parent container
+3. Check: clipsContent, paddingTop/Right/Bottom/Left, width, height on the parent
+4. Implement CSS to match that container — not the raw Iconography insets
+```
+
+---
+
+### 29. CSS size overrides must be complete — never rely on cascade from a different size
+
+When overriding a component to a different size (e.g. M inside a quiz card when the base is L), every property that differs between sizes needs its own explicit override. Never assume a property will inherit correctly from the base if you only override some properties.
+
+**Confirmed case — Subject Badge M quiz card override:**
+- `height: 24px` ✓ — overridden
+- `font-size: 12px` ✓ — overridden
+- `icon width/height: 16×16` ✗ — **missing** — fell through to base L (20px wide icon) making icons too large in M badges
+
+**Rule:** When writing a size override, list every property that differs and override all of them. Check against the DS component spec for the target size — don't guess which properties change.
+
+**Checklist for Subject Badge M override:**
+```css
+.quiz-card__header .subject-badge               { height: 24px; max-height: 24px; }
+.quiz-card__header .subject-badge__icon         { padding: 4px 8px 4px 12px; }
+.quiz-card__header .subject-badge__icon svg,
+.quiz-card__header .subject-badge__icon img     { width: 16px; height: 16px; }   /* ← was missing */
+.quiz-card__header .subject-badge__text         { font-size: 12px; line-height: 12px; }
+```
+
+---
+
+### 30. Figma frame strokes ≠ CSS `border` — use `box-shadow: inset` to match
+
+Figma frame **strokes** render visually on the boundary but **do not consume layout space**. A 18×18 frame with a 1px stroke is still 18×18 — the stroke doesn't push content inward.
+
+CSS `border` consumes box-model space. With `box-sizing: border-box; width: 18px; border: 1px; padding: 1px`, content = 18−2−2 = **14px** — smaller than expected and may cause children to overflow.
+
+**Rule:** Replicate Figma stroke with `box-shadow: inset 0 0 0 <weight>px <color>` — this renders a visible ring inside the element without affecting layout. Then size with content-box math.
+
+**CSS pattern for Secondary/M button arrow (DS node `538:1929` — 18×18, 1px stroke, 1px padding):**
+```css
+.arrow {
+  width:      16px;          /* content width */
+  height:     16px;          /* content height */
+  padding:    1px;           /* +1 each side = 18px total */
+  box-shadow: inset 0 0 0 1px var(--border-primary-default);  /* Figma stroke */
+  /* NO border — border would consume space and shrink content to 14px */
+}
+```
+
+**Confirmed mistake:** Secondary/M button arrow used `border: 1px solid; padding: 1px; box-sizing: border-box; width: 18px` → 14px content area. The 16px clip overflowed. Corrected to `box-shadow: inset`, `width: 16px; padding: 1px` → 18px total, 16px content.
+
+**Applies whenever:** a DS node has both a stroke AND padding, and you need the content area to be exactly `frame_size − 2×padding`.
+
+---
+
+### 31. Button - 1.5 confirmed DS specs (Student Type)
+
+All specs from `use_figma` inspection of component nodes. Arrow circle fills/strokes from `node.fills`/`node.strokes`.
+
+| Property | Primary/S | Primary/M | Secondary/M |
+|---|---|---|---|
+| Height | 24px | 32px | 32px |
+| Outer padding | `2px 8px` | `2px 8px` | `2px 8px` |
+| Border-radius | 60px (pill) | 60px | 60px |
+| Text | 12px SemiBold | 12px SemiBold | 12px SemiBold |
+| Text slot padding | `0 4px` | `0 4px` | `0 4px` |
+| Arrow circle size | 16×16 | 20×20 | 18×18 |
+| Arrow padding | 2px (content-box) | 2px (content-box) | 1px (content-box) |
+| Arrow clip | 12×12 | 16×16 | 16×16 |
+| Arrow fill | `#99ebce` | `#99ebce` | white |
+| Arrow stroke | none | none | 1px `#00cc85` → use `box-shadow:inset` |
+| DS node (Default) | `1437:8154` | `479:344` | `538:1923` |
+
+**All button sizes share the same outer padding `2px 8px` and text size `12px SemiBold`.** Height and arrow size are the only things that change between S/M/L.
+
+---
+
+### 32. Always reset `<button>` default browser styles
+
+Native `<button>` elements carry browser-default styles: grey background, visible border, and padding. These render as a grey box around the content — completely overriding any icon-only or transparent button design from the DS.
+
+**Required reset for every custom-styled `<button>`:**
+```css
+.my-btn {
+  background: none;
+  border:     none;
+  padding:    0;
+  cursor:     pointer;
+}
+```
+
+**Rule:** Any `<button>` used to wrap a DS icon (hamburger, close, chevron, etc.) must have all three resets — `background: none`, `border: none`, `padding: 0` — or the browser will render a grey box around the icon.
+
+**Confirmed mistake (May 2026):** Mobile navbar hamburger button rendered with a grey rounded box because `background/border/padding` resets were missing. The DS Menu Icon frame has `fills: []` (transparent) — the box came entirely from browser defaults.
+
+**When to use `<button>` vs `<div>`:** Prefer `<button>` for icon-only tap targets (semantic, gets focus/keyboard for free). Prefer `<div>` for complex nav items like `.nav-btn` (multi-child layout that doesn't suit button flow). Always add the reset above when using `<button>`.
+
+---
+
+### 33. Responsive typography — DS Responsives collection defines the scale
+
+The DS has a **Responsives** variable collection with 3 modes: Desktop / Tablet / Mobile. Frame widths: Desktop=1440px, Tablet=687px, Mobile=390px. Only **Heading and some Title** styles change across breakpoints — Body (14px and below) and Caption never change.
+
+**Resolved type scale per breakpoint (DS Responsives, confirmed May 2026):**
+
+| Style | Desktop | Tablet | Mobile |
+|---|---|---|---|
+| Header/H1 | 28px / lh:42 | 24px / lh:36 | 20px / lh:32 |
+| Header/H2 | 24px / lh:36 | 24px (same) | 20px / lh:32 |
+| Header/H3 | 24px / lh:36 | 20px / lh:32 | 20px (same) |
+| Header/H4 | 20px / lh:32 | 20px (same) | 18px / lh:28 |
+| Title/T1 | 18px / lh:28 | 18px (same) | 16px / lh:24 |
+| Title/T2 | 18px / lh:28 | 18px (same) | 16px / lh:24 |
+| Title/T3 | 16px / lh:24 | 16px (same) | 16px (same) |
+| Title/T4 | 16px / lh:24 | 16px (same) | 14px / lh:20 |
+| Title/T5 | 16px / lh:24 | 16px (same) | 14px / lh:20 |
+| Body B1–B8 | 14px–10px | no change | no change |
+| Caption C1–C2 | 12px–10px | no change | no change |
+
+**CSS breakpoint mapping (prototype):**
+
+| DS mode | CSS breakpoint |
+|---|---|
+| Tablet (687px) | `@media (max-width: 1279px)` |
+| Mobile (390px) | `@media (max-width: 767px)` |
+
+**Rule:** Always override both `font-size` AND `line-height` together in the media query — never just font-size. Line height must scale with the type or text becomes cramped/loose.
+
+**Only apply to elements that actually use those styles.** Don't add generic `h1, h2` tag overrides — scope overrides to the specific class using that text style (e.g. `.welcome-text__name`, `.static-card__title`, `.section-header__title`).
+
+**Mistake made (May 2026):** `.welcome-text__name` was set to 26px (not a DS value). Correct base is 28px (Header/H1). Always use the exact DS text style value at desktop — never approximate.
+
+---
+
+### 34. Responsive reordering — use CSS `order`, never rewrite HTML
+
+When the mobile layout order differs from the desktop HTML source order, use CSS `order` on flex children. Never rearrange HTML elements to satisfy a mobile layout — that breaks the desktop.
+
+**Pattern — horizontal row → vertical stack with reordered children:**
+```css
+/* Desktop: row layout, source order = A → B → C */
+
+/* Tablet/Mobile: column, desired order = B → A → C */
+@media (max-width: 1279px) {
+  .section {
+    flex-direction: column;
+    align-items:    flex-start;   /* left-align stacked children */
+  }
+  .child-b { order: 1; }   /* moves to top */
+  .child-a { order: 2; }
+  .child-c { order: 3; width: 100%; }  /* full-width card-like children */
+}
+```
+
+**Checklist when switching a flex row to a column:**
+- `flex-direction: column` — stack children
+- `align-items: flex-start` — left-align (default `stretch` is usually wrong)
+- `order` — reassign source-order children to desired visual order
+- `flex: unset` — reset any `flex: 1` grow rules on children that shouldn't stretch vertically
+- `width: 100%` — card/container children need this to fill the column width
+- `flex-wrap: wrap` on any inner row that holds many fixed-width items (e.g. pill badges) so they wrap before overflowing at narrow widths
+
+**Confirmed instance — Welcome section (May 2026):**
+- Desktop: `status-badges` (left) → `welcome-text` (center, `flex:1`) → `check-in-card` (right)
+- Tablet/Mobile target: welcome-text (top) → status-badges (middle) → check-in-card (bottom, full-width)
+- Fix: `order: 1/2/3` on each child + `welcome-text { flex: unset; text-align: left }` + `check-in-card { width: 100% }` + `status-badges { flex-wrap: wrap }` at mobile (5 pills × 122px = 610px overflows at 400px min-width)
+
+**`flex-wrap: wrap` vs `flex-direction: column` — choose by intent:**
+
+| Goal | Pattern |
+|---|---|
+| "Stack vertically, reorder children" | `flex-direction: column` + `order` |
+| "Wrap downward, preserve row context" | `flex-wrap: wrap` + `flex-basis: 100%` on children |
+
+Use `flex-wrap: wrap` + `flex-basis: 100%` when the user says "wrap downward" or when a multi-column row should collapse to single-column by wrapping. The flex row context is preserved, gap works on both axes, and partial wrapping (e.g. 2-per-row at tablet → 1-per-row at mobile) is easy to add later by changing `flex-basis`.
+
+Use `flex-direction: column` when the stack is intentional and reordering via `order` is also needed (e.g. the Welcome section where items swap positions).
+
+**Confirmed instance — Static Cards Section #4 (May 2026):**
+- Desktop: 2 cards side-by-side (`flex: 1` each)
+- Mobile: `flex-wrap: wrap` + `.static-card { flex-basis: 100% }` → each card fills full row width and wraps to next line
+
+---
+
+### 35. Fixed elements — use `left:0; right:0` not `left:50%; transform`
+
+`position: fixed` with `left: 50%; transform: translateX(-50%); max-width: 1440px` centers the element in the viewport but leaves the left and right of the viewport uncovered when the viewport is wider than 1440px. This causes the fixed bar to appear as a narrower floating strip instead of edge-to-edge.
+
+**Rule:** Always use `left: 0; right: 0` for fixed bars (footer, sticky header, toast) that must fill the full viewport width. Never use the centering hack on fixed elements.
+
+```css
+/* Wrong — leaves gaps on wide viewports */
+.footer { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 1440px; }
+
+/* Correct — fills full viewport width at all sizes */
+.footer { position: fixed; bottom: 0; left: 0; right: 0; }
+```
+
+**Mistake made (May 2026):** Footer used `left:50%; transform:translateX(-50%); max-width:1440px` — appeared correct on narrow viewports but had visible side gaps on wider screens. Fixed with `left:0; right:0`.
+
+---
+
+### 36. Always use `<use href="#ic-*">` — never duplicate inline SVG paths
+
+Every icon used in the prototype has a `<symbol>` definition in the SVG defs block at the top of `<body>`. Referencing it via `<svg><use href="#ic-*"/></svg>` is the only correct pattern. Never paste the raw SVG path inline in the HTML — it creates a silent duplicate that drifts out of sync if the symbol is ever updated, and wastes significant HTML bytes.
+
+**Rule:** If a `<symbol id="ic-*">` exists for an icon, always use `<use href="#ic-*">`. Only add an inline SVG if no symbol exists yet (then add the symbol to the defs block first, and reference it from there).
+
+**Semantic token rule:** Always pick the token whose *name* matches the usage context, even when multiple tokens share the same hex value. Icon strokes → `--icon-primary-default`. Container fills → `--surface-primary-default`. Both are `#00cc85` but only one is semantically correct.
+
+**Confirmed mistake (May 2026):** Footer heart used a 22-line inline SVG duplicate of `ic-heart`. The `<symbol id="ic-heart">` already existed in the defs. Also used `--surface-primary-default` instead of `--icon-primary-default` for the stroke color.
+
+---
+
+### Footer - 1.5 confirmed DS specs (node 2073:6579, May 2026)
+
+| Property | Value |
+|---|---|
+| Height | 60px |
+| Padding | `t:20 r:28 b:20 l:28` → CSS `height:60px` + `align-items:center` + `padding:0 28px` |
+| Border | top only, 1px `#00cc85` (`--border-default`) — stroke is full INSIDE but only top is visible |
+| Background | white (`--surface-general-default`) |
+| Layout | `HORIZONTAL`, `SPACE_BETWEEN`, `crossAlign:CENTER` |
+| Left group gap | 4px (`--spacing-space-xxs`) |
+| Right group gap | 4px (`--spacing-space-xxs`) |
+| All text | 14px / weight:500 / `#666666` (`--text-default-body`) |
+| Link "Pandai.org" | 14px / weight:500 / `#00cc85` (`--text-primary-default`) — `visible:false` on both icons, text only |
+| Heart icon | `<use href="#ic-heart">`, 20×20, `color:var(--icon-primary-default)` (`#00cc85`) |
+| Positioning | `position:fixed; bottom:0; left:0; right:0; z-index:100` |
+
+---
+
+### 37. CSS 3D flip pattern — two-face badge/card flip
+
+Use pure CSS `transform-style: preserve-3d` + `backface-visibility: hidden` for any flip animation between two states. No Lottie, no JS animation libraries needed.
+
+**Structure:**
+```html
+<div class="flipper">                          <!-- perspective host -->
+  <div class="flipper__inner">                 <!-- rotates -->
+    <div class="face face--front">...</div>    <!-- normal flow, sizes container -->
+    <div class="face face--back">...</div>     <!-- position:absolute, pre-rotated 180deg -->
+  </div>
+</div>
+```
+
+**CSS:**
+```css
+.flipper          { perspective: 800px; }
+.flipper__inner   { position: relative; transform-style: preserve-3d;
+                    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    will-change: transform; }
+.flipper__inner.is-flipped { transform: rotateY(180deg); }
+.face             { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.face--back       { position: absolute; top:0; left:0; right:0; bottom:0;
+                    transform: rotateY(180deg); }
+```
+
+**JS (register before carousel/non-critical JS):**
+```js
+const flipper = document.querySelector('.flipper__inner');
+if (flipper) setInterval(() => flipper.classList.toggle('is-flipped'), 3000);
+```
+
+**Key rules:**
+- Front face is in normal flow — it sizes the container. Back face is `position: absolute` overlaying the front.
+- `will-change: transform` promotes the element to its own GPU layer — eliminates jank on transition start.
+- `perspective` goes on the **parent** of the rotating element, not on the element itself.
+- Snappy feel = short duration (0.3s) + `cubic-bezier(0.4, 0, 0.2, 1)`. Longer (0.5s+) feels sluggish for small UI elements.
+
+**CSS animation vs Lottie — choose by complexity:**
+| Use case | Tool |
+|---|---|
+| Single-transform: flip, fade, slide, scale | Pure CSS transition / `@keyframes` |
+| Multi-step icon morph, illustrated sequence, After Effects export | Lottie (`.json` + `lottie.js`) |
+
+Lottie plays keyframe data exported from After Effects as `.json`. CSS animations are rendered directly by the browser from the stylesheet — no file format, no library. A simple `rotateY` flip never needs Lottie.
+
+**Confirmed instance — Lives/Ruby status badge flip (May 2026):**
+- Two pills merged into one flipper; flips every 3s
+- Front: Lives (`#ff5c98`), Back: Ruby (`#ff4c51`)
+- `setInterval` registered immediately after nav handler, before carousel `try/catch`
+
+---
+
+### 38. DS state naming — `State=Active` ≠ `State=Pressed`, verify visually before implementing
+
+The DS `Button - 1.5` has 5 states: **Default, Hover, Pressed, Active, Selected, Disabled**. Their names are NOT self-explanatory for interactive feedback:
+
+| DS State | Visual | When to use |
+|---|---|---|
+| `State=Default` | White bg, grey label, green icon | Resting |
+| `State=Hover` | Light green bg (`#b5f291`) | Mouse over |
+| `State=Pressed` | Primary green (`#00cc85`) — **same as Selected** | Momentary click (indistinguishable from selected) |
+| `State=Active` | Dark teal bg (`#00564c`), green label/icon | **Use this as the press feedback** — clearly distinct |
+| `State=Selected` | Primary green (`#00cc85`) | Currently active page/tab |
+| `State=Disabled` | Grey bg (`#f2f2f2`) | Non-interactive |
+
+**Rule:** Always take a screenshot of EVERY state variant before deciding which to map to which interaction. `State=Pressed` in the DS Tertiary button is visually identical to `State=Selected` — using it as pressed feedback gives no visual change. `State=Active` (dark teal) is the correct choice for a perceptible press.
+
+**Confirmed — Navbar button Active/Pressed (DS node `3029:20022`, Tertiary/L/Student):**
+- bg: `#00564c` → `var(--surface-tertiary-default)`
+- border: `#00453d` → `var(--border-tertiary-focus)`
+- text: `#00cc85` → `var(--text-primary-default)`
+- icon: `#00cc85` → `var(--icon-primary-default)`
+
+---
+
+### 39. CSS `:active` on `<div>` is unreliable — use JS `mousedown`/`mouseup` instead
+
+CSS `:active` on a non-native interactive element (`<div>`) fires only while the mouse button is physically held down — typically 50–150ms. Users clicking at normal speed rarely see the state. It can also fail in Electron-based webviews (VS Code Simple Browser).
+
+**Rule:** Always implement pressed state on `<div>` elements via JS class toggle, not CSS `:active`.
+
+```js
+btn.addEventListener('mousedown',  () => btn.classList.add('is-pressed'));
+btn.addEventListener('mouseup',    () => btn.classList.remove('is-pressed'));
+btn.addEventListener('mouseleave', () => btn.classList.remove('is-pressed'));
+```
+
+`mouseleave` cleanup is mandatory — prevents the button getting stuck in pressed state if the cursor moves away while the mouse button is held.
+
+**Use CSS `:active` only on native interactive elements** (`<button>`, `<a>`) where browser handling is reliable.
+
+**Mistake made (May 2026):** First implemented `:active` CSS on `.nav-btn` (a `<div>`). User reported "still same" — state was not visible. Replaced with JS mousedown/mouseup.
+
+---
+
+### Always trace instances to their main component before looking up states
+
+When looking up states for a component used inside a larger DS assembly (e.g. a button inside the Navbar), always inspect the **instance's mainComponent** to identify the exact component set and variant. Never guess from the assembly's component set name.
+
+**Confirmed mistake (May 2026):** Searched `Menu Button - Parts` (a nav-level component set) for the pressed state — found none. The actual component the navbar uses is `Button - 1.5, Variants=Tertiary, Size=L` (confirmed via `instance.mainComponent` inspection on node `866:5576`).
+
+**Workflow:**
+```
+1. use_figma → inspect the parent assembly node
+2. findAll(n => n.type === 'INSTANCE') → read mainComponent.name + mainComponent.parent.name
+3. Navigate to THAT component set to find all states
+```
+
+---
+
+### 40. Button - 1.5 Pressed palette is consistent across all variants
+
+All three variants (Primary, Secondary, Tertiary) share the **same Pressed state colour palette** — dark teal. The variant only changes the Default/Hover appearance, not the Pressed.
+
+**Confirmed Pressed state — all variants, Student type (May 2026):**
+
+| Property | Value | Token |
+|---|---|---|
+| Background | `#00564c` | `Surface/tertiary/default` |
+| Border | `#00453d` | `Border/tertiary/focus` |
+| Label/icon | `#00cc85` | `Text/primary/default` / `Icon/primary/default` |
+
+This applies to: `Primary/S`, `Primary/M`, `Primary/L`, `Secondary/M`, `Tertiary/M`, `Tertiary/L`.
+
+**Mistake corrected (May 2026):** CLAUDE.md Rule 2 previously stated Secondary/M Pressed = "fills solid with `Surface/primary/default` (#00cc85)". This was wrong — actual DS node `538:1907` shows dark teal (#00564c), not primary green. Never rely on old notes for pressed state colours — always pull from DS.
+
+---
+
+### 41. Always check `visible` on component children — hidden elements = no HTML/CSS needed
+
+When inspecting DS component children via `use_figma`, check the `visible` property on each child. If `visible: false`, that element is not rendered in the DS and must NOT be added to the HTML or styled in CSS.
+
+**Confirmed — Secondary/M button arrow (`arrowVisible: false` across all states):**
+The DS Secondary/M button (`538:1923`) has an Arrow frame that is `visible: false` in every state — Default, Hover, Pressed, Active, Disabled. The arrow must not be added to the HTML for Secondary buttons. Any CSS targeting `.btn-secondary__arrow` is dead code.
+
+**Rule:** Before implementing any structural element (icon, badge, arrow, label), confirm `visible: true` on that node in the DS. `visible: false` = intentionally hidden = exclude from implementation.
+
+---
+
+### 42. Composite borders — a component's visual frame may come from child elements, not the container
+
+A DS component's visible border outline is not always a single `border` on the outer container. It can be **composed from multiple child elements**, each contributing part of the outline. Never assume the container has the border — always inspect the actual DS node tree.
+
+**Confirmed instance — Carousel - 1.5 (node 1200:1789, May 2026):**
+
+The carousel's green rounded frame has NO border on the Content frame. It is composed from:
+- **Left Button container** (`1200:1837`): `position:absolute; left:0; top:0; bottom:0; padding:16px; border-top:1px #00cc85; border-left:1px #00cc85; border-bottom:1px #00cc85; border-radius: 24px 0 0 24px`
+- **Right Button container** (`1200:1861`): `position:absolute; right:0; top:0; bottom:0; padding:16px; border-top:1px #00cc85; border-right:1px #00cc85; border-bottom:1px #00cc85; border-radius: 0 24px 24px 0`
+- **Card top/bottom borders**: each card has `border:1px solid #00cc85; height:100%`, so their top/bottom edges visually complete the top/bottom of the outer frame in the middle section
+
+The Content frame itself: `overflow:hidden; border-radius:24px` — **no border property at all**.
+
+**CSS pattern for the button wrapper borders:**
+```css
+.carousel__btn-wrap--prev {
+  left: 0;
+  border-top:    1px solid var(--border-default);
+  border-left:   1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+  border-radius: 24px 0 0 24px;
+}
+.carousel__btn-wrap--next {
+  right: 0;
+  border-top:    1px solid var(--border-default);
+  border-right:  1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+  border-radius: 0 24px 24px 0;
+}
+```
+
+**Why this works:** The button wrappers are `position:absolute` inside the Content frame (`overflow:hidden; border-radius:24px`). Their 3-side borders (at `left:0` / `right:0`) land on the content frame boundary and get clipped at the matching 24px corner radius — creating a seamless visual frame.
+
+**Mistake made:** Added `border: 1px solid #00cc85` to the Content frame OR the card, and tried adjusting card width to expose card edges. Neither addressed the missing left/right sides of the outer frame. The fix was adding the DS-correct 3-side borders to the button wrapper elements.
+
+**Rule:** When a "border" appears to be missing from a component, use `get_design_context` to inspect which child node actually carries the border strokes — never guess that it belongs to the outermost container.
+
+---
+
+### 43. DS component variants per breakpoint — always check for Mobile/Tablet variants before implementing responsive
+
+Many DS components have named variants like `Type=Desktop` and `Type=Mobile`. These variants differ in structure (not just size), so responsive CSS overrides are not enough — the Mobile variant may have completely different children, spacing, and layout.
+
+**Always `use_figma` to list all variants in a component set before writing any responsive CSS.**
+
+**Confirmed — Carousel - 1.5 (component set `3060:868`, May 2026):**
+
+| Variant | Node | Width | Height | Notes |
+|---|---|---|---|---|
+| `Type=Desktop` | `1200:1789` | 1559px | 263px | Nav buttons, 186px cards, gap 16px, content border-radius 24px |
+| `Type=Mobile` | `3060:869` | 350px | 152px | No nav buttons, 152px cards, gap 8px, no border-radius on content frame |
+
+**Mobile variant spec differences (DS confirmed):**
+- No Left/Right button containers — no nav buttons at all
+- Card height: **152px** (vs 186px desktop)
+- Cards row gap: **8px** (`Spacing/space-xs`, vs 16px desktop)
+- Content frame: **no `border-radius`** (vs 24px desktop)
+- No composite 3-side border frame (follows from no button containers)
+- Indicator: 88×12px (vs 108×20px desktop)
+
+**Full-width bleed pattern — escape page padding for edge-to-edge sections:**
+```css
+@media (max-width: 767px) {
+  #SectionName {
+    width:       100vw;
+    min-width:   400px;
+    margin-left: calc(-1 * var(--page-padding-x));
+  }
+}
+```
+This escapes the `.page-container`'s horizontal padding without changing the container itself. Works as long as the parent does not have `overflow: hidden`.
+
+---
+
+### 44. JS carousel centering — never hardcode card width or gap, always read from DOM
+
+If the carousel JS hardcodes `CARD_W` and `GAP` as constants, the centering breaks whenever CSS changes the card size at a different breakpoint (e.g. mobile variant with `aspect-ratio` gives a narrower card).
+
+**Rule:** `offsetFor()` must always read card width and gap from the live DOM — never use hardcoded pixel values.
+
+```js
+// WRONG — breaks when CSS changes card size at mobile
+const CARD_W = 428;
+const GAP    = 16;
+function offsetFor(i) {
+  return -(i * (CARD_W + GAP)) + (content.offsetWidth / 2 - CARD_W / 2);
+}
+
+// CORRECT — always reads actual rendered dimensions
+function offsetFor(i) {
+  const cw  = track.querySelector('.carousel__card').offsetWidth;
+  const gap = parseFloat(getComputedStyle(track).columnGap) || 16;
+  return -(i * (cw + gap)) + (content.offsetWidth / 2 - cw / 2);
+}
+```
+
+**Why `columnGap`:** `getComputedStyle(el).gap` is a shorthand and may return `"normal"` in some browsers. `columnGap` reliably returns the computed pixel value for the horizontal gap in a flex row.
+
+**Resize handler is also required** — call `jump(idx)` on `window.resize` so centering recalculates if the viewport changes:
+```js
+window.addEventListener('resize', () => jump(idx));
+```
+
+**Mistake made:** `CARD_W = 428` was hardcoded. At mobile, CSS `aspect-ratio: 428/186; height: 152px` makes the card ≈349px wide. `offsetFor` calculated center using 428, placing the card ~39px off-center.
+
+---
+
+### Mandatory workflow before implementing any component
+
+```
+1. search_design_system  → confirm component exists in DS, get component key
+2. use_figma             → find node ID across pages
+3. get_design_context    → pull exact token bindings, dimensions, structure per variant
+4. get_variable_defs     → confirm Semantic token names used on the node
+5. Implement             → use only token values from steps 3–4, no assumptions
+6. Validate              → compare against get_screenshot
+```
+
+---
+
+## Project identity
+
+- **Product:** Pandai — educational platform (Student / Teacher / Parent user roles)
+- **Design tool:** Figma
+- **AI assistant:** Claude Code (primary) + Claude.ai (planning/audit)
+- **Workflow:** Figma MCP → Claude Code → VSCode → engineer handoff
+
+---
+
+## Figma file
+
+| File | Key | Purpose |
+|---|---|---|
+| Pandai DS 1.5 **(cleanup target)** | `TLVKe3bgJTdVvuPAzgDq2f` | Original DS — single source of truth after cleanup |
+
+---
+
+## What was audited on the DS file (TLVKe3bgJTdVvuPAzgDq2f)
+
+### Critical issues found
+1. **ALL_SCOPES on all 878 variables** — every variable had no scope restriction, polluting all property pickers
+2. **All 20 component pages were empty** — components were scattered across Nadia Exploration, Syakila Components, and Zul's Dungeon pages
+3. **Zero paint styles and zero effect styles**
+4. **Semantic collection had colors only** — no spacing, radius, or typography semantic aliases
+5. **Duplicate components across pages** — multiple versions of Button, Badges, Tab Menu with inconsistent naming
+
+### What was working in the source
+- 3-tier token architecture: Atomic → Product (per user role) → Semantic (Light/Dark)
+- Product collection multi-mode aliases (Student/Teacher/Parent) pointing correctly into Atomic
+- Zul's Dungeon had the most complete v1.5 component sets (44 sets, 23 standalones)
+- Poppins type system was internally consistent
+
+---
+
+## Variable collections — actual state after Fix 1 + Fix 2
+
+> **Note:** Actual collection names differ from earlier audit estimates. Counts below are from live file read.
+
+#### Primitives (429 vars, 1 mode: Value) — formerly called "Atomic"
+- Colors: Grey (50–950), Orange, Red, OG-Green, Blue, Pink, Yellow, Purple, Lime, Teal, Sky, Neon, Green, Slate, Foundation, Vanilla, Minion, Azure, Mustard, Subject/* palettes
+- Scale/0–1k: spacing raw values (0, 1, 2, 4, 8, 12, 16, 18, 20, 24, 28, 60, 108, 999)
+- Corner Radius/xs–circle, pill, pill, lg, xxl, xxxl
+- Typeface: Font Family, Font Weight, Font Size (50–900), Line Height (50–800)
+- Border Width: xs, sm, md, lg
+- Scopes fixed: colors → `FRAME_FILL SHAPE_FILL TEXT_FILL STROKE_COLOR EFFECT_COLOR`, Scale → `GAP WIDTH_HEIGHT PARAGRAPH_SPACING`, Radius → `CORNER_RADIUS`, Font Size → `FONT_SIZE`, Line Height → `LINE_HEIGHT`, Font Family → `FONT_FAMILY`, Font Weight → `FONT_STYLE`
+
+#### Semantic (255 vars + 22 new = 277 vars, 2 modes: Light / Dark)
+- Color groups: Text/*, Icon/*, Surface/*, Border/*, Overlay/* — scopes set per group
+- **New float aliases added (Fix 2):**
+  - `Spacing/component/none–2xl` → aliases into Primitives Scale/*
+  - `Spacing/layout/sm–xl` → aliases into Primitives Scale/*
+  - `Radius/none–full` → aliases into Primitives Corner Radius/*
+
+#### Product (174 vars, 3 modes: Student / Teacher / Parent)
+- Primary, Secondary, Tertiary (50–900), Success, Alert, Warning, Informative, Neutral
+- Spacing/space-none → space-3xl, Border Width, Corner Radius, Overlay, Font/* tokens
+- ALL_SCOPES removed — correct scopes assigned per type
+
+#### Responsives (if present)
+- Check file directly — not loaded during this session
+
+### Text styles — 21 (Poppins)
+```
+Header/H1 (28px Bold) → Header/H4 (20px Medium)
+Title/T1 (18px Bold) → Title/T5 (16px Medium)
+Body/B1 (14px SemiBold) → Body/B8 (10px Medium)
+Caption/C1 (12px Regular), Caption/C2 (10px Regular)
+Caption/Link Reg (14px Regular), Caption/Link Med (14px Medium)
+```
+
+### Effect styles — 6
+```
+Elevation/xs → Elevation/sm → Elevation/md → Elevation/lg → Elevation/xl → Elevation/overlay
+```
+
+### Components — 431 across 25 pages
+All from Zul's Dungeon. Full v1.5 coverage including:
+- Button (3 sets: Button 1.5, Button Icon 1.5, Spinner 1.5)
+- Button Group (2 sets: Parts + full group)
+- Navigation Bar (7 sets + standalones: Navbar, Navbar Mobile, Learn Menu, Menu BG, etc.)
+- Input Field (Input Field 1.5 + Input Group 1.5)
+- Text Area, Dropdown (Parts + List + Tag), Accordion
+- Checkbox, Radio Button, Toggle
+- Avatar (Avatar 1.5 + Avatar Stacked 1.5)
+- Badges (Pill + Subject + Label + Icon + Subject for Table)
+- Alerts, Breadcrumb, Tab Bar (Parts + 1.5 + Var1)
+- Divider, Modal (Alerts + Selection), Carousel (+ Parts)
+- Pagination, Tooltip (+ BG Parts)
+- Cards (Quiz Card, Quick Notes, Footer, Class Card, Primary, Practice, Reward)
+- Progress Bar, Slider (+ Progress Slider with Icon)
+- Table (full set: Cell, Cell Parts, Body Cell/Row, Heading Cell/Row, Table 1.5, Column, Row, Slot, etc.)
+- Link
+
+**2 components NOT yet on their pages:**
+- `Button - Dropdown - 1.5` → should go in **Dropdown** page
+- `Quiz Card - 1.5` → should go in **Cards** page
+- Fix: publish these in source library OR manually copy-paste into the correct pages
+
+---
+
+## Engineer handoff checklist
+
+| Deliverable | Status |
+|---|---|
+| Figma file link with view access | Ready |
+| Team Library published | ✅ Done — published 2026-05-04 |
+| Dev Mode enabled | Pending |
+| Component descriptions (all 68 sets) | Skipped |
+| Colors documentation page | ✅ Done — 255 Semantic tokens, Light & Dark swatches |
+| Typography specimen page | ✅ Done — All 21 Poppins styles with live samples |
+| Spacing scale page | ✅ Done — Primitives + Semantic spacing & radius |
+| Paint styles | ✅ Done — 255 styles, all variable-bound |
+| API contracts per component | Pending |
+| CLAUDE.md in codebase | Pending |
+| tokens.json export | Pending |
+| Redline annotations | Optional (Dev Mode covers) |
+
+---
+
+## Figma MCP setup for Claude Code
+
+```bash
+# Install Figma plugin (recommended — remote MCP)
+claude plugin install figma@claude-plugins-official
+
+# OR desktop MCP (if using Figma Desktop app)
+claude mcp add --transport http figma-desktop http://127.0.0.1:3845/mcp
+```
+
+### Required Claude Code prompt flow for any Figma-driven component
+```
+1. get_design_context   → structured React + Tailwind representation
+2. get_variable_defs    → extract token names used on the node
+3. get_screenshot       → visual reference
+4. Implement using local token system
+5. Validate against screenshot
+```
+
+---
+
+## CLAUDE.md starter (paste into project root)
+
+```markdown
+# Pandai Frontend — Claude Code Rules
+
+## Files
+Design system: https://www.figma.com/design/TLVKe3bgJTdVvuPAzgDq2f
+
+## Design system rules
+- NEVER use hardcoded hex colors — use CSS variables: var(--pd-color-*)
+- NEVER use hardcoded px spacing — use spacing tokens: var(--pd-spacing-*)
+- NEVER create new components if a DS equivalent exists
+- Always check /src/components before building new UI
+
+## Token prefix
+All exported CSS variables use prefix: --pd-
+
+## Token collections
+- Atomic: raw values (Foundation, Grey, OG Green, Pink, Yellow, Purple, Teal, Slate, Spacing, Radius)
+- Semantic: aliased tokens with Light/Dark modes (Text, Surface, Border, Icon, Spacing, Radius)
+- Product: role-based colors with Student/Teacher/Parent modes (Primary, Secondary)
+- Responsives: Desktop/Tablet/Mobile typography and frame widths
+
+## Text styles (Poppins)
+Header/H1–H4 | Title/T1–T5 | Body/B1–B8 | Caption/C1–C2 | Caption/Link Reg/Med
+
+## Figma MCP workflow
+1. Run get_design_context on selected node
+2. Run get_variable_defs to get token names
+3. Run get_screenshot for visual reference
+4. Build using --pd-* token system
+5. Validate against screenshot
+
+## Component pages
+Button, Button Group, Navigation Bar, Input Field, Text Area, Dropdown,
+Accordion, Checkbox, Radio Button, Toggle, Avatar, Badges, Alerts,
+Breadcrumb, Tab Bar, Divider, Modal, Carousel, Pagination, Tooltip,
+Cards, Progress Bar, Slider, Table, Link
+```
+
+---
+
+## Key variable name mappings
+
+| Source DS name | Local variable name | Collection |
+|---|---|---|
+| `Spacing/space-s` | `Spacing/8` | Atomic |
+| `Scale/200 (8)` | `Spacing/8` | Atomic |
+| `Corner Radius/round` | `Radius/md` | Atomic |
+| `OG Green/500 (Base)` | `OG Green/500 (Base)` | Atomic |
+| `Grey/50–950` | `Grey/50–950` | Atomic |
+| `Foundation/white` | `Foundation/white` | Atomic |
+| `Foundation/black` | `Foundation/black` | Atomic |
+| `Text/default/heading` | `Text/default/heading` | Semantic |
+| `Surface/default` | `Surface/default` | Semantic |
+| `Border/default` | `Border/default` | Semantic |
+| `Primary/500 (Base)` | `Primary/500 (Base)` | Product |
+
+---
+
+## Next session — start with this prompt
+
+Paste this exactly at the start of your next chat or Claude Code session:
+
+```
+I'm sharing this context file to resume our Pandai DS work.
+We decided to clean up the original DS file (TLVKe3bgJTdVvuPAzgDq2f) 
+to make it the standalone single source of truth for designers, 
+front-end, and back-end developers. Please start the cleanup now.
+```
+
+### After cleanup — follow-up prompts
+
+```
+# Build documentation pages (run after component pages are organised)
+"Build the Colors documentation page in the DS file showing all 
+Atomic and Semantic color tokens as visual swatches with names and hex values"
+
+"Build the Typography specimen page showing all 21 text styles with 
+live text samples, font details, and token names"
+
+"Build the Spacing & Layout page showing the full spacing scale and 
+radius tokens as visual reference frames"
+
+# Add component descriptions (run per page)
+"Add descriptions to all component sets on the Button page explaining 
+variants, states, sizes, and usage rules"
+
+# Export tokens (run after cleanup is complete)
+"Export all variables from the cleaned DS file as tokens.json 
+following the W3C Design Tokens spec"
+
+# Generate CLAUDE.md (run once file is published as library)
+"Generate a complete CLAUDE.md for a React + TypeScript project using 
+the Pandai DS with CSS Modules"
+```
+
+---
+
+---
+
+## HTML prototype — `zul.test.git/zul.home.screen.html`
+
+Static HTML/CSS prototype of the Pandai home screen, implemented against DS 1.5.
+
+**Architecture decisions:**
+- Single `<svg><defs>` block at top of `<body>` holds all icon `<symbol>` definitions
+- Icons referenced via `<use href="#ic-*">` — never inlined
+- All icon colors via `color:` + `stroke="currentColor"` inheritance chain
+- Per-icon clip insets via `data-icon` attribute selectors on clip containers
+- All spacing, radius, and color values use CSS custom properties mapped to DS Semantic tokens
+- No gradients, no box-shadows on containers — border only for depth
+- Figma image fill placeholders are `<div class="...__bg">` + CSS `background-image`, never `<img>`
+
+**Page section structure (confirmed May 2026):**
+```html
+<section id="NavBar-Desktop">      <!-- Navbar 1.5 desktop — shown at ≥1440px -->
+<section id="NavBar-Mobile">       <!-- Navbar 1.5 mobile  — shown at <1440px  -->
+<main>
+  <div class="page-container">
+    <div class="main-content">     <!-- gap: var(--spacing-space-m) = 16px between sections -->
+      <section id="Welcome-Desktop" class="section-welcome">
+      <section id="Carousel-Desktop" aria-label="Featured" class="carousel">
+      <section id="StaticNewsCard-Desktop" class="static-cards-row">
+      <section id="YourSelectedSubjects-Desktop" class="section-frame" aria-label="Your Selected Subjects">
+    </div>
+  </div>
+</main>
+```
+
+**Section rename (May 2026):** Section #4 was renamed from `id="static-newscards"` to `id="StaticNewsCard-Desktop"`. Sections #5 (YourSelectedSubjects) and #6 (Recent Activity) were removed; a new #5 (YourSelectedSubjects) was rebuilt with Primary Card - 1.5 (Secondary Card variant) containing 18 Quiz Cards in a 3-column grid.
+
+**Mobile Navbar — confirmed DS specs (node `1943:22641`, May 2026):**
+- Height: **64px** (not 68px — earlier session note was wrong; always re-inspect)
+- Padding: `t:16 r:24 b:16 l:24` → CSS `padding: var(--spacing-space-m) 24px`
+- Layout: `HORIZONTAL`, `mainAlign: SPACE_BETWEEN`, `crossAlign: CENTER`
+- Fill: white; stroke: `#00cc85` (1px, INSIDE align); radius: `0 0 24 24`
+- Children: Logo `116×28` (left) + Menu Icon frame `24×24` (right, `fills:[]` transparent)
+- `Outline/menu` icon: `viewBox="-1 -1 26 26"`, path `M3 12H21M3 6H21M3 18H21`, stroke `var(--icon-primary-default)` = `#00cc85`
+- Hamburger uses `<button>` — **must reset** `background:none; border:none; padding:0` (Rule 32)
+- Outer layout padding: `#NavBar-Mobile { padding: 0 var(--page-padding-x) }` — same as `.navbar` desktop
+- Default CSS: `#NavBar-Desktop { display:block } #NavBar-Mobile { display:none }` — then `@media (max-width:1439px)` swaps them. Never rely on media-query-only visibility (causes flash of both on load).
+- `body { min-width: 400px }` — minimum mobile layout width
+
+**Desktop Navbar — confirmed implementation notes (May 2026):**
+- `.nav-btn` is a `<div>` — MUST have `cursor: pointer; user-select: none` or it feels unresponsive
+- Hover state: `background: #b5f291; box-shadow: inset 0 0 0 1px #70bc6f` on `.nav-btn__inner`
+- Selected state: `is-active` class toggled via JS click handler on each `.nav-btn`
+- Hover border is `box-shadow: inset 0 0 0 1px` (not `border:`) to avoid layout shift inside pill
+- Icon clip is `overflow:hidden` + `padding` approach — NOT `position:absolute; inset` (collapses to 0×0 in Chromium)
+- Dropdown mechanism: `.nav-btn` is `flex-col; gap:20px; height:40px; overflow:hidden` — dropdown hidden below
+
+**JS architecture (confirmed May 2026):**
+- Nav click handler registered FIRST before any other script
+- Carousel and all other init JS wrapped in `try/catch`
+- This ensures nav interactivity is never blocked by a carousel or other JS error
+```js
+// Always first
+document.querySelectorAll('.nav-btn').forEach(btn => { ... });
+// Non-critical after, wrapped
+try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
+```
+
+**Welcome section — confirmed (May 2026):**
+- `id="Welcome-Desktop"`, `class="section-welcome"` — wraps all three components
+- Contains: Status Badge row (5 pills) + Welcome Text + Check-In Card
+- No extra layout rules — relies on `.main-content` gap for spacing from Navbar
+
+**Carousel - 1.5 (node 1200:1789) — confirmed (May 2026):**
+- Outer `.carousel` must have `overflow: hidden` — DS uses `overflow-clip`
+- `.carousel__content` must NOT have `justify-content: center` — JS controls centering via `offsetFor()`
+- Every card always contains an `Outline/image` placeholder (128×128 div, `padding: 16px`), grey `Border/general/default` color — covered by image overlay when image loads
+- Image overlay is `position: absolute; inset: -1px` (bleeds 1px to cover card border edge)
+- Button chevron clip: 20px container, `padding: 5px 7.5px` for chevron-left/right (DS inset: 25% top/bottom, 37.5% left/right on 20px)
+- Infinite loop JS: clone 5 cards before + after, center active card via `-(i×STEP) + (containerWidth/2 - CARD_W/2)`, silent jump on `transitionend` when in clone region
+- Indicator (`108×20px`) is hidden by default — `display: none`
+
+**Mistake made (carousel):** Used `position:absolute; inset` on SVG inside clip — collapses to 0×0 in Chromium. Must use `padding` on clip container + `width:100%; height:100%` on SVG.
+
+---
+
+**Static Card - 1.5 (node 2616:2959) — confirmed (May 2026):**
+- Card: `height: 220px`, `border: 1px solid Border/default (#00cc85)`, `border-radius: corner-4xl (24px)`, `overflow: hidden`, `display: flex`, `background: Surface/general/default` (white)
+- Content: `flex: 1 0 0; min-width: 0; height: 100%; position: relative` — NOT `position: absolute; inset: 0`
+- Background image: `<div class="static-card__bg">` — `position: absolute; inset: 0; background-size: cover`. Set via CSS `background-image`, never `<img>`
+- Content padding: `20px 60px` (`space-l` / `space-3xl` — 60px horizontal, NOT 24px)
+- Texts: right-aligned — `align-items: flex-end; text-align: right; width: 100%`
+- Title: `Title/T1` — Poppins Bold 18px, `line-height: 28px`, `Text/default/heading #404040`
+- Description: `Body/B1` — Poppins SemiBold 14px, `line-height: 20px`, `Text/default/heading #404040`
+- Two cards side by side: `display: flex; gap: var(--spacing-space-m)` (16px)
+
+**Button inside Static Card — Primary/M states (node 473:529):**
+
+| State | btn bg | border | label | arrow bg | arrow chevron |
+|---|---|---|---|---|---|
+| Default | `#00cc85` | `#00a36a` | `#f6fdfb` | `#99ebce` | `#00a36a` |
+| Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` |
+| Pressed | `#00564c` | `#00453d` | `#00cc85` | `#00cc85` | `#00564c` |
+| Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` |
+
+- Arrow chevron color comes from arrow sub-node (`479:351`) variable defs — NOT the parent button node
+- Arrow structure: 20px outer circle (`justify-content: flex-end; padding: 2px`) → 16px clip (NO padding) → SVG using `ic-chevron-btn-m`
+- Button height: `32px; max-height: 32px`
+- **Arrow clip symbol:** `ic-chevron-btn-m` — `viewBox="0 0 16 16"`, path `M6 12L10 8L6 4`, DS node `479:352`. No CSS padding on clip — path position encoded in viewBox. Stroke = 1.5px at 1:1 scale.
+
+**Mistake made (static card):**
+- Content was `position: absolute; inset: 0` — should be `flex: 1 0 0; height: 100%; position: relative`
+- Used `<img src="...">` for bg placeholder — showed broken icon. Use `<div>` + CSS `background-image`
+- Content padding was `20px 24px` — actual DS is `20px 60px`
+- Arrow chevron color was inferred from parent button node (wrong: `#f6fdfb`) — must get from arrow sub-node (`#00a36a`)
+
+---
+
+**Quiz Card - 1.5 (node 2339:5345) — confirmed May 2026:**
+- Size: `min-height: 148px; max-height: 148px`, `min-width: 400px`
+- Layout: `display: flex; flex-direction: row` — image on left, content on right
+- Image: `width: 148px; min-width: 148px; flex-shrink: 0; align-self: stretch` — NOT aspect-ratio (unreliable in grid)
+- Content: `flex: 1 0 0; min-width: 0; padding: var(--spacing-space-m)` with nested `flex-col gap-4px`
+- 3-column grid: `.primary-card__content { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-space-m); }` — CSS Grid handles gap deduction automatically, use this over flexbox + calc
+- Pill Badge inside: `font-size: 10px` (`Body/B8`) — NOT 12px. Spec from parent Quiz Card node, not standalone Pill Badge node (Rule 9)
+
+**Button - 1.5 (Primary/S, Type=Student) inside Quiz Card — confirmed May 2026:**
+- Button: `max-height: 24px`, `px: 8px`, `py: 2px`, `border-radius: 60px` (pill)
+- Text slot: `px: 4px`, font `Body/B5` (Poppins SemiBold 12px, line-height 18px), color `Text/primary/on-color #f6fdfb`
+- Arrow: 16×16 circle (`bg: #99ebce`, `border-radius: 60px`, `padding: 2px`) → 12×12 clip (NO padding) → `ic-chevron-btn`
+- Arrow chevron: `#00a36a` (`Surface/primary/focus`) — from arrow clip sub-node, not parent button
+- **Symbol:** `ic-chevron-btn` — `viewBox="0 0 12 12"`, path `M4.5 9L7.5 6L4.5 3`, DS node `1437:8161`
+- **All states:** see Rule 19. Pressed uses Tertiary palette (`#00564c`), not Primary/focus (`#00a36a`).
+
+**Subject badge icons (18 subjects) — confirmed May 2026:**
+All sourced from `🔰 Iconography` page via `exportAsync({ format: 'SVG_STRING' })`. See Rule 17.
+Badge icon CSS: `width: 16px; height: auto; max-height: 20px` constrains all subject icons uniformly.
+
+**Mistake made (quiz card):**
+- Cards rendered as tall vertical columns. Fixed by: explicit `flex-direction: row` + `width: 148px` on image div + `<div>` placeholder instead of `<img>`
+- Button used `Outline/arrow-right` (→) — actual DS uses `Outline/chevron-right` (›). Always confirm icon from DS context.
+- Arrow clip had `padding: 3px 4.5px` — stroke collapsed to 0.56px. Correct: no padding, use `ic-chevron-btn`.
+- Pressed state used `Surface/primary/focus` (#00a36a) for bg and `Text/primary/on-color` (#f6fdfb) for label — both wrong. DS Pressed = `Surface/tertiary/default` (#00564c) bg + `Text/primary/default` (#00cc85) label (see Rule 19).
+- Queried wrong DS node `1644:11342` (Type=Teacher) instead of `1437:8154` (Type=Student) — led to thinking Student=pink. Always verify the `Type=` variant name before trusting variable defs.
+
+---
+
+**Primary Card - 1.5 / Secondary Card variant (node 2881:36272) — confirmed May 2026:**
+- Outer card: `border: 1px solid Border/general/default`, `border-radius: corner-xl`, `background: Surface/general/default`
+- Content area (`.primary-card__content`): `display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-space-m)`
+- Section header: bookmark icon + title (`H2`) + Button - 1.5 (Secondary/M) with `ic-chevron-btn-m`
+
+---
+
+**Prototype layout configuration (current as of May 2026):**
+
+| Setting | Value | Notes |
+|---|---|---|
+| `--page-max-width` | `100%` | Fluid — fills full viewport, no desktop cap |
+| `--page-padding-x` | `60px` desktop / `32px` tablet / `16px` mobile | Scales via media queries |
+| `body min-width` | `400px` | Minimum mobile layout width |
+| Navbar breakpoint | `< 1320px` → mobile navbar | Desktop navbar at ≥ 1320px |
+| Tablet breakpoint | `≤ 1279px` | 2-col quiz grid, 32px padding |
+| Mobile breakpoint | `≤ 767px` | 1-col quiz grid, 16px padding, stacked sections |
+
+**`--page-max-width` as a single-variable control:** The page width constraint is stored in one CSS custom property (`--page-max-width`) applied to `body`. Changing it propagates everywhere — body, page container, footer. Set to `100%` for a fully fluid layout. Set to `1440px` to cap at a fixed desktop container.
+
+**Responsive typography — applied to prototype (May 2026):**
+- Tablet `@media (max-width: 1279px)`: `.welcome-text__name` → 24px/36lh
+- Mobile `@media (max-width: 767px)`: `.welcome-text__name` → 20px/32lh · `.static-card__title` → 16px/24lh · `.section-header__title` → 16px/24lh · `.status-pill__value` → 14px/20lh
+- Body text (14px and below) unchanged at all breakpoints — matches DS Responsives spec
+- Base `.welcome-text__name` corrected from 26px → **28px** (Header/H1, DS confirmed)
+
+---
+
+**Dev server (Windows):**
+```powershell
+# Start (bypasses PowerShell execution policy via cmd.exe)
+Start-Process -FilePath "cmd.exe" -ArgumentList '/c', 'cd /d "<repo-path>" && npx serve . --listen 3000' -PassThru -WindowStyle Hidden
+
+# Open in VS Code Simple Browser
+Start-Process "vscode://vscode.simpleBrowser/show?url=http%3A%2F%2Flocalhost%3A3000%2Fzul.home.screen.html"
+```
+
+---
+
+*Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
