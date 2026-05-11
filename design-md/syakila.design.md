@@ -1851,4 +1851,66 @@ Two CSS fixes applied:
 
 *Last updated: May 2026 (Session 2)*
 
-*Last updated: May 2026*
+---
+
+## Session — May 2026 (Session 3) — syakila.html navbar + table responsive
+
+### syakila.html — Navbar replaced with exact Zul section
+
+Replaced the old `pd-navbar15`/`pd-topbar`/`pd-navcontent` class structure with Zul's exact navbar section:
+
+| Old class | New class |
+|---|---|
+| `.pd-navbar15` | `.navbar` |
+| `.pd-topbar` | `.navbar-brand` |
+| `.pd-topbar__right` / `.pd-topbar__icons` | `.navbar-actions` / `.navbar-action-icons` |
+| `.pd-icon-btn` | `.navbar-action-icon` |
+| `.pd-avatar-wrap` / `.pd-avatar` / `.pd-avatar__badge` | `.navbar-avatar` / `.navbar-avatar__img` / `.navbar-badge` |
+| `.pd-navcontent` | `.navbar-nav` |
+
+Logo: two separate SVGs — `../zul.test.git/icons/logo-mark.svg` (28px) + `../zul.test.git/icons/logo-text.svg` (18px) — referenced via `.navbar-logo__mark` / `.navbar-logo__text`. Mobile uses same pattern via `.navbar-mobile__logo-mark` / `.navbar-mobile__logo-text`.
+
+**Bug fixed:** `.navbar-mobile__logo-img` CSS was left from old structure — images invisible at 0×0. Fixed to `.navbar-mobile__logo-mark` / `.navbar-mobile__logo-text` with explicit heights + `gap: 8px`.
+
+Action icon symbols added to SVG defs: `ic-search`, `ic-maximize`, `ic-smartphone`, `ic-bell`, `ic-en`, `ic-waffle`.
+
+Achievement nav button set as `is-active`. Uses `ic-book-open` (matches Zul exactly).
+
+### syakila.html — Table Section 3 responsive (card-per-row layout)
+
+Applied at `@media (max-width: 1279px)` — affects both tablet and mobile.
+
+**Card layout per row:**
+```
+┌─────────────────────────────────────────┐  24px outer card radius
+│ ┌───────────────────────────────────┐   │
+│ │ [Subject badge — full width]      │   │  row 1, tinted bg
+│ ├───────────────────────────────────┤   │
+│ │ [Progress bar ████░░░░░░]         │   │  row 2
+│ ├────────────┬──────────┬───────────┤   │
+│ │   SCORE    │  GRADE   │ QUESTIONS │   │  row 3 — 3 equal cols
+│ │    80%     │    A     │    25     │   │  18px inner card radius
+│ ├────────────┴──────────┴───────────┤   │
+│ │                       [View →]    │   │  row 4, right-aligned
+│ └───────────────────────────────────┘   │
+└─────────────────────────────────────────┘
+```
+
+**Key CSS decisions:**
+- `.pd-table15`: `border: none; border-radius: 0; gap: var(--space-xs)` — shell removed, gap between cards
+- `.pd-body-row`: `flex-wrap: wrap; border: 1px solid var(--border-general-default); border-radius: var(--corner-2xl)` (18px); `overflow: hidden`
+- `.pd-col-score/grade/questions`: `flex-direction: column` so `::before` label stacks ABOVE value (not beside it)
+- Divider borders use `.pd-body-row .pd-body-cell.pd-col-score/grade` selector at (0,3,0) specificity to beat the border reset
+- View button: `.pd-body-cell.pd-col-analysis .pd-body-cell__inner { justify-content: flex-end }` at (0,3,0) — right-aligned
+- Download button at mobile (≤767px): icon-only, Size=S `height: 24px`
+
+**CSS specificity bugs fixed this session:**
+
+| Bug | Root cause | Fix |
+|---|---|---|
+| Grade/Questions border missing | `.pd-body-cell:not()` = (0,3,0) beats `.pd-col-grade` = (0,1,0) | Use `.pd-body-row .pd-body-cell.pd-col-grade` = (0,3,0) |
+| View button stayed centered | `.pd-body-cell.pd-col-analysis .pd-body-cell__inner` = (0,3,0) beats `.pd-col-analysis .pd-body-cell__inner` = (0,2,0) | Match exact 3-class selector |
+| `::before` labels appeared sideways | `::before` on `display:flex` parent = flex item beside content | Add `flex-direction: column` to stats cells |
+| Subject column stayed 160px | `width: 160px` later in same `@media` block overrode `width: 100%` | Remove conflicting later declaration |
+
+*Last updated: May 2026 (Session 3)*
