@@ -556,10 +556,11 @@
        Mobile  ≤  768px
     ═══════════════════════════════════════════════════ */
 
-    /* < 1320px — swap to mobile hamburger navbar */
+    /* < 1320px — swap to mobile hamburger navbar, hide breadcrumb (app has none) */
     @media (max-width: 1319px) {
-      #NavBar-Desktop { display: none; }
-      #NavBar-Mobile  { display: block; }
+      #NavBar-Desktop    { display: none; }
+      #NavBar-Mobile     { display: block; }
+      .pd-breadcrumbs15  { display: none; }
     }
 
     /* ── Tablet (1024px) — desktop navbar already hidden at 1319px ── */
