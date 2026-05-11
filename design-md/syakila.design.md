@@ -1634,3 +1634,157 @@ Aligned to `zul.home.screen.html` exactly. `position: fixed`.
 ---
 
 *Last updated: May 2026*
+
+---
+
+## HTML prototype — `Dashboard_syakila/scoreCard.html`
+
+Static HTML/CSS prototype of Syakila's **Score Card** dashboard, implemented against DS 1.5.
+
+**File:** `Dashboard_syakila/scoreCard.html`
+**Active page:** Achievement → Score Card
+**Figma source node:** `3107:65095` (Score Card, 1441×849)
+
+---
+
+### Score Card — confirmed DS specs (May 2026)
+
+#### Page structure
+```
+#NavBar-Desktop / #NavBar-Mobile   (same as syakila.html)
+#Breadcrumbs-Desktop               (Score Card title + Achievement > Score Card links)
+#Subjects-Desktop                  (subject filter pills, flex-wrap centered)
+#ScoreCard-Desktop                 (3-column score card)
+Footer                             (same as syakila.html)
+```
+
+#### Breadcrumbs (DS 3107:65098)
+- Title H1: "Score Card" fs:24 fw:500 `#00564c` (text-tertiary-default)
+- Breadcrumb links: Achievement (icon+text, #4d4d4d) → chevron → Score Card (#00cc85 active)
+- Same pattern as syakila.html breadcrumbs
+
+#### Subject Filter Pills (DS 3107:65099) — `justify-content: center`
+
+**Critical:** Pills use `justify-content: center`, NOT `flex-start`. Row 2 starting at x:386 confirms centered alignment — confirmed by math: (1321 − 549px row2 width) / 2 = 386px ✓
+
+| Property | Value |
+|---|---|
+| Container | `display:flex; flex-wrap:wrap; justify-content:center; gap:12px` |
+| "All" pill | Primary: `bg:#00cc85; border:#00a36a; color:#e9fbf5` |
+| Other pills | Secondary: `bg:#ffffff; border:#00cc85; color:#00cc85` |
+| All pills | `h:32px; padding:2px 8px; border-radius:60px; font:12px/600` |
+| Row 1 (14 pills) | All, Account, Add Math, Bahasa Melayu, Biology, Chemistry, Science, Economy, English, Geography, History, Islamic Studies, KAFA, Mathematics |
+| Row 2 (5 pills) | RBT, Moral Studies, Computer Science, Physics, Chinese Language |
+
+**Hover:** `bg:#b5f291; border:#70bc6f; color:#70bc6f` (same secondary hover as buttons)
+
+#### Score Card Outer (DS 3107:65119)
+
+| Property | Value |
+|---|---|
+| Layout | `display:flex; gap:16px; padding:16px; align-items:stretch` |
+| Background | `#e8fbe8` (`surface-secondary-default-subtle`) |
+| Border | `1px solid #00cc85` (strokeAlign: INSIDE) |
+| Border-radius | `24px` (corner-4xl) |
+| Total dimensions | 1321×464px |
+| 3 columns | Each `flex:1`, equal width (~419px DS) |
+
+#### Left Container (DS 3107:65120)
+
+| Property | Value |
+|---|---|
+| Layout | `display:flex; flex-direction:column; gap:50px; padding:20px` |
+| Background | `#ffffff` |
+| Border-radius | `18px` (corner-2xl) |
+
+**Header (DS 3107:65121, gap:7):**
+- "All Subjects" secondary button: full-width `justify-content:center; width:100%; h:32px; r:60px; border:#00cc85`
+- "Score Overview" title: `fs:20; fw:500; color:#404040` (text-default-heading)
+
+**Donut Chart (DS 3107:65132):**
+- SVG 138×138, `cx:69; cy:69; r:50; stroke-width:18`
+- Grey track: `stroke:#e8e8e8`
+- Green progress 61.5%: `stroke:#00cc85; stroke-dasharray:193.2 120.96; transform:rotate(-90 69 69)`
+- Center label: "61.5%" `fs:28; fw:700; color:#00cc85`
+- DS positions donut at y:-12 (overflows up into gap) — implement without negative margin, gap absorbs it
+
+**Bottom Stats Card (DS 3107:65136, p:24 r:18):**
+- Two halves separated by `border-left:1px solid #d9d9d9`
+- Left: "10" `fs:28 fw:700 color:#00a36a` + "Today's Score" `fs:14 fw:400 color:#404040`
+- Right: "816" `fs:28 fw:700 color:#00a36a` + "This Year's Score" `fs:14 fw:400 color:#404040`
+- Value color `#00a36a` = `--text-primary-focus` (not border-primary-focus — semantic naming for text context)
+
+#### Mid Container (DS 3107:65145)
+
+| Property | Value |
+|---|---|
+| Layout | `display:flex; flex-direction:column; gap:45px; padding:20px` |
+| Background | `#ffffff` |
+| Border-radius | `18px` |
+
+**Header (flex-col, gap:12):**
+- Icon circle (48×48, `bg:#d1f7d1; r:60px`) containing `ic-activity` (22×22)
+- "Score for the past one week" `fs:20 fw:500 color:#404040`
+- "133" `fs:28 fw:700 color:#00a36a`
+
+**Line Chart (DS 3107:65152, 7 data points):**
+- ViewBox: `-4 -4 387 88` (379×80 graph + 4px buffer)
+- Points: `(2,57) (65,78) (127,38) (190,33) (252,28) (315,2) (377,64)`
+- Stroke: `#00cc85; stroke-width:1.5`
+- Dots: `r:3; fill:white; stroke:#00cc85`
+
+#### Right Container (DS 3107:65162)
+
+| Property | Value |
+|---|---|
+| Layout | `display:flex; flex-direction:column; gap:16px` |
+| No background on outer frame | — |
+
+**Icon circles (all 5): `width:48px; height:48px; border-radius:60px; background:#d1f7d1; display:flex; align-items:center; justify-content:center`**
+
+Icons (22×22, all DS-confirmed paths):
+| Icon | DS node | Symbol |
+|---|---|---|
+| Mid header | `I3107:65148;260:372` | `ic-activity` |
+| Current Streak | `I3107:65166;611:2634` | `ic-rotate-cw` |
+| Longest Streak | `I3107:65172;611:2638` | `ic-refresh-cw` |
+| Today's Quiz | `I3107:65179;611:3011` | `ic-edit-3` |
+| Total Quiz | `I3107:65185;611:2936` | `ic-copy` |
+| Last Submission | `I3107:65192;611:2945` | `ic-clock` |
+
+**Stat Card 1 — Current Streak | Longest Streak (DS 3107:65163):**
+- `h:156; padding:24px; border-radius:18px; display:flex`
+- Two equal halves, each: icon circle (top) + texts (label + value)
+- Divider: `border-left:1px solid #d9d9d9` + `padding-left:24px` on right half
+
+**Stat Card 2 — Today's Quiz | Total Quiz (DS 3107:65176):** Same structure
+
+**Stat Card 3 — Last Submission (DS 3107:65189):**
+- `padding:12px 24px; border-radius:18px; flex-direction:row; align-items:center; gap:12px`
+- Icon circle left, texts right
+
+**All stat card text:**
+- Labels: `fs:14 fw:400 color:#404040`
+- Values (Streak/Quiz cards): `fs:18 fw:700 color:#00a36a`
+- Bottom stats (Donut card): `fs:28 fw:700 color:#00a36a`
+
+#### Hidden node — Stat 2 (DS 3107:65196)
+`visible:false` — design artifact, NOT rendered. Ignore entirely.
+
+#### New tokens added in scoreCard.html (not in syakila.html)
+```css
+--text-primary-focus:    #00a36a;   /* large stat values — text context of #00a36a */
+--text-default-heading:  #404040;   /* heading/label text — Text/default/heading */
+```
+
+#### New icon symbols added in scoreCard.html
+All paths from `exportAsync({ format: 'SVG_STRING' })` on DS icon VECTOR nodes:
+- `ic-activity` — `viewBox="-1 -1 22 20"` — pulse/heartbeat line
+- `ic-rotate-cw` — `viewBox="-1 -1 22 20"` — single clockwise arrow
+- `ic-refresh-cw` — `viewBox="-1 -1 24 20"` — double clockwise arrows
+- `ic-edit-3` — `viewBox="-1 -1 20 22"` — pencil (simple)
+- `ic-copy` — `viewBox="-1 -1 22 22"` — stacked squares
+- `ic-clock` — `viewBox="-1 -1 22 22"` — clock face with hands
+- `ic-chevron-right-sm` — breadcrumb separator (inline viewBox 0 0 24 24)
+
+*Last updated: May 2026*

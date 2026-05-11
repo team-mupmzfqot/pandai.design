@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Score Card — Pandai</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ═══════════════════════════════════════════════════
+       PANDAI DS 1.5 — CSS Custom Properties
+       Token names match Figma variable names exactly.
+       DS file: TLVKe3bgJTdVvuPAzgDq2f
+    ═══════════════════════════════════════════════════ */
+    :root {
+      --text-default-heading:  #404040;
+      --text-default-body:     #666;
+      --text-primary-default:  #00cc85;
+      --text-primary-focus:    #00a36a;
+      --text-tertiary-default: #00564c;
+      --text-primary-on-color: #e9fbf5;
+
+      --surface-general-default:              #ffffff;
+      --surface-general-default-secondary:    #f2f2f2;
+      --surface-primary-default:              #00cc85;
+      --surface-primary-default-subtle:       #ccf5e7;
+      --surface-primary-default-subtle-hover: #99ebce;
+      --surface-secondary-default:            #b5f291;
+      --surface-secondary-default-subtle:     #e8fbe8;
+      --surface-tertiary-default:             #00564c;
+      --surface-disabled-primary:             #f2f2f2;
+
+      --border-primary-default:  #00cc85;
+      --border-primary-focus:    #00a36a;
+      --border-default:          #00cc85;
+      --border-general-default:  #d9d9d9;
+      --border-secondary-focus:  #70bc6f;
+      --border-tertiary-focus:   #00453d;
+      --border-disabled:         #bfbfbf;
+
+      --text-secondary-focus:    #70bc6f;
+      --text-disabled-default:   #bfbfbf;
+      --icon-default:            #d9d9d9;
+      --icon-primary-default:    #00cc85;
+      --icon-secondary-hover:    #70bc6f;
+      --icon-primary-on-color:   #f6fdfb;
+      --icon-tertiary-default:   #00564c;
+
+      --corner-pill:    999px;
+      --corner-rounded: 60px;
+      --corner-4xl:     24px;
+      --corner-2xl:     18px;
+      --corner-m:       8px;
+
+      --space-2xl:  28px;
+      --space-xl:   24px;
+      --space-l:    20px;
+      --space-m:    16px;
+      --space-s:    12px;
+      --space-xs:   8px;
+      --space-xxs:  4px;
+      --space-none: 0px;
+
+      --scale-25:  1px;
+      --scale-200: 8px;
+      --scale-500: 20px;
+
+      --surface-subtle: #f8fafc;
+      --font:           'Poppins', sans-serif;
+      --page-bg:        var(--surface-subtle);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: var(--page-bg);
+      color: var(--text-default-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      min-width: 400px;
+      padding-bottom: 90px;
+    }
+    button, input, select, textarea { font-family: inherit; }
+
+    /* ── Shared icon wrapper ── */
+    .pd-icon { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; flex-shrink: 0; }
+    .pd-icon svg { display: block; width: 20px; height: 20px; }
+
+    /* ───────────────────────────────────────────────
+       NAVBAR 1.5  DS 2337:21975
+    ─────────────────────────────────────────────── */
+    .pd-navbar15 { display: flex; flex-direction: column; gap: var(--space-s); padding: 0 60px var(--space-s); }
+
+    .pd-topbar {
+      display: flex; align-items: center; gap: var(--space-2xl);
+      height: 64px; padding: var(--space-xs) var(--space-xl);
+      background: var(--surface-general-default);
+      border-bottom: var(--scale-25) solid var(--border-primary-default);
+      border-left:   var(--scale-25) solid var(--border-primary-default);
+      border-right:  var(--scale-25) solid var(--border-primary-default);
+      border-radius: 0 0 var(--corner-4xl) var(--corner-4xl);
+      overflow: hidden;
+    }
+
+    .pd-logo     { display: flex; align-items: center; flex-shrink: 0; text-decoration: none; }
+    .pd-logo img { display: block; width: 117px; height: 28px; }
+
+    .pd-topbar__right  { display: flex; align-items: center; gap: var(--space-xl); flex: 1; justify-content: flex-end; position: relative; }
+    .pd-topbar__icons  { display: flex; align-items: center; gap: var(--space-2xl); }
+
+    .pd-icon-btn {
+      width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; background: none; border: none; cursor: pointer; padding: 2px;
+      color: var(--icon-default); border-radius: var(--corner-pill);
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .pd-icon-btn svg { display: block; width: 20px; height: 20px; }
+    .pd-icon-btn:hover  { background: var(--surface-secondary-default); color: var(--text-primary-default); }
+    .pd-icon-btn:active { background: var(--surface-secondary-default); }
+
+    .pd-avatar-wrap { position: relative; flex-shrink: 0; }
+    .pd-avatar {
+      width: 48px; height: 48px; border-radius: var(--corner-rounded);
+      border: var(--scale-25) solid var(--border-default);
+      background: var(--surface-general-default);
+      overflow: hidden; position: relative;
+    }
+    .pd-avatar img { position: absolute; left: -7px; right: -7px; top: -1px; width: calc(100% + 14px); max-width: none; height: auto; }
+    .pd-avatar__badge {
+      position: absolute; top: 0; right: -0.5px;
+      min-width: var(--scale-500); height: var(--scale-500);
+      background: var(--surface-primary-default); border-radius: var(--corner-rounded);
+      padding: var(--space-xxs); display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .pd-avatar__badge span { font-size: 10px; font-weight: 600; line-height: var(--space-s); color: var(--text-primary-on-color); white-space: nowrap; }
+
+    .pd-navcontent {
+      display: flex; align-items: flex-start;
+      gap: var(--space-xs);
+      height: 56px; padding: var(--space-xs);
+      background: var(--surface-general-default);
+      border: var(--scale-25) solid var(--border-default);
+      border-radius: var(--corner-pill); overflow: hidden;
+    }
+
+    .nav-btn {
+      display: flex; flex-direction: column; gap: 20px;
+      height: 40px; overflow: hidden; flex-shrink: 0;
+      align-items: flex-start; cursor: pointer; user-select: none;
+    }
+    .nav-btn__inner {
+      display: flex; align-items: center; justify-content: center;
+      gap: var(--space-xs); padding: var(--space-xs) var(--space-s);
+      border-radius: var(--corner-pill); min-height: 24px;
+    }
+    .nav-btn__icon-clip {
+      width: 20px; height: 20px; box-sizing: border-box;
+      padding: 1.67px; overflow: hidden; flex-shrink: 0;
+    }
+    .nav-btn__icon-clip svg { display: block; width: 100%; height: 100%; }
+    .nav-btn__chevron-clip { padding: 0; }
+    .nav-btn__icon-clip[data-icon="home"]        { padding: 1.67px 2.5px; }
+    .nav-btn__icon-clip[data-icon="battle"]      { padding: 2.5px; }
+    .nav-btn__icon-clip[data-icon="practice"]    { padding: 2.5px 1.67px; }
+    .nav-btn__icon-clip[data-icon="class"]       { padding: 2.5px 0.83px; }
+    .nav-btn__icon-clip[data-icon="learn"]       { padding: 1.67px 3.33px; }
+    .nav-btn__icon-clip[data-icon="achievement"] { padding: 2.5px 1.67px; }
+    .nav-btn__icon-clip[data-icon="potential"]   { padding: 1.67px 1.67px 2.48px 1.67px; }
+
+    .nav-btn__label {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--text-default-body); white-space: nowrap;
+    }
+    .nav-btn__icon-wrap {
+      display: flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px; color: var(--icon-primary-default);
+    }
+
+    .nav-btn:hover .nav-btn__inner          { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+    .nav-btn:hover .nav-btn__label          { color: var(--text-secondary-focus); }
+    .nav-btn:hover .nav-btn__icon-wrap      { color: var(--icon-secondary-hover); }
+    .nav-btn.is-pressed .nav-btn__inner     { background: var(--surface-tertiary-default); box-shadow: inset 0 0 0 1px var(--border-tertiary-focus); }
+    .nav-btn.is-pressed .nav-btn__label     { color: var(--text-primary-default); }
+    .nav-btn.is-pressed .nav-btn__icon-wrap { color: var(--icon-primary-default); }
+    .nav-btn.is-active .nav-btn__inner      { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+    .nav-btn.is-active .nav-btn__label      { color: var(--icon-primary-on-color); }
+    .nav-btn.is-active .nav-btn__icon-wrap  { color: var(--icon-primary-on-color); }
+    .nav-btn.is-active:hover .nav-btn__inner     { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+    .nav-btn.is-active:hover .nav-btn__label     { color: var(--icon-primary-on-color); }
+    .nav-btn.is-active:hover .nav-btn__icon-wrap { color: var(--icon-primary-on-color); }
+
+    /* ───────────────────────────────────────────────
+       PAGE SHELL
+    ─────────────────────────────────────────────── */
+    .pd-page { flex: 1; padding: 0 60px var(--space-m); }
+
+    /* ───────────────────────────────────────────────
+       BREADCRUMBS 1.5  DS 837:1033
+    ─────────────────────────────────────────────── */
+    .pd-breadcrumbs15 { display: flex; align-items: center; gap: var(--space-m); min-height: 36px; margin-bottom: var(--space-m); }
+    .pd-breadcrumbs__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
+    .pd-breadcrumbs__sep   { width: 1px; align-self: stretch; background: var(--border-general-default); flex-shrink: 0; }
+    .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--space-xs); color: var(--text-default-body); }
+    .pd-link15 {
+      display: flex; align-items: flex-end; gap: var(--space-xs);
+      background: none; border: none; padding: 0; cursor: pointer;
+      color: var(--text-default-body);
+    }
+    .pd-link15 svg { display: block; width: 20px; height: 20px; }
+    .pd-link15__icon-home { color: var(--text-primary-default); }
+    .pd-link15__text         { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
+    .pd-link15__text--parent { color: #4d4d4d; }
+
+    /* ───────────────────────────────────────────────
+       SUBJECT FILTER PILLS  DS 3107:65099
+       Flex-wrap centered. "All" = Primary, others = Secondary.
+    ─────────────────────────────────────────────── */
+    .sc-subjects {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: var(--space-m);
+    }
+
+    .sc-pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 32px; padding: 2px 8px;
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-rounded);
+      background: var(--surface-general-default);
+      color: var(--text-primary-default);
+      font-size: 12px; font-weight: 600; line-height: 18px;
+      cursor: pointer; white-space: nowrap;
+      font-family: var(--font);
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .sc-pill.is-active {
+      background: var(--surface-primary-default);
+      border-color: var(--border-primary-focus);
+      color: var(--text-primary-on-color);
+    }
+    .sc-pill:hover:not(.is-active) {
+      background: var(--surface-secondary-default);
+      border-color: var(--border-secondary-focus);
+      color: var(--text-secondary-focus);
+    }
+
+    /* ───────────────────────────────────────────────
+       SCORE CARD - 1.5  DS 3107:65119
+       Outer: 24px radius, #e8fbe8 bg, green border
+       3 equal columns, gap + padding 16px
+    ─────────────────────────────────────────────── */
+    .sc-card-outer {
+      display: flex;
+      gap: var(--space-m);
+      padding: var(--space-m);
+      background: var(--surface-secondary-default-subtle);
+      border: 1px solid var(--border-default);
+      border-radius: var(--corner-4xl);
+      align-items: stretch;
+    }
+
+    /* ── Left Container  DS 3107:65120  p:20 gap:50 r:18 ── */
+    .sc-left {
+      flex: 1;
+      display: flex; flex-direction: column; gap: 50px;
+      padding: 20px;
+      background: var(--surface-general-default);
+      border-radius: var(--corner-2xl);
+    }
+
+    .sc-left__header { display: flex; flex-direction: column; gap: 7px; }
+
+    /* Full-width "All Subjects" secondary button */
+    .sc-overview-btn {
+      width: 100%; display: flex; align-items: center; justify-content: center;
+      height: 32px; padding: 2px 8px;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-rounded);
+      color: var(--text-primary-default);
+      font-size: 12px; font-weight: 600; line-height: 18px;
+      cursor: pointer; font-family: var(--font);
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .sc-overview-btn:hover {
+      background: var(--surface-secondary-default);
+      border-color: var(--border-secondary-focus);
+      color: var(--text-secondary-focus);
+    }
+
+    .sc-overview-title {
+      font-size: 20px; font-weight: 500; line-height: 28px;
+      color: var(--text-default-heading);
+    }
+
+    /* Donut chart  DS 3107:65132  138×138 */
+    .sc-donut-wrap {
+      display: flex; align-items: center; justify-content: center;
+      position: relative; flex-shrink: 0; align-self: center;
+    }
+    .sc-donut-wrap svg { display: block; }
+    .sc-donut-label {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 28px; font-weight: 700;
+      color: var(--surface-primary-default);
+      font-family: var(--font);
+      pointer-events: none;
+    }
+
+    /* Bottom mini stat card  DS 3107:65136  p:24 r:18 */
+    .sc-mini-stat-card {
+      background: var(--surface-general-default);
+      border-radius: var(--corner-2xl);
+      padding: 24px;
+      display: flex; align-items: center;
+      border: 1px solid var(--border-general-default);
+    }
+    .sc-mini-stat-item { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .sc-mini-stat-item + .sc-mini-stat-item {
+      padding-left: 24px;
+      border-left: 1px solid var(--border-general-default);
+    }
+    .sc-mini-stat-value { font-size: 28px; font-weight: 700; line-height: 36px; color: var(--text-primary-focus); }
+    .sc-mini-stat-label { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-heading); }
+
+    /* ── Mid Container  DS 3107:65145  p:20 gap:45 r:18 ── */
+    .sc-mid {
+      flex: 1;
+      display: flex; flex-direction: column; gap: 45px;
+      padding: 20px;
+      background: var(--surface-general-default);
+      border-radius: var(--corner-2xl);
+    }
+
+    .sc-mid__header { display: flex; flex-direction: column; gap: 12px; }
+    .sc-mid__content { display: flex; flex-direction: column; gap: 0; }
+    .sc-mid__subtitle { font-size: 20px; font-weight: 500; line-height: 28px; color: var(--text-default-heading); }
+    .sc-mid__value    { font-size: 28px; font-weight: 700; line-height: 36px; color: var(--text-primary-focus); }
+
+    /* Line chart */
+    .sc-graph svg { display: block; width: 100%; }
+
+    /* ── Right Container  DS 3107:65162  gap:16 ── */
+    .sc-right {
+      flex: 1;
+      display: flex; flex-direction: column; gap: var(--space-m);
+    }
+
+    /* Stat cards (right column)  DS 3107:65163 / 65176 / 65189 */
+    .sc-stat-card {
+      background: var(--surface-general-default);
+      border-radius: var(--corner-2xl);
+      padding: 24px;
+      display: flex; align-items: stretch;
+      border: 1px solid var(--border-general-default);
+      flex: 1;
+    }
+    .sc-stat-card--sm { padding: 12px 24px; flex: 0 0 auto; }
+
+    .sc-stat-half {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 12px;
+    }
+    .sc-stat-half + .sc-stat-half {
+      padding-left: 24px;
+      border-left: 1px solid var(--border-general-default);
+    }
+    .sc-stat-half--row {
+      flex-direction: row; align-items: center;
+      gap: 12px; padding-left: 0; border-left: none;
+    }
+
+    /* Icon circle (48×48, #d1f7d1 bg)  DS p:10 r:60 */
+    .sc-icon-circle {
+      width: 48px; height: 48px; border-radius: 60px;
+      background: #d1f7d1;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .sc-icon-circle svg { display: block; width: 22px; height: 22px; }
+
+    .sc-stat-texts { display: flex; flex-direction: column; gap: 4px; }
+    .sc-stat-label { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-heading); }
+    .sc-stat-value { font-size: 18px; font-weight: 700; line-height: 28px; color: var(--text-primary-focus); }
+
+    /* ───────────────────────────────────────────────
+       MOBILE NAVBAR  DS 1943:22641
+    ─────────────────────────────────────────────── */
+    .navbar-mobile {
+      height: 64px; background: var(--surface-general-default);
+      border-bottom: 1px solid var(--border-primary-default);
+      border-left:   1px solid var(--border-primary-default);
+      border-right:  1px solid var(--border-primary-default);
+      border-radius: 0 0 var(--corner-4xl) var(--corner-4xl);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-m) 24px;
+    }
+    .navbar-mobile__logo     { display: flex; align-items: center; height: 28px; }
+    .navbar-mobile__logo-img { height: 28px; width: auto; }
+    .navbar-mobile__menu-btn {
+      width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; user-select: none; flex-shrink: 0;
+      color: var(--icon-primary-default); background: none; border: none; padding: 0;
+    }
+    .navbar-mobile__menu-btn svg { display: block; width: 24px; height: 24px; }
+
+    #NavBar-Mobile { display: none; padding: 0 60px; }
+
+    /* ───────────────────────────────────────────────
+       FOOTER 1.5  DS 2073:6579
+    ─────────────────────────────────────────────── */
+    .footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 100; background: var(--surface-general-default);
+      border-top: 1px solid var(--border-default);
+    }
+    .footer__inner {
+      height: 60px; display: flex; align-items: center;
+      justify-content: space-between;
+      padding-left: var(--space-2xl); padding-right: var(--space-2xl);
+    }
+    .footer__left  { display: flex; align-items: center; gap: var(--space-xxs); flex-shrink: 0; }
+    .footer__right { display: flex; align-items: center; gap: var(--space-xxs); flex-shrink: 0; }
+    .footer__text  { font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
+    .footer__link  { font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-primary-default); white-space: nowrap; cursor: pointer; text-decoration: none; }
+    .footer__heart { width: 20px; height: 20px; flex-shrink: 0; display: block; color: var(--icon-primary-default); }
+
+    /* ═══════════════════════════════════════════════════
+       RESPONSIVE BREAKPOINTS
+    ═══════════════════════════════════════════════════ */
+
+    /* < 1320px — mobile navbar */
+    @media (max-width: 1319px) {
+      #NavBar-Desktop { display: none; }
+      #NavBar-Mobile  { display: block; }
+    }
+
+    /* Tablet ≤ 1024px */
+    @media (max-width: 1024px) {
+      #NavBar-Mobile { padding: 0 32px; }
+      .pd-page { padding: 0 32px var(--space-m); }
+      .pd-breadcrumbs15 { flex-wrap: wrap; gap: var(--space-xs); }
+      .footer__inner { padding-left: var(--space-m); padding-right: var(--space-m); }
+    }
+
+    /* Mobile ≤ 768px */
+    @media (max-width: 768px) {
+      #NavBar-Mobile { padding: 0 var(--space-m); }
+      .pd-page { padding: 0 var(--space-m) var(--space-m); }
+
+      .pd-breadcrumbs15 { flex-direction: column; align-items: flex-start; gap: var(--space-xxs); min-height: unset; }
+      .pd-breadcrumbs__sep { display: none; }
+      .pd-breadcrumbs__title { font-size: 18px; line-height: 28px; }
+
+      /* Score card: stack columns */
+      .sc-card-outer { flex-direction: column; }
+
+      /* Subjects: left-align on mobile */
+      .sc-subjects { justify-content: flex-start; }
+
+      .footer__inner { flex-direction: column; justify-content: center; align-items: center; gap: var(--space-xs); height: auto; padding: var(--space-s) var(--space-2xl); }
+      .footer__left  { justify-content: center; }
+      .footer__right { justify-content: center; }
+      body { padding-bottom: 102px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     SVG SYMBOL DEFS — all icons (paths at origin, 1px buffer viewBox)
+     Sources: DS Iconography node 1898:16977 + Score Card icons
+═══════════════════════════════════════════════ -->
+<svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+
+    <!-- ── Navbar icons ── -->
+    <symbol id="ic-home" viewBox="-1 -1 20 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 0 7 L 9 0 L 18 7 L 18 18 C 18 18.530 17.789 19.039 17.414 19.414 C 17.039 19.789 16.530 20 16 20 L 2 20 C 1.470 20 0.961 19.789 0.586 19.414 C 0.211 19.039 0 18.530 0 18 L 0 7 Z"/>
+      <path d="M 6 20 L 6 10 L 12 10 L 12 20"/>
+    </symbol>
+    <symbol id="ic-check-circle" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 20 9.086 L 20 10.006 C 19.999 12.162 19.301 14.260 18.009 15.988 C 16.718 17.715 14.903 18.978 12.835 19.590 C 10.767 20.201 8.557 20.128 6.534 19.380 C 4.512 18.633 2.785 17.252 1.611 15.443 C 0.437 13.634 -0.120 11.494 0.022 9.342 C 0.164 7.190 0.997 5.142 2.398 3.503 C 3.799 1.864 5.693 0.721 7.796 0.246 C 9.900 -0.229 12.100 -0.012 14.070 0.866"/>
+      <path d="M 20 2.006 L 10 12.016 L 7 9.016"/>
+    </symbol>
+    <symbol id="ic-battle" viewBox="-1 -1 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 18 0 L 18 5 L 7 14 L 3 18 L 0 15 L 4 11 L 13 0 L 18 0 Z"/>
+      <path d="M 2 10 L 8 16"/>
+      <path d="M 11.32 14.32 L 15 18 L 18 15 L 14.635 11.635"/>
+      <path d="M 7 2.5 L 5 0 L 0 0 L 0 5 L 3 7.5"/>
+    </symbol>
+    <symbol id="ic-book-open" viewBox="-1 -1 22 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 0 0 L 6 0 C 7.061 0 8.078 0.421 8.828 1.172 C 9.579 1.922 10 2.939 10 4 L 10 18 C 10 17.204 9.684 16.441 9.121 15.879 C 8.559 15.316 7.796 15 7 15 L 0 15 L 0 0 Z"/>
+      <path d="M 20 0 L 14 0 C 12.939 0 11.922 0.421 11.172 1.172 C 10.421 1.922 10 2.939 10 4 L 10 18 C 10 17.204 10.316 16.441 10.879 15.879 C 11.441 15.316 12.204 15 13 15 L 20 15 L 20 0 Z"/>
+    </symbol>
+    <symbol id="ic-users" viewBox="-1 -1 24 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 16 18 L 16 16 C 16 14.939 15.579 13.922 14.828 13.172 C 14.078 12.421 13.061 12 12 12 L 4 12 C 2.939 12 1.922 12.421 1.172 13.172 C 0.421 13.922 0 14.939 0 16 L 0 18"/>
+      <path d="M 8 8 C 10.209 8 12 6.209 12 4 C 12 1.791 10.209 0 8 0 C 5.791 0 4 1.791 4 4 C 4 6.209 5.791 8 8 8 Z"/>
+      <path d="M 22 18 L 22 16 C 21.999 15.114 21.704 14.253 21.161 13.552 C 20.618 12.852 19.858 12.352 19 12.130"/>
+      <path d="M 15 0.130 C 15.860 0.350 16.623 0.851 17.168 1.552 C 17.712 2.254 18.008 3.117 18.008 4.005 C 18.008 4.893 17.712 5.756 17.168 6.458 C 16.623 7.159 15.860 7.660 15 7.880"/>
+    </symbol>
+    <symbol id="ic-book" viewBox="-1 -1 18 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 0 17.5 C 0 16.837 0.263 16.201 0.732 15.732 C 1.201 15.263 1.837 15 2.5 15 L 16 15"/>
+      <path d="M 2.5 0 L 16 0 L 16 20 L 2.5 20 C 1.837 20 1.201 19.737 0.732 19.268 C 0.263 18.799 0 18.163 0 17.5 L 0 2.5 C 0 1.837 0.263 1.201 0.732 0.732 C 1.201 0.263 1.837 0 2.5 0 Z"/>
+    </symbol>
+    <symbol id="ic-achievement" viewBox="-1 -1 14 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 12 16 L 12 6 M 6 16 L 6 0 M 0 16 L 0 10"/>
+    </symbol>
+    <symbol id="ic-star" viewBox="-1 -1 22 21" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 10 0 L 13.090 6.260 L 20 7.270 L 15 12.140 L 16.180 19.020 L 10 15.770 L 3.820 19.020 L 5 12.140 L 0 7.270 L 6.910 6.260 L 10 0 Z"/>
+    </symbol>
+    <symbol id="ic-gift" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 18 10 L 18 20 L 2 20 L 2 10"/>
+      <path d="M 20 5 L 0 5 L 0 10 L 20 10 L 20 5 Z"/>
+      <path d="M 10 5 L 5.5 5 C 4.837 5 4.201 4.737 3.732 4.268 C 3.263 3.799 3 3.163 3 2.5 C 3 1.837 3.263 1.201 3.732 0.732 C 4.201 0.263 4.837 0 5.5 0 C 9 0 10 5 10 5 Z"/>
+      <path d="M 10 5 L 14.5 5 C 15.163 5 15.799 4.737 16.268 4.268 C 16.737 3.799 17 3.163 17 2.5 C 17 1.837 16.737 1.201 16.268 0.732 C 15.799 0.263 15.163 0 14.5 0 C 11 0 10 5 10 5 Z"/>
+      <path d="M 10 20 L 10 5"/>
+    </symbol>
+    <symbol id="ic-chevron-down-nav" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 7.5L10 12.5L15 7.5"/>
+    </symbol>
+    <symbol id="ic-menu" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12H21M3 6H21M3 18H21"/>
+    </symbol>
+    <symbol id="ic-heart" viewBox="0 0 22.4031 19.7318" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 20.0413 2.36183 C 19.5305 1.85083 18.9241 1.44547 18.2566 1.16891 C 17.5892 0.892347 16.8738 0.75 16.1513 0.75 C 15.4288 0.75 14.7134 0.892347 14.0459 1.16891 C 13.3785 1.44547 12.772 1.85083 12.2613 2.36183 L 11.2013 3.42183 L 10.1413 2.36183 C 9.1096 1.33013 7.71032 0.750535 6.25129 0.750535 C 4.79226 0.750535 3.39298 1.33013 2.36129 2.36183 C 1.3296 3.39352 0.75 4.79279 0.75 6.25183 C 0.75 7.71086 1.3296 9.11013 2.36129 10.1418 L 3.42129 11.2018 L 11.2013 18.9818 L 18.9813 11.2018 L 20.0413 10.1418 C 20.5523 9.63107 20.9576 9.02464 21.2342 8.35718 C 21.5108 7.68972 21.6531 6.97431 21.6531 6.25183 C 21.6531 5.52934 21.5108 4.81393 21.2342 4.14647 C 20.9576 3.47901 20.5523 2.87258 20.0413 2.36183 Z"/>
+    </symbol>
+
+    <!-- ── Breadcrumb chevron-right ── -->
+    <symbol id="ic-chevron-right-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18L15 12L9 6"/>
+    </symbol>
+
+    <!-- ── Score Card icons  DS 3107:65165–65192 ── -->
+    <!-- Outline/activity  DS I3107:65148;260:372  viewBox +1px buffer -->
+    <symbol id="ic-activity" viewBox="-1 -1 22 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19.0833 9H15.4167L12.6667 17.25L7.16667 0.75L4.41667 9H0.75"/>
+    </symbol>
+    <!-- Outline/rotate-cw  DS I3107:65166;611:2634 -->
+    <symbol id="ic-rotate-cw" viewBox="-1 -1 22 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13.5796 7.16489H19.0796V1.66489M19.0796 7.16489L14.8355 3.16822C13.571 1.90298 11.9296 1.08298 10.1586 0.83177C8.38758 0.580565 6.58288 0.911769 5.01647 1.77547C3.45005 2.63918 2.20679 3.98859 1.47402 5.62037C0.741247 7.25214 0.558674 9.07787 0.953811 10.8224C1.34895 12.567 2.30038 14.1359 3.66475 15.2927C5.02912 16.4495 6.73249 17.1315 8.51819 17.2359C10.3039 17.3404 12.0752 16.8617 13.5651 15.8719C15.0551 14.8821 16.1829 13.4348 16.7788 11.7482"/>
+    </symbol>
+    <!-- Outline/refresh-cw  DS I3107:65172;611:2638 -->
+    <symbol id="ic-refresh-cw" viewBox="-1 -1 24 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15.4167 7.1645H20.9167V1.6645M20.9167 7.1645L16.6633 3.16783C15.6781 2.18215 14.4593 1.4621 13.1206 1.07487C11.7819 0.687644 10.3668 0.645853 9.0076 0.953401C7.64834 1.26095 6.38915 1.90781 5.34751 2.83363C4.30587 3.75945 3.51574 4.93405 3.05083 6.24783M6.25 10.8312H0.75V16.3312M0.75 10.8312L5.00333 14.8278C5.98852 15.8135 7.20734 16.5336 8.54607 16.9208C9.88481 17.308 11.2998 17.3498 12.6591 17.0423C14.0183 16.7347 15.2775 16.0878 16.3192 15.162C17.3608 14.2362 18.1509 13.0616 18.6158 11.7478"/>
+    </symbol>
+    <!-- Outline/edit-3  DS I3107:65179;611:3011 -->
+    <symbol id="ic-edit-3" viewBox="-1 -1 20 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M0.75 19.0833H17.25M10.8333 0.75L14.5 4.41667L4.41667 14.5H0.75V10.8333L10.8333 0.75Z"/>
+    </symbol>
+    <!-- Outline/copy  DS I3107:65185;611:2936 -->
+    <symbol id="ic-copy" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3.5 12.6667H2.58333C2.0971 12.6667 1.63079 12.4735 1.28697 12.1297C0.943154 11.7859 0.75 11.3196 0.75 10.8333V2.58333C0.75 2.0971 0.943154 1.63079 1.28697 1.28697C1.63079 0.943154 2.0971 0.75 2.58333 0.75H10.8333C11.3196 0.75 11.7859 0.943154 12.1297 1.28697C12.4735 1.63079 12.6667 2.0971 12.6667 2.58333V3.5M9 7.16667H17.25C18.2625 7.16667 19.0833 7.98748 19.0833 9V17.25C19.0833 18.2625 18.2625 19.0833 17.25 19.0833H9C7.98748 19.0833 7.16667 18.2625 7.16667 17.25V9C7.16667 7.98748 7.98748 7.16667 9 7.16667Z"/>
+    </symbol>
+    <!-- Outline/clock  DS I3107:65192;611:2945 -->
+    <symbol id="ic-clock" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9.91667 4.41667V9.91667L13.5833 11.75M19.0833 9.91667C19.0833 14.9793 14.9793 19.0833 9.91667 19.0833C4.85406 19.0833 0.75 14.9793 0.75 9.91667C0.75 4.85406 4.85406 0.75 9.91667 0.75C14.9793 0.75 19.0833 4.85406 19.0833 9.91667Z"/>
+    </symbol>
+
+  </defs>
+</svg>
+
+<!-- ═══════════════════════════════════════════════
+     NAVBAR 1.5  DS 2337:21975
+     Achievement nav button is active (is-active)
+═══════════════════════════════════════════════ -->
+<div class="pd-navbar15" id="NavBar-Desktop">
+
+  <!-- Bar 1: Logo + Right Controls -->
+  <div class="pd-topbar">
+    <a class="pd-logo" href="#" aria-label="Pandai">
+      <img src="assets/logo-pandai.svg" alt="Pandai" />
+    </a>
+    <div class="pd-topbar__right">
+      <div class="pd-topbar__icons">
+        <button class="pd-icon-btn" aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(3,3)"><path d="M 8 16 C 12.418 16 16 12.418 16 8 C 16 3.582 12.418 0 8 0 C 3.582 0 0 3.582 0 8 C 0 12.418 3.582 16 8 16 Z"/><path d="M 18 18 L 13.65 13.65"/></g>
+          </svg>
+        </button>
+        <button class="pd-icon-btn" aria-label="Fullscreen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(3,3)"><path d="M 0 13 L 0 16 C 0 16.530 0.211 17.039 0.586 17.414 C 0.961 17.789 1.470 18 2 18 L 5 18"/><path d="M 5 0 L 2 0 C 1.470 0 0.961 0.211 0.586 0.586 C 0.211 0.961 0 1.470 0 2 L 0 5 M 18 5 L 18 2 C 18 1.470 17.789 0.961 17.414 0.586 C 17.039 0.211 16.530 0 16 0 L 13 0 M 13 18 L 16 18 C 16.530 18 17.039 17.789 17.414 17.414 C 17.789 17.039 18 16.530 18 16 L 18 13"/></g>
+          </svg>
+        </button>
+        <button class="pd-icon-btn" aria-label="Mobile app">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(5,2)"><path d="M 12 0 L 2 0 C 0.895 0 0 0.895 0 2 L 0 18 C 0 19.105 0.895 20 2 20 L 12 20 C 13.105 20 14 19.105 14 18 L 14 2 C 14 0.895 13.105 0 12 0 Z"/><path d="M 7 16 L 7.01 16"/></g>
+          </svg>
+        </button>
+        <button class="pd-icon-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(2,2)"><path d="M 20 15 L 0 15 C 0.796 15 1.559 14.684 2.121 14.121 C 2.684 13.559 3 12.796 3 12 L 3 7 C 3 5.143 3.737 3.363 5.050 2.050 C 6.363 0.737 8.143 0 10 0 C 11.857 0 13.637 0.737 14.950 2.050 C 16.263 3.363 17 5.143 17 7 L 17 12 C 17 12.796 17.316 13.559 17.879 14.121 C 18.441 14.684 19.204 15 20 15 Z"/><path d="M 11.730 19 C 11.554 19.303 11.302 19.555 10.998 19.730 C 10.695 19.904 10.350 19.996 10 19.996 C 9.650 19.996 9.305 19.904 9.002 19.730 C 8.698 19.555 8.446 19.303 8.270 19"/></g>
+          </svg>
+        </button>
+        <button class="pd-icon-btn" aria-label="Language: English">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(3,6)"><path d="M 6.129 0.050 L 0 0.050 L 0 5.651 L 0 11.252 L 6.129 11.252"/><path d="M 0 5.651 L 6.181 5.651"/><path d="M 10.086 11.252 L 10.086 0 L 18.613 11.252 L 18.613 0"/></g>
+          </svg>
+        </button>
+        <button class="pd-icon-btn" aria-label="Apps">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(4,4)"><path d="M 8 9 C 8.552 9 9 8.552 9 8 C 9 7.448 8.552 7 8 7 C 7.448 7 7 7.448 7 8 C 7 8.552 7.448 9 8 9 Z"/><path d="M 15 9 C 15.552 9 16 8.552 16 8 C 16 7.448 15.552 7 15 7 C 14.448 7 14 7.448 14 8 C 14 8.552 14.448 9 15 9 Z"/><path d="M 1 9 C 1.552 9 2 8.552 2 8 C 2 7.448 1.552 7 1 7 C 0.448 7 0 7.448 0 8 C 0 8.552 0.448 9 1 9 Z"/><path d="M 8 2 C 8.552 2 9 1.552 9 1 C 9 0.448 8.552 0 8 0 C 7.448 0 7 0.448 7 1 C 7 1.552 7.448 2 8 2 Z"/><path d="M 15 2 C 15.552 2 16 1.552 16 1 C 16 0.448 15.552 0 15 0 C 14.448 0 14 0.448 14 1 C 14 1.552 14.448 2 15 2 Z"/><path d="M 1 2 C 1.552 2 2 1.552 2 1 C 2 0.448 1.552 0 1 0 C 0.448 0 0 0.448 0 1 C 0 1.552 0.448 2 1 2 Z"/><path d="M 8 16 C 8.552 16 9 15.552 9 15 C 9 14.448 8.552 14 8 14 C 7.448 14 7 14.448 7 15 C 7 15.552 7.448 16 8 16 Z"/><path d="M 15 16 C 15.552 16 16 15.552 16 15 C 16 14.448 15.552 14 15 14 C 14.448 14 14 14.448 14 15 C 14 15.552 14.448 16 15 16 Z"/><path d="M 1 16 C 1.552 16 2 15.552 2 15 C 2 14.448 1.552 14 1 14 C 0.448 14 0 14.448 0 15 C 0 15.552 0.448 16 1 16 Z"/></g>
+          </svg>
+        </button>
+      </div>
+      <div class="pd-avatar-wrap">
+        <div class="pd-avatar"><img src="assets/avatar-user.png" alt="Profile" /></div>
+        <div class="pd-avatar__badge"><span>15</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bar 2: Navigation pill -->
+  <nav class="pd-navcontent" aria-label="Main navigation">
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="home"><svg aria-hidden="true"><use href="#ic-home"/></svg></div></div>
+        <span class="nav-btn__label">Home</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div></div>
+        <span class="nav-btn__label">Quiz</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="battle"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div></div>
+        <span class="nav-btn__label">Battle</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="practice"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div></div>
+        <span class="nav-btn__label">Practice</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="class"><svg aria-hidden="true"><use href="#ic-users"/></svg></div></div>
+        <span class="nav-btn__label">Class</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="learn"><svg aria-hidden="true"><use href="#ic-book"/></svg></div></div>
+        <span class="nav-btn__label">Learn</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <!-- Achievement — active (is-active) -->
+    <div class="nav-btn is-active">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="achievement"><svg aria-hidden="true"><use href="#ic-achievement"/></svg></div></div>
+        <span class="nav-btn__label">Achievement</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="potential"><svg aria-hidden="true"><use href="#ic-star"/></svg></div></div>
+        <span class="nav-btn__label">Potential</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div></div>
+        <span class="nav-btn__label">Rewards</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+  </nav>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     MOBILE NAVBAR  DS 1943:22641
+═══════════════════════════════════════════════ -->
+<section id="NavBar-Mobile">
+  <div class="navbar-mobile">
+    <a class="navbar-mobile__logo" href="#" aria-label="Pandai">
+      <img src="assets/logo-pandai.svg" class="navbar-mobile__logo-img" alt="Pandai" />
+    </a>
+    <button class="navbar-mobile__menu-btn" aria-label="Open menu" type="button">
+      <svg aria-hidden="true"><use href="#ic-menu"/></svg>
+    </button>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     PAGE CONTENT
+═══════════════════════════════════════════════ -->
+<main class="pd-page">
+
+  <!-- ── BREADCRUMBS 1.5  DS 3107:65098 ── -->
+  <section id="Breadcrumbs-Desktop">
+    <div class="pd-breadcrumbs15">
+      <h1 class="pd-breadcrumbs__title">Score Card</h1>
+      <div class="pd-breadcrumbs__sep"></div>
+      <div class="pd-breadcrumbs__links">
+
+        <!-- Achievement parent link: bar-chart icon + label + chevron -->
+        <button class="pd-link15" type="button">
+          <svg class="pd-link15__icon-home" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(6,4)"><path d="M 12 16 L 12 6 M 6 16 L 6 0 M 0 16 L 0 10"/></g>
+          </svg>
+          <span class="pd-link15__text pd-link15__text--parent">Achievement</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(9,6)"><path d="M 0 12 L 6 6 L 0 0"/></g>
+          </svg>
+        </button>
+
+        <!-- Score Card — active/current page -->
+        <span class="pd-link15" style="cursor:default">
+          <span class="pd-link15__text" style="color:var(--text-primary-default)">Score Card</span>
+        </span>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SUBJECT FILTER PILLS  DS 3107:65099 ── -->
+  <section id="Subjects-Desktop">
+    <div class="sc-subjects">
+      <!-- Row 1: All active, then subjects alphabetically as DS shows -->
+      <button class="sc-pill is-active" data-subject="all" type="button">All</button>
+      <button class="sc-pill" data-subject="account" type="button">Account</button>
+      <button class="sc-pill" data-subject="add-math" type="button">Add Math</button>
+      <button class="sc-pill" data-subject="bm" type="button">Bahasa Melayu</button>
+      <button class="sc-pill" data-subject="biology" type="button">Biology</button>
+      <button class="sc-pill" data-subject="chemistry" type="button">Chemistry</button>
+      <button class="sc-pill" data-subject="science" type="button">Science</button>
+      <button class="sc-pill" data-subject="economy" type="button">Economy</button>
+      <button class="sc-pill" data-subject="english" type="button">English</button>
+      <button class="sc-pill" data-subject="geography" type="button">Geography</button>
+      <button class="sc-pill" data-subject="history" type="button">History</button>
+      <button class="sc-pill" data-subject="islamic" type="button">Islamic Studies</button>
+      <button class="sc-pill" data-subject="kafa" type="button">KAFA</button>
+      <button class="sc-pill" data-subject="math" type="button">Mathematics</button>
+      <!-- Row 2 -->
+      <button class="sc-pill" data-subject="rbt" type="button">RBT</button>
+      <button class="sc-pill" data-subject="moral" type="button">Moral Studies</button>
+      <button class="sc-pill" data-subject="cs" type="button">Computer Science</button>
+      <button class="sc-pill" data-subject="physics" type="button">Physics</button>
+      <button class="sc-pill" data-subject="chinese" type="button">Chinese Language</button>
+    </div>
+  </section>
+
+  <!-- ── SCORE CARD  DS 3107:65119  ── -->
+  <section id="ScoreCard-Desktop">
+    <div class="sc-card-outer">
+
+      <!-- LEFT CONTAINER  DS 3107:65120  p:20 gap:50 r:18 -->
+      <div class="sc-left">
+
+        <!-- Header: "All Subjects" button + "Score Overview" title -->
+        <div class="sc-left__header">
+          <button class="sc-overview-btn" type="button">All Subjects</button>
+          <h2 class="sc-overview-title">Score Overview</h2>
+        </div>
+
+        <!-- Donut chart  DS 3107:65132  138×138  61.5% -->
+        <div class="sc-donut-wrap">
+          <svg viewBox="0 0 138 138" width="138" height="138" aria-label="Score Overview: 61.5%">
+            <!-- Grey track (full circle) -->
+            <circle cx="69" cy="69" r="50" fill="none" stroke="#e8e8e8" stroke-width="18"/>
+            <!-- Green progress: 61.5% — circumference 2π×50 ≈ 314.16, dash = 193.2, gap = 120.96 -->
+            <circle cx="69" cy="69" r="50" fill="none" stroke="#00cc85" stroke-width="18"
+              stroke-dasharray="193.2 120.96" stroke-linecap="round"
+              transform="rotate(-90 69 69)"/>
+          </svg>
+          <span class="sc-donut-label" aria-hidden="true">61.5%</span>
+        </div>
+
+        <!-- Bottom stats card  DS 3107:65136  p:24 r:18 -->
+        <div class="sc-mini-stat-card">
+          <div class="sc-mini-stat-item">
+            <span class="sc-mini-stat-value">10</span>
+            <span class="sc-mini-stat-label">Today's Score</span>
+          </div>
+          <div class="sc-mini-stat-item">
+            <span class="sc-mini-stat-value">816</span>
+            <span class="sc-mini-stat-label">This Year's Score</span>
+          </div>
+        </div>
+
+      </div><!-- /sc-left -->
+
+      <!-- MID CONTAINER  DS 3107:65145  p:20 gap:45 r:18 -->
+      <div class="sc-mid">
+
+        <!-- Header: activity icon + subtitle + value -->
+        <div class="sc-mid__header">
+          <div class="sc-icon-circle">
+            <svg aria-hidden="true"><use href="#ic-activity"/></svg>
+          </div>
+          <div class="sc-mid__content">
+            <span class="sc-mid__subtitle">Score for the past one week</span>
+            <span class="sc-mid__value">133</span>
+          </div>
+        </div>
+
+        <!-- Line chart  DS 3107:65152  7 data points  379×80 -->
+        <div class="sc-graph" aria-label="Score trend line chart">
+          <svg viewBox="-4 -4 387 88" fill="none" stroke="var(--surface-primary-default)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Line connecting all data points -->
+            <polyline points="2,57 65,78 127,38 190,33 252,28 315,2 377,64"/>
+            <!-- Data point dots -->
+            <circle cx="2"   cy="57" r="3" fill="var(--surface-general-default)" stroke-width="1.5"/>
+            <circle cx="65"  cy="78" r="3" fill="var(--surface-general-default)" stroke-width="1.5"/>
+            <circle cx="127" cy="38" r="3" fill="var(--surface-general-default)" stroke-width="1.5"/>
+            <circle cx="190" cy="33" r="3" fill="var(--surface-general-default)" stroke-width="1.5"/>
+            <circle cx="252" cy="28" r="3" fill="var(--surface-general-default)" stroke-width="1.5"/>
+            <circle cx="315" cy="2"  r="3" fill="var(--surface-general-default)" stroke-width="1.5"/>
+            <circle cx="377" cy="64" r="3" fill="var(--surface-general-default)" stroke-width="1.5"/>
+          </svg>
+        </div>
+
+      </div><!-- /sc-mid -->
+
+      <!-- RIGHT CONTAINER  DS 3107:65162  gap:16 -->
+      <div class="sc-right">
+
+        <!-- Stat Card 1: Current Streak | Longest Streak  DS 3107:65163  h:156 p:24 r:18 -->
+        <div class="sc-stat-card">
+          <div class="sc-stat-half">
+            <div class="sc-icon-circle">
+              <svg aria-hidden="true"><use href="#ic-rotate-cw"/></svg>
+            </div>
+            <div class="sc-stat-texts">
+              <span class="sc-stat-label">Current Streak</span>
+              <span class="sc-stat-value">2 Days</span>
+            </div>
+          </div>
+          <div class="sc-stat-half">
+            <div class="sc-icon-circle">
+              <svg aria-hidden="true"><use href="#ic-refresh-cw"/></svg>
+            </div>
+            <div class="sc-stat-texts">
+              <span class="sc-stat-label">Longest Streak</span>
+              <span class="sc-stat-value">1 Days</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stat Card 2: Today's Quiz | Total Quiz  DS 3107:65176  h:156 p:24 r:18 -->
+        <div class="sc-stat-card">
+          <div class="sc-stat-half">
+            <div class="sc-icon-circle">
+              <svg aria-hidden="true"><use href="#ic-edit-3"/></svg>
+            </div>
+            <div class="sc-stat-texts">
+              <span class="sc-stat-label">Today's Quiz</span>
+              <span class="sc-stat-value">2 Quizzes</span>
+            </div>
+          </div>
+          <div class="sc-stat-half">
+            <div class="sc-icon-circle">
+              <svg aria-hidden="true"><use href="#ic-copy"/></svg>
+            </div>
+            <div class="sc-stat-texts">
+              <span class="sc-stat-label">Total Quiz</span>
+              <span class="sc-stat-value">204 Quizzes</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stat Card 3: Last Submission  DS 3107:65189  h:88 p:12/24 r:18 -->
+        <div class="sc-stat-card sc-stat-card--sm">
+          <div class="sc-stat-half sc-stat-half--row">
+            <div class="sc-icon-circle">
+              <svg aria-hidden="true"><use href="#ic-clock"/></svg>
+            </div>
+            <div class="sc-stat-texts">
+              <span class="sc-stat-label">Last Submission</span>
+              <span class="sc-stat-value">5 Hours Ago</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /sc-right -->
+
+    </div><!-- /sc-card-outer -->
+  </section>
+
+</main>
+
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER 1.5  DS 2073:6579 / 3107:65213
+═══════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__left">
+      <span class="footer__text">&copy; 2026</span>
+      <a class="footer__link" href="#">Pandai.org</a>
+      <span class="footer__text">All Rights Reserved</span>
+    </div>
+    <div class="footer__right">
+      <span class="footer__text">Made with</span>
+      <svg class="footer__heart" aria-hidden="true"><use href="#ic-heart"/></svg>
+      <span class="footer__text">in Malaysia</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  /* Nav button handlers — registered first, before any other JS */
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+    });
+    btn.addEventListener('mousedown',  () => btn.classList.add('is-pressed'));
+    btn.addEventListener('mouseup',    () => btn.classList.remove('is-pressed'));
+    btn.addEventListener('mouseleave', () => btn.classList.remove('is-pressed'));
+  });
+
+  /* Subject filter pills — toggle active state */
+  try {
+    document.querySelectorAll('.sc-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.sc-pill').forEach(p => p.classList.remove('is-active'));
+        pill.classList.add('is-active');
+      });
+    });
+  } catch(e) { console.warn('Pill init error:', e); }
+</script>
+
+</body>
+</html>
