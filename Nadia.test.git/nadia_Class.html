@@ -41,6 +41,34 @@
       --page-padding-x: 60px;
       --section-gap:    var(--sp-m);
 
+      /* DS Semantic tokens — Zul naming, used by navbar */
+      --surface-general-default:   #fff;
+      --surface-primary-default:   #00cc85;
+      --surface-secondary-default: #b5f291;
+      --surface-tertiary-default:  #00564c;
+      --border-default:            #00cc85;
+      --border-primary-default:    #00cc85;
+      --border-primary-focus:      #00a36a;
+      --border-secondary-focus:    #70bc6f;
+      --border-tertiary-focus:     #00453d;
+      --text-default-body:         #666666;
+      --text-primary-default:      #00cc85;
+      --text-primary-on-color:     #f6fdfb;
+      --text-secondary-focus:      #70bc6f;
+      --icon-default-default:      #d9d9d9;
+      --icon-primary-default:      #00cc85;
+      --icon-primary-on-color:     #f6fdfb;
+      --icon-secondary-hover:      #70bc6f;
+      --corner-radius-corner-4xl:  24px;
+      --corner-radius-corner-rounded: 60px;
+      --corner-radius-corner-pill: 999px;
+      --spacing-space-xxs: 4px;
+      --spacing-space-xs:  8px;
+      --spacing-space-s:   12px;
+      --spacing-space-m:   16px;
+      --spacing-space-xl:  24px;
+      --spacing-space-2xl: 28px;
+
       /* Subject — B-Melayu */
       --bm-50:  #f6f9ff;  --bm-100: #dbe4ff;  --bm-200: #b8c9ff;
       --bm-500: #4d77ff;  --bm-600: #3e5fcc;  --bm-700: #2e4799;
@@ -89,319 +117,243 @@
     }
 
     /* ══════════════════════════════════════════════════════════════
-       Navbar 1.5 — node 4115:97698
-       Spec: flex-col gap-12px, two bars stacked, inside 60px page padding
+       NAVBAR — Navbar 1.5  (node 2339:2617) — from zul.home.screen
        ══════════════════════════════════════════════════════════════ */
     .navbar {
+      padding:        0 var(--page-padding-x);
       display:        flex;
       flex-direction: column;
-      gap:            12px;
-      width:          100%;
-      padding:        0 var(--page-padding-x);
+      gap:            var(--spacing-space-s);
     }
 
-    /* ── Brand Bar (top row, 64px) ──────────────────────────────── */
-    .navbar__brand {
-      background: var(--Surface-general-default, #fff);
-      border-bottom: 1px solid var(--og-500);  /* border/primary/default */
-      border-left:   1px solid var(--og-500);
-      border-right:  1px solid var(--og-500);
-      border-radius: 0 0 24px 24px;            /* corner-4xl bottom only */
-      height: 64px;
-      display: flex;
+    /* Row 1 — Brand bar (64px) */
+    .navbar-brand {
+      height:          64px;
+      background:      var(--surface-general-default);
+      border-bottom:   1px solid var(--border-primary-default);
+      border-left:     1px solid var(--border-primary-default);
+      border-right:    1px solid var(--border-primary-default);
+      border-radius:   0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl);
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      padding:         var(--spacing-space-xs) var(--spacing-space-xl);
+    }
+    .navbar-logo {
+      display:     flex;
       align-items: center;
-      gap: 28px;             /* spacing/space-2xl */
-      padding: 8px 24px;     /* space-xs vertical, space-xl horizontal — DS spec */
-    }
-
-    /* Pandai logo — node 1898:6911 Normal, 116.5×28px per DS */
-    .navbar__logo {
-      width: 116.5px;
-      height: 28px;
       flex-shrink: 0;
-      display: flex;
+      height:      28px;
+      gap:         8px;
+    }
+    .navbar-logo__mark { height: 28px; width: auto; }
+    .navbar-logo__text { height: 18px; width: auto; }
+    .navbar-actions {
+      display:     flex;
+      position:    relative;
       align-items: center;
+      gap:         var(--spacing-space-xl);
     }
-    .navbar__logo-img {
-      width: 116.5px;
-      height: 28px;
-      object-fit: contain;
-      object-position: left center;
-      display: block;
-    }
-
-    /* Actions area — grows to fill, aligns right */
-    .navbar__actions {
-      flex: 1;
-      display: flex;
+    .navbar-action-icons {
+      display:     flex;
       align-items: center;
-      justify-content: flex-end;
-      gap: 24px;             /* spacing/space-xl */
-    }
-
-    /* Icon row — search, maximize, smartphone, bell, EN, waffle */
-    .navbar__icons {
-      display: flex;
-      align-items: center;
-      gap: 28px;             /* spacing/space-2xl */
-    }
-    .navbar__icon {
-      width: 24px;
-      height: 24px;
+      gap:         var(--spacing-space-2xl);
       flex-shrink: 0;
-      display: flex;
-      align-items: center;
+    }
+    .navbar-action-icon {
+      width:       24px;
+      height:      24px;
+      flex-shrink: 0;
+      color:       var(--icon-default-default);
+    }
+    .navbar-action-icon svg { display: block; width: 100%; height: 100%; }
+    .navbar-avatar {
+      width:           48px;
+      height:          48px;
+      border-radius:   var(--corner-radius-corner-rounded);
+      border:          1px solid var(--border-default);
+      background:      var(--surface-general-default);
+      display:         flex;
+      align-items:     center;
       justify-content: center;
-      cursor: pointer;
-      color: #666;             /* text/default/body */
+      overflow:        hidden;
+      flex-shrink:     0;
+      position:        relative;
     }
-    .navbar__icon svg {
-      width: 24px;
-      height: 24px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 1.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      flex-shrink: 0;
-    }
-
-    /* Avatar (L = 48px) + notification badge */
-    .navbar__avatar-wrap {
-      position: relative;
-      flex-shrink: 0;
-    }
-    .navbar__avatar-l {
-      width: 48px;
-      height: 48px;
-      border-radius: 60px;           /* corner-rounded */
-      border: 1px solid var(--og-500); /* border/default */
-      background: var(--Surface-general-default, #fff);
-      overflow: hidden;
-      display: flex;
-      align-items: flex-start;
-    }
-    .navbar__avatar-l img {
-      /* Figma spec: left-[-7px] right-[-7px] top-[-1px] → overflow avatar */
-      width: calc(100% + 14px);
-      margin-left: -7px;
-      margin-top: -1px;
-    }
-    /* Badges - Number - 1.5 */
-    .navbar__notif {
-      position: absolute;
-      top: 0;
-      right: -0.5px;
-      min-width: 20px;
-      height: 20px;
-      background: var(--og-500);            /* surface/primary/default */
-      border-radius: 60px;                  /* corner-rounded */
-      padding: 4px;                         /* spacing/space-xxs */
-      display: flex;
-      align-items: center;
+    .navbar-avatar__img { width: 62px; height: 50px; object-fit: cover; position: absolute; }
+    .navbar-badge {
+      position:        absolute;
+      top:             0;
+      right:           -0.5px;
+      min-width:       20px;
+      height:          20px;
+      background:      var(--surface-primary-default);
+      border-radius:   var(--corner-radius-corner-rounded);
+      padding:         var(--spacing-space-xxs);
+      display:         flex;
+      align-items:     center;
       justify-content: center;
-      font-size: 10px;                      /* Body/B7 */
-      font-weight: 600;
-      line-height: 12px;                    /* spacing/space-s */
-      color: #e9fbf5;                       /* text/primary/on-color */
-      white-space: nowrap;
+      font-size:       10px;
+      font-weight:     600;
+      color:           var(--text-primary-on-color);
+      line-height:     var(--spacing-space-s);
     }
 
-    /* ── Nav Content Bar (bottom row, 56px pill) ────────────────── */
-    .navbar__content {
-      background: var(--Surface-general-default, #fff);
-      border: 1px solid var(--og-500);   /* border/default */
-      border-radius: 999px;              /* corner-pill */
-      height: 56px;
-      max-height: 64px;
-      display: flex;
-      align-items: flex-start;
-      padding: 8px;                      /* spacing/space-xs */
+    /* Row 2 — Nav content pill (56px) */
+    .navbar-nav {
+      height:        56px;
+      background:    var(--surface-general-default);
+      border:        1px solid var(--border-default);
+      border-radius: var(--corner-radius-corner-pill);
+      display:       flex;
+      align-items:   flex-start;
+      gap:           var(--spacing-space-xs);
+      padding:       var(--spacing-space-xs);
     }
 
-    .navbar__nav-items {
-      display: flex;
-      align-items: center;
-      gap: 8px;                          /* spacing/space-xs */
-    }
-
-    /* Button - NavBar - Dropdown - 1.5 — DS node 857:1236
-       Zul pattern: flex-col, __inner pill, __icon-wrap/__icon-clip, __label */
+    /* Button - NavBar - Dropdown - 1.5 (node 857:1225) */
     .nav-btn {
       display:        flex;
       flex-direction: column;
+      gap:            20px;
       height:         40px;
+      overflow:       hidden;
       flex-shrink:    0;
       align-items:    flex-start;
       cursor:         pointer;
       user-select:    none;
-      text-decoration: none;
     }
-
-    /* Inner pill — px-12 py-8 rounded-pill */
     .nav-btn__inner {
       display:         flex;
       align-items:     center;
       justify-content: center;
-      gap:             8px;              /* spacing/space-xs */
-      padding:         8px 12px;        /* spacing/space-xs + space-s */
-      border-radius:   999px;
+      gap:             var(--spacing-space-xs);
+      padding:         var(--spacing-space-xs) var(--spacing-space-s);
+      border-radius:   var(--corner-radius-corner-pill);
       min-height:      24px;
     }
-
-    /* 24×24 icon wrapper — color cascades to SVG stroke via currentColor */
+    .nav-btn__icon-clip {
+      width:       20px;
+      height:      20px;
+      box-sizing:  border-box;
+      padding:     1.67px;
+      overflow:    hidden;
+      flex-shrink: 0;
+    }
+    .nav-btn__icon-clip svg { display: block; width: 100%; height: 100%; }
+    .nav-btn__chevron-clip { padding: 0; }
+    .nav-btn__icon-clip[data-icon="home"]        { padding: 1.67px 2.5px; }
+    .nav-btn__icon-clip[data-icon="battle"]      { padding: 2.5px; }
+    .nav-btn__icon-clip[data-icon="practice"]    { padding: 2.5px 1.67px; }
+    .nav-btn__icon-clip[data-icon="class"]       { padding: 2.5px 0.83px; }
+    .nav-btn__icon-clip[data-icon="learn"]       { padding: 1.67px 3.33px; }
+    .nav-btn__icon-clip[data-icon="achievement"] { padding: 2.5px 1.67px; }
+    .nav-btn__icon-clip[data-icon="potential"]   { padding: 1.67px 1.67px 2.48px 1.67px; }
+    .nav-btn:hover .nav-btn__inner {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .nav-btn:hover .nav-btn__label     { color: var(--text-secondary-focus); }
+    .nav-btn:hover .nav-btn__icon-wrap { color: var(--icon-secondary-hover); }
+    .nav-btn.is-pressed .nav-btn__inner {
+      background: var(--surface-tertiary-default);
+      box-shadow: inset 0 0 0 1px var(--border-tertiary-focus);
+    }
+    .nav-btn.is-pressed .nav-btn__label     { color: var(--text-primary-default); }
+    .nav-btn.is-pressed .nav-btn__icon-wrap { color: var(--icon-primary-default); }
+    .nav-btn.is-active .nav-btn__inner {
+      background: var(--surface-primary-default);
+      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+    }
+    .nav-btn.is-active .nav-btn__label     { color: var(--text-primary-on-color); }
+    .nav-btn.is-active .nav-btn__icon-wrap { color: var(--icon-primary-on-color); }
+    .nav-btn__label {
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       var(--text-default-body);
+      white-space: nowrap;
+    }
     .nav-btn__icon-wrap {
       display:         flex;
       align-items:     center;
       justify-content: center;
       width:           24px;
       height:          24px;
-      color:           var(--og-500);   /* icon/primary/default */
+      color:           var(--icon-primary-default);
     }
 
-    /* 20×20 overflow clip — pads icon per DS inset spec */
-    .nav-btn__icon-clip {
-      width:       20px;
-      height:      20px;
-      box-sizing:  border-box;
-      padding:     1.67px;              /* default: 8.33% × 20px */
-      overflow:    hidden;
-      flex-shrink: 0;
-    }
-    .nav-btn__icon-clip svg {
-      display: block;
-      width:   100%;
-      height:  100%;
-      fill:    none;
-      stroke:  currentColor;
-      stroke-width:    1.5;
-      stroke-linecap:  round;
-      stroke-linejoin: round;
-      transition: transform 0.15s ease;
-    }
-
-    /* Chevron uses zero padding — position encoded in viewBox */
-    .nav-btn__chevron-clip { padding: 0; }
-
-    /* Per-icon padding overrides (DS inset% × 20px) */
-    .nav-btn__icon-clip[data-icon="home"]        { padding: 1.67px 2.5px; }
-    .nav-btn__icon-clip[data-icon="battle"]      { padding: 2.5px; }
-    .nav-btn__icon-clip[data-icon="practice"]    { padding: 2.5px 1.67px; }
-    .nav-btn__icon-clip[data-icon="class"]       { padding: 2.5px 0.83px; }
-    .nav-btn__icon-clip[data-icon="learn"]       { padding: 1.67px 3.33px; }
-
-    .nav-btn__label {
-      font-family: 'Poppins', sans-serif;
-      font-size:   14px;
-      font-weight: 600;
-      line-height: 20px;
-      color:       #666;               /* text/default/body */
-      white-space: nowrap;
-    }
-
-    /* Hover — surface/secondary/default */
-    .nav-btn:hover .nav-btn__inner {
-      background: #b5f291;                       /* surface/secondary/default */
-      box-shadow: inset 0 0 0 1px #70bc6f;       /* border/secondary/focus */
-    }
-    .nav-btn:hover .nav-btn__label     { color: #70bc6f; }
-    .nav-btn:hover .nav-btn__icon-wrap { color: #70bc6f; }
-
-    /* Active/Selected — surface/primary/default */
-    .nav-btn.is-active .nav-btn__inner {
-      background: var(--og-500);                  /* surface/primary/default */
-      box-shadow: inset 0 0 0 1px var(--og-600);  /* border/primary/focus */
-    }
-    .nav-btn.is-active .nav-btn__label     { color: #e9fbf5; }  /* text/primary/on-color */
-    .nav-btn.is-active .nav-btn__icon-wrap { color: #e9fbf5; }
-
-    /* ── Dropdown group wrapper ─────────────────────────────────── */
+    /* Class dropdown — DS node 890:2465 */
     .nav-btn-group {
-      position: relative;
+      position:   relative;
       flex-shrink: 0;
+      overflow:    visible;
     }
-    /* Chevron rotates UP when group is hovered */
+    .nav-btn-group .nav-btn { overflow: hidden; }
+    .nav-dropdown {
+      display:        none;
+      position:       absolute;
+      top:            calc(100% + 6px);
+      left:           0;
+      z-index:        100;
+      background:     var(--surface-general-default);
+      border:         1px solid var(--border-primary-default);
+      border-radius:  18px;
+      padding:        12px;
+      flex-direction: column;
+      gap:            4px;
+      min-width:      160px;
+      white-space:    nowrap;
+    }
+    .nav-btn-group:hover .nav-dropdown,
+    .nav-btn-group:focus-within .nav-dropdown { display: flex; }
     .nav-btn-group:hover .nav-btn.is-active .nav-btn__chevron-clip svg,
     .nav-btn-group:focus-within .nav-btn.is-active .nav-btn__chevron-clip svg {
       transform: rotate(180deg);
     }
-
-    /* Dropdown panel — DS node 890:2465 */
-    .nav-dropdown {
-      display: none;
-      position: absolute;
-      top: calc(100% + 6px);            /* 6px gap below button */
-      left: 0;
-      z-index: 100;
-      background: var(--Surface-general-default, #fff);
-      border: 1px solid var(--og-500);  /* border/default */
-      border-radius: var(--r-2xl);      /* corner-2xl = 18px */
-      padding: 12px;
-      flex-direction: column;
-      gap: 4px;                          /* spacing/space-xxs */
-      min-width: 160px;
-      white-space: nowrap;
-    }
-    .nav-btn-group:hover .nav-dropdown,
-    .nav-btn-group:focus-within .nav-dropdown {
-      display: flex;
-    }
-
-    /* Sub-menu item — Button - NavBar - Sub Menu - Parts */
     .nav-submenu-item {
-      display: flex;
-      align-items: center;
-      height: 24px;
-      border-radius: var(--r-rounded);   /* corner-rounded = 60px */
-      cursor: pointer;
+      display:         flex;
+      align-items:     center;
+      height:          24px;
+      border-radius:   var(--corner-radius-corner-rounded);
+      cursor:          pointer;
       text-decoration: none;
-      flex-shrink: 0;
-      padding: 0 4px;
-      transition: background 0.1s ease;
+      flex-shrink:     0;
+      padding:         0 4px;
+      transition:      background 0.1s ease;
     }
-    .nav-submenu-item:hover {
-      background: var(--og-50, #e9fbf5);
-    }
+    .nav-submenu-item:hover { background: var(--og-50, #e9fbf5); }
     .nav-submenu-item svg {
-      width: 20px; height: 20px;
-      flex-shrink: 0;
-      fill: none;
-      stroke: var(--og-500);
-      stroke-width: 1.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      width: 20px; height: 20px; flex-shrink: 0;
+      fill: none; stroke: var(--icon-primary-default);
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
     }
     .nav-submenu-item span {
-      font-size: 14px;                   /* Body/B1 */
-      font-weight: 600;
-      line-height: 20px;
-      color: #666;                       /* text/default/body */
-      padding: 0 8px;
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--text-default-body); padding: 0 8px;
     }
 
-    /* ── Mobile Navbar — DS node 1943:22641 (Type=Mobile) ─────── */
+    /* Mobile Navbar — DS node 1943:22641 */
     .navbar-mobile {
       height:          64px;
-      background:      var(--Surface-general-default, #fff);
-      border-bottom:   1px solid var(--og-500);
-      border-left:     1px solid var(--og-500);
-      border-right:    1px solid var(--og-500);
-      border-radius:   0 0 24px 24px;
+      background:      var(--surface-general-default);
+      border-bottom:   1px solid var(--border-primary-default);
+      border-left:     1px solid var(--border-primary-default);
+      border-right:    1px solid var(--border-primary-default);
+      border-radius:   0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl);
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      padding:         var(--sp-m) 24px;
+      padding:         var(--spacing-space-m) 24px;
     }
     .navbar-mobile__logo {
       display:     flex;
       align-items: center;
+      gap:         8px;
       height:      28px;
     }
-    .navbar-mobile__logo img {
-      height:      28px;
-      width:       auto;
-      display:     block;
-    }
+    .navbar-mobile__logo-mark { height: 28px; width: auto; }
+    .navbar-mobile__logo-text { height: 18px; width: auto; }
     .navbar-mobile__menu-btn {
       width:           40px;
       height:          40px;
@@ -409,21 +361,14 @@
       align-items:     center;
       justify-content: center;
       cursor:          pointer;
+      user-select:     none;
+      flex-shrink:     0;
+      color:           var(--icon-primary-default);
       background:      none;
       border:          none;
       padding:         0;
-      flex-shrink:     0;
     }
-    .navbar-mobile__menu-btn svg {
-      width:  24px;
-      height: 24px;
-      stroke: var(--og-500);
-      fill:   none;
-      stroke-width:    1.5;
-      stroke-linecap:  round;
-      stroke-linejoin: round;
-      display: block;
-    }
+    .navbar-mobile__menu-btn svg { display: block; width: 24px; height: 24px; }
 
     /* ── Responsive Layout ─────────────────────────────────────────
        Website  ≥ 1320px : desktop navbar · 3-col cards · 60px padding
@@ -924,229 +869,148 @@
 </head>
 <body>
 
+  <!-- SVG sprite — all icon symbols -->
+  <svg aria-hidden="true" style="display:none">
+    <symbol id="ic-home" viewBox="-1 -1 20 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 7 L 9 0 L 18 7 L 18 18 C 18 18.5304 17.7893 19.0391 17.4142 19.4142 C 17.0391 19.7893 16.5304 20 16 20 L 2 20 C 1.4696 20 0.9609 19.7893 0.5858 19.4142 C 0.2107 19.0391 0 18.5304 0 18 L 0 7 Z"/><path d="M 6 20 L 6 10 L 12 10 L 12 20"/></symbol>
+    <symbol id="ic-check-circle" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 20 9.086 L 20 10.006 C 19.999 12.162 19.3 14.26 18.009 15.988 C 16.718 17.715 14.903 18.978 12.835 19.59 C 10.767 20.201 8.557 20.128 6.534 19.38 C 4.512 18.633 2.785 17.252 1.611 15.443 C 0.437 13.634 -0.12 11.494 0.022 9.342 C 0.164 7.19 0.997 5.142 2.398 3.503 C 3.799 1.864 5.693 0.721 7.796 0.246 C 9.9 -0.229 12.1 -0.012 14.07 0.866"/><path d="M 20 2.006 L 10 12.016 L 7 9.016"/></symbol>
+    <symbol id="ic-battle" viewBox="-1 -1 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 18 0 L 18 5 L 7 14 L 3 18 L 0 15 L 4 11 L 13 0 L 18 0 Z"/><path d="M 2 10 L 8 16"/><path d="M 11.32 14.32 L 15 18 L 18 15 L 14.635 11.635"/><path d="M 7 2.5 L 5 0 L 0 0 L 0 5 L 3 7.5"/></symbol>
+    <symbol id="ic-book-open" viewBox="-1 -1 22 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 0 L 6 0 C 7.061 0 8.078 0.421 8.828 1.172 C 9.579 1.922 10 2.939 10 4 L 10 18 C 10 17.204 9.684 16.441 9.121 15.879 C 8.559 15.316 7.796 15 7 15 L 0 15 L 0 0 Z"/><path d="M 20 0 L 14 0 C 12.939 0 11.922 0.421 11.172 1.172 C 10.421 1.922 10 2.939 10 4 L 10 18 C 10 17.204 10.316 16.441 10.879 15.879 C 11.441 15.316 12.204 15 13 15 L 20 15 L 20 0 Z"/></symbol>
+    <symbol id="ic-users" viewBox="-1 -1 24 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 16 18 L 16 16 C 16 14.939 15.579 13.922 14.828 13.172 C 14.078 12.421 13.061 12 12 12 L 4 12 C 2.939 12 1.922 12.421 1.172 13.172 C 0.421 13.922 0 14.939 0 16 L 0 18"/><path d="M 8 8 C 10.209 8 12 6.209 12 4 C 12 1.791 10.209 0 8 0 C 5.791 0 4 1.791 4 4 C 4 6.209 5.791 8 8 8 Z"/><path d="M 22 18 L 22 16 C 21.999 15.114 21.704 14.253 21.161 13.552 C 20.618 12.852 19.858 12.352 19 12.13"/><path d="M 15 0.13 C 15.86 0.35 16.623 0.851 17.168 1.552 C 17.712 2.254 18.008 3.117 18.008 4.005 C 18.008 4.893 17.712 5.756 17.168 6.458 C 16.623 7.159 15.86 7.66 15 7.88"/></symbol>
+    <symbol id="ic-book" viewBox="-1 -1 18 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 17.5 C 0 16.837 0.263 16.201 0.732 15.732 C 1.201 15.263 1.837 15 2.5 15 L 16 15"/><path d="M 2.5 0 L 16 0 L 16 20 L 2.5 20 C 1.837 20 1.201 19.737 0.732 19.268 C 0.263 18.799 0 18.163 0 17.5 L 0 2.5 C 0 1.837 0.263 1.201 0.732 0.732 C 1.201 0.263 1.837 0 2.5 0 Z"/></symbol>
+    <symbol id="ic-award" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 12 15 C 15.866 15 19 11.866 19 8 C 19 4.134 15.866 1 12 1 C 8.134 1 5 4.134 5 8 C 5 11.866 8.134 15 12 15 Z"/><path d="M 8.21 13.89 L 7 23 L 12 20 L 17 23 L 15.79 13.88"/></symbol>
+    <symbol id="ic-star" viewBox="-1 -1 22 21" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 10 0 L 13.09 6.26 L 20 7.27 L 15 12.14 L 16.18 19.02 L 10 15.77 L 3.82 19.02 L 5 12.14 L 0 7.27 L 6.91 6.26 L 10 0 Z"/></symbol>
+    <symbol id="ic-gift" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 18 10 L 18 20 L 2 20 L 2 10"/><path d="M 20 5 L 0 5 L 0 10 L 20 10 L 20 5 Z"/><path d="M 10 5 L 5.5 5 C 4.837 5 4.201 4.737 3.732 4.268 C 3.263 3.799 3 3.163 3 2.5 C 3 1.837 3.263 1.201 3.732 0.732 C 4.201 0.263 4.837 0 5.5 0 C 9 0 10 5 10 5 Z"/><path d="M 10 5 L 14.5 5 C 15.163 5 15.799 4.737 16.268 4.268 C 16.737 3.799 17 3.163 17 2.5 C 17 1.837 16.737 1.201 16.268 0.732 C 15.799 0.263 15.163 0 14.5 0 C 11 0 10 5 10 5 Z"/><path d="M 10 20 L 10 5"/></symbol>
+    <symbol id="ic-chevron-down-nav" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5L10 12.5L15 7.5"/></symbol>
+    <symbol id="ic-search" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 11 19 C 15.418 19 19 15.418 19 11 C 19 6.582 15.418 3 11 3 C 6.582 3 3 6.582 3 11 C 3 15.418 6.582 19 11 19 Z"/><path d="M 21 21 L 16.65 16.65"/></symbol>
+    <symbol id="ic-maximize" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 3 16 L 3 19 C 3 19.53 3.211 20.039 3.586 20.414 C 3.961 20.789 4.47 21 5 21 L 8 21"/><path d="M 8 3 L 5 3 C 4.47 3 3.961 3.211 3.586 3.586 C 3.211 3.961 3 4.47 3 5 L 3 8 M 21 8 L 21 5 C 21 4.47 20.789 3.961 20.414 3.586 C 20.039 3.211 19.53 3 19 3 L 16 3 M 16 21 L 19 21 C 19.53 21 20.039 20.789 20.414 20.414 C 20.789 20.039 21 19.53 21 19 L 21 16"/></symbol>
+    <symbol id="ic-smartphone" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 17 2 L 7 2 C 5.895 2 5 2.895 5 4 L 5 20 C 5 21.105 5.895 22 7 22 L 17 22 C 18.105 22 19 21.105 19 20 L 19 4 C 19 2.895 18.105 2 17 2 Z"/><path d="M 12 18 L 12.01 18"/></symbol>
+    <symbol id="ic-bell" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22 17 L 2 17 C 2.796 17 3.559 16.684 4.121 16.121 C 4.684 15.559 5 14.796 5 14 L 5 9 C 5 7.143 5.737 5.363 7.05 4.05 C 8.363 2.737 10.143 2 12 2 C 13.857 2 15.637 2.737 16.95 4.05 C 18.263 5.363 19 7.143 19 9 L 19 14 C 19 14.796 19.316 15.559 19.879 16.121 C 20.441 16.684 21.204 17 22 17 Z"/><path d="M 13.73 21 C 13.554 21.303 13.302 21.555 12.998 21.73 C 12.695 21.904 12.35 21.996 12 21.996 C 11.65 21.996 11.305 21.904 11.002 21.73 C 10.698 21.555 10.446 21.303 10.27 21"/></symbol>
+    <symbol id="ic-en" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 21.613 6 L 21.613 17.252 L 13.086 6 L 13.086 17.252"/><path d="M 9.129 6.05 L 3 6.05 L 3 11.651 L 3 17.252 L 9.129 17.252"/><path d="M 3 11.651 L 9.181 11.651"/></symbol>
+    <symbol id="ic-waffle" viewBox="-1 -1 18 18" fill="currentColor" stroke="none"><path d="M 8 9 C 8.552 9 9 8.552 9 8 C 9 7.448 8.552 7 8 7 C 7.448 7 7 7.448 7 8 C 7 8.552 7.448 9 8 9 Z"/><path d="M 15 9 C 15.552 9 16 8.552 16 8 C 16 7.448 15.552 7 15 7 C 14.448 7 14 7.448 14 8 C 14 8.552 14.448 9 15 9 Z"/><path d="M 1 9 C 1.552 9 2 8.552 2 8 C 2 7.448 1.552 7 1 7 C 0.448 7 0 7.448 0 8 C 0 8.552 0.448 9 1 9 Z"/><path d="M 8 2 C 8.552 2 9 1.552 9 1 C 9 0.448 8.552 0 8 0 C 7.448 0 7 0.448 7 1 C 7 1.552 7.448 2 8 2 Z"/><path d="M 15 2 C 15.552 2 16 1.552 16 1 C 16 0.448 15.552 0 15 0 C 14.448 0 14 0.448 14 1 C 14 1.552 14.448 2 15 2 Z"/><path d="M 1 2 C 1.552 2 2 1.552 2 1 C 2 0.448 1.552 0 1 0 C 0.448 0 0 0.448 0 1 C 0 1.552 0.448 2 1 2 Z"/><path d="M 8 16 C 8.552 16 9 15.552 9 15 C 9 14.448 8.552 14 8 14 C 7.448 14 7 14.448 7 15 C 7 15.552 7.448 16 8 16 Z"/><path d="M 15 16 C 15.552 16 16 15.552 16 15 C 16 14.448 15.552 14 15 14 C 14.448 14 14 14.448 14 15 C 14 15.552 14.448 16 15 16 Z"/><path d="M 1 16 C 1.552 16 2 15.552 2 15 C 2 14.448 1.552 14 1 14 C 0.448 14 0 14.448 0 15 C 0 15.552 0.448 16 1 16 Z"/></symbol>
+    <symbol id="ic-menu" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12H21M3 6H21M3 18H21"/></symbol>
+    <symbol id="ic-corner-down-right" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></symbol>
+  </svg>
+
   <!-- ══════════════════════════════════════════════════════════
-       Desktop Navbar — node 4115:97698 (≥ 1320px)
+       Desktop Navbar — Navbar 1.5 (node 2339:2617) ≥ 1320px
        ══════════════════════════════════════════════════════════ -->
   <section id="NavBar-Desktop">
-  <nav class="navbar" aria-label="Main navigation">
+  <nav class="navbar">
 
-    <!-- Brand Bar -->
-    <div class="navbar__brand">
-      <!-- Logo/Pandai/Logo Horizontal — node 1898:6911 Normal -->
-      <div class="navbar__logo">
-        <img class="navbar__logo-img" src="navbar/logo.png" alt="Pandai">
-      </div>
-
-      <!-- Actions: icons + avatar -->
-      <div class="navbar__actions">
-        <div class="navbar__icons">
-          <!-- Outline/search — node 260:1103 -->
-          <div class="navbar__icon" title="Search">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          </div>
-          <!-- Outline/maximize — node 260:915 -->
-          <div class="navbar__icon" title="Fullscreen">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-          </div>
-          <!-- Outline/smartphone — node 260:1178 -->
-          <div class="navbar__icon" title="Mobile app">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-          </div>
-          <!-- Outline/bell — node 260:491 -->
-          <div class="navbar__icon" title="Notifications">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          </div>
-          <!-- Outline/EN — node 1104:2538 (DS export) -->
-          <div class="navbar__icon" title="Language: English">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6125 6V17.2519L13.0858 6V17.2519M9.12861 6.05025H3V11.6511M3 11.6511V17.2519H9.12861M3 11.6511H9.1812 11.6511"/></svg>
-          </div>
-          <!-- Outline/waffle-menu — node 1070:2215 (DS export) -->
-          <div class="navbar__icon" title="Apps">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="5"  cy="5"  r="1"/><circle cx="12" cy="5"  r="1"/><circle cx="19" cy="5"  r="1"/>
-              <circle cx="5"  cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>
-              <circle cx="5"  cy="19" r="1"/><circle cx="12" cy="19" r="1"/><circle cx="19" cy="19" r="1"/>
-            </svg>
-          </div>
+    <!-- Row 1 — Brand bar (64px) -->
+    <div class="navbar-brand">
+      <a class="navbar-logo" href="#">
+        <img src="navbar/logo-mark.svg" class="navbar-logo__mark" alt="Pandai mark">
+        <img src="navbar/logo-text.svg" class="navbar-logo__text" alt="Pandai">
+      </a>
+      <div class="navbar-actions">
+        <div class="navbar-action-icons">
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-maximize"/></svg></div>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-waffle"/></svg></div>
         </div>
-        <!-- Avatar L (48px) + Badges - Number - 1.5 -->
-        <div class="navbar__avatar-wrap">
-          <div class="navbar__avatar-l">
-            <img src="navbar/icon-avatar-user.png" alt="User profile">
-          </div>
-          <div class="navbar__notif">15</div>
+        <div class="navbar-avatar">
+          <img src="navbar/icon-avatar-user.png" class="navbar-avatar__img" alt="User">
+        </div>
+        <span class="navbar-badge">15</span>
+      </div>
+    </div><!-- end row 1 -->
+
+    <!-- Row 2 — Nav content pill (56px) -->
+    <div class="navbar-nav">
+
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="home"><svg aria-hidden="true"><use href="#ic-home"/></svg></div></div>
+          <span class="nav-btn__label">Home</span>
         </div>
       </div>
-    </div>
 
-    <!-- Navbar Content Bar (pill) -->
-    <div class="navbar__content">
-      <div class="navbar__nav-items">
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div></div>
+          <span class="nav-btn__label">Quiz</span>
+        </div>
+      </div>
 
-        <!-- Home -->
-        <a href="#" class="nav-btn">
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="battle"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div></div>
+          <span class="nav-btn__label">Battle</span>
+        </div>
+      </div>
+
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="practice"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div></div>
+          <span class="nav-btn__label">Practice</span>
+        </div>
+      </div>
+
+      <!-- Class — active + dropdown (node 890:2457 + 890:2465) -->
+      <div class="nav-btn-group">
+        <div class="nav-btn is-active">
           <div class="nav-btn__inner">
-            <div class="nav-btn__icon-wrap">
-              <div class="nav-btn__icon-clip" data-icon="home">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-              </div>
-            </div>
-            <span class="nav-btn__label">Home</span>
-          </div>
-        </a>
-
-        <!-- Quiz -->
-        <a href="#" class="nav-btn">
-          <div class="nav-btn__inner">
-            <div class="nav-btn__icon-wrap">
-              <div class="nav-btn__icon-clip">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              </div>
-            </div>
-            <span class="nav-btn__label">Quiz</span>
-          </div>
-        </a>
-
-        <!-- Battle -->
-        <a href="#" class="nav-btn">
-          <div class="nav-btn__inner">
-            <div class="nav-btn__icon-wrap">
-              <div class="nav-btn__icon-clip" data-icon="battle">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3V8L10 17L6 21L3 18L7 14L16 3H21Z"/><path d="M5 13L11 19"/><path d="M14.3199 17.32L17.9999 21L20.9999 18L17.6349 14.635"/><path d="M10 5.5L8 3H3V8L6 10.5"/></svg>
-              </div>
-            </div>
-            <span class="nav-btn__label">Battle</span>
-          </div>
-        </a>
-
-        <!-- Practice -->
-        <a href="#" class="nav-btn">
-          <div class="nav-btn__inner">
-            <div class="nav-btn__icon-wrap">
-              <div class="nav-btn__icon-clip" data-icon="practice">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-              </div>
-            </div>
-            <span class="nav-btn__label">Practice</span>
-          </div>
-        </a>
-
-        <!-- Class — active + dropdown (node 890:2457 + 890:2465) -->
-        <div class="nav-btn-group">
-          <div class="nav-btn is-active">
-            <div class="nav-btn__inner">
-              <div class="nav-btn__icon-wrap">
-                <div class="nav-btn__icon-clip" data-icon="class">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                </div>
-              </div>
-              <span class="nav-btn__label">Class</span>
-              <div class="nav-btn__icon-wrap">
-                <div class="nav-btn__icon-clip nav-btn__chevron-clip">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Dropdown List — DS node 890:2465 -->
-          <div class="nav-dropdown" role="menu">
-            <a href="#" class="nav-submenu-item" role="menuitem">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>
-              <span>My Classes</span>
-            </a>
-            <a href="#" class="nav-submenu-item" role="menuitem">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>
-              <span>Browse Classes</span>
-            </a>
-            <a href="#" class="nav-submenu-item" role="menuitem">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>
-              <span>Timetable</span>
-            </a>
+            <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="class"><svg aria-hidden="true"><use href="#ic-users"/></svg></div></div>
+            <span class="nav-btn__label">Class</span>
+            <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
           </div>
         </div>
-
-        <!-- Learn -->
-        <a href="#" class="nav-btn">
-          <div class="nav-btn__inner">
-            <div class="nav-btn__icon-wrap">
-              <div class="nav-btn__icon-clip" data-icon="learn">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-              </div>
-            </div>
-            <span class="nav-btn__label">Learn</span>
-            <div class="nav-btn__icon-wrap">
-              <div class="nav-btn__icon-clip nav-btn__chevron-clip">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <!-- Achievement -->
-        <a href="#" class="nav-btn">
-          <div class="nav-btn__inner">
-            <div class="nav-btn__icon-wrap">
-              <div class="nav-btn__icon-clip">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-              </div>
-            </div>
-            <span class="nav-btn__label">Achievement</span>
-            <div class="nav-btn__icon-wrap">
-              <div class="nav-btn__icon-clip nav-btn__chevron-clip">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <!-- Potential -->
-        <a href="#" class="nav-btn">
-          <div class="nav-btn__inner">
-            <div class="nav-btn__icon-wrap">
-              <div class="nav-btn__icon-clip">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              </div>
-            </div>
-            <span class="nav-btn__label">Potential</span>
-            <div class="nav-btn__icon-wrap">
-              <div class="nav-btn__icon-clip nav-btn__chevron-clip">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <!-- Rewards -->
-        <a href="#" class="nav-btn">
-          <div class="nav-btn__inner">
-            <div class="nav-btn__icon-wrap">
-              <div class="nav-btn__icon-clip">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
-              </div>
-            </div>
-            <span class="nav-btn__label">Rewards</span>
-            <div class="nav-btn__icon-wrap">
-              <div class="nav-btn__icon-clip nav-btn__chevron-clip">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
-            </div>
-          </div>
-        </a>
-
+        <div class="nav-dropdown" role="menu">
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>My Classes</span></a>
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Browse Classes</span></a>
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Timetable</span></a>
+        </div>
       </div>
-    </div>
 
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="learn"><svg aria-hidden="true"><use href="#ic-book"/></svg></div></div>
+          <span class="nav-btn__label">Learn</span>
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+        </div>
+      </div>
+
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="achievement"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div></div>
+          <span class="nav-btn__label">Achievement</span>
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+        </div>
+      </div>
+
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="potential"><svg aria-hidden="true"><use href="#ic-star"/></svg></div></div>
+          <span class="nav-btn__label">Potential</span>
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+        </div>
+      </div>
+
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div></div>
+          <span class="nav-btn__label">Rewards</span>
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+        </div>
+      </div>
+
+    </div><!-- end row 2 -->
   </nav>
   </section><!-- end NavBar-Desktop -->
 
   <!-- Mobile Navbar — DS node 1943:22641 (< 1320px) -->
   <section id="NavBar-Mobile">
     <div class="navbar-mobile">
-      <div class="navbar-mobile__logo">
-        <img src="navbar/logo.png" alt="Pandai">
-      </div>
+      <a class="navbar-mobile__logo" href="#">
+        <img src="navbar/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
+        <img src="navbar/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
+      </a>
       <button class="navbar-mobile__menu-btn" aria-label="Open menu" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg aria-hidden="true"><use href="#ic-menu"/></svg>
       </button>
     </div>
   </section><!-- end NavBar-Mobile -->
