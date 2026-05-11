@@ -82,7 +82,7 @@
 
     /* Page content — padded area below navbar */
     .page-content {
-      padding:        48px var(--page-padding-x);
+      padding:        0 var(--page-padding-x);
       display:        flex;
       flex-direction: column;
       gap:            var(--section-gap);
@@ -445,7 +445,6 @@
     /* Mobile ≤ 767px: 16px padding, 1-col cards */
     @media (max-width: 767px) {
       :root { --page-padding-x: var(--sp-m); }   /* 16px */
-      .page-content { padding-top: 24px; }
       .cards-grid   { grid-template-columns: 1fr; }
       .bc-row       { flex-direction: column; align-items: flex-start; gap: 12px; }
       .bc-left      { flex-wrap: wrap; }
