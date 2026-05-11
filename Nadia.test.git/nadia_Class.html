@@ -433,6 +433,9 @@
     #NavBar-Desktop { display: block; }
     #NavBar-Mobile  { display: none; padding: 0 var(--page-padding-x); }
 
+    /* Desktop default — 3 col (must be before tablet override) */
+    .cards-grid { grid-template-columns: repeat(3, 1fr); }
+
     /* Tablet — swap navbar + 2-col cards + 32px padding */
     @media (max-width: 1319px) {
       :root           { --page-padding-x: 32px; }
@@ -603,7 +606,6 @@
        ══════════════════════════════════════════════════════════════ */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       width: 100%;
     }
