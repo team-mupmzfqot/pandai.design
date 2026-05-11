@@ -1636,4 +1636,52 @@ Grid: `repeat(3, 1fr)`, `gap: 20px`. 6 Form 4 + 6 Form 5, same 6 subjects each.
 
 ---
 
+---
+
+### Updates — May 2026 (Session 2)
+
+**Navbar refactored to Zul's DS pattern:**
+- `.nav-btn` → `flex-col` container, no border
+- `.nav-btn__inner` → pill row (`padding: 8px 12px`, `border-radius: 999px`)
+- `.nav-btn__icon-wrap` → 24×24, `color` cascades to SVG stroke
+- `.nav-btn__icon-clip` → 20×20 overflow clip, per-icon `data-icon` padding overrides
+- `.nav-btn__label` → Poppins 14px/600
+- `.nav-btn__chevron-clip` → `padding: 0`
+- States via `is-active` class + `box-shadow: inset 0 0 0 1px` (no layout-shifting border)
+- Class dropdown chevron rotation: `.nav-btn-group:hover .nav-btn.is-active .nav-btn__chevron-clip svg { transform: rotate(180deg) }`
+
+**Responsive layout — aligned to zul.home.screen breakpoints:**
+
+| Breakpoint | Navbar | Cards | Padding |
+|---|---|---|---|
+| ≥ 1320px (website) | `#NavBar-Desktop` | 3-col | 60px |
+| < 1320px (tablet) | `#NavBar-Mobile` | 2-col | 32px |
+| ≤ 767px (mobile) | `#NavBar-Mobile` | 1-col | 16px |
+
+- All three breakpoints switch together at `≤1319px` — no inconsistent navbar+grid zones
+- Cards grid `grid-template-columns` defined in responsive section (before media queries) to avoid cascade override bug
+- `body { padding-bottom: 90px }` — clears fixed footer; mobile override: `102px`
+
+**Page content padding:** `padding: 12px var(--page-padding-x) 0` — 12px top (gap between navbar and breadcrumb), 0 bottom, horizontal uses `--page-padding-x` variable.
+
+**Footer - 1.5 (node 2338:10430) added:**
+- Fixed bottom bar: `position: fixed; bottom: 0; height: 60px; border-top: 1px solid #00cc85`
+- Left: © 2026 · Pandai.org (green link) · All Rights Reserved
+- Right: Made with ♥ (inline SVG `Outline/heart`) in Malaysia
+- Mobile ≤767px: stacks vertically, `padding: 12px 28px`, centered
+
+**Breadcrumb `.bc-left` alignment:**
+- Base rule: `width: 100%` added to ensure full stretch at all breakpoints
+- Tablet: `align-items: flex-start; width: 100%` — title anchors to left when wrapped
+- Mobile: `flex-direction: column; align-items: flex-start` on `.bc-row`
+
+**CSS cascade fix — cards grid:**
+Moved `.cards-grid { grid-template-columns }` into the responsive section (before media queries). The base rule at line ~604 previously came after all media queries and silently overrode them back to 3-col at every screen size.
+
+**File scope rule:**
+- Write only to: `Nadia.test.git/nadia_Class.html` and `design-md/nadia.design.md`
+- Read-only: `zul.test.git/zul.home.screen.html` and `design-md/zul.design.md`
+
+---
+
 *Last updated: 2026-05-11 | File: Nadia.test.git/nadia_Class.html | Branch: staging*
