@@ -36,6 +36,11 @@
       /* DS Spacing */
       --sp-xxxs: 2px;  --sp-xxs: 4px;  --sp-xs: 8px;  --sp-s: 12px;  --sp-m: 16px;
 
+      /* Layout — matches zul.home.screen */
+      --page-max-width: 100%;
+      --page-padding-x: 60px;
+      --section-gap:    var(--sp-m);
+
       /* Subject — B-Melayu */
       --bm-50:  #f6f9ff;  --bm-100: #dbe4ff;  --bm-200: #b8c9ff;
       --bm-500: #4d77ff;  --bm-600: #3e5fcc;  --bm-700: #2e4799;
@@ -67,21 +72,19 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      background: var(--Surface-general-default, #fff);
-      max-width: 1440px;
-      margin: 0 auto;
+      background:  var(--Surface-general-default, #fff);
+      width:       100%;
+      min-width:   400px;
+      max-width:   var(--page-max-width);
+      margin:      0 auto;
     }
 
     /* Page content — padded area below navbar */
     .page-content {
-      padding: 48px 60px;
-      display: flex;
+      padding:        48px var(--page-padding-x);
+      display:        flex;
       flex-direction: column;
-      gap: 24px;
-    }
-
-    @media (max-width: 425px) {
-      .page-content { padding: 24px 16px; gap: 16px; }
+      gap:            var(--section-gap);
     }
 
     /* ══════════════════════════════════════════════════════════════
@@ -89,11 +92,11 @@
        Spec: flex-col gap-12px, two bars stacked, inside 60px page padding
        ══════════════════════════════════════════════════════════════ */
     .navbar {
-      display: flex;
+      display:        flex;
       flex-direction: column;
-      gap: 12px;             /* DS gap between brand-bar and nav-bar */
-      width: 100%;
-      padding: 0 60px;       /* 60px horizontal so both bars align with page content */
+      gap:            12px;
+      width:          100%;
+      padding:        0 var(--page-padding-x);
     }
 
     /* ── Brand Bar (top row, 64px) ──────────────────────────────── */
@@ -375,34 +378,78 @@
       padding: 0 8px;
     }
 
-    /* ── Mobile hamburger button ─────────────────────────────── */
-    .navbar__hamburger {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-      flex-shrink: 0;
-      margin-left: auto;
+    /* ── Mobile Navbar — DS node 1943:22641 (Type=Mobile) ─────── */
+    .navbar-mobile {
+      height:          64px;
+      background:      var(--Surface-general-default, #fff);
+      border-bottom:   1px solid var(--og-500);
+      border-left:     1px solid var(--og-500);
+      border-right:    1px solid var(--og-500);
+      border-radius:   0 0 24px 24px;
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      padding:         var(--sp-m) 24px;
     }
-    .navbar__hamburger svg {
-      width: 24px; height: 24px;
+    .navbar-mobile__logo {
+      display:     flex;
+      align-items: center;
+      height:      28px;
+    }
+    .navbar-mobile__logo img {
+      height:      28px;
+      width:       auto;
+      display:     block;
+    }
+    .navbar-mobile__menu-btn {
+      width:           40px;
+      height:          40px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      cursor:          pointer;
+      background:      none;
+      border:          none;
+      padding:         0;
+      flex-shrink:     0;
+    }
+    .navbar-mobile__menu-btn svg {
+      width:  24px;
+      height: 24px;
       stroke: var(--og-500);
-      fill: none;
-      stroke-width: 1.5;
-      stroke-linecap: round;
+      fill:   none;
+      stroke-width:    1.5;
+      stroke-linecap:  round;
       stroke-linejoin: round;
       display: block;
     }
 
-    @media (max-width: 425px) {
-      .navbar { padding: 0 16px; }
-      .navbar__brand { padding: 8px 16px; border-radius: 0 0 16px 16px; }
-      /* Hide desktop actions + nav pill on mobile */
-      .navbar__actions { display: none; }
-      .navbar__content { display: none; }
-      /* Show hamburger */
-      .navbar__hamburger { display: flex; align-items: center; }
+    /* ── Responsive Layout — matches zul.home.screen breakpoints ── */
+    #NavBar-Desktop { display: block; }
+    #NavBar-Mobile  { display: none; padding: 0 var(--page-padding-x); }
+
+    /* < 1320px: swap to mobile navbar */
+    @media (max-width: 1319px) {
+      #NavBar-Desktop { display: none; }
+      #NavBar-Mobile  { display: block; }
+    }
+
+    /* Tablet ≤ 1279px: 32px padding, 2-col cards */
+    @media (max-width: 1279px) {
+      :root { --page-padding-x: 32px; }
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .bc-row     { flex-wrap: wrap; gap: 12px; }
+    }
+
+    /* Mobile ≤ 767px: 16px padding, 1-col cards */
+    @media (max-width: 767px) {
+      :root { --page-padding-x: var(--sp-m); }   /* 16px */
+      .page-content { padding-top: 24px; }
+      .cards-grid   { grid-template-columns: 1fr; }
+      .bc-row       { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .bc-left      { flex-wrap: wrap; }
+      .bc-actions   { width: 100%; }
+      .btn-secondary, .btn-primary { flex: 1; justify-content: center; }
     }
 
     /* ── DS Avatar 1.5 — node 4104:81442 ───────────────────────── */
@@ -539,13 +586,6 @@
     }
     .btn-primary svg { stroke: #e9fbf5; }
 
-    @media (max-width: 425px) {
-      .bc-row { flex-direction: column; align-items: flex-start; gap: 12px; }
-      .bc-left { flex-wrap: wrap; }
-      .bc-actions { width: 100%; }
-      .btn-secondary, .btn-primary { flex: 1; justify-content: center; }
-    }
-
     /* ══════════════════════════════════════════════════════════════
        Class Cards Grid
        ══════════════════════════════════════════════════════════════ */
@@ -554,10 +594,6 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       width: 100%;
-    }
-
-    @media (max-width: 425px) {
-      .cards-grid { grid-template-columns: 1fr; }
     }
 
     /* ── Class Card 1.5 — node 4104:83963
@@ -806,8 +842,9 @@
 <body>
 
   <!-- ══════════════════════════════════════════════════════════
-       Navbar 1.5 — node 4115:97698
+       Desktop Navbar — node 4115:97698 (≥ 1320px)
        ══════════════════════════════════════════════════════════ -->
+  <section id="NavBar-Desktop">
   <nav class="navbar" aria-label="Main navigation">
 
     <!-- Brand Bar -->
@@ -816,11 +853,6 @@
       <div class="navbar__logo">
         <img class="navbar__logo-img" src="navbar/logo.png" alt="Pandai">
       </div>
-
-      <!-- Hamburger — mobile only -->
-      <button class="navbar__hamburger" aria-label="Open menu" aria-expanded="false">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
 
       <!-- Actions: icons + avatar -->
       <div class="navbar__actions">
@@ -1022,6 +1054,19 @@
     </div>
 
   </nav>
+  </section><!-- end NavBar-Desktop -->
+
+  <!-- Mobile Navbar — DS node 1943:22641 (< 1320px) -->
+  <section id="NavBar-Mobile">
+    <div class="navbar-mobile">
+      <div class="navbar-mobile__logo">
+        <img src="navbar/logo.png" alt="Pandai">
+      </div>
+      <button class="navbar-mobile__menu-btn" aria-label="Open menu" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </section><!-- end NavBar-Mobile -->
 
   <!-- Page content — padded area ──────────────────────────── -->
   <div class="page-content">
