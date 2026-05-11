@@ -633,6 +633,41 @@
       .footer__inner { flex-direction: column; justify-content: center; align-items: center; gap: var(--space-xs); height: auto; padding: var(--space-s) var(--space-2xl); }
       .footer__left  { justify-content: center; }
       .footer__right { justify-content: center; }
+
+      /* ── Table: card layout ──
+         Each row stacks as a card — no horizontal scroll needed. */
+      .pd-table-scroll  { overflow-x: visible; overflow-y: visible; scrollbar-width: unset; }
+      .pd-table-scroll::-webkit-scrollbar { display: none; }
+      .pd-table15       { min-width: unset; }
+      .pd-heading-row   { display: none; } /* replaced by ::before labels */
+      .pd-body-row      { flex-wrap: wrap; }
+
+      /* All cells: full-width by default, borders reset */
+      .pd-body-cell                        { border-right: none; border-bottom: 1px solid var(--border-general-default); min-height: unset; }
+      .pd-body-row .pd-body-cell:last-child { border-bottom: none; }
+
+      /* Column order + widths */
+      .pd-col-num       { display: none; }
+      .pd-col-subject   { order: 1; width: 100%; flex-shrink: unset; }
+      .pd-col-progress  { order: 2; width: 100%; flex: unset; }
+      .pd-col-score     { order: 3; width: 33.33%; flex: unset; border-right: 1px solid var(--border-general-default); }
+      .pd-col-grade     { order: 4; width: 33.33%; flex: unset; border-right: 1px solid var(--border-general-default); }
+      .pd-col-questions { order: 5; width: 33.34%; flex: unset; }
+      .pd-col-analysis  { order: 6; width: 100%; flex: unset; border-bottom: none; }
+      .pd-col-analysis .pd-body-cell__inner { justify-content: center; }
+
+      /* Column labels — replace hidden heading row */
+      .pd-col-score::before,
+      .pd-col-grade::before,
+      .pd-col-questions::before {
+        display: block;
+        font-size: 10px; font-weight: 600; text-transform: uppercase;
+        letter-spacing: 0.06em; color: var(--text-default-body);
+        padding: var(--space-xs) var(--space-s) 0;
+      }
+      .pd-col-score::before     { content: "Score"; }
+      .pd-col-grade::before     { content: "Year Grade"; }
+      .pd-col-questions::before { content: "Questions"; }
     }
   </style>
 </head>
