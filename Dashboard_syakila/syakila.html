@@ -241,11 +241,12 @@
     .pd-breadcrumbs__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
     .pd-breadcrumbs__sep   { width: 1px; align-self: stretch; background: var(--border-general-default); flex-shrink: 0; }
     .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--space-xs); color: var(--text-default-body); }
-    .pd-link15 { display: flex; align-items: flex-end; gap: var(--space-xs); background: none; border: none; padding: 0; cursor: pointer; }
+    .pd-link15 { display: flex; align-items: flex-end; gap: var(--space-xs); background: none; border: none; padding: 0; cursor: pointer; color: var(--text-default-body); /* prevent button browser default black */ }
     .pd-link15 svg { display: block; width: 20px; height: 20px; }
-    .pd-link15__icon { color: var(--text-primary-default); }
+    .pd-link15__icon-home { color: var(--text-primary-default); }  /* home icon: green */
+    /* chevron-right: grey — inherits --text-default-body from .pd-link15, no extra class needed */
     .pd-link15__text         { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
-    .pd-link15__text--parent { color: #4d4d4d; }
+    .pd-link15__text--parent { color: #4d4d4d; /* DS: parent breadcrumb link = dark grey, not primary green */ }
 
     .pd-card          { background: var(--surface-secondary-50); border-radius: var(--corner-4xl); border: var(--scale-25) solid var(--border-default); overflow: hidden; }
     .pd-card__header  { display: flex; align-items: center; justify-content: space-between; padding: var(--space-m) var(--space-m) 0; }
@@ -943,21 +944,22 @@
     <div class="pd-breadcrumbs__sep"></div>
     <div class="pd-breadcrumbs__links">
 
-      <!-- Link 1.5: Home button  DS 260:822 -->
+      <!-- Link 1.5: Home button  DS 260:822 — icon green, chevron grey -->
       <button class="pd-link15" type="button" aria-label="Home">
-        <svg class="pd-link15__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="pd-link15__icon-home" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <g transform="translate(3,2)"><path d="M 0 7 L 9 0 L 18 7 L 18 18 C 18 18.530 17.789 19.039 17.414 19.414 C 17.039 19.789 16.530 20 16 20 L 2 20 C 1.470 20 0.961 19.789 0.586 19.414 C 0.211 19.039 0 18.530 0 18 L 0 7 Z"/><path d="M 6 20 L 6 10 L 12 10 L 12 20"/></g>
         </svg>
-        <!-- Outline/chevron-right  DS 260:539 -->
-        <svg class="pd-link15__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Outline/chevron-right: DS grey (#666) — inherits from .pd-link15 -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <g transform="translate(9,6)"><path d="M 0 12 L 6 6 L 0 0"/></g>
         </svg>
       </button>
 
-      <!-- Link 1.5: "Achievement" parent button -->
+      <!-- Link 1.5: "Achievement" parent button — text #4d4d4d, chevron grey (DS confirmed) -->
       <button class="pd-link15" type="button">
-        <span class="pd-link15__text" style="color:var(--text-primary-default)">Achievement</span>
-        <svg class="pd-link15__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <span class="pd-link15__text pd-link15__text--parent">Achievement</span>
+        <!-- chevron-right: grey — no pd-link15__icon class, inherits #666 from .pd-link15 -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <g transform="translate(9,6)"><path d="M 0 12 L 6 6 L 0 0"/></g>
         </svg>
       </button>
