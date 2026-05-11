@@ -144,10 +144,8 @@
       align-items: center;
       flex-shrink: 0;
       height:      28px;
-      gap:         8px;
     }
-    .navbar-logo__mark { height: 28px; width: auto; }
-    .navbar-logo__text { height: 18px; width: auto; }
+    .navbar-logo img { height: 28px; width: auto; display: block; }
     .navbar-actions {
       display:     flex;
       position:    relative;
@@ -255,18 +253,19 @@
     }
     .nav-btn:hover .nav-btn__label     { color: var(--text-secondary-focus); }
     .nav-btn:hover .nav-btn__icon-wrap { color: var(--icon-secondary-hover); }
-    .nav-btn.is-pressed .nav-btn__inner {
-      background: var(--surface-tertiary-default);
-      box-shadow: inset 0 0 0 1px var(--border-tertiary-focus);
-    }
-    .nav-btn.is-pressed .nav-btn__label     { color: var(--text-primary-default); }
-    .nav-btn.is-pressed .nav-btn__icon-wrap { color: var(--icon-primary-default); }
     .nav-btn.is-active .nav-btn__inner {
       background: var(--surface-primary-default);
       box-shadow: inset 0 0 0 1px var(--border-primary-focus);
     }
     .nav-btn.is-active .nav-btn__label     { color: var(--text-primary-on-color); }
     .nav-btn.is-active .nav-btn__icon-wrap { color: var(--icon-primary-on-color); }
+    /* Pressed comes after active so it overrides active state on mousedown */
+    .nav-btn.is-pressed .nav-btn__inner {
+      background: var(--surface-tertiary-default);
+      box-shadow: inset 0 0 0 1px var(--border-tertiary-focus);
+    }
+    .nav-btn.is-pressed .nav-btn__label     { color: var(--text-primary-default); }
+    .nav-btn.is-pressed .nav-btn__icon-wrap { color: var(--icon-primary-default); }
     .nav-btn__label {
       font-size:   14px;
       font-weight: 600;
@@ -321,12 +320,11 @@
       flex-shrink:     0;
       padding:         0 4px;
       transition:      background 0.1s ease;
+      color:           var(--icon-primary-default);  /* feeds currentColor in <use> symbols */
     }
     .nav-submenu-item:hover { background: var(--og-50, #e9fbf5); }
     .nav-submenu-item svg {
       width: 20px; height: 20px; flex-shrink: 0;
-      fill: none; stroke: var(--icon-primary-default);
-      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
     }
     .nav-submenu-item span {
       font-size: 14px; font-weight: 600; line-height: 20px;
@@ -349,11 +347,9 @@
     .navbar-mobile__logo {
       display:     flex;
       align-items: center;
-      gap:         8px;
       height:      28px;
     }
-    .navbar-mobile__logo-mark { height: 28px; width: auto; }
-    .navbar-mobile__logo-text { height: 18px; width: auto; }
+    .navbar-mobile__logo img { height: 28px; width: auto; display: block; }
     .navbar-mobile__menu-btn {
       width:           40px;
       height:          40px;
@@ -900,8 +896,7 @@
     <!-- Row 1 — Brand bar (64px) -->
     <div class="navbar-brand">
       <a class="navbar-logo" href="#">
-        <img src="navbar/logo-mark.png" class="navbar-logo__mark" alt="Pandai mark">
-        <img src="navbar/logo-wordmark.png" class="navbar-logo__text" alt="Pandai">
+        <img src="navbar/logo.png" alt="Pandai">
       </a>
       <div class="navbar-actions">
         <div class="navbar-action-icons">
@@ -1006,8 +1001,7 @@
   <section id="NavBar-Mobile">
     <div class="navbar-mobile">
       <a class="navbar-mobile__logo" href="#">
-        <img src="navbar/logo-mark.png" class="navbar-mobile__logo-mark" alt="Pandai mark">
-        <img src="navbar/logo-wordmark.png" class="navbar-mobile__logo-text" alt="Pandai">
+        <img src="navbar/logo.png" alt="Pandai">
       </a>
       <button class="navbar-mobile__menu-btn" aria-label="Open menu" type="button">
         <svg aria-hidden="true"><use href="#ic-menu"/></svg>
