@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analysis for Bahasa Melayu Form 5 — Pandai</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ═══════════════════════════════════════════════════
+       PANDAI DS 1.5 — CSS Custom Properties
+       Token names match Figma variable names exactly.
+       DS file: TLVKe3bgJTdVvuPAzgDq2f
+    ═══════════════════════════════════════════════════ */
+    :root {
+      --text-default-heading:  #404040;
+      --text-default-body:     #666;
+      --text-primary-default:  #00cc85;
+      --text-primary-focus:    #00a36a;
+      --text-tertiary-default: #00564c;
+      --text-primary-on-color: #e9fbf5;
+
+      --surface-general-default:              #ffffff;
+      --surface-general-default-secondary:    #f2f2f2;
+      --surface-primary-default:              #00cc85;
+      --surface-primary-default-subtle:       #ccf5e7;
+      --surface-primary-default-subtle-hover: #99ebce;
+      --surface-secondary-default:            #b5f291;
+      --surface-secondary-default-subtle:     #e8fbe8;
+      --surface-tertiary-default:             #00564c;
+      --surface-disabled-primary:             #f2f2f2;
+      --surface-alert-default:                #ff9f43;
+      --surface-warning-default:              #ff4c51;
+
+      --border-primary-default:  #00cc85;
+      --border-primary-focus:    #00a36a;
+      --border-default:          #00cc85;
+      --border-general-default:  #d9d9d9;
+      --border-secondary-focus:  #70bc6f;
+      --border-tertiary-focus:   #00453d;
+      --border-disabled:         #bfbfbf;
+
+      --text-secondary-focus:    #70bc6f;
+      --text-disabled-default:   #bfbfbf;
+      --icon-default:            #d9d9d9;
+      --icon-primary-default:    #00cc85;
+      --icon-secondary-hover:    #70bc6f;
+      --icon-primary-on-color:   #f6fdfb;
+      --icon-tertiary-default:   #00564c;
+
+      --corner-pill:    999px;
+      --corner-rounded: 60px;
+      --corner-4xl:     24px;
+      --corner-2xl:     18px;
+      --corner-m:       8px;
+
+      --space-2xl:  28px;
+      --space-xl:   24px;
+      --space-l:    20px;
+      --space-m:    16px;
+      --space-s:    12px;
+      --space-xs:   8px;
+      --space-xxs:  4px;
+      --space-none: 0px;
+
+      --surface-subtle: #f8fafc;
+      --font:           'Poppins', sans-serif;
+      --page-bg:        var(--surface-subtle);
+      --page-max-width: 100%;
+      --page-padding-x: 60px;
+      --section-gap:    var(--space-m);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { overflow-x: hidden; }
+    body {
+      font-family: var(--font);
+      background: var(--page-bg);
+      color: var(--text-default-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      padding-bottom: 90px;
+      min-width: 400px;
+    }
+    button, input, select, textarea { font-family: inherit; }
+
+    /* ───────────────────────────────────────────────
+       NAVBAR 1.5  DS 2337:21975
+    ─────────────────────────────────────────────── */
+    .navbar { padding: 0 var(--page-padding-x); display: flex; flex-direction: column; gap: var(--space-s); }
+
+    .navbar-brand {
+      height: 64px;
+      background: var(--surface-general-default);
+      border-bottom: 1px solid var(--border-primary-default);
+      border-left:   1px solid var(--border-primary-default);
+      border-right:  1px solid var(--border-primary-default);
+      border-radius: 0 0 var(--corner-4xl) var(--corner-4xl);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-xs) var(--space-xl);
+    }
+    .navbar-logo { display: flex; align-items: center; flex-shrink: 0; height: 28px; gap: 8px; text-decoration: none; }
+    .navbar-logo__mark { height: 28px; width: auto; }
+    .navbar-logo__text { height: 18px; width: auto; }
+
+    .navbar-actions { display: flex; position: relative; align-items: center; gap: var(--space-xl); }
+    .navbar-action-icons { display: flex; align-items: center; gap: var(--space-2xl); flex-shrink: 0; }
+    .navbar-action-icon { width: 24px; height: 24px; flex-shrink: 0; color: var(--icon-default); }
+    .navbar-action-icon svg { display: block; width: 100%; height: 100%; }
+
+    .navbar-avatar {
+      width: 48px; height: 48px; border-radius: var(--corner-rounded);
+      border: 1px solid var(--border-default); background: var(--surface-general-default);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0; position: relative;
+    }
+    .navbar-avatar__img { width: 62px; height: 50px; object-fit: cover; position: absolute; }
+    .navbar-badge {
+      position: absolute; top: 0; right: -0.5px;
+      min-width: 20px; height: 20px;
+      background: var(--surface-primary-default); border-radius: var(--corner-rounded);
+      padding: var(--space-xxs); display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 600; color: var(--text-primary-on-color); line-height: var(--space-s);
+    }
+
+    .navbar-nav {
+      height: 56px;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-default);
+      border-radius: var(--corner-pill);
+      display: flex; align-items: flex-start;
+      gap: var(--space-xs); padding: var(--space-xs);
+    }
+
+    .nav-btn {
+      display: flex; flex-direction: column; gap: 20px;
+      height: 40px; overflow: hidden; flex-shrink: 0;
+      align-items: flex-start; cursor: pointer; user-select: none;
+    }
+    .nav-btn__inner {
+      display: flex; align-items: center; justify-content: center;
+      gap: var(--space-xs); padding: var(--space-xs) var(--space-s);
+      border-radius: var(--corner-pill); min-height: 24px;
+    }
+    .nav-btn__icon-clip {
+      width: 20px; height: 20px; box-sizing: border-box;
+      padding: 1.67px; overflow: hidden; flex-shrink: 0;
+    }
+    .nav-btn__icon-clip svg { display: block; width: 100%; height: 100%; }
+    .nav-btn__chevron-clip { padding: 0; }
+    .nav-btn__icon-clip[data-icon="home"]        { padding: 1.67px 2.5px; }
+    .nav-btn__icon-clip[data-icon="battle"]      { padding: 2.5px; }
+    .nav-btn__icon-clip[data-icon="practice"]    { padding: 2.5px 1.67px; }
+    .nav-btn__icon-clip[data-icon="class"]       { padding: 2.5px 0.83px; }
+    .nav-btn__icon-clip[data-icon="learn"]       { padding: 1.67px 3.33px; }
+    .nav-btn__icon-clip[data-icon="achievement"] { padding: 2.5px 1.67px; }
+    .nav-btn__icon-clip[data-icon="potential"]   { padding: 1.67px 1.67px 2.48px 1.67px; }
+
+    .nav-btn__label {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--text-default-body); white-space: nowrap;
+    }
+    .nav-btn__icon-wrap {
+      display: flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px; color: var(--icon-primary-default);
+    }
+
+    .nav-btn:hover .nav-btn__inner          { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+    .nav-btn:hover .nav-btn__label          { color: var(--text-secondary-focus); }
+    .nav-btn:hover .nav-btn__icon-wrap      { color: var(--icon-secondary-hover); }
+    .nav-btn.is-pressed .nav-btn__inner     { background: var(--surface-tertiary-default); box-shadow: inset 0 0 0 1px var(--border-tertiary-focus); }
+    .nav-btn.is-pressed .nav-btn__label     { color: var(--text-primary-default); }
+    .nav-btn.is-pressed .nav-btn__icon-wrap { color: var(--icon-primary-default); }
+    .nav-btn.is-active .nav-btn__inner      { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+    .nav-btn.is-active .nav-btn__label      { color: var(--icon-primary-on-color); }
+    .nav-btn.is-active .nav-btn__icon-wrap  { color: var(--icon-primary-on-color); }
+    .nav-btn.is-active:hover .nav-btn__inner     { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+    .nav-btn.is-active:hover .nav-btn__label     { color: var(--icon-primary-on-color); }
+    .nav-btn.is-active:hover .nav-btn__icon-wrap { color: var(--icon-primary-on-color); }
+
+    /* ───────────────────────────────────────────────
+       PAGE SHELL
+    ─────────────────────────────────────────────── */
+    .pd-page { flex: 1; padding: var(--space-m) var(--page-padding-x) var(--space-m); }
+
+    /* ───────────────────────────────────────────────
+       BREADCRUMBS 1.5  DS 837:1033
+    ─────────────────────────────────────────────── */
+    .pd-breadcrumbs15 { display: flex; align-items: center; gap: var(--space-m); min-height: 36px; margin-bottom: var(--space-m); }
+    .pd-breadcrumbs__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
+    .pd-breadcrumbs__sep   { width: 1px; align-self: stretch; background: var(--border-general-default); flex-shrink: 0; }
+    .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--space-xs); flex-wrap: wrap; }
+    .pd-link15 {
+      display: flex; align-items: center; gap: var(--space-xs);
+      background: none; border: none; padding: 0; cursor: pointer;
+      color: var(--text-default-body);
+    }
+    .pd-link15 svg { display: block; width: 20px; height: 20px; }
+    .pd-link15__icon-home { color: var(--text-primary-default); }
+    .pd-link15__text         { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
+    .pd-link15__text--parent { color: #4d4d4d; }
+    .pd-breadcrumbs__chevron { width: 16px; height: 16px; color: var(--border-general-default); flex-shrink: 0; }
+
+    /* ───────────────────────────────────────────────
+       MOBILE NAVBAR  DS 1943:22641
+    ─────────────────────────────────────────────── */
+    .navbar-mobile {
+      height: 64px; background: var(--surface-general-default);
+      border-bottom: 1px solid var(--border-primary-default);
+      border-left:   1px solid var(--border-primary-default);
+      border-right:  1px solid var(--border-primary-default);
+      border-radius: 0 0 var(--corner-4xl) var(--corner-4xl);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-m) 24px;
+    }
+    .navbar-mobile__logo { display: flex; align-items: center; height: 28px; gap: 8px; }
+    .navbar-mobile__logo-mark { height: 28px; width: auto; }
+    .navbar-mobile__logo-text { height: 18px; width: auto; }
+    .navbar-mobile__menu-btn {
+      width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; user-select: none; flex-shrink: 0;
+      color: var(--icon-primary-default); background: none; border: none; padding: 0;
+    }
+    .navbar-mobile__menu-btn svg { display: block; width: 24px; height: 24px; }
+
+    /* ═══════════════════════════════════════════════════
+       ANALYSIS CARD
+       Based on DS node 3282:68207
+    ═══════════════════════════════════════════════════ */
+
+    /* ── Primary Card outer (bg #e8fbe8, green border, 24px r) ── */
+    .an-outer {
+      display: flex; flex-direction: column; gap: var(--space-xs);
+      padding: var(--space-m);
+      background: var(--surface-secondary-default-subtle); /* #e8fbe8 */
+      border: 1px solid var(--border-default);
+      border-radius: var(--corner-4xl);
+      overflow: hidden;
+    }
+
+    /* ── Card header row (subject badge + download btn) ── */
+    .an-header {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 32px; flex-shrink: 0;
+    }
+
+    /* ── Subject Badge BM — L size (32px)
+       DS: Subject Badge/Bahasa Melayu - L
+       border: 1px solid #2e4799 (L variant from design context)
+    ── */
+    .an-subject-badge {
+      display: inline-flex; align-items: center;
+      height: 32px; border-radius: 60px;
+      border: 1px solid #2e4799;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .an-subject-badge__icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 32px;
+      background: var(--surface-general-default);
+      padding: 4px 8px 4px 12px; flex-shrink: 0;
+    }
+    .an-subject-badge__icon img { display: block; width: 20px; height: 20px; object-fit: contain; }
+    .an-subject-badge__label {
+      position: relative;
+      display: flex; align-items: center;
+      height: 32px; padding: 0 16px 0 12px;
+      background: #4d77ff;
+      font-size: 14px; font-weight: 500; line-height: 20px;
+      color: #f2f2f2; white-space: nowrap; font-family: var(--font);
+    }
+    .an-subject-badge__pointer {
+      position: absolute; left: 0; top: 50%;
+      transform: translateY(-50%);
+      display: block; flex-shrink: 0;
+    }
+
+    /* ── Download button (Secondary style, 32px) ── */
+    .an-download-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      height: 32px; padding: 2px 8px;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-rounded);
+      color: var(--text-primary-default);
+      font-family: var(--font); font-size: 12px; font-weight: 600; line-height: 18px;
+      cursor: pointer; white-space: nowrap; flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .an-download-btn svg { display: block; width: 16px; height: 16px; flex-shrink: 0; }
+    .an-download-btn:hover {
+      background: var(--surface-secondary-default);
+      border-color: var(--border-secondary-focus);
+      color: var(--text-secondary-focus);
+    }
+
+    /* ── Content area (flex-col, gap-16px) ── */
+    .an-content {
+      display: flex; flex-direction: column; gap: var(--space-m);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       ANALYTICS INNER CARD
+       DS: white bg, grey border, 18px r, pt-28 px-60 pb-54
+    ═══════════════════════════════════════════════════ */
+    .an-analytics-card {
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-general-default);
+      border-radius: var(--corner-2xl);
+      padding: 28px 60px 54px;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Row with grade + donut pairs. gap-60px between grade and donut section */
+    .an-analytics-row {
+      display: flex; align-items: center;
+      gap: 60px; width: 100%;
+    }
+
+    /* ── Grade column (195px w, flex-col gap-16px) ── */
+    .an-grade {
+      width: 195px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: var(--space-m);
+    }
+
+    /* "A 97%" large grade row */
+    .an-grade__title-row {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--text-default-heading);
+      font-size: 56px; line-height: 1;
+    }
+    .an-grade__letter { font-weight: 700; }
+    .an-grade__pct    { font-weight: 400; }
+
+    /* Mastery pill (green, 32px, pill shape) */
+    .an-mastery-pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 32px; padding: 2px 16px;
+      background: var(--surface-primary-default);
+      border-radius: var(--corner-rounded);
+      font-family: var(--font); font-size: 14px; font-weight: 400; line-height: 20px;
+      color: white; white-space: nowrap;
+      align-self: flex-start;
+    }
+
+    /* Stat lines */
+    .an-grade__stat {
+      font-size: 14px; font-weight: 400; line-height: 20px;
+      color: #626262;
+    }
+
+    /* ── Two donut columns (flex-1 each, no gap between them) ── */
+    .an-donut-pairs {
+      flex: 1; min-width: 0;
+      display: flex; align-items: center;
+      align-self: stretch;
+    }
+
+    /* Single donut + legend column (donut left, legend right, 28px gap) */
+    .an-donut-col {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: row; align-items: center;
+      gap: 28px; justify-content: center;
+    }
+
+    /* ── Donut chart wrapper ── */
+    .an-donut-wrap { flex-shrink: 0; }
+    .an-donut-wrap svg { display: block; }
+
+    /* ── Legend section ── */
+    .an-legend {
+      display: flex; flex-direction: column; gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .an-legend__title {
+      font-size: 16px; font-weight: 700; line-height: 24px;
+      color: #626262; max-width: 212px;
+    }
+
+    .an-legend__rows {
+      display: flex; flex-direction: column; gap: 30px;
+    }
+
+    .an-legend__row {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 142px;
+    }
+
+    /* Legend level pill (Easy / Medium / Hard / LOTS / MOTS / HOTS) */
+    .an-legend__pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 24px; padding: 2px 8px;
+      border-radius: var(--corner-rounded);
+      font-family: var(--font); font-size: 12px; font-weight: 400; line-height: 12px;
+      color: white; white-space: nowrap;
+    }
+    .an-legend__pill--easy   { background: var(--surface-primary-default); }  /* green  */
+    .an-legend__pill--medium { background: var(--surface-alert-default);   }  /* orange */
+    .an-legend__pill--hard   { background: var(--surface-warning-default); }  /* red    */
+
+    .an-legend__value {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: #626262; width: 35px; text-align: right;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       TOPICS + TABLE sections
+    ═══════════════════════════════════════════════════ */
+
+    /* Grouped section: subheader + its content, tighter inner gap */
+    .an-section {
+      display: flex; flex-direction: column; gap: var(--space-xs); /* 8px */
+    }
+
+    /* Section subheaders ("Topics for improvement", "Result of topics") */
+    .an-subheader {
+      font-size: 18px; font-weight: 600; line-height: 28px;
+      color: var(--text-tertiary-default); /* #00564c */
+    }
+
+    /* Topic improvement pills row */
+    .an-pills {
+      display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-m);
+    }
+
+    .an-pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 24px; padding: 2px 8px;
+      background: var(--surface-primary-default);
+      border-radius: var(--corner-rounded);
+      font-family: var(--font); font-size: 12px; font-weight: 400; line-height: 12px;
+      color: var(--text-primary-on-color); /* #e9fbf5 */
+      white-space: nowrap;
+    }
+
+    /* ── Table — Result of topics
+       DS: border #d9d9d9, overflow-clip, rounded-18px
+       Columns: Chapter(100px) | Topic(flex-1) | Score(108px) | Status(242px)
+    ── */
+    .an-table-outer {
+      border: 1px solid var(--border-general-default);
+      border-radius: var(--corner-2xl);
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .an-table {
+      width: 100%; border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .an-col--chapter { width: 100px; }
+    /* .an-col--topic auto-expands */
+    .an-col--score  { width: 108px; }
+    .an-col--status { width: 242px; }
+
+    .an-th {
+      background: var(--surface-general-default-secondary); /* #f2f2f2 */
+      padding: var(--space-m);
+      font-family: var(--font); font-size: 16px; font-weight: 500; line-height: 24px;
+      color: var(--text-default-body);
+      text-align: left; height: 56px;
+      border-right: 1px solid var(--border-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+    }
+    .an-th:last-child { border-right: none; }
+    .an-th--chapter { text-align: center; }
+
+    .an-td {
+      background: var(--surface-general-default);
+      padding: var(--space-m);
+      font-family: var(--font); font-size: 14px; font-weight: 400; line-height: 20px;
+      color: var(--text-default-body);
+      height: 56px;
+      border-right: 1px solid var(--border-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+      vertical-align: middle;
+    }
+    .an-td:last-child { border-right: none; }
+    .an-table tbody tr:last-child .an-td { border-bottom: none; }
+    .an-td--chapter { text-align: center; }
+
+    /* Status cell: dot + text */
+    .an-status {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .an-status-dot {
+      width: 12px; height: 12px; border-radius: 60px;
+      flex-shrink: 0; display: inline-block;
+    }
+
+    /* ───────────────────────────────────────────────
+       FOOTER 1.5  DS 2073:6579
+    ─────────────────────────────────────────────── */
+    .footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 100; background: var(--surface-general-default);
+      border-top: 1px solid var(--border-default);
+    }
+    .footer__inner {
+      height: 60px; display: flex; align-items: center;
+      justify-content: space-between;
+      padding-left: var(--space-2xl); padding-right: var(--space-2xl);
+    }
+    .footer__left  { display: flex; align-items: center; gap: var(--space-xxs); flex-shrink: 0; }
+    .footer__right { display: flex; align-items: center; gap: var(--space-xxs); flex-shrink: 0; }
+    .footer__text  { font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
+    .footer__link  { font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-primary-default); white-space: nowrap; cursor: pointer; text-decoration: none; }
+    .footer__heart { width: 20px; height: 20px; flex-shrink: 0; display: block; color: var(--icon-primary-default); }
+
+    /* ═══════════════════════════════════════════════════
+       RESPONSIVE — mirrors zul.home.screen.html breakpoints
+    ═══════════════════════════════════════════════════ */
+
+    /* Mobile navbar default state — padding inherits --page-padding-x so it updates automatically */
+    #NavBar-Mobile {
+      display: none;
+      padding-left:  var(--page-padding-x);
+      padding-right: var(--page-padding-x);
+    }
+
+    /* < 1320px: swap to mobile navbar */
+    @media (max-width: 1319px) {
+      #NavBar-Desktop      { display: none; }
+      #NavBar-Mobile       { display: block; }
+      #Breadcrumbs-Desktop { display: none; }
+    }
+
+    /* Tablet ≤ 1279px */
+    @media (max-width: 1279px) {
+      :root { --page-padding-x: 32px; }
+      /* analytics card: allow horizontal scroll if viewport too narrow */
+      .an-analytics-card { padding: 20px 24px 32px; overflow-x: auto; }
+      .an-analytics-row  { min-width: 700px; }
+    }
+
+    /* Mobile ≤ 767px */
+    @media (max-width: 767px) {
+      :root { --page-padding-x: var(--space-m); }  /* 16px */
+
+      /* Nav pill row: scrollable horizontally on narrow screens */
+      .navbar-nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .navbar-nav::-webkit-scrollbar { display: none; }
+
+      .an-outer { padding: 12px; }
+      .an-pills  { gap: var(--space-xs); }
+
+      /* Footer — stack vertically, center both groups */
+      body { padding-bottom: 102px; }
+      .footer__inner {
+        flex-direction: column;
+        justify-content: center;
+        align-items:     center;
+        gap:             var(--space-xs);
+        height:          auto;
+        padding:         var(--space-s) var(--space-2xl);
+      }
+      .footer__left  { justify-content: center; }
+      .footer__right { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     SVG SYMBOL DEFS — all icons
+     Sources: DS Iconography + shared symbols
+═══════════════════════════════════════════════ -->
+<svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+
+    <!-- ── Topbar action icons ── -->
+    <symbol id="ic-search" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 11 19 C 15.418 19 19 15.418 19 11 C 19 6.582 15.418 3 11 3 C 6.582 3 3 6.582 3 11 C 3 15.418 6.582 19 11 19 Z"/><path d="M 21 21 L 16.65 16.65"/></symbol>
+    <symbol id="ic-maximize" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 3 16 L 3 19 C 3 19.53 3.211 20.039 3.586 20.414 C 3.961 20.789 4.47 21 5 21 L 8 21"/><path d="M 8 3 L 5 3 C 4.47 3 3.961 3.211 3.586 3.586 C 3.211 3.961 3 4.47 3 5 L 3 8 M 21 8 L 21 5 C 21 4.47 20.789 3.961 20.414 3.586 C 20.039 3.211 19.53 3 19 3 L 16 3 M 16 21 L 19 21 C 19.53 21 20.039 20.789 20.414 20.414 C 20.789 20.039 21 19.53 21 19 L 21 16"/></symbol>
+    <symbol id="ic-smartphone" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 17 2 L 7 2 C 5.895 2 5 2.895 5 4 L 5 20 C 5 21.105 5.895 22 7 22 L 17 22 C 18.105 22 19 21.105 19 20 L 19 4 C 19 2.895 18.105 2 17 2 Z"/><path d="M 12 18 L 12.01 18"/></symbol>
+    <symbol id="ic-bell" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22 17 L 2 17 C 2.796 17 3.559 16.684 4.121 16.121 C 4.684 15.559 5 14.796 5 14 L 5 9 C 5 7.143 5.737 5.363 7.05 4.05 C 8.363 2.737 10.143 2 12 2 C 13.857 2 15.637 2.737 16.95 4.05 C 18.263 5.363 19 7.143 19 9 L 19 14 C 19 14.796 19.316 15.559 19.879 16.121 C 20.441 16.684 21.204 17 22 17 Z"/><path d="M 13.73 21 C 13.554 21.303 13.302 21.555 12.998 21.73 C 12.695 21.904 12.35 21.996 12 21.996 C 11.65 21.996 11.305 21.904 11.002 21.73 C 10.698 21.555 10.446 21.303 10.27 21"/></symbol>
+    <symbol id="ic-en" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 21.613 6 L 21.613 17.252 L 13.086 6 L 13.086 17.252"/><path d="M 9.129 6.05 L 3 6.05 L 3 11.651 L 3 17.252 L 9.129 17.252"/><path d="M 3 11.651 L 9.181 11.651"/></symbol>
+    <symbol id="ic-waffle" viewBox="-1 -1 18 18" fill="currentColor" stroke="none"><path d="M 8 9 C 8.552 9 9 8.552 9 8 C 9 7.448 8.552 7 8 7 C 7.448 7 7 7.448 7 8 C 7 8.552 7.448 9 8 9 Z"/><path d="M 15 9 C 15.552 9 16 8.552 16 8 C 16 7.448 15.552 7 15 7 C 14.448 7 14 7.448 14 8 C 14 8.552 14.448 9 15 9 Z"/><path d="M 1 9 C 1.552 9 2 8.552 2 8 C 2 7.448 1.552 7 1 7 C 0.448 7 0 7.448 0 8 C 0 8.552 0.448 9 1 9 Z"/><path d="M 8 2 C 8.552 2 9 1.552 9 1 C 9 0.448 8.552 0 8 0 C 7.448 0 7 0.448 7 1 C 7 1.552 7.448 2 8 2 Z"/><path d="M 15 2 C 15.552 2 16 1.552 16 1 C 16 0.448 15.552 0 15 0 C 14.448 0 14 0.448 14 1 C 14 1.552 14.448 2 15 2 Z"/><path d="M 1 2 C 1.552 2 2 1.552 2 1 C 2 0.448 1.552 0 1 0 C 0.448 0 0 0.448 0 1 C 0 1.552 0.448 2 1 2 Z"/><path d="M 8 16 C 8.552 16 9 15.552 9 15 C 9 14.448 8.552 14 8 14 C 7.448 14 7 14.448 7 15 C 7 15.552 7.448 16 8 16 Z"/><path d="M 15 16 C 15.552 16 16 15.552 16 15 C 16 14.448 15.552 14 15 14 C 14.448 14 14 14.448 14 15 C 14 15.552 14.448 16 15 16 Z"/><path d="M 1 16 C 1.552 16 2 15.552 2 15 C 2 14.448 1.552 14 1 14 C 0.448 14 0 14.448 0 15 C 0 15.552 0.448 16 1 16 Z"/></symbol>
+
+    <!-- ── Nav button icons ── -->
+    <symbol id="ic-home" viewBox="-1 -1 20 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 7 L 9 0 L 18 7 L 18 18 C 18 18.530 17.789 19.039 17.414 19.414 C 17.039 19.789 16.530 20 16 20 L 2 20 C 1.470 20 0.961 19.789 0.586 19.414 C 0.211 19.039 0 18.530 0 18 L 0 7 Z"/><path d="M 6 20 L 6 10 L 12 10 L 12 20"/></symbol>
+    <symbol id="ic-check-circle" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 20 9.086 L 20 10.006 C 19.999 12.162 19.301 14.260 18.009 15.988 C 16.718 17.715 14.903 18.978 12.835 19.590 C 10.767 20.201 8.557 20.128 6.534 19.380 C 4.512 18.633 2.785 17.252 1.611 15.443 C 0.437 13.634 -0.120 11.494 0.022 9.342 C 0.164 7.190 0.997 5.142 2.398 3.503 C 3.799 1.864 5.693 0.721 7.796 0.246 C 9.900 -0.229 12.100 -0.012 14.070 0.866"/><path d="M 20 2.006 L 10 12.016 L 7 9.016"/></symbol>
+    <symbol id="ic-battle" viewBox="-1 -1 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 18 0 L 18 5 L 7 14 L 3 18 L 0 15 L 4 11 L 13 0 L 18 0 Z"/><path d="M 2 10 L 8 16"/><path d="M 11.32 14.32 L 15 18 L 18 15 L 14.635 11.635"/><path d="M 7 2.5 L 5 0 L 0 0 L 0 5 L 3 7.5"/></symbol>
+    <symbol id="ic-book-open" viewBox="-1 -1 22 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 0 L 6 0 C 7.061 0 8.078 0.421 8.828 1.172 C 9.579 1.922 10 2.939 10 4 L 10 18 C 10 17.204 9.684 16.441 9.121 15.879 C 8.559 15.316 7.796 15 7 15 L 0 15 L 0 0 Z"/><path d="M 20 0 L 14 0 C 12.939 0 11.922 0.421 11.172 1.172 C 10.421 1.922 10 2.939 10 4 L 10 18 C 10 17.204 10.316 16.441 10.879 15.879 C 11.441 15.316 12.204 15 13 15 L 20 15 L 20 0 Z"/></symbol>
+    <symbol id="ic-users" viewBox="-1 -1 24 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 16 18 L 16 16 C 16 14.939 15.579 13.922 14.828 13.172 C 14.078 12.421 13.061 12 12 12 L 4 12 C 2.939 12 1.922 12.421 1.172 13.172 C 0.421 13.922 0 14.939 0 16 L 0 18"/><path d="M 8 8 C 10.209 8 12 6.209 12 4 C 12 1.791 10.209 0 8 0 C 5.791 0 4 1.791 4 4 C 4 6.209 5.791 8 8 8 Z"/><path d="M 22 18 L 22 16 C 21.999 15.114 21.704 14.253 21.161 13.552 C 20.618 12.852 19.858 12.352 19 12.130"/><path d="M 15 0.130 C 15.860 0.350 16.623 0.851 17.168 1.552 C 17.712 2.254 18.008 3.117 18.008 4.005 C 18.008 4.893 17.712 5.756 17.168 6.458 C 16.623 7.159 15.860 7.660 15 7.880"/></symbol>
+    <symbol id="ic-book" viewBox="-1 -1 18 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 17.5 C 0 16.837 0.263 16.201 0.732 15.732 C 1.201 15.263 1.837 15 2.5 15 L 16 15"/><path d="M 2.5 0 L 16 0 L 16 20 L 2.5 20 C 1.837 20 1.201 19.737 0.732 19.268 C 0.263 18.799 0 18.163 0 17.5 L 0 2.5 C 0 1.837 0.263 1.201 0.732 0.732 C 1.201 0.263 1.837 0 2.5 0 Z"/></symbol>
+    <symbol id="ic-achievement" viewBox="-1 -1 14 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 12 16 L 12 6 M 6 16 L 6 0 M 0 16 L 0 10"/></symbol>
+    <symbol id="ic-star" viewBox="-1 -1 22 21" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 10 0 L 13.090 6.260 L 20 7.270 L 15 12.140 L 16.180 19.020 L 10 15.770 L 3.820 19.020 L 5 12.140 L 0 7.270 L 6.910 6.260 L 10 0 Z"/></symbol>
+    <symbol id="ic-gift" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 18 10 L 18 20 L 2 20 L 2 10"/><path d="M 20 5 L 0 5 L 0 10 L 20 10 L 20 5 Z"/><path d="M 10 5 L 5.5 5 C 4.837 5 4.201 4.737 3.732 4.268 C 3.263 3.799 3 3.163 3 2.5 C 3 1.837 3.263 1.201 3.732 0.732 C 4.201 0.263 4.837 0 5.5 0 C 9 0 10 5 10 5 Z"/><path d="M 10 5 L 14.5 5 C 15.163 5 15.799 4.737 16.268 4.268 C 16.737 3.799 17 3.163 17 2.5 C 17 1.837 16.737 1.201 16.268 0.732 C 15.799 0.263 15.163 0 14.5 0 C 11 0 10 5 10 5 Z"/><path d="M 10 20 L 10 5"/></symbol>
+    <symbol id="ic-chevron-down-nav" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5L10 12.5L15 7.5"/></symbol>
+    <symbol id="ic-menu" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12H21M3 6H21M3 18H21"/></symbol>
+    <symbol id="ic-heart" viewBox="0 0 22.4031 19.7318" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 20.0413 2.36183 C 19.5305 1.85083 18.9241 1.44547 18.2566 1.16891 C 17.5892 0.892347 16.8738 0.75 16.1513 0.75 C 15.4288 0.75 14.7134 0.892347 14.0459 1.16891 C 13.3785 1.44547 12.772 1.85083 12.2613 2.36183 L 11.2013 3.42183 L 10.1413 2.36183 C 9.1096 1.33013 7.71032 0.750535 6.25129 0.750535 C 4.79226 0.750535 3.39298 1.33013 2.36129 2.36183 C 1.3296 3.39352 0.75 4.79279 0.75 6.25183 C 0.75 7.71086 1.3296 9.11013 2.36129 10.1418 L 3.42129 11.2018 L 11.2013 18.9818 L 18.9813 11.2018 L 20.0413 10.1418 C 20.5523 9.63107 20.9576 9.02464 21.2342 8.35718 C 21.5108 7.68972 21.6531 6.97431 21.6531 6.25183 C 21.6531 5.52934 21.5108 4.81393 21.2342 4.14647 C 20.9576 3.47901 20.5523 2.87258 20.0413 2.36183 Z"/></symbol>
+
+    <!-- ── Breadcrumb chevron-right ── -->
+    <symbol id="ic-chevron-right-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18L15 12L9 6"/></symbol>
+
+    <!-- ── Download icon (filled-style, for Download button) ── -->
+    <symbol id="ic-download" viewBox="-1 -1 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 1v10"/>
+      <polyline points="4,8 8,12 12,8"/>
+      <line x1="1" y1="14" x2="15" y2="14"/>
+    </symbol>
+
+  </defs>
+</svg>
+
+
+<!-- ═══════════════════════════════════════════════
+     NAVBAR 1.5  DS 2337:21975 — Achievement is active
+═══════════════════════════════════════════════ -->
+<section id="NavBar-Desktop">
+<nav class="navbar">
+
+  <!-- Row 1 — Brand bar -->
+  <div class="navbar-brand">
+    <a class="navbar-logo" href="#">
+      <img src="../zul.test.git/icons/logo-mark.svg" class="navbar-logo__mark" alt="Pandai mark">
+      <img src="../zul.test.git/icons/logo-text.svg" class="navbar-logo__text" alt="Pandai">
+    </a>
+    <div class="navbar-actions">
+      <div class="navbar-action-icons">
+        <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
+        <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-maximize"/></svg></div>
+        <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
+        <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+        <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
+        <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-waffle"/></svg></div>
+      </div>
+      <div class="navbar-avatar">
+        <img src="assets/avatar-user.png" class="navbar-avatar__img" alt="Syakila">
+      </div>
+      <span class="navbar-badge">15</span>
+    </div>
+  </div><!-- end row 1 -->
+
+  <!-- Row 2 — Nav pill -->
+  <div class="navbar-nav">
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="home"><svg aria-hidden="true"><use href="#ic-home"/></svg></div></div>
+        <span class="nav-btn__label">Home</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div></div>
+        <span class="nav-btn__label">Quiz</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="battle"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div></div>
+        <span class="nav-btn__label">Battle</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="practice"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div></div>
+        <span class="nav-btn__label">Practice</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="class"><svg aria-hidden="true"><use href="#ic-users"/></svg></div></div>
+        <span class="nav-btn__label">Class</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="learn"><svg aria-hidden="true"><use href="#ic-book"/></svg></div></div>
+        <span class="nav-btn__label">Learn</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <!-- Achievement — active (is-active) -->
+    <div class="nav-btn is-active">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="achievement"><svg aria-hidden="true"><use href="#ic-achievement"/></svg></div></div>
+        <span class="nav-btn__label">Achievement</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="potential"><svg aria-hidden="true"><use href="#ic-star"/></svg></div></div>
+        <span class="nav-btn__label">Potential</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div></div>
+        <span class="nav-btn__label">Rewards</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+  </div><!-- end row 2 -->
+</nav>
+</section><!-- end NavBar-Desktop -->
+
+<!-- MOBILE NAVBAR — DS node 1943:22641 -->
+<section id="NavBar-Mobile">
+  <div class="navbar-mobile">
+    <a class="navbar-mobile__logo" href="#">
+      <img src="../zul.test.git/icons/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
+      <img src="../zul.test.git/icons/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
+    </a>
+    <button class="navbar-mobile__menu-btn" aria-label="Open menu" type="button">
+      <svg aria-hidden="true"><use href="#ic-menu"/></svg>
+    </button>
+  </div>
+</section><!-- end NavBar-Mobile -->
+
+
+<!-- ═══════════════════════════════════════════════
+     PAGE CONTENT
+═══════════════════════════════════════════════ -->
+<main class="pd-page">
+
+  <!-- ── BREADCRUMBS  DS 3282:68210 ── -->
+  <section id="Breadcrumbs-Desktop">
+    <div class="pd-breadcrumbs15">
+      <h1 class="pd-breadcrumbs__title">Analysis for Bahasa Melayu Form 5</h1>
+      <div class="pd-breadcrumbs__sep"></div>
+      <div class="pd-breadcrumbs__links">
+
+        <!-- Level 1: Achievement (icon + text) -->
+        <button class="pd-link15" type="button">
+          <svg class="pd-link15__icon-home" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(6,4)"><path d="M 12 16 L 12 6 M 6 16 L 6 0 M 0 16 L 0 10"/></g>
+          </svg>
+          <span class="pd-link15__text pd-link15__text--parent">Achievement</span>
+        </button>
+
+        <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
+
+        <!-- Level 2: Report Card for Form 5 -->
+        <button class="pd-link15" type="button">
+          <span class="pd-link15__text pd-link15__text--parent">Report Card for Form 5</span>
+        </button>
+
+        <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
+
+        <!-- Level 3: Bahasa Melayu (current page) -->
+        <span class="pd-link15" style="cursor:default">
+          <span class="pd-link15__text" style="color:var(--text-primary-default)">Bahasa Melayu</span>
+        </span>
+
+      </div>
+    </div>
+  </section><!-- end Breadcrumbs -->
+
+
+  <!-- ═══════════════════════════════════════════════
+       ANALYSIS CARD  DS node 3282:68739
+       Outer: bg #e8fbe8, border green, r-24px, p-16px
+  ═══════════════════════════════════════════════ -->
+  <section id="AnalysisCard-Desktop">
+    <div class="an-outer">
+
+      <!-- ── HEADER: Subject badge + Download button ── -->
+      <div class="an-header">
+
+        <!-- Subject Badge BM — L size (32px)
+             DS: Subject Badge/Bahasa Melayu - L, border #2e4799 bg #4d77ff -->
+        <div class="an-subject-badge">
+          <div class="an-subject-badge__icon">
+            <img src="assets/subject-icons/icon-bmelayu.svg" alt="Bahasa Melayu" width="20" height="20">
+          </div>
+          <div class="an-subject-badge__label">
+            <svg class="an-subject-badge__pointer" width="4" height="8" viewBox="0 0 4 8" fill="white" aria-hidden="true">
+              <path d="M 0 0 L 4 4 L 0 8 Z"/>
+            </svg>
+            Bahasa Melayu
+          </div>
+        </div>
+
+        <!-- Download button — Secondary style, 32px -->
+        <button class="an-download-btn" type="button">
+          <svg aria-hidden="true"><use href="#ic-download"/></svg>
+          Download
+        </button>
+
+      </div><!-- /an-header -->
+
+
+      <!-- ── CONTENT AREA: analytics + topics + table ── -->
+      <div class="an-content">
+
+        <!-- ══ ANALYTICS INNER CARD
+             DS: white bg, border #d9d9d9, r-18px, pt-28 px-60 pb-54
+        ══ -->
+        <div class="an-analytics-card">
+          <div class="an-analytics-row">
+
+            <!-- GRADE SECTION (195px, flex-col gap-16px) -->
+            <div class="an-grade">
+              <!-- "A 97%" — A is Bold 56px, 97% is Regular 56px, both #404040 -->
+              <div class="an-grade__title-row">
+                <span class="an-grade__letter">A</span>
+                <span class="an-grade__pct">97%</span>
+              </div>
+              <!-- Mastery pill -->
+              <span class="an-mastery-pill">Mastery</span>
+              <!-- Stats -->
+              <p class="an-grade__stat">555 Questions Answered</p>
+              <p class="an-grade__stat">70 Set Submitted</p>
+            </div><!-- /an-grade -->
+
+            <!-- DONUT PAIRS (flex-1, 2 equal cols) -->
+            <div class="an-donut-pairs">
+
+              <!-- ── Difficulty Level: donut + legend ── -->
+              <div class="an-donut-col">
+
+                <!-- Progress Wheel — 3 concentric rings
+                     Outer(r=84) = Easy 100% green
+                     Middle(r=63) = Medium 82% orange
+                     Inner(r=42) = Hard 75% red
+                     Grey tracks beneath each colored arc
+                     All arcs rotate from -90° (12 o'clock)
+                -->
+                <div class="an-donut-wrap">
+                  <svg viewBox="0 0 210 210" width="210" height="210" aria-label="Result by Difficulty Level: Easy 100%, Medium 82%, Hard 75%">
+                    <!-- Grey tracks (full 360°) -->
+                    <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="63" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="42" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <!-- Easy  — outer ring, green, 100% (C≈527.8) -->
+                    <circle cx="105" cy="105" r="84" fill="none" stroke="#00cc85" stroke-width="16"
+                      stroke-dasharray="527.8 0" stroke-linecap="round"
+                      transform="rotate(-90 105 105)"/>
+                    <!-- Medium — middle ring, orange, 82% (324.6 of 395.8) -->
+                    <circle cx="105" cy="105" r="63" fill="none" stroke="#ff9f43" stroke-width="16"
+                      stroke-dasharray="324.6 71.2" stroke-linecap="round"
+                      transform="rotate(-90 105 105)"/>
+                    <!-- Hard   — inner ring, red, 75% (197.9 of 263.9) -->
+                    <circle cx="105" cy="105" r="42" fill="none" stroke="#ff4c51" stroke-width="16"
+                      stroke-dasharray="197.9 65.9" stroke-linecap="round"
+                      transform="rotate(-90 105 105)"/>
+                    <!-- Center label "100%" -->
+                    <text x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#404040">100%</text>
+                  </svg>
+                </div>
+
+                <!-- Legend for Difficulty Level -->
+                <div class="an-legend">
+                  <p class="an-legend__title">Result by Difficulty&nbsp;Level</p>
+                  <div class="an-legend__rows">
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill an-legend__pill--easy">Easy</span>
+                      <span class="an-legend__value">100%</span>
+                    </div>
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill an-legend__pill--medium">Medium</span>
+                      <span class="an-legend__value">82%</span>
+                    </div>
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill an-legend__pill--hard">Hard</span>
+                      <span class="an-legend__value">75%</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div><!-- /Difficulty Level col -->
+
+              <!-- ── Thinking Skills: donut + legend ── -->
+              <div class="an-donut-col">
+
+                <!-- Progress Wheel — 3 concentric rings
+                     Outer(r=84) = LOTS 80% green
+                     Middle(r=63) = MOTS 75% orange
+                     Inner(r=42) = HOTS 100% red
+                -->
+                <div class="an-donut-wrap">
+                  <svg viewBox="0 0 210 210" width="210" height="210" aria-label="Result by Thinking Skills: LOTS 80%, MOTS 75%, HOTS 100%">
+                    <!-- Grey tracks -->
+                    <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="63" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="42" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <!-- LOTS  — outer ring, green, 80% (422.2 of 527.8) -->
+                    <circle cx="105" cy="105" r="84" fill="none" stroke="#00cc85" stroke-width="16"
+                      stroke-dasharray="422.2 105.6" stroke-linecap="round"
+                      transform="rotate(-90 105 105)"/>
+                    <!-- MOTS — middle ring, orange, 75% (296.9 of 395.8) -->
+                    <circle cx="105" cy="105" r="63" fill="none" stroke="#ff9f43" stroke-width="16"
+                      stroke-dasharray="296.9 99.0" stroke-linecap="round"
+                      transform="rotate(-90 105 105)"/>
+                    <!-- HOTS — inner ring, red, 100% (263.9 of 263.9) -->
+                    <circle cx="105" cy="105" r="42" fill="none" stroke="#ff4c51" stroke-width="16"
+                      stroke-dasharray="263.9 0" stroke-linecap="round"
+                      transform="rotate(-90 105 105)"/>
+                    <!-- Center label "100%" -->
+                    <text x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#404040">100%</text>
+                  </svg>
+                </div>
+
+                <!-- Legend for Thinking Skills -->
+                <div class="an-legend">
+                  <p class="an-legend__title">Result by Thinking Skills</p>
+                  <div class="an-legend__rows">
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill an-legend__pill--easy">LOTS</span>
+                      <span class="an-legend__value">80%</span>
+                    </div>
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill an-legend__pill--medium">MOTS</span>
+                      <span class="an-legend__value">75%</span>
+                    </div>
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill an-legend__pill--hard">HOTS</span>
+                      <span class="an-legend__value">100%</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div><!-- /Thinking Skills col -->
+
+            </div><!-- /an-donut-pairs -->
+
+          </div><!-- /an-analytics-row -->
+        </div><!-- /an-analytics-card -->
+
+
+        <!-- ══ TOPICS FOR IMPROVEMENT
+             SemiBold 18px, #00564c + green pills
+        ══ -->
+        <div class="an-section">
+          <p class="an-subheader">Topics for improvement</p>
+          <div class="an-pills">
+            <span class="an-pill">Kemahiran mendengar dan bertutur</span>
+            <span class="an-pill">Kemahiran membaca</span>
+            <span class="an-pill">Aspek tatabahasa</span>
+            <span class="an-pill">Kemahiran menulis</span>
+          </div>
+        </div>
+
+
+        <!-- ══ RESULT OF TOPICS
+             SemiBold 18px, #00564c + Table 1.5
+        ══ -->
+        <div class="an-section">
+          <p class="an-subheader">Result of topics</p>
+
+        <!-- Table — DS Table - 1.5
+             Outer: border #d9d9d9, r-18px, overflow-hidden
+             Cols: Chapter(100px) | Topic(flex-1) | Score(108px) | Status(242px)
+             Header: bg #f2f2f2, Medium 16px, #666
+             Body:   bg white,   Regular 14px, #666, h-56px each
+             Status: colored dot (12px) + label text
+        -->
+        <div class="an-table-outer">
+          <table class="an-table">
+            <colgroup>
+              <col class="an-col--chapter">
+              <col><!-- topic: auto-expand -->
+              <col class="an-col--score">
+              <col class="an-col--status">
+            </colgroup>
+            <thead>
+              <tr>
+                <th class="an-th an-th--chapter">Chapter</th>
+                <th class="an-th">Topic</th>
+                <th class="an-th">Score</th>
+                <th class="an-th">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1: Mastery (green dot) -->
+              <tr>
+                <td class="an-td an-td--chapter">1</td>
+                <td class="an-td">Kemahiran mendengar dan bertutur</td>
+                <td class="an-td">100%</td>
+                <td class="an-td">
+                  <div class="an-status">
+                    <span class="an-status-dot" style="background:#00cc85"></span>
+                    Mastery
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 2: Need Attention (red dot) -->
+              <tr>
+                <td class="an-td an-td--chapter">2</td>
+                <td class="an-td">Kemahiran menulis</td>
+                <td class="an-td">50%</td>
+                <td class="an-td">
+                  <div class="an-status">
+                    <span class="an-status-dot" style="background:#ff4c51"></span>
+                    Need Attention
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 3: Not Started (grey dot) -->
+              <tr>
+                <td class="an-td an-td--chapter">3</td>
+                <td class="an-td">Aspek Tatabahasa</td>
+                <td class="an-td">0%</td>
+                <td class="an-td">
+                  <div class="an-status">
+                    <span class="an-status-dot" style="background:#f2f2f2;border:1px solid #d9d9d9"></span>
+                    Not Started
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 4: Basic Understanding (orange dot) -->
+              <tr>
+                <td class="an-td an-td--chapter">4</td>
+                <td class="an-td">Aspek Seni dan Bahasa</td>
+                <td class="an-td">67%</td>
+                <td class="an-td">
+                  <div class="an-status">
+                    <span class="an-status-dot" style="background:#ff9f43"></span>
+                    Basic Understanding
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div><!-- /an-table-outer -->
+        </div><!-- /an-section result -->
+
+      </div><!-- /an-content -->
+
+    </div><!-- /an-outer -->
+  </section><!-- end AnalysisCard-Desktop -->
+
+</main>
+
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER 1.5  DS 2073:6579
+═══════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__left">
+      <span class="footer__text">&copy; 2026</span>
+      <a class="footer__link" href="#">Pandai.org</a>
+      <span class="footer__text">All Rights Reserved</span>
+    </div>
+    <div class="footer__right">
+      <span class="footer__text">Made with</span>
+      <svg class="footer__heart" aria-hidden="true"><use href="#ic-heart"/></svg>
+      <span class="footer__text">in Malaysia</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  /* ── Nav handlers — registered first before other JS ── */
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+    });
+    btn.addEventListener('mousedown',  () => btn.classList.add('is-pressed'));
+    btn.addEventListener('mouseup',    () => btn.classList.remove('is-pressed'));
+    btn.addEventListener('mouseleave', () => btn.classList.remove('is-pressed'));
+  });
+</script>
+
+</body>
+</html>
