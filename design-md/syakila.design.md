@@ -1914,3 +1914,47 @@ Applied at `@media (max-width: 1279px)` — affects both tablet and mobile.
 | Subject column stayed 160px | `width: 160px` later in same `@media` block overrode `width: 100%` | Remove conflicting later declaration |
 
 *Last updated: May 2026 (Session 3)*
+
+---
+
+## Subject Badge 1.5 — DS Confirmed Reference
+
+**Always reload from:** `https://www.figma.com/design/TLVKe3bgJTdVvuPAzgDq2f?node-id=2339:1355`
+
+**Structure (Size=M, h:32px, border-radius: 60px):**
+- Icon slot: `width:40px; padding: 4px 8px 4px 12px; background: white`
+- Label slot: `padding: 0 16px 0 12px; gap: 8px; font: Poppins Medium 14px/20px`
+- Pointer: `position:absolute; left:0; top:12px; bottom:12px; width:4px`
+- Text default: `#f2f2f2` — exceptions: Science `#998027`, KAFA `#538865`
+
+**Confirmed badge colors — from DS node 2339:1355 (May 2026):**
+
+| Subject | `--badge-bg` | `--badge-border` | Text |
+|---|---|---|---|
+| Account | `#0072ca` | `#004479` ⚠️ | `#f2f2f2` |
+| Add Math | `#283589` | `#182052` ⚠️ | `#f2f2f2` |
+| Biology | `#8431d8` | `#6a27ad` | `#f2f2f2` |
+| Bahasa Melayu | `#4d77ff` | `#2e4799` | `#f2f2f2` |
+| Business | `#efb42b` | `#bf9022` | `#f2f2f2` |
+| Chemistry | `#e20082` | `#b50068` | `#f2f2f2` |
+| Chinese Language | `#f94848` | `#c73a3a` | `#f2f2f2` |
+| Computer Science | `#d10070` | `#a7005a` | `#f2f2f2` |
+| Economy | `#ff5733` | `#cc4629` | `#f2f2f2` |
+| English | `#ff4d56` | `#cc3e45` | `#f2f2f2` |
+| Geography | `#77d836` | `#5fad2b` | `#f2f2f2` |
+| History | `#a97c50` | `#876340` | `#f2f2f2` |
+| Islamic Studies | `#de4d7f` | `#b23e66` | `#f2f2f2` |
+| KAFA | `#8ae3a9` | `#6eb687` | `#538865` ⚠️ |
+| Mathematics | `#42ac7b` | `#358a62` | `#f2f2f2` |
+| Moral Studies | `#0072ca` | `#005ba2` | `#f2f2f2` |
+| Physics | `#27a0d7` | `#1f80ac` | `#f2f2f2` |
+| RBT | `#353535` | `#2a2a2a` | `#f2f2f2` |
+| Science | `#ffd641` | `#ccab34` | `#998027` |
+
+⚠️ = corrected from previous CLAUDE.md notes. Always use DS node values above.
+
+**Corrections vs old CLAUDE.md Rule 17b:**
+- Account border was `#005ba2` → correct is `#004479`
+- Add Math border was `#202a6e` → correct is `#182052`
+- KAFA text was `#358a62` → correct is `#538865`
+- Chinese Language was missing → now confirmed `#f94848` / `#c73a3a`
