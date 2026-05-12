@@ -1808,6 +1808,26 @@ Icons: `ic-stop-circle, ic-package, ic-shopping-bag, ic-shopping-cart, ic-smile`
 **Illustration mapping — `_Completed` SVG when fully achieved, base SVG otherwise:**
 `Enroll Course_Completed` (Class instructions ✅) · `Score Exam` (Quiz) · `Goal & Reward` (Battle) · `Topical Test_Completed` (Live Class ✅) · `Personality Test` (Practice) · `Submit Task` (Article) · `Score Full Mark_Completed` (Notes ✅) · `Verify Phone Number` (Library)
 
+**My Rewards Card (class-card, DS node 3065:43089) — `flex-col; border: 1px #d9d9d9; border-radius: 24px; overflow: hidden`:**
+- Image area: `width: 100%; aspect-ratio: 250/148` (locks ratio on responsive) · `object-fit: cover` · `bg: var(--og-50)` fallback · source: `image-repo/Rewards-MyRewards/MyRewards-N.svg`
+- Body: `padding: 16px; gap: 8px` — badges row + title (14px SemiBold `#404040`, 2-line clamp)
+- Label Badge (DS node 3065:43096): `bg #ccf5e7; border 1px #00cc85; border-radius: 60px; padding: 2px 8px; font 10px Medium #00cc85` · icon: `Outline/star` (node 260:1192, vector offset +2/+2, viewBox `-1 -1 26 26`)
+- Badges shown: `Premium` + `Premium Lite` (both same green style)
+- Divider: `height: 1px; bg #d9d9d9`
+- Footer: `padding: 16px; justify-content: space-between` — coin icon (21px) + count · Show Voucher button
+
+**Show Voucher button — Button - 1.5 Primary/S (DS node 3065:43115) — `height: 24px`:**
+- `padding: 2px 8px; border-radius: 60px; bg #00cc85; border 1px #00a36a`
+- Label: `12px SemiBold #f6fdfb`
+- Arrow: `16×16 circle; bg #99ebce; padding: 2px` → 12×12 clip using `ic-chevron-btn` (`viewBox="0 0 12 12"`, path `M4.5 9L7.5 6L4.5 3`, DS node 1437:8161)
+- Hover: `bg #b5f291; border #70bc6f; label #70bc6f; arrow bg #e8fbe8`
+- Pressed: `bg #00564c; border #00453d; label #00cc85; arrow bg #00cc85`
+
+**My Rewards sidebar active state:** `My Rewards` button = `sidebar-btn--active` (`bg #00cc85; border 1px #00a36a`) · `Coin Quest` = inactive
+
+**My Rewards grid — `.mr-grid`:**
+`grid-template-columns: repeat(4, 1fr); gap: 16px` → 2-col at `≤1279px` → 1-col at `≤767px`
+
 ---
 
 *Last updated: 2026-05-12 | Files: Nadia.test.git/My Rewards/*.html | Branch: staging*
