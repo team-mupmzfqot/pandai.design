@@ -458,13 +458,15 @@ When the footer is `position: fixed`, the scrollable content needs `padding-bott
 
 **DS reference (Screen page, home + footer frame `1867:17694`):**
 - Home content frame `1740:9670`: `padding-bottom: 30` (raw value — **not variable-bound**)
-- Footer - 1.5 height: 60px
+- Footer - 1.5 height: **44px** (updated May 2026; was 60px — padding changed from `t:20/b:20` to `t:12/b:12`)
 
-**Rule:** `body { padding-bottom: 90px; }` — 60px (footer) + 30px (DS gap).
+**Rule:** `body { padding-bottom: 74px; }` — 44px (footer) + 30px (DS gap).
+
+> **Updated May 2026:** Footer height reduced from 60px to 44px in DS. `body.padding-bottom` updated from 90px → 74px accordingly.
 
 **Important:** Not all spacing values in DS screen frames are token-bound. Always check `boundVariables` on a node before assuming a raw px value maps to a Semantic token. If absent from `boundVariables`, treat it as a hardcoded design decision and use the raw value.
 
-**Mistake made:** `body` had `padding-bottom: 60px` (footer height only), cutting off 30px of breathing room. Corrected to 90px after reading DS screen frame.
+**Mistake made:** `body` had `padding-bottom: 60px` (footer height only), cutting off 30px of breathing room. Corrected to 90px, then to 74px when the footer height was updated in the DS.
 
 ---
 
@@ -770,21 +772,24 @@ Every icon used in the prototype has a `<symbol>` definition in the SVG defs blo
 
 ---
 
-### Footer - 1.5 confirmed DS specs (node 2073:6579, May 2026)
+### Footer - 1.5 confirmed DS specs (node 2073:6579, updated May 2026)
 
 | Property | Value |
 |---|---|
-| Height | 60px |
-| Padding | `t:20 r:28 b:20 l:28` → CSS `height:60px` + `align-items:center` + `padding:0 28px` |
-| Border | top only, 1px `#00cc85` (`--border-default`) — stroke is full INSIDE but only top is visible |
+| Height | **44px** (was 60px — updated May 2026) |
+| Padding | `t:12 r:28 b:12 l:28` → `Spacing/space-s` (12px) vertical, `Spacing/space-2xl` (28px) horizontal |
+| CSS pattern | `height: 44px` + `align-items: center` + `padding: 0 var(--spacing-space-2xl)` |
+| Border | top only, 1px `#00cc85` (`--border-default`) — `strokeTopWeight:1`, all other sides 0 |
 | Background | white (`--surface-general-default`) |
 | Layout | `HORIZONTAL`, `SPACE_BETWEEN`, `crossAlign:CENTER` |
 | Left group gap | 4px (`--spacing-space-xxs`) |
 | Right group gap | 4px (`--spacing-space-xxs`) |
 | All text | 14px / weight:500 / `#666666` (`--text-default-body`) |
-| Link "Pandai.org" | 14px / weight:500 / `#00cc85` (`--text-primary-default`) — `visible:false` on both icons, text only |
+| Link "Pandai.org" | 14px / weight:500 / `#00cc85` (`--text-primary-default`) — info + chevron icons `visible:false`, text only |
 | Heart icon | `<use href="#ic-heart">`, 20×20, `color:var(--icon-primary-default)` (`#00cc85`) |
 | Positioning | `position:fixed; bottom:0; left:0; right:0; z-index:100` |
+| `body` padding-bottom | `74px` = 44px footer + 30px DS gap (was 90px when footer was 60px) |
+| Mobile stacked height | 72px = 12+20+8+20+12 → `body { padding-bottom: 102px }` (unchanged) |
 
 ---
 
