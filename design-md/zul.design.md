@@ -1512,4 +1512,116 @@ Start-Process "vscode://vscode.simpleBrowser/show?url=http%3A%2F%2Flocalhost%3A3
 
 ---
 
+---
+
+### 45. Subject Badge icon export — always call `exportAsync` on the icon INSTANCE, not the badge component
+
+The `⚙️ Badges` page holds `COMPONENT_SET` nodes named `Subject Badge/[Name]` (e.g. `Subject Badge/Comp-Science`). Each set has children named with `Size=M` / `Size=L`. Inside each size component is a `Subject/XXX` INSTANCE node — that is the icon.
+
+**Export must be called on the INSTANCE, not the badge component.** The badge includes the icon slot, label panel, and pointer. The icon instance exports cleanly as a standalone icon SVG.
+
+**Confirmed workflow (May 2026):**
+```js
+const badgesPage = figma.root.children.find(p => p.name === '⚙️ Badges');
+await figma.setCurrentPageAsync(badgesPage);
+const compSet = badgesPage.findOne(n => n.id === '<component-set-id>');
+const mComp   = compSet.children.find(c => c.name.includes('Size=M'));
+const iconInst = mComp.findOne(n => n.type === 'INSTANCE' && n.name.startsWith('Subject/'));
+const svg = await iconInst.exportAsync({ format: 'SVG_STRING' });
+```
+
+**Badge component naming on `⚙️ Badges` page** — abbreviated names, not the display label:
+
+| Display label | Component set name |
+|---|---|
+| Computer Science | `Subject Badge/Comp-Science` |
+| Bahasa Melayu | `Subject Badge/BMelayu` |
+| Islamic Studies | `Subject Badge/Islamic` |
+| Add Math | `Subject Badge/Add-Math` |
+| KAFA | `Subject Badge/KAFA` |
+| RBT | `Subject Badge/RBT` |
+
+Always `findAll(n => n.type === 'COMPONENT_SET' && n.name.startsWith('Subject Badge/'))` first to confirm the exact names before searching by assumed label.
+
+---
+
+### 46. Some DS subject badge SVGs have no `<g clip-path>` wrapper — structure varies per subject
+
+Not all Subject Badge icon exports have the same SVG structure. Some subjects export with a `<g clip-path="url(#clipN)">` wrapper enclosing all paths; others export with paths placed directly inside `<svg>` with no wrapper at all.
+
+**Confirmed no-clip-path subjects (May 2026):**
+- `Comp-Science` — paths directly in `<svg>`, no `<g>` wrapper
+- `BMelayu` — paths directly in `<svg>`, no `<g>` wrapper
+
+**Rule:** Never add a `<g clip-path>` wrapper to a badge SVG that doesn't have one in the DS export. The DS intentionally omits it for these icons — the paths already fit the viewBox without clipping.
+
+**Mistake made:** The old CS badge HTML had a manually-added `<g clip-path="url(#clip0_3283_85259_cs)">` wrapper. The new DS export has no such wrapper. Replacing required removing the `<g>` and `<defs><clipPath>` entirely.
+
+---
+
+### 47. Full SVG replacement = paths + structure — updating only clip IDs leaves broken state
+
+When a subject badge SVG needs updating, replacing only the `clip-path` ID references (e.g. renaming `clip_math` → `clip0_3283_85245`) while leaving the old path data is a **broken halfway state**. The clip rect dimensions may match but the rendered icon shape is still wrong because the path coordinates are from a different DS export version.
+
+**Rule:** Any SVG replacement must be a full replacement — the complete `<g clip-path>...<defs>` block including all path data. Never do partial updates (ID-only, rect-only, or first-path-only).
+
+**Signal that a partial update was done:** The badge renders but the icon looks wrong/misshapen or proportions don't match the DS screenshot. This means path coordinates are old.
+
+---
+
+### 48. DS badge SVG `height` attribute must match the DS export exactly
+
+The outer `<svg>` tag attributes (`width`, `height`, `viewBox`) in the DS export are exact and must not be altered. Mismatches cause the browser to scale or clip the icon.
+
+**Confirmed mistake (May 2026):** Science badge had `height="23"` in the prototype HTML. The DS export is `height="24"`. A 1px discrepancy causes the icon to render slightly squished vertically.
+
+**Rule:** When doing a full SVG replacement, always include the outer `<svg width="X" height="Y" viewBox="...">` tag in the replacement, not just the inner content.
+
+---
+
+### 49. Large DS SVG exports — split `exportAsync` output when it exceeds ~18KB
+
+Some subject icons (Geography globe at ~18.8KB, KAFA at ~8KB) produce SVG strings that exceed the Figma plugin tool output limit (~20KB). The export still succeeds but the returned string is truncated.
+
+**Workaround:** Request the SVG length first, then retrieve in two halves:
+```js
+const svg = await iconInst.exportAsync({ format: 'SVG_STRING' });
+const mid = Math.floor(svg.length / 2);
+return { total: svg.length, part1: svg.substring(0, mid), part2: svg.substring(mid) };
+```
+
+Concatenate `part1 + part2` to reconstruct the full SVG. The midpoint split may land mid-coordinate in a path `d` attribute — SVG path data is whitespace-tolerant and the concatenated number will parse correctly (e.g. `17.75` | `38 15.0193` → `17.7538 15.0193`).
+
+**Subjects known to be large:** Geography (~18.8KB), KAFA (~8KB). All others are under 5KB.
+
+---
+
+### 50. Subject Badge DS component IDs — confirmed (May 2026)
+
+Component set IDs on `⚙️ Badges` page for direct lookup via `badgesPage.findOne(n => n.id === '<id>')`:
+
+| Subject | Component Set ID |
+|---|---|
+| RBT | `3283:85760` |
+| KAFA | `3283:85852` |
+| History | `3302:67103` |
+| English | `3302:67112` |
+| Biology | `3302:67121` |
+| Physics | `3302:67217` |
+| Science | `3302:67235` |
+| Account | `3302:67244` |
+| Business | `3309:67505` |
+| Economy | `3309:67514` |
+| Add-Math | `3309:67526` |
+| Chemistry | `3309:67537` |
+| Geography | `3309:67546` |
+| Math | `3309:67555` |
+| Moral | `3309:67564` |
+| Islamic | `3309:67573` |
+| BMelayu | `3309:67585` |
+| Comp-Science | `3309:67594` |
+| Chinese-Lang | `3309:67603` |
+
+---
+
 *Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
