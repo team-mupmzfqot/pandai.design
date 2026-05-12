@@ -350,6 +350,9 @@
       font-size: 14px; font-weight: 400; line-height: 20px;
       color: #626262;
     }
+    .an-grade__details {
+      display: flex; flex-direction: column; gap: var(--space-m);
+    }
 
     /* ── Two donut columns (flex-1 each, no gap between them) ── */
     .an-donut-pairs {
@@ -366,8 +369,28 @@
     }
 
     /* ── Donut chart wrapper ── */
-    .an-donut-wrap { flex-shrink: 0; }
+    .an-donut-wrap { flex-shrink: 0; cursor: pointer; }
     .an-donut-wrap svg { display: block; }
+
+    /* ── Donut ring animation: grows from 0 → target on load ── */
+    @keyframes donut-grow {
+      from { stroke-dashoffset: var(--c); }
+      to   { stroke-dashoffset: var(--offset); }
+    }
+    .an-donut-ring {
+      stroke-dashoffset: var(--c);  /* start hidden */
+      animation: donut-grow 1.2s ease-out forwards;
+    }
+
+    /* ── Per-ring hit areas (transparent wide strokes over each ring) ── */
+    .an-ring-hit { cursor: pointer; }
+
+    /* ── Per-ring labels: hidden by default, JS shows/hides individually ── */
+    .an-ring-label {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
 
     /* ── Legend section ── */
     .an-legend {
@@ -515,7 +538,7 @@
        RESPONSIVE — mirrors zul.home.screen.html breakpoints
     ═══════════════════════════════════════════════════ */
 
-    /* Mobile navbar default state — padding inherits --page-padding-x so it updates automatically */
+    /* Mobile navbar default — padding auto-tracks --page-padding-x */
     #NavBar-Mobile {
       display: none;
       padding-left:  var(--page-padding-x);
@@ -529,19 +552,34 @@
       #Breadcrumbs-Desktop { display: none; }
     }
 
-    /* Tablet ≤ 1279px */
+    /* ── Tablet ≤ 1279px ─────────────────────────────── */
     @media (max-width: 1279px) {
       :root { --page-padding-x: 32px; }
-      /* analytics card: allow horizontal scroll if viewport too narrow */
-      .an-analytics-card { padding: 20px 24px 32px; overflow-x: auto; }
-      .an-analytics-row  { min-width: 700px; }
+
+      /* Analytics card: reduce padding, stack grade + donuts vertically */
+      .an-analytics-card { padding: 24px; }
+      .an-analytics-row  { flex-direction: column; gap: 24px; align-items: stretch; }
+
+      /* Grade: expand to full width, keep flex-col stacking */
+      .an-grade { width: 100%; }
+
+      /* Donut pairs: full width, both columns side by side */
+      .an-donut-pairs    { width: 100%; justify-content: space-evenly; }
+
+      /* Shrink donuts so legend text fits comfortably beside them at narrow widths */
+      .an-donut-wrap svg { width: 160px; height: 160px; }
+
+      /* Table: reduce fixed columns so table fits without horizontal scroll */
+      .an-col--chapter { width: 60px; }
+      .an-col--score   { width: 80px; }
+      .an-col--status  { width: auto; }
     }
 
-    /* Mobile ≤ 767px */
+    /* ── Mobile ≤ 767px ──────────────────────────────── */
     @media (max-width: 767px) {
       :root { --page-padding-x: var(--space-m); }  /* 16px */
 
-      /* Nav pill row: scrollable horizontally on narrow screens */
+      /* Nav pill row: horizontally scrollable */
       .navbar-nav {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -549,10 +587,82 @@
       }
       .navbar-nav::-webkit-scrollbar { display: none; }
 
-      .an-outer { padding: 12px; }
-      .an-pills  { gap: var(--space-xs); }
+      /* Outer card + analytics card: tighter padding */
+      .an-outer          { padding: 12px; }
+      .an-analytics-card { padding: var(--space-m); }
+      .an-analytics-row  { gap: var(--space-m); }
 
-      /* Footer — stack vertically, center both groups */
+      /* ── Grade: tighter vertical stack ── */
+      .an-grade            { gap: var(--space-xs); }
+      .an-grade__title-row { font-size: 32px; }
+      .an-grade__details   { gap: var(--space-xxs); }  /* 4px between pill/stats */
+
+      /* ── Donuts: 2 columns side by side, donut top + legend below ── */
+      .an-donut-pairs { flex-direction: row; gap: var(--space-s); align-items: flex-start; }
+      .an-donut-col   { flex: 1; min-width: 0; flex-direction: column; align-items: center; gap: var(--space-xs); }
+      .an-donut-wrap svg { width: 100px; height: 100px; }
+
+      /* Legend: hide title (pills are self-explanatory), compact rows */
+      .an-legend              { align-items: center; width: 100%; }
+      .an-legend__title       { display: none; }
+      .an-legend__rows        { gap: var(--space-xs); }
+      .an-legend__row         { width: 100%; max-width: 130px; margin: 0 auto; }
+
+      /* ── Table: card layout — each row becomes a 2-line flex card ── */
+      .an-table-outer { overflow-x: visible; }
+      .an-table       { min-width: unset; }
+
+      /* Hide header row — labels inferred from layout position */
+      .an-table thead { display: none; }
+
+      /* Table + body: block flow */
+      .an-table,
+      .an-table tbody,
+      .an-table tbody tr { display: block; }
+
+      /* Each row: flex with wrap → creates 2 lines
+         Line 1: [Chapter 32px] [Topic flex-1]
+         Line 2: [Score  32px] [Status flex-1]         */
+      .an-table tbody tr {
+        display: flex; flex-wrap: wrap; align-items: center;
+        gap: 4px 10px;
+        padding: 12px var(--space-m);
+        border-bottom: 1px solid var(--border-general-default);
+      }
+      .an-table tbody tr:last-child { border-bottom: none; }
+
+      /* All cells: strip table borders + padding */
+      .an-td { display: block; border: none !important; padding: 0; height: auto; }
+
+      /* Chapter — left anchor, line 1 */
+      .an-td--chapter {
+        width: 32px; flex-shrink: 0;
+        font-size: 12px; font-weight: 600; text-align: center;
+      }
+
+      /* Topic — fills rest of line 1 */
+      .an-table tbody tr .an-td:nth-child(2) {
+        flex: 1; min-width: 0;
+        font-size: 13px; font-weight: 500;
+      }
+
+      /* Score — left anchor, line 2 (same 32px as Chapter above it) */
+      .an-table tbody tr .an-td:nth-child(3) {
+        width: 32px; flex-shrink: 0;
+        font-size: 12px; font-weight: 600; text-align: center;
+        color: var(--text-primary-focus);
+      }
+
+      /* Status — fills rest of line 2 */
+      .an-table tbody tr .an-td:nth-child(4) {
+        flex: 1; min-width: 0;
+        font-size: 13px;
+      }
+
+      /* Topic pills: tighter gap */
+      .an-pills { gap: var(--space-xs); }
+
+      /* Footer: stack vertically, center both groups */
       body { padding-bottom: 102px; }
       .footer__inner {
         flex-direction: column;
@@ -818,11 +928,12 @@
                 <span class="an-grade__letter">A</span>
                 <span class="an-grade__pct">97%</span>
               </div>
-              <!-- Mastery pill -->
-              <span class="an-mastery-pill">Mastery</span>
-              <!-- Stats -->
-              <p class="an-grade__stat">555 Questions Answered</p>
-              <p class="an-grade__stat">70 Set Submitted</p>
+              <!-- Details: mastery pill + stats — grouped so mobile can flip to row layout -->
+              <div class="an-grade__details">
+                <span class="an-mastery-pill">Mastery</span>
+                <p class="an-grade__stat">555 Questions Answered</p>
+                <p class="an-grade__stat">70 Set Submitted</p>
+              </div>
             </div><!-- /an-grade -->
 
             <!-- DONUT PAIRS (flex-1, 2 equal cols) -->
@@ -844,21 +955,32 @@
                     <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
                     <circle cx="105" cy="105" r="63" fill="none" stroke="#e8e8e8" stroke-width="16"/>
                     <circle cx="105" cy="105" r="42" fill="none" stroke="#e8e8e8" stroke-width="16"/>
-                    <!-- Easy  — outer ring, green, 100% (C≈527.8) -->
-                    <circle cx="105" cy="105" r="84" fill="none" stroke="#00cc85" stroke-width="16"
-                      stroke-dasharray="527.8 0" stroke-linecap="round"
-                      transform="rotate(-90 105 105)"/>
-                    <!-- Medium — middle ring, orange, 82% (324.6 of 395.8) -->
-                    <circle cx="105" cy="105" r="63" fill="none" stroke="#ff9f43" stroke-width="16"
-                      stroke-dasharray="324.6 71.2" stroke-linecap="round"
-                      transform="rotate(-90 105 105)"/>
-                    <!-- Hard   — inner ring, red, 75% (197.9 of 263.9) -->
-                    <circle cx="105" cy="105" r="42" fill="none" stroke="#ff4c51" stroke-width="16"
-                      stroke-dasharray="197.9 65.9" stroke-linecap="round"
-                      transform="rotate(-90 105 105)"/>
-                    <!-- Center label "100%" -->
-                    <text x="105" y="105" text-anchor="middle" dominant-baseline="central"
-                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#404040">100%</text>
+                    <!-- Easy  — outer ring, green, 90% — C=527.8, offset=52.8 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="84" fill="none" stroke="#00cc85" stroke-width="16"
+                      stroke-dasharray="527.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:527.8;--offset:52.8"/>
+                    <!-- Medium — middle ring, orange, 82% — C=395.8, offset=71.2 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="63" fill="none" stroke="#ff9f43" stroke-width="16"
+                      stroke-dasharray="395.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:395.8;--offset:71.2;animation-delay:0.1s"/>
+                    <!-- Hard   — inner ring, red, 75% — C=263.9, offset=66.0 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="42" fill="none" stroke="#ff4c51" stroke-width="16"
+                      stroke-dasharray="263.9" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:263.9;--offset:66.0;animation-delay:0.2s"/>
+                    <!-- Hit areas — transparent wide strokes, one per ring, no fill overlap -->
+                    <circle class="an-ring-hit" cx="105" cy="105" r="84" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="63" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="42" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <!-- Per-ring labels (JS shows one at a time) -->
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#00cc85">90%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff9f43">82%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff4c51">75%</text>
                   </svg>
                 </div>
 
@@ -868,7 +990,7 @@
                   <div class="an-legend__rows">
                     <div class="an-legend__row">
                       <span class="an-legend__pill an-legend__pill--easy">Easy</span>
-                      <span class="an-legend__value">100%</span>
+                      <span class="an-legend__value">90%</span>
                     </div>
                     <div class="an-legend__row">
                       <span class="an-legend__pill an-legend__pill--medium">Medium</span>
@@ -897,21 +1019,32 @@
                     <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
                     <circle cx="105" cy="105" r="63" fill="none" stroke="#e8e8e8" stroke-width="16"/>
                     <circle cx="105" cy="105" r="42" fill="none" stroke="#e8e8e8" stroke-width="16"/>
-                    <!-- LOTS  — outer ring, green, 80% (422.2 of 527.8) -->
-                    <circle cx="105" cy="105" r="84" fill="none" stroke="#00cc85" stroke-width="16"
-                      stroke-dasharray="422.2 105.6" stroke-linecap="round"
-                      transform="rotate(-90 105 105)"/>
-                    <!-- MOTS — middle ring, orange, 75% (296.9 of 395.8) -->
-                    <circle cx="105" cy="105" r="63" fill="none" stroke="#ff9f43" stroke-width="16"
-                      stroke-dasharray="296.9 99.0" stroke-linecap="round"
-                      transform="rotate(-90 105 105)"/>
-                    <!-- HOTS — inner ring, red, 100% (263.9 of 263.9) -->
-                    <circle cx="105" cy="105" r="42" fill="none" stroke="#ff4c51" stroke-width="16"
-                      stroke-dasharray="263.9 0" stroke-linecap="round"
-                      transform="rotate(-90 105 105)"/>
-                    <!-- Center label "100%" -->
-                    <text x="105" y="105" text-anchor="middle" dominant-baseline="central"
-                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#404040">100%</text>
+                    <!-- LOTS  — outer ring, green, 80% — C=527.8, offset=105.6 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="84" fill="none" stroke="#00cc85" stroke-width="16"
+                      stroke-dasharray="527.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:527.8;--offset:105.6"/>
+                    <!-- MOTS — middle ring, orange, 75% — C=395.8, offset=99.0 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="63" fill="none" stroke="#ff9f43" stroke-width="16"
+                      stroke-dasharray="395.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:395.8;--offset:99.0;animation-delay:0.1s"/>
+                    <!-- HOTS — inner ring, red, 90% — C=263.9, offset=26.4 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="42" fill="none" stroke="#ff4c51" stroke-width="16"
+                      stroke-dasharray="263.9" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:263.9;--offset:26.4;animation-delay:0.2s"/>
+                    <!-- Hit areas — transparent wide strokes, one per ring -->
+                    <circle class="an-ring-hit" cx="105" cy="105" r="84" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="63" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="42" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <!-- Per-ring labels (JS shows one at a time) -->
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#00cc85">80%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff9f43">75%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff4c51">90%</text>
                   </svg>
                 </div>
 
@@ -929,7 +1062,7 @@
                     </div>
                     <div class="an-legend__row">
                       <span class="an-legend__pill an-legend__pill--hard">HOTS</span>
-                      <span class="an-legend__value">100%</span>
+                      <span class="an-legend__value">90%</span>
                     </div>
                   </div>
                 </div>
@@ -1067,6 +1200,34 @@
 
 
 <script>
+  /* ── Per-ring hover (desktop) + tap (mobile/tablet) interaction ── */
+  try {
+    document.querySelectorAll('.an-donut-wrap').forEach(wrap => {
+      const hits   = Array.from(wrap.querySelectorAll('.an-ring-hit'));
+      const labels = Array.from(wrap.querySelectorAll('.an-ring-label'));
+
+      const clearAll = () => labels.forEach(l => { l.style.opacity = '0'; });
+      const showRing = (i) => { clearAll(); labels[i].style.opacity = '1'; };
+
+      hits.forEach((hit, i) => {
+        /* Desktop: hover shows that ring's % */
+        hit.addEventListener('mouseenter', () => showRing(i));
+        hit.addEventListener('mouseleave', clearAll);
+
+        /* Mobile/tablet: tap toggles that ring's % */
+        hit.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const active = labels[i].style.opacity === '1';
+          clearAll();
+          if (!active) showRing(i);
+        });
+      });
+
+      /* Tap anywhere outside closes the label */
+      document.addEventListener('click', clearAll);
+    });
+  } catch(e) { console.warn('donut interaction error:', e); }
+
   /* ── Nav handlers — registered first before other JS ── */
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {
