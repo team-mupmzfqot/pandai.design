@@ -1830,4 +1830,36 @@ Icons: `ic-stop-circle, ic-package, ic-shopping-bag, ic-shopping-cart, ic-smile`
 
 ---
 
-*Last updated: 2026-05-12 | Files: Nadia.test.git/My Rewards/*.html | Branch: staging*
+### Updates — May 2026 (Session 5)
+
+**New Merchandise page added (DS node 3065:43309):**
+- `Nadia.test.git/My Rewards/nadia_Rewards-Merchandise.html` — Merchandise view
+- `image-repo/Rewards-Merchandise/` — `Merchandise.svg` + `Merchandise-1.svg` → `Merchandise-3.svg` (4 assets)
+
+**Merchandise differs from Coin Quest / My Rewards in right panel styling:**
+
+| Panel | Coin Quest / My Rewards | Merchandise |
+|---|---|---|
+| Right main bg | `#fff` (white) | `#f6fef6` (Secondary/50) |
+| Right main border | `1px #d9d9d9` | `1px #00cc85` |
+
+**Reward Card - 1.5 (DS nodes 3065:43481–43484) — `flex-col; border: 1px #d9d9d9; border-radius: 24px; height: 329px`:**
+- Image area: `height: 148px; object-fit: contain; bg: #f6fef6` — locks full image visible, no cropping · source: `image-repo/Rewards-Merchandise/Merchandise-N.svg`
+- Body: `padding: 16px; gap: 8px` — badges row + title (14px SemiBold `#404040`, 2-line clamp)
+- Label Badge: `Outline/video` (10px icon) · `bg #ccf5e7; border 1px #00cc85; border-radius: 60px; padding: 2px 8px; font 10px Medium #00cc85`
+- Badges shown: `Premium` + `Premium Lite` (same green style as My Rewards)
+- Divider: `height: 1px; bg #d9d9d9`
+- CTA: `padding: 16px` — P.Coin icon (24px) + value · Show Voucher button (Primary/S, same spec as My Rewards)
+
+**Show Voucher button disabled state (cards 3 & 4 — DS nodes 3065:43483–43484):**
+`bg #f2f2f2; border #bfbfbf; label #bfbfbf; arrow box-shadow: inset 0 0 0 1px #bfbfbf; pointer-events: none`
+
+**Merchandise sidebar active state:** `Merchandise` button = `sidebar-btn--active` · icon: `ic-shopping-bag`
+
+**Merchandise intro text:** `Collect coins, redeem and enjoy these great rewards!` (14px Regular `#666`)
+
+**`ic-video` symbol added to SVG sprite** (10px label badge icon, `Outline/video`, `viewBox="-1 -1 26 26"`)
+
+---
+
+*Last updated: 2026-05-12 | Files: Nadia.test.git/My Rewards/nadia_Rewards-Merchandise.html | Branch: staging*
