@@ -1753,4 +1753,61 @@ Icons use `<use href="#ic-corner-down-right"/>` from the sprite.
 
 ---
 
-*Last updated: 2026-05-11 | File: Nadia.test.git/nadia_Class.html | Branch: staging*
+---
+
+### Updates — May 2026 (Session 4)
+
+**All 20 subjects added to Class page (node 3281:67321):**
+
+Cards grid expanded from 12 to 20 subjects in alphabetical DS order:
+`Enrichment → Account → Add Math → Biology → Bahasa Melayu → Business → Chemistry → Chinese Language → Computer Science → Economy → English → Geography → History → Islamic Studies → KAFA → Mathematics → Moral → Physics → RBT → Science`
+
+**New cover images — `image-repo/MyClassImage/`:**
+13 new covers downloaded from Figma MCP at 1000×435px:
+`account.png`, `add-math.png`, `business.png`, `chemistry.png`, `chi-lang.png`, `economy.png`, `enrichment.png`, `geography.png`, `islamic.png`, `kafa.png`, `moral.png`, `physics.png`, `rbt.png`
+
+Computer Science reuses `chemistry.png` (same cover in DS). English, Science retain DLP badges.
+
+**14 new CSS subject modifier classes added:**
+`.cc--enrichment`, `.cc--acc`, `.cc--add-math`, `.cc--biz`, `.cc--chem`, `.cc--chi`, `.cc--cs`, `.cc--eco`, `.cc--geo`, `.cc--isl`, `.cc--kafa`, `.cc--moral`, `.cc--phy`, `.cc--rbt`
+KAFA has dark title override (`color: #1a6b3a`) — light mint header (`#8ae3a9`) needs dark text.
+
+**Tutor avatar photos — `image-repo/Avatar-teacher/`:**
+7 real tutor photos (`tutor-1.png` → `tutor-7.png`) distributed across 20 cards using fixed rotation: `3,1,6,2,4,7,5` cycle.
+
+Avatar CSS updated: removed DS icon overflow positioning (`-7px/-8px`) in favour of `inset:0; object-fit:cover; object-position:center top` for real photo fill.
+
+**Schedule label:** Changed "Everyday" → "Every" across all 20 cards.
+
+**New Rewards pages added (DS node 3065:42733):**
+- `Nadia.test.git/My Rewards/nadia_Rewards-CoinQuest.html` — Coin Quest view
+- `Nadia.test.git/My Rewards/nadia_Rewards-Myrewards.html` — My Rewards view
+- `image-repo/Rewards-MyRewards/` — `MyRewards.svg` + `MyRewards-1.svg` → `MyRewards-8.svg` (9 assets)
+- `image-repo/Rewards-CoinQuest/` — 16 SVGs: 8 quest types × (normal + `_Completed`) variant
+
+**Two-panel layout — `.rewards-layout` (flex row, gap: 12px):**
+
+| Panel | Width | Container style |
+|---|---|---|
+| Left sidebar (node 3065:42737) | 230px | `bg: white; border: 1px #d9d9d9; border-radius: 18px; padding: 16px; gap: 8px` |
+| Right main (node 3065:42901) | flex: 1 | Same as sidebar |
+
+**Left sidebar buttons** — 5 items matching Rewards nav dropdown:
+`Coin Quest` (Primary active `#00cc85`) · `My Rewards` · `Merchandise` · `eVoucher` · `Avatar`
+Icons: `ic-stop-circle, ic-package, ic-shopping-bag, ic-shopping-cart, ic-smile`
+
+**Coin Quest Card 1.5 (node 3065:42903) — `height: 150px; flex-row`:**
+- Image panel: `bg #e8fbe8; border 1px #baf3b9; border-radius: 12px` — 80×80 illustration
+- Label Badge colours: Easy `#d9f7ed/#66e0b6/#00cc85` · Daily `#e6f6fd/#7fd0f3/#00a2e8` · Hard `#fff1eb/#ffb899/#c24b0a` · Weekly `#fff9e6/#ffe080/#9a6700`
+- Progress bar: `height: 4px; bg #f2f2f2; border-radius: 999px`
+- Claim button (Primary/M, h:32px): active `#00cc85/#00a36a`, arrow `bg #99ebce`
+
+**Disabled Claim button (node I3065:42904;2339:5039) — cards with 0/2 progress:**
+`bg #f2f2f2; border #bfbfbf; label #bfbfbf; arrow box-shadow: inset 0 0 0 1px #bfbfbf; pointer-events: none`
+
+**Illustration mapping — `_Completed` SVG when fully achieved, base SVG otherwise:**
+`Enroll Course_Completed` (Class instructions ✅) · `Score Exam` (Quiz) · `Goal & Reward` (Battle) · `Topical Test_Completed` (Live Class ✅) · `Personality Test` (Practice) · `Submit Task` (Article) · `Score Full Mark_Completed` (Notes ✅) · `Verify Phone Number` (Library)
+
+---
+
+*Last updated: 2026-05-12 | Files: Nadia.test.git/My Rewards/*.html | Branch: staging*

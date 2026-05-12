@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pandai DS — My Rewards</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ══════════════════════════════════════════════════════════════
+       Pandai DS 1.5 — Primitive Tokens
+       ══════════════════════════════════════════════════════════════ */
+    :root {
+      /* OG-Green (Student / Brand) */
+      --og-50:  #e9fbf5;  --og-100: #ccf5e7;  --og-200: #99ebce;
+      --og-500: #00cc85;  --og-600: #00a36a;  --og-700: #007a50;
+
+      /* Pink (Teacher) */
+      --pk-50:  #ffebf2;  --pk-100: #ffdeea;  --pk-200: #ffbed6;
+      --pk-400: #ff7dad;  --pk-500: #ff5c98;  --pk-600: #cc4a7a;
+
+      /* DS Semantic */
+      --Surface-general-default:  #fff;
+      --surface-primary:          var(--og-500);
+      --surface-primary-subtle:   var(--og-100);
+      --surface-secondary-subtle: #e8fbe8;
+      --border-primary:           var(--og-500);
+      --border-primary-focus:     var(--og-600);
+      --text-heading:  #404040;
+      --text-body:     #666666;
+      --text-on-color: #e9fbf5;
+
+      /* DS Corner Radius */
+      --r-rounded: 60px;  --r-4xl: 24px;  --r-2xl: 18px;  --r-xl: 16px;
+
+      /* DS Spacing */
+      --sp-xxxs: 2px;  --sp-xxs: 4px;  --sp-xs: 8px;  --sp-s: 12px;  --sp-m: 16px;
+      --sp-l: 20px;    --sp-xl: 24px;
+
+      /* Layout */
+      --page-max-width: 100%;
+      --page-padding-x: 60px;
+      --section-gap:    var(--sp-m);
+
+      /* DS Semantic tokens — Zul naming, used by navbar */
+      --surface-general-default:   #fff;
+      --surface-primary-default:   #00cc85;
+      --surface-secondary-default: #b5f291;
+      --surface-tertiary-default:  #00564c;
+      --border-default:            #00cc85;
+      --border-primary-default:    #00cc85;
+      --border-primary-focus:      #00a36a;
+      --border-secondary-focus:    #70bc6f;
+      --border-tertiary-focus:     #00453d;
+      --text-default-body:         #666666;
+      --text-primary-default:      #00cc85;
+      --text-primary-on-color:     #f6fdfb;
+      --text-secondary-focus:      #70bc6f;
+      --icon-default-default:      #d9d9d9;
+      --icon-primary-default:      #00cc85;
+      --icon-primary-on-color:     #f6fdfb;
+      --icon-secondary-hover:      #70bc6f;
+      --corner-radius-corner-4xl:  24px;
+      --corner-radius-corner-rounded: 60px;
+      --corner-radius-corner-pill: 999px;
+      --spacing-space-xxs: 4px;
+      --spacing-space-xs:  8px;
+      --spacing-space-s:   12px;
+      --spacing-space-m:   16px;
+      --spacing-space-xl:  24px;
+      --spacing-space-2xl: 28px;
+
+      /* Coin/gold palette */
+      --coin-bg:     #fece00;
+      --coin-border: #cba500;
+      --coin-text:   #7a5c00;
+
+      /* Ruby/ruby palette */
+      --ruby-bg:     #ff4c51;
+      --ruby-border: #cc3d41;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { min-height: 100%; background: var(--Surface-general-default, #fff); }
+
+    body {
+      font-family:    'Poppins', sans-serif;
+      background:     var(--Surface-general-default, #fff);
+      width:          100%;
+      min-width:      400px;
+      max-width:      var(--page-max-width);
+      margin:         0 auto;
+      padding-bottom: 90px;
+    }
+
+    /* Page content — padded area below navbar */
+    .page-content {
+      padding:        12px var(--page-padding-x) 0;
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--section-gap);
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       NAVBAR — Navbar 1.5 (same as nadia_Class.html)
+       ══════════════════════════════════════════════════════════════ */
+    .navbar {
+      padding:        0 var(--page-padding-x);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-s);
+    }
+
+    /* Row 1 — Brand bar (64px) */
+    .navbar-brand {
+      height:          64px;
+      background:      var(--surface-general-default);
+      border-bottom:   1px solid var(--border-primary-default);
+      border-left:     1px solid var(--border-primary-default);
+      border-right:    1px solid var(--border-primary-default);
+      border-radius:   0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl);
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      padding:         var(--spacing-space-xs) var(--spacing-space-xl);
+    }
+    .navbar-logo {
+      display:     flex;
+      align-items: center;
+      flex-shrink: 0;
+      height:      28px;
+    }
+    .navbar-logo img { height: 28px; width: auto; display: block; }
+    .navbar-actions {
+      display:     flex;
+      position:    relative;
+      align-items: center;
+      gap:         var(--spacing-space-xl);
+    }
+    .navbar-action-icons {
+      display:     flex;
+      align-items: center;
+      gap:         var(--spacing-space-2xl);
+      flex-shrink: 0;
+    }
+    .navbar-action-icon {
+      width:       24px;
+      height:      24px;
+      flex-shrink: 0;
+      color:       var(--icon-default-default);
+    }
+    .navbar-action-icon svg { display: block; width: 100%; height: 100%; }
+    .navbar-avatar {
+      width:           48px;
+      height:          48px;
+      border-radius:   var(--corner-radius-corner-rounded);
+      border:          1px solid var(--border-default);
+      background:      var(--surface-general-default);
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      overflow:        hidden;
+      flex-shrink:     0;
+      position:        relative;
+    }
+    .navbar-avatar__img { width: 62px; height: 50px; object-fit: cover; position: absolute; }
+    .navbar-badge {
+      position:        absolute;
+      top:             0;
+      right:           -0.5px;
+      min-width:       20px;
+      height:          20px;
+      background:      var(--surface-primary-default);
+      border-radius:   var(--corner-radius-corner-rounded);
+      padding:         var(--spacing-space-xxs);
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      font-size:       10px;
+      font-weight:     600;
+      color:           var(--text-primary-on-color);
+      line-height:     var(--spacing-space-s);
+    }
+
+    /* Row 2 — Nav content pill (56px) */
+    .navbar-nav {
+      height:        56px;
+      background:    var(--surface-general-default);
+      border:        1px solid var(--border-default);
+      border-radius: var(--corner-radius-corner-pill);
+      display:       flex;
+      align-items:   flex-start;
+      gap:           var(--spacing-space-xs);
+      padding:       var(--spacing-space-xs);
+    }
+
+    .nav-btn {
+      display:        flex;
+      flex-direction: column;
+      gap:            20px;
+      height:         40px;
+      overflow:       hidden;
+      flex-shrink:    0;
+      align-items:    flex-start;
+      cursor:         pointer;
+      user-select:    none;
+    }
+    .nav-btn__inner {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      gap:             var(--spacing-space-xs);
+      padding:         var(--spacing-space-xs) var(--spacing-space-s);
+      border-radius:   var(--corner-radius-corner-pill);
+      min-height:      24px;
+    }
+    .nav-btn__icon-clip {
+      width:       20px;
+      height:      20px;
+      box-sizing:  border-box;
+      padding:     1.67px;
+      overflow:    hidden;
+      flex-shrink: 0;
+    }
+    .nav-btn__icon-clip svg { display: block; width: 100%; height: 100%; }
+    .nav-btn__chevron-clip { padding: 0; }
+    .nav-btn__icon-clip[data-icon="home"]        { padding: 1.67px 2.5px; }
+    .nav-btn__icon-clip[data-icon="battle"]      { padding: 2.5px; }
+    .nav-btn__icon-clip[data-icon="practice"]    { padding: 2.5px 1.67px; }
+    .nav-btn__icon-clip[data-icon="class"]       { padding: 2.5px 0.83px; }
+    .nav-btn__icon-clip[data-icon="learn"]       { padding: 2.5px 1.67px; }
+    .nav-btn__icon-clip[data-icon="achievement"] { padding: 2.5px 1.67px; }
+    .nav-btn__icon-clip[data-icon="potential"]   { padding: 1.67px 1.67px 2.48px 1.67px; }
+    .nav-btn:hover .nav-btn__inner {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .nav-btn:hover .nav-btn__label     { color: var(--text-secondary-focus); }
+    .nav-btn:hover .nav-btn__icon-wrap { color: var(--icon-secondary-hover); }
+    .nav-btn.is-active .nav-btn__inner {
+      background: var(--surface-primary-default);
+      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+    }
+    .nav-btn.is-active .nav-btn__label     { color: var(--text-primary-on-color); }
+    .nav-btn.is-active .nav-btn__icon-wrap { color: var(--icon-primary-on-color); }
+    .nav-btn.is-pressed .nav-btn__inner {
+      background: var(--surface-tertiary-default);
+      box-shadow: inset 0 0 0 1px var(--border-tertiary-focus);
+    }
+    .nav-btn.is-pressed .nav-btn__label     { color: var(--text-primary-default); }
+    .nav-btn.is-pressed .nav-btn__icon-wrap { color: var(--icon-primary-default); }
+    .nav-btn__label {
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       var(--text-default-body);
+      white-space: nowrap;
+    }
+    .nav-btn__icon-wrap {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      width:           24px;
+      height:          24px;
+      color:           var(--icon-primary-default);
+    }
+
+    /* Class dropdown */
+    .nav-btn-group {
+      position:    relative;
+      flex-shrink: 0;
+      overflow:    visible;
+    }
+    .nav-btn-group .nav-btn { overflow: hidden; }
+    .nav-dropdown {
+      display:        none;
+      position:       absolute;
+      top:            calc(100% + 6px);
+      left:           0;
+      z-index:        100;
+      background:     var(--surface-general-default);
+      border:         1px solid var(--border-primary-default);
+      border-radius:  18px;
+      padding:        12px;
+      flex-direction: column;
+      gap:            4px;
+      min-width:      160px;
+      white-space:    nowrap;
+    }
+    .nav-btn-group:hover .nav-dropdown,
+    .nav-btn-group:focus-within .nav-dropdown { display: flex; }
+    .nav-submenu-item {
+      display:         flex;
+      align-items:     center;
+      height:          24px;
+      border-radius:   var(--corner-radius-corner-rounded);
+      cursor:          pointer;
+      text-decoration: none;
+      flex-shrink:     0;
+      padding:         0 4px;
+      transition:      background 0.1s ease;
+      color:           var(--icon-primary-default);
+    }
+    .nav-submenu-item:hover { background: var(--og-50, #e9fbf5); }
+    .nav-submenu-item svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .nav-submenu-item span {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--text-default-body); padding: 0 8px;
+    }
+
+    /* Mobile Navbar */
+    .navbar-mobile {
+      height:          64px;
+      background:      var(--surface-general-default);
+      border-bottom:   1px solid var(--border-primary-default);
+      border-left:     1px solid var(--border-primary-default);
+      border-right:    1px solid var(--border-primary-default);
+      border-radius:   0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl);
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      padding:         var(--spacing-space-m) 24px;
+    }
+    .navbar-mobile__logo {
+      display:     flex;
+      align-items: center;
+      height:      28px;
+    }
+    .navbar-mobile__logo img { height: 28px; width: auto; display: block; }
+    .navbar-mobile__menu-btn {
+      width:       40px;
+      height:      40px;
+      display:     flex;
+      align-items: center;
+      justify-content: center;
+      cursor:      pointer;
+      user-select: none;
+      flex-shrink: 0;
+      color:       var(--icon-primary-default);
+      background:  none;
+      border:      none;
+      padding:     0;
+    }
+    .navbar-mobile__menu-btn svg { display: block; width: 24px; height: 24px; }
+
+    /* ── Responsive Layout ─────────────────────────────────────────
+       Desktop ≥ 1320px : desktop navbar · 60px padding
+       < 1320px          : mobile navbar
+       Tablet  ≤ 1279px  : 2-col rewards · 32px padding
+       Mobile  ≤  767px  : 1-col rewards · 16px padding
+    ─────────────────────────────────────────────────────────────── */
+    .rewards-grid { grid-template-columns: repeat(3, 1fr); }
+
+    #NavBar-Desktop { display: block; }
+    #NavBar-Mobile  { display: none; padding-left: var(--page-padding-x); padding-right: var(--page-padding-x); }
+
+    @media (max-width: 1319px) {
+      #NavBar-Desktop { display: none; }
+      #NavBar-Mobile  { display: block; }
+    }
+
+    @media (max-width: 1279px) {
+      :root          { --page-padding-x: 32px; }
+      .rewards-grid  { grid-template-columns: repeat(2, 1fr); }
+      .bc-row        { flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+      .bc-left       { align-items: flex-start; width: 100%; }
+      .balance-hero  { flex-direction: column; gap: var(--sp-m); }
+    }
+
+    @media (max-width: 767px) {
+      :root          { --page-padding-x: var(--spacing-space-m); }
+      .rewards-grid  { grid-template-columns: 1fr; }
+      .bc-row        { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .bc-actions    { width: 100%; }
+      .btn-secondary, .btn-primary { flex: 1; justify-content: center; }
+      .navbar-nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .navbar-nav::-webkit-scrollbar { display: none; }
+      body { padding-bottom: 102px; }
+      .footer__inner {
+        flex-direction: column;
+        justify-content: center;
+        align-items:     center;
+        gap:             var(--spacing-space-xs);
+        height:          auto;
+        padding:         var(--spacing-space-s) var(--spacing-space-2xl);
+      }
+      .footer__left  { justify-content: center; }
+      .footer__right { justify-content: center; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       Breadcrumb 1.5
+       ══════════════════════════════════════════════════════════════ */
+    .bc-row {
+      display:     flex;
+      align-items: center;
+      gap:         12px;
+      min-height:  36px;
+    }
+    .bc-left {
+      flex:        1;
+      width:       100%;
+      min-width:   0;
+      display:     flex;
+      align-items: center;
+      gap:         var(--sp-m);
+    }
+    .bc-title {
+      font-size:   24px;
+      font-weight: 500;
+      line-height: 36px;
+      color:       #00564c;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .bc-sep {
+      width:      1px;
+      height:     20px;
+      background: #d9d9d9;
+      flex-shrink: 0;
+    }
+    .bc-trail {
+      display:     flex;
+      align-items: center;
+      gap:         var(--sp-xs);
+      flex-wrap:   wrap;
+    }
+    .bc-link {
+      display:         inline-flex;
+      align-items:     center;
+      gap:             var(--sp-xs);
+      font-size:       14px;
+      font-weight:     400;
+      line-height:     20px;
+      color:           var(--og-500);
+      text-decoration: none;
+      white-space:     nowrap;
+    }
+    .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .bc-chevron {
+      width:           16px;
+      height:          16px;
+      stroke:          #bfbfbf;
+      fill:            none;
+      stroke-width:    1.5;
+      stroke-linecap:  round;
+      stroke-linejoin: round;
+      flex-shrink:     0;
+    }
+    .bc-link--current { color: #666; }
+    .bc-actions {
+      display:     flex;
+      align-items: center;
+      gap:         var(--sp-xs);
+      flex-shrink: 0;
+    }
+    .btn-secondary, .btn-primary {
+      display:         inline-flex;
+      align-items:     center;
+      gap:             0;
+      border-radius:   var(--r-rounded);
+      padding:         8px 12px;
+      font-family:     'Poppins', sans-serif;
+      font-size:       14px;
+      font-weight:     600;
+      line-height:     20px;
+      cursor:          pointer;
+      text-decoration: none;
+      white-space:     nowrap;
+      border:          1px solid;
+    }
+    .btn-secondary svg, .btn-primary svg {
+      width:           24px;
+      height:          24px;
+      fill:            none;
+      stroke-width:    1.5;
+      stroke-linecap:  round;
+      stroke-linejoin: round;
+      flex-shrink:     0;
+    }
+    .btn-secondary svg + span, .btn-primary svg + span { padding: 0 8px; }
+    .btn-secondary {
+      background:   #fff;
+      border-color: var(--og-500);
+      color:        var(--og-500);
+    }
+    .btn-secondary svg { stroke: var(--og-500); }
+    .btn-primary {
+      background:   var(--og-500);
+      border-color: var(--og-600);
+      color:        #e9fbf5;
+    }
+    .btn-primary svg { stroke: #e9fbf5; }
+
+    /* ══════════════════════════════════════════════════════════════
+       Balance Hero — coin + ruby totals
+       ══════════════════════════════════════════════════════════════ */
+    .balance-hero {
+      display:       flex;
+      gap:           var(--sp-m);
+      align-items:   stretch;
+    }
+    .balance-card {
+      flex:          1;
+      display:       flex;
+      align-items:   center;
+      gap:           var(--sp-m);
+      border-radius: var(--r-4xl);
+      border:        1px solid var(--border-primary-default);
+      padding:       var(--sp-m) var(--sp-xl);
+      background:    var(--og-50);
+      min-height:    80px;
+    }
+    .balance-card__icon {
+      width:           48px;
+      height:          48px;
+      border-radius:   var(--r-rounded);
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+    }
+    .balance-card__icon--coin  { background: var(--coin-bg); }
+    .balance-card__icon--ruby  { background: var(--ruby-bg); }
+    .balance-card__icon--gem   { background: var(--og-200); }
+    .balance-card__icon svg    { width: 24px; height: 24px; }
+    .balance-card__info { display: flex; flex-direction: column; gap: 2px; }
+    .balance-card__value {
+      font-size:   28px;
+      font-weight: 700;
+      line-height: 36px;
+      color:       var(--text-heading);
+    }
+    .balance-card__label {
+      font-size:   12px;
+      font-weight: 500;
+      line-height: 16px;
+      color:       var(--text-body);
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       Reward Cards Grid
+       ══════════════════════════════════════════════════════════════ */
+    .rewards-grid {
+      display: grid;
+      gap:     var(--sp-m);
+      width:   100%;
+    }
+
+    .reward-card {
+      border-radius: var(--r-4xl);
+      border:        1px solid var(--border-primary-default);
+      background:    #fff;
+      overflow:      hidden;
+      display:       flex;
+      flex-direction: column;
+    }
+    .reward-card__img-wrap {
+      width:           100%;
+      aspect-ratio:    4 / 3;
+      background:      var(--og-50);
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      overflow:        hidden;
+      flex-shrink:     0;
+    }
+    .reward-card__img-wrap svg {
+      width:   64px;
+      height:  64px;
+      color:   var(--og-500);
+      opacity: 0.4;
+    }
+    .reward-card__body {
+      padding:        var(--sp-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--sp-xs);
+      flex:           1;
+    }
+    .reward-card__name {
+      font-size:   16px;
+      font-weight: 600;
+      line-height: 24px;
+      color:       var(--text-heading);
+    }
+    .reward-card__desc {
+      font-size:   12px;
+      font-weight: 400;
+      line-height: 18px;
+      color:       var(--text-body);
+    }
+    .reward-card__footer {
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      padding-top:     var(--sp-xs);
+      border-top:      1px solid var(--og-100);
+      margin-top:      auto;
+    }
+    .reward-card__cost {
+      display:     flex;
+      align-items: center;
+      gap:         var(--sp-xxs);
+      font-size:   14px;
+      font-weight: 700;
+      color:       var(--coin-text);
+    }
+    .reward-card__cost svg {
+      width:  18px;
+      height: 18px;
+    }
+    .btn-redeem {
+      display:         inline-flex;
+      align-items:     center;
+      border-radius:   var(--r-rounded);
+      padding:         2px 8px 2px 12px;
+      background:      var(--og-500);
+      border:          1px solid var(--og-600);
+      cursor:          pointer;
+      text-decoration: none;
+      transition:      background 0.15s ease, border-color 0.15s ease;
+    }
+    .btn-redeem__label {
+      font-size:   12px;
+      font-weight: 600;
+      line-height: 18px;
+      color:       #e9fbf5;
+      white-space: nowrap;
+      padding-right: var(--sp-xxs);
+      transition:  color 0.15s ease;
+    }
+    .btn-redeem__arrow {
+      width:           20px;
+      height:          20px;
+      border-radius:   var(--r-rounded);
+      background:      #99ebce;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+      transition:      background 0.15s ease;
+    }
+    .btn-redeem__arrow svg {
+      width:           12px;
+      height:          12px;
+      fill:            none;
+      stroke-width:    2.5;
+      stroke-linecap:  round;
+      stroke-linejoin: round;
+      stroke:          var(--og-700);
+      transition:      stroke 0.15s ease;
+    }
+    .btn-redeem:hover { background: #b5f291; border-color: #70bc6f; }
+    .btn-redeem:hover .btn-redeem__label { color: #70bc6f; }
+    .btn-redeem:hover .btn-redeem__arrow { background: #e8fbe8; }
+    .btn-redeem:hover .btn-redeem__arrow svg { stroke: #70bc6f; }
+    .btn-redeem:active { background: #00564c; border-color: #00453d; }
+    .btn-redeem:active .btn-redeem__label { color: var(--og-500); }
+    .btn-redeem:active .btn-redeem__arrow { background: var(--og-500); }
+
+    /* ══════════════════════════════════════════════════════════════
+       Two-panel rewards layout — DS node 3065:42736
+       Left sidebar: 230px  |  gap: 12px  |  Right main: flex-1
+       ══════════════════════════════════════════════════════════════ */
+    .rewards-layout {
+      display:     flex;
+      gap:         12px;
+      align-items: stretch;
+    }
+
+    /* LEFT SIDEBAR — DS node 3065:42737
+       bg: white, border: 1px #d9d9d9, border-radius: 18px (corner-2xl)
+       padding: 16px, gap: 8px                                         */
+    .rewards-sidebar {
+      width:          230px;
+      flex-shrink:    0;
+      background:     #fff;
+      border:         1px solid #d9d9d9;
+      border-radius:  var(--r-2xl);
+      padding:        var(--sp-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--sp-xs);
+    }
+
+    /* Coin balance chip — DS node 3065:42738
+       bg: #e8fbe8 (Surface/secondary/default-subtle)
+       border: 1px #b5f291 (Border/secondary/default)
+       border-radius: 8px (corner-m), px:12 py:8, height:40px          */
+    .sidebar-balance {
+      height:          40px;
+      background:      #e8fbe8;
+      border:          1px solid #b5f291;
+      border-radius:   8px;
+      padding:         var(--sp-xs) var(--sp-s);
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      gap:             var(--sp-xs);
+      overflow:        hidden;
+      flex-shrink:     0;
+    }
+    .sidebar-balance__coin  { width: 18px; height: 21px; flex-shrink: 0; display: block; object-fit: contain; }
+    .sidebar-balance__value { font-size: 16px; font-weight: 700; line-height: 24px; color: var(--text-default-body); white-space: nowrap; }
+
+    /* Sidebar nav buttons — Button - 1.5 Tertiary / Primary (active) */
+    .sidebar-btn {
+      width:         100%;
+      height:        40px;
+      border-radius: var(--r-rounded);
+      padding:       var(--sp-xs) var(--sp-s);
+      display:       flex;
+      align-items:   center;
+      gap:           0;
+      cursor:        pointer;
+      background:    #fff;
+      border:        none;
+      flex-shrink:   0;
+      transition:    background 0.12s ease;
+    }
+    .sidebar-btn:not(.sidebar-btn--active):hover { background: var(--og-50); }
+    .sidebar-btn--active {
+      background: var(--og-500);
+      border:     1px solid var(--og-600);
+    }
+    .sidebar-btn__icon-wrap {
+      width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: var(--icon-primary-default);
+    }
+    .sidebar-btn--active .sidebar-btn__icon-wrap { color: var(--icon-primary-on-color); }
+    .sidebar-btn__icon-clip {
+      width: 20px; height: 20px;
+      box-sizing: border-box;
+      padding: 1.67px;   /* 8.33% — default for stop-circle + smile */
+      overflow: hidden; flex-shrink: 0;
+    }
+    .sidebar-btn__icon-clip svg { display: block; width: 100%; height: 100%; }
+    /* Per-icon DS insets */
+    .sidebar-btn__icon-clip[data-icon="box"]           { padding: 1.03px 1.67px 1.02px 1.67px; }
+    .sidebar-btn__icon-clip[data-icon="shopping-bag"]  { padding: 1.67px 2.5px; }
+    .sidebar-btn__icon-clip[data-icon="shopping-cart"] { padding: 0.83px 0.83px 1.67px 0.83px; }
+    .sidebar-btn__label {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--text-heading); padding: 0 var(--sp-xs); white-space: nowrap;
+    }
+    .sidebar-btn--active .sidebar-btn__label { color: var(--text-primary-on-color); }
+
+    /* RIGHT MAIN PANEL — same container as sidebar */
+    .rewards-main {
+      flex:           1;
+      min-width:      0;
+      background:     #fff;
+      border:         1px solid #d9d9d9;
+      border-radius:  var(--r-2xl);
+      padding:        var(--sp-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--sp-m);
+      overflow:       hidden;
+    }
+
+    /* Quest cards 2-col grid — row-gap 16px, col-gap 8px */
+    .quest-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-m) var(--sp-xs);
+    }
+
+    /* Coin Quest Card 1.5 — DS node 3065:42903
+       border: 1px #d9d9d9, border-radius: 24px, padding: 16px, height: 150px */
+    .qc {
+      background:    #fff;
+      border:        1px solid #d9d9d9;
+      border-radius: var(--r-4xl);
+      padding:       var(--sp-m);
+      display:       flex;
+      gap:           var(--sp-m);
+      align-items:   center;
+      height:        150px;
+      overflow:      hidden;
+    }
+
+    /* Image panel — bg #e8fbe8, border #baf3b9, radius 12px, px 16px */
+    .qc__img {
+      background:      #e8fbe8;
+      border:          1px solid #baf3b9;
+      border-radius:   12px;
+      padding:         0 var(--sp-m);
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      align-self:      stretch;
+      flex-shrink:     0;
+    }
+    .qc__img img { width: 80px; height: 80px; object-fit: contain; display: block; }
+
+    /* Content — flex:1, gap:15px */
+    .qc__content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 15px; }
+
+    /* Header: title + label badges */
+    .qc__header { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .qc__title  { font-size: 16px; font-weight: 600; line-height: 24px; color: var(--text-heading); white-space: nowrap; flex-shrink: 0; }
+    .qc__badges { display: flex; gap: 8px; align-items: center; }
+
+    /* Label Badge 1.5 */
+    .lbadge {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 24px; border-radius: 60px; padding: 2px 8px;
+      font-size: 14px; font-weight: 500; line-height: 20px; white-space: nowrap; border: 1px solid;
+    }
+    .lbadge--easy   { background: #d9f7ed; border-color: #66e0b6; color: #00cc85; }
+    .lbadge--daily  { background: #e6f6fd; border-color: #7fd0f3; color: #00a2e8; }
+    .lbadge--hard   { background: #fff1eb; border-color: #ffb899; color: #c24b0a; }
+    .lbadge--weekly { background: #fff9e6; border-color: #ffe080; color: #9a6700; }
+
+    /* Progress */
+    .qc__progress { display: flex; flex-direction: column; gap: 4px; }
+    .qc__coin-row { display: flex; gap: 4px; align-items: center; }
+    .qc__coin-icon  { width: 24px; height: 24px; flex-shrink: 0; display: block; object-fit: contain; }
+    .qc__coin-value { font-size: 14px; font-weight: 400; line-height: 20px; color: #666; }
+    .qc__bar      { height: 4px; background: #f2f2f2; border-radius: 999px; overflow: hidden; width: 100%; }
+    .qc__bar-fill { height: 100%; background: var(--og-500); border-radius: 999px; }
+
+    /* Footer row */
+    .qc__footer { display: flex; gap: 8px; align-items: center; }
+    .qc__status { flex: 1; min-width: 0; font-size: 14px; font-weight: 400; line-height: 20px; color: #666; }
+
+    /* Claim button — Button - 1.5 Primary/M (h:32px) */
+    .btn-claim {
+      display: inline-flex; align-items: center;
+      border-radius: var(--r-rounded); padding: 2px 8px;
+      height: 32px; max-height: 32px;
+      background: var(--og-500); border: 1px solid var(--og-600);
+      cursor: pointer; text-decoration: none; flex-shrink: 0;
+      transition: background 0.12s ease, border-color 0.12s ease;
+    }
+    .btn-claim__label { font-size: 12px; font-weight: 600; line-height: 18px; color: #f6fdfb; padding: 0 4px; transition: color 0.12s ease; }
+    .btn-claim__arrow {
+      width: 20px; height: 20px; border-radius: var(--r-rounded); background: #99ebce;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 2px;
+      transition: background 0.12s ease;
+    }
+    .btn-claim__arrow svg { display: block; width: 16px; height: 16px; }
+    .btn-claim:hover { background: #b5f291; border-color: #70bc6f; }
+    .btn-claim:hover .btn-claim__label { color: #70bc6f; }
+    .btn-claim:hover .btn-claim__arrow { background: #e8fbe8; }
+    .btn-claim:active { background: #00564c; border-color: #00453d; }
+    .btn-claim:active .btn-claim__label { color: #00cc85; }
+    .btn-claim:active .btn-claim__arrow { background: #00cc85; }
+
+    /* Disabled state — DS node I3065:42904;2339:5039 (Rule 19)
+       bg: Surface/disabled/primary #f2f2f2
+       border + label + chevron: #bfbfbf (Icon/disabled/default)
+       Arrow border via box-shadow: inset (Rule 30)                */
+    .btn-claim--disabled,
+    .btn-claim--disabled:hover,
+    .btn-claim--disabled:active {
+      background:     #f2f2f2;
+      border-color:   #bfbfbf;
+      cursor:         not-allowed;
+      pointer-events: none;
+    }
+    .btn-claim--disabled .btn-claim__label { color: #bfbfbf; }
+    .btn-claim--disabled .btn-claim__arrow {
+      background: #f2f2f2;
+      box-shadow: inset 0 0 0 1px #bfbfbf;
+      color:      #bfbfbf;
+    }
+
+    /* Responsive — collapse sidebar above tablet */
+    @media (max-width: 1279px) {
+      .rewards-layout { flex-direction: column; }
+      .rewards-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; height: auto; }
+      .quest-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       Footer - 1.5
+       ══════════════════════════════════════════════════════════════ */
+    .footer {
+      position:   fixed;
+      bottom:     0;
+      left:       0;
+      right:      0;
+      z-index:    100;
+      background: var(--Surface-general-default, #fff);
+      border-top: 1px solid var(--og-500);
+    }
+    .footer__inner {
+      height:          60px;
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      padding-left:    28px;
+      padding-right:   28px;
+    }
+    .footer__left {
+      display:     flex;
+      align-items: center;
+      gap:         var(--sp-xxs);
+      flex-shrink: 0;
+    }
+    .footer__text {
+      font-size:   14px;
+      font-weight: 500;
+      line-height: 20px;
+      color:       #666;
+      white-space: nowrap;
+    }
+    .footer__link {
+      font-size:       14px;
+      font-weight:     500;
+      line-height:     20px;
+      color:           var(--og-500);
+      white-space:     nowrap;
+      cursor:          pointer;
+      text-decoration: none;
+    }
+    .footer__right {
+      display:     flex;
+      align-items: center;
+      gap:         var(--sp-xxs);
+      flex-shrink: 0;
+    }
+    .footer__heart {
+      width:           20px;
+      height:          20px;
+      flex-shrink:     0;
+      display:         block;
+      fill:            none;
+      stroke:          var(--og-500);
+      stroke-width:    1.5;
+      stroke-linecap:  round;
+      stroke-linejoin: round;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG sprite — all icon symbols -->
+  <svg aria-hidden="true" style="display:none">
+    <symbol id="ic-home" viewBox="-1 -1 20 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 7 L 9 0 L 18 7 L 18 18 C 18 18.5304 17.7893 19.0391 17.4142 19.4142 C 17.0391 19.7893 16.5304 20 16 20 L 2 20 C 1.4696 20 0.9609 19.7893 0.5858 19.4142 C 0.2107 19.0391 0 18.5304 0 18 L 0 7 Z"/><path d="M 6 20 L 6 10 L 12 10 L 12 20"/></symbol>
+    <symbol id="ic-check-circle" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 20 9.086 L 20 10.006 C 19.999 12.162 19.3 14.26 18.009 15.988 C 16.718 17.715 14.903 18.978 12.835 19.59 C 10.767 20.201 8.557 20.128 6.534 19.38 C 4.512 18.633 2.785 17.252 1.611 15.443 C 0.437 13.634 -0.12 11.494 0.022 9.342 C 0.164 7.19 0.997 5.142 2.398 3.503 C 3.799 1.864 5.693 0.721 7.796 0.246 C 9.9 -0.229 12.1 -0.012 14.07 0.866"/><path d="M 20 2.006 L 10 12.016 L 7 9.016"/></symbol>
+    <symbol id="ic-battle" viewBox="-1 -1 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 18 0 L 18 5 L 7 14 L 3 18 L 0 15 L 4 11 L 13 0 L 18 0 Z"/><path d="M 2 10 L 8 16"/><path d="M 11.32 14.32 L 15 18 L 18 15 L 14.635 11.635"/><path d="M 7 2.5 L 5 0 L 0 0 L 0 5 L 3 7.5"/></symbol>
+    <symbol id="ic-book-open" viewBox="-1 -1 22 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 0 L 6 0 C 7.061 0 8.078 0.421 8.828 1.172 C 9.579 1.922 10 2.939 10 4 L 10 18 C 10 17.204 9.684 16.441 9.121 15.879 C 8.559 15.316 7.796 15 7 15 L 0 15 L 0 0 Z"/><path d="M 20 0 L 14 0 C 12.939 0 11.922 0.421 11.172 1.172 C 10.421 1.922 10 2.939 10 4 L 10 18 C 10 17.204 10.316 16.441 10.879 15.879 C 11.441 15.316 12.204 15 13 15 L 20 15 L 20 0 Z"/></symbol>
+    <symbol id="ic-users" viewBox="-1 -1 24 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 16 18 L 16 16 C 16 14.939 15.579 13.922 14.828 13.172 C 14.078 12.421 13.061 12 12 12 L 4 12 C 2.939 12 1.922 12.421 1.172 13.172 C 0.421 13.922 0 14.939 0 16 L 0 18"/><path d="M 8 8 C 10.209 8 12 6.209 12 4 C 12 1.791 10.209 0 8 0 C 5.791 0 4 1.791 4 4 C 4 6.209 5.791 8 8 8 Z"/><path d="M 22 18 L 22 16 C 21.999 15.114 21.704 14.253 21.161 13.552 C 20.618 12.852 19.858 12.352 19 12.13"/><path d="M 15 0.13 C 15.86 0.35 16.623 0.851 17.168 1.552 C 17.712 2.254 18.008 3.117 18.008 4.005 C 18.008 4.893 17.712 5.756 17.168 6.458 C 16.623 7.159 15.86 7.66 15 7.88"/></symbol>
+    <symbol id="ic-book" viewBox="-1 -1 18 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 17.5 C 0 16.837 0.263 16.201 0.732 15.732 C 1.201 15.263 1.837 15 2.5 15 L 16 15"/><path d="M 2.5 0 L 16 0 L 16 20 L 2.5 20 C 1.837 20 1.201 19.737 0.732 19.268 C 0.263 18.799 0 18.163 0 17.5 L 0 2.5 C 0 1.837 0.263 1.201 0.732 0.732 C 1.201 0.263 1.837 0 2.5 0 Z"/></symbol>
+    <symbol id="ic-award" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 12 15 C 15.866 15 19 11.866 19 8 C 19 4.134 15.866 1 12 1 C 8.134 1 5 4.134 5 8 C 5 11.866 8.134 15 12 15 Z"/><path d="M 8.21 13.89 L 7 23 L 12 20 L 17 23 L 15.79 13.88"/></symbol>
+    <symbol id="ic-star" viewBox="-1 -1 22 21" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 10 0 L 13.09 6.26 L 20 7.27 L 15 12.14 L 16.18 19.02 L 10 15.77 L 3.82 19.02 L 5 12.14 L 0 7.27 L 6.91 6.26 L 10 0 Z"/></symbol>
+    <symbol id="ic-gift" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 18 10 L 18 20 L 2 20 L 2 10"/><path d="M 20 5 L 0 5 L 0 10 L 20 10 L 20 5 Z"/><path d="M 10 5 L 5.5 5 C 4.837 5 4.201 4.737 3.732 4.268 C 3.263 3.799 3 3.163 3 2.5 C 3 1.837 3.263 1.201 3.732 0.732 C 4.201 0.263 4.837 0 5.5 0 C 9 0 10 5 10 5 Z"/><path d="M 10 5 L 14.5 5 C 15.163 5 15.799 4.737 16.268 4.268 C 16.737 3.799 17 3.163 17 2.5 C 17 1.837 16.737 1.201 16.268 0.732 C 15.799 0.263 15.163 0 14.5 0 C 11 0 10 5 10 5 Z"/><path d="M 10 20 L 10 5"/></symbol>
+    <symbol id="ic-chevron-down-nav" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5L10 12.5L15 7.5"/></symbol>
+    <symbol id="ic-search" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 11 19 C 15.418 19 19 15.418 19 11 C 19 6.582 15.418 3 11 3 C 6.582 3 3 6.582 3 11 C 3 15.418 6.582 19 11 19 Z"/><path d="M 21 21 L 16.65 16.65"/></symbol>
+    <symbol id="ic-maximize" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 3 16 L 3 19 C 3 19.53 3.211 20.039 3.586 20.414 C 3.961 20.789 4.47 21 5 21 L 8 21"/><path d="M 8 3 L 5 3 C 4.47 3 3.961 3.211 3.586 3.586 C 3.211 3.961 3 4.47 3 5 L 3 8 M 21 8 L 21 5 C 21 4.47 20.789 3.961 20.414 3.586 C 20.039 3.211 19.53 3 19 3 L 16 3 M 16 21 L 19 21 C 19.53 21 20.039 20.789 20.414 20.414 C 20.789 20.039 21 19.53 21 19 L 21 16"/></symbol>
+    <symbol id="ic-smartphone" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 17 2 L 7 2 C 5.895 2 5 2.895 5 4 L 5 20 C 5 21.105 5.895 22 7 22 L 17 22 C 18.105 22 19 21.105 19 20 L 19 4 C 19 2.895 18.105 2 17 2 Z"/><path d="M 12 18 L 12.01 18"/></symbol>
+    <symbol id="ic-bell" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22 17 L 2 17 C 2.796 17 3.559 16.684 4.121 16.121 C 4.684 15.559 5 14.796 5 14 L 5 9 C 5 7.143 5.737 5.363 7.05 4.05 C 8.363 2.737 10.143 2 12 2 C 13.857 2 15.637 2.737 16.95 4.05 C 18.263 5.363 19 7.143 19 9 L 19 14 C 19 14.796 19.316 15.559 19.879 16.121 C 20.441 16.684 21.204 17 22 17 Z"/><path d="M 13.73 21 C 13.554 21.303 13.302 21.555 12.998 21.73 C 12.695 21.904 12.35 21.996 12 21.996 C 11.65 21.996 11.305 21.904 11.002 21.73 C 10.698 21.555 10.446 21.303 10.27 21"/></symbol>
+    <symbol id="ic-en" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 21.613 6 L 21.613 17.252 L 13.086 6 L 13.086 17.252"/><path d="M 9.129 6.05 L 3 6.05 L 3 11.651 L 3 17.252 L 9.129 17.252"/><path d="M 3 11.651 L 9.181 11.651"/></symbol>
+    <symbol id="ic-waffle" viewBox="-1 -1 18 18" fill="currentColor" stroke="none"><path d="M 8 9 C 8.552 9 9 8.552 9 8 C 9 7.448 8.552 7 8 7 C 7.448 7 7 7.448 7 8 C 7 8.552 7.448 9 8 9 Z"/><path d="M 15 9 C 15.552 9 16 8.552 16 8 C 16 7.448 15.552 7 15 7 C 14.448 7 14 7.448 14 8 C 14 8.552 14.448 9 15 9 Z"/><path d="M 1 9 C 1.552 9 2 8.552 2 8 C 2 7.448 1.552 7 1 7 C 0.448 7 0 7.448 0 8 C 0 8.552 0.448 9 1 9 Z"/><path d="M 8 2 C 8.552 2 9 1.552 9 1 C 9 0.448 8.552 0 8 0 C 7.448 0 7 0.448 7 1 C 7 1.552 7.448 2 8 2 Z"/><path d="M 15 2 C 15.552 2 16 1.552 16 1 C 16 0.448 15.552 0 15 0 C 14.448 0 14 0.448 14 1 C 14 1.552 14.448 2 15 2 Z"/><path d="M 1 2 C 1.552 2 2 1.552 2 1 C 2 0.448 1.552 0 1 0 C 0.448 0 0 0.448 0 1 C 0 1.552 0.448 2 1 2 Z"/><path d="M 8 16 C 8.552 16 9 15.552 9 15 C 9 14.448 8.552 14 8 14 C 7.448 14 7 14.448 7 15 C 7 15.552 7.448 16 8 16 Z"/><path d="M 15 16 C 15.552 16 16 15.552 16 15 C 16 14.448 15.552 14 15 14 C 14.448 14 14 14.448 14 15 C 14 15.552 14.448 16 15 16 Z"/><path d="M 1 16 C 1.552 16 2 15.552 2 15 C 2 14.448 1.552 14 1 14 C 0.448 14 0 14.448 0 15 C 0 15.552 0.448 16 1 16 Z"/></symbol>
+    <symbol id="ic-menu" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12H21M3 6H21M3 18H21"/></symbol>
+    <symbol id="ic-corner-down-right" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></symbol>
+    <!-- Coin icon for balance card -->
+    <symbol id="ic-coin" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M9 8.5c0-.83.67-1.5 1.5-1.5h3a1.5 1.5 0 0 1 0 3H10a1.5 1.5 0 0 0 0 3h3.5a1.5 1.5 0 0 1 0 3H10"/></symbol>
+    <!-- Ruby/gem icon -->
+    <symbol id="ic-gem" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7 12 2"/><line x1="12" y1="22" x2="12" y2="2"/><line x1="2" y1="7" x2="22" y2="7"/></symbol>
+    <!-- Ticket icon for rewards -->
+    <symbol id="ic-tag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
+    <!-- Sidebar nav icons -->
+    <symbol id="ic-stop-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><rect x="9" y="9" width="6" height="6"/></symbol>
+    <symbol id="ic-package" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/></symbol>
+    <symbol id="ic-shopping-bag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
+    <symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></symbol>
+    <symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></symbol>
+    <!-- Claim button chevron — Primary/M clip 16×16 (DS node 479:352) -->
+    <symbol id="ic-chevron-btn-m" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12L10 8L6 4"/></symbol>
+  </svg>
+
+  <!-- ══════════════════════════════════════════════════════════
+       Desktop Navbar — Navbar 1.5 ≥ 1320px
+       ══════════════════════════════════════════════════════════ -->
+  <section id="NavBar-Desktop">
+  <nav class="navbar">
+
+    <!-- Row 1 — Brand bar (64px) -->
+    <div class="navbar-brand">
+      <a class="navbar-logo" href="#">
+        <img src="../navbar/logo.png" alt="Pandai">
+      </a>
+      <div class="navbar-actions">
+        <div class="navbar-action-icons">
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-maximize"/></svg></div>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
+          <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-waffle"/></svg></div>
+        </div>
+        <div class="navbar-avatar">
+          <img src="../navbar/icon-avatar-user.png" class="navbar-avatar__img" alt="User">
+        </div>
+        <span class="navbar-badge">15</span>
+      </div>
+    </div><!-- end row 1 -->
+
+    <!-- Row 2 — Nav content pill (56px) -->
+    <div class="navbar-nav">
+
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="home"><svg aria-hidden="true"><use href="#ic-home"/></svg></div></div>
+          <span class="nav-btn__label">Home</span>
+        </div>
+      </div>
+
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div></div>
+          <span class="nav-btn__label">Quiz</span>
+        </div>
+      </div>
+
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="battle"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div></div>
+          <span class="nav-btn__label">Battle</span>
+        </div>
+      </div>
+
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="practice"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div></div>
+          <span class="nav-btn__label">Practice</span>
+        </div>
+      </div>
+
+      <!-- Class dropdown -->
+      <div class="nav-btn-group">
+        <div class="nav-btn">
+          <div class="nav-btn__inner">
+            <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="class"><svg aria-hidden="true"><use href="#ic-users"/></svg></div></div>
+            <span class="nav-btn__label">Class</span>
+            <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+          </div>
+        </div>
+        <div class="nav-dropdown" role="menu">
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>My Classes</span></a>
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Browse Classes</span></a>
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Timetable</span></a>
+        </div>
+      </div>
+
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="learn"><svg aria-hidden="true"><use href="#ic-book"/></svg></div></div>
+          <span class="nav-btn__label">Learn</span>
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+        </div>
+      </div>
+
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="achievement"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div></div>
+          <span class="nav-btn__label">Achievement</span>
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+        </div>
+      </div>
+
+      <div class="nav-btn">
+        <div class="nav-btn__inner">
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="potential"><svg aria-hidden="true"><use href="#ic-star"/></svg></div></div>
+          <span class="nav-btn__label">Potential</span>
+          <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+        </div>
+      </div>
+
+      <!-- Rewards — active -->
+      <div class="nav-btn-group">
+        <div class="nav-btn is-active">
+          <div class="nav-btn__inner">
+            <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div></div>
+            <span class="nav-btn__label">Rewards</span>
+            <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+          </div>
+        </div>
+        <div class="nav-dropdown" role="menu">
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Coin Quest</span></a>
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>My Rewards</span></a>
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Merchandise</span></a>
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>eVoucher</span></a>
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Avatar</span></a>
+        </div>
+      </div>
+
+    </div><!-- end row 2 -->
+  </nav>
+  </section><!-- end NavBar-Desktop -->
+
+  <!-- Mobile Navbar (< 1320px) -->
+  <section id="NavBar-Mobile">
+    <div class="navbar-mobile">
+      <a class="navbar-mobile__logo" href="#">
+        <img src="../navbar/logo.png" alt="Pandai">
+      </a>
+      <button class="navbar-mobile__menu-btn" aria-label="Open menu" type="button">
+        <svg aria-hidden="true"><use href="#ic-menu"/></svg>
+      </button>
+    </div>
+  </section><!-- end NavBar-Mobile -->
+
+  <!-- Page content ─────────────────────────────────────────── -->
+  <div class="page-content">
+
+    <!-- Breadcrumb — Rewards > Coin Quest (DS node 3065:42735) -->
+    <section class="bc-row" aria-label="Breadcrumb">
+      <div class="bc-left">
+        <span class="bc-title">Rewards</span>
+        <span class="bc-sep" aria-hidden="true"></span>
+        <nav class="bc-trail" aria-label="Breadcrumb">
+          <a href="#" class="bc-link">
+            <svg aria-hidden="true"><use href="#ic-gift"/></svg>
+            Rewards
+            <svg class="bc-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <span class="bc-link bc-link--current" aria-current="page">Coin Quest</span>
+        </nav>
+      </div>
+    </section>
+
+    <!-- Two-panel layout — DS node 3065:42736 -->
+    <div class="rewards-layout">
+
+      <!-- LEFT SIDEBAR — DS node 3065:42737 (230px) -->
+      <aside class="rewards-sidebar">
+
+        <!-- Coin balance chip — DS node 3065:42738 -->
+        <div class="sidebar-balance">
+          <img class="sidebar-balance__coin"
+            src="https://www.figma.com/api/mcp/asset/f380960d-7bfa-4835-a69f-548759c09cce"
+            alt="Coin">
+          <span class="sidebar-balance__value">120</span>
+        </div>
+
+        <!-- Coin Quest — Primary/Active (DS node 3065:42896) -->
+        <button class="sidebar-btn sidebar-btn--active" type="button">
+          <div class="sidebar-btn__icon-wrap">
+            <div class="sidebar-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-stop-circle"/></svg></div>
+          </div>
+          <span class="sidebar-btn__label">Coin Quest</span>
+        </button>
+
+        <!-- My Rewards (DS node 3065:42897) -->
+        <button class="sidebar-btn" type="button">
+          <div class="sidebar-btn__icon-wrap">
+            <div class="sidebar-btn__icon-clip" data-icon="box"><svg aria-hidden="true"><use href="#ic-package"/></svg></div>
+          </div>
+          <span class="sidebar-btn__label">My Rewards</span>
+        </button>
+
+        <!-- Merchandise (DS node 3065:42898) -->
+        <button class="sidebar-btn" type="button">
+          <div class="sidebar-btn__icon-wrap">
+            <div class="sidebar-btn__icon-clip" data-icon="shopping-bag"><svg aria-hidden="true"><use href="#ic-shopping-bag"/></svg></div>
+          </div>
+          <span class="sidebar-btn__label">Merchandise</span>
+        </button>
+
+        <!-- eVoucher (DS node 3065:42899) -->
+        <button class="sidebar-btn" type="button">
+          <div class="sidebar-btn__icon-wrap">
+            <div class="sidebar-btn__icon-clip" data-icon="shopping-cart"><svg aria-hidden="true"><use href="#ic-shopping-cart"/></svg></div>
+          </div>
+          <span class="sidebar-btn__label">eVoucher</span>
+        </button>
+
+        <!-- Avatar (DS node 3065:42900) -->
+        <button class="sidebar-btn" type="button">
+          <div class="sidebar-btn__icon-wrap">
+            <div class="sidebar-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-smile"/></svg></div>
+          </div>
+          <span class="sidebar-btn__label">Avatar</span>
+        </button>
+
+      </aside>
+
+      <!-- RIGHT MAIN — DS node 3065:42901 -->
+      <main class="rewards-main">
+        <div class="quest-grid">
+
+          <!-- ① Class instructions | Easy · Daily | 120 coins | 2/2 -->
+          <div class="qc">
+            <div class="qc__img">
+              <img src="../image-repo/Rewards-CoinQuest/Property%201=Enroll%20Course_Completed.svg" alt="Enroll Course">
+            </div>
+            <div class="qc__content">
+              <div class="qc__header">
+                <span class="qc__title">Class instructions</span>
+                <div class="qc__badges"><span class="lbadge lbadge--easy">Easy</span><span class="lbadge lbadge--daily">Daily</span></div>
+              </div>
+              <div class="qc__progress">
+                <div class="qc__coin-row">
+                  <img class="qc__coin-icon" src="https://www.figma.com/api/mcp/asset/f380960d-7bfa-4835-a69f-548759c09cce" alt="Coin">
+                  <span class="qc__coin-value">120</span>
+                </div>
+                <div class="qc__bar"><div class="qc__bar-fill" style="width:100%"></div></div>
+              </div>
+              <div class="qc__footer">
+                <span class="qc__status">2/2 Achieved</span>
+                <a href="#" class="btn-claim"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ② Complete a Quiz | Easy · Daily | 80 coins | 0/2 — disabled -->
+          <div class="qc">
+            <div class="qc__img">
+              <img src="../image-repo/Rewards-CoinQuest/Property%201=Score%20Exam.svg" alt="Score Exam">
+            </div>
+            <div class="qc__content">
+              <div class="qc__header">
+                <span class="qc__title">Complete a Quiz</span>
+                <div class="qc__badges"><span class="lbadge lbadge--easy">Easy</span><span class="lbadge lbadge--daily">Daily</span></div>
+              </div>
+              <div class="qc__progress">
+                <div class="qc__coin-row">
+                  <img class="qc__coin-icon" src="https://www.figma.com/api/mcp/asset/f380960d-7bfa-4835-a69f-548759c09cce" alt="Coin">
+                  <span class="qc__coin-value">80</span>
+                </div>
+                <div class="qc__bar"><div class="qc__bar-fill" style="width:0%"></div></div>
+              </div>
+              <div class="qc__footer">
+                <span class="qc__status">0/2 Achieved</span>
+                <a href="#" class="btn-claim btn-claim--disabled" aria-disabled="true" tabindex="-1"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ③ Win a Battle | Hard · Daily | 200 coins | 0/1 -->
+          <div class="qc">
+            <div class="qc__img">
+              <img src="../image-repo/Rewards-CoinQuest/Property%201=Goal%20%26%20Reward.svg" alt="Goal &amp; Reward">
+            </div>
+            <div class="qc__content">
+              <div class="qc__header">
+                <span class="qc__title">Win a Battle</span>
+                <div class="qc__badges"><span class="lbadge lbadge--hard">Hard</span><span class="lbadge lbadge--daily">Daily</span></div>
+              </div>
+              <div class="qc__progress">
+                <div class="qc__coin-row">
+                  <img class="qc__coin-icon" src="https://www.figma.com/api/mcp/asset/f380960d-7bfa-4835-a69f-548759c09cce" alt="Coin">
+                  <span class="qc__coin-value">200</span>
+                </div>
+                <div class="qc__bar"><div class="qc__bar-fill" style="width:0%"></div></div>
+              </div>
+              <div class="qc__footer">
+                <span class="qc__status">0/2 Achieved</span>
+                <a href="#" class="btn-claim btn-claim--disabled" aria-disabled="true" tabindex="-1"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ④ Attend Live Class | Easy · Weekly | 150 coins | 1/1 -->
+          <div class="qc">
+            <div class="qc__img">
+              <img src="../image-repo/Rewards-CoinQuest/Property%201=Topical%20Test_Completed.svg" alt="Topical Test Completed">
+            </div>
+            <div class="qc__content">
+              <div class="qc__header">
+                <span class="qc__title">Attend Live Class</span>
+                <div class="qc__badges"><span class="lbadge lbadge--easy">Easy</span><span class="lbadge lbadge--weekly">Weekly</span></div>
+              </div>
+              <div class="qc__progress">
+                <div class="qc__coin-row">
+                  <img class="qc__coin-icon" src="https://www.figma.com/api/mcp/asset/f380960d-7bfa-4835-a69f-548759c09cce" alt="Coin">
+                  <span class="qc__coin-value">150</span>
+                </div>
+                <div class="qc__bar"><div class="qc__bar-fill" style="width:100%"></div></div>
+              </div>
+              <div class="qc__footer">
+                <span class="qc__status">1/1 Achieved</span>
+                <a href="#" class="btn-claim"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ⑤ Practice Session | Hard · Weekly | 250 coins | 0/2 -->
+          <div class="qc">
+            <div class="qc__img">
+              <img src="../image-repo/Rewards-CoinQuest/Property%201=Personality%20Test.svg" alt="Personality Test">
+            </div>
+            <div class="qc__content">
+              <div class="qc__header">
+                <span class="qc__title">Practice Session</span>
+                <div class="qc__badges"><span class="lbadge lbadge--hard">Hard</span><span class="lbadge lbadge--weekly">Weekly</span></div>
+              </div>
+              <div class="qc__progress">
+                <div class="qc__coin-row">
+                  <img class="qc__coin-icon" src="https://www.figma.com/api/mcp/asset/f380960d-7bfa-4835-a69f-548759c09cce" alt="Coin">
+                  <span class="qc__coin-value">250</span>
+                </div>
+                <div class="qc__bar"><div class="qc__bar-fill" style="width:0%"></div></div>
+              </div>
+              <div class="qc__footer">
+                <span class="qc__status">0/2 Achieved</span>
+                <a href="#" class="btn-claim btn-claim--disabled" aria-disabled="true" tabindex="-1"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ⑥ Read an Article | Easy · Daily | 60 coins | 2/3 -->
+          <div class="qc">
+            <div class="qc__img">
+              <img src="../image-repo/Rewards-CoinQuest/Property%201=Submit%20Task.svg" alt="Submit Task">
+            </div>
+            <div class="qc__content">
+              <div class="qc__header">
+                <span class="qc__title">Read an Article</span>
+                <div class="qc__badges"><span class="lbadge lbadge--easy">Easy</span><span class="lbadge lbadge--daily">Daily</span></div>
+              </div>
+              <div class="qc__progress">
+                <div class="qc__coin-row">
+                  <img class="qc__coin-icon" src="https://www.figma.com/api/mcp/asset/f380960d-7bfa-4835-a69f-548759c09cce" alt="Coin">
+                  <span class="qc__coin-value">60</span>
+                </div>
+                <div class="qc__bar"><div class="qc__bar-fill" style="width:0%"></div></div>
+              </div>
+              <div class="qc__footer">
+                <span class="qc__status">0/2 Achieved</span>
+                <a href="#" class="btn-claim btn-claim--disabled" aria-disabled="true" tabindex="-1"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ⑦ Complete Notes | Easy · Daily | 100 coins | 3/3 -->
+          <div class="qc">
+            <div class="qc__img">
+              <img src="../image-repo/Rewards-CoinQuest/Property%201=Score%20Full%20Mark_Completed.svg" alt="Score Full Mark Completed">
+            </div>
+            <div class="qc__content">
+              <div class="qc__header">
+                <span class="qc__title">Complete Notes</span>
+                <div class="qc__badges"><span class="lbadge lbadge--easy">Easy</span><span class="lbadge lbadge--daily">Daily</span></div>
+              </div>
+              <div class="qc__progress">
+                <div class="qc__coin-row">
+                  <img class="qc__coin-icon" src="https://www.figma.com/api/mcp/asset/f380960d-7bfa-4835-a69f-548759c09cce" alt="Coin">
+                  <span class="qc__coin-value">100</span>
+                </div>
+                <div class="qc__bar"><div class="qc__bar-fill" style="width:100%"></div></div>
+              </div>
+              <div class="qc__footer">
+                <span class="qc__status">3/3 Achieved</span>
+                <a href="#" class="btn-claim"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ⑧ Explore Library | Easy · Weekly | 120 coins | 1/2 -->
+          <div class="qc">
+            <div class="qc__img">
+              <img src="../image-repo/Rewards-CoinQuest/Property%201=Verify%20Phone%20Number.svg" alt="Verify Phone Number">
+            </div>
+            <div class="qc__content">
+              <div class="qc__header">
+                <span class="qc__title">Explore Library</span>
+                <div class="qc__badges"><span class="lbadge lbadge--easy">Easy</span><span class="lbadge lbadge--weekly">Weekly</span></div>
+              </div>
+              <div class="qc__progress">
+                <div class="qc__coin-row">
+                  <img class="qc__coin-icon" src="https://www.figma.com/api/mcp/asset/f380960d-7bfa-4835-a69f-548759c09cce" alt="Coin">
+                  <span class="qc__coin-value">120</span>
+                </div>
+                <div class="qc__bar"><div class="qc__bar-fill" style="width:0%"></div></div>
+              </div>
+              <div class="qc__footer">
+                <span class="qc__status">0/2 Achieved</span>
+                <a href="#" class="btn-claim btn-claim--disabled" aria-disabled="true" tabindex="-1"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.quest-grid -->
+      </main>
+
+    </div><!-- /.rewards-layout -->
+
+  </div><!-- /.page-content -->
+
+  <!-- Footer - 1.5 -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__left">
+        <span class="footer__text">&copy; 2026</span>
+        <a class="footer__link" href="#">Pandai.org</a>
+        <span class="footer__text">All Rights Reserved</span>
+      </div>
+      <div class="footer__right">
+        <span class="footer__text">Made with</span>
+        <svg class="footer__heart" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <span class="footer__text">in Malaysia</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Critical — nav pressed state
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('mousedown', () => btn.classList.add('is-pressed'));
+      const clear = () => btn.classList.remove('is-pressed');
+      btn.addEventListener('mouseup', clear);
+      btn.addEventListener('mouseleave', clear);
+    });
+
+    // Sidebar active state
+    try {
+      document.querySelectorAll('.sidebar-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('sidebar-btn--active'));
+          btn.classList.add('sidebar-btn--active');
+        });
+      });
+    } catch(e) { console.warn('sidebar init:', e); }
+  </script>
+
+</body>
+</html>
