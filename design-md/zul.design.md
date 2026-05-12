@@ -1629,4 +1629,88 @@ Component set IDs on `⚙️ Badges` page for direct lookup via `badgesPage.find
 
 ---
 
+### 51. DS component drift check — always re-inspect live DS before assuming specs are stable
+
+Component dimensions, padding, and token bindings in the DS can change between sessions. Never assume a previously-confirmed spec is still current. Before touching any component in a new session, re-run `use_figma` on the live node to catch drift.
+
+**Confirmed drift (May 2026 — Footer):**
+- Old confirmed spec: height 60px, `paddingTop/Bottom: 20` (`Spacing/space-l`)
+- New DS state: height **44px**, `paddingTop/Bottom: 12` (`Spacing/space-s`)
+- Impact: prototype `body { padding-bottom }` also wrong — must track all downstream effects
+
+**Drift check workflow:**
+```
+1. use_figma → inspect the live node (not from CLAUDE.md or memory)
+2. Compare height, padding, fills, strokes, children vs. current HTML/CSS
+3. For every changed property, find ALL places in the prototype it affects
+4. Update CSS + comments + zul.design.md spec table in one pass
+```
+
+**Downstream effects to check whenever footer height changes:**
+- `.footer__inner { height }` — direct height
+- `body { padding-bottom }` — must equal footer height + 30px DS gap
+- Mobile `body { padding-bottom }` — based on stacked height, recalculate if padding changed
+- Any CSS comment referencing the old height value
+
+---
+
+### 52. `strokeTopWeight` / `strokeBottomWeight` etc. — check individual sides for partial borders
+
+In the Figma Plugin API, `strokeWeight` is the uniform weight. To check whether a stroke applies to all 4 sides or only specific sides, read the individual properties:
+
+```js
+node.strokeTopWeight    // top border weight (px)
+node.strokeRightWeight  // right border weight
+node.strokeBottomWeight // bottom border weight
+node.strokeLeftWeight   // left border weight
+```
+
+**Footer confirmed (May 2026):** `strokeTopWeight: 1`, all others `0` — confirms top-only border. `strokeWeight` alone would return `1` but wouldn't reveal that right/bottom/left are 0.
+
+**Rule:** When implementing a partial border (e.g. top-only), always confirm via `strokeTopWeight` etc. before using `border-top` in CSS. A node with `strokeWeight: 1` and `strokeAlign: INSIDE` could be top-only OR all-sides — only the individual weights tell you which.
+
+---
+
+### 53. `boundVariables` on a node — use this to confirm exactly which Semantic token binds to each property
+
+`node.boundVariables` maps CSS-equivalent property names to `VariableID` objects. This is the authoritative way to confirm which Semantic token drives a given property — more reliable than reading the fills/strokes color values and guessing the token name.
+
+**Confirmed Footer example (May 2026):**
+```js
+variant.boundVariables = {
+  paddingLeft:   { type: 'VARIABLE_ALIAS', id: 'VariableID:90:318' },  // Spacing/space-2xl = 28px
+  paddingTop:    { type: 'VARIABLE_ALIAS', id: 'VariableID:90:305' },  // Spacing/space-s = 12px
+  paddingRight:  { type: 'VARIABLE_ALIAS', id: 'VariableID:90:318' },  // Spacing/space-2xl = 28px
+  paddingBottom: { type: 'VARIABLE_ALIAS', id: 'VariableID:90:305' },  // Spacing/space-s = 12px
+  fills:   [{ type: 'VARIABLE_ALIAS', id: 'VariableID:123:10' }],      // Surface/general/default
+  strokes: [{ type: 'VARIABLE_ALIAS', id: 'VariableID:124:59' }],      // Border/default = #00cc85
+}
+```
+
+**Rule:** When you see a raw px or hex value on a DS node, always check `boundVariables` first to get the Semantic token name. If the property is missing from `boundVariables`, the value is hardcoded — treat it as a raw design decision, not a token.
+
+---
+
+### 54. Fixed height in CSS is fragile when DS padding changes — prefer padding-driven height
+
+The prototype used `height: 60px` (hardcoded) for `.footer__inner` with no explicit vertical padding. When the DS changed `paddingTop/Bottom` from 20px → 12px, the CSS height needed a manual update.
+
+**More resilient pattern — let padding drive the height:**
+```css
+.footer__inner {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  padding:         var(--spacing-space-s) var(--spacing-space-2xl); /* 12px 28px — DS bound tokens */
+}
+```
+
+This auto-sizes to `padding-top + content-height + padding-bottom`. If the DS changes the padding token, the CSS inherits the new height without a manual fix — as long as the token variable value is updated.
+
+**Trade-off:** `height: Xpx` is explicit and easy to audit visually. `padding`-driven height requires knowing what content height contributes. For single-row bars (navbar, footer) where content height is fixed (20px text), padding-driven is safer.
+
+**Confirmed instance (May 2026):** Footer text is 20px (line-height). With `padding: 12px 28px`, total height = 12 + 20 + 12 = **44px** — matches DS exactly, and will automatically update if `--spacing-space-s` ever changes.
+
+---
+
 *Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
