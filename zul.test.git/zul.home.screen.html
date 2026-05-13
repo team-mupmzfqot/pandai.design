@@ -542,64 +542,7 @@
       white-space: nowrap;
     }
 
-    /* ─────────────────────────────────────────────────────
-       STATS CARD — DS home+footer frame (3088:61197)
-       Two panels side by side, each with a Primary/M button
-       DS: showLeadingIcon:false, showRArrow:true, showLabel:true
-    ───────────────────────────────────────────────────── */
-    .stats-card {
-      display:       flex;
-      gap:           21px;
-      height:        220px;
-      overflow:      hidden;
-      border-radius: var(--corner-radius-corner-4xl);   /* 24px */
-    }
-
-    .stats-card__panel {
-      flex:            1;
-      display:         flex;
-      flex-direction:  column;
-      align-items:     flex-end;
-      justify-content: center;
-      gap:             12px;
-      padding:         20px 60px;
-      position:        relative;
-      overflow:        hidden;
-    }
-    .stats-card__panel--report { background: #fffbec; }   /* DS Frame 1707479604 fill */
-    .stats-card__panel--goals  { background: #e6f6fd; }   /* DS Frame 1707479606 fill */
-
-    .stats-card__title {
-      font-size:   18px;
-      font-weight: 700;
-      line-height: 28px;
-      color:       var(--text-default-heading);
-      text-align:  right;
-    }
-
-    .stats-card__subtitle {
-      font-size:   14px;
-      font-weight: 500;
-      line-height: 20px;
-      color:       var(--text-default-body);
-      text-align:  right;
-    }
-
-    /* Decorative blob — mirrors DS vector background element */
-    .stats-card__blob {
-      position:      absolute;
-      right:         -60px;
-      bottom:        -60px;
-      width:         240px;
-      height:        240px;
-      border-radius: 50%;
-      opacity:       0.35;
-      pointer-events: none;
-    }
-    .stats-card__panel--report .stats-card__blob { background: #f9e1aa; }
-    .stats-card__panel--goals  .stats-card__blob { background: #7fd0f3; }
-
-    .welcome-text__greeting {
+.welcome-text__greeting {
       font-size:   14px;
       font-weight: 400;
       line-height: 20px;
@@ -2010,42 +1953,6 @@
           </div>
 
         </section><!-- end StaticNewsCard-Desktop -->
-
-
-        <!-- ────────────────────────────────────────────────────────────
-             STATS CARD — DS home+footer (3088:61197)
-             Placed after carousel + static cards per DS section order.
-             Two Primary/M buttons: showLeadingIcon:false, showRArrow:true
-             Left (3088:61236): "View your report card now!"
-             Right (3088:61243): "14 Goals set to you"
-        ──────────────────────────────────────────────────────────────── -->
-        <section id="StatsCard-Desktop" aria-label="Stats" class="stats-card">
-
-          <!-- Left panel — report card CTA -->
-          <div class="stats-card__panel stats-card__panel--report">
-            <div class="stats-card__blob"></div>
-            <p class="stats-card__title">Pandai Score</p>
-            <p class="stats-card__subtitle">Check how you're doing this semester</p>
-            <!-- Primary/M: showLeadingIcon:false, showRArrow:true (DS 3088:61236) -->
-            <button class="static-card__btn" type="button">
-              <span class="static-card__btn-label">View your report card now!</span>
-              <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
-            </button>
-          </div>
-
-          <!-- Right panel — goals CTA -->
-          <div class="stats-card__panel stats-card__panel--goals">
-            <div class="stats-card__blob"></div>
-            <p class="stats-card__title">Your Goals</p>
-            <p class="stats-card__subtitle">Keep going — you're making progress</p>
-            <!-- Primary/M: showLeadingIcon:false, showRArrow:true (DS 3088:61243) -->
-            <button class="static-card__btn" type="button">
-              <span class="static-card__btn-label">14 Goals set to you</span>
-              <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
-            </button>
-          </div>
-
-        </section><!-- end StatsCard-Desktop -->
 
 
         <!-- ────────────────────────────────────────────────────────────
