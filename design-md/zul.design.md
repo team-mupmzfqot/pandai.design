@@ -458,13 +458,15 @@ When the footer is `position: fixed`, the scrollable content needs `padding-bott
 
 **DS reference (Screen page, home + footer frame `1867:17694`):**
 - Home content frame `1740:9670`: `padding-bottom: 30` (raw value — **not variable-bound**)
-- Footer - 1.5 height: 60px
+- Footer - 1.5 height: **44px** (updated May 2026; was 60px — padding changed from `t:20/b:20` to `t:12/b:12`)
 
-**Rule:** `body { padding-bottom: 90px; }` — 60px (footer) + 30px (DS gap).
+**Rule:** `body { padding-bottom: 74px; }` — 44px (footer) + 30px (DS gap).
+
+> **Updated May 2026:** Footer height reduced from 60px to 44px in DS. `body.padding-bottom` updated from 90px → 74px accordingly.
 
 **Important:** Not all spacing values in DS screen frames are token-bound. Always check `boundVariables` on a node before assuming a raw px value maps to a Semantic token. If absent from `boundVariables`, treat it as a hardcoded design decision and use the raw value.
 
-**Mistake made:** `body` had `padding-bottom: 60px` (footer height only), cutting off 30px of breathing room. Corrected to 90px after reading DS screen frame.
+**Mistake made:** `body` had `padding-bottom: 60px` (footer height only), cutting off 30px of breathing room. Corrected to 90px, then to 74px when the footer height was updated in the DS.
 
 ---
 
@@ -770,21 +772,24 @@ Every icon used in the prototype has a `<symbol>` definition in the SVG defs blo
 
 ---
 
-### Footer - 1.5 confirmed DS specs (node 2073:6579, May 2026)
+### Footer - 1.5 confirmed DS specs (node 2073:6579, updated May 2026)
 
 | Property | Value |
 |---|---|
-| Height | 60px |
-| Padding | `t:20 r:28 b:20 l:28` → CSS `height:60px` + `align-items:center` + `padding:0 28px` |
-| Border | top only, 1px `#00cc85` (`--border-default`) — stroke is full INSIDE but only top is visible |
+| Height | **44px** (was 60px — updated May 2026) |
+| Padding | `t:12 r:28 b:12 l:28` → `Spacing/space-s` (12px) vertical, `Spacing/space-2xl` (28px) horizontal |
+| CSS pattern | `height: 44px` + `align-items: center` + `padding: 0 var(--spacing-space-2xl)` |
+| Border | top only, 1px `#00cc85` (`--border-default`) — `strokeTopWeight:1`, all other sides 0 |
 | Background | white (`--surface-general-default`) |
 | Layout | `HORIZONTAL`, `SPACE_BETWEEN`, `crossAlign:CENTER` |
 | Left group gap | 4px (`--spacing-space-xxs`) |
 | Right group gap | 4px (`--spacing-space-xxs`) |
 | All text | 14px / weight:500 / `#666666` (`--text-default-body`) |
-| Link "Pandai.org" | 14px / weight:500 / `#00cc85` (`--text-primary-default`) — `visible:false` on both icons, text only |
+| Link "Pandai.org" | 14px / weight:500 / `#00cc85` (`--text-primary-default`) — info + chevron icons `visible:false`, text only |
 | Heart icon | `<use href="#ic-heart">`, 20×20, `color:var(--icon-primary-default)` (`#00cc85`) |
 | Positioning | `position:fixed; bottom:0; left:0; right:0; z-index:100` |
+| `body` padding-bottom | `74px` = 44px footer + 30px DS gap (was 90px when footer was 60px) |
+| Mobile stacked height | 72px = 12+20+8+20+12 → `body { padding-bottom: 102px }` (unchanged) |
 
 ---
 
@@ -1509,6 +1514,318 @@ Start-Process -FilePath "cmd.exe" -ArgumentList '/c', 'cd /d "<repo-path>" && np
 # Open in VS Code Simple Browser
 Start-Process "vscode://vscode.simpleBrowser/show?url=http%3A%2F%2Flocalhost%3A3000%2Fzul.home.screen.html"
 ```
+
+---
+
+---
+
+### 45. Subject Badge icon export — always call `exportAsync` on the icon INSTANCE, not the badge component
+
+The `⚙️ Badges` page holds `COMPONENT_SET` nodes named `Subject Badge/[Name]` (e.g. `Subject Badge/Comp-Science`). Each set has children named with `Size=M` / `Size=L`. Inside each size component is a `Subject/XXX` INSTANCE node — that is the icon.
+
+**Export must be called on the INSTANCE, not the badge component.** The badge includes the icon slot, label panel, and pointer. The icon instance exports cleanly as a standalone icon SVG.
+
+**Confirmed workflow (May 2026):**
+```js
+const badgesPage = figma.root.children.find(p => p.name === '⚙️ Badges');
+await figma.setCurrentPageAsync(badgesPage);
+const compSet = badgesPage.findOne(n => n.id === '<component-set-id>');
+const mComp   = compSet.children.find(c => c.name.includes('Size=M'));
+const iconInst = mComp.findOne(n => n.type === 'INSTANCE' && n.name.startsWith('Subject/'));
+const svg = await iconInst.exportAsync({ format: 'SVG_STRING' });
+```
+
+**Badge component naming on `⚙️ Badges` page** — abbreviated names, not the display label:
+
+| Display label | Component set name |
+|---|---|
+| Computer Science | `Subject Badge/Comp-Science` |
+| Bahasa Melayu | `Subject Badge/BMelayu` |
+| Islamic Studies | `Subject Badge/Islamic` |
+| Add Math | `Subject Badge/Add-Math` |
+| KAFA | `Subject Badge/KAFA` |
+| RBT | `Subject Badge/RBT` |
+
+Always `findAll(n => n.type === 'COMPONENT_SET' && n.name.startsWith('Subject Badge/'))` first to confirm the exact names before searching by assumed label.
+
+---
+
+### 46. Some DS subject badge SVGs have no `<g clip-path>` wrapper — structure varies per subject
+
+Not all Subject Badge icon exports have the same SVG structure. Some subjects export with a `<g clip-path="url(#clipN)">` wrapper enclosing all paths; others export with paths placed directly inside `<svg>` with no wrapper at all.
+
+**Confirmed no-clip-path subjects (May 2026):**
+- `Comp-Science` — paths directly in `<svg>`, no `<g>` wrapper
+- `BMelayu` — paths directly in `<svg>`, no `<g>` wrapper
+
+**Rule:** Never add a `<g clip-path>` wrapper to a badge SVG that doesn't have one in the DS export. The DS intentionally omits it for these icons — the paths already fit the viewBox without clipping.
+
+**Mistake made:** The old CS badge HTML had a manually-added `<g clip-path="url(#clip0_3283_85259_cs)">` wrapper. The new DS export has no such wrapper. Replacing required removing the `<g>` and `<defs><clipPath>` entirely.
+
+---
+
+### 47. Full SVG replacement = paths + structure — updating only clip IDs leaves broken state
+
+When a subject badge SVG needs updating, replacing only the `clip-path` ID references (e.g. renaming `clip_math` → `clip0_3283_85245`) while leaving the old path data is a **broken halfway state**. The clip rect dimensions may match but the rendered icon shape is still wrong because the path coordinates are from a different DS export version.
+
+**Rule:** Any SVG replacement must be a full replacement — the complete `<g clip-path>...<defs>` block including all path data. Never do partial updates (ID-only, rect-only, or first-path-only).
+
+**Signal that a partial update was done:** The badge renders but the icon looks wrong/misshapen or proportions don't match the DS screenshot. This means path coordinates are old.
+
+---
+
+### 48. DS badge SVG `height` attribute must match the DS export exactly
+
+The outer `<svg>` tag attributes (`width`, `height`, `viewBox`) in the DS export are exact and must not be altered. Mismatches cause the browser to scale or clip the icon.
+
+**Confirmed mistake (May 2026):** Science badge had `height="23"` in the prototype HTML. The DS export is `height="24"`. A 1px discrepancy causes the icon to render slightly squished vertically.
+
+**Rule:** When doing a full SVG replacement, always include the outer `<svg width="X" height="Y" viewBox="...">` tag in the replacement, not just the inner content.
+
+---
+
+### 49. Large DS SVG exports — split `exportAsync` output when it exceeds ~18KB
+
+Some subject icons (Geography globe at ~18.8KB, KAFA at ~8KB) produce SVG strings that exceed the Figma plugin tool output limit (~20KB). The export still succeeds but the returned string is truncated.
+
+**Workaround:** Request the SVG length first, then retrieve in two halves:
+```js
+const svg = await iconInst.exportAsync({ format: 'SVG_STRING' });
+const mid = Math.floor(svg.length / 2);
+return { total: svg.length, part1: svg.substring(0, mid), part2: svg.substring(mid) };
+```
+
+Concatenate `part1 + part2` to reconstruct the full SVG. The midpoint split may land mid-coordinate in a path `d` attribute — SVG path data is whitespace-tolerant and the concatenated number will parse correctly (e.g. `17.75` | `38 15.0193` → `17.7538 15.0193`).
+
+**Subjects known to be large:** Geography (~18.8KB), KAFA (~8KB). All others are under 5KB.
+
+---
+
+### 50. Subject Badge DS component IDs — confirmed (May 2026)
+
+Component set IDs on `⚙️ Badges` page for direct lookup via `badgesPage.findOne(n => n.id === '<id>')`:
+
+| Subject | Component Set ID |
+|---|---|
+| RBT | `3283:85760` |
+| KAFA | `3283:85852` |
+| History | `3302:67103` |
+| English | `3302:67112` |
+| Biology | `3302:67121` |
+| Physics | `3302:67217` |
+| Science | `3302:67235` |
+| Account | `3302:67244` |
+| Business | `3309:67505` |
+| Economy | `3309:67514` |
+| Add-Math | `3309:67526` |
+| Chemistry | `3309:67537` |
+| Geography | `3309:67546` |
+| Math | `3309:67555` |
+| Moral | `3309:67564` |
+| Islamic | `3309:67573` |
+| BMelayu | `3309:67585` |
+| Comp-Science | `3309:67594` |
+| Chinese-Lang | `3309:67603` |
+
+---
+
+### 51. DS component drift check — always re-inspect live DS before assuming specs are stable
+
+Component dimensions, padding, and token bindings in the DS can change between sessions. Never assume a previously-confirmed spec is still current. Before touching any component in a new session, re-run `use_figma` on the live node to catch drift.
+
+**Confirmed drift (May 2026 — Footer):**
+- Old confirmed spec: height 60px, `paddingTop/Bottom: 20` (`Spacing/space-l`)
+- New DS state: height **44px**, `paddingTop/Bottom: 12` (`Spacing/space-s`)
+- Impact: prototype `body { padding-bottom }` also wrong — must track all downstream effects
+
+**Drift check workflow:**
+```
+1. use_figma → inspect the live node (not from CLAUDE.md or memory)
+2. Compare height, padding, fills, strokes, children vs. current HTML/CSS
+3. For every changed property, find ALL places in the prototype it affects
+4. Update CSS + comments + zul.design.md spec table in one pass
+```
+
+**Downstream effects to check whenever footer height changes:**
+- `.footer__inner { height }` — direct height
+- `body { padding-bottom }` — must equal footer height + 30px DS gap
+- Mobile `body { padding-bottom }` — based on stacked height, recalculate if padding changed
+- Any CSS comment referencing the old height value
+
+---
+
+### 52. `strokeTopWeight` / `strokeBottomWeight` etc. — check individual sides for partial borders
+
+In the Figma Plugin API, `strokeWeight` is the uniform weight. To check whether a stroke applies to all 4 sides or only specific sides, read the individual properties:
+
+```js
+node.strokeTopWeight    // top border weight (px)
+node.strokeRightWeight  // right border weight
+node.strokeBottomWeight // bottom border weight
+node.strokeLeftWeight   // left border weight
+```
+
+**Footer confirmed (May 2026):** `strokeTopWeight: 1`, all others `0` — confirms top-only border. `strokeWeight` alone would return `1` but wouldn't reveal that right/bottom/left are 0.
+
+**Rule:** When implementing a partial border (e.g. top-only), always confirm via `strokeTopWeight` etc. before using `border-top` in CSS. A node with `strokeWeight: 1` and `strokeAlign: INSIDE` could be top-only OR all-sides — only the individual weights tell you which.
+
+---
+
+### 53. `boundVariables` on a node — use this to confirm exactly which Semantic token binds to each property
+
+`node.boundVariables` maps CSS-equivalent property names to `VariableID` objects. This is the authoritative way to confirm which Semantic token drives a given property — more reliable than reading the fills/strokes color values and guessing the token name.
+
+**Confirmed Footer example (May 2026):**
+```js
+variant.boundVariables = {
+  paddingLeft:   { type: 'VARIABLE_ALIAS', id: 'VariableID:90:318' },  // Spacing/space-2xl = 28px
+  paddingTop:    { type: 'VARIABLE_ALIAS', id: 'VariableID:90:305' },  // Spacing/space-s = 12px
+  paddingRight:  { type: 'VARIABLE_ALIAS', id: 'VariableID:90:318' },  // Spacing/space-2xl = 28px
+  paddingBottom: { type: 'VARIABLE_ALIAS', id: 'VariableID:90:305' },  // Spacing/space-s = 12px
+  fills:   [{ type: 'VARIABLE_ALIAS', id: 'VariableID:123:10' }],      // Surface/general/default
+  strokes: [{ type: 'VARIABLE_ALIAS', id: 'VariableID:124:59' }],      // Border/default = #00cc85
+}
+```
+
+**Rule:** When you see a raw px or hex value on a DS node, always check `boundVariables` first to get the Semantic token name. If the property is missing from `boundVariables`, the value is hardcoded — treat it as a raw design decision, not a token.
+
+---
+
+### 54. Fixed height in CSS is fragile when DS padding changes — prefer padding-driven height
+
+The prototype used `height: 60px` (hardcoded) for `.footer__inner` with no explicit vertical padding. When the DS changed `paddingTop/Bottom` from 20px → 12px, the CSS height needed a manual update.
+
+**More resilient pattern — let padding drive the height:**
+```css
+.footer__inner {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  padding:         var(--spacing-space-s) var(--spacing-space-2xl); /* 12px 28px — DS bound tokens */
+}
+```
+
+This auto-sizes to `padding-top + content-height + padding-bottom`. If the DS changes the padding token, the CSS inherits the new height without a manual fix — as long as the token variable value is updated.
+
+**Trade-off:** `height: Xpx` is explicit and easy to audit visually. `padding`-driven height requires knowing what content height contributes. For single-row bars (navbar, footer) where content height is fixed (20px text), padding-driven is safer.
+
+**Confirmed instance (May 2026):** Footer text is 20px (line-height). With `padding: 12px 28px`, total height = 12 + 20 + 12 = **44px** — matches DS exactly, and will automatically update if `--spacing-space-s` ever changes.
+
+---
+
+---
+
+### 55. Inspect DS page instances, not component defaults — `componentProperties` is the source of truth
+
+A component's default variant properties (e.g. Secondary/M has `showRArrow: true` by default) are NOT what matters. What matters is what the specific INSTANCE on the page has overridden. Always call `inst.componentProperties` on the actual page instance.
+
+**Workflow to find all button configs on a specific screen:**
+```js
+// Find the correct screen frame first
+const pandai = screenPage.children.find(n => n.name === 'Pandai Student');
+const homeFrame = pandai.children.find(n => n.id === '3088:61197');
+
+// Find all Button-1.5 instances by component set ID (473:529)
+const btns = homeFrame.findAll(n => {
+  if (n.type !== 'INSTANCE') return false;
+  return n.mainComponent?.parent?.id === '473:529';
+});
+
+// Read instance-level overrides
+btns.forEach(inst => {
+  const p = inst.componentProperties;
+  console.log(p.Variants?.value, p.Size?.value,
+    'icon:', p['Show Leading Icon#1437:0']?.value,
+    'Rarrow:', p['Show R Arrow#473:6']?.value,
+    'label:', p['↳ Label#473:4']?.value);
+});
+```
+
+**Confirmed home screen button configs (DS frame 3088:61197, May 2026):**
+
+| Usage | Variant/Size | showLeadingIcon | showLArrow | showRArrow | Label |
+|---|---|---|---|---|---|
+| Quiz card CTA | Primary/S | false | false | **true** | "Button" |
+| Check-in card | Primary/M | false | false | **true** | "View your report card now!" |
+| Add Classes | Secondary/M | **true** | false | **false** | "Add Classes" |
+
+**Key insight:** Secondary/M "Add Classes" has `showRArrow: false` (instance override). The component default has the arrow visible — but this page's instance explicitly hides it.
+
+---
+
+### 56. Never share a CSS class between button instances with different `showRArrow` configs
+
+If two buttons use the same CSS class but one has `showRArrow: true` and the other has `showRArrow: false`, removing the arrow CSS (to match the false-instance) silently breaks the true-instance.
+
+**Confirmed mistake (May 2026):**
+- "Add Classes" (Secondary/M, `showRArrow: false`) and "View Activity History" (Secondary/M, `showRArrow: true`) both used `.btn-add-classes`
+- Removing arrow CSS from `.btn-add-classes` broke "View Activity History" — the `ic-chevron-btn-m` SVG rendered at full size with no containment
+- Fix: gave "View Activity History" its own class `.btn-secondary-arrow` with full arrow specs
+
+**Rule:** Each unique DS instance configuration needs its own CSS class. Two buttons that share a variant but differ in `showRArrow`, `showLeadingIcon`, or any boolean property must have separate classes. Never assume two buttons with the same Figma component type have the same HTML structure.
+
+---
+
+### 57. Always get a DS screenshot before inserting a new section — confirm position and order
+
+When adding a section derived from the DS to the prototype, take a `get_screenshot` of the home frame FIRST to confirm:
+1. Where the section appears in the vertical flow
+2. What sections come before and after it
+
+**Confirmed mistake (May 2026):** Added the Stats Card section between Welcome and Carousel — but the DS frame shows Welcome → **Carousel** → Stats Card. The wrong insertion order pushed the Carousel to position #3, breaking the page flow. A single screenshot before inserting would have prevented this.
+
+**DS home+footer frame (`3088:61197`) — confirmed section order (May 2026):**
+```
+1. Welcome (status badges + check-in card)
+2. Carousel - 1.5
+3. Static News Cards  [prototype-only, not in DS]
+4. Your Selected Subjects (18 quiz cards)
+5. Your Recent Activities (3 quiz cards)
+```
+
+The Stats Card (two pastel panels with Primary/M CTAs) appears in the DS after the Carousel but was rejected by the user — do not add it again without explicit instruction.
+
+---
+
+### 58. `componentProperties` boolean key format — exact strings required
+
+Component property keys in Figma include the internal node ID suffix (e.g. `#1437:0`). These exact strings must be used when reading instance overrides via `inst.componentProperties`.
+
+**Confirmed Button - 1.5 property keys (May 2026):**
+
+| Property | Key string | Type |
+|---|---|---|
+| Show Leading Icon | `'Show Leading Icon#1437:0'` | BOOLEAN |
+| Show Label | `'Show Label#643:3'` | BOOLEAN |
+| Show L Arrow | `'Show L Arrow#2086:18'` | BOOLEAN |
+| Show R Arrow | `'Show R Arrow#473:6'` | BOOLEAN |
+| Label text | `'↳ Label#473:4'` | TEXT |
+| Leading icon swap | `'↳ Leading Icon#1437:25'` | INSTANCE_SWAP |
+| Right icon swap | `'↳ Right Icon#2783:0'` | INSTANCE_SWAP |
+| Variant | `'Variants'` | VARIANT |
+| Size | `'Size'` | VARIANT |
+| State | `'State'` | VARIANT |
+| Type | `'Type'` | VARIANT |
+
+**Button - 1.5 component set ID:** `473:529` — use `mc?.parent?.id === '473:529'` to reliably identify Button-1.5 instances across all pages.
+
+---
+
+### 59. Prototype home screen — confirmed section inventory (May 2026)
+
+Current sections in `zul.test.git/zul.home.screen.html` in visual order:
+
+| Position | Section ID | Content |
+|---|---|---|
+| Fixed top | `NavBar-Desktop` / `NavBar-Mobile` | Navbar (swaps at 1320px breakpoint) |
+| 1 | `Welcome-Desktop` | Status badges · Welcome text · Check-in card |
+| 2 | `Carousel-Desktop` | Featured carousel — 5 image cards (428×186px) |
+| 3 | `StaticNewsCard-Desktop` | 2 side-by-side promo static cards |
+| 4 | `YourSelectedSubjects-Desktop` | 18 quiz cards (3-col grid) · Modify List button |
+| 5 | `YourRecentActivities-Desktop` | 3 quiz cards · View Activity History button |
+| Fixed bottom | `footer.footer` | Copyright · Heart · Pandai.org |
+
+**Section classes:** Sections 4 and 5 share `.section-frame` (green border card). Sections 2 and 3 are full-width sections with their own CSS. Section 1 is `.section-welcome` (flex row).
 
 ---
 
