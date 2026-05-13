@@ -542,6 +542,63 @@
       white-space: nowrap;
     }
 
+    /* ─────────────────────────────────────────────────────
+       STATS CARD — DS home+footer frame (3088:61197)
+       Two panels side by side, each with a Primary/M button
+       DS: showLeadingIcon:false, showRArrow:true, showLabel:true
+    ───────────────────────────────────────────────────── */
+    .stats-card {
+      display:       flex;
+      gap:           21px;
+      height:        220px;
+      overflow:      hidden;
+      border-radius: var(--corner-radius-corner-4xl);   /* 24px */
+    }
+
+    .stats-card__panel {
+      flex:            1;
+      display:         flex;
+      flex-direction:  column;
+      align-items:     flex-end;
+      justify-content: center;
+      gap:             12px;
+      padding:         20px 60px;
+      position:        relative;
+      overflow:        hidden;
+    }
+    .stats-card__panel--report { background: #fffbec; }   /* DS Frame 1707479604 fill */
+    .stats-card__panel--goals  { background: #e6f6fd; }   /* DS Frame 1707479606 fill */
+
+    .stats-card__title {
+      font-size:   18px;
+      font-weight: 700;
+      line-height: 28px;
+      color:       var(--text-default-heading);
+      text-align:  right;
+    }
+
+    .stats-card__subtitle {
+      font-size:   14px;
+      font-weight: 500;
+      line-height: 20px;
+      color:       var(--text-default-body);
+      text-align:  right;
+    }
+
+    /* Decorative blob — mirrors DS vector background element */
+    .stats-card__blob {
+      position:      absolute;
+      right:         -60px;
+      bottom:        -60px;
+      width:         240px;
+      height:        240px;
+      border-radius: 50%;
+      opacity:       0.35;
+      pointer-events: none;
+    }
+    .stats-card__panel--report .stats-card__blob { background: #f9e1aa; }
+    .stats-card__panel--goals  .stats-card__blob { background: #7fd0f3; }
+
     .welcome-text__greeting {
       font-size:   14px;
       font-weight: 400;
@@ -937,48 +994,21 @@
       padding:     0 var(--spacing-space-xxs);
       white-space: nowrap;
     }
-    /* Arrow circle: DS 18×18 frame, 1px stroke (no layout cost), 1px padding → 16px clip.
-       Use box-shadow:inset (like Figma stroke) so width:16+padding:1+1=18px total, content=16px. */
-    .btn-add-classes__arrow {
-      width:           16px;
-      height:          16px;
-      background:      var(--surface-general-default);
-      box-shadow:      inset 0 0 0 1px var(--border-primary-default);
-      border-radius:   var(--corner-radius-corner-rounded);
-      padding:         1px;
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      flex-shrink:     0;
-      color:           var(--text-primary-default);
-    }
-    /* 16px clip — DS node 479:352 exports viewBox="0 0 16 16", stroke=1.5 at 1:1 = 1.5px. No padding needed. */
-    .btn-add-classes__arrow-clip {
-      width:    16px;
-      height:   16px;
-      overflow: hidden;
-    }
-    .btn-add-classes__arrow-clip svg { display: block; width: 100%; height: 100%; }
-
-    /* Hover */
+    /* Hover — DS Secondary/M/Hover (538:1915): bg #b5f291, border #70bc6f, text/icon #70bc6f */
     .btn-add-classes:hover {
       background:   var(--surface-secondary-default);
       border-color: var(--border-secondary-focus);
     }
     .btn-add-classes:hover .btn-add-classes__text,
-    .btn-add-classes:hover .btn-add-classes__icon  { color: var(--text-secondary-focus); }
-    .btn-add-classes:hover .btn-add-classes__arrow {
-      background:  var(--surface-secondary-default-subtle);
-      box-shadow:  inset 0 0 0 1px var(--border-secondary-focus);
-      color:       var(--icon-secondary-hover);
-    }
-    /* Pressed — DS node 538:1907 (Secondary/M/Student/Pressed): dark teal, same as Tertiary pressed */
+    .btn-add-classes:hover .btn-add-classes__icon { color: var(--text-secondary-focus); }
+
+    /* Pressed — DS Secondary/M/Pressed (538:1907): bg #00564c, border #00453d, text #00cc85 */
     .btn-add-classes:active {
-      background:   var(--surface-tertiary-default);   /* #00564c */
-      border-color: var(--border-tertiary-focus);      /* #00453d */
+      background:   var(--surface-tertiary-default);
+      border-color: var(--border-tertiary-focus);
     }
     .btn-add-classes:active .btn-add-classes__text,
-    .btn-add-classes:active .btn-add-classes__icon { color: var(--text-primary-default); }  /* #00cc85 */
+    .btn-add-classes:active .btn-add-classes__icon { color: var(--text-primary-default); }
 
     /* Link 1.5  State=Default, Type=Default (node 701:524) */
     .link-view-activity {
@@ -1807,6 +1837,41 @@
           </div>
 
         </section><!-- end section 1 -->
+
+
+        <!-- ────────────────────────────────────────────────────────────
+             STATS CARD — DS home+footer (3088:61197)
+             Two Primary/M buttons: showLeadingIcon:false, showRArrow:true
+             Left (3088:61236): “View your report card now!”
+             Right (3088:61243): “14 Goals set to you”
+        ──────────────────────────────────────────────────────────────── -->
+        <section id=”StatsCard-Desktop” aria-label=”Stats” class=”stats-card”>
+
+          <!-- Left panel — report card CTA -->
+          <div class=”stats-card__panel stats-card__panel--report”>
+            <div class=”stats-card__blob”></div>
+            <p class=”stats-card__title”>Pandai Score</p>
+            <p class=”stats-card__subtitle”>Check how you're doing this semester</p>
+            <!-- Primary/M: showLeadingIcon:false, showRArrow:true (DS 3088:61236) -->
+            <button class=”static-card__btn” type=”button”>
+              <span class=”static-card__btn-label”>View your report card now!</span>
+              <span class=”static-card__btn-arrow”><span class=”static-card__btn-arrow-clip”><svg aria-hidden=”true”><use href=”#ic-chevron-btn-m”/></svg></span></span>
+            </button>
+          </div>
+
+          <!-- Right panel — goals CTA -->
+          <div class=”stats-card__panel stats-card__panel--goals”>
+            <div class=”stats-card__blob”></div>
+            <p class=”stats-card__title”>Your Goals</p>
+            <p class=”stats-card__subtitle”>Keep going — you're making progress</p>
+            <!-- Primary/M: showLeadingIcon:false, showRArrow:true (DS 3088:61243) -->
+            <button class=”static-card__btn” type=”button”>
+              <span class=”static-card__btn-label”>14 Goals set to you</span>
+              <span class=”static-card__btn-arrow”><span class=”static-card__btn-arrow-clip”><svg aria-hidden=”true”><use href=”#ic-chevron-btn-m”/></svg></span></span>
+            </button>
+          </div>
+
+        </section><!-- end StatsCard-Desktop -->
 
 
         <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
