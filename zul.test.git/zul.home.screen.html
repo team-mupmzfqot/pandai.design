@@ -1010,6 +1010,75 @@
     .btn-add-classes:active .btn-add-classes__text,
     .btn-add-classes:active .btn-add-classes__icon { color: var(--text-primary-default); }
 
+    /* Button - 1.5  Secondary/M + R Arrow — section 6 "View Activity History"
+       Same Secondary/M base as .btn-add-classes but with showRArrow:true.
+       Arrow circle: 18×18 total (16px content + 1px padding each side),
+       white fill + inset 1px green border (box-shadow, no layout cost). */
+    .btn-secondary-arrow {
+      display:       inline-flex;
+      align-items:   center;
+      height:        32px;
+      background:    var(--surface-general-default);
+      border:        1px solid var(--border-primary-default);
+      border-radius: var(--corner-radius-corner-rounded);
+      padding:       2px var(--spacing-space-xs);
+      gap:           0;
+      cursor:        pointer;
+      font-family:   var(--font-family);
+      flex-shrink:   0;
+    }
+    .btn-secondary-arrow__text {
+      font-size:   12px;
+      font-weight: 600;
+      line-height: 18px;
+      color:       var(--text-primary-default);
+      padding:     0 var(--spacing-space-xxs);
+      white-space: nowrap;
+    }
+    /* 18×18 circle: content-box 16px + 1px padding each side = 18px total */
+    .btn-secondary-arrow__circle {
+      width:           16px;
+      height:          16px;
+      background:      var(--surface-general-default);
+      box-shadow:      inset 0 0 0 1px var(--border-primary-default);
+      border-radius:   var(--corner-radius-corner-rounded);
+      padding:         1px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+      color:           var(--text-primary-default);
+    }
+    .btn-secondary-arrow__clip {
+      width:    16px;
+      height:   16px;
+      overflow: hidden;
+    }
+    .btn-secondary-arrow__clip svg { display: block; width: 100%; height: 100%; }
+
+    /* Hover */
+    .btn-secondary-arrow:hover {
+      background:   var(--surface-secondary-default);
+      border-color: var(--border-secondary-focus);
+    }
+    .btn-secondary-arrow:hover .btn-secondary-arrow__text { color: var(--text-secondary-focus); }
+    .btn-secondary-arrow:hover .btn-secondary-arrow__circle {
+      background:  var(--surface-secondary-default-subtle);
+      box-shadow:  inset 0 0 0 1px var(--border-secondary-focus);
+      color:       var(--icon-secondary-hover);
+    }
+    /* Pressed */
+    .btn-secondary-arrow:active {
+      background:   var(--surface-tertiary-default);
+      border-color: var(--border-tertiary-focus);
+    }
+    .btn-secondary-arrow:active .btn-secondary-arrow__text   { color: var(--text-primary-default); }
+    .btn-secondary-arrow:active .btn-secondary-arrow__circle {
+      background: var(--surface-primary-default);
+      box-shadow: none;
+      color:      var(--icon-tertiary-default);
+    }
+
     /* Link 1.5  State=Default, Type=Default (node 701:524) */
     .link-view-activity {
       display:     inline-flex;
@@ -2297,13 +2366,11 @@
               <h2 class="section-header__title">Your Recent Activities</h2>
             </div>
 
-            <!-- Button - 1.5  Variants=Secondary, Size=M — no leading icon, right chevron -->
-            <button class="btn-add-classes" type="button">
-              <span class="btn-add-classes__inner">
-                <span class="btn-add-classes__text">View Activity History</span>
-                <span class="btn-add-classes__arrow">
-                  <span class="btn-add-classes__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
-                </span>
+            <!-- Button - 1.5  Secondary/M, showLeadingIcon:false, showRArrow:true -->
+            <button class="btn-secondary-arrow" type="button">
+              <span class="btn-secondary-arrow__text">View Activity History</span>
+              <span class="btn-secondary-arrow__circle">
+                <span class="btn-secondary-arrow__clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
               </span>
             </button>
           </div>
