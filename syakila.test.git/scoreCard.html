@@ -51,6 +51,7 @@
       --corner-2xl:     18px;
       --corner-m:       8px;
 
+      --space-3xl:  60px;
       --space-2xl:  28px;
       --space-xl:   24px;
       --space-l:    20px;
@@ -458,7 +459,153 @@
     }
     .navbar-mobile__menu-btn svg { display: block; width: 24px; height: 24px; }
 
-    #NavBar-Mobile { display: none; }
+    #NavBar-Tablet { display: none; }
+
+    /* ───────────────────────────────────────────────
+       SECTION 2 — MENU BAR  DS 3406:774
+       Desktop: pill nav row. Tablet/Mobile: slide-in panel.
+    ─────────────────────────────────────────────── */
+    .menubar-nav {
+      height: 56px;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-default);
+      border-radius: var(--corner-pill);
+      display: flex; align-items: flex-start;
+      gap: var(--space-xs); padding: var(--space-xs);
+    }
+
+    /* Slide-in overlay backdrop */
+    .menubar-overlay {
+      position: fixed; inset: 0; z-index: 150;
+      background: rgba(0,0,0,0.35);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .menubar-overlay.is-open { opacity: 1; pointer-events: all; }
+
+    /* Panel card */
+    .menubar-panel {
+      position: absolute;
+      top: 80px; left: 50%; transform: translateX(-50%);
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-default);
+      border-radius: var(--corner-4xl);
+      overflow: hidden;
+      width: min(1288px, calc(100% - 64px));
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      padding: var(--space-m);
+    }
+    .menubar-panel__header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--space-xs) var(--space-m);
+    }
+    .menubar-panel__logo { height: 34px; width: auto; }
+    .menubar-panel__close {
+      width: 24px; height: 24px; background: none; border: none; padding: 0;
+      cursor: pointer; color: var(--icon-primary-default); flex-shrink: 0;
+    }
+    .menubar-panel__close svg { display: block; width: 24px; height: 24px; }
+    .menubar-panel__search {
+      display: flex; align-items: center; gap: 10px;
+      height: 40px; padding: var(--space-xs) var(--space-s);
+      border: 1px solid var(--border-general-default);
+      border-radius: var(--corner-pill); margin-bottom: var(--space-m);
+      color: var(--text-disabled-default); font-size: 14px; font-weight: 500;
+      line-height: 20px; font-family: var(--font);
+    }
+    .menubar-panel__search svg { width: 24px; height: 24px; flex-shrink: 0; }
+    .menubar-panel__menu {
+      display: flex; gap: var(--space-xs); align-items: flex-start;
+    }
+    .menubar-panel__col {
+      flex: 1; display: flex; flex-direction: column; gap: var(--space-xs);
+    }
+    .menubar-panel__divider {
+      width: 1px; background: var(--border-general-default);
+      flex-shrink: 0; align-self: stretch; margin: 0 var(--space-xs);
+    }
+
+    /* Panel menu item */
+    .panel-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: var(--space-xs) var(--space-m);
+      border-radius: var(--corner-pill); cursor: pointer; user-select: none;
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--text-default-body); font-family: var(--font);
+      border: 1px solid transparent;
+      transition: background 0.15s;
+    }
+    .panel-item svg { width: 24px; height: 24px; flex-shrink: 0; color: var(--text-default-body); }
+    .panel-item__label { flex: 1; }
+    .panel-item__chevron { width: 24px; height: 24px; flex-shrink: 0; color: var(--border-general-default); }
+    .panel-item.is-active {
+      background: var(--surface-secondary-default);
+      border-color: var(--border-primary-focus);
+      color: var(--text-primary-focus);
+    }
+    .panel-item.is-active svg { color: var(--text-primary-focus); }
+    .panel-item:hover:not(.is-active) { background: var(--surface-general-default-secondary); }
+
+    /* Panel footer */
+    .menubar-panel__footer { margin-top: var(--space-m); display: flex; flex-direction: column; gap: 0; }
+    .menubar-panel__cta {
+      display: flex; gap: var(--space-xs); align-items: center;
+      background: var(--surface-secondary-default-subtle);
+      border: 1px solid #d1f7d1; border-radius: 20px; padding: var(--space-xs);
+    }
+    .panel-cta-notif {
+      display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;
+      padding: var(--space-xs) var(--space-m);
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--text-default-body); font-family: var(--font);
+    }
+    .panel-cta-notif svg { width: 24px; height: 24px; color: var(--icon-primary-default); flex-shrink: 0; }
+    .panel-cta-download {
+      display: flex; align-items: center; justify-content: center; gap: 0; flex: 1;
+      height: 48px; padding: var(--space-xs) var(--space-s);
+      background: var(--surface-primary-default);
+      border: 1px solid var(--border-primary-focus);
+      border-radius: var(--corner-rounded); cursor: pointer;
+    }
+    .panel-cta-download__icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+    .panel-cta-download__icon svg { width: 20px; height: 20px; color: var(--text-primary-on-color); }
+    .panel-cta-download__label {
+      padding: 0 var(--space-xs); font-size: 14px; font-weight: 600;
+      line-height: 20px; color: var(--text-primary-on-color);
+      white-space: nowrap; font-family: var(--font);
+    }
+    .panel-cta-download__arrow {
+      background: var(--surface-primary-default-subtle-hover);
+      border-radius: var(--corner-rounded); padding: 4px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .panel-cta-download__arrow svg { width: 16px; height: 16px; color: var(--icon-primary-default); }
+    .menubar-panel__localization {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-m) 60px;
+    }
+    .menubar-panel__localization svg { width: 24px; height: 24px; color: var(--text-default-body); }
+
+    /* Mobile bottom tab bar  DS 3406:734 */
+    #NavBar-Mobile-Bottom { display: none; }
+    .mobile-bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+      height: 56px;
+      background: var(--surface-general-default);
+      border-top: 1px solid var(--border-default);
+      display: flex; align-items: center; justify-content: center;
+      gap: var(--space-xxs); padding: var(--space-m);
+    }
+    .mobile-nav-tab {
+      display: flex; align-items: center; justify-content: center; gap: 4px;
+      height: 24px; padding: 2px var(--space-xs); border-radius: var(--corner-rounded);
+      font-size: 12px; font-weight: 600; line-height: 18px;
+      color: var(--text-default-body); cursor: pointer; user-select: none;
+      font-family: var(--font); background: var(--surface-general-default);
+    }
+    .mobile-nav-tab svg { display: block; width: 16px; height: 16px; flex-shrink: 0; }
+    .mobile-nav-tab.is-active { background: var(--surface-primary-default); color: var(--text-primary-on-color); }
 
     /* ───────────────────────────────────────────────
        FOOTER 1.5  DS 2073:6579
@@ -486,11 +633,12 @@
        Mobile  ≤  767px
     ═══════════════════════════════════════════════════ */
 
-    /* < 1320px — mobile navbar, hide desktop sections, stack score card, align padding */
+    /* < 1320px — tablet: compact navbar, hide desktop nav pill */
     @media (max-width: 1319px) {
       :root { --page-padding-x: 32px; }
       #NavBar-Desktop      { display: none; }
-      #NavBar-Mobile       { display: block; padding: 0 var(--page-padding-x); }
+      #NavBar-Tablet       { display: block; padding: 0 var(--page-padding-x); }
+      #MenuBar-Desktop     { display: none; }
       #Breadcrumbs-Desktop { display: none; }
       .sc-card-outer { flex-direction: column; }
       .footer__inner { padding-left: var(--space-m); padding-right: var(--space-m); }
@@ -501,17 +649,24 @@
       .sc-left, .sc-mid { flex: 0 0 auto; }
       .sc-mid { gap: 16px; }
       .sc-graph { margin-top: 0; margin-bottom: 0; }
+      .menubar-panel { width: min(1288px, calc(100% - 48px)); top: 72px; }
     }
 
     /* Mobile ≤ 767px */
     @media (max-width: 767px) {
       :root { --page-padding-x: var(--space-m); }
-      #NavBar-Mobile { padding: 0 var(--page-padding-x); }
-
-      .footer__inner { flex-direction: column; justify-content: center; align-items: center; gap: var(--space-xs); height: auto; padding: var(--space-s) var(--space-2xl); }
-      .footer__left  { justify-content: center; }
-      .footer__right { justify-content: center; }
-      body { padding-bottom: 102px; }
+      #NavBar-Tablet { padding: 0 var(--page-padding-x); }
+      #NavBar-Mobile-Bottom { display: flex; }
+      .footer { display: none; }
+      body { padding-bottom: 86px; }
+      .menubar-panel {
+        width: min(329px, calc(100% - 32px));
+        top: 72px; max-height: calc(100vh - 90px);
+      }
+      .menubar-panel__menu { flex-direction: column; }
+      .menubar-panel__divider { display: none; }
+      .menubar-panel__col { flex: none; }
+      .menubar-panel__localization { padding: var(--space-m) var(--space-xl); }
     }
   </style>
 </head>
@@ -584,10 +739,15 @@
       <path d="M 20.0413 2.36183 C 19.5305 1.85083 18.9241 1.44547 18.2566 1.16891 C 17.5892 0.892347 16.8738 0.75 16.1513 0.75 C 15.4288 0.75 14.7134 0.892347 14.0459 1.16891 C 13.3785 1.44547 12.772 1.85083 12.2613 2.36183 L 11.2013 3.42183 L 10.1413 2.36183 C 9.1096 1.33013 7.71032 0.750535 6.25129 0.750535 C 4.79226 0.750535 3.39298 1.33013 2.36129 2.36183 C 1.3296 3.39352 0.75 4.79279 0.75 6.25183 C 0.75 7.71086 1.3296 9.11013 2.36129 10.1418 L 3.42129 11.2018 L 11.2013 18.9818 L 18.9813 11.2018 L 20.0413 10.1418 C 20.5523 9.63107 20.9576 9.02464 21.2342 8.35718 C 21.5108 7.68972 21.6531 6.97431 21.6531 6.25183 C 21.6531 5.52934 21.5108 4.81393 21.2342 4.14647 C 20.9576 3.47901 20.5523 2.87258 20.0413 2.36183 Z"/>
     </symbol>
 
-    <!-- ── Breadcrumb chevron-right ── -->
-    <symbol id="ic-chevron-right-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M9 18L15 12L9 6"/>
-    </symbol>
+    <!-- ── Breadcrumb + panel chevron-right ── -->
+    <symbol id="ic-chevron-right-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18L15 12L9 6"/></symbol>
+    <symbol id="ic-chevron-right" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18L15 12L9 6"/></symbol>
+
+    <!-- ── Menu Bar + Panel icons — DS 3406:774 ── -->
+    <symbol id="ic-clipboard" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4H18C18.5304 4 19.0391 4.21071 19.4142 4.58579C19.7893 4.96086 20 5.46957 20 6V20C20 20.5304 19.7893 21.0391 19.4142 21.4142C19.0391 21.7893 18.5304 22 18 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V6C4 5.46957 4.21071 4.96086 4.58579 4.58579C4.96086 4.21071 5.46957 4 6 4H8M9 2H15C15.5523 2 16 2.44772 16 3V5C16 5.55228 15.5523 6 15 6H9C8.44772 6 8 5.55228 8 5V3C8 2.44772 8.44772 2 9 2Z"/></symbol>
+    <symbol id="ic-bar-chart-2" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></symbol>
+    <symbol id="ic-settings" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+    <symbol id="ic-x" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6L18 18"/></symbol>
 
     <!-- ── Score Card icons  DS 3107:65165–65192 ── -->
     <!-- Outline/activity  DS I3107:65148;260:372  viewBox +1px buffer -->
@@ -619,13 +779,14 @@
 </svg>
 
 <!-- ═══════════════════════════════════════════════
-     NAVBAR 1.5  DS 2337:21975 — matches syakila.html exactly
-     Achievement nav button is active (is-active)
+     SECTION 1 — NAVBAR  DS 2339:2443
+     Desktop (≥1320px): top bar — logo + action icons + avatar
+     Tablet/Mobile (<1320px): compact top bar — logo + hamburger
 ═══════════════════════════════════════════════ -->
+
+<!-- Desktop Navbar top bar  DS node 866:5576 -->
 <section id="NavBar-Desktop">
 <nav class="navbar">
-
-  <!-- Row 1 — Brand bar (64px) -->
   <div class="navbar-brand">
     <a class="navbar-logo" href="#">
       <img src="../zul.test.git/icons/logo-mark.svg" class="navbar-logo__mark" alt="Pandai mark">
@@ -645,10 +806,35 @@
       </div>
       <span class="navbar-badge">15</span>
     </div>
-  </div><!-- end row 1 -->
+  </div>
+</nav>
+</section><!-- end NavBar-Desktop -->
 
-  <!-- Row 2 — Nav content pill (56px) -->
-  <div class="navbar-nav">
+<!-- Tablet/Mobile Navbar top bar  DS node 1943:22641 -->
+<section id="NavBar-Tablet">
+  <div class="navbar-mobile">
+    <a class="navbar-mobile__logo" href="#">
+      <img src="../zul.test.git/icons/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
+      <img src="../zul.test.git/icons/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
+    </a>
+    <button class="navbar-mobile__menu-btn" id="hamburger-btn" aria-label="Open menu" aria-expanded="false" type="button">
+      <svg aria-hidden="true"><use href="#ic-menu"/></svg>
+    </button>
+  </div>
+</section><!-- end NavBar-Tablet -->
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 2 — MENU BAR  DS 3406:774
+     Desktop (≥1320px): pill nav row — all nav items
+     Tablet/Mobile (<1320px): slide-in panel (hamburger triggers)
+     Mobile (≤767px): + fixed bottom tab bar
+═══════════════════════════════════════════════ -->
+
+<!-- Desktop Menu Bar pill row  DS node 3406:789 — Achievement active -->
+<section id="MenuBar-Desktop">
+<nav class="navbar">
+  <div class="menubar-nav">
 
     <div class="nav-btn">
       <div class="nav-btn__inner">
@@ -694,10 +880,10 @@
       </div>
     </div>
 
-    <!-- Achievement — active (is-active) -->
+    <!-- Achievement — active (is-active) — DS node 3406:810 uses Outline/bar-chart-2 -->
     <div class="nav-btn is-active">
       <div class="nav-btn__inner">
-        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="achievement"><svg aria-hidden="true"><use href="#ic-achievement"/></svg></div></div>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="achievement"><svg aria-hidden="true"><use href="#ic-bar-chart-2"/></svg></div></div>
         <span class="nav-btn__label">Achievement</span>
         <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
       </div>
@@ -719,22 +905,134 @@
       </div>
     </div>
 
-  </div><!-- end row 2 -->
-</nav>
-</section><!-- end NavBar-Desktop -->
-
-<!-- MOBILE NAVBAR — DS node 1943:22641 -->
-<section id="NavBar-Mobile">
-  <div class="navbar-mobile">
-    <a class="navbar-mobile__logo" href="#">
-      <img src="../zul.test.git/icons/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
-      <img src="../zul.test.git/icons/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
-    </a>
-    <button class="navbar-mobile__menu-btn" aria-label="Open menu" type="button">
-      <svg aria-hidden="true"><use href="#ic-menu"/></svg>
-    </button>
   </div>
-</section><!-- end NavBar-Mobile -->
+</nav>
+</section><!-- end MenuBar-Desktop -->
+
+<!-- Slide-in panel — Tablet (3427:2184) + Mobile (3427:2442) -->
+<div id="MenuBar-Panel" class="menubar-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Navigation menu">
+  <div class="menubar-panel">
+
+    <!-- Header: Logo + Close -->
+    <div class="menubar-panel__header">
+      <img src="../zul.test.git/icons/logo-mark.svg" class="menubar-panel__logo" alt="Pandai">
+      <button class="menubar-panel__close" id="menubar-close-btn" aria-label="Close menu" type="button">
+        <svg aria-hidden="true"><use href="#ic-x"/></svg>
+      </button>
+    </div>
+
+    <!-- Search bar -->
+    <div class="menubar-panel__search" role="search">
+      <span style="flex:1;color:var(--text-disabled-default)">Search</span>
+      <svg aria-hidden="true"><use href="#ic-search"/></svg>
+    </div>
+
+    <!-- Nav items — 2 cols (tablet) / 1 col (mobile) -->
+    <div class="menubar-panel__menu">
+      <div class="menubar-panel__col">
+        <!-- Home (active state shown as default, scoreCard=Achievement active below) -->
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-home"/></svg>
+          <span class="panel-item__label">Home</span>
+        </div>
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+          <span class="panel-item__label">Quiz</span>
+        </div>
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-battle"/></svg>
+          <span class="panel-item__label">Battle</span>
+        </div>
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-clipboard"/></svg>
+          <span class="panel-item__label">Practice</span>
+        </div>
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-users"/></svg>
+          <span class="panel-item__label">Class</span>
+          <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+        </div>
+      </div>
+      <div class="menubar-panel__divider" aria-hidden="true"></div>
+      <div class="menubar-panel__col">
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-book"/></svg>
+          <span class="panel-item__label">Learn</span>
+          <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+        </div>
+        <!-- Achievement — active on this page -->
+        <div class="panel-item is-active">
+          <svg aria-hidden="true"><use href="#ic-bar-chart-2"/></svg>
+          <span class="panel-item__label">Achievement</span>
+          <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+        </div>
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-star"/></svg>
+          <span class="panel-item__label">Potential</span>
+          <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+        </div>
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-gift"/></svg>
+          <span class="panel-item__label">Rewards</span>
+          <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+        </div>
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-settings"/></svg>
+          <span class="panel-item__label">My Account</span>
+          <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer CTA: Notification + Download App -->
+    <div class="menubar-panel__footer">
+      <div class="menubar-panel__cta">
+        <div class="panel-cta-notif">
+          <svg aria-hidden="true"><use href="#ic-bell"/></svg>
+          <span>Notification</span>
+        </div>
+        <button class="panel-cta-download" type="button">
+          <div class="panel-cta-download__content">
+            <div class="panel-cta-download__icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
+            <span class="panel-cta-download__label">Download App</span>
+          </div>
+          <div class="panel-cta-download__arrow">
+            <svg aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+          </div>
+        </button>
+      </div>
+      <!-- Localization row: EN / BM / 中 -->
+      <div class="menubar-panel__localization">
+        <svg aria-hidden="true" style="color:var(--text-default-body)"><use href="#ic-en"/></svg>
+        <span style="font-size:14px;font-weight:500;color:var(--text-default-body);font-family:var(--font)">BM</span>
+        <span style="font-size:14px;font-weight:500;color:var(--text-default-body);font-family:var(--font)">中</span>
+      </div>
+    </div>
+
+  </div>
+</div><!-- end MenuBar-Panel -->
+
+<!-- Mobile bottom tab bar  DS node 3406:734 — shown ≤767px -->
+<section id="NavBar-Mobile-Bottom">
+  <nav class="mobile-bottom-nav" aria-label="Bottom navigation">
+    <div class="mobile-nav-tab">
+      <svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+      Quiz
+    </div>
+    <div class="mobile-nav-tab">
+      <svg aria-hidden="true"><use href="#ic-clipboard"/></svg>
+      Practice
+    </div>
+    <div class="mobile-nav-tab is-active">
+      <svg aria-hidden="true"><use href="#ic-bar-chart-2"/></svg>
+      Score
+    </div>
+    <div class="mobile-nav-tab">
+      <svg aria-hidden="true"><use href="#ic-menu"/></svg>
+      Account
+    </div>
+  </nav>
+</section><!-- end NavBar-Mobile-Bottom -->
 
 
 <!-- ═══════════════════════════════════════════════
@@ -974,7 +1272,33 @@
 
 
 <script>
-  /* Nav button handlers — registered first, before any other JS */
+  /* ── Menu Bar panel toggle — hamburger open/close ── */
+  (function() {
+    const overlay  = document.getElementById('MenuBar-Panel');
+    const hamburger = document.getElementById('hamburger-btn');
+    const closeBtn  = document.getElementById('menubar-close-btn');
+
+    function openPanel() {
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      hamburger && hamburger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function closePanel() {
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      hamburger && hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    if (hamburger) hamburger.addEventListener('click', openPanel);
+    if (closeBtn)  closeBtn.addEventListener('click', closePanel);
+    if (overlay)   overlay.addEventListener('click', e => { if (e.target === overlay) closePanel(); });
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+  })();
+
+  /* Nav button handlers — registered before non-critical JS */
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('is-active'));
