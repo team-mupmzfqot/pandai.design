@@ -1713,4 +1713,120 @@ This auto-sizes to `padding-top + content-height + padding-bottom`. If the DS ch
 
 ---
 
+---
+
+### 55. Inspect DS page instances, not component defaults — `componentProperties` is the source of truth
+
+A component's default variant properties (e.g. Secondary/M has `showRArrow: true` by default) are NOT what matters. What matters is what the specific INSTANCE on the page has overridden. Always call `inst.componentProperties` on the actual page instance.
+
+**Workflow to find all button configs on a specific screen:**
+```js
+// Find the correct screen frame first
+const pandai = screenPage.children.find(n => n.name === 'Pandai Student');
+const homeFrame = pandai.children.find(n => n.id === '3088:61197');
+
+// Find all Button-1.5 instances by component set ID (473:529)
+const btns = homeFrame.findAll(n => {
+  if (n.type !== 'INSTANCE') return false;
+  return n.mainComponent?.parent?.id === '473:529';
+});
+
+// Read instance-level overrides
+btns.forEach(inst => {
+  const p = inst.componentProperties;
+  console.log(p.Variants?.value, p.Size?.value,
+    'icon:', p['Show Leading Icon#1437:0']?.value,
+    'Rarrow:', p['Show R Arrow#473:6']?.value,
+    'label:', p['↳ Label#473:4']?.value);
+});
+```
+
+**Confirmed home screen button configs (DS frame 3088:61197, May 2026):**
+
+| Usage | Variant/Size | showLeadingIcon | showLArrow | showRArrow | Label |
+|---|---|---|---|---|---|
+| Quiz card CTA | Primary/S | false | false | **true** | "Button" |
+| Check-in card | Primary/M | false | false | **true** | "View your report card now!" |
+| Add Classes | Secondary/M | **true** | false | **false** | "Add Classes" |
+
+**Key insight:** Secondary/M "Add Classes" has `showRArrow: false` (instance override). The component default has the arrow visible — but this page's instance explicitly hides it.
+
+---
+
+### 56. Never share a CSS class between button instances with different `showRArrow` configs
+
+If two buttons use the same CSS class but one has `showRArrow: true` and the other has `showRArrow: false`, removing the arrow CSS (to match the false-instance) silently breaks the true-instance.
+
+**Confirmed mistake (May 2026):**
+- "Add Classes" (Secondary/M, `showRArrow: false`) and "View Activity History" (Secondary/M, `showRArrow: true`) both used `.btn-add-classes`
+- Removing arrow CSS from `.btn-add-classes` broke "View Activity History" — the `ic-chevron-btn-m` SVG rendered at full size with no containment
+- Fix: gave "View Activity History" its own class `.btn-secondary-arrow` with full arrow specs
+
+**Rule:** Each unique DS instance configuration needs its own CSS class. Two buttons that share a variant but differ in `showRArrow`, `showLeadingIcon`, or any boolean property must have separate classes. Never assume two buttons with the same Figma component type have the same HTML structure.
+
+---
+
+### 57. Always get a DS screenshot before inserting a new section — confirm position and order
+
+When adding a section derived from the DS to the prototype, take a `get_screenshot` of the home frame FIRST to confirm:
+1. Where the section appears in the vertical flow
+2. What sections come before and after it
+
+**Confirmed mistake (May 2026):** Added the Stats Card section between Welcome and Carousel — but the DS frame shows Welcome → **Carousel** → Stats Card. The wrong insertion order pushed the Carousel to position #3, breaking the page flow. A single screenshot before inserting would have prevented this.
+
+**DS home+footer frame (`3088:61197`) — confirmed section order (May 2026):**
+```
+1. Welcome (status badges + check-in card)
+2. Carousel - 1.5
+3. Static News Cards  [prototype-only, not in DS]
+4. Your Selected Subjects (18 quiz cards)
+5. Your Recent Activities (3 quiz cards)
+```
+
+The Stats Card (two pastel panels with Primary/M CTAs) appears in the DS after the Carousel but was rejected by the user — do not add it again without explicit instruction.
+
+---
+
+### 58. `componentProperties` boolean key format — exact strings required
+
+Component property keys in Figma include the internal node ID suffix (e.g. `#1437:0`). These exact strings must be used when reading instance overrides via `inst.componentProperties`.
+
+**Confirmed Button - 1.5 property keys (May 2026):**
+
+| Property | Key string | Type |
+|---|---|---|
+| Show Leading Icon | `'Show Leading Icon#1437:0'` | BOOLEAN |
+| Show Label | `'Show Label#643:3'` | BOOLEAN |
+| Show L Arrow | `'Show L Arrow#2086:18'` | BOOLEAN |
+| Show R Arrow | `'Show R Arrow#473:6'` | BOOLEAN |
+| Label text | `'↳ Label#473:4'` | TEXT |
+| Leading icon swap | `'↳ Leading Icon#1437:25'` | INSTANCE_SWAP |
+| Right icon swap | `'↳ Right Icon#2783:0'` | INSTANCE_SWAP |
+| Variant | `'Variants'` | VARIANT |
+| Size | `'Size'` | VARIANT |
+| State | `'State'` | VARIANT |
+| Type | `'Type'` | VARIANT |
+
+**Button - 1.5 component set ID:** `473:529` — use `mc?.parent?.id === '473:529'` to reliably identify Button-1.5 instances across all pages.
+
+---
+
+### 59. Prototype home screen — confirmed section inventory (May 2026)
+
+Current sections in `zul.test.git/zul.home.screen.html` in visual order:
+
+| Position | Section ID | Content |
+|---|---|---|
+| Fixed top | `NavBar-Desktop` / `NavBar-Mobile` | Navbar (swaps at 1320px breakpoint) |
+| 1 | `Welcome-Desktop` | Status badges · Welcome text · Check-in card |
+| 2 | `Carousel-Desktop` | Featured carousel — 5 image cards (428×186px) |
+| 3 | `StaticNewsCard-Desktop` | 2 side-by-side promo static cards |
+| 4 | `YourSelectedSubjects-Desktop` | 18 quiz cards (3-col grid) · Modify List button |
+| 5 | `YourRecentActivities-Desktop` | 3 quiz cards · View Activity History button |
+| Fixed bottom | `footer.footer` | Copyright · Heart · Pandai.org |
+
+**Section classes:** Sections 4 and 5 share `.section-frame` (green border card). Sections 2 and 3 are full-width sections with their own CSS. Section 1 is `.section-welcome` (flex row).
+
+---
+
 *Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
