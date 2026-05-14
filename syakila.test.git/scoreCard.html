@@ -684,12 +684,9 @@
       body { padding-bottom: 86px; }
       .menubar-panel {
         width: min(329px, calc(100% - 32px));
-        top: 64px; bottom: 0;
-        left: 0; transform: translateX(-100%);
-        max-height: unset; border-radius: 0 var(--corner-4xl) var(--corner-4xl) 0;
-        transition: transform 0.3s ease;
+        top: 72px; max-height: calc(100vh - 90px);
+        left: 16px; transform: none;
       }
-      .menubar-overlay.is-open .menubar-panel { transform: translateX(0); }
       .menubar-panel__menu { flex-direction: column; }
       .menubar-panel__divider { display: none; }
       .menubar-panel__col { flex: none; width: 100%; }
