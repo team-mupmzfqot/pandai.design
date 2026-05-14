@@ -189,15 +189,28 @@
       position:    relative;
       flex-shrink: 0;
     }
+    /* Avatar - 1.5 Size=L Type=Image — DS node 684:621 */
     .navbar-avatar {
-      width: 48px; height: 48px;
-      border-radius: var(--corner-radius-corner-rounded);
-      border:        1px solid var(--border-default);
+      width:         48px;
+      height:        48px;
+      border-radius: var(--corner-radius-corner-rounded);  /* 60px pill */
+      border:        1px solid var(--border-default);       /* border/default #00cc85 */
       background:    var(--surface-general-default);
-      display:       flex;  align-items: center; justify-content: center;
       overflow:      hidden;
+      position:      relative;   /* anchor for absolute img */
+      flex-shrink:   0;
     }
-    .navbar-avatar__img { width: 62px; height: 50px; object-fit: cover; position: absolute; }
+    /* DS: left:-7px right:-7px top:-1px → 62×62 icon clipped by 48×48 circle */
+    .navbar-avatar__img {
+      position:      absolute;
+      left:          -7px;
+      right:         -7px;
+      top:           -1px;
+      aspect-ratio:  1 / 1;
+      object-fit:    cover;
+      pointer-events: none;
+      display:       block;
+    }
     .navbar-badge {
       position:      absolute;  top: 0; right: -0.5px;
       min-width:     20px; height: 20px;
