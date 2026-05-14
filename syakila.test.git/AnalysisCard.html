@@ -172,12 +172,13 @@
     .nav-btn.is-pressed .nav-btn__inner     { background: var(--surface-tertiary-default); box-shadow: inset 0 0 0 1px var(--border-tertiary-focus); }
     .nav-btn.is-pressed .nav-btn__label     { color: var(--text-primary-default); }
     .nav-btn.is-pressed .nav-btn__icon-wrap { color: var(--icon-primary-default); }
-    .nav-btn.is-active .nav-btn__inner      { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
-    .nav-btn.is-active .nav-btn__label      { color: var(--icon-primary-on-color); }
-    .nav-btn.is-active .nav-btn__icon-wrap  { color: var(--icon-primary-on-color); }
-    .nav-btn.is-active:hover .nav-btn__inner     { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
-    .nav-btn.is-active:hover .nav-btn__label     { color: var(--icon-primary-on-color); }
-    .nav-btn.is-active:hover .nav-btn__icon-wrap { color: var(--icon-primary-on-color); }
+    /* State=Active on this page: dark teal bg, green text/icon — DS node 3282:68209 Achievement */
+    .nav-btn.is-active .nav-btn__inner      { background: var(--surface-tertiary-default); box-shadow: inset 0 0 0 1px var(--border-tertiary-focus); }
+    .nav-btn.is-active .nav-btn__label      { color: var(--text-primary-default); }
+    .nav-btn.is-active .nav-btn__icon-wrap  { color: var(--icon-primary-default); }
+    .nav-btn.is-active:hover .nav-btn__inner     { background: var(--surface-tertiary-default); box-shadow: inset 0 0 0 1px var(--border-tertiary-focus); }
+    .nav-btn.is-active:hover .nav-btn__label     { color: var(--text-primary-default); }
+    .nav-btn.is-active:hover .nav-btn__icon-wrap { color: var(--icon-primary-default); }
 
     /* ───────────────────────────────────────────────
        PAGE SHELL
@@ -196,8 +197,7 @@
       background: none; border: none; padding: 0; cursor: pointer;
       color: var(--text-default-body);
     }
-    .pd-link15 svg { display: block; width: 20px; height: 20px; }
-    .pd-link15__icon-home { color: var(--text-primary-default); }
+    .pd-link15__icon-home { display: block; width: 20px; height: 20px; flex-shrink: 0; color: var(--text-primary-default); }
     .pd-link15__text         { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
     .pd-link15__text--parent { color: #4d4d4d; }
     .pd-breadcrumbs__chevron { width: 16px; height: 16px; color: var(--border-general-default); flex-shrink: 0; }
@@ -563,10 +563,11 @@
       /* Grade: expand to full width, keep flex-col stacking */
       .an-grade { width: 100%; }
 
-      /* Donut pairs: full width, both columns side by side */
-      .an-donut-pairs    { width: 100%; justify-content: space-evenly; }
+      /* Donut pairs: full width, side by side — wrap to stack when viewport too narrow */
+      .an-donut-pairs { width: 100%; flex-wrap: wrap; gap: 24px; justify-content: center; }
+      .an-donut-col   { flex: 1; min-width: 260px; } /* wraps to single column below ~548px */
 
-      /* Shrink donuts so legend text fits comfortably beside them at narrow widths */
+      /* Shrink donuts so legend text fits comfortably beside them */
       .an-donut-wrap svg { width: 160px; height: 160px; }
 
       /* Table: reduce fixed columns so table fits without horizontal scroll */
@@ -597,16 +598,16 @@
       .an-grade__title-row { font-size: 32px; }
       .an-grade__details   { gap: var(--space-xxs); }  /* 4px between pill/stats */
 
-      /* ── Donuts: 2 columns side by side, donut top + legend below ── */
-      .an-donut-pairs { flex-direction: row; gap: var(--space-s); align-items: flex-start; }
-      .an-donut-col   { flex: 1; min-width: 0; flex-direction: column; align-items: center; gap: var(--space-xs); }
-      .an-donut-wrap svg { width: 100px; height: 100px; }
+      /* ── Donuts: stack vertically — each item is donut left + legend right ── */
+      .an-donut-pairs { flex-direction: column; gap: var(--space-m); }
+      .an-donut-col   { width: 100%; flex-direction: row; align-items: center; justify-content: flex-start; gap: var(--space-m); }
+      .an-donut-wrap svg { width: 100px; height: 100px; flex-shrink: 0; }
 
-      /* Legend: hide title (pills are self-explanatory), compact rows */
-      .an-legend              { align-items: center; width: 100%; }
-      .an-legend__title       { display: none; }
-      .an-legend__rows        { gap: var(--space-xs); }
-      .an-legend__row         { width: 100%; max-width: 130px; margin: 0 auto; }
+      /* Legend: left-aligned, compact rows */
+      .an-legend        { align-items: flex-start; flex-shrink: 1; min-width: 0; }
+      .an-legend__title { display: none; }
+      .an-legend__rows  { gap: var(--space-xs); }
+      .an-legend__row   { width: 130px; margin: 0; }
 
       /* ── Table: card layout — each row becomes a 2-line flex card ── */
       .an-table-outer { overflow-x: visible; }
@@ -711,11 +712,9 @@
     <!-- ── Breadcrumb chevron-right ── -->
     <symbol id="ic-chevron-right-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18L15 12L9 6"/></symbol>
 
-    <!-- ── Download icon (filled-style, for Download button) ── -->
-    <symbol id="ic-download" viewBox="-1 -1 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M8 1v10"/>
-      <polyline points="4,8 8,12 12,8"/>
-      <line x1="1" y1="14" x2="15" y2="14"/>
+    <!-- ── Download icon — DS Filled/download node 3075:61036 ── -->
+    <symbol id="ic-download" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M17 10L12 15L7 10M12 15V3"/>
     </symbol>
 
   </defs>
@@ -852,24 +851,20 @@
       <div class="pd-breadcrumbs__sep"></div>
       <div class="pd-breadcrumbs__links">
 
-        <!-- Level 1: Achievement (icon + text) -->
+        <!-- Level 1: Achievement — Icon Left=true (achievement icon) + text + Icon Right=true (chevron) -->
         <button class="pd-link15" type="button">
-          <svg class="pd-link15__icon-home" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <g transform="translate(6,4)"><path d="M 12 16 L 12 6 M 6 16 L 6 0 M 0 16 L 0 10"/></g>
-          </svg>
+          <svg class="pd-link15__icon-home" aria-hidden="true"><use href="#ic-achievement"/></svg>
           <span class="pd-link15__text pd-link15__text--parent">Achievement</span>
+          <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
         </button>
 
-        <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
-
-        <!-- Level 2: Report Card for Form 5 -->
+        <!-- Level 2: Report Card — Icon Left=false + text + Icon Right=true (chevron) -->
         <button class="pd-link15" type="button">
           <span class="pd-link15__text pd-link15__text--parent">Report Card for Form 5</span>
+          <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
         </button>
 
-        <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
-
-        <!-- Level 3: Bahasa Melayu (current page) -->
+        <!-- Level 3: Bahasa Melayu — State=Active, Icon Left=false, Icon Right=false -->
         <span class="pd-link15" style="cursor:default">
           <span class="pd-link15__text" style="color:var(--text-primary-default)">Bahasa Melayu</span>
         </span>
