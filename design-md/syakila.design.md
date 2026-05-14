@@ -1958,3 +1958,226 @@ Applied at `@media (max-width: 1279px)` — affects both tablet and mobile.
 - Add Math border was `#202a6e` → correct is `#182052`
 - KAFA text was `#358a62` → correct is `#538865`
 - Chinese Language was missing → now confirmed `#f94848` / `#c73a3a`
+
+---
+
+## Session — May 2026 (Session 4) — scoreCard.html navbar/menubar + AnalysisCard.html fixes
+
+### scoreCard.html — Waffle icon
+
+Replaced placeholder waffle with exact DS export from **Filled/waffle-menu node `3075:61110`**.
+Symbol: `<symbol id="ic-waffle" viewBox="0 0 24 24" fill="none">` — 18 paths total (9 `fill="currentColor"` circles + 9 `stroke="currentColor"` paths). The symbol must have `fill="none"` so stroke-only paths don't inherit a fill.
+
+**Mistake made:** Earlier version used radius-1 filled circles with `stroke-width:1.5` — dots bled into horizontal bars. Fix: use exact DS 18-path export separated into fill and stroke paths.
+
+---
+
+### scoreCard.html — Logos (mobile navbar + panel)
+
+Logo replaced with DS symbol `logo-pandai-h` sourced from **DS node `1943:22622`** (Logo/Pandai/Logo Horizontal, 116×28).
+
+**Implementation:**
+```html
+<symbol id="logo-pandai-h" viewBox="0 0 116.479 28">
+  <!-- 12 colored mark paths + 7 dark wordmark paths — NO clipPath wrapper -->
+</symbol>
+```
+
+**Rule confirmed:** `<clipPath>` inside a `<symbol>` does NOT resolve reliably via `<use>` shadow DOM. All paths fit within the viewBox naturally — never add clipPath to a logo symbol.
+
+Usage in mobile navbar:
+```html
+<svg class="navbar-mobile__logo-svg" aria-label="Pandai" role="img"><use href="#logo-pandai-h"/></svg>
+```
+Usage in panel header:
+```html
+<svg class="menubar-panel__logo" aria-label="Pandai" role="img"><use href="#logo-pandai-h"/></svg>
+```
+
+---
+
+### scoreCard.html — Desktop navbar icon colors
+
+| Element | Color | Token |
+|---|---|---|
+| Action icons (search, maximize, smartphone, bell, EN, waffle) | `#808080` | `--icon-default-default` |
+| Nav pill icons | `#00cc85` | `--icon-primary-default` |
+
+Added CSS variable: `--icon-default-default: #808080`
+
+```css
+.navbar-action-icon { color: var(--icon-default-default); }
+.nav-btn__icon-wrap { color: var(--icon-primary-default); }
+```
+
+---
+
+### scoreCard.html — Close × button color
+
+Close button on the menubar overlay: `color: var(--icon-default-default)` = `#808080` (grey, `Icon/default/default`). Not green, not white.
+
+---
+
+### scoreCard.html — Mobile bottom nav icon colors
+
+All 4 mobile bottom nav icons use `color: var(--icon-primary-default)` = `#00cc85` (green). The active tab icon is also green (same token, active state is communicated by label color change only at mobile).
+
+---
+
+### scoreCard.html — Menubar panel border & positioning
+
+**Tablet (≤1319px) — DS Nav Menu Tablet - 1.5 node `3427:2184`:**
+```css
+.menubar-panel {
+  width: min(1288px, calc(100% - 48px));
+  top: 0;
+  border-top: 0;
+  border-radius: 0 0 var(--corner-4xl) var(--corner-4xl); /* top corners 0, bottom corners 24px */
+}
+```
+- No top border — panel sits flush against top of overlay
+- `top: 0` (not `top: 64px`) — overlay already covers full viewport; the dim area starts from top
+
+**Mobile (≤767px) — DS Nav Menu Mobile - 1.5 node `3427:2442`:**
+```css
+.menubar-panel {
+  position: relative;
+  left: auto; top: auto; bottom: auto;
+  width: min(329px, 100%);
+  height: auto;
+  max-height: unset;
+  transform: none;
+  border-left: 0;
+  border-radius: 0 var(--corner-4xl) var(--corner-4xl) 0; /* right corners 24px, left corners 0 */
+}
+```
+- No left border — panel slides from the left edge
+- Right corners 24px only
+
+**Mobile overlay — flex approach for left alignment:**
+```css
+.menubar-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 0 60px 0; /* 60px bottom = space for mobile bottom nav */
+}
+```
+`position: fixed; left: 0` failed to override centered panel (opacity stacking context). Flex overlay with `justify-content: flex-start` + panel `position: relative` is the reliable fix.
+
+**Mistake made:** Setting `overlay { top: 64px }` to shift below navbar — user immediately reverted. Correct: `top: 0` always. The overlay covers the full viewport; navbar visibility at mobile is handled separately (`#NavBar-Tablet { display: none }`).
+
+---
+
+### scoreCard.html — Panel item states (DS Dropdown-Parts)
+
+```css
+.panel-item:hover:not(.is-active) {
+  background: var(--surface-secondary-default-subtle); /* #e8fbe8 */
+  border-color: var(--border-primary-default);
+  color: var(--text-primary-default);
+}
+.panel-item:active:not(.is-active),
+.panel-item.is-touch:not(.is-active) {
+  background: var(--surface-secondary-default);       /* #b5f291 */
+  border-color: var(--border-primary-focus);
+  color: var(--text-primary-focus);
+}
+.panel-item.is-active {
+  background: var(--surface-secondary-default);
+  border-color: var(--border-primary-focus);          /* #00a36a */
+  color: var(--text-primary-focus);
+}
+```
+
+---
+
+### scoreCard.html — Panel items without chevrons
+
+Home, Quiz, Battle, Practice nav items have **no chevron**. DS confirmed — these items go directly to the page, no sub-menu. Only items with sub-navigation (Learn, Class, Achievement, Potential) have chevrons.
+
+```html
+<!-- No .panel-item__chevron element on these: -->
+<div class="panel-item"><svg><use href="#ic-home"/></svg><span class="panel-item__label">Home</span></div>
+<div class="panel-item"><svg><use href="#ic-filled-check-circle"/></svg><span class="panel-item__label">Quiz</span></div>
+```
+
+---
+
+### scoreCard.html — Search bar active state
+
+Search bar always shows active border (`Border/primary/default` = `#00cc85`):
+```css
+.menubar-panel__search { border: 1px solid var(--border-primary-default); }
+.menubar-panel__search svg { color: var(--icon-primary-default); }
+```
+
+---
+
+### scoreCard.html — Mobile panel: Account tab opens/closes panel
+
+At ≤767px, the top navbar is hidden. The Account tab in the bottom nav bar toggles the menubar overlay:
+```js
+const accountTab = document.getElementById('account-tab-btn');
+if (accountTab) accountTab.addEventListener('click', () => {
+  overlay.classList.contains('is-open') ? closePanel() : openPanel();
+});
+```
+
+---
+
+### scoreCard.html — Navbar width confirmed correct
+
+DS mobile navbar (`1943:22641`) vs current CSS:
+
+| Property | DS spec | CSS | Status |
+|---|---|---|---|
+| Height | 64px | `height: 64px` | ✓ |
+| Horizontal padding | `Spacing/space-xl` = 24px | `padding: var(--space-m) 24px` | ✓ |
+| Vertical padding | `Spacing/space-m` = 16px | `var(--space-m)` | ✓ |
+| Border | bottom+left+right `#00cc85` | 3-side 1px | ✓ |
+| Border-radius | bottom corners 24px | `0 0 var(--corner-4xl) var(--corner-4xl)` | ✓ |
+
+Width is fluid (fills container). Section `#NavBar-Tablet` adds `padding: 0 var(--page-padding-x)` = `0 32px` at tablet — this is the page-level margin, consistent with the desktop navbar pattern. No changes needed.
+
+---
+
+### AnalysisCard.html — Nav active state fix
+
+Active nav button uses **Tertiary palette** (dark teal), not Primary green. DS node `3282:68209` (Achievement page, active state).
+
+```css
+/* WRONG (was using Primary) */
+.nav-btn.is-active .nav-btn__inner { background: var(--surface-primary-default); }
+.nav-btn.is-active .nav-btn__label { color: var(--icon-primary-on-color); }
+
+/* CORRECT — Tertiary palette */
+.nav-btn.is-active .nav-btn__inner { background: var(--surface-tertiary-default); box-shadow: inset 0 0 0 1px var(--border-tertiary-focus); }
+.nav-btn.is-active .nav-btn__label { color: var(--text-primary-default); }
+.nav-btn.is-active .nav-btn__icon-wrap { color: var(--icon-primary-default); }
+```
+
+Applied to both hover-over-active state as well. Same fix applies to all Syakila prototype pages.
+
+---
+
+### AnalysisCard.html — Donut chart responsive layout
+
+**Tablet (≤1279px):**
+```css
+.an-donut-pairs { width: 100%; flex-wrap: wrap; gap: 24px; justify-content: center; }
+.an-donut-col   { flex: 1; min-width: 260px; } /* wraps below ~548px viewport */
+.an-donut-wrap svg { width: 160px; height: 160px; }
+```
+
+**Mobile (≤767px):**
+```css
+/* Each column: donut on left, legend on right — stacked vertically */
+.an-donut-pairs { flex-direction: column; gap: var(--space-m); }
+.an-donut-col   { width: 100%; flex-direction: row; align-items: center; justify-content: flex-start; gap: var(--space-m); }
+.an-donut-wrap svg { width: 100px; height: 100px; flex-shrink: 0; }
+.an-legend      { align-items: flex-start; flex-shrink: 1; min-width: 0; }
+.an-legend__row { width: 130px; margin: 0; }
+```
+
+*Last updated: May 2026 (Session 4)*
