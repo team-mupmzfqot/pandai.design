@@ -541,7 +541,7 @@
       flex-shrink: 0; align-self: stretch; margin: 0 var(--space-xs);
     }
 
-    /* Panel menu item */
+    /* Panel menu item — DS Dropdown-Parts states */
     .panel-item {
       display: flex; align-items: center; gap: 10px;
       padding: var(--space-xs) var(--space-m);
@@ -549,22 +549,38 @@
       font-size: 14px; font-weight: 500; line-height: 20px;
       color: var(--text-default-body); font-family: var(--font);
       border: 1px solid transparent;
-      transition: background 0.15s;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
-    /* All panel icons: Icon/primary/default (#00cc85) — DS VariableID:119:10 confirmed */
     .panel-item svg { width: 24px; height: 24px; flex-shrink: 0; color: var(--icon-primary-default); }
     .panel-item__label { flex: 1; min-width: 0; }
-    /* Chevron: Icon/primary/default (#00cc85) on ALL items — DS confirmed VariableID:119:10 */
     .panel-item .panel-item__chevron { color: var(--icon-primary-default); }
-    /* Mobile-only chevrons for items that have none on tablet */
     .panel-item__chevron--mobile { display: none; }
+
+    /* Hover — Surface/secondary/default-subtle + Border/primary/default + Text/primary/default */
+    .panel-item:hover:not(.is-active) {
+      background: var(--surface-secondary-default-subtle);
+      border-color: var(--border-primary-default);
+      color: var(--text-primary-default);
+    }
+    /* Active touch feedback */
+    .panel-item:active:not(.is-active) {
+      background: var(--surface-secondary-default);
+      border-color: var(--border-primary-focus);
+      color: var(--text-primary-focus);
+    }
+    /* Selected — Surface/secondary/default + Border/primary/focus + Text/primary/default-hover */
     .panel-item.is-active {
       background: var(--surface-secondary-default);
       border-color: var(--border-primary-focus);
       color: var(--text-primary-focus);
     }
-    .panel-item.is-active svg { color: var(--text-primary-focus); }
-    .panel-item:hover:not(.is-active) { background: var(--surface-general-default-secondary); }
+    .panel-item.is-active svg,
+    .panel-item.is-active .panel-item__chevron { color: var(--text-primary-focus); }
+
+    /* Search bar — Default: Border/general/default | Focus: Border/primary/default */
+    .menubar-panel__search:focus-within {
+      border-color: var(--border-primary-default);
+    }
 
     /* Panel footer */
     .menubar-panel__footer { margin-top: var(--space-m); display: flex; flex-direction: column; gap: 0; }
