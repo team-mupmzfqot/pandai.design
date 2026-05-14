@@ -556,8 +556,6 @@
     .panel-item__label { flex: 1; min-width: 0; }
     /* Chevron: Icon/primary/default (#00cc85) on ALL items — DS confirmed VariableID:119:10 */
     .panel-item .panel-item__chevron { color: var(--icon-primary-default); }
-    /* Checkbox indicator — DS Checkbox-1.5 Checked Size=S — mobile only */
-    .panel-item__check { display: none; width: 16px; height: 16px; flex-shrink: 0; }
     /* Mobile-only chevrons for items that have none on tablet */
     .panel-item__chevron--mobile { display: none; }
     .panel-item.is-active {
@@ -694,7 +692,6 @@
         left: 16px; transform: none;
       }
       .menubar-panel__menu { flex-direction: column; }
-      .panel-item__check { display: block; }
       .panel-item__chevron--mobile { display: block; }
       .menubar-panel__divider { display: none; }
       .menubar-panel__col { flex: none; width: 100%; }
@@ -809,11 +806,6 @@
     <symbol id="ic-filled-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999"/>
       <path d="M22 4L12 14.01L9 11.01"/>
-    </symbol>
-    <!-- DS Checkbox-1.5 State=Checked Size=S node 587:540 — mobile menu item indicator -->
-    <symbol id="ic-checkbox-checked" viewBox="0 0 16 16" fill="none">
-      <path d="M4 0.5H12C13.933 0.5 15.5 2.067 15.5 4V12C15.5 13.933 13.933 15.5 12 15.5H4C2.067 15.5 0.5 13.933 0.5 12V4C0.5 2.067 2.067 0.5 4 0.5Z" fill="#00CC85" stroke="#00A36A"/>
-      <path d="M12 5L6.5 10.5L4 8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
 
     <!-- logo-pandai-h = DS Logo/Pandai/Logo Horizontal node 1943:22622 — 116×28 — no clipPath (paths don't overflow viewBox) -->
@@ -1025,67 +1017,47 @@
       <div class="menubar-panel__col">
         <!-- Home (active state shown as default, scoreCard=Achievement active below) -->
         <div class="panel-item">
-          <svg aria-hidden="true"><use href="#ic-home"/></svg>
-          <svg class="panel-item__check" aria-hidden="true" width="16" height="16"><use href="#ic-checkbox-checked"/></svg>
-          <span class="panel-item__label">Home</span>
+          <svg aria-hidden="true"><use href="#ic-home"/></svg>          <span class="panel-item__label">Home</span>
           <svg class="panel-item__chevron panel-item__chevron--mobile" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
         </div>
         <div class="panel-item">
-          <svg aria-hidden="true"><use href="#ic-filled-check-circle"/></svg>
-          <svg class="panel-item__check" aria-hidden="true" width="16" height="16"><use href="#ic-checkbox-checked"/></svg>
-          <span class="panel-item__label">Quiz</span>
+          <svg aria-hidden="true"><use href="#ic-filled-check-circle"/></svg>          <span class="panel-item__label">Quiz</span>
           <svg class="panel-item__chevron panel-item__chevron--mobile" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
         </div>
         <div class="panel-item">
-          <svg aria-hidden="true"><use href="#ic-battle"/></svg>
-          <svg class="panel-item__check" aria-hidden="true" width="16" height="16"><use href="#ic-checkbox-checked"/></svg>
-          <span class="panel-item__label">Battle</span>
+          <svg aria-hidden="true"><use href="#ic-battle"/></svg>          <span class="panel-item__label">Battle</span>
           <svg class="panel-item__chevron panel-item__chevron--mobile" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
         </div>
         <div class="panel-item">
-          <svg aria-hidden="true"><use href="#ic-clipboard"/></svg>
-          <svg class="panel-item__check" aria-hidden="true" width="16" height="16"><use href="#ic-checkbox-checked"/></svg>
-          <span class="panel-item__label">Practice</span>
+          <svg aria-hidden="true"><use href="#ic-clipboard"/></svg>          <span class="panel-item__label">Practice</span>
           <svg class="panel-item__chevron panel-item__chevron--mobile" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
         </div>
         <div class="panel-item">
-          <svg aria-hidden="true"><use href="#ic-users"/></svg>
-          <svg class="panel-item__check" aria-hidden="true" width="16" height="16"><use href="#ic-checkbox-checked"/></svg>
-          <span class="panel-item__label">Class</span>
+          <svg aria-hidden="true"><use href="#ic-users"/></svg>          <span class="panel-item__label">Class</span>
           <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
         </div>
       </div>
       <div class="menubar-panel__divider" aria-hidden="true"></div>
       <div class="menubar-panel__col">
         <div class="panel-item">
-          <svg aria-hidden="true"><use href="#ic-book"/></svg>
-          <svg class="panel-item__check" aria-hidden="true" width="16" height="16"><use href="#ic-checkbox-checked"/></svg>
-          <span class="panel-item__label">Learn</span>
+          <svg aria-hidden="true"><use href="#ic-book"/></svg>          <span class="panel-item__label">Learn</span>
           <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
         </div>
         <!-- Achievement — active on this page -->
         <div class="panel-item is-active">
-          <svg aria-hidden="true"><use href="#ic-bar-chart-2"/></svg>
-          <svg class="panel-item__check" aria-hidden="true" width="16" height="16"><use href="#ic-checkbox-checked"/></svg>
-          <span class="panel-item__label">Achievement</span>
+          <svg aria-hidden="true"><use href="#ic-bar-chart-2"/></svg>          <span class="panel-item__label">Achievement</span>
           <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
         </div>
         <div class="panel-item">
-          <svg aria-hidden="true"><use href="#ic-star"/></svg>
-          <svg class="panel-item__check" aria-hidden="true" width="16" height="16"><use href="#ic-checkbox-checked"/></svg>
-          <span class="panel-item__label">Potential</span>
+          <svg aria-hidden="true"><use href="#ic-star"/></svg>          <span class="panel-item__label">Potential</span>
           <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
         </div>
         <div class="panel-item">
-          <svg aria-hidden="true"><use href="#ic-gift"/></svg>
-          <svg class="panel-item__check" aria-hidden="true" width="16" height="16"><use href="#ic-checkbox-checked"/></svg>
-          <span class="panel-item__label">Rewards</span>
+          <svg aria-hidden="true"><use href="#ic-gift"/></svg>          <span class="panel-item__label">Rewards</span>
           <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
         </div>
         <div class="panel-item">
-          <svg aria-hidden="true"><use href="#ic-settings"/></svg>
-          <svg class="panel-item__check" aria-hidden="true" width="16" height="16"><use href="#ic-checkbox-checked"/></svg>
-          <span class="panel-item__label">My Account</span>
+          <svg aria-hidden="true"><use href="#ic-settings"/></svg>          <span class="panel-item__label">My Account</span>
           <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
         </div>
       </div>
