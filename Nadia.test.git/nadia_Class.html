@@ -154,16 +154,37 @@
       display: flex; align-items: center; gap: var(--spacing-space-xs); flex-shrink: 0;
     }
     /* Nav Button - Parts — DS node 3427:58651 — p:10px br:8px (radius/xl) */
+    /* Nav Button - Parts — DS node 3427:63111 */
     .navbar-primary-icon {
       width: 44px; height: 44px;
       display: flex; align-items: center; justify-content: center;
       background:    var(--surface-general-default);
-      border-radius: 8px;
+      border-radius: 8px;              /* radius/xl */
       flex-shrink:   0;
       cursor:        pointer;
-      color:         var(--icon-default-default);
+      color:         #808080;          /* Icon/default/default — default state */
+      transition:    background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
     }
     .navbar-primary-icon svg { display: block; width: 24px; height: 24px; }
+
+    /* Hover — Surface/secondary/default-subtle + Icon/primary/default */
+    .navbar-primary-icon:hover {
+      background: #e8fbe8;             /* Surface/secondary/default-subtle */
+      box-shadow: inset 0 0 0 1px #00cc85;  /* Icon/primary/default */
+      color:      #00cc85;
+    }
+    /* Pressed — JS class (Rule 39: :active unreliable on div) */
+    .navbar-primary-icon.is-pressed {
+      background: #00564c;             /* Surface/tertiary/default */
+      box-shadow: inset 0 0 0 1px #00cc85;
+      color:      #00cc85;
+    }
+    /* Active — toggled state */
+    .navbar-primary-icon.is-active {
+      background: #00cc85;             /* Surface/primary/default */
+      box-shadow: inset 0 0 0 1px #00a36a;  /* Icon/primary/focus */
+      color:      #f6fdfb;             /* Icon/primary/on-color */
+    }
     .navbar-avatar-wrap {
       position:    relative;
       flex-shrink: 0;
@@ -1806,6 +1827,14 @@
   </footer>
 
   <script>
+    // Navbar primary icon pressed state (Rule 39: :active unreliable on div)
+    document.querySelectorAll('.navbar-primary-icon').forEach(btn => {
+      btn.addEventListener('mousedown',  () => btn.classList.add('is-pressed'));
+      const clearPressed = () => btn.classList.remove('is-pressed');
+      btn.addEventListener('mouseup',    clearPressed);
+      btn.addEventListener('mouseleave', clearPressed);
+    });
+
     // Nav item pressed state — mousedown/mouseup so visible regardless of click speed
     document.querySelectorAll('.nav-item').forEach(item => {
       item.addEventListener('mousedown', () => item.classList.add('is-pressed'));
