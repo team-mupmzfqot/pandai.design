@@ -2226,6 +2226,8 @@ const svg = await iconInst.exportAsync({ format: 'SVG_STRING' });
 
 **Mistake corrected (May 2026):** NavTopMenu icons had `viewBox="0 0 24 24"` with CSS per-icon padding. Both were wrong. All 9 symbols were re-exported from DS instances, updated to `viewBox="0 0 20 20"`, and all clip padding CSS rules were removed.
 
+**See also Rule 76** — the failure mode when `padding` on clip AND a tight-path `viewBox` are both present (stroke collapses). The NavTopMenu chevron-down (16×16 clip) was a concrete instance of this.
+
 ---
 
 ### 73. Company logo — constrain by height only, never fix both dimensions
@@ -2393,6 +2395,52 @@ When a component needs `max-width` only at a specific breakpoint (e.g. desktop o
 - Mobile (`≤767px`): `max-width: none` — same
 
 **Rule:** Whenever a layout property differs between breakpoints, check if a CSS variable in `:root` makes it easier to revert or adjust. This is especially useful for sizing constraints (`max-width`, `min-width`, `width`) that need to be "removed" at certain breakpoints.
+
+---
+
+### 76. CSS padding on clip + tight-path viewBox = stroke collapse — never combine
+
+Putting CSS `padding` on a clip container AND using a `viewBox` tightly sized to the path is a **silent failure** — the SVG renders into a smaller content area and scales down, collapsing the stroke to a fraction of 1.5px (effectively invisible).
+
+**The failure mode:**
+```
+Clip container: 16×16px
+Padding: 6px top/bottom, 4px left/right (box-sizing: border-box)
+Content area: 16 - 6 - 6 = 4px tall, 16 - 4 - 4 = 8px wide = 8×4px
+ViewBox: "-1 -1 14 8" (14×8 units, tight around path)
+Scale: min(8/14, 4/8) = 0.5×
+Stroke: 1.5 × 0.5 = 0.75px  ← nearly invisible
+```
+
+**Rule (extends Rule 72):** For any clip-container icon:
+- `viewBox` = `"0 0 <clip_w> <clip_h>"` — match the clip CSS size exactly
+- Path coordinates in **clip-space** (0 → clip_size), not local/tight path coordinates
+- **No CSS padding** on the clip container — path position is encoded in the viewBox
+
+```
+Scale at 1:1: clip_px / clip_viewBox_units = 16/16 = 1.0 → stroke = 1.5px ✓
+```
+
+**Confirmed — NavTopMenu chevron-down (DS node I3406:808;538:2074, May 2026):**
+
+| Property | Value |
+|---|---|
+| Clip container | 16×16px, `overflow: hidden` |
+| DS inset | 37.5% top/bottom, 25% left/right |
+| Active area in clip | top: 6px, bottom: 10px, left: 4px, right: 12px (8×4px) |
+| Symbol `id` | `ic-chevron-down` |
+| `viewBox` | `"0 0 16 16"` |
+| Path | `M 4 6 L 8 10 L 12 6` |
+| Stroke | `1.5` at 1:1 scale = **1.5px** |
+| CSS on clip | `width: 16px; height: 16px; overflow: hidden; flex-shrink: 0;` — no padding |
+
+**Mistake made (May 2026):**
+- Symbol had `viewBox="-1 -1 14 8"` with path `M 0 0 L 6 6 L 12 0` (tight to path in local coords)
+- Clip had `padding: 6px 4px; box-sizing: border-box` → content area shrunk to 8×4px
+- Scale = 0.5 → stroke = 0.75px → chevron appeared nearly invisible / "off"
+- Fix: remove padding, set `viewBox="0 0 16 16"`, translate path to clip-space coords
+
+**Quick diagnostic:** If a chevron or icon looks faint/thin/off in a clip container, first check whether CSS padding + a tight viewBox are both present on the same element. That combination always collapses the stroke.
 
 ---
 
