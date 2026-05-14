@@ -55,7 +55,7 @@
 
 **Mistake made:**
 - Primary button hover was assumed to be a darker green. Actual DS: Primary hover transitions to the **Secondary palette** — `Surface/secondary/default` (`#b5f291`) bg, `Border/secondary/focus` (`#70bc6f`) border, `Text/secondary/focus` (`#70bc6f`) text.
-- Secondary button Pressed state was incorrectly noted as "fills solid with Surface/primary/default". Actual DS node `538:1907` (Secondary/M/Student/Pressed): bg `#00564c` (`Surface/tertiary/default`), border `#00453d` (`Border/tertiary/focus`), text `#00cc85` (`Text/primary/default`) — same dark teal palette as Tertiary Pressed.
+- Secondary button Pressed state was incorrectly noted as "fills solid with Surface/primary/default", then later mis-corrected to dark teal (#00564c). **Confirmed live DS (May 2026, node 538:1907):** bg `#00a36a` (`Surface/primary/focus`), border `#00cc85` (`Border/primary/default`), text `#00cc85` (`Text/primary/default`). See Rule 40 for the full corrected table.
 - Disabled state was invented. Actual DS: `Surface/disabled/primary` (`#f2f2f2`) bg, `Border/disabled/disabled` (`#bfbfbf`) border, `Icon/disabled/default` (`#bfbfbf`) text.
 
 ---
@@ -904,21 +904,34 @@ When looking up states for a component used inside a larger DS assembly (e.g. a 
 
 ---
 
-### 40. Button - 1.5 Pressed palette is consistent across all variants
+### 40. Button - 1.5 Pressed palette — confirmed live DS (May 2026, re-verified May 2026)
 
-All three variants (Primary, Secondary, Tertiary) share the **same Pressed state colour palette** — dark teal. The variant only changes the Default/Hover appearance, not the Pressed.
+All variants (Primary, Secondary, Tertiary) share the **same Pressed state palette** — **Primary/focus mid-green**, NOT the Tertiary dark-teal that was previously documented. The dark-teal palette (`#00564c`) was a documentation error; the live DS has always resolved Pressed to `Surface/primary/focus`.
 
-**Confirmed Pressed state — all variants, Student type (May 2026):**
+**Confirmed Pressed state — all variants, Student type (re-verified May 2026 from live DS):**
 
-| Property | Value | Token |
+| Property | Token | Hex |
 |---|---|---|
-| Background | `#00564c` | `Surface/tertiary/default` |
-| Border | `#00453d` | `Border/tertiary/focus` |
-| Label/icon | `#00cc85` | `Text/primary/default` / `Icon/primary/default` |
+| Button background | `Surface/primary/focus` | `#00a36a` |
+| Button border | `Border/primary/default` | `#00cc85` |
+| Label / icon | `Text/primary/default` / `Icon/primary/default` | `#00cc85` |
+| Arrow bg (if shown) | `Surface/primary/default` | `#00cc85` |
+| Arrow chevron | `Icon/primary/focus` | `#00a36a` |
 
-This applies to: `Primary/S`, `Primary/M`, `Primary/L`, `Secondary/M`, `Tertiary/M`, `Tertiary/L`.
+This applies to: `Primary/S` (1437:8138), `Primary/M` (479:326), `Secondary/M` (538:1907), `Tertiary/L` (3029:20022).
 
-**Mistake corrected (May 2026):** CLAUDE.md Rule 2 previously stated Secondary/M Pressed = "fills solid with `Surface/primary/default` (#00cc85)". This was wrong — actual DS node `538:1907` shows dark teal (#00564c), not primary green. Never rely on old notes for pressed state colours — always pull from DS.
+**CSS pattern:**
+```css
+.btn:active,
+.btn.is-pressing {
+  background:   var(--surface-primary-focus);   /* #00a36a */
+  border-color: var(--border-primary-default);  /* #00cc85 */
+}
+.btn:active .btn__label { color: var(--text-primary-default); }   /* #00cc85 */
+/* Arrow chevron — use --surface-primary-focus (#00a36a), same hex as Icon/primary/focus */
+```
+
+**Previous documentation error:** An earlier session documented Pressed as `Surface/tertiary/default` (#00564c) / `Border/tertiary/focus` (#00453d). This was wrong. The error propagated into code and was corrected by re-fetching live `get_variable_defs` on every state node (May 2026 audit). Always re-verify from live DS — never trust previously written colour notes for state tokens.
 
 ---
 
@@ -1040,16 +1053,42 @@ window.addEventListener('resize', () => jump(idx));
 
 ---
 
-### Mandatory workflow before implementing any component
+### 45. DS state tokens can change — always re-verify from live DS, never trust prior notes
+
+The DS is a living file. Token values assigned to component states (especially Pressed) can change between sessions as the DS is updated. Never assume a state's colours are the same as what was written in a previous session note or rule.
+
+**What changed (May 2026 audit):** All Button - 1.5 Pressed states were re-fetched from the live DS via `get_variable_defs`. Every variant that was previously documented as using `Surface/tertiary/default` (#00564c) / Tertiary dark-teal for Pressed was found to actually use `Surface/primary/focus` (#00a36a). Five buttons in `zul.home.screen.html` had wrong Pressed state CSS and were corrected in one audit pass.
+
+**Rule:** For any interactive state — especially Pressed — always call `get_variable_defs` on the specific DS variant node **in the current session**. Do not reuse colour values from previous sessions, CLAUDE.md notes, or zul.design.md entries without re-verification against the live DS.
+
+**Detection workflow:**
+```
+1. Find all variant nodes for the component set (use_figma → filter by Type + State + Variant + Size)
+2. Call get_variable_defs on each state node in parallel
+3. Compare against current CSS — token by token
+4. Update CSS where tokens have drifted
+```
+
+**The only reliable source is `get_variable_defs` on the live DS node.** Everything else is a cached snapshot that may be stale.
+
+---
+
+### Mandatory workflow — BEFORE every session and every change
+
+> **Non-negotiable. No exceptions.**
 
 ```
-1. search_design_system  → confirm component exists in DS, get component key
-2. use_figma             → find node ID across pages
-3. get_design_context    → pull exact token bindings, dimensions, structure per variant
-4. get_variable_defs     → confirm Semantic token names used on the node
-5. Implement             → use only token values from steps 3–4, no assumptions
-6. Validate              → compare against get_screenshot
+Step 0a: Read zul.design.md       → load all confirmed specs, session rules, known mistakes
+Step 0b: Refer to live DS         → TLVKe3bgJTdVvuPAzgDq2f — single source of truth
+Step 1:  search_design_system     → confirm component exists in DS, get component key
+Step 2:  use_figma                → find node ID across pages
+Step 3:  get_design_context       → pull structure, dimensions, token bindings per variant
+Step 4:  get_variable_defs        → confirm exact Semantic token names on the node
+Step 5:  Implement                → use only token values from steps 3–4, no assumptions
+Step 6:  Validate                 → compare against get_screenshot
 ```
+
+Step 0a and 0b are mandatory before ANY design work, ANY change, and ANY decision — including seemingly trivial ones. The biggest errors in this project have come from skipping the DS lookup and relying on memory or prior notes.
 
 ---
 

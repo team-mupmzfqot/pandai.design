@@ -574,15 +574,15 @@
       color:      var(--icon-secondary-hover);               /* #70bc6f */
     }
 
-    /* Pressed — DS 479:326 */
+    /* Pressed — DS 479:326 — Surface/primary/focus #00a36a, Border/primary/default #00cc85 */
     .static-card__btn:active {
-      background:   var(--surface-tertiary-default);   /* #00564c */
-      border-color: var(--border-tertiary-focus);      /* #00453d */
+      background:   var(--surface-primary-focus);    /* #00a36a */
+      border-color: var(--border-primary-default);   /* #00cc85 */
     }
     .static-card__btn:active .static-card__btn-label { color: var(--text-primary-default); }   /* #00cc85 */
     .static-card__btn:active .static-card__btn-arrow {
-      background: var(--surface-primary-default);   /* #00cc85 */
-      color:      var(--icon-tertiary-default);      /* #00564c */
+      background: var(--surface-primary-default);    /* #00cc85 */
+      color:      var(--surface-primary-focus);      /* Icon/primary/focus #00a36a */
     }
 
     /* Disabled — DS 479:317 */
@@ -728,10 +728,10 @@
     .btn-add-classes:hover .btn-add-classes__text,
     .btn-add-classes:hover .btn-add-classes__icon { color: var(--text-secondary-focus); }
 
-    /* Pressed — DS Secondary/M/Pressed (538:1907): bg #00564c, border #00453d, text #00cc85 */
+    /* Pressed — DS 538:1907 — Surface/primary/focus #00a36a, Border/primary/default #00cc85 */
     .btn-add-classes:active {
-      background:   var(--surface-tertiary-default);
-      border-color: var(--border-tertiary-focus);
+      background:   var(--surface-primary-focus);
+      border-color: var(--border-primary-default);
     }
     .btn-add-classes:active .btn-add-classes__text,
     .btn-add-classes:active .btn-add-classes__icon { color: var(--text-primary-default); }
@@ -793,16 +793,16 @@
       box-shadow:  inset 0 0 0 1px var(--border-secondary-focus);
       color:       var(--icon-secondary-hover);
     }
-    /* Pressed */
+    /* Pressed — DS 538:1907 — Surface/primary/focus #00a36a, Border/primary/default #00cc85 */
     .btn-secondary-arrow:active {
-      background:   var(--surface-tertiary-default);
-      border-color: var(--border-tertiary-focus);
+      background:   var(--surface-primary-focus);
+      border-color: var(--border-primary-default);
     }
     .btn-secondary-arrow:active .btn-secondary-arrow__text   { color: var(--text-primary-default); }
     .btn-secondary-arrow:active .btn-secondary-arrow__circle {
       background: var(--surface-primary-default);
       box-shadow: none;
-      color:      var(--icon-tertiary-default);
+      color:      var(--surface-primary-focus);      /* Icon/primary/focus #00a36a */
     }
 
     /* Link 1.5  State=Default, Type=Default (node 701:524) */
@@ -1037,15 +1037,15 @@
       border-color: var(--border-secondary-focus);      /* #70bc6f */
     }
     .btn-quiz-cta:hover .btn-quiz-cta__text  { color: var(--text-secondary-focus); }         /* #70bc6f */
-    .btn-quiz-cta:hover .btn-quiz-cta__arrow { background: #e8fbe8; color: var(--border-secondary-focus); }  /* #e8fbe8 / #70bc6f */
+    .btn-quiz-cta:hover .btn-quiz-cta__arrow { background: var(--surface-secondary-default-subtle); color: var(--border-secondary-focus); }  /* #e8fbe8 / #70bc6f */
 
-    /* Pressed — Tertiary palette (node 1437:8138) */
+    /* Pressed — DS 1437:8138 — Surface/primary/focus #00a36a, Border/primary/default #00cc85 */
     .btn-quiz-cta:active {
-      background:   var(--surface-tertiary-default);    /* #00564c */
-      border-color: var(--border-tertiary-focus);       /* #00453d */
+      background:   var(--surface-primary-focus);    /* #00a36a */
+      border-color: var(--border-primary-default);   /* #00cc85 */
     }
     .btn-quiz-cta:active .btn-quiz-cta__text  { color: var(--text-primary-default); }        /* #00cc85 */
-    .btn-quiz-cta:active .btn-quiz-cta__arrow { background: var(--surface-primary-default); color: var(--surface-tertiary-default); }  /* #00cc85 / #00564c */
+    .btn-quiz-cta:active .btn-quiz-cta__arrow { background: var(--surface-primary-default); color: var(--surface-primary-focus); }  /* #00cc85 / #00a36a */
 
     /* Disabled (node 1437:8130) */
     .btn-quiz-cta:disabled,
@@ -1440,9 +1440,10 @@
     .nav-menu-btn:hover .nav-menu-btn__chevron-clip { color: var(--text-secondary-focus); }
 
     /* Pressed — JS class is-pressing (Rule 39: JS mousedown on <div>) */
+    /* DS node 3029:20022 — Surface/primary/focus #00a36a, Border/primary/default #00cc85 */
     .nav-menu-btn.is-pressing .nav-menu-btn__inner {
-      background: var(--surface-tertiary-default);
-      box-shadow: inset 0 0 0 1px var(--border-tertiary-focus);
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
     }
     .nav-menu-btn.is-pressing .nav-menu-btn__label,
     .nav-menu-btn.is-pressing .nav-menu-btn__icon-clip,
