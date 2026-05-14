@@ -552,9 +552,8 @@
     }
     .panel-item svg { width: 24px; height: 24px; flex-shrink: 0; color: var(--text-default-body); }
     .panel-item__label { flex: 1; min-width: 0; }
-    /* Use higher-specificity selector (0,2,0 > 0,1,1) to override .panel-item svg */
-    .panel-item .panel-item__chevron { color: var(--border-general-default); }
-    .panel-item.is-active .panel-item__chevron { color: var(--text-primary-focus); }
+    /* Chevron: Icon/primary/default (#00cc85) on ALL items — DS confirmed VariableID:119:10 */
+    .panel-item .panel-item__chevron { color: var(--icon-primary-default); }
     .panel-item.is-active {
       background: var(--surface-secondary-default);
       border-color: var(--border-primary-focus);
