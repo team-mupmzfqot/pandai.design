@@ -1176,9 +1176,9 @@
        Logo left · action icons + avatar right
        Border: b/l/r only · radius: 0 0 24px 24px
     ───────────────────────────────────────────────────── */
-    #NavbarPrimary-Desktop { display: block; }
+    #NavbarPrimary-Desktop { display: block; padding: 0 var(--page-padding-x); }
 
-    /* Navbar Top (node 1084:1787): flex, gap-28, items-center, px-24→page-pad, py-8 */
+    /* Navbar Top (node 1084:1787): flex, gap-28, items-center, px-60, py-8 */
     .navbar-primary {
       background:    var(--surface-general-default);
       border-bottom: 1px solid var(--border-default);
@@ -1188,7 +1188,7 @@
       display:       flex;
       align-items:   center;
       gap:           var(--spacing-space-2xl);   /* 28px — Spacing/space-2xl */
-      padding:       var(--spacing-space-xs) var(--page-padding-x);   /* 8px / responsive */
+      padding:       var(--spacing-space-xs) var(--spacing-space-xl);   /* 8px · 24px — DS px-[Spacing/space-xl] */
       height:        64px;
       overflow:      hidden;
     }
@@ -1340,7 +1340,7 @@
     ───────────────────────────────────────────────────── */
     #NavTopMenu-Desktop {
       display:    block;
-      padding:    0 var(--page-padding-x);
+      padding:    0 var(--page-padding-x);   /* follows page padding — 60px desktop / 32px tablet / 16px mobile */
       margin-top: var(--spacing-space-s);   /* 12px gap below Primary (DS gap-[Spacing/space-s]) */
     }
 
@@ -1511,7 +1511,7 @@
        Mobile  : < 768px         → 1-col quiz grid, 16px padding
     ───────────────────────────────────────────────────── */
 
-    #NavBar-Mobile         { display: none; }
+    #NavBar-Mobile         { display: none; padding: 0 var(--page-padding-x); }
 
     /* Navbar breakpoint: ≤1319px → mobile navbar, hide desktop navbars */
     @media (max-width: 1319px) {

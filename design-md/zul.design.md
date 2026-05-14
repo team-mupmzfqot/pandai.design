@@ -2017,4 +2017,43 @@ Image child (node `684:622`):
 
 ---
 
+### 69. Section wrapper vs component internal padding — never mix page-level offset into the component
+
+Page-level horizontal alignment (the `var(--page-padding-x)` offset from the viewport edge) belongs on the **section wrapper**, not inside the component bar itself. The component bar keeps only its DS-specified internal padding.
+
+**Rule:**
+```css
+/* Section wrapper — provides page-level horizontal margin */
+#NavbarPrimary-Desktop { padding: 0 var(--page-padding-x); }
+#NavTopMenu-Desktop    { padding: 0 var(--page-padding-x); }
+#NavBar-Mobile         { padding: 0 var(--page-padding-x); }
+
+/* Component bar — keeps only DS internal padding, untouched */
+.navbar-primary  { padding: var(--spacing-space-xs) var(--spacing-space-xl); }  /* 8px 24px — DS spec */
+.navbar-mobile   { padding: var(--spacing-space-m)  24px; }                     /* 16px 24px — DS spec */
+```
+
+**Why this separation matters:**
+- The component's internal padding is a DS design decision (how much breathing room inside the bar).
+- The page-level offset is a layout decision (where the bar sits relative to the viewport).
+- Mixing both into the component's `padding` makes it impossible to change one without affecting the other, and causes the component to render differently if placed in a different context.
+
+**All three navbar sections apply this pattern (May 2026):**
+
+| Section | Shown at | Section `padding` | Bar internal `padding` |
+|---|---|---|---|
+| `#NavbarPrimary-Desktop` | ≥ 1320px | `0 var(--page-padding-x)` = **60px** | `8px 24px` (DS `Spacing/space-xl`) |
+| `#NavTopMenu-Desktop` | ≥ 1320px | `0 var(--page-padding-x)` = **60px** | `8px` internal (DS pill padding) |
+| `#NavBar-Mobile` | ≤ 1319px | `0 var(--page-padding-x)` = **60→32→16px** | `16px 24px` (DS `Spacing/space-m`/`space-xl`) |
+
+The mobile navbar section uses `var(--page-padding-x)` so it automatically scales with the responsive system: 60px when it first appears (1280–1319px), 32px at tablet (≤1279px), 16px at mobile (≤767px).
+
+**Mistake made (May 2026):**
+- `.navbar-primary` had `padding: 8px var(--page-padding-x)` — 60px baked into the component bar.
+- `#NavbarPrimary-Desktop` section had no padding.
+- Result: changing `--page-padding-x` would have changed DS component proportions, and the bar visually showed no offset from the viewport edges (the bar border was edge-to-edge with no grey margin visible).
+- Fix: move the 60px to the section, restore DS `24px` inside the bar.
+
+---
+
 *Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
