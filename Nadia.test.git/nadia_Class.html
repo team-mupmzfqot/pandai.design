@@ -1026,30 +1026,75 @@
        ══════════════════════════════════════════════════════════════ */
 
     /* Backdrop overlay */
+    /* Overlay — mobile default: left-aligned, top, no padding */
     .mmenu-overlay {
       display:         none;
       position:        fixed;
       inset:           0;
       background:      rgba(0, 0, 0, 0.4);
       z-index:         200;
-      justify-content: center;
-      align-items:     flex-start;
-      padding-top:     80px;   /* 64px navbar + 16px gap */
+      justify-content: flex-start;   /* mobile: left */
+      align-items:     flex-start;   /* both: top */
     }
     .mmenu-overlay.is-open { display: flex; }
+    /* Tablet: centered + top gap */
+    @media (min-width: 768px) {
+      .mmenu-overlay.is-open { justify-content: center; padding-top: 80px; }
+    }
 
-    /* Modal panel — 329px, border-radius:24px, border:#00cc85 */
+    /* Shared panel base */
     .mmenu-panel {
-      background:    white;
-      border:        1px solid var(--border-primary-default);
-      border-radius: var(--corner-radius-corner-4xl);
-      width:         329px;
-      max-height:    calc(100vh - 100px);
-      overflow:      hidden;
-      overflow-y:    auto;
+      background:      white;
+      border:          1px solid var(--border-primary-default);
+      overflow:        hidden;
+      overflow-y:      auto;
       scrollbar-width: none;
     }
     .mmenu-panel::-webkit-scrollbar { display: none; }
+
+    /* Mobile panel — full-height left drawer, no left radius */
+    .mmenu-panel--mobile {
+      width:         329px;
+      height:        100vh;
+      max-height:    100vh;
+      border-radius: 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl) 0;
+    }
+    @media (min-width: 768px) { .mmenu-panel--mobile { display: none; } }
+
+    /* Tablet panel — centered card, hidden at mobile */
+    .mmenu-panel--tablet {
+      display:       none;
+      width:         min(calc(100vw - 64px), 800px);
+      max-height:    calc(100vh - 100px);
+      border-radius: var(--corner-radius-corner-4xl);
+    }
+    @media (min-width: 768px) { .mmenu-panel--tablet { display: block; } }
+
+    /* Tablet 2-column menu row */
+    .mmenu-menu-row {
+      display: flex;
+      gap:     0;
+      padding: var(--spacing-space-m);
+    }
+    .mmenu-col {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: column;
+      gap: var(--spacing-space-xs);
+    }
+    .mmenu-divider {
+      width: 1px; flex-shrink: 0;
+      background: #e5e5e5;
+      margin: 0 var(--spacing-space-xs);
+      align-self: stretch;
+    }
+    /* Tablet CTA — horizontal side-by-side */
+    .mmenu-cta--tablet {
+      flex-direction: row;
+      border-radius:  28px;   /* corner-5xl */
+      align-items:    center;
+    }
+    .mmenu-cta--tablet .mmenu-item { flex: 1; }
+    .mmenu-cta--tablet .btn-dl-app { flex: 1; }
 
     /* Header — p:16px */
     .mmenu-header {
@@ -2029,7 +2074,7 @@
        Triggered by mobile navbar hamburger button
        ══════════════════════════════════════════════════════════ -->
   <div id="mmenu-overlay" class="mmenu-overlay" role="dialog" aria-modal="true" aria-label="Navigation menu" aria-hidden="true">
-    <div class="mmenu-panel" id="mmenu-panel">
+    <div class="mmenu-panel mmenu-panel--mobile" id="mmenu-panel-mobile">
 
       <!-- Header -->
       <div class="mmenu-header">
@@ -2150,22 +2195,139 @@
         </div>
 
       </div><!-- /.mmenu-body -->
-    </div><!-- /.mmenu-panel -->
+    </div><!-- /.mmenu-panel--mobile -->
+
+    <!-- ── Tablet panel — Nav Menu Tablet - 1.5 (DS node 3427:2184) ── -->
+    <!-- 2-column layout: left (Home–Class) | right (Learn–My Account)  -->
+    <!-- Position: centered + top (≥768px)                              -->
+    <div class="mmenu-panel mmenu-panel--tablet" id="mmenu-panel-tablet">
+
+      <!-- Header -->
+      <div class="mmenu-header">
+        <div class="mmenu-header-logo"><img src="navbar/logo.png" alt="Pandai"></div>
+        <button class="mmenu-close-btn" aria-label="Close menu" type="button">
+          <svg aria-hidden="true"><use href="#ic-x"/></svg>
+        </button>
+      </div>
+
+      <!-- Search -->
+      <div class="mmenu-body" style="padding-bottom:0">
+        <div class="mmenu-search">
+          <span class="mmenu-search-placeholder">Search</span>
+          <div class="mmenu-search-icon"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
+        </div>
+      </div>
+
+      <!-- Two-column menu -->
+      <div class="mmenu-menu-row">
+
+        <!-- Left column: Home · Quiz · Battle · Practice · Class -->
+        <div class="mmenu-col">
+          <div class="mmenu-item mmenu-item--active">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-home"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Home</span>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Quiz</span>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Battle</span>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-clipboard"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Practice</span>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-users"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Class</span>
+            <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+          </div>
+        </div><!-- /.mmenu-col left -->
+
+        <!-- Vertical divider -->
+        <div class="mmenu-divider" aria-hidden="true"></div>
+
+        <!-- Right column: Learn · Achievement · Potential · Rewards · My Account -->
+        <div class="mmenu-col">
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-book"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Learn</span>
+            <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Achievement</span>
+            <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-star"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Potential</span>
+            <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Rewards</span>
+            <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-settings"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">My Account</span>
+            <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+          </div>
+        </div><!-- /.mmenu-col right -->
+
+      </div><!-- /.mmenu-menu-row -->
+
+      <!-- Footer: horizontal CTA + Localization -->
+      <div class="mmenu-body" style="padding-top:0">
+        <div class="mmenu-cta mmenu-cta--tablet">
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Notification</span>
+          </div>
+          <a href="#" class="btn-dl-app">
+            <div class="btn-dl-icon"><div class="btn-dl-icon-clip"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div></div>
+            <span class="btn-dl-label">Download App</span>
+            <div class="btn-dl-arrow"><div class="btn-dl-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></div>
+          </a>
+        </div>
+        <div class="mmenu-localization">
+          <button class="mmenu-lang-btn" type="button" aria-label="English"><svg aria-hidden="true"><use href="#ic-en"/></svg></button>
+          <button class="mmenu-lang-btn" type="button" aria-label="Bahasa Melayu">BM</button>
+          <button class="mmenu-lang-btn" type="button" aria-label="Mandarin" style="font-size:8px;">中A</button>
+        </div>
+      </div>
+
+    </div><!-- /.mmenu-panel--tablet -->
+
   </div><!-- /#mmenu-overlay -->
 
   <script>
-    // Mobile menu modal — open/close handlers
+    // Mobile/tablet menu modal — open/close handlers
     (function() {
-      const overlay  = document.getElementById('mmenu-overlay');
-      const closeBtn = document.getElementById('mmenu-close');
-      const menuBtn  = document.querySelector('.navbar-mobile__menu-btn');
+      const overlay = document.getElementById('mmenu-overlay');
+      const menuBtn = document.querySelector('.navbar-mobile__menu-btn');
 
       const openMenu  = () => { overlay.classList.add('is-open');    overlay.setAttribute('aria-hidden', 'false'); };
       const closeMenu = () => { overlay.classList.remove('is-open'); overlay.setAttribute('aria-hidden', 'true');  };
 
-      if (menuBtn)  menuBtn.addEventListener('click', openMenu);
-      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
-      if (overlay)  overlay.addEventListener('click', e => { if (e.target === overlay) closeMenu(); });
+      if (menuBtn) menuBtn.addEventListener('click', openMenu);
+      // All close buttons in both panels (mobile + tablet)
+      overlay.querySelectorAll('.mmenu-close-btn').forEach(btn => btn.addEventListener('click', closeMenu));
+      overlay.addEventListener('click', e => { if (e.target === overlay) closeMenu(); });
       document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
     })();
 
