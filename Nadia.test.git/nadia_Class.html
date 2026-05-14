@@ -223,18 +223,9 @@
     }
     .nav-item__icon-clip {
       width: 24px; height: 24px;
-      overflow: hidden; box-sizing: border-box; flex-shrink: 0;
-      padding: 2px;                                   /* default inset 8.33% × 24 = 2px */
+      overflow: hidden; flex-shrink: 0;
     }
     .nav-item__icon-clip svg { display: block; width: 100%; height: 100%; }
-    .nav-item__icon-clip[data-icon="home"]         { padding: 2px 3px; }       /* 8.33% 12.5% */
-    .nav-item__icon-clip[data-icon="battle"]       { padding: 3px; }            /* 12.5% */
-    .nav-item__icon-clip[data-icon="practice"]     { padding: 3px 2px; }        /* 12.5% 8.33% */
-    .nav-item__icon-clip[data-icon="class"]        { padding: 3px 1px; }        /* 12.5% 4.17% */
-    .nav-item__icon-clip[data-icon="learn"]        { padding: 2px 4px; }        /* 8.33% 16.67% */
-    .nav-item__icon-clip[data-icon="achievement"]  { padding: 4px 3px; }        /* 16.67% 12.5% */
-    .nav-item__icon-clip[data-icon="potential"]    { padding: 2px 2px 3px; }    /* 8.33% 8.33% 12.42% */
-    .nav-item__icon-clip[data-icon="gift"]         { padding: 2px; }
     .nav-label {
       font-size: 14px; font-weight: 600; line-height: 20px;
       color:      var(--text-default-body);
@@ -529,13 +520,9 @@
     }
     .btn-icon-clip {
       width: 24px; height: 24px;
-      box-sizing: border-box; overflow: hidden; flex-shrink: 0;
-      padding: 2px; /* default 8.33% × 24 = 2px */
+      overflow: hidden; flex-shrink: 0;
     }
     .btn-icon-clip svg { display: block; width: 100%; height: 100%; }
-    .btn-icon-clip[data-icon="calendar"] { padding: 2px 3px; }  /* DS inset 8.33% 12.5% */
-    .btn-icon-clip[data-icon="website"]  { padding: 3px; }       /* DS inset 12.5% */
-    .btn-icon-clip[data-icon="plus"]     { padding: 5px; }       /* DS inset 20.83% */
     /* Label slot inside breadcrumb buttons */
     .btn-label { padding: 0 var(--sp-xs); white-space: nowrap; }
     /* Outlined — DS Secondary variant (Timetable, Browse Classes) */
