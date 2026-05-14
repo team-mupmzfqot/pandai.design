@@ -574,24 +574,30 @@
       color: var(--text-default-body); font-family: var(--font);
     }
     .panel-cta-notif svg { width: 24px; height: 24px; color: var(--icon-primary-default); flex-shrink: 0; }
+    /* Download App button — Button - 1.5 Primary/M  DS 3427:2478 */
     .panel-cta-download {
-      display: flex; align-items: center; justify-content: center; gap: 0; flex: 1;
-      height: 48px; padding: var(--space-xs) var(--space-s);
+      display: flex; align-items: center; gap: 0; flex: 1; min-width: 0;
+      max-height: 48px; padding: var(--space-xs) var(--space-s); /* 8px 12px */
       background: var(--surface-primary-default);
       border: 1px solid var(--border-primary-focus);
       border-radius: var(--corner-rounded); cursor: pointer;
+      font-family: var(--font);
     }
-    .panel-cta-download__icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+    .panel-cta-download__content {
+      display: flex; align-items: center; min-height: 24px; flex-shrink: 0; flex: 1; min-width: 0;
+    }
+    .panel-cta-download__icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .panel-cta-download__icon svg { width: 20px; height: 20px; color: var(--text-primary-on-color); }
     .panel-cta-download__label {
       padding: 0 var(--space-xs); font-size: 14px; font-weight: 600;
       line-height: 20px; color: var(--text-primary-on-color);
-      white-space: nowrap; font-family: var(--font);
+      white-space: nowrap; font-family: var(--font); flex-shrink: 1;
     }
     .panel-cta-download__arrow {
-      background: var(--surface-primary-default-subtle-hover);
+      background: var(--surface-primary-default-subtle-hover); /* #99ebce */
       border-radius: var(--corner-rounded); padding: 4px;
       display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; max-height: 24px;
     }
     .panel-cta-download__arrow svg { width: 16px; height: 16px; color: var(--icon-primary-default); }
     .menubar-panel__localization {
@@ -680,6 +686,10 @@
       .menubar-panel__divider { display: none; }
       .menubar-panel__col { flex: none; }
       .menubar-panel__localization { padding: var(--space-m) var(--space-xl); }
+      /* Mobile CTA: stack Notification above Download App (DS 3427:2477 — flex-col) */
+      .menubar-panel__cta { flex-direction: column; border-radius: 20px; }
+      .panel-cta-notif { width: 100%; }
+      .panel-cta-download { flex: none; width: 100%; }
     }
   </style>
 </head>
@@ -761,6 +771,9 @@
     <symbol id="ic-bar-chart-2" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></symbol>
     <symbol id="ic-settings" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
     <symbol id="ic-x" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6L18 18"/></symbol>
+    <!-- ── Language icons — DS Outline/BM 1524:3170, Outline/Mandarin 1524:3614 ── -->
+    <symbol id="ic-bm" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12C6.42826 12 7.3185 11.6839 7.97487 11.1213C8.63125 10.5587 9 9.79565 9 9C9 8.20435 8.63125 7.44129 7.97487 6.87868C7.3185 6.31607 6.42826 6 5.5 6H2V18H5.5C6.42826 18 7.3185 17.6839 7.97487 17.1213C8.63125 16.5587 9 15.7956 9 15C9 14.2044 8.63125 13.4413 7.97487 12.8787C7.3185 12.3161 6.42826 12 5.5 12ZM5.5 12H2M12 18V6L17 15L22 6V18"/></symbol>
+    <symbol id="ic-mandarin" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.1178H11.4117M9.29405 3V5.11762C9.29405 9.79545 6.92338 13.5881 4 13.5881M5.0578 9.35284C5.0578 11.6229 8.18341 13.4907 12.1518 13.5881M12.47 21L16.7052 11.4707L20.9405 21M19.9885 18.8821H13.4238"/></symbol>
 
     <!-- ── Score Card icons  DS 3107:65165–65192 ── -->
     <!-- Outline/activity  DS I3107:65148;260:372  viewBox +1px buffer -->
@@ -1014,11 +1027,11 @@
           </div>
         </button>
       </div>
-      <!-- Localization row: EN / BM / 中 -->
+      <!-- Localization row — DS Outline/EN 1104:2538, Outline/BM 1524:3170, Outline/Mandarin 1524:3614 -->
       <div class="menubar-panel__localization">
-        <svg aria-hidden="true" style="color:var(--text-default-body)"><use href="#ic-en"/></svg>
-        <span style="font-size:14px;font-weight:500;color:var(--text-default-body);font-family:var(--font)">BM</span>
-        <span style="font-size:14px;font-weight:500;color:var(--text-default-body);font-family:var(--font)">中</span>
+        <svg aria-hidden="true"><use href="#ic-en"/></svg>
+        <svg aria-hidden="true"><use href="#ic-bm"/></svg>
+        <svg aria-hidden="true"><use href="#ic-mandarin"/></svg>
       </div>
     </div>
 
