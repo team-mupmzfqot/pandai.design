@@ -9,5 +9,20 @@
       "Bash(git mv *)",
       "Bash(git stash *)"
     ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "powershell",
+            "async": true,
+            "statusMessage": "Starting dev server on :3000...",
+            "command": "$tcp = New-Object System.Net.Sockets.TcpClient; $running = $false; try { $tcp.Connect('localhost', 3000); $running = $true; $tcp.Close() } catch {}; if (-not $running) { Start-Process -FilePath 'cmd.exe' -ArgumentList '/c', 'cd /d \"C:\\Users\\zulfa\\OneDrive\\Desktop\\pandai.design\" && npx serve . --listen 3000' -WindowStyle Hidden }"
+          }
+        ]
+      }
+    ]
   }
 }
