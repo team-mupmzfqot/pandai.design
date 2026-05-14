@@ -241,13 +241,31 @@
       white-space: nowrap;
       padding:    0 8px;                              /* text slot px: space-xs */
     }
+    /* Plain chevron-down — 16×16 clip, no padding (path is centred in viewBox) */
     .nav-chevron {
       width: 16px; height: 16px;
-      overflow: hidden; box-sizing: border-box; flex-shrink: 0;
-      padding: 6px 4px;                               /* DS inset 37.5%×16=6 · 25%×16=4 */
+      overflow: hidden; flex-shrink: 0;
       color: var(--text-default-body);
     }
     .nav-chevron svg { display: block; width: 100%; height: 100%; }
+
+    /* Arrow circle for active Class button — DS R Arrow style (node 3528:51331) */
+    .nav-arrow-circle {
+      background:      #99ebce;   /* surface/primary/default-subtle-hover */
+      border-radius:   var(--corner-radius-corner-rounded);
+      padding:         4px;       /* scale/100 = 4px */
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+      max-height:      24px;
+      color:           var(--border-primary-focus);  /* #00a36a — chevron stroke */
+    }
+    .nav-arrow-circle__clip {
+      width: 16px; height: 16px;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .nav-arrow-circle__clip svg { display: block; width: 100%; height: 100%; }
 
     /* Nav item interactive states — Tertiary/L/Student */
     .nav-item:hover {
@@ -289,8 +307,8 @@
       min-width:      160px;
       white-space:    nowrap;
     }
-    .nav-item-group:hover .nav-dropdown                    { display: flex; }
-    .nav-item-group:hover .nav-item.is-active .nav-chevron svg { transform: rotate(180deg); }
+    .nav-item-group:hover .nav-dropdown                             { display: flex; }
+    .nav-item-group:hover .nav-arrow-circle__clip svg              { transform: rotate(180deg); }
     .nav-submenu-item {
       display: flex; align-items: center;
       height: 24px; border-radius: var(--corner-radius-corner-rounded);
@@ -1078,12 +1096,13 @@
         <div class="nav-item is-active">
           <div class="nav-item__icon-wrap"><div class="nav-item__icon-clip" data-icon="class"><svg aria-hidden="true"><use href="#ic-users"/></svg></div></div>
           <span class="nav-label">Class</span>
-          <div class="nav-chevron"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div>
+          <div class="nav-arrow-circle"><div class="nav-arrow-circle__clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
         </div>
         <div class="nav-dropdown" role="menu">
           <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>My Classes</span></a>
           <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Browse Classes</span></a>
           <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Timetable</span></a>
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Assignment</span></a>
         </div>
       </div>
 
