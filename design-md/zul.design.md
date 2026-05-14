@@ -1864,4 +1864,24 @@ When the viewport is narrowed below 390px, the browser shows a horizontal scroll
 
 ---
 
+### 63. Flex row cards — use `flex: 1; min-width: Xpx` not `width: Xpx; flex-shrink: 0`
+
+A hardcoded `width` + `flex-shrink: 0` on a card in a flex row locks it to a fixed size at all viewports. It cannot adapt when the row gets wider or narrower — it either overflows or leaves dead space.
+
+**Rule:** Cards that should fill available space in a flex row must use `flex: 1; min-width: Xpx`. This lets the card grow to fill space alongside siblings, while `min-width` sets a floor so it never collapses to nothing.
+
+```css
+/* Wrong — fixed, never adapts */
+.check-in-card { width: 350px; flex-shrink: 0; }
+
+/* Correct — fills space, floors at 150px */
+.check-in-card { flex: 1; min-width: 150px; }
+```
+
+The tablet/mobile `width: 100%` override remains intact — when the section switches to `flex-direction: column`, `width: 100%` takes over and `flex: 1` has no effect in the cross-axis.
+
+**Mistake made (May 2026):** `.check-in-card` had `width: 350px; flex-shrink: 0` — fixed size that couldn't fill the section width. Corrected to `flex: 1; min-width: 150px`.
+
+---
+
 *Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

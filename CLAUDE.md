@@ -1070,6 +1070,24 @@ When the browser is resized below 390px, a horizontal scrollbar appears — the 
 
 ---
 
+### 47. Flex row cards — use `flex: 1; min-width: Xpx` not `width: Xpx; flex-shrink: 0`
+
+A hardcoded `width` + `flex-shrink: 0` locks a card to a fixed size at all viewports. Use `flex: 1; min-width: Xpx` so the card fills available space while having a collapse floor.
+
+```css
+/* Wrong — fixed, never adapts */
+.check-in-card { width: 350px; flex-shrink: 0; }
+
+/* Correct — fills space, floors at 150px */
+.check-in-card { flex: 1; min-width: 150px; }
+```
+
+The tablet/mobile `width: 100%` override still works — when the section switches to `flex-direction: column`, `width: 100%` takes over and `flex: 1` has no effect in the cross-axis.
+
+**Mistake made (May 2026):** `.check-in-card` had `width: 350px; flex-shrink: 0`. Corrected to `flex: 1; min-width: 150px`.
+
+---
+
 ### Mandatory workflow — BEFORE every session and every change
 
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work or making any change to the prototype. No exceptions.

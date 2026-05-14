@@ -275,8 +275,8 @@
       display:       flex;
       align-items:   center;
       gap:           var(--spacing-space-m);
-      width:         350px;
-      flex-shrink:   0;
+      flex:          1;
+      min-width:     150px;
       padding:       var(--spacing-space-xs) var(--spacing-space-xs) var(--spacing-space-xs) var(--spacing-space-l);
     }
 
@@ -1118,6 +1118,7 @@
       bottom:     0;
       left:       0;
       right:      0;
+      min-width:  390px;
       z-index:    100;
       background: var(--surface-general-default);
       border-top: 1px solid var(--border-default);
