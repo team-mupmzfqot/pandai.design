@@ -1021,6 +1021,179 @@
       stroke-linejoin: round;
     }
 
+    /* ══════════════════════════════════════════════════════════════
+       Mobile Menu Modal — Nav Menu Mobile - 1.5 (DS node 3427:2185)
+       ══════════════════════════════════════════════════════════════ */
+
+    /* Backdrop overlay */
+    .mmenu-overlay {
+      display:         none;
+      position:        fixed;
+      inset:           0;
+      background:      rgba(0, 0, 0, 0.4);
+      z-index:         200;
+      justify-content: center;
+      align-items:     flex-start;
+      padding-top:     80px;   /* 64px navbar + 16px gap */
+    }
+    .mmenu-overlay.is-open { display: flex; }
+
+    /* Modal panel — 329px, border-radius:24px, border:#00cc85 */
+    .mmenu-panel {
+      background:    white;
+      border:        1px solid var(--border-primary-default);
+      border-radius: var(--corner-radius-corner-4xl);
+      width:         329px;
+      max-height:    calc(100vh - 100px);
+      overflow:      hidden;
+      overflow-y:    auto;
+      scrollbar-width: none;
+    }
+    .mmenu-panel::-webkit-scrollbar { display: none; }
+
+    /* Header — p:16px */
+    .mmenu-header {
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      padding:         var(--spacing-space-m);
+      background:      white;
+    }
+    .mmenu-header-logo img { height: 34px; width: auto; display: block; }
+    .mmenu-close-btn {
+      background: none; border: none; padding: 0;
+      width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-default-body);
+    }
+    .mmenu-close-btn svg { display: block; width: 24px; height: 24px; }
+
+    /* Body — pt:0 pb:16px px:16px gap:8px */
+    .mmenu-body {
+      padding:        0 var(--spacing-space-m) var(--spacing-space-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xs);
+    }
+
+    /* Search row — h:40px, border:#d9d9d9, pill */
+    .mmenu-search {
+      height:          40px;
+      border:          1px solid #d9d9d9;
+      border-radius:   var(--corner-radius-corner-pill);
+      padding:         var(--spacing-space-xs) var(--spacing-space-s);
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      gap:             10px;
+      cursor:          pointer;
+    }
+    .mmenu-search-placeholder {
+      flex: 1;
+      font-size: 14px; font-weight: 500; line-height: 20px;
+      color: #bfbfbf;
+    }
+    .mmenu-search-icon { width: 24px; height: 24px; flex-shrink: 0; color: #bfbfbf; }
+    .mmenu-search-icon svg { display: block; width: 100%; height: 100%; }
+
+    /* Menu item row */
+    .mmenu-item {
+      display:       flex;
+      align-items:   center;
+      gap:           10px;
+      padding:       var(--spacing-space-xs) var(--spacing-space-m);
+      border-radius: var(--corner-radius-corner-pill);
+      cursor:        pointer;
+      user-select:   none;
+    }
+    /* Active (Home) — Surface/secondary/default + border/primary/focus */
+    .mmenu-item--active {
+      background: #b5f291;
+      border:     1px solid var(--border-primary-focus);
+    }
+    .mmenu-item-icon {
+      width: 24px; height: 24px; flex-shrink: 0;
+      color: var(--icon-primary-default);
+    }
+    .mmenu-item-icon svg { display: block; width: 100%; height: 100%; }
+    .mmenu-item-label {
+      flex: 1; min-width: 0;
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--text-default-body);
+    }
+    .mmenu-item--active .mmenu-item-label { color: #00a36a; }
+    .mmenu-item-chevron { width: 24px; height: 24px; flex-shrink: 0; color: var(--text-default-body); }
+    .mmenu-item-chevron svg { display: block; width: 100%; height: 100%; }
+
+    /* Checkbox 1.5 Checked/S — DS node 587:540 */
+    .menu-chk {
+      width: 16px; height: 16px;
+      background: var(--surface-primary-default);
+      border: 1px solid var(--border-primary-focus);
+      border-radius: 4px;
+      padding: 2px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .menu-chk svg { display: block; width: 12px; height: 12px; }
+
+    /* CTA section — Surface/secondary/default-subtle bg */
+    .mmenu-cta {
+      background:    #e8fbe8;
+      border:        1px solid #d1f7d1;
+      border-radius: 20px;
+      padding:       var(--spacing-space-xs);
+      display:       flex;
+      flex-direction: column;
+      gap:           var(--spacing-space-xs);
+    }
+
+    /* Download App — Button-1.5 Primary/M full-width */
+    .btn-dl-app {
+      display:        flex;
+      align-items:    center;
+      background:     var(--surface-primary-default);
+      border:         1px solid var(--border-primary-focus);
+      border-radius:  var(--corner-radius-corner-rounded);
+      padding:        var(--spacing-space-xs) var(--spacing-space-s);
+      text-decoration: none;
+      cursor:         pointer;
+    }
+    .btn-dl-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .btn-dl-icon-clip { width: 20px; height: 20px; overflow: hidden; flex-shrink: 0; }
+    .btn-dl-icon-clip svg { display: block; width: 100%; height: 100%; }
+    .btn-dl-label {
+      flex: 1; text-align: center;
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--text-primary-on-color);
+      padding: 0 var(--spacing-space-xs);
+    }
+    .btn-dl-arrow {
+      background: #99ebce; border-radius: var(--corner-radius-corner-rounded);
+      padding: 4px; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; max-height: 24px;
+      color: var(--border-primary-focus);
+    }
+    .btn-dl-arrow-clip { width: 16px; height: 16px; overflow: hidden; flex-shrink: 0; }
+    .btn-dl-arrow-clip svg { display: block; width: 100%; height: 100%; }
+
+    /* Localization row — px:60px, space-between */
+    .mmenu-localization {
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      padding:         0 60px;
+    }
+    .mmenu-lang-btn {
+      width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+      background: none; border: none; padding: 0; cursor: pointer;
+      color: var(--text-default-body);
+      font-size: 9px; font-weight: 700; font-family: 'Poppins', sans-serif;
+      line-height: 1;
+    }
+    .mmenu-lang-btn svg { display: block; width: 24px; height: 24px; }
+
   </style>
 </head>
 <body>
@@ -1056,6 +1229,17 @@
     <symbol id="ic-website" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.6 9 L20.4 9 M3.6 15 L20.4 15"/><path d="M11.5 3 C9.9 5.7 9 8.8 9 12 C9 15.2 9.9 18.3 11.5 21"/><path d="M12.5 3 C14.1 5.7 15 8.8 15 12 C15 15.2 14.1 18.3 12.5 21"/></symbol>
     <!-- Outline/plus — DS node 260:1051, vector offset x:5 y:5 -->
     <symbol id="ic-plus" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5 L12 19 M5 12 L19 12"/></symbol>
+    <!-- Mobile menu modal icons -->
+    <!-- Outline/x — close button, path at inset:25% of 24×24 -->
+    <symbol id="ic-x" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6L18 18"/></symbol>
+    <!-- Outline/chevron-right — menu item sub-menu indicator -->
+    <symbol id="ic-chevron-right" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18L15 12L9 6"/></symbol>
+    <!-- Button - 1.5 Size=M chevron clip — DS node 479:352, viewBox 0 0 16 16 -->
+    <symbol id="ic-chevron-btn-m" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12L10 8L6 4"/></symbol>
+    <!-- Outline/clipboard — Practice icon in mobile menu -->
+    <symbol id="ic-clipboard" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4H18a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/></symbol>
+    <!-- Outline/settings — My Account icon -->
+    <symbol id="ic-settings" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
   </svg>
 
   <!-- ══════════════════════════════════════════════════════════
@@ -1840,7 +2024,151 @@
     </div>
   </footer>
 
+  <!-- ══════════════════════════════════════════════════════════
+       Mobile Menu Modal — Nav Menu Mobile - 1.5 (DS node 3427:2185)
+       Triggered by mobile navbar hamburger button
+       ══════════════════════════════════════════════════════════ -->
+  <div id="mmenu-overlay" class="mmenu-overlay" role="dialog" aria-modal="true" aria-label="Navigation menu" aria-hidden="true">
+    <div class="mmenu-panel" id="mmenu-panel">
+
+      <!-- Header -->
+      <div class="mmenu-header">
+        <div class="mmenu-header-logo">
+          <img src="navbar/logo.png" alt="Pandai">
+        </div>
+        <button class="mmenu-close-btn" id="mmenu-close" aria-label="Close menu" type="button">
+          <svg aria-hidden="true"><use href="#ic-x"/></svg>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="mmenu-body">
+
+        <!-- Search -->
+        <div class="mmenu-search">
+          <span class="mmenu-search-placeholder">Search</span>
+          <div class="mmenu-search-icon"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
+        </div>
+
+        <!-- Home — active state -->
+        <div class="mmenu-item mmenu-item--active">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-home"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Home</span>
+        </div>
+
+        <!-- Quiz -->
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Quiz</span>
+        </div>
+
+        <!-- Battle -->
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Battle</span>
+        </div>
+
+        <!-- Practice — uses Outline/clipboard in mobile menu (DS spec) -->
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-clipboard"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Practice</span>
+        </div>
+
+        <!-- Class — with sub-menu chevron -->
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-users"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Class</span>
+          <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+        </div>
+
+        <!-- Learn — with sub-menu chevron -->
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-book"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Learn</span>
+          <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+        </div>
+
+        <!-- Achievement — with sub-menu chevron -->
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Achievement</span>
+          <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+        </div>
+
+        <!-- Potential — with sub-menu chevron -->
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-star"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Potential</span>
+          <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+        </div>
+
+        <!-- Rewards — with sub-menu chevron -->
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Rewards</span>
+          <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+        </div>
+
+        <!-- My Account — with sub-menu chevron -->
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-settings"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">My Account</span>
+          <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+        </div>
+
+        <!-- CTA section — Notification + Download App -->
+        <div class="mmenu-cta">
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Notification</span>
+          </div>
+          <a href="#" class="btn-dl-app">
+            <div class="btn-dl-icon"><div class="btn-dl-icon-clip"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div></div>
+            <span class="btn-dl-label">Download App</span>
+            <div class="btn-dl-arrow"><div class="btn-dl-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></div>
+          </a>
+        </div>
+
+        <!-- Localization — EN / BM / 中A -->
+        <div class="mmenu-localization">
+          <button class="mmenu-lang-btn" type="button" aria-label="English">
+            <svg aria-hidden="true"><use href="#ic-en"/></svg>
+          </button>
+          <button class="mmenu-lang-btn" type="button" aria-label="Bahasa Melayu">BM</button>
+          <button class="mmenu-lang-btn" type="button" aria-label="Mandarin" style="font-size:8px;">中A</button>
+        </div>
+
+      </div><!-- /.mmenu-body -->
+    </div><!-- /.mmenu-panel -->
+  </div><!-- /#mmenu-overlay -->
+
   <script>
+    // Mobile menu modal — open/close handlers
+    (function() {
+      const overlay  = document.getElementById('mmenu-overlay');
+      const closeBtn = document.getElementById('mmenu-close');
+      const menuBtn  = document.querySelector('.navbar-mobile__menu-btn');
+
+      const openMenu  = () => { overlay.classList.add('is-open');    overlay.setAttribute('aria-hidden', 'false'); };
+      const closeMenu = () => { overlay.classList.remove('is-open'); overlay.setAttribute('aria-hidden', 'true');  };
+
+      if (menuBtn)  menuBtn.addEventListener('click', openMenu);
+      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+      if (overlay)  overlay.addEventListener('click', e => { if (e.target === overlay) closeMenu(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+    })();
+
     // Navbar primary icon pressed state (Rule 39: :active unreliable on div)
     document.querySelectorAll('.navbar-primary-icon').forEach(btn => {
       btn.addEventListener('mousedown',  () => btn.classList.add('is-pressed'));
