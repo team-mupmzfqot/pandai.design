@@ -1847,4 +1847,21 @@ Then prepend `/*` to the line before the orphaned text. Example: `   MAIN CONTEN
 
 ---
 
+### 62. Minimum page width — set `min-width: 390px` on BOTH `html` AND `body`
+
+The DS mobile frame is **390px** wide (DS Responsives collection, Mobile mode). The prototype must never render narrower than this.
+
+**Rule:** Always set `min-width: 390px` on **both** `html` and `body`. Setting it on `body` alone is not sufficient — the `html` root element can still shrink below the body's minimum, and the scrollbar clamp may not trigger correctly in all browsers.
+
+```css
+html      { min-width: 390px; }
+body      { min-width: 390px; ... }
+```
+
+When the viewport is narrowed below 390px, the browser shows a horizontal scrollbar — the page content does not reflow or collapse below the DS minimum.
+
+**Mistake made (May 2026):** `body { min-width: 400px }` was set but `html` had no `min-width`. Two errors: (1) 400px is not the DS value — correct is **390px**; (2) missing `html` rule meant the clamp didn't hold in all browsers.
+
+---
+
 *Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

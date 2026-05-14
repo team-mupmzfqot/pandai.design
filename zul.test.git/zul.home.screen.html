@@ -116,13 +116,14 @@
     img  { display: block; }
     a    { text-decoration: none; color: inherit; }
     button { font-family: var(--font-family); cursor: pointer; }
+    html { min-width: 390px; }
 
     body {
       font-family:    var(--font-family);
       background:     var(--surface-subtle);
       color:          var(--text-default-heading);
       width:          100%;
-      min-width:      400px;
+      min-width:      390px;
       max-width:      var(--page-max-width);
       margin:         0 auto;
       padding-bottom: 74px; /* 44px fixed footer + 30px DS gap */
@@ -1271,7 +1272,7 @@
          Full-width bleed (no page padding), no nav buttons, no rounded frame, 152px height */
       #Carousel-Desktop {
         width:       100vw;
-        min-width:   400px;
+        min-width:   390px;
         margin-left: calc(-1 * var(--page-padding-x));
       }
       .carousel__content {

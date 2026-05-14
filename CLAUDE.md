@@ -1055,6 +1055,21 @@ Select-String -Path file.html -Pattern "^\s*[^/].*\*/$"
 
 ---
 
+### 46. Minimum page width — set `min-width: 390px` on BOTH `html` AND `body`
+
+The DS mobile frame is **390px** (DS Responsives collection, Mobile mode). Setting `min-width` on `body` alone is not sufficient — the `html` root can still shrink below it and the scrollbar clamp may not trigger in all browsers.
+
+```css
+html { min-width: 390px; }
+body { min-width: 390px; ... }
+```
+
+When the browser is resized below 390px, a horizontal scrollbar appears — the layout never collapses below the DS mobile minimum.
+
+**Mistake made (May 2026):** `body { min-width: 400px }` — two errors: (1) `html` had no `min-width` so the clamp was unreliable; (2) 400px is not the DS value — correct is **390px**.
+
+---
+
 ### Mandatory workflow — BEFORE every session and every change
 
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work or making any change to the prototype. No exceptions.
