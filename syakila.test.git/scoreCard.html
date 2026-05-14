@@ -554,7 +554,6 @@
     .panel-item svg { width: 24px; height: 24px; flex-shrink: 0; color: var(--icon-primary-default); }
     .panel-item__label { flex: 1; min-width: 0; }
     .panel-item .panel-item__chevron { color: var(--icon-primary-default); }
-    .panel-item__chevron--mobile { display: none; }
 
     /* Hover — Surface/secondary/default-subtle + Border/primary/default + Text/primary/default */
     .panel-item:hover:not(.is-active) {
@@ -736,7 +735,6 @@
         border-radius: 0 var(--corner-4xl) var(--corner-4xl) 0;
       }
       .menubar-panel__menu { flex-direction: column; }
-      .panel-item__chevron--mobile { display: block; }
       .menubar-panel__divider { display: none; }
       .menubar-panel__col { flex: none; width: 100%; }
       .menubar-panel__localization { padding: var(--space-m) var(--space-xl); }
@@ -1061,21 +1059,13 @@
       <div class="menubar-panel__col">
         <!-- Home (active state shown as default, scoreCard=Achievement active below) -->
         <div class="panel-item">
-          <svg aria-hidden="true"><use href="#ic-home"/></svg>          <span class="panel-item__label">Home</span>
-          <svg class="panel-item__chevron panel-item__chevron--mobile" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
-        </div>
+          <svg aria-hidden="true"><use href="#ic-home"/></svg>          <span class="panel-item__label">Home</span>        </div>
         <div class="panel-item">
-          <svg aria-hidden="true"><use href="#ic-filled-check-circle"/></svg>          <span class="panel-item__label">Quiz</span>
-          <svg class="panel-item__chevron panel-item__chevron--mobile" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
-        </div>
+          <svg aria-hidden="true"><use href="#ic-filled-check-circle"/></svg>          <span class="panel-item__label">Quiz</span>        </div>
         <div class="panel-item">
-          <svg aria-hidden="true"><use href="#ic-battle"/></svg>          <span class="panel-item__label">Battle</span>
-          <svg class="panel-item__chevron panel-item__chevron--mobile" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
-        </div>
+          <svg aria-hidden="true"><use href="#ic-battle"/></svg>          <span class="panel-item__label">Battle</span>        </div>
         <div class="panel-item">
-          <svg aria-hidden="true"><use href="#ic-clipboard"/></svg>          <span class="panel-item__label">Practice</span>
-          <svg class="panel-item__chevron panel-item__chevron--mobile" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
-        </div>
+          <svg aria-hidden="true"><use href="#ic-clipboard"/></svg>          <span class="panel-item__label">Practice</span>        </div>
         <div class="panel-item">
           <svg aria-hidden="true"><use href="#ic-users"/></svg>          <span class="panel-item__label">Class</span>
           <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
