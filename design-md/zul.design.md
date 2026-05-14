@@ -1869,19 +1869,19 @@ Then prepend `/*` to the line before the orphaned text. Example: `   MAIN CONTEN
 
 ### 61. Mandatory session workflow — read DS & zul.design.md BEFORE any change
 
-**Before starting any design work, any new section, or any change to the prototype:**
+**Before starting any design work, making any change, or making any decision — including seemingly trivial fixes:**
 
 ```
-0. Read design-md/zul.design.md   → session rules, confirmed specs, section inventory
-1. Refer to DS (TLVKe3bgJTdVvuPAzgDq2f) → get_design_context / use_figma for all values
-2. search_design_system            → confirm component exists, get component key
-3. get_design_context              → token bindings, dimensions, structure per variant
-4. get_variable_defs               → confirm Semantic token names on the node
-5. Implement                       → DS values only, no assumptions
-6. Validate                        → compare against get_screenshot
+0a. Read design-md/zul.design.md   → session rules, confirmed specs, section inventory
+0b. Refer to DS (TLVKe3bgJTdVvuPAzgDq2f) → single source of truth for all values
+1.  search_design_system            → confirm component exists, get component key
+2.  get_design_context              → token bindings, dimensions, structure per variant
+3.  get_variable_defs               → confirm Semantic token names on the node
+4.  Implement                       → DS values only, no assumptions
+5.  Validate                        → compare against get_screenshot
 ```
 
-**This is non-negotiable.** No guessing, no skipping DS lookup, no implementing from memory alone. zul.design.md holds confirmed specs from past sessions — always load it first to avoid re-learning already-solved problems.
+**This is non-negotiable.** Steps 0a and 0b are mandatory even for "small" changes — spacing tweaks, token lookups, responsive overrides. No guessing, no skipping DS lookup, no implementing from memory alone. zul.design.md holds confirmed specs from past sessions; always load it first to avoid re-learning already-solved problems.
 
 **Why this matters — confirmed May 2026:** The Status Badge - 1.5 DS structure changed on 2026-05-14 (Streak/Lives/Ruby L layout unified, content gap changed 8px→4px, sizes updated). Two sessions in a row produced "looks a bit off" because the live DS was not re-inspected before implementing. Always re-verify — component specs can change between sessions.
 
@@ -2357,6 +2357,42 @@ The icon circle's own dimensions (32×32 L, 24×24 M) and padding define the ava
 - Icon circle was `39px wide × 100% height` — actual is `32×32px` for L (pill height 48 minus 8px top+bottom padding = 32).
 - Rule 25's CSS of `width:24px; height:24px` on `<img>` is superseded — use `100%/100%` with the circle defining the box.
 - Old sessions noted Streak/Lives/Ruby L as `w:122px` with separate icon container — DS update (2026-05-14) unified all 5 types to the same layout. Always re-inspect live DS; component structure can change between sessions.
+
+### 75. Responsive max-width control — use a CSS variable, not a hardcoded property
+
+When a component needs `max-width` only at a specific breakpoint (e.g. desktop only), store it as a CSS custom property in `:root` and override it in the relevant media query `:root` blocks. Never hardcode the value directly on the selector when it needs to be toggled per breakpoint.
+
+**Pattern:**
+```css
+/* :root — desktop default */
+:root {
+  --check-in-card-max-width: 390px;
+}
+
+/* Tablet */
+@media (max-width: 1279px) {
+  :root { --check-in-card-max-width: none; }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  :root { --check-in-card-max-width: none; }
+}
+
+/* Component */
+.check-in-card {
+  max-width: var(--check-in-card-max-width);
+}
+```
+
+**Why:** A single variable in `:root` is the only place to change to revert or adjust the constraint. No hunting across media query blocks. Adding `none` explicitly to both tablet and mobile `:root` blocks is also required — even though the tablet rule cascades to mobile, being explicit prevents breakage if query order is ever changed.
+
+**Confirmed instance — Check-In Card (May 2026):**
+- Desktop: `max-width: 390px` (DS mobile frame width — card is capped to phone-width on wide viewports)
+- Tablet (`≤1279px`): `max-width: none` — card fills `width: 100%` in the stacked column layout
+- Mobile (`≤767px`): `max-width: none` — same
+
+**Rule:** Whenever a layout property differs between breakpoints, check if a CSS variable in `:root` makes it easier to revert or adjust. This is especially useful for sizing constraints (`max-width`, `min-width`, `width`) that need to be "removed" at certain breakpoints.
 
 ---
 

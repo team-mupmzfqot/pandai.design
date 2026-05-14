@@ -106,9 +106,10 @@
       --font-family: 'Poppins', sans-serif;
 
       /* Layout */
-      --page-max-width: 100%;
-      --page-padding-x: 60px;
-      --section-gap:    var(--spacing-space-m);   /* Spacing/space-m = 16px */
+      --page-max-width:          100%;
+      --page-padding-x:          60px;
+      --section-gap:             var(--spacing-space-m);   /* Spacing/space-m = 16px */
+      --check-in-card-max-width: 390px;
     }
 
     /* â”€â”€ Reset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -279,6 +280,7 @@
       gap:           var(--spacing-space-m);
       flex:          1;
       min-width:     150px;
+      max-width:     var(--check-in-card-max-width);
       padding:       var(--spacing-space-xs) var(--spacing-space-xs) var(--spacing-space-xs) var(--spacing-space-l);
     }
 
@@ -1502,7 +1504,8 @@
     /* Tablet */
     @media (max-width: 1279px) {
       :root {
-        --page-padding-x: 32px;
+        --page-padding-x:          32px;
+        --check-in-card-max-width: none;
       }
       .primary-card__content {
         grid-template-columns: repeat(2, 1fr);
@@ -1524,7 +1527,8 @@
     /* Mobile */
     @media (max-width: 767px) {
       :root {
-        --page-padding-x: var(--spacing-space-m);   /* 16px */
+        --page-padding-x:          var(--spacing-space-m);   /* 16px */
+        --check-in-card-max-width: none;
       }
       /* DS Responsives: H1→20px, T1/T2→16px, T3/T4/T5→14px at mobile */
       .welcome-text__name    { font-size: 20px; line-height: 32px; }
