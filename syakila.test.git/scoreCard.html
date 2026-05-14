@@ -690,10 +690,11 @@
       .footer { display: none; }
       body { padding-bottom: 86px; }
       .menubar-panel {
+        position: fixed;
+        left: 0; top: 16px; bottom: 72px;
         width: min(329px, 100%);
-        top: 16px; bottom: 72px;
         max-height: unset;
-        left: 0; transform: none;
+        transform: none;
         border-left: 0;
         border-radius: 0 var(--corner-4xl) var(--corner-4xl) 0;
       }
