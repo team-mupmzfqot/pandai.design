@@ -111,9 +111,22 @@
     .navbar-logo__text { height: 18px; width: auto; }
 
     .navbar-actions { display: flex; position: relative; align-items: center; gap: var(--space-xl); }
-    .navbar-action-icons { display: flex; align-items: center; gap: var(--space-2xl); flex-shrink: 0; }
-    .navbar-action-icon { width: 24px; height: 24px; flex-shrink: 0; color: var(--icon-default); }
-    .navbar-action-icon svg { display: block; width: 100%; height: 100%; }
+
+    /* Nav Button - Parts  DS 3427:63384 — 44×44, padding 10px, 4 states */
+    .navbar-action-icons { display: flex; align-items: center; gap: var(--space-xs); flex-shrink: 0; }
+    .navbar-action-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      padding: 10px; border-radius: var(--corner-m); /* 8px — radius/xl from DS */
+      color: var(--icon-default);
+      cursor: pointer; user-select: none;
+      border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .navbar-action-icon svg { display: block; width: 24px; height: 24px; flex-shrink: 0; }
+    .navbar-action-icon:hover  { background: var(--surface-secondary-default-subtle); border-color: var(--border-primary-default); color: var(--icon-primary-default); }
+    .navbar-action-icon.is-pressed { background: var(--surface-tertiary-default); border-color: var(--border-primary-default); color: var(--icon-primary-on-color); }
+    .navbar-action-icon.is-active  { background: var(--surface-primary-default);  border-color: var(--border-primary-focus);   color: var(--icon-primary-on-color); }
 
     .navbar-avatar {
       width: 48px; height: 48px; border-radius: var(--corner-rounded);
@@ -1272,6 +1285,13 @@
 
 
 <script>
+  /* ── Action icon pressed state (Rule 39: JS mousedown, not CSS :active on div) ── */
+  document.querySelectorAll('.navbar-action-icon').forEach(icon => {
+    icon.addEventListener('mousedown',  () => icon.classList.add('is-pressed'));
+    icon.addEventListener('mouseup',    () => icon.classList.remove('is-pressed'));
+    icon.addEventListener('mouseleave', () => icon.classList.remove('is-pressed'));
+  });
+
   /* ── Menu Bar panel toggle — hamburger open/close ── */
   (function() {
     const overlay  = document.getElementById('MenuBar-Panel');
