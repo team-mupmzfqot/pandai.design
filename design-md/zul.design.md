@@ -2106,4 +2106,44 @@ If an SVG has gradient fills, keep the gradient `<linearGradient>`/`<radialGradi
 
 ---
 
+### 71. NavTopMenu pill container — `align-items: center` and explicit button backgrounds
+
+**DS node:** `3406:789` (Type=Desktop variant) — NOT `3406:788` (that is the component set frame).
+
+The "Navbar Content" pill (inner node `3406:802`) has two properties that must be set exactly:
+
+1. **`align-items: center`** — The DS specifies `items-center` on the pill container. Using `flex-start` is a spec deviation even when buttons happen to equal the inner height (40px in 40px). Always use `center` to remain correct as content changes.
+
+2. **Explicit `background: var(--surface-general-default)` on each button** — The DS has `bg-[var(--surface/general/default,white)]` on every individual button (`Button - 1.5` instance inside the pill). Without it, hover transitions start from an inherited (not explicit) white — which works visually today but can break if the pill's background ever changes.
+
+**Confirmed CSS (May 2026):**
+```css
+.navbar-nav-menu {
+  align-items: center;   /* DS items-center on "Navbar Content" 3406:802 — was wrongly flex-start */
+}
+.nav-menu-btn__inner {
+  background: var(--surface-general-default);   /* DS bg-white on each button — explicit, not inherited */
+}
+```
+
+**DS component structure — NavTopMenu Desktop 1.5 (3406:789):**
+```
+[outer wrapper: max-w-1440px, w-1288px, no border]
+  [Navbar Content 3406:802: h-56px, p-8px, border green 1px, radius-999px, bg-white, items-center]
+    [Content 3406:803: flex row, gap-8px, items-center, shrink-0]
+      [9× Button-1.5: bg-white, py-8px px-12px, radius-60px]
+        [inner: flex row, gap-0, items-center, min-h-24px]
+          [icon-wrap: 24×24 flex center]
+            [icon-clip: 20×20, overflow-hidden, per-icon inset%]
+          [text: 14px SemiBold #666, px-8px]
+          [chevron-clip: 16×16, inset 37.5%/25%] ← only for Class, Learn, Achievement, Potential, Rewards
+```
+
+**Mistake corrected (May 2026):**
+- HTML comment said "DS node 3406:788" — correct node is `3406:789`. `3406:788` is the component set frame; `3406:789` is the Desktop variant that was implemented.
+- `.navbar-nav-menu { align-items: flex-start }` — should be `center` per DS `items-center` on the pill container.
+- `.nav-menu-btn__inner` had no `background` — DS specifies explicit white on every button.
+
+---
+
 *Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

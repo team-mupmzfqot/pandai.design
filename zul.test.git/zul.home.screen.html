@@ -1335,7 +1335,7 @@
 
     /* ─────────────────────────────────────────────────────
        NAV TOP MENU DESKTOP — Nav Top Menu Desktop - 1.5
-       DS node 3406:788 / inner "Navbar Content" 3406:802
+       DS node 3406:789 (Type=Desktop) / inner "Navbar Content" 3406:802
        Pill container · 9 nav buttons · hover + active states
     ───────────────────────────────────────────────────── */
     #NavTopMenu-Desktop {
@@ -1344,17 +1344,17 @@
       margin-top: var(--spacing-space-s);   /* 12px gap below Primary (DS gap-[Spacing/space-s]) */
     }
 
-    /* Pill container: h:56px, full border, radius 999px */
+    /* Pill container: h:56px, full border, radius 999px — DS 3406:802 */
     .navbar-nav-menu {
       background:    var(--surface-general-default);
       border:        1px solid var(--border-default);
       border-radius: var(--corner-radius-corner-pill);   /* 999px */
       height:        56px;
       max-height:    64px;
-      padding:       var(--spacing-space-xs);   /* 8px */
+      padding:       var(--spacing-space-xs);   /* 8px all sides — DS p-[Spacing/space-xs] */
       display:       flex;
-      align-items:   flex-start;
-      gap:           var(--spacing-space-xs);   /* 8px between buttons */
+      align-items:   center;                             /* DS items-center on Navbar Content */
+      gap:           var(--spacing-space-xs);   /* 8px between buttons — DS Content gap */
     }
 
     /* Each nav button — <div> per existing implementation (Rule 13 cursor + user-select) */
@@ -1365,14 +1365,15 @@
       flex-shrink: 0;
     }
 
-    /* Inner pill — receives hover/active bg */
+    /* Inner pill — receives hover/active bg. Default: explicit white (DS bg-white per button) */
     .nav-menu-btn__inner {
       display:       flex;
       align-items:   center;
       gap:           0;
-      padding:       var(--spacing-space-xs) var(--spacing-space-s);   /* 8px 12px */
-      border-radius: var(--corner-radius-corner-rounded);   /* 60px */
+      padding:       var(--spacing-space-xs) var(--spacing-space-s);   /* 8px 12px — DS py-space-xs px-space-s */
+      border-radius: var(--corner-radius-corner-rounded);   /* 60px — DS rounded-corner-rounded */
       min-height:    24px;
+      background:    var(--surface-general-default);       /* DS bg-[var(--surface/general/default)] */
     }
 
     /* Icon wrapper: 24×24 flex center (contains the 20×20 clip) */
@@ -1739,7 +1740,7 @@
 
   <!-- ═══════════════════════════════════════════════════════════════
        NAV TOP MENU DESKTOP — Nav Top Menu Desktop - 1.5
-       DS node 3406:788 / inner "Navbar Content" 3406:802
+       DS node 3406:789 (Type=Desktop) / inner "Navbar Content" 3406:802
        Pill nav bar · 9 items: Home, Quiz, Battle, Practice,
        Class↓, Learn↓, Achievement↓, Potential↓, Rewards↓
   ═══════════════════════════════════════════════════════════════ -->
