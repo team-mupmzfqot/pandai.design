@@ -1035,9 +1035,32 @@ window.addEventListener('resize', () => jump(idx));
 
 ---
 
-### Mandatory workflow before implementing any component
+### 45. CSS comment integrity — a missing `/*` silently discards the next CSS rule
+
+When a `/* ════...════` opening line is deleted (e.g. by a script removing box-drawing characters) but the closing `════...════ */` line remains, the CSS parser sees the orphaned comment text + the next rule's selector as one long invalid selector. The following rule block is treated as the body of that garbage selector and **silently discarded** — no error, no warning, styles just don't apply.
+
+**How it happened (May 2026):** A PowerShell script removed all lines containing box-drawing characters (╔═, ╚═). This deleted the `/* ════...════` opener but left `MAIN CONTENT` + `════...════ */` behind. The CSS parser read `MAIN CONTENT ════...════ */ .main-content` as one selector, so `.main-content { gap: 16px }` never applied — the inter-section gap was completely broken.
+
+**Rule:** After any bulk line-deletion operation on the HTML/CSS file, scan for orphaned `*/` closers that have no matching `/*` opener. Fix by prepending `/*` to the line before the orphaned text.
+
+**Detection pattern:**
+```powershell
+# Find lines ending with */ that are NOT part of a /* ... */ pair on the same line
+Select-String -Path file.html -Pattern "^\s*[^/].*\*/$"
+```
+
+**Fix:** If line N is `   MAIN CONTENT` and line N+1 is `   ════...════ */`, change line N to `   /* MAIN CONTENT`.
+
+**Mistake made (May 2026):** `gap: var(--section-gap)` on `.main-content` was completely ignored. User reported "still no gap" across multiple sessions. Root cause was the broken comment, not the CSS value itself.
+
+---
+
+### Mandatory workflow — BEFORE every session and every change
+
+**Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work or making any change to the prototype. No exceptions.
 
 ```
+0. Read zul.design.md    → load session rules, confirmed specs, section inventory
 1. search_design_system  → confirm component exists in DS, get component key
 2. use_figma             → find node ID across pages
 3. get_design_context    → pull exact token bindings, dimensions, structure per variant

@@ -178,7 +178,7 @@ A component's spec values can differ depending on where it appears. The same ele
 
 Every major content block on a page must be wrapped in `<section id="SectionName-Desktop">`. This applies to Navbar, Welcome, Carousel, Static Cards, and every content section below.
 
-**Naming convention:** `id="[ComponentName]-Desktop"` — e.g. `NavBar-Desktop`, `Welcome-Desktop`, `Carousel-Desktop`, `static-newscards`.
+**Naming convention:** `id="[ComponentName]-Desktop"` — e.g. `Welcome-Desktop`, `Carousel-Desktop`, `StaticNewsCard-Desktop`.
 
 **Mistake made:** Static cards were in a plain `<div>`, carousel had no `id`, welcome section had no `id`. All were missing the named section wrapper.
 
@@ -1352,8 +1352,6 @@ idx = total = 4  →  centers orig0 = first card in HTML
 
 **Page section structure (confirmed May 2026):**
 ```html
-<section id="NavBar-Desktop">      <!-- Navbar 1.5 desktop — shown at ≥1440px -->
-<section id="NavBar-Mobile">       <!-- Navbar 1.5 mobile  — shown at <1440px  -->
 <main>
   <div class="page-container">
     <div class="main-content">     <!-- gap: var(--spacing-space-m) = 16px between sections -->
@@ -1377,25 +1375,12 @@ idx = total = 4  →  centers orig0 = first card in HTML
 - `Outline/menu` icon: `viewBox="-1 -1 26 26"`, path `M3 12H21M3 6H21M3 18H21`, stroke `var(--icon-primary-default)` = `#00cc85`
 - Hamburger uses `<button>` — **must reset** `background:none; border:none; padding:0` (Rule 32)
 - Outer layout padding: `#NavBar-Mobile { padding: 0 var(--page-padding-x) }` — same as `.navbar` desktop
-- Default CSS: `#NavBar-Desktop { display:block } #NavBar-Mobile { display:none }` — then `@media (max-width:1439px)` swaps them. Never rely on media-query-only visibility (causes flash of both on load).
+- Default CSS: `#NavBar-Mobile { display:none }` always. No media-query toggle needed for this desktop prototype.
 - `body { min-width: 400px }` — minimum mobile layout width
 
-**Desktop Navbar — confirmed implementation notes (May 2026):**
-- `.nav-btn` is a `<div>` — MUST have `cursor: pointer; user-select: none` or it feels unresponsive
-- Hover state: `background: #b5f291; box-shadow: inset 0 0 0 1px #70bc6f` on `.nav-btn__inner`
-- Selected state: `is-active` class toggled via JS click handler on each `.nav-btn`
-- Hover border is `box-shadow: inset 0 0 0 1px` (not `border:`) to avoid layout shift inside pill
-- Icon clip is `overflow:hidden` + `padding` approach — NOT `position:absolute; inset` (collapses to 0×0 in Chromium)
-- Dropdown mechanism: `.nav-btn` is `flex-col; gap:20px; height:40px; overflow:hidden` — dropdown hidden below
-
 **JS architecture (confirmed May 2026):**
-- Nav click handler registered FIRST before any other script
-- Carousel and all other init JS wrapped in `try/catch`
-- This ensures nav interactivity is never blocked by a carousel or other JS error
+- Non-critical JS (carousel etc.) wrapped in `try/catch` so errors never block other handlers
 ```js
-// Always first
-document.querySelectorAll('.nav-btn').forEach(btn => { ... });
-// Non-critical after, wrapped
 try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 ```
 
@@ -1817,8 +1802,7 @@ Current sections in `zul.test.git/zul.home.screen.html` in visual order:
 
 | Position | Section ID | Content |
 |---|---|---|
-| Fixed top | `NavBar-Desktop` / `NavBar-Mobile` | Navbar (swaps at 1320px breakpoint) |
-| 1 | `Welcome-Desktop` | Status badges · Welcome text · Check-in card |
+| #1 | `Welcome-Desktop` | Status badges · Welcome text · Check-in card |
 | 2 | `Carousel-Desktop` | Featured carousel — 5 image cards (428×186px) |
 | 3 | `StaticNewsCard-Desktop` | 2 side-by-side promo static cards |
 | 4 | `YourSelectedSubjects-Desktop` | 18 quiz cards (3-col grid) · Modify List button |
@@ -1826,6 +1810,40 @@ Current sections in `zul.test.git/zul.home.screen.html` in visual order:
 | Fixed bottom | `footer.footer` | Copyright · Heart · Pandai.org |
 
 **Section classes:** Sections 4 and 5 share `.section-frame` (green border card). Sections 2 and 3 are full-width sections with their own CSS. Section 1 is `.section-welcome` (flex row).
+
+---
+
+### 60. CSS comment integrity — a missing `/*` silently discards the next CSS rule
+
+When a `/* ════...════` opener line is deleted (e.g. by a bulk script removing box-drawing characters) but the closing `════...════ */` line remains, the CSS parser treats the orphaned comment text + the following CSS rule selector as one long **invalid selector**. The rule block is silently discarded — no error, no warning.
+
+**How it happened (May 2026):** A PowerShell script removed lines containing box-drawing chars (╔═ etc.). It deleted the `/*` opener but left `MAIN CONTENT` + `═══...═══ */` behind. The parser read `MAIN CONTENT ═══...═══ */ .main-content` as one selector → `.main-content { gap: 16px }` never applied → inter-section gap was broken across multiple debug sessions.
+
+**Fix:** Scan for orphaned closers after any bulk line-delete:
+```powershell
+Select-String -Path file.html -Pattern "^\s*[^/].*\*/$"
+```
+Then prepend `/*` to the line before the orphaned text. Example: `   MAIN CONTENT` → `   /* MAIN CONTENT`.
+
+**Mistake made:** User reported "still no gap" across multiple rounds. Root cause was the broken comment silently killing the CSS rule — not the gap value itself.
+
+---
+
+### 61. Mandatory session workflow — read DS & zul.design.md BEFORE any change
+
+**Before starting any design work, any new section, or any change to the prototype:**
+
+```
+0. Read design-md/zul.design.md   → session rules, confirmed specs, section inventory
+1. Refer to DS (TLVKe3bgJTdVvuPAzgDq2f) → get_design_context / use_figma for all values
+2. search_design_system            → confirm component exists, get component key
+3. get_design_context              → token bindings, dimensions, structure per variant
+4. get_variable_defs               → confirm Semantic token names on the node
+5. Implement                       → DS values only, no assumptions
+6. Validate                        → compare against get_screenshot
+```
+
+**This is non-negotiable.** No guessing, no skipping DS lookup, no implementing from memory alone. zul.design.md holds confirmed specs from past sessions — always load it first to avoid re-learning already-solved problems.
 
 ---
 
