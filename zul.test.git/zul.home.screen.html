@@ -1193,33 +1193,16 @@
       overflow:      hidden;
     }
 
-    /* Logo/Pandai/Logo Horizontal (node 1898:6965): 116×28 overflow-clip container */
+    /* Logo/Pandai/Logo Horizontal (node 1898:6965): height-only constraint, width auto */
     .navbar-primary__logo {
-      width:       116px;
+      display:     flex;
+      align-items: center;
+      gap:         4.2px;      /* DS gap: mark right (26.851) → wordmark left (31.055) = 4.204px */
       height:      28px;
-      overflow:    hidden;
-      position:    relative;
       flex-shrink: 0;
-      display:     block;
     }
-    /* Group (mark): inset-[0_76.95%_0_0] → occupies left (1-0.7695)×116 = 26.86px */
-    .navbar-primary__logo-mark {
-      position: absolute;
-      left:     0;
-      top:      0;
-      bottom:   0;
-      width:    26.86px;
-    }
-    .navbar-primary__logo-mark img { display: block; width: 100%; height: 100%; }
-    /* Vector (wordmark): inset-[15.07%_0_15.03%_26.66%] → left 30.93px, t/b 4.22/4.21px */
-    .navbar-primary__logo-text {
-      position: absolute;
-      left:     30.93px;
-      top:      4.22px;
-      right:    0;
-      bottom:   4.21px;
-    }
-    .navbar-primary__logo-text img { display: block; width: 100%; height: 100%; }
+    .navbar-primary__logo-mark { display: block; height: 28px;     width: auto; }
+    .navbar-primary__logo-text { display: block; height: 19.573px; width: auto; }
 
     /* Avatar group (node 1084:1836): flex-1, gap-16, items-center, justify-end, relative */
     .navbar-primary__actions {
@@ -1471,11 +1454,11 @@
     .navbar-mobile__logo {
       display:     flex;
       align-items: center;
-      gap:         8px;
+      gap:         4.2px;      /* matches desktop — DS: 4.204px */
       height:      28px;
     }
-    .navbar-mobile__logo-mark { height: 28px; width: auto; }
-    .navbar-mobile__logo-text { height: 18px; width: auto; }
+    .navbar-mobile__logo-mark { display: block; height: 28px;     width: auto; }
+    .navbar-mobile__logo-text { display: block; height: 19.573px; width: auto; }
 
     .navbar-mobile__menu-btn {
       width:            40px;
@@ -1681,12 +1664,8 @@
       <!-- Logo/Pandai/Logo Horizontal (node 1898:6965): 116×28px overflow-clip container -->
       <!-- mark: inset-[0_76.95%_0_0] · wordmark: inset-[15.07%_0_15.03%_26.66%] -->
       <a class="navbar-primary__logo" href="#" aria-label="Pandai">
-        <div class="navbar-primary__logo-mark" aria-hidden="true">
-          <img src="icons/logo-mark.svg" alt="">
-        </div>
-        <div class="navbar-primary__logo-text">
-          <img src="icons/logo-text.svg" alt="Pandai">
-        </div>
+        <img src="icons/logo-mark.svg" class="navbar-primary__logo-mark" alt="" aria-hidden="true">
+        <img src="icons/logo-text.svg" class="navbar-primary__logo-text" alt="Pandai">
       </a>
 
       <!-- Avatar group (node 1084:1836): flex-1, gap-16, justify-end, relative -->

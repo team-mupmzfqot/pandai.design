@@ -1072,7 +1072,7 @@ The DS is a living file. Token values assigned to component states (especially P
 
 ### Mandatory workflow — BEFORE every session and every change
 
-> **Non-negotiable. No exceptions.**
+> **Non-negotiable. No exceptions. This applies to every task — even "small" fixes.**
 
 ```
 Step 0a: Read zul.design.md       → load all confirmed specs, session rules, known mistakes
@@ -1085,7 +1085,9 @@ Step 5:  Implement                → use only token values from steps 3–4, no
 Step 6:  Validate                 → compare against get_screenshot
 ```
 
-Step 0a and 0b are mandatory before ANY design work, ANY change, and ANY decision — including seemingly trivial ones. The biggest errors in this project have come from skipping the DS lookup and relying on memory or prior notes.
+**Step 0a and 0b are mandatory before ANY design work, ANY change, and ANY decision — including seemingly trivial fixes.** The biggest errors in this project have come from skipping the DS lookup and relying on memory or prior notes.
+
+> Example of a "small" fix that required DS inspection (May 2026): The Pandai logo looked "abit off." Root cause required `use_figma` on node `1898:6965` to discover the exact DS dimensions (116.479×28px, gap 4.204px, wordmark height 19.573px) — none of which matched the hardcoded CSS. Memory and prior notes were wrong. See Rule 73.
 
 ---
 
@@ -2221,6 +2223,55 @@ const svg = await iconInst.exportAsync({ format: 'SVG_STRING' });
 ```
 
 **Mistake corrected (May 2026):** NavTopMenu icons had `viewBox="0 0 24 24"` with CSS per-icon padding. Both were wrong. All 9 symbols were re-exported from DS instances, updated to `viewBox="0 0 20 20"`, and all clip padding CSS rules were removed.
+
+---
+
+### 73. Company logo — constrain by height only, never fix both dimensions
+
+A company logo must **never** have both `width` and `height` fixed in CSS. Set height only; width is determined automatically by the SVG's intrinsic aspect ratio from its `viewBox`. This keeps the logo undistorted, consistent across all breakpoints, and requires zero maintenance if the height ever changes.
+
+**The rule:**
+```css
+/* WRONG — both dimensions hardcoded, fragile and context-dependent */
+.logo-mark { width: 26.86px; height: 28px; }
+.logo-text { width: 85.07px; height: 18px; }
+
+/* CORRECT — height constrains, width flows from SVG viewBox aspect ratio */
+.logo-mark { display: block; height: 28px;     width: auto; }
+.logo-text { display: block; height: 19.573px; width: auto; }
+```
+
+**The correct logo container pattern** (flex row — same for desktop and mobile):
+```css
+.logo {
+  display:     flex;
+  align-items: center;
+  gap:         4.2px;   /* DS gap: mark right edge → wordmark left edge */
+  height:      28px;    /* single controlled dimension */
+  flex-shrink: 0;
+}
+```
+
+**Never use absolute positioning** to assemble the mark + wordmark. Absolute-positioned children require fixed pixel widths (which break proportions) and a fixed container width (which must be kept in sync manually). The flex approach is self-consistent: each `<img>` sizes itself from its SVG's intrinsic ratio.
+
+**Same pattern everywhere.** Every navbar — desktop, mobile, tablet, any future breakpoint — must use the identical logo CSS. Only the `height` value ever changes (if the DS specifies a smaller logo for mobile). Never maintain two different logo implementations.
+
+**DS-confirmed logo node `1898:6965` specs (May 2026):**
+
+| Part | DS dimensions | CSS rule |
+|---|---|---|
+| Mark (Group) | `26.851 × 28px` | `height: 28px; width: auto` |
+| Wordmark (Vector) | `85.424 × 19.573px` | `height: 19.573px; width: auto` |
+| Gap (mark → wordmark) | `31.055 − 26.851 = 4.204px` | `gap: 4.2px` on flex container |
+| Total logo | `116.479 × 28px` | flows from content, not hardcoded |
+| Wordmark color | `Surface/general/pandai-logo` | `#444A56` in Light mode |
+
+**What was wrong (May 2026):**
+- Desktop logo: absolutely-positioned `<div>` wrappers around each `<img>`, with `width: 116px; height: 28px` on the container. The container width was rounded (116 vs DS 116.479px), shifting the wordmark left 0.12px and making the wordmark container 0.35px too narrow.
+- Mobile logo: flex row but `gap: 8px` (DS is 4.2px) and `height: 18px` on wordmark (DS is 19.573px — slightly squished text).
+- Both implementations were inconsistent with each other despite rendering the same logo.
+
+**Mistake made:** Logo width was derived by rounding the DS node's `116.479px` to `116px`, then using that rounded base to compute percentage-based offsets — compounding the rounding error. The correct approach never needs the total logo width at all.
 
 ---
 

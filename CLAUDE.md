@@ -1090,17 +1090,20 @@ The tablet/mobile `width: 100%` override still works — when the section switch
 
 ### Mandatory workflow — BEFORE every session and every change
 
-**Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work or making any change to the prototype. No exceptions.
+**Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision — including seemingly trivial fixes. No exceptions.
 
 ```
-0. Read zul.design.md    → load session rules, confirmed specs, section inventory
-1. search_design_system  → confirm component exists in DS, get component key
-2. use_figma             → find node ID across pages
-3. get_design_context    → pull exact token bindings, dimensions, structure per variant
-4. get_variable_defs     → confirm Semantic token names used on the node
-5. Implement             → use only token values from steps 3–4, no assumptions
-6. Validate              → compare against get_screenshot
+0a. Read zul.design.md   → load all confirmed specs, session rules, known mistakes
+0b. Refer to live DS     → TLVKe3bgJTdVvuPAzgDq2f — single source of truth
+1.  search_design_system → confirm component exists in DS, get component key
+2.  use_figma            → find node ID across pages
+3.  get_design_context   → pull exact token bindings, dimensions, structure per variant
+4.  get_variable_defs    → confirm Semantic token names used on the node
+5.  Implement            → use only token values from steps 3–4, no assumptions
+6.  Validate             → compare against get_screenshot
 ```
+
+> The biggest errors in this project come from skipping Step 0 and relying on memory. Even "small" fixes require DS inspection — the logo gap, the wordmark height, and the container width were all wrong without it. See Rule 73.
 
 ---
 
