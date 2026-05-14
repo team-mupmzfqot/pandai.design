@@ -1884,4 +1884,137 @@ The tablet/mobile `width: 100%` override remains intact — when the section swi
 
 ---
 
+### 64. Navbar Primary Desktop — logo is a clip container, not a flex row
+
+The Pandai logo (`Logo/Pandai/Logo Horizontal`, node `1898:6965`) is a **116×28px `overflow:hidden` container** with two absolutely positioned children. Never implement it as a flex row of two `<img>` tags.
+
+**Confirmed DS structure (May 2026):**
+- Container: `width:116px; height:28px; overflow:hidden; position:relative; flex-shrink:0`
+- Mark child (`inset-[0_76.95%_0_0]`): `position:absolute; left:0; top:0; bottom:0; width:26.86px`
+- Wordmark child (`inset-[15.07%_0_15.03%_26.66%]`): `position:absolute; left:30.93px; top:4.22px; right:0; bottom:4.21px`
+
+```css
+.navbar-primary__logo         { width:116px; height:28px; overflow:hidden; position:relative; flex-shrink:0; display:block; }
+.navbar-primary__logo-mark    { position:absolute; left:0; top:0; bottom:0; width:26.86px; }
+.navbar-primary__logo-mark img{ display:block; width:100%; height:100%; }
+.navbar-primary__logo-text    { position:absolute; left:30.93px; top:4.22px; right:0; bottom:4.21px; }
+.navbar-primary__logo-text img{ display:block; width:100%; height:100%; }
+```
+
+**Mistake made (May 2026):** Logo was implemented as `<a>` with `display:flex; gap:8px` and two `<img>` tags side by side. This produced the wrong gap (~8px vs DS ~4px), wrong text height (18px vs DS 19.57px), and wrong total width (~113px vs DS 116px).
+
+---
+
+### 65. Navbar Primary Desktop — Avatar group structure (node 1084:1836)
+
+The actions group (right side of Navbar Primary) has a specific three-level structure that must be followed exactly. The badge is a **sibling of the avatar**, not a child of an avatar-wrapper div.
+
+**Confirmed DS structure:**
+```
+Avatar group: flex: 1 0 0 · gap:16px · align-items:center · justify-content:flex-end · position:relative · min-width:1px
+  ├── Row wrap: display:flex · align-self:stretch · align-items:center   ← intermediate wrapper
+  │   └── Top Icons: display:flex · gap:8px · height:100% · align-items:center · justify-content:flex-end · flex-shrink:0
+  │       └── 6 × Nav Button - Parts
+  ├── Avatar (flex-shrink:0)
+  └── Badge (position:absolute · right:-0.48px · top:0)   ← sibling of avatar, within group
+```
+
+**Key rules:**
+- Actions group uses `flex: 1 0 0; justify-content: flex-end` — fills remaining bar width, pushes content right. NOT `flex-shrink:0` with `space-between` on parent.
+- An intermediate `self-stretch` wrapper div sits between the actions group and the icons row.
+- Icons row has `height: 100%` (matches the 48px avatar height).
+- Badge `right: -0.48px` is relative to the actions group (which is `position:relative`), not a separate avatar-wrap div.
+
+**Mistake made (May 2026):** Used `justify-content:space-between` on the parent bar + `flex-shrink:0` on the actions group. Missing the intermediate row-wrap. Badge inside a separate `.navbar-primary__avatar-wrap` div instead of directly in the actions group.
+
+---
+
+### 66. Nav Button - Parts — Hover and Pressed both have a 1px border
+
+Default state has NO border. All three non-default visible states have a `1px solid` border that changes color.
+
+**Confirmed DS tokens (node `3427:63111`, May 2026):**
+
+| State | Background | Border | Icon |
+|---|---|---|---|
+| Default | `Surface/general/default` `#ffffff` | none | `Icon/default/default` `#808080` |
+| Hover | `Surface/secondary/default-subtle` `#e8fbe8` | 1px `Icon/primary/default` `#00cc85` | `Icon/primary/default` `#00cc85` |
+| Pressed | `Surface/tertiary/default` `#00564c` | 1px `Icon/primary/default` `#00cc85` | `Icon/primary/default` `#00cc85` |
+| Active | `Surface/primary/default` `#00cc85` | 1px `Icon/primary/focus` `#00a36a` (INSIDE, 1px) | `Icon/primary/on-color` `#f6fdfb` |
+
+Always use `box-shadow: inset 0 0 0 1px <color>` for the border — never `border: 1px solid` — to avoid layout shift when the border appears/disappears on state change.
+
+```css
+.navbar-action-btn:hover  { background: #e8fbe8; box-shadow: inset 0 0 0 1px #00cc85; color: #00cc85; }
+.navbar-action-btn:active { background: #00564c; box-shadow: inset 0 0 0 1px #00cc85; color: #00cc85; }
+.navbar-action-btn.is-active { background: #00cc85; box-shadow: inset 0 0 0 1px #00a36a; color: #f6fdfb; }
+```
+
+**Mistake made (May 2026):** Hover and Pressed states were implemented with only background/icon color change — no border. DS clearly shows all three non-default states with a 1px border visible in the screenshot.
+
+---
+
+### 67. `get_design_context` gives approximate values — always verify exact px with `use_figma`
+
+`get_design_context` returns React+Tailwind code derived from Figma's CSS percentage calculations. These are approximations that can differ from the actual Figma node pixel measurements.
+
+**Rule:** When exact pixel dimensions are critical (image positioning, clip containers, fixed-size elements), always verify with `use_figma` node inspection:
+```js
+const node = page.findOne(n => n.id === 'NODE_ID');
+return { w: node.width, h: node.height, x: node.x, y: node.y };
+```
+
+**Confirmed example — Avatar image child (node `684:622`, May 2026):**
+- `get_design_context` showed: `left:[-7px] right:[-7px] top:[-1px]` + `aspect-[24/24]` → implies 62×62px
+- `use_figma` actual: `w:60, h:60, x:-6, y:0` → **60×60px at x:-6, y:0**
+- CSS diff: `left:-6px` (not -7px), `top:0` (not -1px), no `aspect-ratio` needed, explicit `width:60px; height:60px`
+
+The `get_design_context` percentage-based insets rounded differently from actual node coordinates. Always trust `use_figma` over `get_design_context` for exact positioning values.
+
+---
+
+### 68. Avatar - 1.5 Type=Image — use `<img>` not SVG, exact DS dimensions from `use_figma`
+
+The `Type=Image` variant of Avatar - 1.5 contains an **IMAGE fill** child, not an SVG icon. Always implement it with an `<img>` element.
+
+**Confirmed DS specs — Size=L Type=Image (node `684:621`, May 2026):**
+
+Container:
+- `display:flex; align-items:flex-start` (NOT `align-items:center`)
+- `width:48px; height:48px; border-radius:60px; border:1px solid #00cc85; overflow:hidden; position:relative`
+
+Image child (node `684:622`):
+- Fill type: `IMAGE` with `scaleMode: FILL`
+- Dimensions: `width:60px; height:60px`
+- Position: `x:-6, y:0` relative to container
+
+```css
+.navbar-avatar {
+  display: flex; align-items: flex-start;
+  width: 48px; height: 48px;
+  border-radius: 60px; border: 1px solid var(--border-default);
+  overflow: hidden; position: relative; flex-shrink: 0;
+}
+.navbar-avatar__image {
+  position: absolute; left: -6px; top: 0;
+  width: 60px; height: 60px;
+  object-fit: cover; pointer-events: none;
+  display: block; max-width: none;
+}
+```
+
+```html
+<div class="navbar-avatar">
+  <img class="navbar-avatar__image" src="icons/avatar-user.png" alt="User avatar">
+</div>
+```
+
+**Mistakes made (May 2026):**
+- Used `<div>` + SVG `<use href="#ic-user">` instead of `<img>` — wrong element for Image variant.
+- `bottom:0` constraint compressed the image to 49px tall instead of the correct 60px.
+- Used `aspect-ratio:1` from design context instead of explicit `width:60px; height:60px` from `use_figma`.
+- Used `left:-7px; top:-1px` (design context approximation) instead of `left:-6px; top:0` (actual Figma node).
+
+---
+
 *Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
