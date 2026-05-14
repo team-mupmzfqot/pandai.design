@@ -620,7 +620,7 @@ All specs from `use_figma` inspection of component nodes. Arrow circle fills/str
 | Property | Primary/S | Primary/M | Secondary/M |
 |---|---|---|---|
 | Height | 24px | 32px | 32px |
-| Outer padding | `2px 8px` | `2px 8px` | `2px 8px` |
+| Outer padding | `2px 4px` (`space-xxs`) | `2px 8px` (`space-xs`) | `2px 8px` (`space-xs`) |
 | Border-radius | 60px (pill) | 60px | 60px |
 | Text | 12px SemiBold | 12px SemiBold | 12px SemiBold |
 | Text slot padding | `0 4px` | `0 4px` | `0 4px` |
@@ -631,7 +631,9 @@ All specs from `use_figma` inspection of component nodes. Arrow circle fills/str
 | Arrow stroke | none | none | 1px `#00cc85` → use `box-shadow:inset` |
 | DS node (Default) | `1437:8154` | `479:344` | `538:1923` |
 
-**All button sizes share the same outer padding `2px 8px` and text size `12px SemiBold`.** Height and arrow size are the only things that change between S/M/L.
+**Primary/S uses `Spacing/space-xxs` (4px) for outer horizontal padding — NOT 8px.** Primary/M and Secondary/M use `Spacing/space-xs` (8px). Text size `12px SemiBold` is the same across all sizes.
+
+**Mistake corrected (May 2026):** Rule 31 previously stated all sizes share `2px 8px` outer padding. Live DS audit via `get_design_context` confirmed Primary/S is `px-[Spacing/space-xxs, 4px]` = `2px 4px`. The quiz CTA buttons on the home screen were rendering 8px wider than DS because of this error.
 
 ---
 
