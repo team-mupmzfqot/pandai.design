@@ -2056,4 +2056,54 @@ The mobile navbar section uses `var(--page-padding-x)` so it automatically scale
 
 ---
 
+### 70. Repeated SVG icons — define once as `<symbol>`, reference with `<use>`
+
+Any SVG that appears more than once in the HTML — including colored multi-path icons like subject badges — should be defined as a `<symbol>` in the `<defs>` block and referenced everywhere via `<use href="#id">`. Inlining the same SVG repeatedly inflates the file and creates drift risk if the icon ever changes.
+
+**Rule:** Every SVG icon with more than one occurrence belongs in `<defs>` as a `<symbol>`. This applies to both stroke icons (nav icons, action icons) and fill icons (subject badge icons, badge pointers).
+
+**`<symbol>` vs inline SVG — decision:**
+
+| Case | Pattern |
+|---|---|
+| Icon appears once | Inline SVG is fine |
+| Icon appears 2+ times | `<symbol>` + `<use>` |
+| Icon has gradients | Keep gradient `<defs>` inside the symbol — self-contained |
+| Icon has `<clipPath>` = its viewBox | Strip the clipPath — symbol viewport clips identically |
+
+**ClipPath stripping — safe when clipPath == viewBox bounds:**
+Figma exports SVGs with `<g clip-path="url(#clip...)"><...paths...></g><defs><clipPath id="clip..."><rect width="W" height="H"/></clipPath></defs>`. When the clipPath is just a rectangle matching the viewBox dimensions, it is redundant — the `<symbol>` viewport clips content to those bounds automatically. Strip both the `<g clip-path>` wrapper and the `<defs><clipPath>` block.
+
+**Gradient defs inside symbols — self-containment pattern:**
+If an SVG has gradient fills, keep the gradient `<linearGradient>`/`<radialGradient>` definitions inside the symbol (as nested `<defs>`), NOT the clipPath. Rename IDs to avoid global collisions (e.g. `subj-kafa-grad-0` instead of `paint0_linear_3283_85130`). Modern browsers resolve `url(#...)` references inside `<use>` shadow DOM to the host document — the gradient inside the symbol is accessible.
+
+```html
+<!-- Self-contained symbol with gradients -->
+<symbol id="ic-subj-kafa" viewBox="0 0 24.32 24">
+  <defs>
+    <linearGradient id="subj-kafa-grad-0" x1="..." gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFC664"/><stop offset="1" stop-color="#FFEBA6"/>
+    </linearGradient>
+    <!-- more gradients... -->
+  </defs>
+  <!-- paths referencing url(#subj-kafa-grad-0) -->
+</symbol>
+
+<!-- Usage — as many times as needed, zero duplication -->
+<svg width="25" height="24" viewBox="0 0 24.32 24" aria-hidden="true">
+  <use href="#ic-subj-kafa"/>
+</svg>
+```
+
+**Implementation results — subject badge optimization (May 2026):**
+- 18 subject icon SVGs + 1 badge pointer → 19 `<symbol>` definitions
+- 21 inline icon SVGs + 21 inline pointer SVGs → 42 `<use>` references
+- Saved **10,494 bytes** (237,602 → 227,108 bytes, −4.4%) with no visual change
+- KAFA's 3 linear gradients kept inside its symbol with renamed IDs
+- All redundant `<clipPath>` wrappers removed
+
+**Mistake avoided:** Considered putting gradient defs in the top-level defs (outside the symbol). Self-containment inside the symbol is cleaner — the symbol carries everything it needs, and moving it doesn't break gradient references.
+
+---
+
 *Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
