@@ -1883,6 +1883,8 @@ Then prepend `/*` to the line before the orphaned text. Example: `   MAIN CONTEN
 
 **This is non-negotiable.** No guessing, no skipping DS lookup, no implementing from memory alone. zul.design.md holds confirmed specs from past sessions — always load it first to avoid re-learning already-solved problems.
 
+**Why this matters — confirmed May 2026:** The Status Badge - 1.5 DS structure changed on 2026-05-14 (Streak/Lives/Ruby L layout unified, content gap changed 8px→4px, sizes updated). Two sessions in a row produced "looks a bit off" because the live DS was not re-inspected before implementing. Always re-verify — component specs can change between sessions.
+
 ---
 
 ### 62. Minimum page width — set `min-width: 390px` on BOTH `html` AND `body`
@@ -2272,6 +2274,89 @@ A company logo must **never** have both `width` and `height` fixed in CSS. Set h
 - Both implementations were inconsistent with each other despite rendering the same logo.
 
 **Mistake made:** Logo width was derived by rounding the DS node's `116.479px` to `116px`, then using that rounded base to compute percentage-based offsets — compounding the rounding error. The correct approach never needs the total logo width at all.
+
+---
+
+### 74. Status Badge - 1.5 — full confirmed specs (DS updated 2026-05-14, node 2312:10653)
+
+The DS was updated on **2026-05-14** — all 5 badge types (Score, Coins, Streak, Lives, Ruby) now share **identical layout structure** for both L and M sizes. Old notes about Streak/Lives/Ruby L having a separate right-side icon container (w:122px) are **obsolete**.
+
+**Always use `min-width`, never `max-width`.** This was the source of the "looks a bit off" issue — badges collapsed narrower than intended when `max-width` was used.
+
+#### L size (desktop + tablet)
+
+| Property | Value | DS token |
+|---|---|---|
+| Height | `48px; min-height: 48px` | — |
+| Min-width | **`115px`** | — |
+| Pill padding | `8px all` | `Spacing/space-xs` |
+| Border-radius | `40.5px` | — |
+| Content `padding-left` | `8px` | `Spacing/space-xs` |
+| Content `padding-right` | `2px` | `Spacing/component/3xs` |
+| Content `gap` | **`4px`** | `Spacing/space-xxs` |
+| Icon circle size | **`32 × 32px`** | pill(48) − py-pad(16) = 32 |
+| Icon circle `padding` | `4px all` | `Spacing/component/2xs` |
+| Label | visible — 10px/600 SemiBold | `Body/B7` |
+| Value | 16px/700 Bold, lh:24px | `Title/T3` |
+
+#### M size (mobile ≤767px)
+
+| Property | Value | DS token |
+|---|---|---|
+| Height | `32px; max-height: 32px` | — |
+| Min-width | **`89px`** | — |
+| Pill padding | `4px 2px 4px 4px` | `Spacing/space-xxs` / `Spacing/component/3xs` |
+| Border-radius | `40.5px` | — |
+| Content `padding-left` | `8px` | `Spacing/space-xs` |
+| Content `padding-right` | `2px` | `Spacing/component/3xs` |
+| Content `gap` | `4px` | `Spacing/space-xxs` |
+| Icon circle size | **`24 × 24px`** | fixed |
+| Icon circle `padding` | `pt:4 pr:2 pb:4 pl:2` | — |
+| Label | **`display: none`** — `visible:false` in DS | — |
+| Value | **14px/600 SemiBold**, lh:20px | `Body/B1` |
+
+**Content gap is 4px at BOTH sizes** — not 8px. Old implementation had `gap: 8px` (Spacing/space-xs) which was wrong.
+
+**Coins badge: text stroke applies to M value too.** DS node `3752:4050` (Coins M value) has `stroke: #cba500, weight:1, OUTSIDE`. Same CSS rule as L:
+```css
+.status-pill--coins .status-pill__value {
+  -webkit-text-stroke: 2px #cba500;
+  paint-order:         stroke fill;
+}
+```
+
+**Icon img CSS — use `100%/100%` not fixed px:**
+```css
+.status-pill__icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+```
+The icon circle's own dimensions (32×32 L, 24×24 M) and padding define the available space. `object-fit: contain` preserves each icon's natural aspect ratio within that space. Fixed pixel sizes on the `<img>` break when circle size changes between L and M.
+
+**Confirmed CSS (prototype, May 2026):**
+```css
+/* L — desktop + tablet */
+.status-pill {
+  height: 48px; min-height: 48px; min-width: 115px;
+  padding: var(--spacing-space-xs); /* 8px all */
+  border-radius: 40.5px;
+}
+.status-pill__content { gap: var(--spacing-space-xxs); padding-left: var(--spacing-space-xs); padding-right: 2px; }
+.status-pill__icon    { width: 32px; height: 32px; padding: 4px; }
+
+/* M — mobile only */
+@media (max-width: 767px) {
+  .status-pill        { height: 32px; max-height: 32px; min-height: unset; min-width: 89px; padding: 4px 2px 4px 4px; }
+  .status-pill__label { display: none; }
+  .status-pill__value { font-size: 14px; font-weight: 600; line-height: 20px; }
+  .status-pill__icon  { width: 24px; height: 24px; padding: 4px 2px; }
+}
+```
+
+**Mistakes made (May 2026):**
+- Used `max-width: 115px` / `max-width: 89px` instead of `min-width` — badges collapsed too narrow.
+- Content `gap` was `8px` — actual DS is `4px` for all variants at both sizes.
+- Icon circle was `39px wide × 100% height` — actual is `32×32px` for L (pill height 48 minus 8px top+bottom padding = 32).
+- Rule 25's CSS of `width:24px; height:24px` on `<img>` is superseded — use `100%/100%` with the circle defining the box.
+- Old sessions noted Streak/Lives/Ruby L as `w:122px` with separate icon container — DS update (2026-05-14) unified all 5 types to the same layout. Always re-inspect live DS; component structure can change between sessions.
 
 ---
 

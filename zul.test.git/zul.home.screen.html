@@ -172,7 +172,9 @@
 
     /* Status Pill â€” 1.5, Type=Score */
     .status-pill {
-      min-width:     122px;
+      height:        48px;
+      min-height:    48px;
+      min-width:     115px;
       background:    var(--surface-primary-default);
       border:        1px solid var(--border-primary-focus);
       border-radius: 40.5px;
@@ -182,11 +184,12 @@
     }
 
     .status-pill__content {
-      display:     flex;
-      align-items: center;
-      gap:         var(--spacing-space-xs);
-      padding-left: var(--spacing-space-xs);
-      width:       100%;
+      display:       flex;
+      align-items:   center;
+      gap:           var(--spacing-space-xxs);
+      padding-left:  var(--spacing-space-xs);
+      padding-right: 2px;
+      width:         100%;
     }
 
     .status-pill__texts {
@@ -213,9 +216,9 @@
     }
 
     .status-pill__icon {
-      width:           39px;
-      height:          100%;
-      min-height:      39px;
+      width:           32px;
+      height:          32px;
+      padding:         4px;
       background:      var(--surface-general-default);
       border-radius:   var(--corner-radius-corner-pill);
       display:         flex;
@@ -224,9 +227,8 @@
       flex-shrink:     0;
     }
 
-    /* DS icon heights are all 24px, widths vary (Trophy:20, Coin:24, Streak:17, Heart:22, Ruby:24).
-       object-fit:contain preserves natural aspect ratio within the 24×24 box — no squish, no overflow. */
-    .status-pill__icon img { width: 24px; height: 24px; object-fit: contain; display: block; }
+    /* Icons fill icon circle via 100%/100% — object-fit:contain preserves aspect ratio (no squish). */
+    .status-pill__icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
     /* Status Badge variants (DS Status Badge - 1.5, node 2312:10653) */
     .status-badges {
       display:  flex;
@@ -1528,7 +1530,11 @@
       .welcome-text__name    { font-size: 20px; line-height: 32px; }
       .static-card__title    { font-size: 16px; line-height: 24px; }
       .section-header__title { font-size: 16px; line-height: 24px; }
-      .status-pill__value    { font-size: 14px; line-height: 20px; }
+      /* Status Badge Size=M (DS 2026-05-14 — h:32px max-w:89px, no label, icon 24×24) */
+      .status-pill        { height: 32px; max-height: 32px; min-height: unset; min-width: 89px; padding: 4px 2px 4px 4px; }
+      .status-pill__label { display: none; }
+      .status-pill__value { font-size: 14px; font-weight: 600; line-height: 20px; }
+      .status-pill__icon  { width: 24px; height: 24px; padding: 4px 2px; }
 
       /* Single-column quiz grid */
       .primary-card__content {
