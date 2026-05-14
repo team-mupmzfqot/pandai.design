@@ -675,7 +675,11 @@
       .sc-left, .sc-mid { flex: 0 0 auto; }
       .sc-mid { gap: 16px; }
       .sc-graph { margin-top: 0; margin-bottom: 0; }
-      .menubar-panel { width: min(1288px, calc(100% - 48px)); top: 72px; }
+      .menubar-panel {
+        width: min(1288px, calc(100% - 48px)); top: 72px;
+        border-top: 0;
+        border-radius: 0 0 var(--corner-4xl) var(--corner-4xl);
+      }
     }
 
     /* Mobile ≤ 767px */
