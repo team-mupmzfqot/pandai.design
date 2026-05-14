@@ -1862,4 +1862,65 @@ Icons: `ic-stop-circle, ic-package, ic-shopping-bag, ic-shopping-cart, ic-smile`
 
 ---
 
-*Last updated: 2026-05-12 | Files: Nadia.test.git/My Rewards/nadia_Rewards-Merchandise.html | Branch: staging*
+### Updates — May 2026 (Session 6)
+
+**File:** `Nadia.test.git/nadia_Class.html` — Class page navbar + menu modals
+
+---
+
+#### Navbar responsiveness fixes
+
+- `width: 100%` added to `.navbar-primary` (brand bar now explicitly fills section)
+- `padding-top: var(--spacing-space-s)` (12px) on `#NavBar-Menu-Desktop` — restores gap between brand bar and nav pill
+- `.navbar-avatar` wrapped in `.navbar-avatar-wrap` (`position: relative`) so `.navbar-badge` anchors to avatar corner only
+- `overflow-x: hidden` on `html` + `body` — prevents horizontal scroll
+
+#### Nav menu pill fixes (DS node 3528:51331)
+
+- **Chevron-down invisible fix:** `.nav-chevron` had `padding: 6px 4px` collapsing SVG content to 4px height — removed padding entirely
+- **Active Class button arrow:** replaced `.nav-chevron` with DS-correct `.nav-arrow-circle` — `bg: #99ebce; padding: 4px; border-radius: 60px` containing 16×16 chevron-down clip
+- **Dropdown:** added Assignment as 4th item (My Classes → Browse Classes → Timetable → Assignment)
+- **Nav icon clip:** `20×20` (DS spec `overflow-clip size-[20px]` inside `size-[24px]` wrap) — clip padding removed; SVG fills 20px cleanly
+- **Text changes:** breadcrumb title `Class` → `My Classes`; button label `Go to My Classes` → `Browse Classes`
+- **bc-actions icon clip:** `24×24`, no padding (user-facing 24px icon size)
+
+#### Navbar primary icon states (DS node 3427:63111 — Nav Button - Parts)
+
+| State | Button bg | Inset border | Icon |
+|---|---|---|---|
+| Default | `#ffffff` | — | `#808080` (`Icon/default/default`) |
+| Hover | `#e8fbe8` (`Surface/secondary/default-subtle`) | 1px `#00cc85` | `#00cc85` |
+| Pressed | `#00564c` (`Surface/tertiary/default`) | 1px `#00cc85` | `#00cc85` |
+| Active | `#00cc85` (`Surface/primary/default`) | 1px `#00a36a` | `#f6fdfb` |
+
+Pressed implemented via JS `mousedown`/`mouseup`/`mouseleave` (Rule 39 — `:active` unreliable on `<div>`).
+
+#### Avatar fix (DS Avatar-1.5 Size=L node 684:621)
+
+- `.navbar-avatar`: added `position: relative` — without this, absolute img positioned against wrong ancestor
+- `.navbar-avatar__img`: `position: absolute; left: -7px; right: -7px; top: -1px; aspect-ratio: 1/1; object-fit: cover` — 62×62 img clipped to 48×48 circle by `overflow: hidden`
+
+#### New SVG symbols added to sprite
+
+`ic-x` (close), `ic-chevron-right` (menu sub-item), `ic-chevron-btn-m` (Button-1.5 Size=M arrow, `viewBox="0 0 16 16"` path `M6 12L10 8L6 4`), `ic-clipboard` (Practice in mobile menu), `ic-settings` (My Account)
+
+#### Mobile menu modal — Nav Menu Mobile - 1.5 (DS node 3427:2185)
+
+Triggered by mobile hamburger button (`< 1320px`).
+
+- **Mobile (`< 768px`):** left+top, `width: 329px; height: 100vh` (full fill), `border-radius: 0 24px 24px 0` (flush left edge)
+- **Panel structure:** header (logo + X) → search pill → menu items with `Checkbox-1.5` (16×16, `bg #00cc85; border #00a36a; border-radius: 4px`) → CTA box (`bg #e8fbe8; border #d1f7d1; border-radius: 20px`) → localization row
+- Home = active state (`bg #b5f291; border #00a36a`); Practice uses `Outline/clipboard` (DS mobile spec, differs from desktop `book-open`)
+- CTA: Notification row + Download App (Primary/M full-width + R Arrow using `ic-chevron-btn-m`)
+- Localization: EN (`ic-en`) / BM / 中A
+
+#### Tablet menu modal — Nav Menu Tablet - 1.5 (DS node 3427:2184)
+
+- **Tablet (`≥ 768px`):** centered + top (80px gap for navbar), `width: min(calc(100vw - 64px), 800px)`, `border-radius: 24px`
+- **2-column layout:** left col (Home/Quiz/Battle/Practice/Class) + vertical divider + right col (Learn/Achievement/Potential/Rewards/My Account)
+- **Footer CTA:** horizontal row — Notification (flex:1) + Download App (flex:1), `border-radius: 28px` (`corner-5xl`)
+- JS: `querySelectorAll('.mmenu-close-btn')` covers both mobile + tablet close buttons; backdrop click + Escape also close
+
+---
+
+*Last updated: 2026-05-14 | Files: Nadia.test.git/nadia_Class.html | Branch: staging*
