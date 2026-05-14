@@ -129,38 +129,33 @@
 
 ---
 
-### 8. Icon clip framing is per-icon — never use blanket inset values
+### 8. Icon clip framing — always `exportAsync` the icon INSTANCE, never derive from Iconography insets
 
-The DS renders each icon inside an `overflow:hidden` clip container using `position:absolute; inset: X%`. These percentages are **unique per icon** based on its internal geometry. Never apply a uniform default across all icons.
+The only reliable way to get icon rendering correct inside a clip container is to call `exportAsync({ format: 'SVG_STRING' })` on the icon INSTANCE within the DS component. The exported SVG contains the exact `viewBox` and path coordinates to use directly — no CSS clip padding needed, because the natural margins are baked into the path data.
 
-**Always pull the exact inset from `get_design_context` for the specific component node being implemented.**
+**Rule:** `viewBox` in the symbol must equal the clip container's CSS size. For 20×20 clips → `viewBox="0 0 20 20"`. For 24×24 clips → `viewBox="-1 -1 26 26"` (with translated paths + buffer). See Rule 27 for the full viewBox guide.
 
-**Confirmed inset values from DS node 866:5576 (Navbar 1.5, May 2026):**
+**Confirmed — NavTopMenu icons (DS node 3406:802, May 2026):**
+All 9 nav button icons export at `viewBox="0 0 20 20"`. The clip container is 20×20. Use DS-exported paths at 1:1 scale. No CSS padding on the clip.
 
-Nav button icons — 20px clip container:
-| Icon | DS inset |
-|---|---|
-| `Outline/home` | `8.33% 12.5%` |
-| `Outline/check-circle` | `8.33%` |
-| `Outline/battle` | `12.5%` |
-| `Outline/book-open` | `12.5% 8.33%` |
-| `Outline/users` | `12.5% 4.17%` |
-| `Outline/book` | `8.33% 16.67%` |
-| `Outline/star` | `8.33% 8.33% 12.42% 8.33%` |
-| `Outline/gift` | `8.33%` |
-| `Outline/chevron-down` | `37.5% 25%` |
+```js
+// Correct workflow
+const iconInst = container.findOne(n => n.id === 'I3406:804;538:2070'); // icon instance ID
+const svg = await iconInst.exportAsync({ format: 'SVG_STRING' });
+// svg.viewBox tells you the correct viewBox to use in the <symbol>
+```
 
-Action icons — 24px clip container:
-| Icon | DS inset |
-|---|---|
-| `Outline/search` | `12.5%` |
-| `Outline/maximize` | `12.5%` |
-| `Outline/smartphone` | `8.33% 20.83%` |
-| `Outline/bell` | `8.33%` |
-| `Outline/EN` | `top:25% right:9.95% bottom:28.12% left:12.5%` |
-| `Outline/waffle-menu` | `16.67%` |
+**What NOT to do:**
+- Never derive clip padding from DS inset percentages and apply them as CSS `padding` on the clip element — this double-crops icons that already have margins in their paths.
+- Never use `viewBox="0 0 24 24"` for icons that render in a 20×20 clip — this scales icons to 83.3%, making them appear smaller and thinner than DS.
 
-**Mistake made:** Applied blanket `8.33%` to all nav icons and `12.5%` to all action icons. Had to go back and add per-icon CSS overrides (`data-icon` attribute selectors) after pulling the actual DS values.
+**Previous (wrong) approach — corrected May 2026:**
+An earlier implementation used per-icon CSS padding (e.g. `padding: 1.67px 2.5px`) on the 20×20 clip container, with `viewBox="0 0 24 24"` symbols. This was derived from DS inset percentages. When the DS exports were checked, every icon used `viewBox="0 0 20 20"` with NO clip padding — the margins were already in the path coordinates. The CSS padding was double-cropping all icons. All 9 symbols were updated and padding rules removed.
+
+**Action icons (NavbarPrimary — 24px, NO clip container):**
+These are a different case — rendered at 24×24 with no clip div. Use `viewBox="-1 -1 26 26"` with translated paths. See Rule 27.
+
+**Mistake made:** Applied blanket `8.33%` clip padding to all nav icons based on Iconography page insets — wrong source. The correct source is always `exportAsync` on the icon instance within the actual DS component.
 
 ---
 
@@ -544,7 +539,7 @@ viewBox = "-1 -1 26 26"
 - All 6 action icons (search, maximize, smartphone, bell, EN, waffle) are plain 24×24 — no CSS clip, no padding.
 - All use `viewBox="-1 -1 26 26"` with translated paths.
 
-**Navbar nav button icons (Row 2):** These ARE inside clip containers (`.nav-btn__icon-clip`) with per-icon DS inset padding — leave those viewBoxes as-is (tight to path), the clip handles sizing.
+**Navbar nav button icons (NavTopMenu — 20×20 clip containers):** Use `exportAsync` on the icon instance → DS exports these at `viewBox="0 0 20 20"`. Use that viewBox directly, NO CSS clip padding. Do NOT use `viewBox="0 0 24 24"` — that scales icons to 83.3%. See Rule 8 for the full corrected workflow. The old note about "leave viewBoxes tight to path" was wrong and has been corrected (May 2026).
 
 ---
 
@@ -2175,7 +2170,7 @@ The "Navbar Content" pill (inner node `3406:802`) has two properties that must b
       [9× Button-1.5: bg-white, py-8px px-12px, radius-60px]
         [inner: flex row, gap-0, items-center, min-h-24px]
           [icon-wrap: 24×24 flex center]
-            [icon-clip: 20×20, overflow-hidden, per-icon inset%]
+            [icon-clip: 20×20, overflow-hidden, NO clip padding — natural margins in 20×20 paths]
           [text: 14px SemiBold #666, px-8px]
           [chevron-clip: 16×16, inset 37.5%/25%] ← only for Class, Learn, Achievement, Potential, Rewards
 ```
@@ -2184,6 +2179,48 @@ The "Navbar Content" pill (inner node `3406:802`) has two properties that must b
 - HTML comment said "DS node 3406:788" — correct node is `3406:789`. `3406:788` is the component set frame; `3406:789` is the Desktop variant that was implemented.
 - `.navbar-nav-menu { align-items: flex-start }` — should be `center` per DS `items-center` on the pill container.
 - `.nav-menu-btn__inner` had no `background` — DS specifies explicit white on every button.
+
+---
+
+---
+
+### 72. Icon-in-clip rendering — viewBox must equal clip container size; use `exportAsync`, not inset percentages
+
+When an icon renders inside a CSS clip container (`overflow: hidden`), the SVG `viewBox` must match the clip's CSS dimensions. The correct paths come from `exportAsync({ format: 'SVG_STRING' })` on the icon INSTANCE within the DS component — not from the Iconography page.
+
+**The rule:**
+- Clip is 20×20 → `viewBox="0 0 20 20"` → no CSS padding on clip
+- Clip is 24×24 (action icons, no clip container) → `viewBox="-1 -1 26 26"` with translated paths
+
+**Why viewBox must match clip size:**
+When `viewBox="0 0 24 24"` is used in a 20×20 CSS box, the browser scales the 24×24 coordinate space to fit 20×20 — every icon renders at 83.3% of its intended size. Strokes appear thinner, shapes appear smaller. The user will notice immediately when comparing side-by-side with DS.
+
+**Why NO clip padding:**
+DS icon instances exported via `exportAsync` already have natural margins baked into the path coordinates within their viewBox. Adding CSS `padding` on the clip container crops the already-margined icon a second time, making icons even smaller.
+
+**Confirmed — NavTopMenu DS component (3406:802, May 2026):**
+- All 9 icon instances export at `viewBox="0 0 20 20"`
+- Natural margins in paths: home ≈ 2.5px L/R, 1.67px T/B; star ≈ 1.67px all; etc.
+- CSS clip padding = 0 on all buttons
+- Correct symbol format: `<symbol id="ic-home" viewBox="0 0 20 20" ...><path d="M7.5 18.33..."/></symbol>`
+
+**Workflow:**
+```js
+// 1. Find the component using the icon
+const page = figma.root.children.find(p => p.name === '⚙️ Menu Bar');
+await figma.setCurrentPageAsync(page);
+const container = page.findOne(n => n.id === '3406:802');
+
+// 2. Export the icon INSTANCE (not the component frame from Iconography)
+const iconInst = container.findOne(n => n.id === 'I3406:804;538:2070');
+const svg = await iconInst.exportAsync({ format: 'SVG_STRING' });
+// svg now contains <svg width="20" height="20" viewBox="0 0 20 20" ...>
+
+// 3. Extract: viewBox → use as symbol viewBox; path data → use as symbol path
+// 4. Strip any <g clip-path> wrapper if the clipPath rect matches the viewBox (redundant)
+```
+
+**Mistake corrected (May 2026):** NavTopMenu icons had `viewBox="0 0 24 24"` with CSS per-icon padding. Both were wrong. All 9 symbols were re-exported from DS instances, updated to `viewBox="0 0 20 20"`, and all clip padding CSS rules were removed.
 
 ---
 
