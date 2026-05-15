@@ -216,6 +216,32 @@ For these two, set `--badge-text` explicitly on the modifier class:
 .subject-badge--kafa    { --badge-border: #6eb687; --badge-bg: #8ae3a9; --badge-text: #358a62; }
 ```
 
+### 4.3 Subject state variants — `[PENDING — Figma extraction from node 3372-5766]`
+
+> **Status (2026-05-15):** This section is reserved for the **subject state palette** (default / focus / hover / pressed / subtle / on-color) per subject, as defined on Figma node [`3372-5766`](https://www.figma.com/design/TLVKe3bgJTdVvuPAzgDq2f/Pandai-Design-System-1.5?node-id=3372-5766&m=dev) in file `TLVKe3bgJTdVvuPAzgDq2f`. It will be filled in the next session once Figma MCP tools are live.
+>
+> **What goes here when populated:**
+> - Full `Subjects/{name}/{state}` token paths for all 18 subjects
+> - Hex values for each (state, subject) cell
+> - CSS variable names following the convention `--subjects-{name}-{state}` (e.g. `--subjects-math-focus`, `--subjects-chemistry-subtle`)
+> - Usage guidance: which state to use on quiz card stripes, subject-themed buttons, subject filter chips, subject icon backgrounds, etc.
+>
+> **Why this section exists today:** The current prototypes (`zul.test.git`, `nadia.test.git`, `syakila.test.git`) only declare `--subjects-{name}-default`. Interactive subject UI (hover on a math card, pressed on a chemistry filter) currently has no DS-backed token and falls back to ad-hoc CSS — flagged here as a known gap.
+>
+> **Known mismatch to verify and fix in the same commit as this section:** seven `--subjects-*-default` declarations in `zul.test.git/zul.home.screen.html` (lines 97–103) use Tailwind-like approximations rather than the DS-confirmed badge bg values in §4.2:
+>
+> | Subject | Prototype hex (wrong) | DS §4.2 badge bg (likely correct — verify against node 3372-5766) |
+> |---|---|---|
+> | Add Math | `#1D3A8A` | `#283589` |
+> | Economy | `#F97316` | `#ff5733` |
+> | Account | `#3B82F6` | `#0072ca` |
+> | Business | `#F59E0B` | `#efb42b` |
+> | Computer Science | `#DB2777` | `#d10070` |
+> | KAFA | `#0D9488` | `#8ae3a9` |
+> | RBT | `#475569` | `#353535` |
+>
+> Re-verify each against the live DS before committing — Figma may have changed since §4.2 was authored.
+
 ---
 
 ## 5. Status Badge colors ([CLAUDE.md Rule 74](CLAUDE.md), updated 2026-05-14)
