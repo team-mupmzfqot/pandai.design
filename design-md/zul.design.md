@@ -2444,4 +2444,257 @@ Scale at 1:1: clip_px / clip_viewBox_units = 16/16 = 1.0 → stroke = 1.5px ✓
 
 ---
 
+---
+
+### 77. Semantic Tokens — every CSS color/spacing must use `var(--token)`; hardcoded hex requires DS-source comment
+
+Every CSS property value for color, spacing, radius, or font **must resolve through a `var(--semantic-token)`**. Hardcoded hex values in rule declarations are prohibited unless NO Semantic token equivalent exists (e.g. subject-specific badge colors from DS Iconography, Status Badge type colors not in Semantic collection). All exceptions must be followed by a comment citing the DS node or collection source.
+
+**Violations found in audit (May 2026) — must fix:**
+
+| Line | Hardcoded value | Element | Correct replacement |
+|---|---|---|---|
+| 307 | `background: #f2f2f2` | `.check-in-card__progress` | `var(--surface-disabled-primary)` |
+| 299 | `color: #00564c` | `.check-in-card__label` | `var(--text-tertiary-default)` |
+| 337 | `color: #00564c` | `.check-in-card__stats-value` | `var(--text-tertiary-default)` |
+| 903 | `background: #fff` | `.subject-badge__icon` | `var(--surface-general-default)` |
+
+**Acceptable exceptions — must have DS-source comment:**
+- Status Badge Score bg/border: `#00cc85 / #00a36a` → same as `var(--surface-primary-default) / var(--border-primary-default)`; use the token instead
+- Status Badge Coins: `#fece00 / #cba500` — no Semantic token; source: Status Badge - 1.5 node `2312:10653`, Type=Coins fills
+- Status Badge Streak: `#7367f0 / #5c52c0` — no Semantic token; source: Status Badge - 1.5, Type=Streak fills
+- Status Badge Lives: `#ff5c98 / #cc4a7a` — no Semantic token; source: Status Badge - 1.5, Type=Lives fills
+- Status Badge Ruby: `#ff4c51 / #b23539` — no Semantic token; source: Status Badge - 1.5, Type=Ruby fills
+- Subject Badge per-subject colors (lines 940–958) — sourced from `🔰 Iconography` page; no Semantic equivalents; acceptable as CSS custom properties with subject class scope
+
+**Rule:** If you can map a hardcoded hex to an existing `var(--*)` in `:root`, always use the variable. Only fall back to hex if you have searched `:root` and confirmed there is no matching Semantic token.
+
+---
+
+### 78. DS Component naming in HTML — exact COMPONENT_SET name + variant label + node ID in every comment
+
+Every DS component used in HTML must be annotated in a `<!-- -->` comment with its exact Figma **COMPONENT_SET name** (not a shortened alias), the specific **variant in use**, and the **node ID**. This allows any future session to look up the live DS node without guessing.
+
+**Correct annotation format:**
+```html
+<!-- ComponentSetName / VariantKey=VariantValue (node XXXX:YYYY) -->
+```
+
+**Confirmed correct DS COMPONENT_SET names from audit (May 2026):**
+
+| HTML section / element | Correct COMPONENT_SET name | Variant in use | Node ID |
+|---|---|---|---|
+| `#NavBar-Desktop` | **Navbar Primary Desktop - 1.5** | Type=Desktop | `866:5576` |
+| `#NavBar-Mobile` | **Navbar Tablet - 1.5** | Type=Mobile | `1943:22641` |
+| Status Badge | **Status Badge - 1.5** | Type=[Score\|Coins\|Streak\|Lives\|Ruby], Size=[L\|M] | `2312:10653` |
+| Check-In Card | **Check-In Card - 1.5** | (single component, no variants) | `2600:82` |
+| Carousel | **Carousel - 1.5** | Type=Desktop | `1200:1789` |
+| Carousel (mobile) | **Carousel - 1.5** | Type=Mobile | `3060:869` |
+| Static Card | **Static Card - 1.5** | (single component) | `2616:2959` |
+| Primary Card | **Primary Card - 1.5** | Type=Secondary Card | `2881:36272` |
+| Quiz Card | **Quiz Card - 1.5** | Type=Default | `2339:5346` |
+| Subject Badge (L) | **Subject Badge - 1.5** | Size=L | `2339:1343` |
+| Subject Badge (M) | **Subject Badge - 1.5** | Size=M | `2339:1349` |
+| Button (Primary/M) | **Button - 1.5** | Type=Student, State=Default, Variants=Primary, Size=M | `479:344` |
+| Button (Primary/S) | **Button - 1.5** | Type=Student, State=Default, Variants=Primary, Size=S | `1437:8154` |
+| Button (Secondary/M) | **Button - 1.5** | Type=Student, State=Default, Variants=Secondary, Size=M | `538:1923` |
+| Footer | **Footer - 1.5** | Property 1=Default | `2073:6579` |
+
+**All available variants per component (from live DS audit):**
+
+| Component | Variant properties | All options |
+|---|---|---|
+| Navbar Primary Desktop - 1.5 | Type | [Desktop] |
+| Navbar Tablet - 1.5 | Type | [Mobile] |
+| Status Badge - 1.5 | Type, Size | Type: [Score, Coins, Streak, Lives, Ruby], Size: [L, M] |
+| Check-In Card - 1.5 | — | single component |
+| Carousel - 1.5 | Type | [Desktop, Mobile] |
+| Static Card - 1.5 | — | single component |
+| Primary Card - 1.5 | Type | [Primary Card, Secondary Card] |
+| Quiz Card - 1.5 | Type | [Default] |
+| Button - 1.5 | Type, State, Variants, Size | Type: [Student, Teacher] · State: [Default, Hover, Pressed, Disabled, Active] · Variants: [Primary, Secondary, Tertiary] · Size: [L, M, S] |
+| Footer - 1.5 | Property 1 | [Default] |
+| Subject Badge - 1.5 | Size | [L, M] (per subject component set) |
+
+**Mistake pattern:** Using shortened names like "Navbar 1.5", "Navbar Mobile", "Navbar Desktop" without the full COMPONENT_SET name — makes it impossible to locate the correct node in a future session without re-searching.
+
+---
+
+### 79. Icon container sizes must match the DS clip frame exactly — source via `exportAsync` on the instance
+
+The icon clip container's CSS `width` and `height` must match the DS clip frame's dimensions pixel-for-pixel. Never estimate or scale. Always export from the icon **INSTANCE inside the actual DS component** (not from the Iconography page standalone), then read the exported SVG's `viewBox` to get the correct container size.
+
+**Confirmed icon container sizes from live DS audit (May 2026):**
+
+| Component | Icon | DS container | clips | HTML container | Status |
+|---|---|---|---|---|---|
+| Status Badge - 1.5 / Size=L | Icon | 32×32 | no | 32×32 | ✅ |
+| Status Badge - 1.5 / Size=M | Icon | 24×24 | no | 24×24 | ✅ |
+| Check-In Card - 1.5 | Icon | 24×24 | yes | 24×24 | ✅ |
+| Button - 1.5 / Primary/M | Outline/chevron-right | 16×16 | yes | 16×16 | ✅ |
+| Button - 1.5 / Primary/S | Outline/chevron-right | 12×12 | yes | 12×12 | ✅ |
+| Carousel - 1.5 / Desktop | Outline/chevron-left | 20×20 | yes | 20×20 | ✅ |
+| Navbar Primary Desktop - 1.5 | Action icons (6×) | 24×24 | yes | 24×24 | ✅ |
+| Navbar Tablet - 1.5 | Menu icon | 24×24 | yes | 24×24 | ✅ |
+| Primary Card - 1.5 | Leading Icon (bookmark) | 24×24 | yes | 24×24 | ✅ |
+| Primary Card - 1.5 | Outline/info | 20×20 | yes | not implemented | ⚠️ |
+| Quiz Card - 1.5 | Pill badge icon (Outline/video) | 10×10 | yes | not implemented | ⚠️ |
+
+**⚠️ Not implemented notes:**
+- `Outline/info` (20×20) and `Outline/chevron-right` (20×20) in Primary Card header — these appear in the DS component but are not surfaced in the prototype header. Flag if implementing the full section header later.
+- `Outline/video` (10×10) in Quiz Card pill badges — extremely small clip container; if implementing pill badge icons, use `exportAsync` on the `I2339:5352;602:660` instance.
+
+**Rule:** When in doubt about a container size, run:
+```js
+const iconInst = componentNode.findOne(n => n.id === '<instance-id>');
+const svg = await iconInst.exportAsync({ format: 'SVG_STRING' });
+// Read the viewBox from the svg string — that IS your container size
+```
+
+---
+
+### 80. All DS icons must be SVG Symbols in `<defs>` — never `<img src="*.svg">` for any DS-sourced icon
+
+Every DS icon used on the page must be:
+1. **Exported** from its container frame instance inside the DS component via `exportAsync({ format: 'SVG_STRING' })`
+2. **Defined** as a `<symbol id="ic-*">` in the `<svg><defs>` block at the top of `<body>`
+3. **Referenced** everywhere via `<svg><use href="#ic-*"/></svg>`
+
+Using `<img src="icons/ic-*.svg">` for DS icons is prohibited. It:
+- Breaks the `stroke="currentColor"` inheritance chain (icon can't be recolored by parent CSS `color:`)
+- Creates separate HTTP requests per icon
+- Makes state changes (hover/active/disabled) require separate JS color manipulation
+- Violates the single source-of-truth principle (symbol in defs vs external file)
+
+**Current violation found in audit (May 2026) — must fix:**
+
+Status Badge icons use `<img src="icons/ic-status-*.svg">` instead of symbols:
+
+| Current (wrong) | Correct symbol ID | DS source |
+|---|---|---|
+| `<img src="icons/ic-status-trophy.svg">` | `<use href="#ic-status-trophy">` | P.Trophy — 20×24px |
+| `<img src="icons/ic-status-coin.svg">` | `<use href="#ic-status-coin">` | P.Coin — 24×24px |
+| `<img src="icons/ic-status-streak.svg">` | `<use href="#ic-status-streak">` | P.Streak — 17×24px |
+| `<img src="icons/ic-status-heart.svg">` (lives) | `<use href="#ic-status-lives">` | P.Heart — 22×24px |
+| `<img src="icons/ic-status-ruby.svg">` | `<use href="#ic-status-ruby">` | P.Ruby — 24×23px |
+
+**Fix:** Add 5 new `<symbol>` definitions to the `<svg><defs>` block. Export each from its instance inside Status Badge - 1.5 (node `2312:10653`) using `exportAsync`. Then replace all 5 `<img>` tags with `<svg><use href="#ic-status-*"/></svg>`.
+
+**Note on non-square status icons:** These icons have different natural widths (17–24px) at 24px height. Per Rule 25: render in a 24×24 CSS box with `object-fit: contain`. When using `<use>`, set `width` and `height` on the `<svg>` element to the icon's natural dimensions (e.g. `width="17" height="24"` for Streak). The parent 24×24 container handles alignment.
+
+**Currently confirmed symbols in `<defs>` (47 symbols — correct):**
+`ic-image · ic-chevron-down · ic-chevron-left · ic-chevron-right · ic-chevron-btn · ic-chevron-btn-m · ic-plus · ic-arrow-right · ic-search · ic-maximize · ic-smartphone · ic-bell · ic-bookmark · ic-clock · ic-en · ic-waffle · ic-info · ic-heart · ic-menu · ic-user · ic-home · ic-check-circle · ic-battle · ic-book-open · ic-users · ic-book · ic-bar-chart · ic-star · ic-gift · ic-subj-pointer` + 18 subject icons (`ic-subj-add-math` through `ic-subj-bm`)
+
+**Missing — must add:** `ic-status-trophy · ic-status-coin · ic-status-streak · ic-status-lives · ic-status-ruby`
+
+---
+
+### 81. List all `componentPropertyDefinitions` before implementing any DS component
+
+Before writing a single line of HTML for a DS component, call `use_figma` to read `node.componentPropertyDefinitions` (for COMPONENT_SET / non-variant COMPONENT) or `node.variantProperties` + `node.parent.componentPropertyDefinitions` (for variant COMPONENT). Document every property and explicitly note whether it is implemented in HTML, and if not, what the chosen default is.
+
+**Why this matters:** Missing a `visible: false` boolean produces phantom HTML structure. Missing an instance-swap property produces a generic placeholder instead of the correct DS icon. Implementing only one variant when multiple exist produces incorrect states.
+
+**Confirmed instance properties from live DS audit (May 2026):**
+
+**Button - 1.5 (COMPONENT_SET `473:529`):**
+
+| Property key | Type | Default | HTML implementation |
+|---|---|---|---|
+| `↳ Label#473:4` | TEXT | "Button" | ✅ varies per context |
+| `Show R Arrow#473:6` | BOOLEAN | true | ✅ true in Primary; false in Secondary/Add Classes (Rule 56) |
+| `Show Label#643:3` | BOOLEAN | true | ✅ always true |
+| `Show Leading Icon#1437:0` | BOOLEAN | true | ❌ always false in prototype — intentional |
+| `↳ Leading Icon#1437:25` | INSTANCE_SWAP | Outline/image | ❌ not implemented — leading icon hidden |
+| `Show L Arrow#2086:18` | BOOLEAN | false | ✅ always false |
+| `↳ Right Icon#2783:0` | INSTANCE_SWAP | Outline/image | ❌ not implemented |
+
+**Check-In Card - 1.5 (single COMPONENT `2600:82`):**
+
+| Property | Type | HTML implementation |
+|---|---|---|
+| `Label#4059:0` | TEXT | ✅ "Today's Check-In" |
+| `Icon#4059:1` | INSTANCE_SWAP | ⚠️ implemented as `<img src>` — must convert to `<symbol>/<use>` |
+| `Value#4059:2` | TEXT | ✅ streak count value |
+
+**Static Card - 1.5 (single COMPONENT `2616:2959`):**
+
+| Property | Type | HTML implementation |
+|---|---|---|
+| `↳ Header#2616:0` | TEXT | ✅ card title |
+| `Show Header#2616:1` | BOOLEAN | ✅ always true — intentional |
+| `↳ Description#2616:2` | TEXT | ✅ card description |
+| `Show Description#2616:3` | BOOLEAN | ✅ always true — intentional |
+
+**Primary Card - 1.5 (COMPONENT_SET `2339:5393`, Type=Secondary Card):**
+
+| Property | Type | HTML implementation |
+|---|---|---|
+| `Header#2881:0` | TEXT | ✅ section title |
+| `Leading Icon#2881:3` | INSTANCE_SWAP | ✅ Outline/bookmark (`ic-bookmark`) |
+| `Show Leading Icon#2881:6` | BOOLEAN | ✅ always true — intentional |
+| `Header2#2881:9` | TEXT | ✅ subtitle |
+| `Show Header#2881:12` | BOOLEAN | ✅ always true — intentional |
+
+**Quiz Card - 1.5 (COMPONENT_SET `2339:5345`):**
+
+| Property | Type | HTML implementation |
+|---|---|---|
+| `Subject Badge#1806:20` | INSTANCE_SWAP | ✅ per-subject badge |
+| `Show Pill Badge 1#1808:22` | BOOLEAN | ✅ always true — intentional |
+| `Show Pill Badge 2#1808:24` | BOOLEAN | ✅ always true — intentional |
+| `Show Pill Badge 3#1808:26` | BOOLEAN | ✅ always true — intentional |
+| `Show Pill Badge 4#1808:28` | BOOLEAN | ✅ always true — intentional |
+| `Show CTA#1818:0` | BOOLEAN | ✅ always true — intentional |
+| `Type` (variant) | VARIANT | ✅ Type=Default only — only variant in DS |
+
+**Rule:** For every boolean property: if false → the corresponding HTML element must be absent (not just `display:none`). For every INSTANCE_SWAP: confirm what the DS page instance uses (not the component default) via `inst.componentProperties` on the home screen frame.
+
+---
+
+### 82. Pre-implementation DS audit checklist — mandatory for every component
+
+Before implementing or modifying any DS component in the prototype, complete this checklist in order. No step may be skipped, even for "small" changes.
+
+```
+□ 0a. Read design-md/zul.design.md — load all confirmed specs + section inventory
+□ 0b. Open DS file TLVKe3bgJTdVvuPAzgDq2f — single source of truth
+
+□ 1. COMPONENT_SET name
+     use_figma → confirm exact name (e.g. "Navbar Primary Desktop - 1.5")
+     → add to HTML comment as <!-- ComponentSetName / Variant (node ID) -->
+
+□ 2. All variants
+     Read node.componentPropertyDefinitions on the COMPONENT_SET
+     → list every Type/State/Size/Variant option
+     → confirm which variant the prototype implements
+
+□ 3. Instance properties
+     For each BOOLEAN property: confirm visible=true/false → include or exclude from HTML
+     For each INSTANCE_SWAP: check inst.componentProperties on the DS screen instance
+     For each TEXT: use DS label or placeholder text
+     → document all in a comment block above the HTML section
+
+□ 4. Icon containers
+     For each icon inside the component:
+       use_figma → findAll to get container node → read .width, .height, .clipsContent
+       exportAsync({ format: 'SVG_STRING' }) on the INSTANCE (not Iconography standalone)
+     → CSS container must match DS dimensions exactly (Rule 79)
+     → SVG must go into <symbol id="ic-*"> in defs (Rule 80)
+
+□ 5. Semantic tokens
+     get_variable_defs on each sub-node that carries a fill, stroke, or spacing
+     → every CSS property must use var(--semantic-token) (Rule 77)
+     → exceptions: note DS source node in comment
+
+□ 6. Screenshot validation
+     get_screenshot of the DS component node after each implementation step
+     → compare rendered HTML against DS screenshot side-by-side
+     → if off: go back to step 4 or 5 before proceeding
+```
+
+**Shortcut forbidden:** Never skip to step 4 or 5 without completing steps 1–3 first. The most common implementation bugs come from guessing variant names, skipping boolean properties, or using wrong icon container sizes — all caught by steps 1–3.
+
+---
+
 *Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
