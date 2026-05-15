@@ -8,6 +8,25 @@
 >
 > **Companion files** — [CLAUDE.md](CLAUDE.md) (full implementation rules, 1–76+), [design-md/zul.design.md](design-md/zul.design.md), [design-md/nadia.design.md](design-md/nadia.design.md), [design-md/syakila.design.md](design-md/syakila.design.md).
 
+> ### Sync status (2026-05-15)
+>
+> **Live-verified against DS this session:**
+> - §3.1/§3.3/§3.4 — all tokens referenced by §6.1 Button states + §6.3 Nav-btn pill
+> - §4.1 / §4.2 / §4.3 — full 19-subject palette (default + 5 states × 2 modes), extracted from DS node `3372:5766`
+> - §6.1 — Button - 1.5 Default, Hover, Pressed, Disabled (Primary/S + Tertiary/L)
+> - §6.3 — Nav-btn / Tertiary button Pressed
+>
+> **Known stale / not yet re-verified this session:**
+> - §3.1 `--surface-subtle` (`#F8FAFC`) · §3.2 `--text-default-secondary`, `--text-default-placeholder` · §3.5 `--overlay-default` · §5 Status Badge hexes · §6.2 / §6.4 / §6.5 / §6.6 component recipes
+>
+> **Coverage gaps (DS has these, this doc doesn't yet):**
+> - `Surface/gold/*`, `Surface/silver/*`, `Surface/bronze/*` (medal/tier surfaces)
+> - `Surface/success/*`, `Surface/warning/*`, `Surface/alert/*` (state surfaces — alerts, toasts, banners)
+> - `Surface/primary/default-hover` (distinct from `default-focus`)
+> - `Icon/primary/default-hover`, `Text/primary/default-hover`, `Border/primary/default-subtle` (latter just added)
+>
+> **CLAUDE.md drift:** Rules 19, 38, 40 document a pre-2026-05 DS where Button/Nav Pressed = dark teal `#00564c`. The live DS now uses intensified-green `#00a36a` for Pressed (no `State=Active` variant). When CLAUDE.md and this file conflict on state colors, **this file is authoritative.**
+
 ---
 
 ## 0. TL;DR for agents (read this first)
@@ -84,11 +103,11 @@ Figma:  Corner Radius/corner-rounded       → CSS: --corner-radius-corner-round
 | `--surface-subtle` | `#F8FAFC` | `Surface/subtle` | Sectional alt background (rarely used; prefer white). |
 | `--surface-primary-default` | `#00cc85` | `Surface/primary/default` | Primary button fill (Default state), badge fills that say "active", carousel button container fill, Score status pill fill. The "Pandai green." |
 | `--surface-primary-focus` | `#00a36a` | `Surface/primary/focus` | Primary button border (Default), focus rings on primary inputs. **Do not use for button labels** — that's `--text-primary-on-color`. |
-| `--surface-primary-default-subtle` | `#e9fbf5` | `Surface/primary/default-subtle` | Tint backgrounds for primary-themed cards or alerts (light mint). |
+| `--surface-primary-default-subtle` | `#d9f7ed` | `Surface/primary/default-subtle` | Tint backgrounds for primary-themed cards or alerts (light mint). |
 | `--surface-primary-default-subtle-hover` | `#99ebce` | `Surface/primary/default-subtle-hover` | Primary button arrow circle bg (Default state). |
 | `--surface-secondary-default` | `#b5f291` | `Surface/secondary/default` | Primary button bg (**Hover** state — Primary→Secondary palette transition, see §6.1). |
 | `--surface-secondary-default-subtle` | `#e8fbe8` | `Surface/secondary/default-subtle` | Primary button arrow circle bg (Hover state). |
-| `--surface-tertiary-default` | `#00564c` | `Surface/tertiary/default` | Primary/Secondary/Tertiary button bg (**Pressed/Active** state — all variants share this dark teal). Active nav-btn bg. |
+| `--surface-tertiary-default` | `#00564c` | `Surface/tertiary/default` | Dark teal — still defined in the DS but no longer used for Button/Nav Pressed states post-2026-05 refactor. Available for any future dark-teal surface (e.g. dark mode component fills); confirm against the DS before applying. |
 | `--surface-disabled-primary` | `#f2f2f2` | `Surface/disabled/primary` | Disabled button bg, disabled input bg, disabled badge bg. |
 
 ### 3.2 Text — character fills
@@ -99,7 +118,7 @@ Figma:  Corner Radius/corner-rounded       → CSS: --corner-radius-corner-round
 | `--text-default-body` | `#666666` | `Text/default/body` | Body copy, nav-menu button labels, footer text, descriptions. |
 | `--text-default-secondary` | `#6B7280` | `Text/default/secondary` | Secondary captions, helper text. |
 | `--text-default-placeholder` | `#f2f2f2` | `Text/default/placeholder` | Input placeholder text. |
-| `--text-primary-default` | `#00cc85` | `Text/primary/default` | Primary-colored text (e.g. "Pandai.org" link in footer, button label on **Pressed** state, nav-btn active label). |
+| `--text-primary-default` | `#00cc85` | `Text/primary/default` | Primary-colored text (e.g. "Pandai.org" link in footer, button label on **Pressed** state, nav-btn pressed label). |
 | `--text-primary-on-color` | `#f6fdfb` | `Text/primary/on-color` | Button label on primary fill (Default state). **Not pure white** — a green-tinted off-white. |
 | `--text-secondary-focus` | `#70bc6f` | `Text/secondary/focus` | Button label on **Hover** state (primary→secondary palette). |
 | `--text-tertiary-default` | `#00564c` | `Text/tertiary/default` | Dark teal text on light backgrounds. |
@@ -115,8 +134,9 @@ Icons are colored via `stroke="currentColor"` in the `<symbol>` and the parent C
 | `--icon-default-default` | `#808080` | `Icon/default/default` | Default-state outline icons (e.g. nav-btn icons in resting state). |
 | `--icon-primary-default` | `#00cc85` | `Icon/primary/default` | Primary-colored outline icons (footer heart, primary-bg button chevrons, mobile hamburger). |
 | `--icon-primary-on-color` | `#f6fdfb` | `Icon/primary/on-color` | Icons rendered on primary fills. |
-| `--icon-secondary-hover` | `#70bc6f` | `Icon/secondary/hover` | Icon color on button **Hover** state. |
-| `--icon-tertiary-default` | `#00564c` | `Icon/tertiary/default` | Icon color on button **Pressed** state (dark teal). |
+| `--icon-secondary-on-color` | `#70bc6f` | `Icon/secondary/on-color` | Icon color on button **Hover** state (DS uses the `on-color` suffix, not `hover`). |
+| `--icon-primary-focus` | `#00a36a` | `Icon/primary/focus` | Chevron stroke on button **Pressed** state and similar intensified-green accents. |
+| `--icon-tertiary-default` | `#00564c` | `Icon/tertiary/default` | Dark teal icon stroke — still defined but no longer used for Button Pressed chevrons after 2026-05 refactor (those now use `--icon-primary-focus` `#00a36a`). |
 | `--icon-disabled-default` | `#bfbfbf` | `Icon/disabled/default` | Disabled icon strokes (matches text-disabled-default). |
 
 **Semantic rule** ([CLAUDE.md Rule 36](CLAUDE.md)) — pick the token whose *name* matches the usage, not just the hex. `--icon-primary-default` and `--surface-primary-default` are both `#00cc85` but only one is correct for any single rule.
@@ -128,8 +148,9 @@ Icons are colored via `stroke="currentColor"` in the `<symbol>` and the parent C
 | `--border-default` | `#00cc85` | `Border/default` | The DS "frame" border — carousel outer frame, static card frame, footer top border, primary-themed card outlines. |
 | `--border-primary-default` | `#00cc85` | `Border/primary/default` | Border on primary-themed containers — same hex as `--border-default`, choose by context. |
 | `--border-primary-focus` | `#00a36a` | `Border/primary/focus` | Primary button border (Default state), focus rings. |
+| `--border-primary-default-subtle` | `#d9f7ed` | `Border/primary/default-subtle` | Light-mint border for inner accents on Pressed Tertiary buttons (the arrow ring on a green-filled Tertiary button) and similar subtle-on-color outlines. |
 | `--border-secondary-focus` | `#70bc6f` | `Border/secondary/focus` | Primary button border (Hover state). |
-| `--border-tertiary-focus` | `#00453d` | `Border/tertiary/focus` | Button border (Pressed/Active state — all variants share this). |
+| `--border-tertiary-focus` | `#00453d` | `Border/tertiary/focus` | Dark teal border — still defined but no longer used for Button Pressed borders after 2026-05 refactor (those now use `--border-primary-default` `#00cc85`). |
 | `--border-general-default` | `#d9d9d9` | `Border/general/default` | Neutral dividers and outlines on non-primary surfaces (e.g. placeholder image frames). |
 | `--border-disabled-disabled` | `#bfbfbf` | `Border/disabled/disabled` | Disabled button border, disabled input border. |
 
@@ -216,31 +237,124 @@ For these two, set `--badge-text` explicitly on the modifier class:
 .subject-badge--kafa    { --badge-border: #6eb687; --badge-bg: #8ae3a9; --badge-text: #358a62; }
 ```
 
-### 4.3 Subject state variants — `[PENDING — Figma extraction from node 3372-5766]`
+### 4.3 Subject state variants — full state palette per subject
 
-> **Status (2026-05-15):** This section is reserved for the **subject state palette** (default / focus / hover / pressed / subtle / on-color) per subject, as defined on Figma node [`3372-5766`](https://www.figma.com/design/TLVKe3bgJTdVvuPAzgDq2f/Pandai-Design-System-1.5?node-id=3372-5766&m=dev) in file `TLVKe3bgJTdVvuPAzgDq2f`. It will be filled in the next session once Figma MCP tools are live.
+> **Source** — Figma node [`3372-5766`](https://www.figma.com/design/TLVKe3bgJTdVvuPAzgDq2f/Pandai-Design-System-1.5?node-id=3372-5766&m=dev) ("Pandai - Foundations: Semantic Colors — Subjects") in file `TLVKe3bgJTdVvuPAzgDq2f`. Extracted live via Figma MCP on **2026-05-15**.
 >
-> **What goes here when populated:**
-> - Full `Subjects/{name}/{state}` token paths for all 18 subjects
-> - Hex values for each (state, subject) cell
-> - CSS variable names following the convention `--subjects-{name}-{state}` (e.g. `--subjects-math-focus`, `--subjects-chemistry-subtle`)
-> - Usage guidance: which state to use on quiz card stripes, subject-themed buttons, subject filter chips, subject icon backgrounds, etc.
->
-> **Why this section exists today:** The current prototypes (`zul.test.git`, `nadia.test.git`, `syakila.test.git`) only declare `--subjects-{name}-default`. Interactive subject UI (hover on a math card, pressed on a chemistry filter) currently has no DS-backed token and falls back to ad-hoc CSS — flagged here as a known gap.
->
-> **Known mismatch to verify and fix in the same commit as this section:** seven `--subjects-*-default` declarations in `zul.test.git/zul.home.screen.html` (lines 97–103) use Tailwind-like approximations rather than the DS-confirmed badge bg values in §4.2:
->
-> | Subject | Prototype hex (wrong) | DS §4.2 badge bg (likely correct — verify against node 3372-5766) |
-> |---|---|---|
-> | Add Math | `#1D3A8A` | `#283589` |
-> | Economy | `#F97316` | `#ff5733` |
-> | Account | `#3B82F6` | `#0072ca` |
-> | Business | `#F59E0B` | `#efb42b` |
-> | Computer Science | `#DB2777` | `#d10070` |
-> | KAFA | `#0D9488` | `#8ae3a9` |
-> | RBT | `#475569` | `#353535` |
->
-> Re-verify each against the live DS before committing — Figma may have changed since §4.2 was authored.
+> **What this is** — every subject in the DS has 5 states. These are the **role-neutral semantic tokens** (`Subjects/{name}/{state}` in the Semantic collection) that subject-themed UI should resolve through. Interactive subject UI — a math card on hover, a chemistry filter pressed, a quiz card focused — must use the correct state token, never derive it by darkening/lightening the default.
+
+**The 5 states (all subjects):**
+
+| State | Purpose | Where to use |
+|---|---|---|
+| `default` | Resting fill on solid subject-colored surfaces | Subject badge bg, subject-colored buttons, card stripes |
+| `default-hover` | Hover on solid subject-colored surfaces | Mouse-over on default fills |
+| `default-subtle` | Tint background — very light wash of the subject color | Card backgrounds with subject theming, alert tints, hover bg for subtle buttons |
+| `default-subtle-hover` | Hover on the subtle tint | Mouse-over on `default-subtle` backgrounds |
+| `focus` | Focus ring / pressed-state border / dark accent | Focus outlines, pressed-state borders, dark text on subtle bg |
+
+**Naming notes (DS canonical vs prototype shorthand):**
+- DS uses `comp-science` — the prototypes use `--subjects-cs-*` (shorthand). The canonical name is `comp-science`; rename in prototypes when convenient.
+- DS uses `geo`, `b-melayu`, `add-math`, `kafa`, `rbt`, `chi-lang` — all kebab-cased as shown.
+- **New subject added vs §4.2:** `chi-lang` (Chinese Language) — 19 subjects total, not 18.
+
+#### 4.3.1 Light mode hex (default rendering context)
+
+| Subject | `default` | `default-hover` | `default-subtle` | `default-subtle-hover` | `focus` |
+|---|---|---|---|---|---|
+| Account | `#0072CA` | `#005BA2` | `#E6F1FA` | `#99C7EA` | `#004479` |
+| Add Math | `#283589` | `#202A6E` | `#EAEBF3` | `#A9AED0` | `#182052` |
+| Bahasa Melayu | `#4D77FF` | `#3E5FCC` | `#F6F9FF` | `#B8C9FF` | `#2E4799` |
+| Biology | `#8431D8` | `#6A27AD` | `#F3EBFB` | `#CEADEF` | `#4F1D82` |
+| Business | `#EFB42B` | `#BF9022` | `#FEF8EA` | `#F9E1AA` | `#8F6C1A` |
+| Chemistry | `#E20082` | `#B50068` | `#FCE6F3` | `#ED99C6` | `#88004E` |
+| **Chinese Lang** | `#F94848` | `#C73A3A` | `#FFEDED` | `#FDB6B6` | `#952B2B` |
+| Computer Science | `#D10070` | `#A7005A` | `#FBE6F1` | `#ED99C6` | `#7D0043` |
+| Economy | `#FF5733` | `#CC4629` | `#FFEEEB` | `#FFBCAD` | `#99341F` |
+| English | `#FF4D56` | `#CC3E45` | `#FFEDEE` | `#FFB8BB` | `#992E34` |
+| Geography | `#77D836` | `#5FAD2B` | `#F2FBEB` | `#C9EFAF` | `#478220` |
+| History | `#A97C50` | `#876340` | `#F7F2EE` | `#DDCBB9` | `#654A30` |
+| Islamic Studies | `#DE4D7F` | `#B23E66` | `#FCEDF2` | `#F2B8CC` | `#852E4C` |
+| KAFA | `#8AE3A9` | `#6EB687` | `#F4FCF7` | `#D0F4DD` | `#538865` |
+| Mathematics | `#42AC7B` | `#358A62` | `#ECF7F2` | `#B3DECA` | `#28674A` |
+| Moral Studies | `#0072CA` | `#005BA2` | `#E6F1FA` | `#99C7EA` | `#004479` |
+| Physics | `#27A0D7` | `#1F80AC` | `#EAF6FB` | `#A9D9EF` | `#176081` |
+| RBT | `#353535` | `#2A2A2A` | `#D7D7D7` | `#AEAEAE` | `#202020` |
+| Science | `#FFD641` | `#CCAB34` | `#FFFBEC` | `#FFEFB3` | `#998027` |
+
+#### 4.3.2 Dark mode hex (Semantic Dark mode)
+
+| Subject | `default` | `default-hover` | `default-subtle` | `default-subtle-hover` | `focus` |
+|---|---|---|---|---|---|
+| Account | `#338ED5` | `#0072CA` | `#002E51` | `#004479` | `#66AADF` |
+| Add Math | `#283589` | `#202A6E` | `#D4D7E7` | `#A9AED0` | `#182052` |
+| Bahasa Melayu | `#4D77FF` | `#3E5FCC` | `#DBE4FF` | `#B8C9FF` | `#2E4799` |
+| Biology | `#6A27AD` | `#6A27AD` | `#E6D6F7` | `#CEADEF` | `#4F1D82` |
+| Business | `#EFB42B` | `#BF9022` | `#FCF0D5` | `#F9E1AA` | `#8F6C1A` |
+| Chemistry | `#E20082` | `#B50068` | `#F9CCE6` | `#ED99C6` | `#88004E` |
+| **Chinese Lang** | `#F94848` | `#C73A3A` | `#FEDADA` | `#FDB6B6` | `#952B2B` |
+| Computer Science | `#D10070` | `#A7005A` | `#F6CCE2` | `#ED99C6` | `#7D0043` |
+| Economy | `#FF5733` | `#CC4629` | `#FFDDD6` | `#FFBCAD` | `#99341F` |
+| English | `#FF4D56` | `#CC3E45` | `#FFDBDD` | `#FFB8BB` | `#992E34` |
+| Geography | `#77D836` | `#5FAD2B` | `#E4F7D7` | `#C9EFAF` | `#478220` |
+| History | `#A97C50` | `#876340` | `#EEE5DC` | `#DDCBB9` | `#654A30` |
+| Islamic Studies | `#DE4D7F` | `#B23E66` | `#F8DBE5` | `#F2B8CC` | `#852E4C` |
+| KAFA | `#8AE3A9` | `#6EB687` | `#E8F9EE` | `#D0F4DD` | `#538865` |
+| Mathematics | `#42AC7B` | `#358A62` | `#D9EEE5` | `#B3DECA` | `#28674A` |
+| Moral Studies | `#0072CA` | `#005BA2` | `#CCE3F4` | `#99C7EA` | `#004479` |
+| Physics | `#27A0D7` | `#1F80AC` | `#D4ECF7` | `#A9D9EF` | `#176081` |
+| RBT | `#353535` | `#2A2A2A` | `#D7D7D7` | `#AEAEAE` | `#202020` |
+| Science | `#FFD641` | `#CCAB34` | `#FFF7D9` | `#FFEFB3` | `#998027` |
+
+**Light vs Dark differences worth noting:**
+- **Account** — `default` and `focus` are *swapped between modes* (light `default` `#0072CA` ↔ dark `focus` `#66AADF`). The subtle pair is also inverted (light `#E6F1FA` becomes dark `#002E51`).
+- **Biology** — dark `default-hover` matches dark `default` (`#6A27AD`) — no hover darkening in dark mode.
+- All other subjects keep `default`, `default-hover`, and `focus` identical across modes; only the `default-subtle` / `default-subtle-hover` pair flips for legibility on dark backgrounds.
+
+#### 4.3.3 CSS variable convention
+
+Token names mirror the Figma path exactly:
+
+```css
+/* Naming pattern */
+--subjects-{kebab-name}-{state}
+
+/* Examples */
+--subjects-math-default
+--subjects-math-default-hover
+--subjects-math-default-subtle
+--subjects-math-default-subtle-hover
+--subjects-math-focus
+
+--subjects-chi-lang-default        /* not --subjects-chinese-* */
+--subjects-comp-science-default    /* not --subjects-cs-* — see naming notes above */
+```
+
+**Declare all 95 light-mode tokens once in `:root`.** For dark-mode support, override in `[data-theme="dark"]` with the values from §4.3.2.
+
+#### 4.3.4 Relationship to §4.2 Subject Badge matrix
+
+§4.2 documents the **bg / border / text** triplet for the `Subject Badge - 1.5` component. §4.3 documents the **5-state semantic palette** for each subject.
+
+- §4.2 `bg` always equals §4.3 `default`. ✓ (cross-verified — all 18 overlapping subjects match exactly.)
+- §4.2 `border` for **most subjects** equals §4.3 `default-hover` — but **3 subjects** (Account, Add Math, Bahasa Melayu) use a darker shade equal to §4.3 `focus`. This is how Figma authored the component; do not silently reconcile.
+- When building a `Subject Badge`, use §4.2. When building any other subject-themed UI (cards, chips, buttons, filters, focus rings), use §4.3.
+
+#### 4.3.5 Usage guidance — which state for which UI
+
+| UI element | Light state | Dark state | Notes |
+|---|---|---|---|
+| Subject chip / filter (resting) | `default-subtle` bg, `default` text/border | `default-subtle` bg, `focus` text | Subtle bg keeps the chip readable next to other UI |
+| Subject chip (hover) | `default-subtle-hover` bg | `default-subtle-hover` bg | |
+| Subject chip (selected / active) | `default` bg, `--text-primary-on-color` text | `default` bg, `--text-primary-on-color` text | Solid subject color when the chip is the active selection |
+| Subject card stripe / accent bar | `default` | `default` | The 4–8px colored stripe on a quiz/lesson card |
+| Subject card hover state | `default-hover` (on stripe), or `default-subtle` (on full card tint) | same | |
+| Subject icon container bg | `default-subtle` | `default-subtle` | |
+| Subject focus ring (any element) | `focus` (2px outline) | `focus` (2px outline) | Use for keyboard focus on subject-themed interactive UI |
+| Subject text on subtle bg | `focus` (dark, readable) | `focus` | E.g. "Mathematics" label on a math-themed alert |
+| Subject text on solid `default` bg | `--text-primary-on-color` (`#f6fdfb`) | `--text-primary-on-color` | Two readability exceptions (Science, KAFA, Chinese Lang on light bg) — see §4.2 |
+
+**Pitfall:** Never pair `default` bg with `focus` text — there is not enough contrast. `default` bg always pairs with `--text-primary-on-color` or `#f2f2f2`. `focus` is used as a *foreground* color on subtle bgs, not as a *background*.
 
 ---
 
@@ -269,22 +383,26 @@ The 5 status badge variants use **flat hex values** (not semantic tokens — the
 
 ## 6. Component color recipes (read these before re-implementing)
 
-### 6.1 Button - 1.5 — all 4 states across all sizes (Student, Type=Student) ([CLAUDE.md Rules 19, 31, 40](CLAUDE.md))
+### 6.1 Button - 1.5 — all 4 states across all sizes (Student, Type=Student)
+
+> **Live-verified 2026-05-15** against DS nodes `1437:8154` (Default), `1437:8146` (Hover), `1437:8138` (Pressed), `1437:8130` (Disabled), `3029:20022` (Tertiary/L Pressed). The DS component variants are **`State=Default | Hover | Pressed | Disabled`** — there is no `State=Active` variant. (The "Active = dark teal" state documented in CLAUDE.md Rules 19/38/40 reflects a pre-2026-05 DS that has since been refactored. Treat those rules as obsolete for state colors.)
 
 **The same 4 states apply to Primary/S, Primary/M, Primary/L, Secondary/M, Tertiary/M, Tertiary/L.** Sizes change height and arrow geometry, not color palette. Variants change only the Default and Hover appearance — **Pressed/Disabled palettes are shared across all variants.**
 
 | State | btn bg | border | label | arrow circle bg | arrow chevron |
 |---|---|---|---|---|---|
 | **Default** | `--surface-primary-default` `#00cc85` | `--border-primary-focus` `#00a36a` | `--text-primary-on-color` `#f6fdfb` | `--surface-primary-default-subtle-hover` `#99ebce` | `--surface-primary-focus` `#00a36a` |
-| **Hover** | `--surface-secondary-default` `#b5f291` | `--border-secondary-focus` `#70bc6f` | `--text-secondary-focus` `#70bc6f` | `--surface-secondary-default-subtle` `#e8fbe8` | `--icon-secondary-hover` `#70bc6f` |
-| **Pressed** | `--surface-tertiary-default` `#00564c` | `--border-tertiary-focus` `#00453d` | `--text-primary-default` `#00cc85` | `--surface-primary-default` `#00cc85` | `--icon-tertiary-default` `#00564c` |
+| **Hover** | `--surface-secondary-default` `#b5f291` | `--border-secondary-focus` `#70bc6f` | `--text-secondary-focus` `#70bc6f` | `--surface-secondary-default-subtle` `#e8fbe8` | `--icon-secondary-on-color` `#70bc6f` |
+| **Pressed** | `--surface-primary-focus` `#00a36a` | `--border-primary-default` `#00cc85` | `--text-primary-default` `#00cc85` | `--surface-primary-default` `#00cc85` | `--icon-primary-focus` `#00a36a` |
 | **Disabled** | `--surface-disabled-primary` `#f2f2f2` | `--border-disabled-disabled` `#bfbfbf` | `--text-disabled-default` `#bfbfbf` | `--surface-disabled-primary` `#f2f2f2` | `--icon-disabled-default` `#bfbfbf` |
 
+**Pressed variant note (Tertiary/L specifically — DS node `3029:20022`):** the arrow circle has no fill (transparent on the green button), and uses a light-mint border `--border-primary-default-subtle` `#d9f7ed` instead of an arrow-bg color. The chevron remains `--icon-primary-focus` `#00a36a`. This is the only Pressed-state cell that differs by variant.
+
 **Critical pitfalls:**
-- Pressed bg is **`Surface/tertiary/default`** (`#00564c`), **NOT** `Surface/primary/focus` (`#00a36a`). [CLAUDE.md Rule 19]
-- Pressed label is **`Text/primary/default`** (`#00cc85`), **NOT** `Text/primary/on-color` (`#f6fdfb`). [CLAUDE.md Rule 19]
-- Hover transitions from primary palette to **secondary palette** — never a darker green. [CLAUDE.md Rule 2]
-- Arrow chevron color must be read from the **arrow sub-node**, not the parent button node. The parent reports `Icon/primary/on-color` which is wrong. [CLAUDE.md Rule 12]
+- Pressed bg is **`Surface/primary/focus`** (`#00a36a`) — an *intensified* green, not the dark teal documented in older notes. The dark-teal token (`Surface/tertiary/default` `#00564c`) still exists in the DS but is no longer used for any Button - 1.5 state.
+- Pressed label is **`Text/primary/default`** (`#00cc85`), **NOT** `Text/primary/on-color` (`#f6fdfb`).
+- Hover transitions from primary palette to **secondary palette** — never a darker green.
+- Arrow chevron color must be read from the **arrow sub-node**, not the parent button node. The parent reports `Icon/primary/on-color` which is wrong.
 
 ### 6.2 Secondary/M button (white-fill outlined) — Default state
 
@@ -299,19 +417,21 @@ The 5 status badge variants use **flat hex values** (not semantic tokens — the
 
 **Hover/Pressed/Disabled** for Secondary/M share the same palettes as Primary/M — see §6.1.
 
-### 6.3 Nav-btn / Nav menu pill ([CLAUDE.md Rules 13, 38, 39](CLAUDE.md))
+### 6.3 Nav-btn / Nav menu pill
 
-| Element | Default | Hover | Active/Pressed |
+> **Live-verified 2026-05-15** — DS node `3029:20022` (formerly described in CLAUDE.md as "Navbar Active" is actually `Button - 1.5, Variants=Tertiary, State=Pressed, Size=L`). The Nav-btn Pressed state uses the same intensified-green palette as §6.1 Button Pressed, not the dark teal the old notes documented.
+
+| Element | Default | Hover | Pressed |
 |---|---|---|---|
-| Background | `--surface-general-default` (`#FFFFFF`) | `--surface-secondary-default` (`#b5f291`) | `--surface-tertiary-default` (`#00564c`) |
-| Border (shadow inset) | none | `--border-secondary-focus` (`#70bc6f`) | `--border-tertiary-focus` (`#00453d`) |
+| Background | `--surface-general-default` (`#FFFFFF`) | `--surface-secondary-default` (`#b5f291`) | `--surface-primary-focus` (`#00a36a`) |
+| Border (shadow inset) | none | `--border-secondary-focus` (`#70bc6f`) | `--border-primary-default` (`#00cc85`) |
 | Label | `--text-default-body` (`#666666`) | `--text-secondary-focus` (`#70bc6f`) | `--text-primary-default` (`#00cc85`) |
-| Icon | `--icon-default-default` (`#808080`) | `--icon-secondary-hover` (`#70bc6f`) | `--icon-primary-default` (`#00cc85`) |
+| Icon | `--icon-default-default` (`#808080`) | `--icon-secondary-on-color` (`#70bc6f`) | `--icon-primary-default` (`#00cc85`) |
 
 **Implementation notes:**
 - Hover border via `box-shadow: inset 0 0 0 1px` (avoids layout shift inside the pill).
-- "Active" state is the **`State=Active`** DS variant (dark teal), **NOT `State=Pressed`** — Pressed is visually identical to Selected and gives no feedback. [CLAUDE.md Rule 38]
-- On `<div>` buttons, use JS `mousedown`/`mouseup` to toggle `.is-pressed` — CSS `:active` is unreliable on non-native elements. [CLAUDE.md Rule 39]
+- The DS no longer has a separate `State=Active` for nav buttons. Use `State=Pressed` (intensified green) for both momentary press feedback and the "this nav item is the active page" selected look — they share the same palette in the current DS.
+- On `<div>` buttons, use JS `mousedown`/`mouseup` to toggle `.is-pressed` — CSS `:active` is unreliable on non-native elements.
 
 ### 6.4 Carousel - 1.5 frame ([CLAUDE.md Rule 42](CLAUDE.md))
 
@@ -381,8 +501,9 @@ When implementing a new DS-derived component:
 | `color: #2FAC51` ("Pandai green" guess) | `color: var(--text-primary-default)` → `#00cc85` |
 | `color: #0F172A` (dark navy heading) | `color: var(--text-default-heading)` → `#404040` |
 | `color: #FFFFFF` for on-primary text | `color: var(--text-primary-on-color)` → `#f6fdfb` |
-| Pressed button = `Surface/primary/focus` `#00a36a` | Pressed button = `Surface/tertiary/default` `#00564c` (see §6.1) |
+| Pressed button = `Surface/tertiary/default` `#00564c` (dark teal — from older notes / CLAUDE.md Rule 19) | Pressed button = `Surface/primary/focus` `#00a36a` (intensified green — see §6.1, live-verified 2026-05-15) |
 | Pressed label = `Text/primary/on-color` `#f6fdfb` | Pressed label = `Text/primary/default` `#00cc85` |
+| Pressed chevron = `Icon/tertiary/default` `#00564c` | Pressed chevron = `Icon/primary/focus` `#00a36a` |
 | Hover button = darker green | Hover button = `Surface/secondary/default` `#b5f291` (palette swap) |
 | Disabled bg invented as `#e5e7eb` | `--surface-disabled-primary` `#f2f2f2` |
 | `box-shadow: <elevation>` on card | `border: 1px solid var(--border-primary-default)` |
@@ -422,4 +543,4 @@ Drop these directly into Claude Code / Codex / Cursor when working in this repo:
 
 ---
 
-*Last updated: 2026-05-15 | DS source: `TLVKe3bgJTdVvuPAzgDq2f` (Pandai Design System 1.5) | Confirmed Student context (OG-Green palette)*
+*Last updated: 2026-05-15 — §4.3 populated from live DS (19 subjects × 5 states × 2 modes); §3.1/§3.3/§3.4 hex + token-name corrections; §6.1 Button Pressed row + §6.3 Nav-btn Pressed row rewritten with live DS intensified-green palette; sync-status header added | DS source: `TLVKe3bgJTdVvuPAzgDq2f` (Pandai Design System 1.5) | Confirmed Student context (OG-Green palette)*
