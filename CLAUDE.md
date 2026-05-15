@@ -1088,6 +1088,37 @@ The tablet/mobile `width: 100%` override still works — when the section switch
 
 ---
 
+### 48. Color reference lives in `design.color.md` — keep it in sync with every color update
+
+The canonical color reference for this repo is [`design.color.md`](design.color.md) at the repo root. It holds the complete list of CSS variables, hex values, subject palette matrix, status badge colors, button-state recipes, and the "common mistakes" table.
+
+**Hard rules for every contributor (human or agent):**
+
+1. **Before writing any color CSS** — read `design.color.md` §0 (TL;DR) and §3 (CSS variable reference). Never hardcode hex values in rule declarations.
+2. **After confirming any new color value from the DS or fixing any color mistake in a `.md` file** (CLAUDE.md, design-md/*.md, or any per-designer notes) — propagate the update to `design.color.md` in the same commit. The `.md` files are append-only logbooks; `design.color.md` is the consolidated reference. They must not drift.
+3. **When inventing or renaming a token is unavoidable** — first verify it does not exist by searching `design.color.md` §3. If genuinely new, add the row to §3 with hex, Figma path, and a usage description, and cross-reference the CLAUDE.md rule that introduced it.
+4. **When deprecating a token** — strike it through in `design.color.md` with the replacement noted; do not silently remove it (other branches and downstream code may still reference it).
+
+**What to mirror into `design.color.md` whenever it appears in a `.md` file:**
+- A new CSS variable name (e.g. a new `--surface-*`, `--text-*`, `--icon-*`, `--border-*`)
+- A new component color recipe (button variant, badge, pill, card)
+- A correction to an existing hex value (always re-pull from DS first)
+- A new subject palette entry (or a corrected `--badge-bg`/`--badge-border`/`--badge-text`)
+- A new "common mistake" with its correction
+
+**Workflow for adding a color update:**
+```
+1. Confirm the value from DS (search_design_system → use_figma → get_variable_defs)
+2. Document the finding in the relevant .md file (CLAUDE.md rule, or design-md/*.md log)
+3. Add or update the row in design.color.md (§3 / §4 / §5 / §6 / §9 as applicable)
+4. Commit all three changes together — never split into separate commits
+5. Push to origin (current branch); coordinate cross-branch updates per Rule 49 (TBD) when adding it
+```
+
+**Cross-reference anchor:** `design.color.md` links back to specific CLAUDE.md rules. When you add a new color rule here, drop a `[design.color.md §X](design.color.md)` reference in this rule's body so the two files stay symmetrically discoverable.
+
+---
+
 ### Mandatory workflow — BEFORE every session and every change
 
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision — including seemingly trivial fixes. No exceptions.
