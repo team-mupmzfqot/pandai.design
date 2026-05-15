@@ -907,11 +907,12 @@
       padding:         4px 8px 4px 12px;  /* pl-12 pr-8 py-4 → total width: 12+16+8=36px */
       flex-shrink:     0;
     }
-    /* DS Size=L: icon 20×20 — base is always L. M override below sets 16×16. */
+    /* DS Size=L (Desktop/Tablet): icon height 24px, width auto (proportional from viewBox).
+       L badge = 32px tall: 4px top + 24px icon + 4px bottom = 32px. */
     .subject-badge__icon svg,
     .subject-badge__icon img {
-      width:       20px;
-      height:      20px;
+      height:      24px;
+      width:       auto;
       display:     block;
       flex-shrink: 0;
     }
@@ -957,23 +958,23 @@
     .subject-badge--rbt       { --badge-border: #2a2a2a; --badge-bg: #353535; }
     .subject-badge--chinese   { --badge-border: #c73a3a; --badge-bg: #f94848; }
 
-    /* Badge inside quiz card uses Size=M (h-24px) — DS icon 16×16, text 12px */
+    /* Badge inside quiz card uses Size=M (h-24px) — DS icon 16px height, width auto (proportional).
+       M badge = 24px tall: 4px top + 16px icon + 4px bottom = 24px. */
     .quiz-card__header .subject-badge {
       height:     24px;
       max-height: 24px;
     }
     .quiz-card__header .subject-badge__icon  { padding: 4px 8px 4px 12px; }
     .quiz-card__header .subject-badge__icon svg,
-    .quiz-card__header .subject-badge__icon img { width: 16px; height: 16px; }
+    .quiz-card__header .subject-badge__icon img { height: 16px; width: auto; }
     .quiz-card__header .subject-badge__text  { font-size: 12px; line-height: 12px; }
 
-    /* Section 5 overrides — hide CTA + pills, upgrade badge to L (h-32px, 14px, 20px icon) */
-
+    /* Section 4 (YourSelectedSubjects) — L variant on Desktop/Tablet: 32px badge, 24px icon height, auto width */
     #YourSelectedSubjects-Desktop .pill-badge-sm  { display: none; }
     #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge      { height: 32px; max-height: 32px; }
     #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__text { font-size: 14px; line-height: 20px; }
     #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon svg,
-    #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon img { width: 20px; height: 20px; }
+    #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon img { height: 24px; width: auto; }
 
     /* Pill Badge - 1.5 (node 602:460) — quiz card uses 10px/12px per DS QuizCard-1.5 spec */
     .pill-badge-sm {
@@ -1574,6 +1575,13 @@
       .quiz-card {
         min-width: 0;
       }
+
+      /* Subject Badge M variant at mobile — switch Section 4 back to M (16px icon, 24px badge).
+         M badge = 24px tall: 4px top + 16px icon + 4px bottom = 24px. */
+      #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge      { height: 24px; max-height: 24px; }
+      #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__text { font-size: 12px; line-height: 12px; }
+      #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon svg,
+      #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon img { height: 16px; width: auto; }
 
       /* Status badges: allow wrapping when pills don't fit in a single row */
       .status-badges { flex-wrap: wrap; }
