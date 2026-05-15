@@ -2697,4 +2697,121 @@ Before implementing or modifying any DS component in the prototype, complete thi
 
 ---
 
+### 83. Semantic token mapping — verify by `:root` hex value, never by token name alone
+
+When replacing a hardcoded hex with a `var(--*)`, always look up which `:root` variable resolves to that exact hex. Never infer the correct token from the name — similar-sounding tokens can resolve to completely different values.
+
+**Confirmed mistake (May 2026 — Score badge border):**
+- Hardcoded: `border-color: #00a36a`
+- Wrong mapping: `var(--border-primary-default)` → resolves to `#00cc85` (same as badge background → border became invisible)
+- Correct mapping: `var(--border-primary-focus)` → resolves to `#00a36a` ✓
+
+**Token name ≠ token value. Always cross-check:**
+```
+1. Find the hex in `:root` — search for the hex string directly
+2. Read the variable name that owns it
+3. Use that variable name — not a guess based on semantic similarity
+```
+
+**Known trap — greens that look alike:**
+
+| Token | Value | Use |
+|---|---|---|
+| `--border-primary-default` | `#00cc85` | Borders on neutral containers (navbar, footer) |
+| `--border-primary-focus` | `#00a36a` | Badge borders, button borders, hover states |
+| `--surface-primary-default` | `#00cc85` | Badge/button fill backgrounds |
+| `--surface-primary-focus` | `#00a36a` | Arrow circle bg in button, active state fills |
+
+`Border/primary/default` and `Surface/primary/default` share the same hex (`#00cc85`). When a border uses `#00a36a` (the darker shade), the correct token is `Border/primary/focus`, NOT `Border/primary/default`.
+
+**Rule:** Before any Group A (Semantic Token) fix, run this check:
+```
+grep ":#00a36a\|: #00a36a" zul.home.screen.html → confirms --border-primary-focus
+grep ":#00cc85\|: #00cc85" zul.home.screen.html → confirms --border-primary-default OR --surface-primary-default
+```
+
+---
+
+### 84. `<svg><use>` icons need their own CSS size rule — `img` rules never cascade to `svg`
+
+When replacing `<img src="*.svg">` with `<svg><use href="#ic-*"/>`, any existing `.container img { width: ...; height: ... }` CSS rule becomes dead code — it does NOT apply to `<svg>` elements.
+
+**Always add a matching `svg` rule alongside every `img` rule for icon containers:**
+```css
+/* Both rules required — img and svg are distinct element types */
+.status-pill__icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.status-pill__icon svg { height: 24px; width: auto; display: block; flex-shrink: 0; }
+```
+
+**Why `width: auto` not `width: 100%`:** SVG elements with `width: 100%` fill the container width and scale proportionally — which can distort non-square icons if the container is square. `width: auto` defers to the SVG's own `viewBox` aspect ratio, giving the correct proportional width for a given height.
+
+**Confirmed mistake (May 2026 — Status Badge):**
+- `.status-pill__icon img { ... }` existed but `.status-pill__icon svg { ... }` was missing
+- After converting all status icons from `<img>` to `<svg><use>`, the icons had no CSS size constraint
+- Icons rendered at their HTML `width`/`height` attributes unconditionally, overflowing the M container
+
+**Checklist when replacing `<img>` with `<svg><use>`:**
+```
+□ Find the existing .container img { ... } CSS rule
+□ Add matching .container svg { height: Xpx; width: auto; display: block; } rule
+□ Verify the height matches the content area (see Rule 85), not the container total
+□ Add responsive override if the container size changes at a breakpoint
+```
+
+---
+
+### 85. Icon content area formula — container height minus vertical padding = rendered icon height
+
+The icon's rendered height is NOT the container's total height. It is the container height minus top and bottom padding. Always calculate the content area before setting icon CSS height.
+
+**Formula:**
+```
+icon rendered height = container height − padding-top − padding-bottom
+```
+
+**Confirmed DS values from `get_design_context` (Status Badge - 1.5, node 2312:10653):**
+
+| Size | Container | Padding | Icon content height | CSS rule |
+|---|---|---|---|---|
+| **L** (desktop) | 32×32px | `4px all sides` | 32 − 4 − 4 = **24px** | `height: 24px` |
+| **M** (mobile) | 24×24px | `px:2px py:4px` | 24 − 4 − 4 = **16px** | `height: 16px` |
+
+**Subject Badge - 1.5 (node 2339:1343/1349):**
+
+| Size | Badge height | Outer padding | Icon content height | CSS rule |
+|---|---|---|---|---|
+| **L** (desktop/tablet) | 32px badge | `4px top+bottom` | 32 − 4 − 4 = **24px** | `height: 24px` |
+| **M** (mobile) | 24px badge | `4px top+bottom` | 24 − 4 − 4 = **16px** | `height: 16px` |
+
+**Rule:** When a DS component uses `h-full` on an icon inside a padded flex container, that `h-full` resolves to the CONTENT area height (container − padding), not the total outer height. Always verify with `get_design_context` → read the padding values → subtract to get the icon height.
+
+**Mistake pattern:** Setting icon CSS to `height: 24px` for both L and M because "all icons are 24px" — correct for L, but M's content area is only 16px, causing 8px overflow.
+
+---
+
+### 86. Always refer to DS & `zul.design.md` before any design work, change, or decision
+
+This rule supersedes all others as the mandatory first step. No exception exists — not for "quick fixes", not for "obvious" changes, not for token substitutions.
+
+**Required before EVERY action:**
+```
+Step 0a → Read design-md/zul.design.md (load confirmed specs, mistakes, rules 1–85)
+Step 0b → Open DS file TLVKe3bgJTdVvuPAzgDq2f (single source of truth for all values)
+Step 0c → get_design_context on the relevant DS component node
+Step 0d → Cross-check any CSS variable value against :root before using it
+```
+
+**Why this matters — every mistake in this project traced back to skipping Step 0:**
+- Primary color guessed as `#2FAC51` instead of `#00cc85` (Rule 1)
+- Score badge border mapped to wrong token (`--border-primary-default` = `#00cc85` instead of `--border-primary-focus` = `#00a36a`) (Rule 83)
+- Footer height assumed as 60px, DS changed to 44px (Rule 51)
+- Icon containers assumed no-padding, DS showed specific padding per variant (Rule 85)
+- Button pressed state assumed as primary green, DS uses Tertiary dark teal (Rule 19)
+
+**Every one of these would have been caught by reading zul.design.md + checking the DS node first.**
+
+**Shortcut cost:** A 2-minute DS inspection saves a full debug cycle. Every "quick" change that skips Step 0 has cost more time to fix than the inspection would have taken.
+
+---
+
 *Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
