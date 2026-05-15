@@ -2793,13 +2793,16 @@ icon rendered height = container height − padding-top − padding-bottom
 
 This rule supersedes all others as the mandatory first step. No exception exists — not for "quick fixes", not for "obvious" changes, not for token substitutions.
 
-**Required before EVERY action:**
+**Required before EVERY action — no exceptions:**
 ```
-Step 0a → Read design-md/zul.design.md (load confirmed specs, mistakes, rules 1–85)
-Step 0b → Open DS file TLVKe3bgJTdVvuPAzgDq2f (single source of truth for all values)
-Step 0c → get_design_context on the relevant DS component node
+Step 0a → Read design-md/zul.design.md  ← load ALL confirmed specs, rules 1–90, known mistakes
+Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f ← single source of truth, re-verify every value live
+Step 0c → get_design_context on the exact DS component node (correct variant + correct SIZE)
 Step 0d → Cross-check any CSS variable value against :root before using it
+Step 0e → For icons: confirm viewBox, path scale, AND CSS dimensions are all consistent (Rule 87)
 ```
+
+**This applies even for "trivial" changes** — wrong icon size, wrong viewBox, wrong token are all silent errors that only surface visually.
 
 **Why this matters — every mistake in this project traced back to skipping Step 0:**
 - Primary color guessed as `#2FAC51` instead of `#00cc85` (Rule 1)
@@ -2814,4 +2817,120 @@ Step 0d → Cross-check any CSS variable value against :root before using it
 
 ---
 
-*Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 87. SVG symbol icon audit — three layers must all be DS-consistent
+
+Every icon in the prototype has three interdependent layers. Fixing only one silently breaks the others.
+
+| Layer | What to check | Common error |
+|---|---|---|
+| **Symbol `viewBox`** | Coordinate space must match the exported DS instance dimensions | M-size viewBox used while rendering at L-size |
+| **Path coordinate scale** | Path `d=` values must be in the same coordinate space as the viewBox | Paths from M-size instance placed in L-size viewBox |
+| **CSS dimensions** | `width` + `height` on the `<svg>` must match DS instance frame | `width:auto` gives wrong width for non-square icons |
+
+**Audit workflow (mandatory before any icon change):**
+```
+1. grep all <symbol> IDs and viewBoxes in the file
+2. For each symbol: confirm viewBox matches the DS instance frame size via use_figma
+3. For each <svg><use>: confirm CSS width/height matches DS instance frame
+4. For status/subject icons: confirm exported paths came from the correct DS size (L vs M)
+```
+
+**Confirmed mistake (May 2026 icon audit):** Status badge symbols `ic-status-trophy`, `ic-status-coin`, `ic-status-lives`, `ic-status-ruby` had M-size path data (viewBox ~14-18px wide × 16px tall) but were rendered at L-size CSS (24px tall). Carousel chevrons missing 1px viewBox buffer per Rule 27. Subject badge icons using `height:auto` instead of explicit DS instance dimensions.
+
+---
+
+### 88. Status Badge icons — always export from the DS size that matches the rendered context
+
+The DS Status Badge component (`2312:10653`) has **two sizes**: L (48px badge, icon at 24px tall) and M (32px badge, icon at 16px tall). Path coordinate scales are completely different between sizes — they cannot be swapped.
+
+**DS-confirmed L-size icon dimensions (node `2312:10653`):**
+
+| Icon | DS L instance | viewBox to use | CSS rule |
+|---|---|---|---|
+| P.Trophy | w:20.23 h:24 | `0 0 21 24` | `height:24px; width:auto` |
+| P.Coin | w:24 h:24 | `0 0 24 24` | `height:24px; width:auto` |
+| P.Streak | w:17 h:24 | `0 0 17 24` | `height:24px; width:auto` |
+| P.Heart (Lives) | w:21.57 h:24 | `0 0 22 24` | `height:24px; width:auto` |
+| P.Ruby | w:24 h:**22** | `0 0 24 22` | `height:**22px**; width:auto` — see Rule 90 |
+
+**DS-confirmed M-size icon dimensions (for mobile scaling at 16px tall):**
+
+| Icon | DS M instance | Used at |
+|---|---|---|
+| P.Trophy | w:13.49 h:16 | Mobile `height:16px` |
+| P.Coin | w:16 h:16 | Mobile `height:16px` |
+| P.Streak | w:11.33 h:16 | Mobile `height:16px` |
+| P.Heart | w:14.67 h:16 | Mobile `height:16px` |
+| P.Ruby | w:17.45 h:16 | Mobile `height:16px` |
+
+**How to export paths from the correct DS size:**
+```js
+// use_figma — always target the instance node for the SIZE you are rendering at
+const node = figma.getNodeById('3747:1357');  // Trophy L-size instance
+const svg = await node.exportAsync({ format: 'SVG_STRING' });
+// The exported viewBox will match the instance frame — use it directly in <symbol>
+```
+
+**Mistake made (May 2026):** Symbols were built from M-size instances but rendered at L-size CSS. Trophy symbol `viewBox="0 0 14 16"` displayed at `height:24px` → actual render: 21×22.86px (letterboxed, 1.14px too short). Ruby `viewBox="0 0 18 16"` at `height:24px` → 27×24px (3px too wide). Fixed by re-exporting all 4 symbols from DS L-size instances.
+
+---
+
+### 89. Subject badge icon sizing — always explicit `width:Xpx; height:Xpx`, never `width:auto`
+
+DS-confirmed instance dimensions from the Subject Badge - 1.5 component (May 2026):
+
+| Badge size | DS node | DS icon instance | CSS rule |
+|---|---|---|---|
+| L (32px badge) | `2339:1343` | **20×20** | `width: 20px; height: 20px` |
+| M (24px badge) | `2339:1349` | **16×16** | `width: 16px; height: 16px` |
+
+**Why `width:auto` is wrong:** Subject icons are non-square (Add Math is 21:24, Chemistry is 15:24, etc.). `height:20px; width:auto` computes width from the viewBox aspect ratio — e.g., Add Math at `0 0 21 24` gives width = 20 × (21/24) = 17.5px. But the DS places the icon in a 20×20 instance frame, centering the icon within that frame. The CSS must mirror the 20×20 frame, not the icon's natural proportions.
+
+**Why `height:24px; width:auto` (old approach) was doubly wrong:** Height was 24px instead of 20px (20% too tall, filling the slot padding), AND width was auto (wrong proportions).
+
+**Complete override pattern for M-size badges in quiz cards:**
+```css
+/* Base — L badge icons (20×20) */
+.subject-badge__icon svg,
+.subject-badge__icon img { width: 20px; height: 20px; }
+
+/* Quiz card M badge override (16×16) */
+.quiz-card__header .subject-badge__icon svg,
+.quiz-card__header .subject-badge__icon img { width: 16px; height: 16px; }
+
+/* Section with L badges inside quiz cards (e.g. YourSelectedSubjects) */
+#SectionName-Desktop .quiz-card__header .subject-badge__icon svg,
+#SectionName-Desktop .quiz-card__header .subject-badge__icon img { width: 20px; height: 20px; }
+```
+
+**Mistake made (May 2026):** Base CSS used `height: 24px; width: auto` — icon was 20% taller than DS and non-square icons had wrong width. YourSelectedSubjects override used `height: 24px; width: auto` but intended L-size (20×20). All corrected to explicit pixel pairs.
+
+---
+
+### 90. Ruby status icon is non-square (24×22) — requires a dedicated height override
+
+Ruby L (DS node `3761:236`) is the **only status badge icon that is not 24px tall**. Its DS L dimensions are **w:24 h:22**. All other status icons are 24px tall.
+
+The global rule `.status-pill__icon svg { height: 24px; width: auto; }` renders Ruby at 24px tall, which computes width = 24 × (24/22) = **26.18px** — too wide and too tall.
+
+**Required CSS override:**
+```css
+.status-pill--ruby .status-pill__icon svg { height: 22px; }
+/* width:auto then computes: 22 × (24/22) = 24px ✓ — matches DS w:24 h:22 */
+```
+
+**Mobile size:** At `height:16px`, Ruby M is `w:17.45 h:16`. The `viewBox="0 0 24 22"` with `height:16px; width:auto` gives width = 16 × (24/22) = 17.45px ✓ — matches DS M exactly.
+
+**Pattern — any non-square status icon needs its own height override:**
+```css
+/* Standard icons (height=24px at L, height=16px at M): no override needed */
+.status-pill__icon svg { height: 24px; width: auto; }
+/* Non-square L icon — override height to DS native h, width:auto resolves to DS native w */
+.status-pill--ruby .status-pill__icon svg { height: 22px; }  /* DS: 24×22 */
+```
+
+**Check this whenever** adding a new status icon type: inspect the DS instance height. If it differs from 24px, add a class-scoped height override.
+
+---
+
+*Generated: May 2026 | Last updated: May 2026 (Rules 87–90 — icon audit session) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
