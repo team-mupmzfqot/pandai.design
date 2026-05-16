@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pandai DS — School Header + Class Cards</title>
+  <title>Pandai DS — Browse Classes</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* ══════════════════════════════════════════════════════════════
@@ -697,7 +697,7 @@
       display: inline-flex; align-items: center; gap: var(--sp-xxs); /* 4px */
       border-radius: var(--r-rounded);
       padding: var(--sp-xxxs) var(--sp-xs);  /* 2px 8px */
-      background: #d9f7ed;                   /* surface/primary/default-subtle — DS node 3528:52082 */
+      background: #ccf5e7;                   /* surface/primary/default-subtle */
       border: 1px solid var(--og-500);
       align-self: flex-start;
       font-size: 10px; font-weight: 500; line-height: 12px; /* Body/B8 */
@@ -714,75 +714,67 @@
     /* Divider */
     .cc__divider { height: 1px; background: #ccf5e7; }
 
-    /* CTA */
+    /* CTA — Browse Classes: Premium Only (left) + Preview button (right) */
     .cc__cta {
       background: #fff; padding: var(--sp-m);
-      display: flex; justify-content: flex-end;
+      display: flex; justify-content: space-between; align-items: center;
     }
 
-    /* Enter Class — Button - 1.5 Primary/S — DS node 1437:8154
-       Page config: Show Leading Icon=false, Show R Arrow=true, Show Label=true */
-    .btn-enter {
+    /* "Premium Only" label — text/primary/default */
+    .cc-premium-tag {
+      font-size: 14px; font-weight: 600; line-height: 20px; /* Body/B1 */
+      color: var(--og-500);
+      white-space: nowrap;
+    }
+
+    /* Preview — Button - 1.5 Secondary/S Student — DS nodes 1452:8292 (Default) · 8284 (Hover) · 8276 (Pressed)
+       Default : bg #fff,     border #00cc85, label #00cc85, arrow bg #fff,     arrow border #00cc85, chevron #00cc85
+       Hover   : bg #b5f291,  border #70bc6f, label #70bc6f, arrow bg #b5f291,  arrow border #70bc6f, chevron #70bc6f
+       Pressed : bg #00564c,  border #00453d, label #00cc85, arrow bg #00cc85,  no arrow border,      chevron #00564c */
+    .btn-preview {
       display: inline-flex; align-items: center;
       border-radius: var(--r-rounded);
-      padding: 2px 4px;                      /* py: scale/50-(2)=2px  px: space-xxs=4px — DS node 3528:52082 */
-      background: var(--og-500);             /* surface/primary/default */
-      border: 1px solid var(--og-600);       /* border/primary/focus */
+      padding: 2px 8px;
+      background: #fff;                       /* surface/general/default */
+      border: 1px solid var(--og-500);        /* border/primary/default */
       cursor: pointer; text-decoration: none;
       transition: background 0.15s ease, border-color 0.15s ease;
     }
-    .btn-enter__label {
+    .btn-preview__label {
       font-size: 12px; font-weight: 600; line-height: 18px; /* Body/B5 */
-      color: #f6fdfb;                        /* text/primary/on-color */
+      color: var(--og-500);                   /* text/primary/default = #00cc85 */
       white-space: nowrap;
-      padding: 0 var(--sp-xxs);             /* px: space-xxs=4px both sides */
+      padding: 0 var(--sp-xxs);
       transition: color 0.15s ease;
     }
-    .btn-enter__arrow {
-      width: 16px; height: 16px;            /* Size=S arrow: 16×16 (DS confirmed) */
+    /* Arrow — 16px frame, 2px padding → 12px clip area (Rule 30: inset shadow = border without consuming space) */
+    .btn-preview__arrow {
+      width: 16px; height: 16px;
       border-radius: var(--r-rounded);
-      background: #99ebce;                   /* surface/primary/default-subtle */
+      background: #fff;                       /* surface/general/default */
+      box-shadow: inset 0 0 0 1px var(--og-500);  /* border/primary/default */
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-      padding: 2px;                          /* 2px padding → 12×12 clip */
-      transition: background 0.15s ease;
+      padding: 2px;
+      transition: background 0.15s ease, box-shadow 0.15s ease;
     }
-    .btn-enter__arrow svg {
-      width: 12px; height: 12px;            /* clip: 12×12 */
-      fill: none; stroke-width: 1.5;        /* DS stroke-width = 1.5 */
+    /* Explicit stroke on SVG — mirrors btn-enter pattern, avoids <use> shadow-DOM cascade */
+    .btn-preview__arrow svg {
+      width: 12px; height: 12px; display: block;
+      fill: none; stroke-width: 1.5;
       stroke-linecap: round; stroke-linejoin: round;
-      stroke: var(--og-600);               /* #00a36a — border/primary/focus */
+      stroke: var(--og-500);                  /* Icon/primary/default = #00cc85 */
       transition: stroke 0.15s ease;
     }
-
-    /* Hover — surface/secondary/default (#b5f291) */
-    .btn-enter:hover {
-      background: #b5f291;                   /* surface/secondary/default */
-      border-color: #70bc6f;                 /* border/secondary/focus */
-    }
-    .btn-enter:hover .btn-enter__label {
-      color: #70bc6f;                        /* text/secondary/focus */
-    }
-    .btn-enter:hover .btn-enter__arrow {
-      background: #e8fbe8;                   /* surface/secondary/default-subtle */
-    }
-    .btn-enter:hover .btn-enter__arrow svg {
-      stroke: #70bc6f;
-    }
-
-    /* Pressed — surface/tertiary/default (#00564c) */
-    .btn-enter:active {
-      background: #00564c;                   /* surface/tertiary/default */
-      border-color: #00453d;                 /* border/tertiary/focus */
-    }
-    .btn-enter:active .btn-enter__label {
-      color: var(--og-500);                  /* text/primary/default */
-    }
-    .btn-enter:active .btn-enter__arrow {
-      background: var(--og-500);             /* surface/primary/default */
-    }
-    .btn-enter:active .btn-enter__arrow svg {
-      stroke: #00564c;                       /* icon/tertiary/default — DS Pressed state */
-    }
+    /* Hover — DS 1452:8284: bg Surface/secondary/default, border/label/chevron Border/secondary/focus */
+    .btn-preview:hover                          { background: #b5f291; border-color: #70bc6f; }
+    .btn-preview:hover .btn-preview__label      { color: #70bc6f; }
+    .btn-preview:hover .btn-preview__arrow      { background: #b5f291; box-shadow: inset 0 0 0 1px #70bc6f; }
+    .btn-preview:hover .btn-preview__arrow svg  { stroke: #70bc6f; }
+    /* Pressed — DS 1452:8276: bg Surface/tertiary/default, arrow bg Surface/primary/default, no arrow border */
+    .btn-preview:active                         { background: #00564c; border-color: #00453d; }
+    .btn-preview:active .btn-preview__label     { color: var(--og-500); }
+    .btn-preview:active .btn-preview__arrow     { background: var(--og-500); box-shadow: none; }
+    .btn-preview:active .btn-preview__arrow svg { stroke: #00564c; }
 
     /* Avatar inside cards — og-500 border (default) */
     .cc .ds-avatar { border-color: var(--og-500); }
@@ -1184,8 +1176,7 @@
       color: var(--text-default-body);
     }
     .mmenu-item--active .mmenu-item-label { color: #00a36a; }
-    /* DS confirmed: Icon/primary/default #00cc85 (VariableID:119:10) */
-    .mmenu-item-chevron { width: 24px; height: 24px; flex-shrink: 0; color: var(--icon-primary-default); }
+    .mmenu-item-chevron { width: 24px; height: 24px; flex-shrink: 0; color: var(--text-default-body); }
     .mmenu-item-chevron svg { display: block; width: 100%; height: 100%; }
 
     /* Checkbox 1.5 Checked/S — DS node 587:540 */
@@ -1292,6 +1283,8 @@
     <symbol id="ic-website" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.6 9 L20.4 9 M3.6 15 L20.4 15"/><path d="M11.5 3 C9.9 5.7 9 8.8 9 12 C9 15.2 9.9 18.3 11.5 21"/><path d="M12.5 3 C14.1 5.7 15 8.8 15 12 C15 15.2 14.1 18.3 12.5 21"/></symbol>
     <!-- Outline/plus — DS node 260:1051, vector offset x:5 y:5 -->
     <symbol id="ic-plus" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5 L12 19 M5 12 L19 12"/></symbol>
+    <!-- Outline/airplay — DS node 3528:52800, inset 12.5% 8.33% on 20px clip in 24px wrap -->
+    <symbol id="ic-airplay" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2"/><polygon points="12 15 17 21 7 21"/></symbol>
     <!-- Mobile menu modal icons -->
     <!-- Outline/x — close button, path at inset:25% of 24×24 -->
     <symbol id="ic-x" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6L18 18"/></symbol>
@@ -1417,35 +1410,34 @@
   <!-- Page content — padded area ──────────────────────────── -->
   <div class="page-content">
 
-  <!-- ── Breadcrumb 1.5 — node 3065:40778 (TLVKe3bgJTdVvuPAzgDq2f) ── -->
+  <!-- ── Breadcrumb 1.5 — DS node 3528:52796 ── -->
   <section class="bc-row" aria-label="Breadcrumb">
     <div class="bc-left">
-      <span class="bc-title">My Classes</span>
+      <span class="bc-title">Browse Classes</span>
       <span class="bc-sep" aria-hidden="true"></span>
       <nav class="bc-trail" aria-label="Breadcrumb">
-        <!-- Link 1.5: Outline/users icon + label + chevron-right -->
-        <a href="#" class="bc-link">
+        <a href="nadia_Class-MyClasses.html" class="bc-link">
           <svg aria-hidden="true"><use href="#ic-users"/></svg>
           Class
           <svg class="bc-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
-        <span class="bc-link bc-link--current" aria-current="page">My Classes</span>
+        <span class="bc-link bc-link--current" aria-current="page">Browse Classes</span>
       </nav>
     </div>
     <div class="bc-actions">
-      <!-- Timetable — Secondary/L · Show Leading Icon=true · Outline/calendar · Show R Arrow=false (DS 3288:68629) -->
+      <!-- Timetable — Secondary · Outline/calendar -->
       <a href="#" class="btn-secondary">
-        <div class="btn-icon-wrap"><div class="btn-icon-clip" data-icon="calendar"><svg aria-hidden="true"><use href="#ic-calendar"/></svg></div></div>
+        <div class="btn-icon-wrap"><div class="btn-icon-clip"><svg aria-hidden="true"><use href="#ic-calendar"/></svg></div></div>
         <span class="btn-label">Timetable</span>
       </a>
-      <!-- Browse Classes — Secondary/L · Show Leading Icon=true · Outline/website · Show R Arrow=false (DS 3288:68630) -->
-      <a href="#" class="btn-secondary">
-        <div class="btn-icon-wrap"><div class="btn-icon-clip" data-icon="website"><svg aria-hidden="true"><use href="#ic-website"/></svg></div></div>
-        <span class="btn-label">Browse Classes</span>
+      <!-- Go to My Classes — Secondary · Outline/airplay — DS node 3528:52800 -->
+      <a href="nadia_Class-MyClasses.html" class="btn-secondary">
+        <div class="btn-icon-wrap"><div class="btn-icon-clip"><svg aria-hidden="true"><use href="#ic-airplay"/></svg></div></div>
+        <span class="btn-label">Go to My Classes</span>
       </a>
-      <!-- Join Class — Primary/L · Show Leading Icon=true · Outline/plus · Show R Arrow=false (DS 3288:68631) -->
+      <!-- Join Class — Primary · Outline/plus -->
       <a href="#" class="btn-primary">
-        <div class="btn-icon-wrap"><div class="btn-icon-clip" data-icon="plus"><svg aria-hidden="true"><use href="#ic-plus"/></svg></div></div>
+        <div class="btn-icon-wrap"><div class="btn-icon-clip"><svg aria-hidden="true"><use href="#ic-plus"/></svg></div></div>
         <span class="btn-label">Join Class</span>
       </a>
     </div>
@@ -1475,9 +1467,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1505,9 +1498,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1535,9 +1529,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1565,9 +1560,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1595,9 +1591,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">RM 80.00</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1625,9 +1622,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1655,9 +1653,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1685,9 +1684,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Free</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1715,9 +1715,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1745,16 +1746,17 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ⑪ English | Form 4 ─────────────────────────────────── -->
+    <!-- ⑪ English | Form 4 ──────────────────────────────────── -->
     <div class="cc cc--en">
       <div class="cc__cover"><img src="../image-repo/MyClassImage/en.png" alt="English cover"></div>
       <div class="cc__body">
@@ -1776,9 +1778,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">RM 80.00</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1806,9 +1809,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1836,9 +1840,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1866,9 +1871,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1896,9 +1902,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Free</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1926,9 +1933,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1956,9 +1964,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -1986,9 +1995,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -2016,9 +2026,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -2047,9 +2058,10 @@
           </div>
           <div class="cc__divider"></div>
           <div class="cc__cta">
-            <a href="#" class="btn-enter">
-              <span class="btn-enter__label">Enter Class</span>
-              <div class="btn-enter__arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
+            <span class="cc-premium-tag">Premium Only</span>
+            <a href="#" class="btn-preview">
+              <span class="btn-preview__label">Preview</span>
+              <div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div>
             </a>
           </div>
         </div>
@@ -2188,7 +2200,7 @@
           <a href="#" class="btn-dl-app">
             <div class="btn-dl-icon"><div class="btn-dl-icon-clip"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div></div>
             <span class="btn-dl-label">Download App</span>
-            <div class="btn-dl-arrow"><div class="btn-dl-arrow-clip"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12L10 8L6 4"/></svg></div></div>
+            <div class="btn-dl-arrow"><div class="btn-dl-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></div>
           </a>
         </div>
 
@@ -2297,7 +2309,7 @@
           <a href="#" class="btn-dl-app">
             <div class="btn-dl-icon"><div class="btn-dl-icon-clip"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div></div>
             <span class="btn-dl-label">Download App</span>
-            <div class="btn-dl-arrow"><div class="btn-dl-arrow-clip"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12L10 8L6 4"/></svg></div></div>
+            <div class="btn-dl-arrow"><div class="btn-dl-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></div>
           </a>
         </div>
         <div class="mmenu-localization">

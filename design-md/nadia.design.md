@@ -1923,4 +1923,65 @@ Triggered by mobile hamburger button (`< 1320px`).
 
 ---
 
-*Last updated: 2026-05-14 | Files: Nadia.test.git/nadia_Class.html | Branch: staging*
+---
+
+### Updates — May 2026 (Session 7)
+
+**Files updated:** `Class/nadia_Class-MyClasses.html`, `Class/nadia_Class-BrowseClasses.html`, `Rewards/nadia_Rewards-CoinQuest.html`, `Rewards/nadia_Rewards-Merchandise.html`, `Rewards/nadia_Rewards-MyRewards.html`
+
+#### Color token rules — all Nadia files
+
+> Source of truth: [`design.color.md`](../design.color.md) (Pandai DS 1.5, file `TLVKe3bgJTdVvuPAzgDq2f`). Never hardcode a hex value in a CSS rule — always reference a `var(--token)`.
+
+**Rule:** Token name = Figma path, kebab-cased. `Surface/primary/default` → `--surface-primary-default`. No `--pd-` prefix. No invented names.
+
+All `:root` blocks now include the canonical token set. New tokens added (2026-05-16):
+
+| Token | Hex | Usage |
+|---|---|---|
+| `--surface-primary-default-subtle` | `#d9f7ed` | Live Tuition badge bg, tint cards |
+| `--surface-primary-default-subtle-hover` | `#99ebce` | Button arrow circle bg (Default state) |
+| `--surface-secondary-default-subtle` | `#e8fbe8` | Card body bg, hover arrow bg |
+| `--surface-disabled-primary` | `#f2f2f2` | Disabled button/input bg |
+| `--text-default-heading` | `#404040` | Card titles, teacher name |
+| `--text-disabled-default` | `#bfbfbf` | Disabled labels |
+| `--icon-primary-focus` | `#00a36a` | Button arrow chevron stroke (Default) |
+| `--icon-secondary-on-color` | `#70bc6f` | Button arrow chevron stroke (Hover) |
+| `--icon-disabled-default` | `#bfbfbf` | Disabled icon strokes |
+| `--border-primary-default-subtle` | `#d9f7ed` | Light-mint inner borders |
+| `--border-general-default` | `#d9d9d9` | Neutral dividers, search pill border |
+| `--border-disabled-disabled` | `#bfbfbf` | Disabled button borders |
+
+**Also fixed:** `--icon-default-default` corrected from `#d9d9d9` → `#808080` per DS (`Icon/default/default`).
+
+**Existing tokens confirmed correct (no change needed):**
+
+| Token | Hex | Usage |
+|---|---|---|
+| `--surface-primary-default` | `#00cc85` | Primary fills, active badges |
+| `--surface-secondary-default` | `#b5f291` | Button bg Hover state |
+| `--surface-tertiary-default` | `#00564c` | Button bg Active/Pressed state |
+| `--border-primary-default` | `#00cc85` | Card borders, button arrow border |
+| `--border-primary-focus` | `#00a36a` | Primary button border (Default) |
+| `--border-secondary-focus` | `#70bc6f` | Primary button border (Hover) |
+| `--text-primary-on-color` | `#f6fdfb` | Button label (Default state) |
+| `--text-primary-default` | `#00cc85` | Green text, button label (Pressed) |
+| `--text-secondary-focus` | `#70bc6f` | Button label (Hover state) |
+| `--text-default-body` | `#666666` | Body copy, descriptions |
+| `--icon-primary-default` | `#00cc85` | Green icons, footer heart, menu icons |
+| `--icon-primary-on-color` | `#f6fdfb` | Icons on primary fills |
+
+#### File renames + moves (this session)
+
+| Old path | New path |
+|---|---|
+| `Nadia.test.git/nadia_Class.html` | `Nadia.test.git/Class/nadia_Class-MyClasses.html` |
+| `Nadia.test.git/My Rewards/nadia_Rewards-CoinQuest.html` | `Nadia.test.git/Rewards/nadia_Rewards-CoinQuest.html` |
+| `Nadia.test.git/My Rewards/nadia_Rewards-Merchandise.html` | `Nadia.test.git/Rewards/nadia_Rewards-Merchandise.html` |
+| `Nadia.test.git/My Rewards/nadia_Rewards-Myrewards.html` | `Nadia.test.git/Rewards/nadia_Rewards-MyRewards.html` |
+
+All moved files had relative asset paths updated with `../` prefix.
+
+---
+
+*Last updated: 2026-05-16 | Branch: staging*
