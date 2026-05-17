@@ -949,7 +949,7 @@
     .subject-badge--chemistry { --badge-border: #b50068; --badge-bg: #e20082; }
     .subject-badge--physics   { --badge-border: #1f80ac; --badge-bg: #27a0d7; }
     .subject-badge--history   { --badge-border: #876340; --badge-bg: #a97c50; }
-    .subject-badge--geo       { --badge-border: #5fad2b; --badge-bg: #77d836; }
+    .subject-badge--geo       { --badge-border: #5fad2b; --badge-bg: #77d836; --badge-text: #478220; }
     .subject-badge--islamic   { --badge-border: #b23e66; --badge-bg: #de4d7f; }
     .subject-badge--moral     { --badge-border: #005ba2; --badge-bg: #0072ca; }
     .subject-badge--biology   { --badge-border: #6a27ad; --badge-bg: #8431d8; }
@@ -1199,7 +1199,7 @@
       gap:           var(--spacing-space-2xl);   /* 28px — Spacing/space-2xl */
       padding:       var(--spacing-space-xs) var(--spacing-space-xl);   /* 8px · 24px — DS px-[Spacing/space-xl] */
       height:        64px;
-      overflow:      hidden;
+      overflow:      visible;   /* must be visible so Union tail (44×52) clears the navbar bottom edge */
     }
 
     /* Logo/Pandai/Logo Horizontal (node 1898:6965): height-only constraint, width auto */
@@ -1241,39 +1241,101 @@
       flex-shrink:     0;
     }
 
-    /* Nav Button - Parts (DS node 3427:63384): white bg, 10px padding, radius 8px (Radius/xl) */
+    /* Nav Button - 1.5 (DS node 3908:6148) — outer wrapper, no visual styling
+       Structure: button > .nav-btn-content > [.nav-btn-rect + .nav-btn-icon-clip] (+ .nav-btn-union-bg for waffle) */
     .navbar-action-btn {
-      background:      var(--surface-general-default);
-      border:          none;
-      padding:         10px;
-      border-radius:   8px;   /* Radius/xl */
-      cursor:          pointer;
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      flex-shrink:     0;
-      color:           var(--icon-default-default);   /* #808080 */
+      border:             none;
+      background:         transparent;
+      padding:            0;
+      cursor:             pointer;
+      -webkit-appearance: none;
+      appearance:         none;
+      outline:            none;
+      display:            flex;
+      align-items:        center;
+      justify-content:    center;
+      width:              44px;
+      height:             44px;
+      min-width:          44px;
+      flex-shrink:        0;
+      position:           relative;
+      overflow:           visible;
     }
-    .navbar-action-btn svg { display: block; width: 24px; height: 24px; flex-shrink: 0; }
+    .navbar-action-btn:focus        { outline: none; }
+    .navbar-action-btn:focus-visible { outline: none; }
 
-    /* Hover — Surface/secondary/default-subtle #e8fbe8 · 1px #00cc85 · Icon/primary/default */
-    .navbar-action-btn:hover {
-      background: var(--surface-secondary-default-subtle);
-      box-shadow: inset 0 0 0 1px var(--icon-primary-default);
-      color:      var(--icon-primary-default);
+    /* Content frame — DS: 44×44, flex items-start justify-between, relative */
+    .nav-btn-content {
+      position:        relative;
+      width:           44px;
+      height:          44px;
+      display:         flex;
+      align-items:     flex-start;
+      justify-content: space-between;
+      flex-shrink:     0;
     }
-    /* Pressed — Surface/tertiary/default #00564c · 1px #00cc85 · Icon/primary/default */
-    .navbar-action-btn:active {
-      background: var(--surface-tertiary-default);
-      box-shadow: inset 0 0 0 1px var(--icon-primary-default);
-      color:      var(--icon-primary-default);
+
+    /* Rectangle 10 — DS: bg square, 44×44, 8px radius, state-driven fills */
+    .nav-btn-rect {
+      width:         44px;
+      height:        44px;
+      background:    var(--surface-general-default);   /* Default: white */
+      border-radius: 8px;
+      flex-shrink:   0;
+      transition:    background 0.12s ease, box-shadow 0.12s ease;
     }
-    /* Active (toggled) — Surface/primary/default #00cc85 · 1px #00a36a · Icon/primary/on-color */
-    .navbar-action-btn.is-active {
-      background: var(--surface-primary-default);
-      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
-      color:      var(--text-primary-on-color);
+    .navbar-action-btn:hover   .nav-btn-rect { background: var(--surface-secondary-default-subtle); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+    .navbar-action-btn:active  .nav-btn-rect { background: var(--surface-primary-focus);            box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+    .navbar-action-btn.is-active .nav-btn-rect { background: transparent; box-shadow: none; }
+
+    /* Icon clip — DS: absolute left-50% top-50% translate-center, overflow-clip, 24×24 */
+    .nav-btn-icon-clip {
+      position:  absolute;
+      left:      50%;
+      top:       50%;
+      transform: translate(-50%, -50%);
+      width:     24px;
+      height:    24px;
+      overflow:  hidden;
+      z-index:   1;
     }
+    .nav-btn-icon-clip svg {
+      display:    block;
+      width:      24px;
+      height:     24px;
+      flex-shrink: 0;
+      color:      var(--icon-default-default);   /* Default: #808080 */
+      transition: color 0.12s ease;
+    }
+    .navbar-action-btn:hover  .nav-btn-icon-clip svg { color: var(--icon-primary-default); }
+    .navbar-action-btn:active .nav-btn-icon-clip svg { color: var(--icon-primary-default); }
+    .navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--text-primary-on-color); }   /* DS node 3908:6163: rgb(246,253,251) = #f6fdfb */
+
+    /* Union bg — DS Active state speech-bubble (node 3908:6165): 44×51.172
+       Outer = Border/primary/focus (#00a36a), inner ::before = Surface/primary/default (#00cc85)
+       scale(0.9545, 0.9609) from center ≈ 1px inset per side (DS inner stroke) */
+    .nav-btn-union-bg {
+      position:    absolute;
+      top:         0;
+      left:        0;
+      width:       44px;
+      height:      51.172px;
+      background:  var(--surface-primary-focus);   /* #00a36a — DS stroke color */
+      clip-path:   path('M36 0C40.4183 0 44 3.58172 44 8V36C44 40.4183 40.4183 44 36 44H31.6569C30.596 44 29.5786 44.4214 28.8284 45.1716L23.4141 50.5859C22.6331 51.3668 21.3669 51.3668 20.5859 50.5859L15.1716 45.1716C14.4214 44.4214 13.404 44 12.3431 44H8C3.58172 44 0 40.4183 0 36V8C0 3.58172 3.58172 0 8 0H36Z');
+      display:     none;
+      pointer-events: none;
+      z-index:     0;
+    }
+    .nav-btn-union-bg::before {
+      content:          '';
+      position:         absolute;
+      inset:            0;
+      background:       var(--surface-primary-default);  /* #00cc85 — fill color */
+      clip-path:        inherit;
+      transform:        scale(0.9545, 0.9609);
+      transform-origin: 50% 50%;
+    }
+    .navbar-action-btn.is-active .nav-btn-union-bg { display: block; }
 
     /* Avatar - 1.5 (node 684:621): flex items-start · 48×48 · border · overflow-clip */
     .navbar-avatar {
@@ -1358,6 +1420,107 @@
       pointer-events: auto;
       visibility:     visible;
       transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
+    }
+
+    /* ─── Learn Menu - 1.5 (DS node 3908:5091)
+       364px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
+       Anchored to #NavTopMenu-Desktop (position:relative) below the nav pill
+       JS positions .style.left to align with Learn nav button
+    ─────────────────────────────────────────────────────────────────────── */
+    .learn-dropdown {
+      position:       absolute;
+      top:            80px;   /* DS: Navbar h:64 + 16px gap = 80, same as profile-dropdown */
+      left:           0;      /* JS overrides to align with waffle button */
+      z-index:        500;
+      width:          364px;
+      background:     var(--surface-general-default);
+      border:         1px solid var(--border-primary-default);
+      border-radius:  var(--corner-radius-corner-4xl);
+      padding:        var(--spacing-space-m);
+
+      opacity:        0;
+      transform:      translateY(-8px);
+      pointer-events: none;
+      visibility:     hidden;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
+    }
+    .learn-dropdown.is-open {
+      opacity:        1;
+      transform:      translateY(0);
+      pointer-events: auto;
+      visibility:     visible;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
+    }
+
+    /* 3×4 grid — DS: grid-cols:3, min-h per cell 114px */
+    .learn-dropdown__grid {
+      display:               grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Cell — DS State=Default: transparent bg, no border, 12px radius, flex-col, gap 4px, p-8px */
+    .learn-dropdown__item {
+      display:         flex;
+      flex-direction:  column;
+      align-items:     center;
+      justify-content: center;
+      gap:             var(--spacing-space-xxs);
+      padding:         var(--spacing-space-xs);
+      border-radius:   var(--corner-radius-corner-lg);
+      min-height:      114px;
+      cursor:          pointer;
+      user-select:     none;
+      transition:      background 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    /* Hover — DS State=Hover: bg #e8fbe8, inset border #00cc85, text #00564c */
+    .learn-dropdown__item:hover {
+      background: var(--surface-secondary-default-subtle);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .learn-dropdown__item:hover .learn-dropdown__label {
+      color: var(--text-tertiary-default);
+    }
+
+    /* Pressing — dark teal (Rule 40 consistent) */
+    .learn-dropdown__item.is-pressing {
+      background: var(--surface-tertiary-default);
+      box-shadow: inset 0 0 0 1px var(--border-tertiary-focus);
+    }
+    .learn-dropdown__item.is-pressing .learn-dropdown__label {
+      color: var(--text-primary-default);
+    }
+
+    /* DS Selected: bg #b5f291, border #70bc6f, text #00564c
+       Use :is() to beat :hover specificity so hover doesn't override selected */
+    .learn-dropdown__item.is-selected,
+    .learn-dropdown__item.is-selected:hover {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .learn-dropdown__item.is-selected .learn-dropdown__label,
+    .learn-dropdown__item.is-selected:hover .learn-dropdown__label {
+      color: var(--text-tertiary-default);
+    }
+
+    /* 70×70 illustrated icon — PNG per Rule 50 */
+    .learn-dropdown__icon {
+      width:      70px;
+      height:     70px;
+      object-fit: contain;
+      display:    block;
+      flex-shrink: 0;
+    }
+
+    /* Label — DS Body/B1: 14px SemiBold #666 */
+    .learn-dropdown__label {
+      font-family: var(--font-family);
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       var(--text-default-body);
+      text-align:  center;
+      transition:  color 0.12s ease;
     }
 
     /* Header: light mint bg, 1px green border, 16px radius, py 16px, items centered */
@@ -1845,6 +2008,7 @@
       <!-- Outline/bookmark (260:504) — path translated by x+5 y+3 to match 24x24 DS frame; viewBox -1 -1 26 26 for 1px stroke buffer --><symbol id="ic-bookmark" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 19 21 L 12 16 L 5 21 L 5 5 C 5 4.47 5.211 3.961 5.586 3.586 C 5.961 3.211 6.47 3 7 3 L 17 3 C 17.53 3 18.039 3.211 18.414 3.586 C 18.789 3.961 19 4.47 19 5 L 19 21 Z"/></symbol>
       <!-- Outline/clock (260:566) --><symbol id="ic-clock" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6V12L16 14M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
       <!-- Outline/EN (1104:2538) — vec x:3 y:6 +3+6 → vb -1 -1 26 26; no CSS clip, icon renders at natural 24x24 --><symbol id="ic-en" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 21.613 6 L 21.613 17.252 L 13.086 6 L 13.086 17.252"/><path d="M 9.129 6.05 L 3 6.05 L 3 11.651 L 3 17.252 L 9.129 17.252"/><path d="M 3 11.651 L 9.181 11.651"/></symbol>
+      <!-- Nav Button - 1.5 Active state Union bg (DS node 3908:6165) — 44×52 speech-bubble shape, green fill, downward tail at bottom-center --><symbol id="ic-nav-btn-union" viewBox="0 0 44 52"><path d="M36 0C40.4183 0 44 3.58172 44 8V36C44 40.4183 40.4183 44 36 44H31.6569C30.596 44 29.5786 44.4214 28.8284 45.1716L23.4141 50.5859C22.6331 51.3668 21.3669 51.3668 20.5859 50.5859L15.1716 45.1716C14.4214 44.4214 13.404 44 12.3431 44H8C3.58172 44 0 40.4183 0 36V8C0 3.58172 3.58172 0 8 0H36Z" fill="#00cc85"/></symbol>
       <!-- Filled/waffle-menu (3075:61110) — DS export, 9 filled dots, fill+stroke=currentColor --><symbol id="ic-waffle" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z"/><path d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z"/><path d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z"/><path d="M12 6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5C11 5.55228 11.4477 6 12 6Z"/><path d="M19 6C19.5523 6 20 5.55228 20 5C20 4.44772 19.5523 4 19 4C18.4477 4 18 4.44772 18 5C18 5.55228 18.4477 6 19 6Z"/><path d="M5 6C5.55228 6 6 5.55228 6 5C6 4.44772 5.55228 4 5 4C4.44772 4 4 4.44772 4 5C4 5.55228 4.44772 6 5 6Z"/><path d="M12 20C12.5523 20 13 19.5523 13 19C13 18.4477 12.5523 18 12 18C11.4477 18 11 18.4477 11 19C11 19.5523 11.4477 20 12 20Z"/><path d="M19 20C19.5523 20 20 19.5523 20 19C20 18.4477 19.5523 18 19 18C18.4477 18 18 18.4477 18 19C18 19.5523 18.4477 20 19 20Z"/><path d="M5 20C5.55228 20 6 19.5523 6 19C6 18.4477 5.55228 18 5 18C4.44772 18 4 18.4477 4 19C4 19.5523 4.44772 20 5 20Z"/></symbol>
       <!-- Outline/info (260:832) — vec x:2 y:2 +2+2 → vb -1 -1 26 26 --><symbol id="ic-info" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 12 22 C 17.523 22 22 17.523 22 12 C 22 6.477 22 2 12 2 C 6.477 2 2 6.477 2 12 C 2 17.523 6.477 22 12 22 Z"/><path d="M 12 16 L 12 12 M 12 8 L 12.01 8"/></symbol>
       <!-- Outline/heart (260:815) --><symbol id="ic-heart" viewBox="0 0 22.4031 19.7318" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 20.0413 2.36183 C 19.5305 1.85083 18.9241 1.44547 18.2566 1.16891 C 17.5892 0.892347 16.8738 0.75 16.1513 0.75 C 15.4288 0.75 14.7134 0.892347 14.0459 1.16891 C 13.3785 1.44547 12.772 1.85083 12.2613 2.36183 L 11.2013 3.42183 L 10.1413 2.36183 C 9.1096 1.33013 7.71032 0.750535 6.25129 0.750535 C 4.79226 0.750535 3.39298 1.33013 2.36129 2.36183 C 1.3296 3.39352 0.75 4.79279 0.75 6.25183 C 0.75 7.71086 1.3296 9.11013 2.36129 10.1418 L 3.42129 11.2018 L 11.2013 18.9818 L 18.9813 11.2018 L 20.0413 10.1418 C 20.5523 9.63107 20.9576 9.02464 21.2342 8.35718 C 21.5108 7.68972 21.6531 6.97431 21.6531 6.25183 C 21.6531 5.52934 21.5108 4.81393 21.2342 4.14647 C 20.9576 3.47901 20.5523 2.87258 20.0413 2.36183 Z"/></symbol>
@@ -1946,22 +2110,42 @@
           <!-- Top Icons (node 1084:1909): flex, gap-8, h-full, justify-end -->
           <div class="navbar-primary__icons">
             <button class="navbar-action-btn" aria-label="Search" type="button">
-              <svg aria-hidden="true"><use href="#ic-search"/></svg>
+              <div class="nav-btn-content">
+                <div class="nav-btn-rect" aria-hidden="true"></div>
+                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
+              </div>
             </button>
             <button class="navbar-action-btn" aria-label="Maximize" type="button">
-              <svg aria-hidden="true"><use href="#ic-maximize"/></svg>
+              <div class="nav-btn-content">
+                <div class="nav-btn-rect" aria-hidden="true"></div>
+                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-maximize"/></svg></div>
+              </div>
             </button>
             <button class="navbar-action-btn" aria-label="Mobile app" type="button">
-              <svg aria-hidden="true"><use href="#ic-smartphone"/></svg>
+              <div class="nav-btn-content">
+                <div class="nav-btn-rect" aria-hidden="true"></div>
+                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
+              </div>
             </button>
             <button class="navbar-action-btn" aria-label="Notifications" type="button">
-              <svg aria-hidden="true"><use href="#ic-bell"/></svg>
+              <div class="nav-btn-content">
+                <div class="nav-btn-rect" aria-hidden="true"></div>
+                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+              </div>
             </button>
             <button class="navbar-action-btn" aria-label="Language: English" type="button">
-              <svg aria-hidden="true"><use href="#ic-en"/></svg>
+              <div class="nav-btn-content">
+                <div class="nav-btn-rect" aria-hidden="true"></div>
+                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
+              </div>
             </button>
-            <button class="navbar-action-btn" aria-label="App menu" type="button">
-              <svg aria-hidden="true"><use href="#ic-waffle"/></svg>
+            <!-- Learn Menu trigger — waffle icon, Active state shows Union speech-bubble -->
+            <button class="navbar-action-btn" aria-label="App menu" id="waffle-btn" type="button" aria-haspopup="true">
+              <div class="nav-btn-content">
+                <div class="nav-btn-union-bg" aria-hidden="true"></div>
+                <div class="nav-btn-rect" aria-hidden="true"></div>
+                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-waffle"/></svg></div>
+              </div>
             </button>
           </div>
         </div>
@@ -2064,6 +2248,75 @@
       </div><!-- end menu -->
 
     </div><!-- end profile-dropdown -->
+
+    <!-- Learn Menu - 1.5 (DS node 3908:5091)
+         Triggered by waffle button · closes on mouseleave / outside click
+         JS positions .style.left to align to waffle button · 0.15s snappy animation -->
+    <div class="learn-dropdown" id="learn-dropdown" aria-label="Learn menu" role="menu">
+      <div class="learn-dropdown__grid">
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Live Tuition">
+          <img class="learn-dropdown__icon" src="icons/feature-live-tuition.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Live Tuition</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Live Help">
+          <img class="learn-dropdown__icon" src="icons/feature-live-help.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Live Help</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quiz">
+          <img class="learn-dropdown__icon" src="icons/feature-quiz.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Quiz</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Practice">
+          <img class="learn-dropdown__icon" src="icons/feature-practice.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Practice</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Chapters">
+          <img class="learn-dropdown__icon" src="icons/feature-chapters.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Chapters</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Textbooks">
+          <img class="learn-dropdown__icon" src="icons/feature-textbooks.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Textbooks</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quick Notes">
+          <img class="learn-dropdown__icon" src="icons/feature-quick-notes.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Quick Notes</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Videos">
+          <img class="learn-dropdown__icon" src="icons/feature-videos.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Videos</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Experiments">
+          <img class="learn-dropdown__icon" src="icons/feature-experiments.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Experiments</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Personality">
+          <img class="learn-dropdown__icon" src="icons/feature-personality.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Personality</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="University">
+          <img class="learn-dropdown__icon" src="icons/feature-university.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">University</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Rewards">
+          <img class="learn-dropdown__icon" src="icons/feature-rewards.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Rewards</span>
+        </div>
+
+      </div>
+    </div><!-- end learn-dropdown -->
 
   </section><!-- end NavbarPrimary-Desktop -->
 
@@ -2172,6 +2425,7 @@
       </div>
 
     </nav>
+
   </section><!-- end NavTopMenu-Desktop -->
 
 
@@ -2817,11 +3071,73 @@
       if (!avatar || !dropdown) return;
 
       avatar.addEventListener('click', function () {
+        // Close Learn Menu if open
+        var learnDd = document.getElementById('learn-dropdown');
+        var waffleBtn = document.getElementById('waffle-btn');
+        if (learnDd) learnDd.classList.remove('is-open');
+        if (waffleBtn) waffleBtn.classList.remove('is-active');
         dropdown.classList.toggle('is-open');
       });
 
       dropdown.addEventListener('mouseleave', function () {
         dropdown.classList.remove('is-open');
+      });
+    })();
+
+    // Learn Menu dropdown — waffle btn click → position + toggle; mouseleave → close (Rule 14: critical first)
+    (function () {
+      var waffleBtn  = document.getElementById('waffle-btn');
+      var navSection = document.getElementById('NavbarPrimary-Desktop');
+      var dropdown   = document.getElementById('learn-dropdown');
+      if (!waffleBtn || !navSection || !dropdown) return;
+
+      function positionDropdown() {
+        var btnRect     = waffleBtn.getBoundingClientRect();
+        var sectionRect = navSection.getBoundingClientRect();
+        var left        = btnRect.left - sectionRect.left;
+        var dropW       = dropdown.offsetWidth || 364;
+        var maxLeft     = sectionRect.width - dropW;
+        dropdown.style.left = Math.max(0, Math.min(left, maxLeft)) + 'px';
+      }
+
+      waffleBtn.addEventListener('click', function () {
+        var willOpen = !dropdown.classList.contains('is-open');
+        // Close profile dropdown if open
+        var profileDd = document.getElementById('profile-dropdown');
+        if (profileDd) profileDd.classList.remove('is-open');
+        if (willOpen) positionDropdown();
+        dropdown.classList.toggle('is-open');
+        waffleBtn.classList.toggle('is-active', willOpen);
+      });
+
+      dropdown.addEventListener('mouseleave', function () {
+        dropdown.classList.remove('is-open');
+        waffleBtn.classList.remove('is-active');
+      });
+
+      // Close on outside click
+      document.addEventListener('click', function (e) {
+        if (!dropdown.contains(e.target) && !waffleBtn.contains(e.target)) {
+          dropdown.classList.remove('is-open');
+          waffleBtn.classList.remove('is-active');
+        }
+      }, true);
+
+      // Reposition on resize if open
+      window.addEventListener('resize', function () {
+        if (dropdown.classList.contains('is-open')) positionDropdown();
+      });
+
+      // Pressed feedback + persistent Active/Selected state on menu items (Rule 39)
+      var allItems = Array.from(dropdown.querySelectorAll('.learn-dropdown__item'));
+      allItems.forEach(function (item) {
+        item.addEventListener('mousedown',  function () { item.classList.add('is-pressing'); });
+        item.addEventListener('mouseup',    function () { item.classList.remove('is-pressing'); });
+        item.addEventListener('mouseleave', function () { item.classList.remove('is-pressing'); });
+        item.addEventListener('click', function () {
+          allItems.forEach(function (i) { i.classList.remove('is-selected'); });
+          item.classList.add('is-selected');
+        });
       });
     })();
 

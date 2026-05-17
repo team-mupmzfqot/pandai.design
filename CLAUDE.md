@@ -303,41 +303,44 @@ All known subject icon names (May 2026):
 **Geography note:** SVG export is 27,907 chars (complex globe). Use simplified DS-colored globe SVG instead.
 
 #### 17b. Badge bg / border / text colors
-Source from `Subject Badge/[Name] - M` (24px) or `Subject Badge/[Name] - L` (32px) components on the Iconography page. **Never approximate with Tailwind color tokens.**
+Source from `Subject Badge/[Name]` COMPONENT_SET on **`⚙️ Badges` page** (not Iconography). Each set has `Size=M` (32px) and `Size=S` (24px) variants. **Never approximate with Tailwind color tokens.**
 
-**Lookup:** `findAll(n => n.type === 'COMPONENT' && n.name === 'Subject Badge/[Name] - M')` on Iconography page.
+**Lookup:** `findAll(n => n.type === 'COMPONENT_SET' && n.name.startsWith('Subject Badge/'))` on Badges page.
 
-**L vs M:** bg colors are identical between sizes. Border colors differ slightly for some subjects (Add Math, Account). Since quiz cards use M size (24px), always check M variants for quiz card badges.
+**M vs S:** bg and border colors identical between sizes. Size=M = 32px (previously called "L"), Size=S = 24px (previously called "M"). Since quiz cards use S size (24px), always check S variants for quiz card badges.
 
 **Text color rule:** Almost all subjects use `#f2f2f2` (light text on dark bg). Exceptions — dark text on light bg:
 - `Science`: `--badge-text: #998027` (yellow bg)
-- `KAFA`: `--badge-text: #358a62` (mint green bg)
+- `KAFA`: `--badge-text: #538865` (mint green bg)
+- `Geography`: `--badge-text: #478220` (light green bg)
 
-**Confirmed badge colors — M variants (May 2026), all from DS Iconography:**
+**Confirmed badge colors — S variants (confirmed 2026-05-17, live DS audit), all from `⚙️ Badges` page:**
 
 | Subject | `--badge-bg` | `--badge-border` | Text |
 |---|---|---|---|
-| Add Math | `#283589` | `#202a6e` | `#f2f2f2` |
-| Account | `#0072ca` | `#005ba2` | `#f2f2f2` |
-| Bahasa Melayu | `#4d77ff` | `#3e5fcc` | `#f2f2f2` |
+| Add Math | `#283589` | `#182052` | `#f2f2f2` |
+| Account | `#0072ca` | `#004479` | `#f2f2f2` |
+| Bahasa Melayu | `#4d77ff` | `#2e4799` | `#f2f2f2` |
 | Biology | `#8431d8` | `#6a27ad` | `#f2f2f2` |
 | Business | `#efb42b` | `#bf9022` | `#f2f2f2` |
 | Chemistry | `#e20082` | `#b50068` | `#f2f2f2` |
+| Chinese Language | `#f94848` | `#c73a3a` | `#f2f2f2` |
 | Computer Science | `#d10070` | `#a7005a` | `#f2f2f2` |
 | Economy | `#ff5733` | `#cc4629` | `#f2f2f2` |
 | English | `#ff4d56` | `#cc3e45` | `#f2f2f2` |
-| Geography | `#77d836` | `#5fad2b` | `#f2f2f2` |
+| Geography | `#77d836` | `#5fad2b` | `#478220` |
 | History | `#a97c50` | `#876340` | `#f2f2f2` |
 | Islamic Studies | `#de4d7f` | `#b23e66` | `#f2f2f2` |
-| KAFA | `#8ae3a9` | `#6eb687` | `#358a62` |
+| KAFA | `#8ae3a9` | `#6eb687` | `#538865` |
 | Mathematics | `#42ac7b` | `#358a62` | `#f2f2f2` |
 | Moral Studies | `#0072ca` | `#005ba2` | `#f2f2f2` |
 | Physics | `#27a0d7` | `#1f80ac` | `#f2f2f2` |
+| Primary/Default | `#00cc85` | `#00a36a` | `#f2f2f2` |
 | RBT | `#353535` | `#2a2a2a` | `#f2f2f2` |
 | Science | `#ffd641` | `#ccab34` | `#998027` |
 
 **Structure confirmed (DS node inspection, May 2026):**
-- Overall: `height: 24px` (M), `border-radius: 60px`, `overflow: hidden`
+- Overall: `height: 32px` (M) / `24px` (S), `border-radius: 60px`, `overflow: hidden`
 - Icon slot: `padding: 4px 8px 4px 12px`, white bg, `width: 34px`
 - Label panel: `padding: 0 16px 0 12px`, `gap: 8px`, subject bg color
 - Pointer: 4×8px white SVG, `position: absolute; left: 0; top: 50%`
@@ -346,7 +349,10 @@ Source from `Subject Badge/[Name] - M` (24px) or `Subject Badge/[Name] - L` (32p
 **Mistakes made (May 2026):**
 - Used Tailwind/guessed colors for 8 subjects — RBT, KAFA, Account, Add Math, Economy, Business, CS, BM all had wrong bg and/or border colors.
 - Business text was set to `#78350F` (dark) — DS actually uses `#f2f2f2` (light).
-- KAFA text was missing `--badge-text: #358a62` override — rendered white text on mint green (unreadable).
+- KAFA text was initially documented as `#358a62` — live DS audit 2026-05-17 confirmed correct value is `#538865`.
+- Geography text exception was undocumented — DS uses `#478220` (dark green) on light green bg. Missing override renders white text on `#77d836` (unreadable).
+- Component location was wrong — badges are on `⚙️ Badges` page (COMPONENT_SETs), not Iconography page.
+- Size names changed: old L/M are now DS M/S. Same px values (32px/24px), just renamed.
 
 ---
 
@@ -1146,7 +1152,7 @@ Implemented profile menu items from the Profile Menu `get_design_context` output
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision — including seemingly trivial fixes. No exceptions.
 
 ```
-0a. Read design-md/zul.design.md  → ALL rules 1–95, confirmed specs, known mistakes — NO EXCEPTIONS
+0a. Read design-md/zul.design.md  → ALL rules 1–100, confirmed specs, known mistakes — NO EXCEPTIONS
 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f         → single source of truth, re-verify every value live
 0c. Audit component anatomy (Rule 49 / zul Rule 93):
       → get_design_context on COMPONENT_SET node → list ALL variants

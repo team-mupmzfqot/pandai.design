@@ -298,41 +298,44 @@ All known subject icon names (May 2026):
 **Geography note:** SVG export is 27,907 chars (complex globe). Use simplified DS-colored globe SVG instead.
 
 #### 17b. Badge bg / border / text colors
-Source from `Subject Badge/[Name] - M` (24px) or `Subject Badge/[Name] - L` (32px) components on the Iconography page. **Never approximate with Tailwind color tokens.**
+Source from `Subject Badge/[Name]` COMPONENT_SET on **`⚙️ Badges` page** (not Iconography). Each set has `Size=M` (32px) and `Size=S` (24px) variants. **Never approximate with Tailwind color tokens.**
 
-**Lookup:** `findAll(n => n.type === 'COMPONENT' && n.name === 'Subject Badge/[Name] - M')` on Iconography page.
+**Lookup:** `findAll(n => n.type === 'COMPONENT_SET' && n.name.startsWith('Subject Badge/'))` on Badges page.
 
-**L vs M:** bg colors are identical between sizes. Border colors differ slightly for some subjects (Add Math, Account). Since quiz cards use M size (24px), always check M variants for quiz card badges.
+**M vs S:** bg and border colors are identical between sizes. Size=M = 32px (was previously called "L"), Size=S = 24px (was previously called "M"). Since quiz cards use S size (24px), always check S variants for quiz card badges. The prototype base `.subject-badge` CSS = M (32px), quiz card override = S (24px).
 
 **Text color rule:** Almost all subjects use `#f2f2f2` (light text on dark bg). Exceptions — dark text on light bg:
 - `Science`: `--badge-text: #998027` (yellow bg)
-- `KAFA`: `--badge-text: #358a62` (mint green bg)
+- `KAFA`: `--badge-text: #538865` (mint green bg)
+- `Geography`: `--badge-text: #478220` (light green bg)
 
-**Confirmed badge colors — M variants (May 2026), all from DS Iconography:**
+**Confirmed badge colors — S variants (confirmed 2026-05-17, live DS audit), all from `⚙️ Badges` page:**
 
 | Subject | `--badge-bg` | `--badge-border` | Text |
 |---|---|---|---|
-| Add Math | `#283589` | `#202a6e` | `#f2f2f2` |
-| Account | `#0072ca` | `#005ba2` | `#f2f2f2` |
-| Bahasa Melayu | `#4d77ff` | `#3e5fcc` | `#f2f2f2` |
+| Add Math | `#283589` | `#182052` | `#f2f2f2` |
+| Account | `#0072ca` | `#004479` | `#f2f2f2` |
+| Bahasa Melayu | `#4d77ff` | `#2e4799` | `#f2f2f2` |
 | Biology | `#8431d8` | `#6a27ad` | `#f2f2f2` |
 | Business | `#efb42b` | `#bf9022` | `#f2f2f2` |
 | Chemistry | `#e20082` | `#b50068` | `#f2f2f2` |
+| Chinese Language | `#f94848` | `#c73a3a` | `#f2f2f2` |
 | Computer Science | `#d10070` | `#a7005a` | `#f2f2f2` |
 | Economy | `#ff5733` | `#cc4629` | `#f2f2f2` |
 | English | `#ff4d56` | `#cc3e45` | `#f2f2f2` |
-| Geography | `#77d836` | `#5fad2b` | `#f2f2f2` |
+| Geography | `#77d836` | `#5fad2b` | `#478220` |
 | History | `#a97c50` | `#876340` | `#f2f2f2` |
 | Islamic Studies | `#de4d7f` | `#b23e66` | `#f2f2f2` |
-| KAFA | `#8ae3a9` | `#6eb687` | `#358a62` |
+| KAFA | `#8ae3a9` | `#6eb687` | `#538865` |
 | Mathematics | `#42ac7b` | `#358a62` | `#f2f2f2` |
 | Moral Studies | `#0072ca` | `#005ba2` | `#f2f2f2` |
 | Physics | `#27a0d7` | `#1f80ac` | `#f2f2f2` |
+| Primary/Default | `#00cc85` | `#00a36a` | `#f2f2f2` |
 | RBT | `#353535` | `#2a2a2a` | `#f2f2f2` |
 | Science | `#ffd641` | `#ccab34` | `#998027` |
 
 **Structure confirmed (DS node inspection, May 2026):**
-- Overall: `height: 24px` (M), `border-radius: 60px`, `overflow: hidden`
+- Overall: `height: 32px` (M) / `24px` (S), `border-radius: 60px`, `overflow: hidden`
 - Icon slot: `padding: 4px 8px 4px 12px`, white bg, `width: 34px`
 - Label panel: `padding: 0 16px 0 12px`, `gap: 8px`, subject bg color
 - Pointer: 4×8px white SVG, `position: absolute; left: 0; top: 50%`
@@ -341,7 +344,10 @@ Source from `Subject Badge/[Name] - M` (24px) or `Subject Badge/[Name] - L` (32p
 **Mistakes made (May 2026):**
 - Used Tailwind/guessed colors for 8 subjects — RBT, KAFA, Account, Add Math, Economy, Business, CS, BM all had wrong bg and/or border colors.
 - Business text was set to `#78350F` (dark) — DS actually uses `#f2f2f2` (light).
-- KAFA text was missing `--badge-text: #358a62` override — rendered white text on mint green (unreadable).
+- KAFA text was initially documented as `#358a62` — live DS audit 2026-05-17 confirmed correct value is `#538865`.
+- Geography text exception was undocumented — DS uses `#478220` (dark green) on the light green bg. Missing `--badge-text` override renders white text on `#77d836` (unreadable).
+- Component location was wrong — badges are on `⚙️ Badges` page (COMPONENT_SETs), not Iconography page as previously documented.
+- Size names changed: old L/M are now DS M/S. Same px values (32px/24px), just renamed.
 
 ---
 
@@ -3190,7 +3196,7 @@ dropdown top = target_element.y  (from DS screen frame children)
 **Non-negotiable. Applies to every session, every component, every fix — no exceptions.**
 
 ```
-Step 0a → Read design-md/zul.design.md      ← ALL rules 1–95 + confirmed specs
+Step 0a → Read design-md/zul.design.md      ← ALL rules 1–100 + confirmed specs
 Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f  ← single source of truth
 Step 0c → Audit component anatomy (Rule 93):
            - get_design_context on COMPONENT_SET node → list all variants
@@ -3239,4 +3245,97 @@ When removing a block of HTML by line range, the containing element's closing ta
 
 ---
 
-*Generated: May 2026 | Last updated: May 2026 (Rules 96–97 — PNG for complex icons + bulk HTML removal safety) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 98 — `<button>` wrapper for DS icon buttons: explicit dimensions + full outline reset
+
+Any `<button>` used as the outer wrapper for a DS action icon component (e.g. `Nav Button - 1.5`) **must** have:
+
+```css
+.my-btn {
+  width:              44px;   /* exact DS component width */
+  height:             44px;   /* exact DS component height */
+  min-width:          44px;   /* prevents browser compression on press */
+  outline:            none;
+  -webkit-appearance: none;
+  appearance:         none;
+  border:             none;
+  background:         transparent;
+  padding:            0;
+}
+.my-btn:focus        { outline: none; }
+.my-btn:focus-visible { outline: none; }
+```
+
+**Why explicit dimensions:** Without `width`/`height`/`min-width`, the browser's default button sizing can compress the element on press (`:active`) — the button appears to narrow or shrink even when all child elements are the correct size. The button box must be pinned to exactly the DS frame dimensions.
+
+**Why three outline rules:** `outline: none` in the base rule prevents the ring in most browsers. `:focus` covers click focus in older browsers. `:focus-visible` overrides any browser UA stylesheet that re-adds the ring for keyboard navigation. All three together guarantee zero focus ring at all times.
+
+**Confirmed mistake (May 2026):** `.navbar-action-btn` had no `width`/`height` and no `outline: none`. The button compressed visually on press and showed a blue focus ring after click. Adding `width: 44px; height: 44px; min-width: 44px; outline: none` + the two pseudo-class overrides fixed both issues.
+
+---
+
+### Rule 99 — Nav Button - 1.5 Active state icon color: `Text/primary/on-color`, never grey
+
+When a nav action button enters `.is-active` (speech-bubble Union bg visible), the icon inside the clip must use **`var(--text-primary-on-color)`** = `#f6fdfb`. This is the near-white used for content rendered on a colored `Surface/primary` background — the same token used on Button labels.
+
+**Confirmed from DS node `3908:6163` (Nav Button - 1.5, Active state, May 2026):**
+- Icon vector fill: `rgb(246,253,251)` = `#f6fdfb` → maps to `Text/primary/on-color`
+- Stroke: same `#f6fdfb` at `weight: 1.5`
+
+**Wrong values to avoid:**
+| Wrong value | Why wrong |
+|---|---|
+| `#d9d9d9` | DS "default" icon grey — for inactive/rest state only |
+| `#808080` | `Icon/default/default` — for rest state icons |
+| `var(--icon-primary-default)` `#00cc85` | Hover/pressed state on the rect — not the Union active state |
+
+**Rule:** Always call `use_figma` on the Active state node specifically (not Default) to confirm icon fill. The token changes completely between states — never inherit Default state token assumptions for Active.
+
+---
+
+### Rule 100 — `clip-path: path()` inner border: outer-div border color + `::before` scaled fill
+
+CSS `clip-path` clips ALL box properties — `border`, `box-shadow: inset`, `outline` are all clipped away and cannot produce an inner border. To replicate a DS inner stroke on a `clip-path: path()` shape:
+
+1. Set the outer div's `background` to the **border color** (e.g. `var(--surface-primary-focus)` = `#00a36a`)
+2. Add a `::before` pseudo-element with the **fill color** (e.g. `var(--surface-primary-default)` = `#00cc85`), `clip-path: inherit`, and a scale transform that shrinks it by ~1px on all sides
+
+**CSS pattern:**
+```css
+.clip-shape {
+  background: var(--border-color);   /* outer ring color */
+  clip-path: path('M...');
+  position: relative;
+}
+.clip-shape::before {
+  content:          '';
+  position:         absolute;
+  inset:            0;
+  background:       var(--fill-color);  /* inner fill color */
+  clip-path:        inherit;
+  transform:        scale(Sx, Sy);
+  transform-origin: 50% 50%;
+}
+```
+
+**Scale formula for ~1px border:**
+```
+Sx = (W - 2) / W    →  e.g. (44 - 2) / 44 = 0.9545
+Sy = (H - 2) / H    →  e.g. (51.172 - 2) / 51.172 = 0.9609
+```
+
+`transform-origin: 50% 50%` centers the scale so the border is visually uniform on all sides.
+
+**`clip-path: inherit`** — the pseudo-element inherits the exact same `path(...)` from the parent. The scale is then applied to the already-clipped content, producing a smaller version of the same shape that reveals the outer fill color as a border ring.
+
+**Confirmed instance — Nav Button - 1.5 Union bg (node 3908:6165, May 2026):**
+- W=44, H=51.172 → Sx=0.9545, Sy=0.9609
+- Border color: `var(--surface-primary-focus)` = `#00a36a`
+- Fill color: `var(--surface-primary-default)` = `#00cc85`
+
+**Limitation:** The border is not perfectly uniform at 1px because scale() doesn't produce a true parallel offset of a complex curve. For the Union speech-bubble shape this is imperceptible at the rendered size (44px). For larger shapes where the imperfection would be visible, use an SVG `<path>` with native `fill` + `stroke` + `overflow: hidden` on the SVG wrapper instead.
+
+---
+
+*Generated: May 2026 | Last updated: May 2026 (Rules 96–100 — PNG icons, bulk HTML safety, button reset, Active icon color, clip-path inner border) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
