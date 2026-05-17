@@ -3198,7 +3198,7 @@ dropdown top = target_element.y  (from DS screen frame children)
 > This is the single most important section in this file. Every mistake in this project — wrong colors, wrong states, wrong hover styles, wrong icon sizes, broken layout — traced back to skipping one of these steps. Read it before you type anything.
 
 ```
-Step 0a → Read design-md/zul.design.md          ← ALL rules 1–101 + confirmed specs
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–102 + confirmed specs
 Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH. Not memory. Not docs. The DS.
 Step 0c → Audit component anatomy (Rule 49, 93):
            - use_figma: find the component SET — list ALL variants by name
@@ -3468,4 +3468,51 @@ Compare output against CSS variables in the HTML. Any mismatch must be fixed bef
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-17 (Rule 101 — Subject Badge live DS audit learnings) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 102 — Nav dropdown horizontal alignment: RIGHT-align to trigger button's right edge
+
+Any `position: absolute` dropdown inside `#NavbarPrimary-Desktop` that is triggered by a button near the **right side** of the navbar must be positioned so its **right edge aligns with the trigger button's right edge**. The panel extends leftward. Never left-align these dropdowns to the button's left edge — the panel would overflow off-screen to the right.
+
+**CSS default:**
+```css
+.my-dropdown {
+  position: absolute;
+  top:   80px;    /* navbar 64px + 16px gap — confirmed for all nav dropdowns */
+  right: 0;       /* JS overrides per button; default fallback at viewport right */
+  left:  auto;
+  width: Xpx;     /* DS-confirmed width */
+}
+```
+
+**JS pattern — `positionDropdown()`:**
+```js
+function positionDropdown() {
+  var btnRect     = btn.getBoundingClientRect();
+  var sectionRect = navSection.getBoundingClientRect();  // #NavbarPrimary-Desktop
+  // right-align: dropdown right edge = trigger button right edge
+  var rightOffset = sectionRect.right - btnRect.right;
+  var dropW       = dropdown.offsetWidth || dsWidth;
+  var maxRight    = sectionRect.width - dropW;   // clamp so it never clips left edge
+  dropdown.style.right = Math.max(0, Math.min(rightOffset, maxRight)) + 'px';
+  dropdown.style.left  = 'auto';
+}
+```
+
+**Why `sectionRect.right - btnRect.right`:** `sectionRect.right` = viewport right edge (the section is full-width). `btnRect.right` = button's right edge from viewport left. Their difference = distance from the button's right edge to the viewport right. Setting `right: this value` on an element inside the section moves the element's right edge to the button's right edge. ✓
+
+**All nav dropdowns confirmed at `top: 80px` (DS Frame 1707479685, May 2026):**
+| Dropdown | DS y | Width |
+|---|---|---|
+| Download Apps | 80px | 238px |
+| Notification | 80px | 320px |
+| Learn Menu | 80px | 365px |
+| Profile | 80px | 319px |
+
+**DS gallery frames ≠ real UI x-positions:** The DS screen frame "Frame 1707479685" shows all four dropdowns simultaneously as a component gallery. Their x-coordinates in that frame (23, 282, 623, 1009) are display-only positioning for the gallery layout — NOT the actual CSS `left` values. Only `y` (always 80) and `width` are reliable from that frame. Horizontal alignment must always be derived from the trigger button via JS.
+
+**Confirmed mistake (May 2026):** `positionDropdown()` computed `left = btnRect.left - sectionRect.left`. Since the waffle button is near the right edge of the navbar, the 365px dropdown was placed at `btnRect.left` (e.g. x=1196), which `maxLeft` clamped to x=1075 — positioning it partially over the right padding area and entirely to the right of the content. The fix: switch to `right`-based positioning so the panel sits correctly to the LEFT of the waffle button.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-18 (Rule 102 — Nav dropdown right-alignment pattern) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
