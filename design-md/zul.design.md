@@ -2814,4 +2814,316 @@ Step 0d → Cross-check any CSS variable value against :root before using it
 
 ---
 
-*Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 87. SVG symbol icon audit — three layers must all be DS-consistent
+
+Every icon in the prototype has three interdependent layers. Fixing only one silently breaks the others.
+
+| Layer | What to check | Common error |
+|---|---|---|
+| **Symbol `viewBox`** | Coordinate space must match the exported DS instance dimensions | M-size viewBox used while rendering at L-size |
+| **Path coordinate scale** | Path `d=` values must be in the same coordinate space as the viewBox | Paths from M-size instance placed in L-size viewBox |
+| **CSS dimensions** | `width` + `height` on the `<svg>` must match DS instance frame | `width:auto` gives wrong width for non-square icons |
+
+**Audit workflow (mandatory before any icon change):**
+```
+1. grep all <symbol> IDs and viewBoxes in the file
+2. For each symbol: confirm viewBox matches the DS instance frame size via use_figma
+3. For each <svg><use>: confirm CSS width/height matches DS instance frame
+4. For status/subject icons: confirm exported paths came from the correct DS size (L vs M)
+```
+
+**Confirmed mistake (May 2026 icon audit):** Status badge symbols `ic-status-trophy`, `ic-status-coin`, `ic-status-lives`, `ic-status-ruby` had M-size path data (viewBox ~14-18px wide × 16px tall) but were rendered at L-size CSS (24px tall). Carousel chevrons missing 1px viewBox buffer per Rule 27. Subject badge icons using `height:auto` instead of explicit DS instance dimensions.
+
+---
+
+### 88. Status Badge icons — always export from the DS size that matches the rendered context
+
+The DS Status Badge component (`2312:10653`) has **two sizes**: L (48px badge, icon at 24px tall) and M (32px badge, icon at 16px tall). Path coordinate scales are completely different between sizes — they cannot be swapped.
+
+**DS-confirmed L-size icon dimensions (node `2312:10653`):**
+
+| Icon | DS L instance | viewBox to use | CSS rule |
+|---|---|---|---|
+| P.Trophy | w:20.23 h:24 | `0 0 21 24` | `height:24px; width:auto` |
+| P.Coin | w:24 h:24 | `0 0 24 24` | `height:24px; width:auto` |
+| P.Streak | w:17 h:24 | `0 0 17 24` | `height:24px; width:auto` |
+| P.Heart (Lives) | w:21.57 h:24 | `0 0 22 24` | `height:24px; width:auto` |
+| P.Ruby | w:24 h:**22** | `0 0 24 22` | `height:**22px**; width:auto` — see Rule 90 |
+
+**DS-confirmed M-size icon dimensions (for mobile scaling at 16px tall):**
+
+| Icon | DS M instance | Used at |
+|---|---|---|
+| P.Trophy | w:13.49 h:16 | Mobile `height:16px` |
+| P.Coin | w:16 h:16 | Mobile `height:16px` |
+| P.Streak | w:11.33 h:16 | Mobile `height:16px` |
+| P.Heart | w:14.67 h:16 | Mobile `height:16px` |
+| P.Ruby | w:17.45 h:16 | Mobile `height:16px` |
+
+**How to export paths from the correct DS size:**
+```js
+// use_figma — always target the instance node for the SIZE you are rendering at
+const node = figma.getNodeById('3747:1357');  // Trophy L-size instance
+const svg = await node.exportAsync({ format: 'SVG_STRING' });
+// The exported viewBox will match the instance frame — use it directly in <symbol>
+```
+
+**Mistake made (May 2026):** Symbols were built from M-size instances but rendered at L-size CSS. Trophy symbol `viewBox="0 0 14 16"` displayed at `height:24px` → actual render: 21×22.86px (letterboxed, 1.14px too short). Ruby `viewBox="0 0 18 16"` at `height:24px` → 27×24px (3px too wide). Fixed by re-exporting all 4 symbols from DS L-size instances.
+
+---
+
+### 89. Subject badge icon sizing — always explicit `width:Xpx; height:Xpx`, never `width:auto`
+
+DS-confirmed instance dimensions from the Subject Badge - 1.5 component (May 2026):
+
+| Badge size | DS node | DS icon instance | CSS rule |
+|---|---|---|---|
+| L (32px badge) | `2339:1343` | **20×20** | `width: 20px; height: 20px` |
+| M (24px badge) | `2339:1349` | **16×16** | `width: 16px; height: 16px` |
+
+**Why `width:auto` is wrong:** Subject icons are non-square (Add Math is 21:24, Chemistry is 15:24, etc.). `height:20px; width:auto` computes width from the viewBox aspect ratio — e.g., Add Math at `0 0 21 24` gives width = 20 × (21/24) = 17.5px. But the DS places the icon in a 20×20 instance frame, centering the icon within that frame. The CSS must mirror the 20×20 frame, not the icon's natural proportions.
+
+**Why `height:24px; width:auto` (old approach) was doubly wrong:** Height was 24px instead of 20px (20% too tall, filling the slot padding), AND width was auto (wrong proportions).
+
+**Complete override pattern for M-size badges in quiz cards:**
+```css
+/* Base — L badge icons (20×20) */
+.subject-badge__icon svg,
+.subject-badge__icon img { width: 20px; height: 20px; }
+
+/* Quiz card M badge override (16×16) */
+.quiz-card__header .subject-badge__icon svg,
+.quiz-card__header .subject-badge__icon img { width: 16px; height: 16px; }
+
+/* Section with L badges inside quiz cards (e.g. YourSelectedSubjects) */
+#SectionName-Desktop .quiz-card__header .subject-badge__icon svg,
+#SectionName-Desktop .quiz-card__header .subject-badge__icon img { width: 20px; height: 20px; }
+```
+
+**Mistake made (May 2026):** Base CSS used `height: 24px; width: auto` — icon was 20% taller than DS and non-square icons had wrong width. YourSelectedSubjects override used `height: 24px; width: auto` but intended L-size (20×20). All corrected to explicit pixel pairs.
+
+---
+
+### 90. Ruby status icon is non-square (24×22) — requires a dedicated height override
+
+Ruby L (DS node `3761:236`) is the **only status badge icon that is not 24px tall**. Its DS L dimensions are **w:24 h:22**. All other status icons are 24px tall.
+
+The global rule `.status-pill__icon svg { height: 24px; width: auto; }` renders Ruby at 24px tall, which computes width = 24 × (24/22) = **26.18px** — too wide and too tall.
+
+**Required CSS override:**
+```css
+.status-pill--ruby .status-pill__icon svg { height: 22px; }
+/* width:auto then computes: 22 × (24/22) = 24px ✓ — matches DS w:24 h:22 */
+```
+
+**Mobile size:** At `height:16px`, Ruby M is `w:17.45 h:16`. The `viewBox="0 0 24 22"` with `height:16px; width:auto` gives width = 16 × (24/22) = 17.45px ✓ — matches DS M exactly.
+
+**Pattern — any non-square status icon needs its own height override:**
+```css
+/* Standard icons (height=24px at L, height=16px at M): no override needed */
+.status-pill__icon svg { height: 24px; width: auto; }
+/* Non-square L icon — override height to DS native h, width:auto resolves to DS native w */
+.status-pill--ruby .status-pill__icon svg { height: 22px; }  /* DS: 24×22 */
+```
+
+**Check this whenever** adding a new status icon type: inspect the DS instance height. If it differs from 24px, add a class-scoped height override.
+
+---
+
+---
+
+### 91. Profile Menu - 1.5 — confirmed DS specs (node 3908:3679, May 2026)
+
+Dropdown panel that opens below the navbar avatar. Sourced from `⚙️ Menu Bar` page.
+
+**Container:**
+| Property | Value | Token |
+|---|---|---|
+| Width | 320px | — |
+| Background | white | `Surface/general/default` |
+| Border | 1px `#00cc85` | `Border/primary/default` |
+| Border-radius | 24px | `Corner Radius/corner-4xl` |
+| Padding | 16px all sides | `Spacing/component/md` |
+| Gap | 8px | `Spacing/component/xs` |
+
+**Positioning (prototype):**
+- `position: absolute; top: 68px; right: var(--page-padding-x)` anchored to `#NavbarPrimary-Desktop` (`position: relative`)
+- Escapes `.navbar-primary`'s `overflow: hidden` by living as a sibling element outside it
+- Open state: class `.is-open` → `opacity:1; transform:translateY(0); visibility:visible; pointer-events:auto`
+- Closed state: `opacity:0; transform:translateY(-8px); visibility:hidden; pointer-events:none`
+- Transition: `opacity 0.15s ease, transform 0.15s ease, visibility 0s linear <delay>`
+- Open trigger: click `.navbar-avatar`; Close trigger: `mouseleave` on the dropdown panel itself
+
+**Header block (node 3908:1481):**
+- Background: `#f6fef6` (`Surface/secondary/default-hover`) — CSS var: `--surface-secondary-default-hover`
+- Border: 1px `#00cc85`; Border-radius: 16px (`corner-2xl`); Padding: 16px vertical; Gap: 10px; centered column
+
+**Avatar (node 3908:1484):** 64×64px, border-radius 60px, 1px `#00cc85` border, white bg
+
+**Number Badge (node 3908:1485):** absolute `top:0; right:0` on 64×64 wrap; 20×20; green `#00cc85` bg; Poppins SemiBold 10px; `#f6fdfb` text
+
+**Name row:** Poppins Bold 18px / 28lh, `#00564c` (`Text/tertiary/default`)
+
+**Verified icon badge (node 3908:1491):** 12×12; bg `#00a2e8`; 1px white border; pill radius; 2px padding; 8×8 check icon white stroke
+
+**Username:** Poppins Medium 12px, `#666` (`Text/default/body`)
+
+**Plan pill (node 3908:1493):** white bg; 1px `#00cc85` border; pill radius; padding `2px 8px`; Poppins Medium 10px; `#00cc85` text
+
+**Upgrade link (node 3908:1495):** flex row; gap 8px; `Filled/star` icon 20×20 `#00cc85`; Poppins Regular 14px; `#00cc85` text
+
+**Menu items:** 7 rows + divider + Log Out — all use `Dropdown - Parts` → see Rule 92
+
+**Menu icons (all 24×24, `symbol`/`<use>`, `viewBox="-1 -1 26 26"`, `stroke="currentColor"`):**
+- My Profile: `ic-user-circle` (node 1942:23330)
+- Manage Account: `ic-user-check` (node 260:1300)
+- Subscribe Pandai Premium: `ic-star-24` (node 260:1192)
+- Payment History: `ic-credit-card` (node 260:656)
+- Share My Progress: `ic-progress-mobile` (node 1524:3597)
+- Learn and Earn: `ic-gift` (node 260:765)
+- Online Support: `ic-life-buoy` (node 260:855)
+- Log Out: `ic-power` (node 260:1057)
+- Upgrade link star: `ic-star-filled-24` (node 3074:60862) — `fill="currentColor"` on path
+
+**Divider:** 1px `#d9d9d9` (`Border/general/default`) horizontal rule between Online Support and Log Out
+
+**New CSS variable added (May 2026):**
+```css
+--surface-secondary-default-hover: #f6fef6;   /* Surface/secondary/default-hover — profile menu header bg */
+```
+
+---
+
+### 92. Dropdown - Parts — confirmed DS state tokens (node 1342:4370, May 2026)
+
+Component set on `⚙️ Dropdown Menu` page. Used inside Profile Menu - 1.5. Type used in profile menu: `Type=Check List` (default appearance) with interactive states from `Type=Main List`.
+
+**All states — confirmed from `get_design_context` (May 2026):**
+
+| State | Background | Border | Radius | Label color | Label weight |
+|---|---|---|---|---|---|
+| **Default** | none | none | — | `#666` (`Text/default/body`) | SemiBold 14px |
+| **Hover** | `#e8fbe8` (`Surface/secondary/default-subtle`) | `1px #00cc85` | **pill (108px)** | `#00cc85` (`Text/primary/default`) | SemiBold 14px |
+| **Selected** | `#b5f291` (`Surface/secondary/default`) | `1px #00a36a` | pill (108px) | `#00a36a` (`Text/primary/default-hover`) | SemiBold 14px |
+| **Disabled** | none | none | — | `#bfbfbf` (`Text/disabled/default`) | SemiBold 14px |
+
+**Icon color:** `#00cc85` in all states. Does not change on hover.
+
+**Padding (all states):** `px: 16px / py: 8px` (`Spacing/space-m` / `Spacing/space-xs`)
+
+**CSS implementation pattern (prototype):**
+```css
+/* Use box-shadow:inset for border — no layout shift (Rule 30) */
+/* border-radius: pill always — visible only when bg is present */
+.profile-dropdown__item {
+  padding:       8px 16px;
+  border-radius: 108px;               /* pill — matches DS hover shape */
+  transition:    background 0.12s ease, box-shadow 0.12s ease;
+}
+.profile-dropdown__item:hover {
+  background: #e8fbe8;                /* Surface/secondary/default-subtle */
+  box-shadow: inset 0 0 0 1px #00cc85; /* Border/primary/default */
+}
+.profile-dropdown__item:hover .profile-dropdown__item-label {
+  color: #00cc85;                     /* Text/primary/default */
+}
+.profile-dropdown__item:active {
+  background: #b5f291;                /* Surface/secondary/default — Selected palette */
+  box-shadow: inset 0 0 0 1px #00a36a; /* Border/primary/focus */
+}
+.profile-dropdown__item:active .profile-dropdown__item-label {
+  color: #00a36a;                     /* Text/primary/default-hover */
+}
+```
+
+**Mistake made (May 2026):**
+- Hover BG: used `#d9f7ed` (wrong) → correct is `#e8fbe8`
+- Hover border: missing entirely
+- Hover radius: `8px` (wrong) → correct is `108px` pill
+- Hover label: colour unchanged (wrong) → correct is `#00cc85`
+- None of these were visible from the Default state alone. **This is why Rule 93 exists.**
+
+---
+
+### 93. Always audit component anatomy — Nested Instances, Variants, States, Properties
+
+**This is the single most important workflow discipline.** Before writing any HTML or CSS for a DS component, audit all four anatomy layers:
+
+**1. Nested Instances**
+Every sub-component used inside a parent is its own COMPONENT_SET with its own variants and states. Always look each one up independently.
+```
+Profile Menu - 1.5 contains → Dropdown - Parts (node 1342:4370)
+Button - 1.5 contains        → chevron clip node (Rule 16)
+Carousel - 1.5 contains      → Button Icon - 1.5
+```
+Never implement a sub-component based on what the parent component's `get_design_context` shows. Always pull the nested component's own COMPONENT_SET.
+
+**2. Variants**
+List ALL variants in the COMPONENT_SET before writing any code:
+```js
+// use_figma to list all variants in a set
+const set = await figma.getNodeByIdAsync('<COMPONENT_SET_ID>');
+return set.children.map(c => c.name);
+```
+Never assume what variants exist. The variant you see in the parent screen may not be the Default variant.
+
+**3. States**
+Pull EVERY interactive state (Default, Hover, Pressed/Active, Selected, Disabled, Focus) via `get_design_context` BEFORE writing any CSS. Required tokens to extract per state:
+- Background token + hex
+- Border token + hex
+- Border-radius
+- Label/text color token + hex
+- Icon color token + hex
+
+**4. Properties**
+Check all `componentPropertyDefinitions` on the COMPONENT_SET:
+- `BOOLEAN` props (`visible`, `showIcon`, `showLabel`) → `visible: false` means exclude from HTML entirely (Rule 41)
+- `INSTANCE_SWAP` props → identifies which nested sub-component is in use
+- `TEXT` props → actual label content
+
+**Required workflow (every component, no exceptions):**
+```
+1. get_design_context on COMPONENT_SET node → read all variant names
+2. get_design_context on EACH state variant → extract tokens per state
+3. For EACH nested instance → repeat steps 1–2 on that sub-component's own set
+4. Check all componentPropertyDefinitions → confirm visible/hidden children
+5. ONLY THEN write HTML and CSS
+```
+
+**Mistake made (May 2026 — Profile Menu dropdown):**
+Implemented all menu items from the Profile Menu parent `get_design_context` output, which only showed the Default/Check List state. Did not separately audit `Dropdown - Parts` (node 1342:4370). The correct Hover state has `#e8fbe8` bg + `1px solid #00cc85` border + **pill border-radius (108px)** + `#00cc85` label — zero of which was visible from the parent's output. All hover styles required correction after the fact.
+
+**Rule added to CLAUDE.md as Rule 49. Memory saved as `feedback_check_component_anatomy.md`.**
+
+---
+
+### Mandatory workflow — BEFORE every design action, change, or decision (updated May 2026)
+
+**Non-negotiable. Applies to every session, every component, every fix — no exceptions.**
+
+```
+Step 0a → Read design-md/zul.design.md      ← ALL rules 1–93 + confirmed specs
+Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f  ← single source of truth
+Step 0c → Audit component anatomy (Rule 93):
+           - get_design_context on COMPONENT_SET node → list all variants
+           - get_design_context on each state variant → extract all tokens
+           - Repeat for every nested sub-component
+           - Check all componentPropertyDefinitions (visible/hidden/swap)
+Step 0d → get_variable_defs on exact sub-nodes for every fill/stroke/spacing
+Step 0e → Cross-check CSS variable value against :root before using it (Rule 83)
+Step 0f → For icons: confirm viewBox, path scale, AND CSS dimensions (Rule 87)
+Step 0g → get_screenshot after implementation → compare against DS side-by-side
+```
+
+**Why this matters — every mistake in this project came from skipping Step 0:**
+- Primary color guessed as `#2FAC51` instead of `#00cc85` — skipped 0b
+- Score badge border used wrong token — skipped 0e
+- Button pressed state wrong colour — skipped 0c (state variants not audited)
+- Profile menu hover styles all wrong — skipped 0c (nested instance not audited)
+- Footer height assumed 60px, DS changed to 44px — skipped 0b
+
+**A 2-minute DS inspection always saves more time than the bug it prevents.**
+
+---
+
+*Generated: May 2026 | Last updated: May 2026 (Rules 91–93 — Profile Menu dropdown + component anatomy audit) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
