@@ -1591,4 +1591,47 @@ Start-Process "vscode://vscode.simpleBrowser/show?url=http%3A%2F%2Flocalhost%3A3
 
 ---
 
+---
+
+### 50. Complex illustrated DS icons — always export as 2× PNG, never SVG
+
+`Feature/*` icons (Learn Menu, feature tiles) are multi-colour isometric illustrations with 15–56KB of SVG data per icon. They exceed the tool output limit and cannot be exported as SVG in a single call.
+
+**Rule:** Before any icon batch export, check SVG sizes. If any icon > 12KB → use PNG for the entire batch. Do not attempt SVG chunking.
+
+```js
+// Step 1 — size check
+const svg = await node.exportAsync({ format: 'SVG_STRING' });
+// if svg.length > 12000 → switch to PNG
+
+// Step 2 — PNG export
+const bytes = await node.exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 2 } });
+const b64 = btoa(String.fromCharCode(...bytes));
+```
+
+**Learn Menu exception (confirmed May 2026):** All 12 `Feature/*` icons use 2× PNG. This is the authorised exception. The icons are authentic Figma exports.
+
+**Mistake made:** Alternated between SVG → chunked SVG → PNG across multiple sessions. Commit to one format before the first export call.
+
+---
+
+### 51. Bulk HTML removal — always grep-verify section tag balance before and after
+
+When removing a block of HTML by line range, wrapper closing tags (`</section>`, `</div>`) may sit just outside the removed range and get orphaned or accidentally included.
+
+**Mandatory checks:**
+```bash
+# Before removal — establish baseline
+grep -n "<section\|</section>" file.html
+
+# After removal — confirm every open has a close
+grep -n "<section\|</section>" file.html
+```
+
+Both counts must match. If any `<section id="...">` has no corresponding `</section>`, fix it before committing.
+
+**Mistake made (May 2026):** Removed Learn Menu HTML (lines 2150–2182). The `</section><!-- end NavbarPrimary-Desktop -->` at line 2073 was preserved in the slice range but ended up missing — breaking the HTML nesting. Result: all subsequent sections (NavTopMenu, main content) were rendered inside NavbarPrimary-Desktop, breaking page padding and responsive breakpoints. Root cause: trusted line-number math without verifying structural tag integrity.
+
+---
+
 *Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

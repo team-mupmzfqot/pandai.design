@@ -3208,4 +3208,35 @@ Step 0h → get_screenshot after implementation → compare against DS side-by-s
 
 ---
 
-*Generated: May 2026 | Last updated: May 2026 (Rules 94–95 — DS screen coordinates for gaps + dropdown positioning) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 96 — Complex illustrated icons → PNG, not SVG
+
+DS feature icons (e.g. `Feature/live-tuition`, `Feature/quiz`, `Feature/personality`) are multi-colour isometric illustrations with 15–56KB of SVG path data. They cannot be exported as SVG through the tool output limit (~15–20KB per call). Always export these as **2× PNG** via `exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 2 } })` and save as actual `.png` files.
+
+**Decision rule:** Before starting any icon export batch, check SVG byte sizes first (`exportAsync({ format: 'SVG_STRING' })` → `svg.length`). If any icon exceeds ~12KB, switch the entire batch to PNG immediately. Do not attempt SVG chunking.
+
+**PNG exception for Learn Menu (confirmed May 2026):** All 12 `Feature/*` icons in the Learn Menu use PNG (2×). This is the authorised exception — the icons are authentic Figma exports, not hand-coded.
+
+**Mistake made:** Spent an entire session alternating between SVG → chunked SVG → PNG → SVG instead of checking sizes first and committing to PNG after the first truncation. Commit to one format before the first export call.
+
+---
+
+### Rule 97 — Bulk HTML removal: always verify wrapper closing tags
+
+When removing a block of HTML by line range, the containing element's closing tag (`</section>`, `</div>`) may sit OUTSIDE the removed range but was logically tied to the content you're deleting. Removing the content without the closer — or vice versa — leaves the DOM structure broken.
+
+**Verification workflow (mandatory before any bulk HTML removal):**
+```
+1. grep -n "<section\|</section>" file.html  ← baseline: every open has a close
+2. Identify the FULL containing element boundary — not just the content block
+3. After removal: re-run the same grep and confirm every open still has a close
+```
+
+**Confirmed mistake (May 2026):** Removed Learn Menu HTML (lines 2150–2182 original). The `</section><!-- end NavbarPrimary-Desktop -->` was at line 2073 — BEFORE the removed range — and should have been preserved. It was missing from the output, breaking the HTML nesting of every element below the navbar. The bug manifested as: desktop page padding "too wide," responsive breakpoints not applying, NavTopMenu rendered inside NavbarPrimary-Desktop.
+
+**Root cause:** I trusted line-number math (`lines.slice(...)`) without verifying that every structural tag was accounted for. Always grep-verify after bulk file operations.
+
+---
+
+*Generated: May 2026 | Last updated: May 2026 (Rules 96–97 — PNG for complex icons + bulk HTML removal safety) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
