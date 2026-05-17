@@ -2947,7 +2947,8 @@ Dropdown panel that opens below the navbar avatar. Sourced from `⚙️ Menu Bar
 | Gap | 8px | `Spacing/component/xs` |
 
 **Positioning (prototype):**
-- `position: absolute; top: 68px; right: var(--page-padding-x)` anchored to `#NavbarPrimary-Desktop` (`position: relative`)
+- `position: absolute; top: 80px; right: var(--page-padding-x)` anchored to `#NavbarPrimary-Desktop` (`position: relative`)
+- `top: 80px` = Navbar h:64 + gap 16px — aligns Profile Menu top with Nav Menu Bar top (DS confirmed: NavMenu y=80)
 - Escapes `.navbar-primary`'s `overflow: hidden` by living as a sibling element outside it
 - Open state: class `.is-open` → `opacity:1; transform:translateY(0); visibility:visible; pointer-events:auto`
 - Closed state: `opacity:0; transform:translateY(-8px); visibility:hidden; pointer-events:none`
@@ -3126,4 +3127,85 @@ Step 0g → get_screenshot after implementation → compare against DS side-by-s
 
 ---
 
-*Generated: May 2026 | Last updated: May 2026 (Rules 91–93 — Profile Menu dropdown + component anatomy audit) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 94. Inter-component gaps — always read DS screen frame children, never guess
+
+When positioning any floating element (dropdown, tooltip, popover) or setting `margin-top` between two stacked sections, always derive the value from the **DS screen frame's child node coordinates**, not from assumption or a "looks right" estimate.
+
+**Method:**
+```js
+// use_figma on the Screen frame node
+const home = await figma.getNodeByIdAsync('<screen-node-id>');
+home.children.map(c => ({ name: c.name, y: c.y, h: c.height }));
+// gap between A and B = B.y - (A.y + A.h)
+```
+
+**Confirmed DS screen layout — Home frame `3658:64086` (May 2026):**
+
+| Component | y | h | Bottom edge |
+|---|---|---|---|
+| Navbar Primary Desktop - 1.5 | 0 | 64 | **64** |
+| Nav Menu Desktop - 1.5 | **80** | 56 | 136 |
+| Content frame | 152 | 72 | — |
+
+**Gaps confirmed:**
+- Navbar → Nav Menu Bar: `80 − 64 = **16px**` (`Spacing/space-m`) ← prototype had 12px, corrected
+- Nav Menu Bar → Content: `152 − 136 = 16px` (`Spacing/space-m`)
+
+**Mistakes corrected (May 2026):**
+- `#NavTopMenu-Desktop { margin-top }` was `var(--spacing-space-s)` = 12px → corrected to `var(--spacing-space-m)` = **16px**
+- Profile Menu dropdown `top` was `68px` → corrected to **80px** (aligns top-to-top with Nav Menu Bar)
+
+---
+
+### 95. Absolute-positioned dropdown `top` = DS screen y-coordinate of the aligned element
+
+When a floating panel (dropdown, profile menu, popover) must align its top edge with another element on the page, its `top` value equals that element's **y-coordinate in the DS screen frame** — not the navbar height, not a guessed offset.
+
+**Formula:**
+```
+dropdown top = target_element.y  (from DS screen frame children)
+```
+
+**Confirmed — Profile Menu - 1.5 (May 2026):**
+- Nav Menu Bar top in DS screen: `y = 80px`
+- Profile Menu `top` must be: `80px`
+- Old value: `68px` (navbar h:64 + 4px arbitrary gap) → **wrong**
+- Correct value: `80px` → top-to-top aligned with Nav Menu Bar ✓
+
+**General pattern for any dropdown anchored to `#NavbarPrimary-Desktop`:**
+```css
+.my-dropdown {
+  position: absolute;
+  top: 80px;   /* = Nav Menu Bar y in DS screen — aligns with menu bar top */
+  right: var(--page-padding-x);
+}
+```
+
+**Why `top: 68px` was wrong:** It was calculated as navbar height (64px) + a 4px visual guess. The DS screen defines the actual spacing as 16px (Spacing/space-m), making the correct value 64 + 16 = 80px. Always use DS screen coordinates — never add arbitrary offsets.
+
+---
+
+### Mandatory workflow — BEFORE every design action, change, or decision (updated May 2026)
+
+**Non-negotiable. Applies to every session, every component, every fix — no exceptions.**
+
+```
+Step 0a → Read design-md/zul.design.md      ← ALL rules 1–95 + confirmed specs
+Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f  ← single source of truth
+Step 0c → Audit component anatomy (Rule 93):
+           - get_design_context on COMPONENT_SET node → list all variants
+           - get_design_context on each state variant → extract all tokens
+           - Repeat for every nested sub-component
+           - Check all componentPropertyDefinitions (visible/hidden/swap)
+Step 0d → For spacing/positioning: read DS screen frame children → use y-coordinates (Rule 94–95)
+Step 0e → get_variable_defs on exact sub-nodes for every fill/stroke/spacing
+Step 0f → Cross-check CSS variable value against :root before using it (Rule 83)
+Step 0g → For icons: confirm viewBox, path scale, AND CSS dimensions (Rule 87)
+Step 0h → get_screenshot after implementation → compare against DS side-by-side
+```
+
+**Every mistake in this project came from skipping Step 0. A 2-minute DS inspection always saves more time than the bug it prevents.**
+
+---
+
+*Generated: May 2026 | Last updated: May 2026 (Rules 94–95 — DS screen coordinates for gaps + dropdown positioning) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

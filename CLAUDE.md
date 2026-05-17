@@ -1146,16 +1146,18 @@ Implemented profile menu items from the Profile Menu `get_design_context` output
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision — including seemingly trivial fixes. No exceptions.
 
 ```
-0a. Read design-md/zul.design.md  → ALL rules 1–93, confirmed specs, known mistakes — NO EXCEPTIONS
+0a. Read design-md/zul.design.md  → ALL rules 1–95, confirmed specs, known mistakes — NO EXCEPTIONS
 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f         → single source of truth, re-verify every value live
 0c. Audit component anatomy (Rule 49 / zul Rule 93):
       → get_design_context on COMPONENT_SET node → list ALL variants
       → get_design_context on EACH state variant → extract every token per state
       → For EACH nested sub-component → repeat the above on its own COMPONENT_SET
       → Check componentPropertyDefinitions → confirm visible/hidden/swap properties
-0d. get_variable_defs on exact sub-nodes    → confirm Semantic token per fill/stroke/spacing
-0e. Cross-check CSS var against :root hex   → never guess token from name (Rule 83)
-0f. For icons: confirm viewBox + path scale + CSS dimensions all consistent (Rule 87)
+0d. For spacing/positioning: read DS screen frame children y-coordinates (zul Rules 94–95)
+      → gap = B.y − (A.y + A.h)  |  dropdown top = target element's y in screen frame
+0e. get_variable_defs on exact sub-nodes    → confirm Semantic token per fill/stroke/spacing
+0f. Cross-check CSS var against :root hex   → never guess token from name (Rule 83)
+0g. For icons: confirm viewBox + path scale + CSS dimensions all consistent (Rule 87)
 1.  search_design_system → confirm component in DS, get component key
 2.  use_figma            → find node IDs across pages
 3.  get_design_context   → pull token bindings, dimensions, structure per variant

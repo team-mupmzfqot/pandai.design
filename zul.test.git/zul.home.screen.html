@@ -1333,7 +1333,7 @@
     ─────────────────────────────────────────────────────────────────────────────────────── */
     .profile-dropdown {
       position:       absolute;
-      top:            68px;
+      top:            80px;   /* DS: NavMenu y=80 — top-to-top aligned with Menu Bar */
       right:          var(--page-padding-x);
       z-index:        500;
       width:          320px;
@@ -1537,15 +1537,10 @@
       flex-shrink: 0;
     }
 
-    /* ─────────────────────────────────────────────────────
-       NAV TOP MENU DESKTOP — Nav Top Menu Desktop - 1.5
-       DS node 3406:789 (Type=Desktop) / inner "Navbar Content" 3406:802
-       Pill container · 9 nav buttons · hover + active states
-    ───────────────────────────────────────────────────── */
     #NavTopMenu-Desktop {
       display:    block;
       padding:    0 var(--page-padding-x);   /* follows page padding — 60px desktop / 32px tablet / 16px mobile */
-      margin-top: var(--spacing-space-s);   /* 12px gap below Primary (DS gap-[Spacing/space-s]) */
+      margin-top: var(--spacing-space-m);   /* 16px — DS confirmed: Navbar y:0 h:64, NavMenu y:80 → gap = 16px */
     }
 
     /* Pill container: h:56px, full border, radius 999px — DS 3406:802 */
@@ -2069,9 +2064,6 @@
       </div><!-- end menu -->
 
     </div><!-- end profile-dropdown -->
-
-  </section><!-- end NavbarPrimary-Desktop -->
-
 
   <!-- ═══════════════════════════════════════════════════════════════
        NAV TOP MENU DESKTOP — Nav Top Menu Desktop - 1.5
