@@ -3191,26 +3191,31 @@ dropdown top = target_element.y  (from DS screen frame children)
 
 ---
 
-### Mandatory workflow — BEFORE every design action, change, or decision (updated May 2026)
+### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-17)
 
-**Non-negotiable. Applies to every session, every component, every fix — no exceptions.**
+**Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
+
+> This is the single most important section in this file. Every mistake in this project — wrong colors, wrong states, wrong hover styles, wrong icon sizes, broken layout — traced back to skipping one of these steps. Read it before you type anything.
 
 ```
-Step 0a → Read design-md/zul.design.md      ← ALL rules 1–100 + confirmed specs
-Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f  ← single source of truth
-Step 0c → Audit component anatomy (Rule 93):
-           - get_design_context on COMPONENT_SET node → list all variants
-           - get_design_context on each state variant → extract all tokens
-           - Repeat for every nested sub-component
-           - Check all componentPropertyDefinitions (visible/hidden/swap)
-Step 0d → For spacing/positioning: read DS screen frame children → use y-coordinates (Rule 94–95)
-Step 0e → get_variable_defs on exact sub-nodes for every fill/stroke/spacing
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–101 + confirmed specs
+Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH. Not memory. Not docs. The DS.
+Step 0c → Audit component anatomy (Rule 49, 93):
+           - use_figma: find the component SET — list ALL variants by name
+           - get_design_context on each relevant state variant → extract all tokens
+           - Repeat for every nested sub-component (Rule 49)
+           - Check componentPropertyDefinitions → confirm visible/hidden/swap props
+Step 0d → For spacing/positioning: read DS screen frame y-coords (Rules 94–95)
+Step 0e → get_variable_defs on exact sub-nodes for every fill/stroke/spacing (Rule 12)
 Step 0f → Cross-check CSS variable value against :root before using it (Rule 83)
 Step 0g → For icons: confirm viewBox, path scale, AND CSS dimensions (Rule 87)
-Step 0h → get_screenshot after implementation → compare against DS side-by-side
+Step 0h → For Subject Badges: run full audit script (Rule 101e) before touching any badge CSS
+Step 0i → get_screenshot after implementation → compare against DS side-by-side
 ```
 
-**Every mistake in this project came from skipping Step 0. A 2-minute DS inspection always saves more time than the bug it prevents.**
+**Why Step 0b matters more than docs:** zul.design.md and CLAUDE.md can lag the DS. In the 2026-05-17 badge audit, the HTML was ahead of the docs, and the docs had 4 wrong values. The DS was the only correct source. Always re-verify live — never trust any written record as a substitute for a DS lookup.
+
+**A 2-minute DS inspection always saves more time than the bug it prevents.**
 
 ---
 
@@ -3338,4 +3343,129 @@ Sy = (H - 2) / H    →  e.g. (51.172 - 2) / 51.172 = 0.9609
 
 ---
 
-*Generated: May 2026 | Last updated: May 2026 (Rules 96–100 — PNG icons, bulk HTML safety, button reset, Active icon color, clip-path inner border) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 101 — Subject Badge audit: DS is always authoritative — docs and implementations drift
+
+**What this rule is:** A standing lesson from the 2026-05-17 full Subject Badge live DS audit. Applies to Subject Badges specifically, and as a principle to all DS component audits.
+
+---
+
+#### 101a. Component location and size naming can change between sessions
+
+The Subject Badge component **moved pages** and **renamed its sizes** at some point between May 2026 and May 2026-05-17:
+
+| Property | Old (documented) | New (live DS 2026-05-17) |
+|---|---|---|
+| Page | `🔰 Iconography` | `⚙️ Badges` |
+| Node type | `COMPONENT` (individual) | `COMPONENT_SET` (variant set) |
+| Size=32px name | `- L` | `Size=M` |
+| Size=24px name | `- M` | `Size=S` |
+
+**Rule:** Never hardcode a page name or size variant name from memory when writing a Figma lookup script. Always discover dynamically:
+
+```js
+// CORRECT — discovers wherever they live
+const sets = [];
+for (const page of figma.root.children) {
+  await figma.setCurrentPageAsync(page);
+  const found = page.findAll(n => n.type === 'COMPONENT_SET' && n.name.startsWith('Subject Badge/'));
+  found.forEach(n => sets.push({ page: page.name, id: n.id, name: n.name, variants: n.children.map(c => c.name) }));
+}
+return sets;
+```
+
+---
+
+#### 101b. Always pull text color from the TEXT node inside the Label frame — per subject
+
+The badge text color is on the `TEXT` node inside the `Label` child frame, not on the component root or label panel. The extraction path is:
+
+```
+COMPONENT (variant node)
+  └── FRAME "Content"          → .strokes[0].color = border color
+        ├── FRAME "Subject Icon"  (white slot — skip)
+        └── FRAME "Label"      → .fills[0].color   = badge bg color
+              ├── TEXT "Subject" → .fills[0].color  = text color
+              └── VECTOR "Pointer"
+```
+
+**Correct extraction code:**
+```js
+const contentFrame = node.children.find(c => c.name === 'Content');
+const labelFrame   = contentFrame?.children.find(c => c.name === 'Label');
+const textNode     = labelFrame?.children.find(c => c.type === 'TEXT');
+
+const border = contentFrame?.strokes?.[0]?.color;
+const bg     = labelFrame?.fills?.[0]?.color;
+const text   = textNode?.fills?.[0]?.color;
+```
+
+**Why this matters:** A generic `findAll` walk will hit the Subject Icon's vector fills before the Label fill, returning the wrong color as the "badge bg". Always target named children directly.
+
+---
+
+#### 101c. Text exceptions are not always the documented ones — always audit all 20
+
+As of 2026-05-17 there are **three** dark-text exceptions (light backgrounds):
+
+| Subject | bg | `--badge-text` |
+|---|---|---|
+| Science | `#ffd641` (yellow) | `#998027` |
+| KAFA | `#8ae3a9` (mint green) | `#538865` |
+| Geography | `#77d836` (light green) | `#478220` |
+
+Geography was **not documented** prior to this audit. It renders white text on a light green badge — unreadable. The docs only listed Science and KAFA as exceptions.
+
+**Rule:** When running a Subject Badge audit, always extract text color for ALL subjects and compare each against `#f2f2f2`. Any subject whose bg is a light or mid-tone color is a candidate for a dark-text exception. Never assume the documented exceptions are complete.
+
+---
+
+#### 101d. Docs can be wrong while the implementation is right — always verify both
+
+In this audit, the HTML was **more accurate** than CLAUDE.md and zul.design.md for 3 border colors (Add Math, Account, Bahasa Melayu) and KAFA text. The docs had old values that were never corrected after a prior DS update.
+
+**Rule priority (descending):**
+```
+1. Live DS (use_figma → inspect node → extract color)   ← always authoritative
+2. Current HTML/CSS implementation                       ← may be ahead of docs
+3. zul.design.md + CLAUDE.md                            ← may lag the DS
+4. design.color.md                                       ← was already updated, still verify
+```
+
+When a doc value and the HTML value disagree, **go to the DS first** — one of the two is correct, but only the DS decides which.
+
+---
+
+#### 101e. Do a full Subject Badge color audit before any badge-related work
+
+Any time a session involves Subject Badges (adding a new subject, changing badge layout, implementing a new quiz card section), run the full audit script below before touching any CSS:
+
+```js
+// Full audit — run at session start when badges are in scope
+const badgesPage = figma.root.children.find(p => p.name.includes('Badges'));
+await figma.setCurrentPageAsync(badgesPage);
+const toHex = c => `#${[c.r,c.g,c.b].map(v=>Math.round(v*255).toString(16).padStart(2,'0')).join('')}`;
+const sets = badgesPage.findAll(n => n.type === 'COMPONENT_SET' && n.name.startsWith('Subject Badge/'));
+const results = [];
+for (const set of sets) {
+  const sVariant = set.children.find(c => c.name.includes('Size=S'));
+  if (!sVariant) continue;
+  const content = sVariant.children.find(c => c.name === 'Content');
+  const label   = content?.children.find(c => c.name === 'Label');
+  const text    = label?.children.find(c => c.type === 'TEXT');
+  results.push({
+    subject: set.name.replace('Subject Badge/', ''),
+    bg:     label?.fills?.[0]?.color ? toHex(label.fills[0].color) : '?',
+    border: content?.strokes?.[0]?.color ? toHex(content.strokes[0].color) : '?',
+    text:   text?.fills?.[0]?.color ? toHex(text.fills[0].color) : '?'
+  });
+}
+return results.sort((a,b) => a.subject.localeCompare(b.subject));
+```
+
+Compare output against CSS variables in the HTML. Any mismatch must be fixed before other work begins.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-17 (Rule 101 — Subject Badge live DS audit learnings) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
