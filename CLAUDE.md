@@ -1640,4 +1640,78 @@ Both counts must match. If any `<section id="...">` has no corresponding `</sect
 
 ---
 
-*Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### 52. Navbar action button → dropdown: full anatomy checklist
+
+Every action button in `#NavbarPrimary-Desktop` that opens a dropdown (bell, EN/locale, smartphone/download, waffle/learn) requires ALL FOUR of these. Missing any one breaks the behaviour.
+
+1. **Button HTML** — `id`, `aria-haspopup="true"`, and `<div class="nav-btn-union-bg">` as first child of `nav-btn-content`. Without `nav-btn-union-bg`, `.is-active` shows no speech-bubble.
+2. **Dropdown HTML** — `<div class="my-dropdown" id="DROPDOWN-ID">` placed inside `#NavbarPrimary-Desktop` (after the `.navbar-primary` closing div).
+3. **CSS** — same pattern as all other nav dropdowns: white bg, `1px solid #00cc85` border, `24px` radius, `16px` padding, `top: 80px` (confirmed for ALL nav dropdowns), `opacity + translateY(-8px)` animation.
+4. **JS IIFE** — `positionDropdown()` (right-align to button), click toggle, `mouseleave` close, outside-click close, close-all-others block (Rule 53).
+
+See `design-md/zul.design.md` Rule 106 for the full code templates.
+
+---
+
+### 53. All navbar dropdowns are mutually exclusive — every click handler must close all others
+
+Only one dropdown can be open at a time. Every button click handler must close ALL other nav dropdowns (and deactivate their buttons) before opening its own.
+
+**When adding a new dropdown:** Update EVERY existing click handler to include the new dropdown ID in its closing block. The current roster (May 2026): `profile-dropdown`, `learn-dropdown` / `waffle-btn`, `locale-dropdown` / `locale-btn`, `notif-dropdown` / `notif-btn`, `download-dropdown` / `download-btn`.
+
+See `design-md/zul.design.md` Rule 107 for the full closing-block code pattern.
+
+---
+
+### 54. Notification item (Navbar Notification Button - Parts) — structural state, not color-only
+
+The DS component changes LAYOUT between Default and Hover/Pressed, not just color:
+- **Default**: inner row has `border-bottom: 1px solid #d9d9d9` + `padding-bottom: 12px`. Content frame: `pt-12 px-12 pb-0`, no border.
+- **Hover**: content frame gets `box-shadow: inset 0 0 0 1px #00cc85` + `border-radius: 16px` + `padding: 12px`. Inner row border disappears (`border-bottom-color: transparent`, `padding-bottom: 0`). Text: `#00564c`.
+- **Pressed**: same as hover but bg: `Surface/primary/focus #00a36a`. Text: `#00cc85`.
+
+Avatar: 60×60 clip, `ic-user-circle` at 50px (DS `inset: 8.33%` = 5px each side). See `design-md/zul.design.md` Rule 108 for the full CSS pattern.
+
+---
+
+### 55. Coloured brand/store icons → 2× PNG, not SVG symbols
+
+App store icons (Google Play, Apple App Store, Huawei AppGallery) have multiple hard-coded fill colors — they cannot be used as `stroke="currentColor"` SVG symbols. Export as 2× PNG even though they are small (1–5KB).
+
+**Decision rule:** single-color outline icon → SVG symbol. Multi-color / filled icon → 2× PNG.
+
+Use `object-fit: contain` on the `<img>` — Play Store's native height is 26.8px (not 24px), and `object-fit: contain` letterboxes it correctly within a 24×24 CSS box. Use `<a>` elements (not `<div>`) for download items — semantic and gets hover/active on mobile correctly.
+
+See `design-md/zul.design.md` Rule 109 for confirmed DS node IDs and file sizes.
+
+---
+
+### Mandatory workflow — BEFORE every session and every change
+
+**Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision — including seemingly trivial fixes. No exceptions.
+
+```
+0a. Read design-md/zul.design.md  → ALL rules 1–109, confirmed specs, known mistakes — NO EXCEPTIONS
+0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f         → single source of truth, re-verify every value live
+0c. Audit component anatomy (Rule 49 / zul Rule 93):
+      → get_design_context on COMPONENT_SET node → list ALL variants
+      → get_design_context on EACH state variant → extract every token per state
+      → For EACH nested sub-component → repeat the above on its own COMPONENT_SET
+      → Check componentPropertyDefinitions → confirm visible/hidden/swap properties
+0d. For spacing/positioning: read DS screen frame children y-coordinates (zul Rules 94–95)
+0e. get_variable_defs on exact sub-nodes    → confirm Semantic token per fill/stroke/spacing
+0f. Cross-check CSS var against :root hex   → never guess token from name (Rule 83)
+0g. For icons: confirm viewBox + path scale + CSS dimensions all consistent (Rule 87)
+1.  search_design_system → confirm component in DS, get component key
+2.  use_figma            → find node IDs across pages
+3.  get_design_context   → pull token bindings, dimensions, structure per variant
+4.  get_variable_defs    → confirm Semantic token names on exact sub-nodes
+5.  Implement            → use only DS-confirmed values, zero assumptions
+6.  Validate             → compare against get_screenshot, fix before moving on
+```
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-18 (Rules 52–55 — nav dropdown anatomy, mutual exclusivity, notification structural states, store icon PNG) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

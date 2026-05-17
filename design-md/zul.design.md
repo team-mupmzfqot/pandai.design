@@ -3198,7 +3198,7 @@ dropdown top = target_element.y  (from DS screen frame children)
 > This is the single most important section in this file. Every mistake in this project — wrong colors, wrong states, wrong hover styles, wrong icon sizes, broken layout — traced back to skipping one of these steps. Read it before you type anything.
 
 ```
-Step 0a → Read design-md/zul.design.md          ← ALL rules 1–105 + confirmed specs
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–109 + confirmed specs
 Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH. Not memory. Not docs. The DS.
 Step 0c → Audit component anatomy (Rule 49, 93):
            - use_figma: find the component SET — list ALL variants by name
@@ -3608,4 +3608,259 @@ The DS component `Learn Menu Button - Parts` (node `3880:50098`) has **exactly 3
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-18 (Rules 103–105 — image-repo first, get_screenshot reference only, Learn Menu Button states) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 106 — Navbar action button → dropdown: full anatomy checklist (confirmed May 2026)
+
+Every action button in `#NavbarPrimary-Desktop` that triggers a dropdown (bell, EN/locale, smartphone/download, waffle/learn) requires FOUR things. Missing any one of them breaks the behaviour.
+
+**1. HTML — button element:**
+```html
+<button class="navbar-action-btn" id="BUTTON-ID" type="button"
+        aria-label="Label" aria-haspopup="true">
+  <div class="nav-btn-content">
+    <div class="nav-btn-union-bg" aria-hidden="true"></div>  <!-- ← mandatory for active speech-bubble -->
+    <div class="nav-btn-rect"     aria-hidden="true"></div>
+    <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-ICON"/></svg></div>
+  </div>
+</button>
+```
+`nav-btn-union-bg` MUST be the first child of `nav-btn-content`. Without it, `.is-active` has no speech-bubble to show — the active state is completely invisible.
+
+**2. HTML — dropdown panel (inside `#NavbarPrimary-Desktop`, after `</div><!-- navbar primary -->`):**
+```html
+<div class="my-dropdown" id="DROPDOWN-ID" aria-label="..." role="menu">
+  <!-- items -->
+</div>
+```
+
+**3. CSS — panel:**
+```css
+.my-dropdown {
+  position:       absolute;
+  top:            80px;   /* confirmed for ALL nav dropdowns — never change */
+  right:          0;      /* JS overrides per button */
+  left:           auto;
+  z-index:        500;
+  width:          Xpx;   /* DS-confirmed width */
+  background:     var(--surface-general-default);
+  border:         1px solid var(--border-primary-default);
+  border-radius:  var(--corner-radius-corner-4xl);   /* 24px */
+  padding:        var(--spacing-space-m);             /* 16px */
+
+  /* Closed state */
+  opacity:        0;
+  transform:      translateY(-8px);
+  pointer-events: none;
+  visibility:     hidden;
+  transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
+}
+.my-dropdown.is-open {
+  opacity:        1;
+  transform:      translateY(0);
+  pointer-events: auto;
+  visibility:     visible;
+  transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
+}
+```
+
+**4. JS — IIFE (registered BEFORE non-critical JS per Rule 14):**
+```js
+(function () {
+  var btn        = document.getElementById('BUTTON-ID');
+  var navSection = document.getElementById('NavbarPrimary-Desktop');
+  var dropdown   = document.getElementById('DROPDOWN-ID');
+  if (!btn || !navSection || !dropdown) return;
+
+  function positionDropdown() {
+    var btnRect     = btn.getBoundingClientRect();
+    var sectionRect = navSection.getBoundingClientRect();
+    var rightOffset = sectionRect.right - btnRect.right;
+    var dropW       = dropdown.offsetWidth || DS_WIDTH;
+    dropdown.style.right = Math.max(0, Math.min(rightOffset, sectionRect.width - dropW)) + 'px';
+    dropdown.style.left  = 'auto';
+  }
+
+  btn.addEventListener('click', function () {
+    var willOpen = !dropdown.classList.contains('is-open');
+    closeAllOtherDropdowns();   // Rule 107
+    if (willOpen) positionDropdown();
+    dropdown.classList.toggle('is-open');
+    btn.classList.toggle('is-active', willOpen);
+  });
+
+  dropdown.addEventListener('mouseleave', function () {
+    dropdown.classList.remove('is-open');
+    btn.classList.remove('is-active');
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
+      dropdown.classList.remove('is-open');
+      btn.classList.remove('is-active');
+    }
+  }, true);
+
+  window.addEventListener('resize', function () {
+    if (dropdown.classList.contains('is-open')) positionDropdown();
+  });
+})();
+```
+
+**Confirmed DS panel specs — ALL four nav dropdowns (May 2026):**
+| Dropdown | DS node | Panel width | Items |
+|---|---|---|---|
+| Localization | `3928:3067` | 204px | 3 text-only (Dropdown - Parts) |
+| Download Apps | `3909:3405` | 238px | 3 icon + text (Dropdown - Parts) |
+| Notification | `3908:13057` | 320px | 4 notification items + CTA button |
+| Learn Menu | `3908:5091` | 365px | 12 feature grid items |
+
+**ALL nav dropdowns share `top: 80px`** — confirmed from DS screen frame. This is Navbar height (64px) + `Spacing/space-m` (16px) gap. Never change this value for any navbar-anchored dropdown.
+
+**Mistakes made (May 2026):**
+- Forgot `nav-btn-union-bg` on locale, bell, and smartphone buttons → `.is-active` showed no visual change at all. Fix: always use the full button HTML template above.
+- Used `aria-label="Language: English"` on the locale button → label should be generic (`"Language"`) since the active language is indicated by the selected item inside the dropdown, not the button label.
+
+---
+
+### Rule 107 — All navbar dropdowns are mutually exclusive — every click handler must close all others
+
+Only one dropdown can be open at any time. Every button click handler must close ALL other navbar dropdowns + deactivate their trigger buttons before opening its own. No exceptions.
+
+**Why:** Two open dropdowns overlap visually and create a broken UX. The DS only ever shows one dropdown open at a time.
+
+**Closing roster (current prototype, May 2026):**
+
+| Trigger | Must close |
+|---|---|
+| Avatar (profile) | learn, locale, notif, download |
+| Waffle (learn) | profile, locale, notif, download |
+| Locale (EN) | profile, learn, notif, download |
+| Bell (notification) | profile, learn, locale, download |
+| Smartphone (download) | profile, learn, locale, notif |
+
+**Pattern — expand the closing block in every handler as new dropdowns are added:**
+```js
+// Close all other dropdowns — update this list whenever a new dropdown is added
+var profileDd   = document.getElementById('profile-dropdown');
+var learnDd     = document.getElementById('learn-dropdown');
+var waffleBtn   = document.getElementById('waffle-btn');
+var localeDd    = document.getElementById('locale-dropdown');
+var localeBtn   = document.getElementById('locale-btn');
+var notifDd     = document.getElementById('notif-dropdown');
+var notifBtn    = document.getElementById('notif-btn');
+var downloadDd  = document.getElementById('download-dropdown');
+var downloadBtn = document.getElementById('download-btn');
+if (profileDd)  profileDd.classList.remove('is-open');
+if (learnDd)    learnDd.classList.remove('is-open');
+if (waffleBtn)  waffleBtn.classList.remove('is-active');
+if (localeDd)   localeDd.classList.remove('is-open');
+if (localeBtn)  localeBtn.classList.remove('is-active');
+if (notifDd)    notifDd.classList.remove('is-open');
+if (notifBtn)   notifBtn.classList.remove('is-active');
+if (downloadDd)  downloadDd.classList.remove('is-open');
+if (downloadBtn) downloadBtn.classList.remove('is-active');
+```
+
+**When adding a new dropdown:** Update EVERY existing click handler to include the new dropdown's ID in its closing block. Failing to do this leaves one handler that can open alongside the new dropdown.
+
+---
+
+### Rule 108 — Navbar Notification Button - Parts: structural state change, not just color
+
+The DS `Navbar Notification Button - Parts` (node `3908:13427`) has a **structural layout change** between Default and Hover/Pressed. The inner row wrapper and bottom divider exist ONLY in Default state. This cannot be replicated with color CSS alone — the padding and border-bottom on the inner body element must change.
+
+**Default state (node `3908:13427`):**
+- Content frame: white bg, `pt-12 px-12 pb-0`, no border, no radius
+- Inner row (`.notif-item__body`): `gap-8, pb-12, border-bottom: 1px solid #d9d9d9`
+- Items are separated by the bottom divider, not a gap on the container
+
+**Hover state (node `3908:13443`):**
+- Content frame: `Surface/secondary/default-hover (#f6fef6)` bg + `inset 0 0 0 1px #00cc85` + `border-radius: 16px (Radius/2xl)` + `p-12` ALL sides
+- Inner row: `border-bottom-color: transparent; padding-bottom: 0` — divider disappears
+- Text: `Text/tertiary/default (#00564c)`
+
+**Pressed state (node `3908:13456`):**
+- Same as Hover but bg: `Surface/primary/focus (#00a36a)`
+- Text: `Text/primary/default (#00cc85)`
+
+**CSS implementation pattern:**
+```css
+/* Default */
+.notif-item__content {
+  background:    var(--surface-general-default);
+  padding:       12px 12px 0;
+  border-radius: 0;
+}
+.notif-item__body {
+  padding-bottom: 12px;
+  border-bottom:  1px solid var(--border-general-default);
+}
+/* Hover */
+.notif-item:hover .notif-item__content {
+  background:    var(--surface-secondary-default-hover);  /* #f6fef6 */
+  box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+  border-radius: var(--corner-radius-corner-xl);          /* 16px */
+  padding:       12px;
+}
+.notif-item:hover .notif-item__body { border-bottom-color: transparent; padding-bottom: 0; }
+.notif-item:hover .notif-item__text { color: var(--text-tertiary-default); }
+/* Pressed */
+.notif-item:active .notif-item__content {
+  background:    var(--surface-primary-focus);            /* #00a36a */
+  box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+  border-radius: var(--corner-radius-corner-xl);
+  padding:       12px;
+}
+.notif-item:active .notif-item__body { border-bottom-color: transparent; padding-bottom: 0; }
+.notif-item:active .notif-item__text { color: var(--text-primary-default); }
+```
+
+**Avatar — 60×60 clip, DS `Outline/user-circle` at 50px:**
+- Clip container: `60×60, overflow: hidden`
+- Icon inside: `50×50px` (DS `inset: 8.33%` on 60px = 5px each side = 50px content area)
+- Use existing `ic-user-circle` symbol: `<svg style="width:50px;height:50px"><use href="#ic-user-circle"/></svg>`
+
+**"See all notification" button — Primary/L, 288px wide, no arrow:**
+- `max-height: 48px; padding: 8px 12px; border-radius: 60px`
+- bg: `var(--surface-primary-default)`; border: `var(--border-primary-focus)`; text: `var(--text-primary-on-color)`
+- Hover/Pressed: same Primary button palette from Rule 19
+
+---
+
+### Rule 109 — Coloured brand/store icons → 2× PNG export, even if small in bytes
+
+App store brand icons (Google Play, Apple App Store, Huawei AppGallery) are multi-colour filled illustrations. They cannot be used as `stroke="currentColor"` SVG symbols because they have multiple hard-coded fill colors (blue, orange, green, red, etc. for Play Store; gradient fills for App Store).
+
+**Export them as 2× PNG** using `exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 2 } })` — even though they are much smaller than the Feature/* illustrated icons from Rule 96 (1–5KB vs 15–56KB). The deciding factor is **multiple fill colors**, not file size.
+
+**Decision rule:**
+```
+Is the icon a single-color outline (stroke)?   → SVG symbol with stroke="currentColor"
+Is the icon multi-color / has fills?            → 2× PNG
+```
+
+**Confirmed store icon specs (DS node 3909:3405, May 2026):**
+| Icon | DS node | Native size | PNG @2× | Saved as |
+|---|---|---|---|---|
+| Google Play (Playstore) | `I3909:3405;3908:14084;2185:42800` | 24×26.8px | 1.2KB | `store-google-play.png` |
+| Apple App Store | `I3909:3405;3908:14085;2185:42800` | 24×24px | 3.1KB | `store-apple.png` |
+| Huawei AppGallery | `I3909:3405;3908:14086;2185:42800` | 24×24px | 3.1KB | `store-huawei.png` |
+
+**CSS for store icons (confirmed DS spec):**
+```css
+.download-dropdown__icon {
+  width:      24px;
+  height:     24px;
+  flex-shrink: 0;
+  object-fit: contain;  /* letterboxes Play Store's 24×26.8 within the 24×24 box */
+  display:    block;
+}
+```
+`object-fit: contain` is required for the Play Store icon which has a native height of 26.8px — without it the icon squishes to fit the 24×24 box.
+
+**Use `<a>` not `<div>` for download items:** Since each store item navigates to an external app store URL, use `<a class="download-dropdown__item" href="...">` — semantic, keyboard-accessible, and gets `:hover`/`:active` correctly on native mobile.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-18 (Rules 106–109 — nav dropdown anatomy, mutual exclusivity, notification structural states, store icon PNG export) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
