@@ -1483,15 +1483,6 @@
       color: var(--text-tertiary-default);
     }
 
-    /* Pressing — dark teal (Rule 40 consistent) */
-    .learn-dropdown__item.is-pressing {
-      background: var(--surface-tertiary-default);
-      box-shadow: inset 0 0 0 1px var(--border-tertiary-focus);
-    }
-    .learn-dropdown__item.is-pressing .learn-dropdown__label {
-      color: var(--text-primary-default);
-    }
-
     /* DS Selected: bg #b5f291, border #70bc6f, text #00564c
        Use :is() to beat :hover specificity so hover doesn't override selected */
     .learn-dropdown__item.is-selected,
@@ -1513,13 +1504,13 @@
       flex-shrink: 0;
     }
 
-    /* Label — DS Body/B1: 14px SemiBold #666 */
+    /* Label — DS State=Default: 14px SemiBold, #404040 (Text/default/heading, varName 106:34) */
     .learn-dropdown__label {
       font-family: var(--font-family);
       font-size:   14px;
       font-weight: 600;
       line-height: 20px;
-      color:       var(--text-default-body);
+      color:       var(--text-default-heading);
       text-align:  center;
       transition:  color 0.12s ease;
     }
@@ -3133,12 +3124,9 @@
         if (dropdown.classList.contains('is-open')) positionDropdown();
       });
 
-      // Pressed feedback + persistent Active/Selected state on menu items (Rule 39)
+      // Persistent Selected state on menu items — DS has Default/Hover/Selected only (no Pressed)
       var allItems = Array.from(dropdown.querySelectorAll('.learn-dropdown__item'));
       allItems.forEach(function (item) {
-        item.addEventListener('mousedown',  function () { item.classList.add('is-pressing'); });
-        item.addEventListener('mouseup',    function () { item.classList.remove('is-pressing'); });
-        item.addEventListener('mouseleave', function () { item.classList.remove('is-pressing'); });
         item.addEventListener('click', function () {
           allItems.forEach(function (i) { i.classList.remove('is-selected'); });
           item.classList.add('is-selected');
