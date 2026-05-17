@@ -3198,7 +3198,7 @@ dropdown top = target_element.y  (from DS screen frame children)
 > This is the single most important section in this file. Every mistake in this project — wrong colors, wrong states, wrong hover styles, wrong icon sizes, broken layout — traced back to skipping one of these steps. Read it before you type anything.
 
 ```
-Step 0a → Read design-md/zul.design.md          ← ALL rules 1–102 + confirmed specs
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–105 + confirmed specs
 Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH. Not memory. Not docs. The DS.
 Step 0c → Audit component anatomy (Rule 49, 93):
            - use_figma: find the component SET — list ALL variants by name
@@ -3515,4 +3515,97 @@ function positionDropdown() {
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-18 (Rule 102 — Nav dropdown right-alignment pattern) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 103 — Always check `src/image-repo/` before exporting assets from Figma
+
+Before exporting any icon, illustration, or image from Figma, **check the project's `src/image-repo/` directory first**. Authored assets stored there are the correct, production-ready versions — proper resolution, proper transparency, already prepared by the designer.
+
+**Directory structure confirmed (May 2026):**
+```
+pandai.design/
+  src/
+    image-repo/
+      Learn-Menu/       ← 12 feature icons (live-tuition, live-help, quiz, etc.)
+        chapters.png
+        experiments.png
+        live-help.png
+        live-tuition.png
+        personality.png
+        practice.png
+        quick-notes.png
+        quiz.png
+        rewards.png
+        textbook.png      ← maps to feature-textbooks.png in icons/
+        university.png
+        videos.png
+```
+
+**Workflow (mandatory for any image asset):**
+```
+1. Check src/image-repo/<ComponentName>/ — use these files if present
+2. Only if absent: export from Figma via use_figma or get_screenshot
+3. Copy to zul.test.git/icons/ with the correct feature-*.png naming
+```
+
+**Name mapping (src/image-repo/Learn-Menu → zul.test.git/icons):**
+| Source filename | Target filename |
+|---|---|
+| `chapters.png` | `feature-chapters.png` |
+| `experiments.png` | `feature-experiments.png` |
+| `live-help.png` | `feature-live-help.png` |
+| `live-tuition.png` | `feature-live-tuition.png` |
+| `personality.png` | `feature-personality.png` |
+| `practice.png` | `feature-practice.png` |
+| `quick-notes.png` | `feature-quick-notes.png` |
+| `quiz.png` | `feature-quiz.png` |
+| `rewards.png` | `feature-rewards.png` |
+| `textbook.png` | `feature-textbooks.png` |
+| `university.png` | `feature-university.png` |
+| `videos.png` | `feature-videos.png` |
+
+**Mistake made (May 2026):** Spent multiple sessions trying to export icons via `use_figma` (base64 too large to write) and `get_screenshot` (only 52×52px, 1–3KB — too small and blurry), when the correct 12–30KB RGBA transparent PNGs were already sitting in `src/image-repo/Learn-Menu/`.
+
+---
+
+### Rule 104 — `get_screenshot` is for visual reference only — never use it for asset export
+
+The Figma MCP `get_screenshot` tool returns a screenshot of a node at its **native 1× size** (e.g., 52×52px for a 52px component). This is appropriate for visual inspection during design review, but never for asset export into the prototype.
+
+**Confirmed behavior (May 2026):**
+- Returns PNG at component's native pixel dimensions (no upscaling)
+- Feature/* icons: returned at 52×52px
+- File size: 1–3KB (vs correct assets at 12–30KB)
+- Even though color type = 6 (RGBA), the small size causes blurriness at 70px CSS display
+
+**For checking transparency:** Use PowerShell to read byte 25 of the PNG (color type byte): `2` = RGB (no alpha), `6` = RGBA (alpha channel present). But RGBA alone doesn't guarantee the content is visually correct — check actual file size too. Correct Learn Menu icons are 12–30KB; anything under 5KB is a wrong export.
+
+**Use `get_screenshot` for:** Side-by-side visual comparison, design review, confirming layout before implementation.
+
+**Never use `get_screenshot` for:** Saving to `icons/` directory, using as `<img src>` in the prototype.
+
+---
+
+### Rule 105 — Learn Menu Button - Parts: only 3 states (Default / Hover / Selected)
+
+The DS component `Learn Menu Button - Parts` (node `3880:50098`) has **exactly 3 states**. There is no Pressed, Active, or Focus state.
+
+| State | bg | border | text |
+|---|---|---|---|
+| **Default** | transparent | none | `#404040` — `Text/default/heading` (`var(--text-default-heading)`) |
+| **Hover** | `#e8fbe8` — `Surface/secondary/default-subtle` | `1px #00cc85` — `Border/primary/default` | `#00564c` — `Text/tertiary/default` |
+| **Selected** | `#b5f291` — `Surface/secondary/default` | `1px #70bc6f` — `Border/secondary/focus` | `#00564c` — `Text/tertiary/default` |
+
+**Key details:**
+- `padding: 8px` all sides, `border-radius: 12px`, `min-height: 114px` per cell
+- Grid: `display: grid; grid-template-columns: repeat(3, 1fr)` — NO gap between cells (items pack flush)
+- Label: `font-size: 14px; font-weight: 600; line-height: 20px`
+- Default label color is `Text/default/heading` = `#404040` — **NOT** `Text/default/body` = `#666666`
+
+**Mistakes made (May 2026):**
+- Implemented `.is-pressing` dark-teal state (from Rule 40) — this palette does NOT apply to Learn Menu Button, which has no Pressed variant in the DS. Always pull states from the SPECIFIC component's COMPONENT_SET, not from a general rule.
+- Default label used `var(--text-default-body)` = `#666` — actual DS varName `106:34` maps to `Text/default/heading` = `#404040`.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-18 (Rules 103–105 — image-repo first, get_screenshot reference only, Learn Menu Button states) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
