@@ -1425,14 +1425,15 @@
     /* ─── Learn Menu - 1.5 (DS node 3908:5091)
        364px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
        Anchored to #NavTopMenu-Desktop (position:relative) below the nav pill
-       JS positions .style.left to align with Learn nav button
+       JS positions .style.right to right-align dropdown to waffle button's right edge
     ─────────────────────────────────────────────────────────────────────── */
     .learn-dropdown {
       position:       absolute;
-      top:            80px;   /* DS: Navbar h:64 + 16px gap = 80, same as profile-dropdown */
-      left:           0;      /* JS overrides to align with waffle button */
+      top:            80px;   /* DS confirmed: Navbar h:64 + 16px gap = 80 (same as all other nav dropdowns) */
+      right:          0;      /* JS overrides — right-aligned to waffle btn right edge, extends leftward */
+      left:           auto;
       z-index:        500;
-      width:          364px;
+      width:          365px;  /* DS node 3908:5492: w=365px */
       background:     var(--surface-general-default);
       border:         1px solid var(--border-primary-default);
       border-radius:  var(--corner-radius-corner-4xl);
@@ -3094,10 +3095,14 @@
       function positionDropdown() {
         var btnRect     = waffleBtn.getBoundingClientRect();
         var sectionRect = navSection.getBoundingClientRect();
-        var left        = btnRect.left - sectionRect.left;
-        var dropW       = dropdown.offsetWidth || 364;
-        var maxLeft     = sectionRect.width - dropW;
-        dropdown.style.left = Math.max(0, Math.min(left, maxLeft)) + 'px';
+        // Right-align: dropdown right edge = waffle button right edge → extends leftward
+        // right = distance from section's right edge to the button's right edge
+        var rightOffset = sectionRect.right - btnRect.right;
+        var dropW       = dropdown.offsetWidth || 365;
+        // Clamp so the dropdown never clips past the section's left edge
+        var maxRight    = sectionRect.width - dropW;
+        dropdown.style.right = Math.max(0, Math.min(rightOffset, maxRight)) + 'px';
+        dropdown.style.left  = 'auto';
       }
 
       waffleBtn.addEventListener('click', function () {
