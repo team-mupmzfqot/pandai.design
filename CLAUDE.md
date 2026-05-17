@@ -1119,22 +1119,52 @@ The canonical color reference for this repo is [`design.color.md`](design.color.
 
 ---
 
+### 49. Always audit component anatomy before implementing any component
+
+Before writing a single CSS rule or HTML element for a DS component, always inspect its full anatomy:
+
+1. **Nested Instances** — every child instance (e.g. `Dropdown - Parts` inside `Profile Menu - 1.5`, `Button - 1.5` inside a card) is its own component set with its own states. Look each one up separately via `get_design_context` on the nested component's own node.
+2. **Variants** — list ALL variants in the component set before writing any code. Never assume what variants exist from the component name alone.
+3. **States** — pull every interactive state (Default, Hover, Pressed/Active, Selected, Disabled, Focus) via `get_design_context` BEFORE writing any `:hover`, `:active`, or JS class CSS.
+4. **Properties** — check boolean props (`visible`, `showIcon`, `showLabel`) and enum props (`type`, `size`, `role`). `visible: false` children must not be rendered; different `type` values can change the entire layout.
+
+**Workflow (mandatory):**
+```
+1. get_design_context on the COMPONENT SET node → read all variant names
+2. get_design_context on each relevant state variant → extract tokens per state
+3. For each nested instance → repeat steps 1–2 on that sub-component's own set
+4. Only then write HTML and CSS
+```
+
+**Mistake made (May 2026 — Dropdown - Parts / Profile Menu):**
+Implemented profile menu items from the Profile Menu `get_design_context` output only, which showed the Default state. Did not separately audit `Dropdown - Parts` (node `1342:4370`). The DS Hover state uses `#e8fbe8` bg + `1px solid #00cc85` border + **pill border-radius (108px)** + `#00cc85` label — none of which is visible from the Default state alone. Hover styles had to be corrected after the fact.
+
+---
+
 ### Mandatory workflow — BEFORE every session and every change
 
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision — including seemingly trivial fixes. No exceptions.
 
 ```
-0a. Read zul.design.md   → load all confirmed specs, session rules, known mistakes
-0b. Refer to live DS     → TLVKe3bgJTdVvuPAzgDq2f — single source of truth
-1.  search_design_system → confirm component exists in DS, get component key
-2.  use_figma            → find node ID across pages
-3.  get_design_context   → pull exact token bindings, dimensions, structure per variant
-4.  get_variable_defs    → confirm Semantic token names used on the node
-5.  Implement            → use only token values from steps 3–4, no assumptions
-6.  Validate             → compare against get_screenshot
+0a. Read design-md/zul.design.md  → ALL rules 1–93, confirmed specs, known mistakes — NO EXCEPTIONS
+0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f         → single source of truth, re-verify every value live
+0c. Audit component anatomy (Rule 49 / zul Rule 93):
+      → get_design_context on COMPONENT_SET node → list ALL variants
+      → get_design_context on EACH state variant → extract every token per state
+      → For EACH nested sub-component → repeat the above on its own COMPONENT_SET
+      → Check componentPropertyDefinitions → confirm visible/hidden/swap properties
+0d. get_variable_defs on exact sub-nodes    → confirm Semantic token per fill/stroke/spacing
+0e. Cross-check CSS var against :root hex   → never guess token from name (Rule 83)
+0f. For icons: confirm viewBox + path scale + CSS dimensions all consistent (Rule 87)
+1.  search_design_system → confirm component in DS, get component key
+2.  use_figma            → find node IDs across pages
+3.  get_design_context   → pull token bindings, dimensions, structure per variant
+4.  get_variable_defs    → confirm Semantic token names on exact sub-nodes
+5.  Implement            → use only DS-confirmed values, zero assumptions
+6.  Validate             → compare against get_screenshot, fix before moving on
 ```
 
-> The biggest errors in this project come from skipping Step 0 and relying on memory. Even "small" fixes require DS inspection — the logo gap, the wordmark height, and the container width were all wrong without it. See Rule 73.
+> **Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes — all traceable to not reading zul.design.md and not auditing DS first. A 2-minute inspection always saves more time than the bug it prevents. See Rules 73, 83, 86, 93.
 
 ---
 
