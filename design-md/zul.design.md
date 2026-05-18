@@ -3828,11 +3828,13 @@ The DS `Navbar Notification Button - Parts` (node `3908:13427`) has a **structur
 
 ---
 
-### Rule 109 — Coloured brand/store icons → 2× PNG export, even if small in bytes
+### Rule 109 — ~~Coloured brand/store icons → 2× PNG~~ — SUPERSEDED BY RULE 111
 
-App store brand icons (Google Play, Apple App Store, Huawei AppGallery) are multi-colour filled illustrations. They cannot be used as `stroke="currentColor"` SVG symbols because they have multiple hard-coded fill colors (blue, orange, green, red, etc. for Play Store; gradient fills for App Store).
+This rule was incorrect. Multi-color brand icons CAN be embedded as `<symbol>` elements with hardcoded fills — they do not require `stroke="currentColor"`. **Use Rule 111 instead.**
 
-**Export them as 2× PNG** using `exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 2 } })` — even though they are much smaller than the Feature/* illustrated icons from Rule 96 (1–5KB vs 15–56KB). The deciding factor is **multiple fill colors**, not file size.
+The original reasoning ("they cannot be SVG symbols") was wrong. SVG symbols support any fill value, not just `currentColor`. The rule confused "can't be recoloured via CSS" (true) with "can't be a symbol" (false).
+
+**What remains valid from Rule 109:** The PNG approach was wrong from the start. The SVG size check (< 12KB → symbol) is the correct gate.
 
 **Decision rule:**
 ```

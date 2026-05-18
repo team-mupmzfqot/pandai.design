@@ -1648,7 +1648,7 @@ Every action button in `#NavbarPrimary-Desktop` that opens a dropdown (bell, EN/
 
 1. **Button HTML** — `id`, `aria-haspopup="true"`, and `<div class="nav-btn-union-bg">` as first child of `nav-btn-content`. Without `nav-btn-union-bg`, `.is-active` shows no speech-bubble.
 2. **Dropdown HTML** — `<div class="my-dropdown" id="DROPDOWN-ID">` placed inside `#NavbarPrimary-Desktop` (after the `.navbar-primary` closing div).
-3. **CSS** — same pattern as all other nav dropdowns: white bg, `1px solid #00cc85` border, `24px` radius, `16px` padding, `top: 80px` (confirmed for ALL nav dropdowns), `opacity + translateY(-8px)` animation.
+3. **CSS** — same pattern as all other nav dropdowns: white bg, `1px solid #00cc85` border, `24px` radius, `16px` padding, `top: var(--nav-dropdown-top)` (CSS variable, currently 72px), `opacity + translateY(-8px)` animation.
 4. **JS IIFE** — `positionDropdown()` (right-align to button), click toggle, `mouseleave` close, outside-click close, close-all-others block (Rule 53).
 
 See `design-md/zul.design.md` Rule 106 for the full code templates.
@@ -1676,15 +1676,10 @@ Avatar: 60×60 clip, `ic-user-circle` at 50px (DS `inset: 8.33%` = 5px each side
 
 ---
 
-### 55. Coloured brand/store icons → 2× PNG, not SVG symbols
+### 55. ~~Coloured brand/store icons → 2× PNG~~ — SUPERSEDED by Rule 57
 
-App store icons (Google Play, Apple App Store, Huawei AppGallery) have multiple hard-coded fill colors — they cannot be used as `stroke="currentColor"` SVG symbols. Export as 2× PNG even though they are small (1–5KB).
-
-**Decision rule:** single-color outline icon → SVG symbol. Multi-color / filled icon → 2× PNG.
-
-Use `object-fit: contain` on the `<img>` — Play Store's native height is 26.8px (not 24px), and `object-fit: contain` letterboxes it correctly within a 24×24 CSS box. Use `<a>` elements (not `<div>`) for download items — semantic and gets hover/active on mobile correctly.
-
-See `design-md/zul.design.md` Rule 109 for confirmed DS node IDs and file sizes.
+This rule was wrong. Multi-color brand icons CAN be SVG symbols using hardcoded fills.
+**Use Rule 57 instead.** See `design-md/zul.design.md` Rule 111 for the corrected approach.
 
 ---
 
@@ -1693,7 +1688,7 @@ See `design-md/zul.design.md` Rule 109 for confirmed DS node IDs and file sizes.
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision — including seemingly trivial fixes. No exceptions.
 
 ```
-0a. Read design-md/zul.design.md  → ALL rules 1–109, confirmed specs, known mistakes — NO EXCEPTIONS
+0a. Read design-md/zul.design.md  → ALL rules 1–112, confirmed specs, known mistakes — NO EXCEPTIONS
 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f         → single source of truth, re-verify every value live
 0c. Audit component anatomy (Rule 49 / zul Rule 93):
       → get_design_context on COMPONENT_SET node → list ALL variants
