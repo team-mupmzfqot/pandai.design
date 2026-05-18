@@ -24,6 +24,7 @@
       --surface-primary-default:              #00cc85;
       --surface-primary-default-subtle:       #d9f7ed;
       --surface-primary-default-subtle-hover: #99ebce;
+      --surface-primary-focus:                #00a36a;
       --surface-secondary-default:            #b5f291;
       --surface-secondary-default-subtle:     #e8fbe8;
       --surface-tertiary-default:             #00564c;
@@ -213,16 +214,16 @@
     .pd-breadcrumbs15 { display: flex; align-items: center; gap: var(--space-m); min-height: 36px; margin-bottom: var(--space-m); }
     .pd-breadcrumbs__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
     .pd-breadcrumbs__sep   { width: 1px; align-self: stretch; background: var(--border-general-default); flex-shrink: 0; }
-    .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--space-xs); color: var(--text-default-body); }
+    .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--space-xs); flex-wrap: wrap; }
     .pd-link15 {
-      display: flex; align-items: flex-end; gap: var(--space-xs);
+      display: flex; align-items: center; gap: var(--space-xs);
       background: none; border: none; padding: 0; cursor: pointer;
       color: var(--text-default-body);
     }
-    .pd-link15 svg { display: block; width: 20px; height: 20px; }
-    .pd-link15__icon-home { color: var(--text-primary-default); }
+    .pd-link15__icon-home { display: block; width: 20px; height: 20px; flex-shrink: 0; color: var(--text-primary-default); }
     .pd-link15__text         { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
-    .pd-link15__text--parent { color: #4d4d4d; }
+    .pd-link15__text--parent { color: var(--text-primary-default); }
+    .pd-breadcrumbs__chevron { width: 16px; height: 16px; color: var(--text-primary-default); flex-shrink: 0; }
 
     /* ───────────────────────────────────────────────
        SUBJECT FILTER PILLS  DS 3107:65099

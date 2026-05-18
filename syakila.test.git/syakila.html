@@ -23,6 +23,7 @@
       --surface-primary-default:             #00cc85;
       --surface-primary-default-subtle:      #d9f7ed;
       --surface-primary-default-subtle-hover:#99ebce;
+      --surface-primary-focus:               #00a36a;
       --surface-secondary-default:           #b5f291;
       --surface-secondary-default-subtle:    #e8fbe8;
       --surface-secondary-50:                #f6fef6;
@@ -105,9 +106,21 @@
     .navbar-logo__text { height: 18px; width: auto; }
 
     .navbar-actions { display: flex; position: relative; align-items: center; gap: var(--space-xl); }
-    .navbar-action-icons { display: flex; align-items: center; gap: var(--space-2xl); flex-shrink: 0; }
-    .navbar-action-icon { width: 24px; height: 24px; flex-shrink: 0; color: var(--icon-default); }
-    .navbar-action-icon svg { display: block; width: 100%; height: 100%; }
+    /* Nav Button - Parts  DS 3427:63384 — 44×44, padding 10px, 4 states */
+    .navbar-action-icons { display: flex; align-items: center; gap: var(--space-xs); flex-shrink: 0; }
+    .navbar-action-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      padding: 10px; border-radius: var(--corner-m);
+      color: var(--icon-default-default);
+      cursor: pointer; user-select: none;
+      border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .navbar-action-icon svg { display: block; width: 24px; height: 24px; flex-shrink: 0; }
+    .navbar-action-icon:hover  { background: var(--surface-secondary-default-subtle); border-color: var(--border-primary-default); color: var(--icon-primary-default); }
+    .navbar-action-icon.is-pressed { background: var(--surface-primary-focus); border-color: var(--border-primary-default); color: var(--icon-primary-default); }
+    .navbar-action-icon.is-active  { background: var(--surface-primary-default);  border-color: var(--border-primary-focus);   color: var(--icon-primary-on-color); }
 
     .navbar-avatar {
       width: 48px; height: 48px; border-radius: var(--corner-rounded);
@@ -179,7 +192,7 @@
     /* Default label and icon-wrap */
     .nav-btn__label {
       font-size:   14px;
-      font-weight: 600;
+      font-weight: 500;
       line-height: 20px;
       color:       var(--text-default-body);
       white-space: nowrap;
@@ -378,13 +391,12 @@
     .pd-breadcrumbs15 { display: flex; align-items: center; gap: var(--space-m); min-height: 36px; margin-bottom: var(--space-m); }
     .pd-breadcrumbs__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
     .pd-breadcrumbs__sep   { width: 1px; align-self: stretch; background: var(--border-general-default); flex-shrink: 0; }
-    .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--space-xs); color: var(--text-default-body); }
-    .pd-link15 { display: flex; align-items: flex-end; gap: var(--space-xs); background: none; border: none; padding: 0; cursor: pointer; color: var(--text-default-body); /* prevent button browser default black */ }
-    .pd-link15 svg { display: block; width: 20px; height: 20px; }
-    .pd-link15__icon-home { color: var(--text-primary-default); }  /* home icon: green */
-    /* chevron-right: grey — inherits --text-default-body from .pd-link15, no extra class needed */
+    .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--space-xs); flex-wrap: wrap; }
+    .pd-link15 { display: flex; align-items: center; gap: var(--space-xs); background: none; border: none; padding: 0; cursor: pointer; color: var(--text-default-body); }
+    .pd-link15__icon-home { display: block; width: 20px; height: 20px; flex-shrink: 0; color: var(--text-primary-default); }
     .pd-link15__text         { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
-    .pd-link15__text--parent { color: #4d4d4d; /* DS: parent breadcrumb link = dark grey, not primary green */ }
+    .pd-link15__text--parent { color: var(--text-primary-default); }
+    .pd-breadcrumbs__chevron { width: 16px; height: 16px; color: var(--text-primary-default); flex-shrink: 0; }
 
     .pd-card          { background: var(--surface-secondary-50); border-radius: var(--corner-4xl); border: var(--scale-25) solid var(--border-default); overflow: hidden; }
     .pd-card__header  { display: flex; align-items: center; justify-content: space-between; padding: var(--space-m) var(--space-m) 0; }
@@ -705,17 +717,17 @@
        Mobile  ≤  767px
     ═══════════════════════════════════════════════════ */
 
-    /* < 1320px — mobile navbar, hide breadcrumb (app has none) */
+    /* < 1320px — tablet: compact navbar, hide breadcrumbs */
     @media (max-width: 1319px) {
+      :root { --page-padding-x: 32px; }
       #NavBar-Desktop   { display: none; }
-      #NavBar-Mobile    { display: block; }
+      #NavBar-Mobile    { display: block; padding: 0 var(--page-padding-x); }
       .pd-breadcrumbs15 { display: none; }
+      .footer__inner    { padding-left: var(--space-m); padding-right: var(--space-m); }
     }
 
     /* ── Tablet ≤ 1279px — card-per-row table layout ── */
     @media (max-width: 1279px) {
-      :root { --page-padding-x: 32px; }
-      #NavBar-Mobile { padding: 0 var(--page-padding-x); }
 
       /* Card header */
       .pd-card__header { flex-wrap: wrap; gap: var(--space-xs); }
