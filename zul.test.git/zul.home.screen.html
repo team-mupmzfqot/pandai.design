@@ -1964,14 +1964,19 @@
       box-shadow: inset 0 0 0 1px var(--border-primary-default);
     }
     .download-dropdown__item:hover .download-dropdown__label { color: var(--text-primary-default); }
-    /* Store icon — 24×24, object-fit:contain (Play Store is 24×26.8 native) */
+    /* Store icon — SVG <use> symbol, 24×24 CSS box (Rule 36: all icons must be symbols)
+       Google Play viewBox is 0 0 24 27 — SVG preserveAspectRatio="xMidYMid meet" letterboxes it */
     .download-dropdown__icon {
-      width:      24px;
-      height:     24px;
+      width:       24px;
+      height:      24px;
       flex-shrink: 0;
-      object-fit: contain;
-      display:    block;
+      display:     block;
+      overflow:    visible;
     }
+    /* <a> reset — suppress browser focus ring and visited color shift on download items */
+    .download-dropdown__item:focus        { outline: none; }
+    .download-dropdown__item:focus-visible { outline: none; }
+    .download-dropdown__item:visited .download-dropdown__label { color: var(--text-default-body); }
     /* Label — Body/B1, 14px SemiBold, Text/default/body #666, w-140px */
     .download-dropdown__label {
       font-family: var(--font-family);
@@ -2366,6 +2371,44 @@
       <!-- Outline/power (260:1057) — Log Out -->
       <symbol id="ic-power" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64C19.6184 7.89879 20.4753 9.50244 20.8223 11.2482C21.1693 12.9939 20.9909 14.8034 20.3096 16.4478C19.6284 18.0921 18.4748 19.4976 16.9948 20.4864C15.5148 21.4752 13.7749 22.0029 11.995 22.0029C10.2151 22.0029 8.47515 21.4752 6.99517 20.4864C5.51519 19.4976 4.36164 18.0921 3.68036 16.4478C2.99909 14.8034 2.82069 12.9939 3.16772 11.2482C3.51475 9.50244 4.37162 7.89879 5.63 6.64M12 2V12"/></symbol>
 
+      <!-- Store brand icons — SVG symbols with hardcoded fills (Rule 36: all icons must be symbols)
+           Gradients live in main <defs> so url(#id) resolves correctly from <use> shadow instances -->
+
+      <!-- Google Play gradient backgrounds -->
+      <linearGradient id="ic-store-apple-grad" x1="12.0015" y1="0" x2="12.0015" y2="24" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#18BFFB"/><stop offset="1" stop-color="#2072F3"/>
+      </linearGradient>
+      <clipPath id="ic-store-apple-clip"><rect width="24" height="24"/></clipPath>
+      <linearGradient id="ic-store-huawei-grad" x1="12" y1="0" x2="12" y2="24" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#FB6361"/><stop offset="1" stop-color="#ED3E45"/>
+      </linearGradient>
+      <clipPath id="ic-store-huawei-clip"><rect width="24" height="24"/></clipPath>
+
+      <!-- App Store/Playstore (DS node I3909:3405;3908:14084;2185:42800) — 24×27, flat fills only -->
+      <symbol id="ic-store-google-play" viewBox="0 0 24 27">
+        <path d="M11.2114 12.8121L0.105957 24.5943C0.447301 25.8773 1.61846 26.813 3.00738 26.813C3.56059 26.813 4.07849 26.6659 4.53166 26.3952L4.56108 26.3717L17.0496 19.1681L11.1996 12.8003H11.2114V12.8121Z" fill="#EA4335"/>
+        <path d="M22.4404 10.8053H22.4286L17.0378 7.66846L10.9583 13.077L17.0554 19.1741L22.4228 16.0785C23.3585 15.5664 24 14.5777 24 13.4419C24 12.306 23.3762 11.3173 22.4345 10.8171V10.8053H22.4404Z" fill="#FBBC04"/>
+        <path d="M0.105934 2.23635C0.0411968 2.48942 0 2.7366 0 3.00732V23.8293C0 24.1 0.0294264 24.3531 0.105934 24.6003L11.588 13.1182L0.105934 2.23047V2.23635Z" fill="#4285F4"/>
+        <path d="M11.2938 13.4125L17.0378 7.66847L4.55516 0.429622C4.10788 0.158901 3.57233 0 3.00146 0C1.61254 0 0.447266 0.947523 0.100037 2.21873L11.2879 13.3948V13.4066L11.2938 13.4125Z" fill="#34A853"/>
+      </symbol>
+
+      <!-- App Store/AppStore (DS node I3909:3405;3908:14085;2185:42800) — 24×24, linear gradient -->
+      <symbol id="ic-store-apple" viewBox="0 0 24 24">
+        <g clip-path="url(#ic-store-apple-clip)">
+          <path d="M19.152 0H4.848C2.169 0 0 2.169 0 4.848V19.155C0 21.831 2.169 24 4.848 24H19.155C21.831 24 24.003 21.831 24.003 19.152V4.848C24 2.169 21.831 0 19.152 0Z" fill="url(#ic-store-apple-grad)"/>
+          <path d="M11.898 5.51409L12.384 4.67409C12.684 4.14909 13.353 3.97209 13.878 4.27209C14.403 4.57209 14.58 5.24109 14.28 5.76609L9.597 13.8721H12.984C14.082 13.8721 14.697 15.1621 14.22 16.0561H4.29C3.684 16.0561 3.198 15.5701 3.198 14.9641C3.198 14.3581 3.684 13.8721 4.29 13.8721H7.074L10.638 7.69509L9.525 5.76309C9.225 5.23809 9.402 4.57509 9.927 4.26909C10.452 3.96909 11.115 4.14609 11.421 4.67109L11.898 5.51409ZM7.686 17.1811L6.636 19.0021C6.336 19.5271 5.667 19.7041 5.142 19.4041C4.617 19.1041 4.44 18.4351 4.74 17.9101L5.52 16.5601C6.402 16.2871 7.119 16.4971 7.686 17.1811ZM16.728 13.8781H19.569C20.175 13.8781 20.661 14.3641 20.661 14.9701C20.661 15.5761 20.175 16.0621 19.569 16.0621H17.991L19.056 17.9101C19.356 18.4351 19.179 19.0981 18.654 19.4041C18.129 19.7041 17.466 19.5271 17.16 19.0021C15.366 15.8911 14.019 13.5631 13.125 12.0121C12.21 10.4341 12.864 8.85009 13.509 8.31309C14.226 9.54309 15.297 11.4001 16.728 13.8781Z" fill="white"/>
+        </g>
+      </symbol>
+
+      <!-- App Store/AppGallery (DS node I3909:3405;3908:14086;2185:42800) — 24×24, linear gradient -->
+      <symbol id="ic-store-huawei" viewBox="0 0 24 24">
+        <g clip-path="url(#ic-store-huawei-clip)">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M6.734 0C1.80341 0 0 1.80309 0 6.73269V17.2673C0 22.1969 1.80341 24 6.734 24H17.2628C22.1932 24 24 22.1969 24 17.2673V6.73269C24 1.80309 22.1966 0 17.266 0H6.734Z" fill="url(#ic-store-huawei-grad)"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4687 13.9195H11.4322L10.9488 12.7953L10.4687 13.9195ZM10.2315 14.486L9.94559 15.1401H9.29476L10.6788 12.0002H11.2413L12.6197 15.1401H11.9515L11.6693 14.486H10.2315ZM20.7043 15.1378H21.3334V12H20.7043V15.1378ZM18.2007 13.7899H19.3602V13.2177H18.2007V12.5746H19.8839V12.0023H17.5719V15.1399H19.9445V14.5676H18.2007V13.7899ZM15.7014 14.1606L14.9883 12H14.4678L13.7547 14.1606L13.0607 12.0017H12.382L13.4773 15.1419H14.0049L14.7192 13.0792L15.4335 15.1419H15.9657L17.058 12.0017H16.397L15.7014 14.1606ZM8.33453 13.7986C8.33453 14.3093 8.08087 14.5823 7.62024 14.5823C7.15709 14.5823 6.90209 14.3014 6.90209 13.7768V12.0021H6.26457V13.7986C6.26457 14.6822 6.75568 15.1889 7.61156 15.1889C8.47592 15.1889 8.97147 14.6726 8.97147 13.7723V12.0002H8.33453V13.7986ZM4.74359 12.0002H5.38072V15.1421H4.74359V13.8661H3.30421V15.1421H2.66669V12.0002H3.30421V13.2675H4.74359V12.0002Z" fill="white"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 8C9.79417 8 8 6.20563 8 4H8.56501C8.56501 5.8939 10.1061 7.4348 12 7.4348C13.8939 7.4348 15.435 5.8939 15.435 4H16C16 6.20563 14.2056 8 12 8Z" fill="white"/>
+        </g>
+      </symbol>
+
     </defs>
   </svg>
 
@@ -2710,17 +2753,17 @@
     <div class="download-dropdown" id="download-dropdown" aria-label="Download app" role="menu">
 
       <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Google Android">
-        <img class="download-dropdown__icon" src="icons/store-google-play.png" alt="Google Play" width="24" height="24">
+        <svg class="download-dropdown__icon" aria-hidden="true" focusable="false"><use href="#ic-store-google-play"/></svg>
         <span class="download-dropdown__label">Google Android</span>
       </a>
 
       <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Apple iOS">
-        <img class="download-dropdown__icon" src="icons/store-apple.png" alt="App Store" width="24" height="24">
+        <svg class="download-dropdown__icon" aria-hidden="true" focusable="false"><use href="#ic-store-apple"/></svg>
         <span class="download-dropdown__label">Apple iOS</span>
       </a>
 
       <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Huawei AppGallery">
-        <img class="download-dropdown__icon" src="icons/store-huawei.png" alt="AppGallery" width="24" height="24">
+        <svg class="download-dropdown__icon" aria-hidden="true" focusable="false"><use href="#ic-store-huawei"/></svg>
         <span class="download-dropdown__label">Huawei</span>
       </a>
 
