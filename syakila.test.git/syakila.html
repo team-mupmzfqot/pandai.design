@@ -1491,6 +1491,13 @@
   const flipper = document.querySelector('.status-pill-flipper__inner');
   if (flipper) setInterval(() => flipper.classList.toggle('is-flipped'), 3000);
 
+  /* Action icon pressed state (Rule 39: JS mousedown, not CSS :active on div) */
+  document.querySelectorAll('.navbar-action-icon').forEach(icon => {
+    icon.addEventListener('mousedown',  () => icon.classList.add('is-pressed'));
+    icon.addEventListener('mouseup',    () => icon.classList.remove('is-pressed'));
+    icon.addEventListener('mouseleave', () => icon.classList.remove('is-pressed'));
+  });
+
   /* Nav button handlers — registered first before any other JS that could throw */
   document.querySelectorAll('.nav-btn').forEach(btn => {
     /* Click: toggle is-active */
