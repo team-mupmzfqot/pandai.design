@@ -4031,12 +4031,50 @@ Any layout variation, visual mode, or experimental change must be:
 
 ---
 
+### Rule 115 — Capping height on an aspect-ratio card requires a matching max-width
+
+When a card uses `height: auto; aspect-ratio: W/H` with an explicit `width`, adding only `max-height` breaks the aspect ratio: the height is clamped but the width stays wide, producing a squashed card.
+
+**Fix — align both constraints at the same ratio point:**
+```css
+.card {
+  width:        <formula>;
+  height:       auto;
+  aspect-ratio: 428 / 186;
+  max-height:   400px;
+  max-width:    calc(400px * 428 / 186);   /* ~920px — same ratio, so both caps hit together */
+}
+```
+
+**Formula:**
+```
+max-width = calc(max-height × aspect-width / aspect-height)
+```
+
+At and below the cap: width drives height via `aspect-ratio` — ratio preserved.
+At the cap: both `max-width` and `max-height` are satisfied simultaneously at the exact ratio — no distortion.
+
+**How the browser resolves it:**
+- If computed width < max-width → height = width × H/W (aspect-ratio governs, max-height not reached)
+- If computed width ≥ max-width → width clamps to max-width → height = max-width × H/W = max-height exactly
+
+**Applies whenever:** `height: auto` + `aspect-ratio` + an explicit or formula-based `width` + a `max-height` cap are all present on the same element. One max without the other always breaks the ratio.
+
+**Confirmed instance — Carousel fan mode (May 2026):**
+- `max-height: 400px` + `max-width: calc(400px * 428 / 186)` ≈ `920px`
+- At 1440px desktop: card = 644 × 280px (cap not reached, aspect ratio governs)
+- At viewports > ~2000px: cap kicks in at 920 × 400px, ratio held ✓
+
+**Mistake made:** First commit added only `max-height: 350px` — width stayed at formula value, aspect ratio broken. Corrected in second commit by adding `max-width: calc(350px * 428 / 186)`.
+
+---
+
 ### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-18)
 
 **Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
 
 ```
-Step 0a → Read design-md/zul.design.md          ← ALL rules 1–114 + confirmed specs
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–115 + confirmed specs
 Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH
 Step 0c → get_design_context on COMPONENT SET    ← list ALL variant names first
 Step 0d → get_design_context on EACH state       ← extract every token before writing CSS
@@ -4050,4 +4088,4 @@ Step 0h → get_screenshot after implementation    ← compare against DS side-b
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-18 (Rules 113–114 — carousel crop dimension clarification, modifier class revert pattern) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+*Generated: May 2026 | Last updated: 2026-05-18 (Rule 115 — max-height + max-width pairing to preserve aspect ratio) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
