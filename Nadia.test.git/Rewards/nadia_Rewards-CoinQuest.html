@@ -794,11 +794,13 @@
     .sidebar-btn--active .sidebar-btn__label { color: #00a36a; }
 
     /* RIGHT MAIN PANEL — same container as sidebar */
+    /* Primary Card - 1.5 — DS node 3897:66048
+       surface/secondary/default-subtle bg + border/default stroke */
     .rewards-main {
       flex:           1;
       min-width:      0;
-      background:     #fff;
-      border:         1px solid var(--og-500);
+      background:     #e8fbe8;                 /* surface/secondary/default-subtle */
+      border:         1px solid var(--og-500); /* border/default */
       border-radius:  var(--r-4xl);
       padding:        var(--sp-m);
       display:        flex;
@@ -814,11 +816,11 @@
       gap: var(--sp-m) var(--sp-xs);
     }
 
-    /* Coin Quest Card 1.5 — DS node 3065:42903
-       border: 1px #d9d9d9, border-radius: 24px, padding: 16px, height: 150px */
+    /* Coin Quest Card 1.5 — DS node 3897:66037+
+       surface/general/default bg + border/default (#00cc85) stroke, radius 24px */
     .qc {
       background:    #fff;
-      border:        1px solid #d9d9d9;
+      border:        1px solid var(--og-500); /* border/default = #00cc85 */
       border-radius: var(--r-4xl);
       padding:       var(--sp-m);
       display:       flex;
@@ -850,16 +852,21 @@
     .qc__title  { font-size: 16px; font-weight: 600; line-height: 24px; color: var(--text-heading); white-space: nowrap; flex-shrink: 0; }
     .qc__badges { display: flex; gap: 8px; align-items: center; }
 
-    /* Label Badge 1.5 */
+    /* Label Badge 1.5 — DS confirmed colors from node 3897:66048 */
     .lbadge {
       display: inline-flex; align-items: center; justify-content: center;
       min-height: 24px; border-radius: 60px; padding: 2px 8px;
-      font-size: 14px; font-weight: 500; line-height: 20px; white-space: nowrap; border: 1px solid;
+      font-size: 12px; font-weight: 500; line-height: 12px; white-space: nowrap; border: 1px solid;
     }
+    /* Difficulty: Easy — surface/primary/default-subtle + border/primary/default-hover */
     .lbadge--easy   { background: #d9f7ed; border-color: #66e0b6; color: #00cc85; }
+    /* Difficulty: Medium — surface/alert/default-subtle + border/alert/default-hover */
+    .lbadge--medium { background: #fff6ed; border-color: #ffcea0; color: #ff9f43; font-size: 14px; line-height: 20px; }
+    /* Difficulty: Hard — surface/warning/default-subtle + border/warning/default-hover */
+    .lbadge--hard   { background: #ffeeee; border-color: #ffa5a7; color: #ff4c51; font-size: 14px; line-height: 20px; }
+    /* Frequency: Daily / Weekly — surface/informative/default-subtle + border/informative/default-hover */
     .lbadge--daily  { background: #e6f6fd; border-color: #7fd0f3; color: #00a2e8; }
-    .lbadge--hard   { background: #fff1eb; border-color: #ffb899; color: #c24b0a; }
-    .lbadge--weekly { background: #fff9e6; border-color: #ffe080; color: #9a6700; }
+    .lbadge--weekly { background: #e6f6fd; border-color: #7fd0f3; color: #00a2e8; }
 
     /* Progress */
     .qc__progress { display: flex; flex-direction: column; gap: 4px; }

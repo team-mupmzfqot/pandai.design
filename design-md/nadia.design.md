@@ -2137,3 +2137,36 @@ Sidebar container: `width: 280px; min-width: 240px; border: 1px solid #00cc85; b
 - `nadia_Rewards-Merchandise.html` → `ic-shopping-bag` + `data-icon="shopping-bag"` (Merchandise) active
 
 *Last updated: 2026-05-18 | File: Nadia.test.git/Rewards/nadia_Rewards-Myrewards.html | Branch: staging*
+
+---
+
+### Updates — May 2026 (Session 11)
+
+**Sidebar hover state — all 3 Rewards pages (DS node `4060:54496`):**
+- Inactive hover: `bg #e8fbe8` (`Surface/secondary/default-subtle`) + `border 1px #00cc85` + icon/label `#00cc85` (`Text/primary/default`)
+- Previously only changed background to `var(--og-50)` — DS hover includes border and text color change
+
+**My Rewards main panel rebuild (DS node `3897:67569` Primary Card - 1.5):**
+- `rewards-main`: `bg #e8fbe8` + `border 1px #00cc85` + `border-radius 24px`
+- Header row: "All items you have redeemed!" (left `#00564c`) + "Total redeem this month : [coin] 10,000" (right `#00564c`)
+- Badge: `bg #d9f7ed` (`Surface/primary/default-subtle`) + `Outline/video` icon (was `ic-star`)
+- Coin: 24px, local `P.Coin.svg`
+- Show Voucher chevron: inlined SVG path `stroke="#00a36a"` — `<use href>` inherited wrong `currentColor`
+
+**CoinQuest main panel updates:**
+- `rewards-main` bg: `#fff` → `#e8fbe8` (Primary Card 1.5 surface)
+- Quest card (`.qc`) border: `#d9d9d9` → `#00cc85` (`border/default`)
+- Label badge font-size corrected to `12px / lh 12px`
+- Badge color corrections: Medium `#fff6ed/#ffcea0/#ff9f43`, Hard `#ffeeee/#ffa5a7/#ff4c51`, Weekly same as Daily `#e6f6fd/#7fd0f3/#00a2e8`
+
+**Merchandise main panel updates:**
+- `rewards-main` border-radius: `r-2xl` → `r-4xl` (24px); bg: `#f6fef6` → `#e8fbe8`; gap: `sp-m` → `sp-xs`
+- Header row added: "Collect coins, redeem and enjoy these great rewards!" + "Total redeem this month : [coin] 120"
+- Badge bg: `#ccf5e7` → `#d9f7ed`
+
+**Icon fix — sidebar icon rendering:**
+- `position: absolute; inset` on SVG collapses to 0×0 in Chromium
+- Fixed to `padding: 2px; box-sizing: border-box` on container + `width: 100%; height: 100%` on SVG
+
+**Bug fix — `nadia_Class-MyClasses.html`:**
+- Corrupted querySelector: `.navbar-primary-icon´` → `.navbar-primary-icon` (stray acute accent)
