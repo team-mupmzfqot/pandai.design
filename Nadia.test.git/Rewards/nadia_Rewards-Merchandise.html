@@ -497,25 +497,22 @@
       background:   #b5f291;    /* Surface/secondary/default */
       border-color: #00a36a;    /* Border/primary/focus */
     }
-    /* Icon — single 24×24 clip container matching DS size-[24px] overflow-clip */
+    /* Icon — 24×24 clip via padding (position:absolute;inset collapses in Chromium) */
     .sidebar-btn__icon-wrap {
       width:       24px;
       height:      24px;
-      position:    relative;
+      padding:     2px;           /* 8.33% of 24px — stop-circle, smile */
+      box-sizing:  border-box;
       overflow:    hidden;
       flex-shrink: 0;
       color:       var(--icon-primary-default);
     }
     .sidebar-btn--active .sidebar-btn__icon-wrap { color: #00a36a; }
-    .sidebar-btn__icon-wrap svg {
-      display:  block;
-      position: absolute;
-      inset:    8.33%;  /* 2px of 24px — stop-circle, smile */
-    }
-    /* Per-icon DS insets from Figma Dropdown-Parts inspection */
-    .sidebar-btn__icon-wrap[data-icon="box"]           svg { inset: 5.17% 8.33% 5.12%; }
-    .sidebar-btn__icon-wrap[data-icon="shopping-bag"]  svg { inset: 8.33% 12.5%; }
-    .sidebar-btn__icon-wrap[data-icon="shopping-cart"] svg { inset: 4.17% 4.17% 8.33%; }
+    .sidebar-btn__icon-wrap svg { display: block; width: 100%; height: 100%; }
+    /* Per-icon DS padding from Figma Dropdown-Parts inspection */
+    .sidebar-btn__icon-wrap[data-icon="box"]           { padding: 1.24px 2px 1.23px; }
+    .sidebar-btn__icon-wrap[data-icon="shopping-bag"]  { padding: 2px 3px; }
+    .sidebar-btn__icon-wrap[data-icon="shopping-cart"] { padding: 1px 1px 2px; }
     /* Label — Text/default/body #666, active: Text/primary/default-hover #00a36a */
     .sidebar-btn__label {
       font-size:   14px;
