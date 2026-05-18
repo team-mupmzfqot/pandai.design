@@ -2170,3 +2170,27 @@ Sidebar container: `width: 280px; min-width: 240px; border: 1px solid #00cc85; b
 
 **Bug fix — `nadia_Class-MyClasses.html`:**
 - Corrupted querySelector: `.navbar-primary-icon´` → `.navbar-primary-icon` (stray acute accent)
+
+---
+
+### Updates — May 2026 (Session 12)
+
+**File:** `Nadia.test.git/Rewards/nadia_Rewards-Merchandise.html`
+
+#### Primary Card - 1.5 rebuild — DS node 3897:68441
+
+| Property | Before | After | DS token |
+|---|---|---|---|
+| `.rewards-main` bg | `#f6fef6` | `#e8fbe8` | `Surface/secondary/default-subtle` |
+| `.rewards-main` border-radius | `r-2xl` (18px) | `r-4xl` (24px) | `corner-4xl` |
+| `.rewards-main` gap | `sp-m` (16px) | `sp-xs` (8px) | `spacing/space-xs` |
+| `.rewards-main` height | auto | `align-self: stretch` — fills layout height | — |
+| Header intro text colour | `#666` | `#00564c` | `text/tertiary/default` |
+| Badge bg | `#ccf5e7` | `#d9f7ed` | `Surface/primary/default-subtle` |
+
+**New header row** (DS node `I3897:68441;2881:36281;3902:49607`):
+- Left: "Collect coins, redeem and enjoy these great rewards!" — 14px Regular `#00564c`
+- Right: "Total redeem this month :" + P.Coin icon (18×21, local `P.Coin.svg`) + "120" — same colour
+- Flex row `justify-content: space-between; flex-wrap: wrap; gap: 16px`
+
+*Last updated: 2026-05-18 | File: Nadia.test.git/Rewards/nadia_Rewards-Merchandise.html | Branch: staging*
