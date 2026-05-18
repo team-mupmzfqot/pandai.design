@@ -333,7 +333,12 @@
       transition:    background 0.12s ease;
       text-align:    left;
     }
-    .sidebar-btn:not(.sidebar-btn--active):hover { background: var(--og-50); }
+    .sidebar-btn:not(.sidebar-btn--active):hover {
+      background:   #e8fbe8;    /* Surface/secondary/default-subtle */
+      border-color: #00cc85;    /* Border/primary/default */
+    }
+    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__icon-wrap { color: #00cc85; }
+    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__label     { color: #00cc85; }
     .sidebar-btn--active {
       background:   #b5f291;    /* Surface/secondary/default */
       border-color: #00a36a;    /* Border/primary/focus */
