@@ -2107,4 +2107,33 @@ All Rewards HTML pages moved from `Nadia.test.git/My Rewards/` to `Nadia.test.gi
   - Footer: coin icon (21px) + value · Show Voucher button (Primary/S, h:24px, `ic-chevron-btn` 12×12 clip)
 - Show Voucher button: active `bg #00cc85; border #00a36a` · hover `#b5f291/#70bc6f` · pressed `#00564c/#00453d`
 
+---
+
+### Updates — May 2026 (Session 10)
+
+**Left sidebar redesign — all 3 Rewards pages (DS node `3849:48401` Nav Side Menu Desktop 1.5):**
+
+Sidebar container: `width: 280px; min-width: 240px; border: 1px solid #00cc85; border-radius: 24px; padding: 16px; gap: 8px`
+
+**Score chip (`.sidebar-balance`):**
+- `bg: #fef1ce` (`Surface/gold/default-subtle`) · `border: 1px solid #fabb0a` (`Border/gold/default`) · `border-radius: 16px`
+- `padding: var(--sp-xs) var(--sp-xs) var(--sp-xs) var(--sp-xxxs)` · `gap: 2px`
+- Coin icon: `<img>` 24×24 `object-fit: contain` from local `image-repo/Rewards-*/P.Coin.svg`
+- Value "10,000": `font 18px Bold; color #fff; -webkit-text-stroke: 2px #c89608; paint-order: stroke fill` (Rule 26 — OUTSIDE 1px stroke → 2px CSS)
+
+**Nav buttons (`.sidebar-btn`):**
+- Icon container: single `<div class="sidebar-btn__icon-wrap">` 24×24 `overflow:hidden; position:relative` — no nested clip div
+- SVG: `position:absolute; inset:8.33%` (default); per-icon overrides via `data-icon` attribute:
+  - `data-icon="box"` (My Rewards): `inset: 5.17% 8.33% 5.12%`
+  - `data-icon="shopping-bag"` (Merchandise): `inset: 8.33% 12.5%`
+  - `data-icon="shopping-cart"` (eVoucher): `inset: 4.17% 4.17% 8.33%`
+- Inactive: `bg transparent; border 1px transparent; icon/label #666` · hover: `bg var(--og-50)`
+- Active (`.sidebar-btn--active`): `bg #b5f291; border 1px #00a36a; icon/label #00a36a`
+- Label: `font 14px SemiBold; line-height 20px`
+
+**Active button per page:**
+- `nadia_Rewards-CoinQuest.html` → `ic-stop-circle` (Coin Quest) active
+- `nadia_Rewards-Myrewards.html` → `ic-package` + `data-icon="box"` (My Rewards) active
+- `nadia_Rewards-Merchandise.html` → `ic-shopping-bag` + `data-icon="shopping-bag"` (Merchandise) active
+
 *Last updated: 2026-05-18 | File: Nadia.test.git/Rewards/nadia_Rewards-Myrewards.html | Branch: staging*
