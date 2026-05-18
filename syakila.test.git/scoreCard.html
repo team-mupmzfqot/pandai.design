@@ -42,7 +42,7 @@
       --icon-default:            #d9d9d9;
       --icon-default-default:    #808080;
       --icon-primary-default:    #00cc85;
-      --icon-secondary-on-color: #70bc6f;
+      --icon-secondary-hover: #70bc6f;
       --icon-primary-on-color:   #f6fdfb;
       --icon-tertiary-default:   #00564c;
 
@@ -84,7 +84,7 @@
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
-      padding-bottom: 90px;
+      padding-bottom: 74px; /* 44px fixed footer + 30px DS gap */
     }
     button, input, select, textarea { font-family: inherit; }
 
@@ -126,7 +126,7 @@
     }
     .navbar-action-icon svg { display: block; width: 24px; height: 24px; flex-shrink: 0; }
     .navbar-action-icon:hover  { background: var(--surface-secondary-default-subtle); border-color: var(--border-primary-default); color: var(--icon-primary-default); }
-    .navbar-action-icon.is-pressed { background: var(--surface-primary-focus); border-color: var(--border-primary-default); color: var(--icon-primary-on-color); }
+    .navbar-action-icon.is-pressed { background: var(--surface-primary-focus); border-color: var(--border-primary-default); color: var(--icon-primary-default); }
     .navbar-action-icon.is-active  { background: var(--surface-primary-default);  border-color: var(--border-primary-focus);   color: var(--icon-primary-on-color); }
 
     .navbar-avatar {
@@ -189,17 +189,18 @@
 
     .nav-btn:hover .nav-btn__inner          { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
     .nav-btn:hover .nav-btn__label          { color: var(--text-secondary-focus); }
-    .nav-btn:hover .nav-btn__icon-wrap      { color: var(--icon-secondary-on-color); }
+    .nav-btn:hover .nav-btn__icon-wrap      { color: var(--icon-secondary-hover); }
+    /* Pressed — DS State=Pressed: Surface/primary/focus #00a36a, green text/icon */
     .nav-btn.is-pressed .nav-btn__inner     { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
     .nav-btn.is-pressed .nav-btn__label     { color: var(--text-primary-default); }
     .nav-btn.is-pressed .nav-btn__icon-wrap { color: var(--icon-primary-default); }
-    /* Active — same intensified-green palette as Pressed (design.color.md §6.3) */
-    .nav-btn.is-active .nav-btn__inner      { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
-    .nav-btn.is-active .nav-btn__label      { color: var(--text-primary-default); }
-    .nav-btn.is-active .nav-btn__icon-wrap  { color: var(--icon-primary-default); }
-    .nav-btn.is-active:hover .nav-btn__inner     { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
-    .nav-btn.is-active:hover .nav-btn__label     { color: var(--text-primary-default); }
-    .nav-btn.is-active:hover .nav-btn__icon-wrap { color: var(--icon-primary-default); }
+    /* Active/Selected — DS State=Active: Surface/primary/default #00cc85, on-color text/icon */
+    .nav-btn.is-active .nav-btn__inner      { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+    .nav-btn.is-active .nav-btn__label      { color: var(--text-primary-on-color); }
+    .nav-btn.is-active .nav-btn__icon-wrap  { color: var(--icon-primary-on-color); }
+    .nav-btn.is-active:hover .nav-btn__inner     { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+    .nav-btn.is-active:hover .nav-btn__label     { color: var(--text-primary-on-color); }
+    .nav-btn.is-active:hover .nav-btn__icon-wrap { color: var(--icon-primary-on-color); }
 
     /* ───────────────────────────────────────────────
        PAGE SHELL
@@ -658,14 +659,14 @@
       border-top: 1px solid var(--border-default);
     }
     .footer__inner {
-      height: 60px; display: flex; align-items: center;
+      height: 44px; display: flex; align-items: center;
       justify-content: space-between;
       padding-left: var(--space-2xl); padding-right: var(--space-2xl);
     }
     .footer__left  { display: flex; align-items: center; gap: var(--space-xxs); flex-shrink: 0; }
     .footer__right { display: flex; align-items: center; gap: var(--space-xxs); flex-shrink: 0; }
     .footer__text  { font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
-    .footer__link  { font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-primary-default); white-space: nowrap; cursor: pointer; text-decoration: none; }
+    .footer__link  { font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-default-body); white-space: nowrap; cursor: pointer; text-decoration: none; }
     .footer__heart { width: 20px; height: 20px; flex-shrink: 0; display: block; color: var(--icon-primary-default); }
 
     /* ═══════════════════════════════════════════════════
