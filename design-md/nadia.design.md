@@ -1984,4 +1984,106 @@ All moved files had relative asset paths updated with `../` prefix.
 
 ---
 
-*Last updated: 2026-05-16 | Branch: staging*
+---
+
+### Updates — May 2026 (Session 8)
+
+**File:** `Nadia.test.git/Class/nadia_Class-MyClasses.html`
+
+#### Menu modal polish
+
+- **Tablet panel top alignment** — removed `padding-top: 80px` from `.mmenu-overlay.is-open` at `≥768px`; panel now sits flush at top of viewport
+- **Checkboxes removed** — all `<div class="menu-chk">` elements stripped from both mobile and tablet menu panels (22 deletions)
+- **Menu chevron-right colour** — `.mmenu-item-chevron` corrected from `color: var(--text-default-body)` (#666 grey) to `color: var(--icon-primary-default)` (#00cc85); confirmed via DS `VariableID:119:10` → `Icon/primary/default`
+
+#### Class card DS alignment (node 3528:52082)
+
+- **Live Tuition badge bg** — `#ccf5e7` → `#d9f7ed` (`--surface-primary-default-subtle`); DS specifies `Surface/primary/default-subtle`
+- **Enter Class button padding** — `2px 8px` → `2px 4px`; DS: `px: space-xxs (4px) py: scale/50-(2px)`
+- **Chevron `<use>` → inline SVG** — CSS `stroke:` on `<svg>` does not pierce `<use>` shadow DOM; replaced all 20 `btn-enter__arrow` + 2 Download App `<use href="#ic-chevron-btn*">` references with inlined paths + `stroke="currentColor"` so CSS cascade applies correctly
+
+---
+
+### Updates — May 2026 (Session 9)
+
+**New file:** `Nadia.test.git/Class/nadia_Class-BrowseClasses.html`
+
+Browse Classes sub-page of the Class section. Same navbar, mobile menu, footer, and SVG sprite as MyClasses. Asset paths use `../` prefix (file lives in `Class/` subfolder).
+
+#### Structure
+
+| Section | Notes |
+|---|---|
+| Section 1 — Navbar top | Identical to MyClasses (DS node 3544:61283) |
+| Section 2 — Nav menu pill | Class nav item active + dropdown; Browse Classes link points to this file |
+| Section 3 — Breadcrumb | Title: **Browse Classes** · Trail: `Class › Browse Classes` · DS node 3528:52796 |
+| Section 4 — Cards grid | 20 Class Card - 1.5 cards, 3-col → 2-col → 1-col responsive |
+
+#### Breadcrumb buttons (DS node 3528:52796)
+
+| Button | Style | Icon | Notes |
+|---|---|---|---|
+| Timetable | Secondary (outlined) | `Outline/calendar` | Same as MyClasses |
+| **Go to My Classes** | Secondary (outlined) | `Outline/airplay` | Links to `nadia_Class-MyClasses.html` |
+| Join Class | Primary (filled green) | `Outline/plus` | Same as MyClasses |
+
+**Airplay icon fix:** First version used `<polyline>` for the triangle — only drew 2 of 3 sides. Changed to `<polygon>` so the shape closes correctly.
+
+#### CTA — Premium Tag + Preview button
+
+Each card CTA has two elements: a tag label on the left and a Preview button on the right (`.cc__cta { justify-content: space-between }`).
+
+**Tag label variations (`.cc-premium-tag`):**
+
+| Tag text | Count | Cards |
+|---|---|---|
+| Premium Only | 16 | All except below |
+| RM 80.00 | 2 | ⑤ Bahasa Melayu, ⑪ English (DS node 3528:52817) |
+| Free | 2 | ⑧ Chinese Language, ⑮ KAFA (DS node 3528:52822) |
+
+All three tag variants share the same CSS: `font-size: 14px; font-weight: 600; color: var(--og-500)`.
+
+**Preview button — Button - 1.5 Secondary/S Student (DS nodes 1452:8292 Default · 8284 Hover · 8276 Pressed):**
+
+| State | btn bg | border | label | arrow bg | arrow border | chevron |
+|---|---|---|---|---|---|---|
+| Default | `#fff` | `#00cc85` | `#00cc85` | `#fff` | `inset 1px #00cc85` | `#00cc85` |
+| Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#b5f291` | `inset 1px #70bc6f` | `#70bc6f` |
+| Pressed | `#00564c` | `#00453d` | `#00cc85` | `#00cc85` | none | `#00564c` |
+
+**Arrow border:** `box-shadow: inset 0 0 0 1px` (Rule 30 — avoids consuming layout space; arrow is 16px frame, 2px padding, 12px clip).
+
+#### Shadow DOM issue — `<use>` vs inline SVG
+
+CSS `stroke` set on a `<svg>` element via a stylesheet rule **does not cascade into the shadow DOM** created by `<use href="#symbol-id"/>`. This caused the Preview button chevron to render with wrong colours (subject theme leaking via `currentColor`, or browser default black/dark).
+
+**Fix:** All 20 Preview button arrows use inline SVG paths — no `<use>`:
+```html
+<!-- ✗ stroke blocked by shadow DOM -->
+<svg><use href="#ic-chevron-btn"/></svg>
+
+<!-- ✓ stroke: var(--og-500) reaches path directly -->
+<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg>
+```
+
+**Rule:** Use `<use>` for icons where the colour never changes per-instance. Use inline paths when per-state colour control is needed via CSS.
+
+**Prompt to fix this in future:** `"inline the SVG path, don't use <use>"`
+
+#### Key DS nodes
+
+| Node | Purpose |
+|---|---|
+| `3528:52796` | Browse Classes breadcrumb row + 3 buttons |
+| `3528:52800` | Go to My Class button (airplay icon, Secondary/L) |
+| `3528:52802` | Full 20-card Browse Classes grid |
+| `3528:52804` | Class Card - 1.5 with Premium Only + Preview CTA |
+| `3528:52817` | RM 80.00 tag variant (English card) |
+| `3528:52822` | Free tag variant (KAFA card) |
+| `1452:8292` | Button - 1.5 Secondary/S Default |
+| `1452:8284` | Button - 1.5 Secondary/S Hover |
+| `1452:8276` | Button - 1.5 Secondary/S Pressed |
+
+---
+
+*Last updated: 2026-05-18 | File: Nadia.test.git/Class/nadia_Class-BrowseClasses.html | Branch: staging*
