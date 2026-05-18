@@ -3965,12 +3965,78 @@ Any value that is shared across multiple components and may need to change toget
 
 ---
 
+### Rule 113 — Carousel crop pattern: "50% visible" means width-clipping, not height reduction
+
+When a design request says "left card 50%, middle card full, right card 50%," this describes the **visible cropped width** of the side cards — not their height. The overflow:hidden on `.carousel__content` is what clips them; the card dimensions stay unchanged.
+
+**The correct formula for a 50/100/50 crop that fills the full content width:**
+```
+cardWidth = (contentWidth − 2 × gap) / 2
+```
+
+For full-page fill at all breakpoints, use CSS calc with the existing page-padding variable:
+```css
+.carousel--fan .carousel__card {
+  width:        calc((100vw - 2 * var(--page-padding-x) - 2 * var(--spacing-space-m)) / 2);
+  height:       auto;
+  aspect-ratio: 428 / 186;   /* DS native ratio — height scales automatically */
+}
+```
+
+At 1440px desktop (`--page-padding-x: 60px`, gap 16px): card = **644px wide × ~280px tall**.
+At 1024px tablet (`--page-padding-x: 32px`): card = **464px wide × ~202px tall**.
+The `offsetFor()` JS centering function reads `content.offsetWidth` and `card.offsetWidth` live from the DOM — **no JS changes needed when card dimensions change via CSS**. The resize handler (`window.addEventListener('resize', () => jump(idx))`) already covers breakpoint transitions.
+
+**Verification math** (at 1440px, content = 1320px, cw = 644px, gap = 16px):
+- Left card visible = 1320/2 − 644/2 − 16 = 660 − 322 − 16 = 322px = 50% of 644px ✓
+- Right card visible = 1320 − (660 + 322 + 16) = 322px = 50% ✓
+
+**Mistakes made (May 2026):**
+- First implemented as a height-based effect (center 186px, sides 93px) — wrong dimension entirely
+- Required a complete rewrite after the user clarified "view/cropping area, not height"
+
+**Rule:** Before implementing any "X at 50%" layout request on a carousel or card, ask: width-crop (clipping), height reduction, or scale transform? Confirm the dimension first.
+
+---
+
+### Rule 114 — Design variations: implement as a single modifier class for one-word revert
+
+Any layout variation, visual mode, or experimental change must be:
+1. Applied via a **single modifier class** on the section element
+2. All CSS scoped to that modifier class — zero bleed into base styles
+3. Reverting = removing one class name from the HTML only — never requires CSS or JS edits
+
+```html
+<!-- Active variation -->
+<section class="carousel carousel--fan">
+
+<!-- Reverted — one word removed, original layout restored -->
+<section class="carousel">
+```
+
+```css
+/* All variation CSS scoped — invisible to base component */
+@media (min-width: 768px) {
+  .carousel--fan .carousel__card {
+    width: calc((100vw - 2 * var(--page-padding-x) - 2 * var(--spacing-space-m)) / 2);
+    height: auto;
+    aspect-ratio: 428 / 186;
+  }
+}
+```
+
+**Why:** Hardcoding a variation inside the base class forces a full CSS diff to revert. A modifier class makes A/B testing trivial and the revert path obvious to any future reader.
+
+**Rule:** Every time a new design variation is built, document the revert instruction as a one-liner in the CSS comment immediately above the modifier class.
+
+---
+
 ### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-18)
 
 **Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
 
 ```
-Step 0a → Read design-md/zul.design.md          ← ALL rules 1–112 + confirmed specs
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–114 + confirmed specs
 Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH
 Step 0c → get_design_context on COMPONENT SET    ← list ALL variant names first
 Step 0d → get_design_context on EACH state       ← extract every token before writing CSS
@@ -3980,8 +4046,8 @@ Step 0g → For icons: exportAsync SVG_STRING first ← check size before decidi
 Step 0h → get_screenshot after implementation    ← compare against DS side-by-side
 ```
 
-**The single biggest mistake in this project:** Writing CSS from memory or approximation instead of reading the DS first. Every wrong button state, every wrong border, every wrong radius came from skipping Step 0c/0d. The DS takes 30 seconds to read. A bug takes 30 minutes to find and fix.
+**The single biggest mistake in this project:** Writing CSS from memory or approximation instead of reading the DS first. Every wrong button state, wrong border, wrong radius, and wrong dimension came from skipping Step 0c/0d. The DS takes 30 seconds to read. A bug takes 30 minutes to find and fix.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-18 (Rules 110–112 — no approximation, SVG symbols for all icons, CSS variables for shared values) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+*Generated: May 2026 | Last updated: 2026-05-18 (Rules 113–114 — carousel crop dimension clarification, modifier class revert pattern) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

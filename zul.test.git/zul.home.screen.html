@@ -489,15 +489,17 @@
     }
     .carousel__dot.is-active { background: var(--surface-primary-default); }  /* active: #00cc85 */
 
-    /* CAROUSEL THREE-CARD CROP VIEW
-       Content frame is 888px wide: 50% card (214px) + gap (16px) + full card (428px) + gap (16px) + 50% card (214px).
-       The carousel section remains full page width — the 888px frame is centered within it.
-       offsetFor() reads content.offsetWidth so centering JS adapts automatically.
+    /* CAROUSEL THREE-CARD CROP VIEW — full page width
+       Card width fills half the content area so 3 cards = 50% left + 100% center + 50% right.
+       Formula: cardWidth = (100vw − 2×page-padding − 2×gap) / 2
+       Height follows DS aspect ratio 428:186 (~280px at 1440px desktop).
+       JS offsetFor() reads content.offsetWidth + card.offsetWidth live — no JS changes needed.
        REVERT: remove 'carousel--fan' from #Carousel-Desktop class attribute (one word, one line). */
     @media (min-width: 768px) {
-      .carousel--fan .carousel__content {
-        width:     888px;
-        max-width: 100%;    /* prevents overflow on narrow viewports */
+      .carousel--fan .carousel__card {
+        width:        calc((100vw - 2 * var(--page-padding-x) - 2 * var(--spacing-space-m)) / 2);
+        height:       auto;
+        aspect-ratio: 428 / 186;
       }
     }
 
