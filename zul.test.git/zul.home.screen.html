@@ -410,7 +410,6 @@
       display:         flex;
       align-items:     center;
       justify-content: center;
-      transition:      height 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
 
@@ -490,17 +489,16 @@
     }
     .carousel__dot.is-active { background: var(--surface-primary-default); }  /* active: #00cc85 */
 
-    /* CAROUSEL FAN EFFECT — desktop three-card view
-       Center card: full height (186px). Adjacent cards: 50% (93px).
-       Driven by data-pos attributes set by JS on each slide/jump.
+    /* CAROUSEL THREE-CARD CROP VIEW
+       Content frame is 888px wide: 50% card (214px) + gap (16px) + full card (428px) + gap (16px) + 50% card (214px).
+       The carousel section remains full page width — the 888px frame is centered within it.
+       offsetFor() reads content.offsetWidth so centering JS adapts automatically.
        REVERT: remove 'carousel--fan' from #Carousel-Desktop class attribute (one word, one line). */
-    .carousel--fan {
-      --fan-height-full: 186px;   /* center card — adjust to increase overall carousel height */
-      --fan-height-side: 93px;    /* adjacent cards — 50% of full */
-    }
     @media (min-width: 768px) {
-      .carousel--fan .carousel__card                   { height: var(--fan-height-side); }
-      .carousel--fan .carousel__card[data-pos="0"]     { height: var(--fan-height-full); }
+      .carousel--fan .carousel__content {
+        width:     888px;
+        max-width: 100%;    /* prevents overflow on narrow viewports */
+      }
     }
 
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -3849,20 +3847,9 @@
           dots.forEach((d, n) => d.classList.toggle('is-active', n === active));
         }
 
-        /* Fan effect — set data-pos on every card relative to active index.
-           data-pos="0" = center, "-1"/"1" = adjacent, etc.
-           When animate=false (jump), card height transitions are suppressed. */
-        const allCards = Array.from(track.querySelectorAll('.carousel__card'));
-        function updateCardPositions(activeIdx, animate) {
-          if (!animate) allCards.forEach(c => (c.style.transition = 'none'));
-          allCards.forEach((c, i) => { c.dataset.pos = String(i - activeIdx); });
-          if (!animate) { track.offsetHeight; allCards.forEach(c => (c.style.transition = '')); }
-        }
-
         function jump(i) {
           track.style.transition = 'none';
           track.style.transform  = `translateX(${offsetFor(i)}px)`;
-          updateCardPositions(i, false);
           track.offsetHeight;
           track.style.transition = '';
           updateDots(i);
@@ -3873,7 +3860,6 @@
           busy = true;
           idx = i;
           track.style.transform = `translateX(${offsetFor(i)}px)`;
-          updateCardPositions(i, true);
           updateDots(i);
         }
 
