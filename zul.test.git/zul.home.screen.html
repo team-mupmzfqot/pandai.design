@@ -37,8 +37,9 @@
       --text-default-body:        #666666;   /* Text/default/body â€” used in navbar, footer */
       --text-default-secondary:   #6B7280;
       --text-default-placeholder: #f2f2f2;   /* Text/default/placeholder â€” subject badge label */
-      --text-primary-default:     #00cc85;
-      --text-primary-on-color:    #f6fdfb;   /* Text/primary/on-color — confirmed via get_variable_defs */
+      --text-primary-default:       #00cc85;
+      --text-primary-default-hover: #00a36a;   /* Text/primary/default-hover — Dropdown Selected label */
+      --text-primary-on-color:      #f6fdfb;   /* Text/primary/on-color — confirmed via get_variable_defs */
       --text-secondary-focus:     #70bc6f;  /* Text/secondary/focus */
       --text-on-color-heading:    #FFFFFF;   /* Text/on-color/heading â€” status pill */
       --text-disabled-default:    #bfbfbf;
@@ -1736,6 +1737,7 @@
       user-select:   none;
       transition:    background 0.12s ease, box-shadow 0.12s ease;
     }
+    /* Hover — Surface/secondary/default-subtle #e8fbe8 · Border/primary/default #00cc85 · text #00cc85 */
     .locale-dropdown__item:hover {
       background: var(--surface-secondary-default-subtle);
       box-shadow: inset 0 0 0 1px var(--border-primary-default);
@@ -1743,22 +1745,16 @@
     .locale-dropdown__item:hover .locale-dropdown__label {
       color: var(--text-primary-default);
     }
-    .locale-dropdown__item:active {
-      background: var(--surface-secondary-default);
-      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
-    }
-    .locale-dropdown__item:active .locale-dropdown__label {
-      color: var(--border-primary-focus);
-    }
-    /* Selected — Surface/secondary/default bg + Border/secondary/focus border + tertiary text */
+    /* Selected — Surface/secondary/default #b5f291 · Border/primary/focus #00a36a · text #00a36a
+       DS node 1363:2887 — Type=Main List, State=Selected (no Pressed state exists in DS) */
     .locale-dropdown__item.is-selected,
     .locale-dropdown__item.is-selected:hover {
       background: var(--surface-secondary-default);
-      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
     }
     .locale-dropdown__item.is-selected .locale-dropdown__label,
     .locale-dropdown__item.is-selected:hover .locale-dropdown__label {
-      color: var(--text-tertiary-default);
+      color: var(--text-primary-default-hover);
     }
     /* Label: Body/B1 — 14px SemiBold, Text/default/body #666 */
     .locale-dropdown__label {
@@ -1961,16 +1957,13 @@
       user-select:   none;
       transition:    background 0.12s ease, box-shadow 0.12s ease;
     }
+    /* Hover — Surface/secondary/default-subtle #e8fbe8 · Border/primary/default #00cc85 · text #00cc85
+       DS node 1363:2881 — Type=Main List, State=Hover (no Pressed state exists in DS) */
     .download-dropdown__item:hover {
       background: var(--surface-secondary-default-subtle);
       box-shadow: inset 0 0 0 1px var(--border-primary-default);
     }
     .download-dropdown__item:hover .download-dropdown__label { color: var(--text-primary-default); }
-    .download-dropdown__item:active {
-      background: var(--surface-secondary-default);
-      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
-    }
-    .download-dropdown__item:active .download-dropdown__label { color: var(--border-primary-focus); }
     /* Store icon — 24×24, object-fit:contain (Play Store is 24×26.8 native) */
     .download-dropdown__icon {
       width:      24px;
