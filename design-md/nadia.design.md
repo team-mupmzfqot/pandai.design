@@ -2087,3 +2087,24 @@ CSS `stroke` set on a `<svg>` element via a stylesheet rule **does not cascade i
 ---
 
 *Last updated: 2026-05-18 | File: Nadia.test.git/Class/nadia_Class-BrowseClasses.html | Branch: staging*
+
+---
+
+### Updates — May 2026 (Session 9)
+
+**Folder restructure — `My Rewards/` → `Rewards/`:**
+All Rewards HTML pages moved from `Nadia.test.git/My Rewards/` to `Nadia.test.git/Rewards/`. Old paths deleted from git.
+
+**`nadia_Rewards-Myrewards.html` — My Rewards view:**
+- Same two-panel sidebar; `My Rewards` button = `sidebar-btn--active` (icon: `ic-package`)
+- Breadcrumb: Rewards › My Rewards (DS node 3284:218453)
+- Right main: `.mr-grid` — `grid-template-columns: repeat(4, 1fr); gap: 16px` → 2-col at `≤1279px` → 1-col at `≤767px`
+- Cards: `.mr-card` — `flex-col; border: 1px #d9d9d9; border-radius: 24px`
+  - Image: `aspect-ratio: 250/148; object-fit: cover; bg: var(--og-50)` · source: `image-repo/Rewards-MyRewards/MyRewards-N.svg`
+  - Body: `padding: 16px; gap: 8px` — badge(s) + title (14px SemiBold `#404040`, 2-line clamp)
+  - Badge (`.mr-badge`): `Outline/star` 10px icon · `bg #ccf5e7; border 1px #00cc85; border-radius: 60px; padding: 2px 8px; font 10px Medium #00cc85`
+  - Divider: `height: 1px; bg #d9d9d9`
+  - Footer: coin icon (21px) + value · Show Voucher button (Primary/S, h:24px, `ic-chevron-btn` 12×12 clip)
+- Show Voucher button: active `bg #00cc85; border #00a36a` · hover `#b5f291/#70bc6f` · pressed `#00564c/#00453d`
+
+*Last updated: 2026-05-18 | File: Nadia.test.git/Rewards/nadia_Rewards-Myrewards.html | Branch: staging*
