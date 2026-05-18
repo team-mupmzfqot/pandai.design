@@ -110,6 +110,7 @@
       /* Layout */
       --page-max-width:          100%;
       --page-padding-x:          60px;
+      --nav-dropdown-top:        72px;   /* navbar 64px + gap. DS=80px (16px gap). Change here to revert. */
       --section-gap:             var(--spacing-space-m);   /* Spacing/space-m = 16px */
       --check-in-card-max-width: 390px;
     }
@@ -1396,7 +1397,7 @@
     ─────────────────────────────────────────────────────────────────────────────────────── */
     .profile-dropdown {
       position:       absolute;
-      top:            80px;   /* DS: NavMenu y=80 — top-to-top aligned with Menu Bar */
+      top:            var(--nav-dropdown-top);
       right:          var(--page-padding-x);
       z-index:        500;
       width:          320px;
@@ -1430,7 +1431,7 @@
     ─────────────────────────────────────────────────────────────────────── */
     .learn-dropdown {
       position:       absolute;
-      top:            80px;   /* DS confirmed: Navbar h:64 + 16px gap = 80 (same as all other nav dropdowns) */
+      top:            var(--nav-dropdown-top);
       right:          0;      /* JS overrides — right-aligned to waffle btn right edge, extends leftward */
       left:           auto;
       z-index:        500;
@@ -1695,11 +1696,11 @@
 
     /* ─── Localization dropdown (DS node 3928:3067, Navbar Download Apps - 1.5)
        204px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
-       Right-aligned to EN button via JS positionDropdown · top: 80px
+       Right-aligned to EN button via JS positionDropdown · top: var(--nav-dropdown-top)
     ─────────────────────────────────────────────────────────────────────────── */
     .locale-dropdown {
       position:       absolute;
-      top:            80px;
+      top:            var(--nav-dropdown-top);
       right:          0;
       left:           auto;
       z-index:        500;
@@ -1759,11 +1760,11 @@
 
     /* ─── Notification dropdown (DS node 3908:13057, Navbar Notification - 1.5)
        320px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
-       Right-aligned to bell button via JS · top: 80px · same animation as all other dropdowns
+       Right-aligned to bell button via JS · top: var(--nav-dropdown-top) · same animation as all other dropdowns
     ──────────────────────────────────────────────────────────────────────────────────────── */
     .notif-dropdown {
       position:       absolute;
-      top:            80px;
+      top:            var(--nav-dropdown-top);
       right:          0;
       left:           auto;
       z-index:        500;
@@ -1911,7 +1912,7 @@
     ─────────────────────────────────────────────────────────────────────────── */
     .download-dropdown {
       position:       absolute;
-      top:            80px;
+      top:            var(--nav-dropdown-top);
       right:          0;
       left:           auto;
       z-index:        500;
