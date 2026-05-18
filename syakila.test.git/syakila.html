@@ -16,12 +16,12 @@
       --text-default-body:     #666;
       --text-primary-default:  #00cc85;
       --text-tertiary-default: #00564c;
-      --text-primary-on-color: #e9fbf5;
+      --text-primary-on-color: #f6fdfb;
 
       --surface-general-default:              #ffffff;
       --surface-general-default-secondary:   #f2f2f2;
       --surface-primary-default:             #00cc85;
-      --surface-primary-default-subtle:      #ccf5e7;
+      --surface-primary-default-subtle:      #d9f7ed;
       --surface-primary-default-subtle-hover:#99ebce;
       --surface-secondary-default:           #b5f291;
       --surface-secondary-default-subtle:    #e8fbe8;
@@ -35,13 +35,13 @@
       --border-general-default:  #d9d9d9;
       --border-secondary-focus:  #70bc6f;
       --border-tertiary-focus:   #00453d;
-      --border-disabled:         #bfbfbf;
+      --border-disabled-disabled: #bfbfbf;
 
       --text-secondary-focus:    #70bc6f;
       --text-disabled-default:   #bfbfbf;
       --icon-default:            #d9d9d9;
       --icon-primary-default:    #00cc85;
-      --icon-secondary-hover:    #70bc6f;
+      --icon-secondary-on-color: #70bc6f;
       --icon-primary-on-color:   #f6fdfb;
       --icon-tertiary-default:   #00564c;
 
@@ -199,31 +199,31 @@
       box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
     }
     .nav-btn:hover .nav-btn__label     { color: var(--text-secondary-focus); }
-    .nav-btn:hover .nav-btn__icon-wrap { color: var(--icon-secondary-hover); }
+    .nav-btn:hover .nav-btn__icon-wrap { color: var(--icon-secondary-on-color); }
 
     /* State=Pressed (via JS is-pressed class — more reliable than :active on div) */
     .nav-btn.is-pressed .nav-btn__inner {
-      background: var(--surface-tertiary-default);
-      box-shadow: inset 0 0 0 1px var(--border-tertiary-focus);
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
     }
     .nav-btn.is-pressed .nav-btn__label     { color: var(--text-primary-default); }
     .nav-btn.is-pressed .nav-btn__icon-wrap { color: var(--icon-primary-default); }
 
-    /* State=Selected/Active */
+    /* State=Selected/Active — same intensified-green palette as Pressed (design.color.md §6.3) */
     .nav-btn.is-active .nav-btn__inner {
-      background: var(--surface-primary-default);
-      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
     }
-    .nav-btn.is-active .nav-btn__label      { color: var(--icon-primary-on-color); }
-    .nav-btn.is-active .nav-btn__icon-wrap  { color: var(--icon-primary-on-color); }
+    .nav-btn.is-active .nav-btn__label      { color: var(--text-primary-default); }
+    .nav-btn.is-active .nav-btn__icon-wrap  { color: var(--icon-primary-default); }
 
-    /* Active: no hover change — stays green */
+    /* Active: no hover change — stays intensified green */
     .nav-btn.is-active:hover .nav-btn__inner {
-      background: var(--surface-primary-default);
-      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
     }
-    .nav-btn.is-active:hover .nav-btn__label     { color: var(--icon-primary-on-color); }
-    .nav-btn.is-active:hover .nav-btn__icon-wrap { color: var(--icon-primary-on-color); }
+    .nav-btn.is-active:hover .nav-btn__label     { color: var(--text-primary-default); }
+    .nav-btn.is-active:hover .nav-btn__icon-wrap { color: var(--icon-primary-default); }
 
     /* ───────────────────────────────────────────────
        PAGE + BREADCRUMBS + CARD — same as before
@@ -361,7 +361,7 @@
       padding:       var(--space-xs) var(--space-xs) var(--space-xs) var(--space-l);
     }
     .check-in-card__content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-xs); }
-    .check-in-card__label { font-size: 12px; font-weight: 700; line-height: 18px; color: #00564c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .check-in-card__label { font-size: 12px; font-weight: 700; line-height: 18px; color: var(--text-tertiary-default); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .check-in-card__progress { height: 4px; background: #f2f2f2; border-radius: var(--corner-pill); overflow: hidden; width: 100%; }
     .check-in-card__progress-fill { height: 100%; width: 32%; background: var(--surface-primary-default); }
     .check-in-card__stats {
@@ -370,7 +370,7 @@
       justify-content: center; gap: var(--space-xs); padding: 4px var(--space-s); flex-shrink: 0;
     }
     .check-in-card__stats-icon { width: 24px; height: 24px; flex-shrink: 0; }
-    .check-in-card__stats-value { font-size: 14px; font-weight: 600; line-height: 20px; color: #00564c; white-space: nowrap; }
+    .check-in-card__stats-value { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-tertiary-default); white-space: nowrap; }
 
     /* Breadcrumb: remove bottom margin (main-content gap handles spacing) */
     .pd-breadcrumbs15 { margin-bottom: 0; }
@@ -403,7 +403,7 @@
     }
     .pd-btn15-secondary:hover  { background: var(--surface-secondary-default); border-color: var(--border-secondary-focus); color: var(--text-secondary-focus); }
     .pd-btn15-secondary:active { background: var(--surface-primary-default);   border-color: var(--border-primary-default); color: var(--text-primary-on-color); }
-    .pd-btn15-secondary:disabled { background: var(--surface-disabled-primary); border-color: var(--border-disabled); color: var(--text-disabled-default); cursor: not-allowed; }
+    .pd-btn15-secondary:disabled { background: var(--surface-disabled-primary); border-color: var(--border-disabled-disabled); color: var(--text-disabled-default); cursor: not-allowed; }
     .pd-btn15-secondary__icon       { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .pd-btn15-secondary__icon svg   { display: block; width: 20px; height: 20px; }
     .pd-btn15-secondary__text-wrap  { display: flex; align-items: center; padding: 0 var(--space-xs); }
@@ -518,7 +518,7 @@
        ─────────────────────────────────────────────────────────
        Container: bg #00cc85 | border 1px #00a36a (border/primary/focus)
                   radius 60px (corner-rounded) | px-8px py-2px | h-32px
-       Label:     Poppins SemiBold 12px (Body/B5) | color #e9fbf5 (text/primary/on-color)
+       Label:     Poppins SemiBold 12px (Body/B5) | color #f6fdfb (text/primary/on-color)
                   padding-x: 4px (space-xxs)
        R Arrow:   bg #99ebce (surface/primary/default-subtle-hover) — NO border, filled pill
                   padding 2px (scale/50-2) | radius 60px
@@ -544,12 +544,12 @@
     .pd-btn15-primary:hover .pd-btn15-primary__arrow { background: var(--surface-secondary-default-subtle); }
     .pd-btn15-primary:hover .pd-btn15-primary__arrow svg { stroke: var(--text-secondary-focus); }
     /* Pressed: surface/tertiary/default + border/tertiary/focus + text/primary/default */
-    .pd-btn15-primary:active { background: var(--surface-tertiary-default); border-color: var(--border-tertiary-focus); color: var(--surface-primary-default); }
+    .pd-btn15-primary:active { background: var(--surface-primary-focus); border-color: var(--border-primary-default); color: var(--text-primary-default); }
     .pd-btn15-primary:active .pd-btn15-primary__arrow { background: var(--surface-primary-default); }
-    .pd-btn15-primary:active .pd-btn15-primary__arrow svg { stroke: var(--surface-tertiary-default); }
+    .pd-btn15-primary:active .pd-btn15-primary__arrow svg { stroke: var(--icon-primary-focus); }
     /* Disabled: surface/disabled + border/disabled + text/disabled */
-    .pd-btn15-primary:disabled { background: var(--surface-disabled-primary); border-color: var(--border-disabled); color: var(--text-disabled-default); cursor: not-allowed; pointer-events: none; }
-    .pd-btn15-primary:disabled .pd-btn15-primary__arrow { background: var(--surface-disabled-primary); border: 1px solid var(--border-disabled); }
+    .pd-btn15-primary:disabled { background: var(--surface-disabled-primary); border-color: var(--border-disabled-disabled); color: var(--text-disabled-default); cursor: not-allowed; pointer-events: none; }
+    .pd-btn15-primary:disabled .pd-btn15-primary__arrow { background: var(--surface-disabled-primary); border: 1px solid var(--border-disabled-disabled); }
     .pd-btn15-primary:disabled .pd-btn15-primary__arrow svg { stroke: var(--text-disabled-default); }
 
     .pd-btn15-primary__label { padding: 0 var(--space-xxs); font-size: 12px; font-weight: 600; line-height: 18px; }

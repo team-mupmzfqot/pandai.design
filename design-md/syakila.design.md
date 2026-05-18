@@ -55,7 +55,7 @@
 
 **Mistake made:**
 - Primary button hover was assumed to be a darker green. Actual DS: Primary hover transitions to the **Secondary palette** — `Surface/secondary/default` (`#b5f291`) bg, `Border/secondary/focus` (`#70bc6f`) border, `Text/secondary/focus` (`#70bc6f`) text.
-- Secondary button Pressed state was incorrectly noted as "fills solid with Surface/primary/default". Actual DS node `538:1907` (Secondary/M/Student/Pressed): bg `#00564c` (`Surface/tertiary/default`), border `#00453d` (`Border/tertiary/focus`), text `#00cc85` (`Text/primary/default`) — same dark teal palette as Tertiary Pressed.
+- Secondary button Pressed state: live-verified 2026-05-15 against DS — bg `#00a36a` (`Surface/primary/focus`), border `#00cc85` (`Border/primary/default`), text `#00cc85` (`Text/primary/default`). The old note referencing dark teal `#00564c` (`Surface/tertiary/default`) is obsolete. All variants (Primary, Secondary, Tertiary) share the same intensified-green Pressed palette.
 - Disabled state was invented. Actual DS: `Surface/disabled/primary` (`#f2f2f2`) bg, `Border/disabled/disabled` (`#bfbfbf`) border, `Icon/disabled/default` (`#bfbfbf`) text.
 
 ---
@@ -317,9 +317,9 @@ Source from `Subject Badge/[Name] - M` (24px) or `Subject Badge/[Name] - L` (32p
 
 | Subject | `--badge-bg` | `--badge-border` | Text |
 |---|---|---|---|
-| Add Math | `#283589` | `#202a6e` | `#f2f2f2` |
-| Account | `#0072ca` | `#005ba2` | `#f2f2f2` |
-| Bahasa Melayu | `#4d77ff` | `#3e5fcc` | `#f2f2f2` |
+| Add Math | `#283589` | `#182052` | `#f2f2f2` |
+| Account | `#0072ca` | `#004479` | `#f2f2f2` |
+| Bahasa Melayu | `#4d77ff` | `#2e4799` | `#f2f2f2` |
 | Biology | `#8431d8` | `#6a27ad` | `#f2f2f2` |
 | Business | `#efb42b` | `#bf9022` | `#f2f2f2` |
 | Chemistry | `#e20082` | `#b50068` | `#f2f2f2` |
@@ -329,7 +329,7 @@ Source from `Subject Badge/[Name] - M` (24px) or `Subject Badge/[Name] - L` (32p
 | Geography | `#77d836` | `#5fad2b` | `#f2f2f2` |
 | History | `#a97c50` | `#876340` | `#f2f2f2` |
 | Islamic Studies | `#de4d7f` | `#b23e66` | `#f2f2f2` |
-| KAFA | `#8ae3a9` | `#6eb687` | `#358a62` |
+| KAFA | `#8ae3a9` | `#6eb687` | `#538865` |
 | Mathematics | `#42ac7b` | `#358a62` | `#f2f2f2` |
 | Moral Studies | `#0072ca` | `#005ba2` | `#f2f2f2` |
 | Physics | `#27a0d7` | `#1f80ac` | `#f2f2f2` |
@@ -378,17 +378,17 @@ These are the confirmed state values for the Pandai student home screen. All fro
 |---|---|---|---|---|---|---|
 | Default | `#00cc85` | `#00a36a` | `#f6fdfb` | `#99ebce` | `#00a36a` | `1437:8154` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` | `1437:8146` |
-| Pressed | `#00564c` | `#00453d` | `#00cc85` | `#00cc85` | `#00564c` | `1437:8138` |
+| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` | `1437:8138` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` | `1437:8130` |
 
-**Pressed state tokens (confirmed from node `1437:8138`):**
-- Btn bg: `Surface/tertiary/default` (#00564c) — NOT `Surface/primary/focus` (#00a36a)
-- Border: `Border/tertiary/focus` (#00453d)
+**Pressed state tokens (live-verified 2026-05-15 from design.color.md §6.1):**
+- Btn bg: `Surface/primary/focus` (#00a36a) — intensified green, NOT dark teal `#00564c`
+- Border: `Border/primary/default` (#00cc85)
 - Label: `Text/primary/default` (#00cc85) — NOT `Text/primary/on-color` (#f6fdfb)
 - Arrow bg: `Surface/primary/default` (#00cc85)
-- Chevron: `Icon/tertiary/default` (#00564c)
+- Chevron: `Icon/primary/focus` (#00a36a) — NOT `Icon/tertiary/default` (#00564c)
 
-**Mistake made:** Pressed state used `Surface/primary/focus` (#00a36a) for bg and `Text/primary/on-color` (#f6fdfb) for label. DS uses Tertiary palette for Pressed — darker bg (`#00564c`) with the primary green as the label color — the inverse of Default.
+**Note:** Earlier notes in this file documented Pressed as dark teal (`Surface/tertiary/default` `#00564c`). The live DS (2026-05-15) uses intensified green (`Surface/primary/focus` `#00a36a`) for all variants. When design.color.md and older rules conflict on state colors, design.color.md is authoritative.
 
 ---
 
@@ -2181,3 +2181,182 @@ Applied to both hover-over-active state as well. Same fix applies to all Syakila
 ```
 
 *Last updated: May 2026 (Session 4)*
+
+---
+
+## Session — May 2026 (Session 5) — AnalysisCard.html navbar alignment + horizontal scroll fix
+
+### RULE: scoreCard.html is the canonical navbar/menubar template for all Achievement pages
+
+All Syakila Achievement pages (`scoreCard.html`, `AnalysisCard.html`, and any future pages) **must copy the navbar/menubar CSS, HTML, and JS exactly from `scoreCard.html`**. Do not rewrite, approximate, or add extra overflow rules on top of it.
+
+`syakila.html` is the home/welcome screen and uses a different simpler navbar — it is NOT part of this rule.
+
+### Canonical navbar/menubar CSS (from scoreCard.html — confirmed correct)
+
+```css
+/* html/body — exact scoreCard values, nothing added */
+html { overflow-x: hidden; }
+body {
+  display: flex; flex-direction: column;
+  overflow-x: hidden;
+  padding-bottom: 90px;
+  /* NO min-width, NO max-width, NO width:100%, NO overflow-x:clip */
+}
+
+/* Nav button states — updated per design.color.md §6.3 (live-verified 2026-05-15) */
+.nav-btn:hover .nav-btn__inner      { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+.nav-btn:hover .nav-btn__label      { color: var(--text-secondary-focus); }
+.nav-btn:hover .nav-btn__icon-wrap  { color: var(--icon-secondary-on-color); }
+.nav-btn.is-pressed .nav-btn__inner { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+.nav-btn.is-pressed .nav-btn__label { color: var(--text-primary-default); }
+.nav-btn.is-pressed .nav-btn__icon-wrap { color: var(--icon-primary-default); }
+.nav-btn.is-active .nav-btn__inner  { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+.nav-btn.is-active .nav-btn__label  { color: var(--text-primary-default); }
+.nav-btn.is-active .nav-btn__icon-wrap { color: var(--icon-primary-default); }
+
+/* PAGE SHELL — no overflow-x on pd-page, no section/main rule */
+.pd-page { flex: 1; padding: var(--space-m) var(--page-padding-x) var(--space-m); }
+
+/* .menubar-nav — NO overflow:hidden (scoreCard has none) */
+.menubar-nav {
+  height: 56px; border: 1px solid var(--border-default);
+  border-radius: var(--corner-pill);
+  display: flex; align-items: flex-start;
+  gap: var(--space-xs); padding: var(--space-xs);
+}
+
+/* Responsive */
+@media (max-width: 1319px) {
+  :root { --page-padding-x: 32px; }
+  #NavBar-Desktop  { display: none; }
+  #NavBar-Tablet   { display: block; padding: 0 var(--page-padding-x); }
+  #MenuBar-Desktop { display: none; }
+  .menubar-panel   { width: min(1288px, calc(100% - 48px)); top: 0;
+                     border-top: 0; border-radius: 0 0 var(--corner-4xl) var(--corner-4xl); }
+}
+@media (max-width: 767px) {
+  :root { --page-padding-x: var(--space-m); }
+  #NavBar-Tablet        { display: none; }
+  #NavBar-Mobile-Bottom { display: flex; z-index: 200; }
+  .footer               { display: none; }
+  body                  { padding-bottom: 86px; }
+  .menubar-overlay      { display: flex; align-items: center; justify-content: flex-start; padding: 0 0 60px 0; }
+  .menubar-panel        { position: relative; left: auto; top: auto; bottom: auto;
+                          width: min(329px, 100%); height: auto; max-height: unset;
+                          transform: none; border-left: 0;
+                          border-radius: 0 var(--corner-4xl) var(--corner-4xl) 0; }
+  .menubar-panel__menu  { flex-direction: column; }
+  .menubar-panel__divider { display: none; }
+  .menubar-panel__col   { flex: none; width: 100%; }
+  .menubar-panel__cta   { flex-direction: column; border-radius: 20px; }
+  .panel-cta-notif      { width: 100%; }
+  .panel-cta-download   { flex: none; width: 100%; }
+  .menubar-panel__localization { padding: var(--space-m) var(--space-xl); }
+}
+```
+
+### What was wrong in AnalysisCard.html (corrected in Session 5)
+
+| Property | Wrong value | Correct value (scoreCard) |
+|---|---|---|
+| `body` | Had `width:100%; max-width:100%; overflow-x:clip; min-width:390px` | `overflow-x: hidden` only |
+| Nav-btn hover bg | `surface-secondary-default-subtle` | `surface-secondary-default` |
+| Nav-btn hover border | `border-primary-default` | `border-secondary-focus` |
+| Nav-btn hover icon | `icon-secondary-hover` (wrong name) | `icon-secondary-on-color` (canonical DS name) |
+| Nav-btn pressed bg | `surface-tertiary-default` (#00564c dark teal) | `surface-primary-focus` (#00a36a intensified green — design.color.md §6.3) |
+| Nav-btn pressed border | `border-tertiary-focus` | `border-primary-default` (design.color.md §6.3) |
+| `.pd-page` | Had `overflow-x: clip` | No overflow-x |
+| `section, main` | Had `max-width:100%; width:100%` global rule | Removed entirely |
+| `.menubar-nav` | Had extra `overflow: hidden` | No overflow property |
+| Mobile overlay padding | `0 0 56px 0` | `0 0 60px 0` |
+
+### AnalysisCard.html — Breadcrumb fixes (Session 5)
+
+- **Achievement icon**: Changed from `#ic-achievement` → `#ic-bar-chart-2` (correct DS bar-chart icon)
+- **Parent link color**: `.pd-link15__text--parent { color: var(--text-primary-default) }` — green, indicates clickable
+- **Chevron separator color**: `var(--text-primary-default)` — green
+- **Current page color**: Base `.pd-link15__text { color: var(--text-default-body) }` — grey, no inline override
+
+### AnalysisCard.html — Donut chart responsive layout (corrected)
+
+**Tablet (≤1279px) — stack vertically, NOT side by side:**
+```css
+.an-donut-pairs { width: 100%; flex-direction: column; gap: 24px; }
+.an-donut-col   { width: 100%; flex-direction: row; align-items: center; gap: 24px; }
+.an-donut-wrap svg { width: 140px; height: 140px; flex-shrink: 0; }
+```
+Side-by-side was wrong — two 400px+ columns cannot fit in a ~700-800px card content area.
+
+**Mobile (≤767px) — same vertical stack, smaller donuts:**
+```css
+.an-donut-pairs { flex-direction: column; gap: var(--space-m); }
+.an-donut-col   { width: 100%; flex-direction: row; align-items: center; justify-content: flex-start; gap: var(--space-m); }
+.an-donut-wrap svg { width: 100px; height: 100px; flex-shrink: 0; }
+.an-legend      { align-items: flex-start; flex-shrink: 1; min-width: 0; }
+.an-legend__row { width: 130px; margin: 0; }
+```
+
+*Last updated: May 2026 (Session 5)*
+
+---
+
+## Session — May 2026 (Session 6) — Color sync with design.color.md
+
+All color rules in this file and the HTML prototypes were audited against `design.color.md` (live-verified 2026-05-15). The following corrections were applied.
+
+### design.color.md is authoritative — conflicts resolved
+
+Per the sync-status note in `design.color.md`: "When CLAUDE.md and this file conflict on state colors, this file is authoritative."
+
+### Changes made to syakila.design.md
+
+| Location | Old value | New value | Reason |
+|---|---|---|---|
+| Rule 2 — Secondary Pressed note | `#00564c` dark teal (`Surface/tertiary/default`) | `#00a36a` intensified green (`Surface/primary/focus`) | design.color.md §6.1 live-verified 2026-05-15 |
+| Rule 17b — Add Math border | `#202a6e` | `#182052` | DS node 2339:1355 confirmed (also in this file's DS Confirmed Reference) |
+| Rule 17b — Account border | `#005ba2` | `#004479` | Same source |
+| Rule 17b — Bahasa Melayu border | `#3e5fcc` | `#2e4799` | Same source |
+| Rule 17b — KAFA text | `#358a62` | `#538865` | Same source |
+| Rule 19 — Pressed btn bg | `#00564c` | `#00a36a` | design.color.md §6.1 |
+| Rule 19 — Pressed border | `#00453d` | `#00cc85` | design.color.md §6.1 |
+| Rule 19 — Pressed chevron | `#00564c` | `#00a36a` | design.color.md §6.1 |
+| Session 5 nav-btn pressed bg | `--surface-tertiary-default` | `--surface-primary-focus` | design.color.md §6.3 |
+| Session 5 nav-btn pressed border | `--border-tertiary-focus` | `--border-primary-default` | design.color.md §6.3 |
+| Session 5 nav-btn hover icon | `--icon-secondary-hover` | `--icon-secondary-on-color` | Canonical DS token name |
+
+### Changes made to HTML prototypes
+
+Applied to all 3 files (`AnalysisCard.html`, `scoreCard.html`, `syakila.html`):
+
+| Property | Old value | New value | Token |
+|---|---|---|---|
+| `--text-primary-on-color` | `#e9fbf5` | `#f6fdfb` | `Text/primary/on-color` — design.color.md §3.2 |
+| `--surface-primary-default-subtle` | `#ccf5e7` | `#d9f7ed` | `Surface/primary/default-subtle` — design.color.md §3.1 |
+| `--icon-secondary-hover` (renamed) | `#70bc6f` | `--icon-secondary-on-color: #70bc6f` | Canonical DS name — design.color.md §3.3 |
+| `--border-disabled` (renamed) | `#bfbfbf` | `--border-disabled-disabled: #bfbfbf` | Canonical DS name — design.color.md §3.4 |
+| Nav-btn `.is-pressed` bg | `var(--surface-tertiary-default)` | `var(--surface-primary-focus)` | design.color.md §6.3 |
+| Nav-btn `.is-pressed` border | `var(--border-tertiary-focus)` | `var(--border-primary-default)` | design.color.md §6.3 |
+| Nav-btn `.is-active` bg | `var(--surface-primary-default)` | `var(--surface-primary-focus)` | design.color.md §6.3 — pressed = active |
+| Nav-btn `.is-active` label | `var(--icon-primary-on-color)` | `var(--text-primary-default)` | design.color.md §6.3 |
+| Nav-btn `.is-active` icon | `var(--icon-primary-on-color)` | `var(--icon-primary-default)` | design.color.md §6.3 |
+| `.navbar-action-icon.is-pressed` bg | `var(--surface-tertiary-default)` | `var(--surface-primary-focus)` | Consistent with nav-btn pressed |
+| Hover icon usage | `var(--icon-secondary-hover)` | `var(--icon-secondary-on-color)` | Matches renamed token |
+
+Additional changes in specific files:
+
+**scoreCard.html** — subject badge JS data:
+| Subject | Old border | New border |
+|---|---|---|
+| Account | `#005ba2` | `#004479` |
+| Add Math | `#202a6e` | `#182052` |
+| Bahasa Melayu | `#3e5fcc` | `#2e4799` |
+
+**syakila.html** only:
+- `.pd-btn15-primary:active` bg/border: `--surface-tertiary-default` / `--border-tertiary-focus` → `--surface-primary-focus` / `--border-primary-default`
+- `.pd-btn15-primary:active` arrow svg stroke: `--surface-tertiary-default` → `--icon-primary-focus`
+- `.check-in-card__label` color: hardcoded `#00564c` → `var(--text-tertiary-default)`
+- `.check-in-card__stats-value` color: hardcoded `#00564c` → `var(--text-tertiary-default)`
+- All `var(--border-disabled)` usages → `var(--border-disabled-disabled)`
+
+*Last updated: May 2026 (Session 6)*

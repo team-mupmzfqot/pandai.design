@@ -17,12 +17,12 @@
       --text-primary-default:  #00cc85;
       --text-primary-focus:    #00a36a;
       --text-tertiary-default: #00564c;
-      --text-primary-on-color: #e9fbf5;
+      --text-primary-on-color: #f6fdfb;
 
       --surface-general-default:              #ffffff;
       --surface-general-default-secondary:    #f2f2f2;
       --surface-primary-default:              #00cc85;
-      --surface-primary-default-subtle:       #ccf5e7;
+      --surface-primary-default-subtle:       #d9f7ed;
       --surface-primary-default-subtle-hover: #99ebce;
       --surface-secondary-default:            #b5f291;
       --surface-secondary-default-subtle:     #e8fbe8;
@@ -35,14 +35,14 @@
       --border-general-default:  #d9d9d9;
       --border-secondary-focus:  #70bc6f;
       --border-tertiary-focus:   #00453d;
-      --border-disabled:         #bfbfbf;
+      --border-disabled-disabled: #bfbfbf;
 
       --text-secondary-focus:    #70bc6f;
       --text-disabled-default:   #bfbfbf;
       --icon-default:            #d9d9d9;
       --icon-default-default:    #808080;
       --icon-primary-default:    #00cc85;
-      --icon-secondary-hover:    #70bc6f;
+      --icon-secondary-on-color: #70bc6f;
       --icon-primary-on-color:   #f6fdfb;
       --icon-tertiary-default:   #00564c;
 
@@ -126,7 +126,7 @@
     }
     .navbar-action-icon svg { display: block; width: 24px; height: 24px; flex-shrink: 0; }
     .navbar-action-icon:hover  { background: var(--surface-secondary-default-subtle); border-color: var(--border-primary-default); color: var(--icon-primary-default); }
-    .navbar-action-icon.is-pressed { background: var(--surface-tertiary-default); border-color: var(--border-primary-default); color: var(--icon-primary-on-color); }
+    .navbar-action-icon.is-pressed { background: var(--surface-primary-focus); border-color: var(--border-primary-default); color: var(--icon-primary-on-color); }
     .navbar-action-icon.is-active  { background: var(--surface-primary-default);  border-color: var(--border-primary-focus);   color: var(--icon-primary-on-color); }
 
     .navbar-avatar {
@@ -189,16 +189,17 @@
 
     .nav-btn:hover .nav-btn__inner          { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
     .nav-btn:hover .nav-btn__label          { color: var(--text-secondary-focus); }
-    .nav-btn:hover .nav-btn__icon-wrap      { color: var(--icon-secondary-hover); }
-    .nav-btn.is-pressed .nav-btn__inner     { background: var(--surface-tertiary-default); box-shadow: inset 0 0 0 1px var(--border-tertiary-focus); }
+    .nav-btn:hover .nav-btn__icon-wrap      { color: var(--icon-secondary-on-color); }
+    .nav-btn.is-pressed .nav-btn__inner     { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
     .nav-btn.is-pressed .nav-btn__label     { color: var(--text-primary-default); }
     .nav-btn.is-pressed .nav-btn__icon-wrap { color: var(--icon-primary-default); }
-    .nav-btn.is-active .nav-btn__inner      { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
-    .nav-btn.is-active .nav-btn__label      { color: var(--icon-primary-on-color); }
-    .nav-btn.is-active .nav-btn__icon-wrap  { color: var(--icon-primary-on-color); }
-    .nav-btn.is-active:hover .nav-btn__inner     { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
-    .nav-btn.is-active:hover .nav-btn__label     { color: var(--icon-primary-on-color); }
-    .nav-btn.is-active:hover .nav-btn__icon-wrap { color: var(--icon-primary-on-color); }
+    /* Active — same intensified-green palette as Pressed (design.color.md §6.3) */
+    .nav-btn.is-active .nav-btn__inner      { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+    .nav-btn.is-active .nav-btn__label      { color: var(--text-primary-default); }
+    .nav-btn.is-active .nav-btn__icon-wrap  { color: var(--icon-primary-default); }
+    .nav-btn.is-active:hover .nav-btn__inner     { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+    .nav-btn.is-active:hover .nav-btn__label     { color: var(--text-primary-default); }
+    .nav-btn.is-active:hover .nav-btn__icon-wrap { color: var(--icon-primary-default); }
 
     /* ───────────────────────────────────────────────
        PAGE SHELL
@@ -1438,9 +1439,9 @@
   /* ── Subject data: DS-confirmed badge colors (CLAUDE.md Rule 17) ── */
   try {
     const SUBJECT_DATA = {
-      'account':   { name: 'Account',          bg: '#0072ca', border: '#005ba2', text: '#f2f2f2', icon: 'assets/subject-icons/icon-account.svg'    },
-      'add-math':  { name: 'Add Math',          bg: '#283589', border: '#202a6e', text: '#f2f2f2', icon: 'assets/subject-icons/icon-add-math.svg'   },
-      'bm':        { name: 'Bahasa Melayu',     bg: '#4d77ff', border: '#3e5fcc', text: '#f2f2f2', icon: 'assets/subject-icons/icon-bmelayu.svg'    },
+      'account':   { name: 'Account',          bg: '#0072ca', border: '#004479', text: '#f2f2f2', icon: 'assets/subject-icons/icon-account.svg'    },
+      'add-math':  { name: 'Add Math',          bg: '#283589', border: '#182052', text: '#f2f2f2', icon: 'assets/subject-icons/icon-add-math.svg'   },
+      'bm':        { name: 'Bahasa Melayu',     bg: '#4d77ff', border: '#2e4799', text: '#f2f2f2', icon: 'assets/subject-icons/icon-bmelayu.svg'    },
       'biology':   { name: 'Biology',           bg: '#8431d8', border: '#6a27ad', text: '#f2f2f2', icon: 'assets/subject-icons/icon-biology.svg'    },
       'chemistry': { name: 'Chemistry',         bg: '#e20082', border: '#b50068', text: '#f2f2f2', icon: 'assets/subject-icons/icon-chemistry.svg'  },
       'science':   { name: 'Science',           bg: '#ffd641', border: '#ccab34', text: '#998027', icon: 'assets/subject-icons/icon-science.svg'    },
