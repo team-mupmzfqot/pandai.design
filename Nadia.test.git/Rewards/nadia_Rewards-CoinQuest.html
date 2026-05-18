@@ -55,7 +55,7 @@
       --text-primary-default:      #00cc85;
       --text-primary-on-color:     #f6fdfb;
       --text-secondary-focus:      #70bc6f;
-      --icon-default-default:      #d9d9d9;
+      --icon-default-default:      #808080;
       --icon-primary-default:      #00cc85;
       --icon-primary-on-color:     #f6fdfb;
       --icon-secondary-hover:      #70bc6f;
@@ -68,6 +68,23 @@
       --spacing-space-m:   16px;
       --spacing-space-xl:  24px;
       --spacing-space-2xl: 28px;
+      /* ── Canonical tokens per design.color.md (2026-05-16) ─────── */
+      /* Surface */
+      --surface-primary-default-subtle:       #d9f7ed;
+      --surface-primary-default-subtle-hover: #99ebce;
+      --surface-secondary-default-subtle:     #e8fbe8;
+      --surface-disabled-primary:             #f2f2f2;
+      /* Text */
+      --text-default-heading:                 #404040;
+      --text-disabled-default:                #bfbfbf;
+      /* Icon */
+      --icon-primary-focus:                   #00a36a;
+      --icon-secondary-on-color:              #70bc6f;
+      --icon-disabled-default:                #bfbfbf;
+      /* Border */
+      --border-primary-default-subtle:        #d9f7ed;
+      --border-general-default:               #d9d9d9;
+      --border-disabled-disabled:             #bfbfbf;
 
       /* Coin/gold palette */
       --coin-bg:     #fece00;
@@ -673,92 +690,116 @@
       align-items: stretch;
     }
 
-    /* LEFT SIDEBAR — DS node 3065:42737
-       bg: white, border: 1px #d9d9d9, border-radius: 18px (corner-2xl)
-       padding: 16px, gap: 8px                                         */
+    /* ── Rewards Sidebar — DS node 3849:48401 (Nav Side Menu Desktop 1.5) ─── */
     .rewards-sidebar {
-      width:          230px;
+      width:          280px;
+      min-width:      240px;
       flex-shrink:    0;
       background:     #fff;
-      border:         1px solid #d9d9d9;
-      border-radius:  var(--r-2xl);
+      border:         1px solid var(--og-500);   /* Border/primary/default */
+      border-radius:  24px;                       /* Radius/4xl */
       padding:        var(--sp-m);
       display:        flex;
       flex-direction: column;
       gap:            var(--sp-xs);
     }
-
-    /* Coin balance chip — DS node 3065:42738
-       bg: #e8fbe8 (Surface/secondary/default-subtle)
-       border: 1px #b5f291 (Border/secondary/default)
-       border-radius: 8px (corner-m), px:12 py:8, height:40px          */
+    /* Score chip — Surface/gold/default-subtle #fef1ce, Border/gold/default #fabb0a */
     .sidebar-balance {
-      height:          40px;
-      background:      #e8fbe8;
-      border:          1px solid #b5f291;
-      border-radius:   8px;
-      padding:         var(--sp-xs) var(--sp-s);
+      background:      #fef1ce;
+      border:          1px solid #fabb0a;
+      border-radius:   16px;
+      padding:         var(--sp-xs) var(--sp-xs) var(--sp-xs) var(--sp-xxxs);
       display:         flex;
       align-items:     center;
       justify-content: center;
-      gap:             var(--sp-xs);
+      gap:             2px;
       overflow:        hidden;
       flex-shrink:     0;
     }
-    .sidebar-balance__coin  { width: 18px; height: 21px; flex-shrink: 0; display: block; object-fit: contain; }
-    .sidebar-balance__value { font-size: 16px; font-weight: 700; line-height: 24px; color: var(--text-default-body); white-space: nowrap; }
-
-    /* Sidebar nav buttons — Button - 1.5 Tertiary / Primary (active) */
+    .sidebar-balance__coin {
+      width:       24px;
+      height:      24px;
+      flex-shrink: 0;
+      display:     block;
+      object-fit:  contain;
+    }
+    /* strokeAlign: OUTSIDE 1px → 2px CSS (Rule 26) */
+    .sidebar-balance__value {
+      font-size:           18px;
+      font-weight:         700;
+      line-height:         28px;
+      color:               #fff;
+      -webkit-text-stroke: 2px #c89608;
+      paint-order:         stroke fill;
+      white-space:         nowrap;
+    }
+    .sidebar-divider {
+      height:      1px;
+      background:  #d9d9d9;
+      width:       100%;
+      flex-shrink: 0;
+      margin:      4px 0;
+    }
+    /* Nav items — Dropdown-Parts DS pattern, gap:10px, radius:108px */
     .sidebar-btn {
       width:         100%;
-      height:        40px;
-      border-radius: var(--r-rounded);
-      padding:       var(--sp-xs) var(--sp-s);
+      border-radius: 108px;
+      padding:       var(--sp-xs) var(--sp-m);
       display:       flex;
       align-items:   center;
-      gap:           0;
+      gap:           10px;
       cursor:        pointer;
-      background:    #fff;
-      border:        none;
+      background:    transparent;
+      border:        1px solid transparent;
       flex-shrink:   0;
       transition:    background 0.12s ease;
+      text-align:    left;
     }
-    .sidebar-btn:not(.sidebar-btn--active):hover { background: var(--og-50); }
+    .sidebar-btn:not(.sidebar-btn--active):hover {
+      background:   #e8fbe8;    /* Surface/secondary/default-subtle */
+      border-color: #00cc85;    /* Border/primary/default */
+    }
+    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__icon-wrap { color: #00cc85; }
+    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__label     { color: #00cc85; }
     .sidebar-btn--active {
-      background: var(--og-500);
-      border:     1px solid var(--og-600);
+      background:   #b5f291;    /* Surface/secondary/default */
+      border-color: #00a36a;    /* Border/primary/focus */
     }
+    /* Icon — 24×24 clip via padding (position:absolute;inset collapses in Chromium) */
     .sidebar-btn__icon-wrap {
-      width: 24px; height: 24px;
-      display: flex; align-items: center; justify-content: center;
+      width:       24px;
+      height:      24px;
+      padding:     2px;           /* 8.33% of 24px — stop-circle, smile */
+      box-sizing:  border-box;
+      overflow:    hidden;
       flex-shrink: 0;
-      color: var(--icon-primary-default);
+      color:       var(--icon-primary-default);
     }
-    .sidebar-btn--active .sidebar-btn__icon-wrap { color: var(--icon-primary-on-color); }
-    .sidebar-btn__icon-clip {
-      width: 20px; height: 20px;
-      box-sizing: border-box;
-      padding: 1.67px;   /* 8.33% — default for stop-circle + smile */
-      overflow: hidden; flex-shrink: 0;
-    }
-    .sidebar-btn__icon-clip svg { display: block; width: 100%; height: 100%; }
-    /* Per-icon DS insets */
-    .sidebar-btn__icon-clip[data-icon="box"]           { padding: 1.03px 1.67px 1.02px 1.67px; }
-    .sidebar-btn__icon-clip[data-icon="shopping-bag"]  { padding: 1.67px 2.5px; }
-    .sidebar-btn__icon-clip[data-icon="shopping-cart"] { padding: 0.83px 0.83px 1.67px 0.83px; }
+    .sidebar-btn--active .sidebar-btn__icon-wrap { color: #00a36a; }
+    .sidebar-btn__icon-wrap svg { display: block; width: 100%; height: 100%; }
+    /* Per-icon DS padding from Figma Dropdown-Parts inspection */
+    .sidebar-btn__icon-wrap[data-icon="box"]           { padding: 1.24px 2px 1.23px; }
+    .sidebar-btn__icon-wrap[data-icon="shopping-bag"]  { padding: 2px 3px; }
+    .sidebar-btn__icon-wrap[data-icon="shopping-cart"] { padding: 1px 1px 2px; }
+    /* Label — Text/default/body #666, active: Text/primary/default-hover #00a36a */
     .sidebar-btn__label {
-      font-size: 14px; font-weight: 600; line-height: 20px;
-      color: var(--text-heading); padding: 0 var(--sp-xs); white-space: nowrap;
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       #666;
+      flex:        1 0 0;
+      min-width:   0;
+      white-space: nowrap;
     }
-    .sidebar-btn--active .sidebar-btn__label { color: var(--text-primary-on-color); }
+    .sidebar-btn--active .sidebar-btn__label { color: #00a36a; }
 
     /* RIGHT MAIN PANEL — same container as sidebar */
     .rewards-main {
       flex:           1;
       min-width:      0;
       background:     #fff;
-      border:         1px solid #d9d9d9;
-      border-radius:  var(--r-2xl);
+      border:         1px solid var(--og-500);
+      border-radius:  var(--r-4xl);
       padding:        var(--sp-m);
       display:        flex;
       flex-direction: column;
@@ -1134,54 +1175,36 @@
     <!-- Two-panel layout — DS node 3065:42736 -->
     <div class="rewards-layout">
 
-      <!-- LEFT SIDEBAR — DS node 3065:42737 (230px) -->
+            <!-- LEFT SIDEBAR — DS node 3849:48401 (Nav Side Menu Desktop 1.5) -->
       <aside class="rewards-sidebar">
 
-        <!-- Coin balance chip — DS node 3065:42738 -->
+        <!-- Score chip — Surface/gold/default-subtle #fef1ce, Border/gold/default #fabb0a -->
         <div class="sidebar-balance">
-          <img class="sidebar-balance__coin"
-            src="https://www.figma.com/api/mcp/asset/f380960d-7bfa-4835-a69f-548759c09cce"
-            alt="Coin">
-          <span class="sidebar-balance__value">120</span>
+          <img class="sidebar-balance__coin" src="../image-repo/Rewards-CoinQuest/P.Coin.svg" alt="Pandai Coin">
+          <span class="sidebar-balance__value">10,000</span>
         </div>
 
-        <!-- Coin Quest — Primary/Active (DS node 3065:42896) -->
+        <!-- Divider — 1px #d9d9d9 -->
+        <div class="sidebar-divider" aria-hidden="true"></div>
+
         <button class="sidebar-btn sidebar-btn--active" type="button">
-          <div class="sidebar-btn__icon-wrap">
-            <div class="sidebar-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-stop-circle"/></svg></div>
-          </div>
+          <div class="sidebar-btn__icon-wrap"><svg aria-hidden="true"><use href="#ic-stop-circle"/></svg></div>
           <span class="sidebar-btn__label">Coin Quest</span>
         </button>
-
-        <!-- My Rewards (DS node 3065:42897) -->
         <button class="sidebar-btn" type="button">
-          <div class="sidebar-btn__icon-wrap">
-            <div class="sidebar-btn__icon-clip" data-icon="box"><svg aria-hidden="true"><use href="#ic-package"/></svg></div>
-          </div>
+          <div class="sidebar-btn__icon-wrap" data-icon="box"><svg aria-hidden="true"><use href="#ic-package"/></svg></div>
           <span class="sidebar-btn__label">My Rewards</span>
         </button>
-
-        <!-- Merchandise (DS node 3065:42898) -->
         <button class="sidebar-btn" type="button">
-          <div class="sidebar-btn__icon-wrap">
-            <div class="sidebar-btn__icon-clip" data-icon="shopping-bag"><svg aria-hidden="true"><use href="#ic-shopping-bag"/></svg></div>
-          </div>
+          <div class="sidebar-btn__icon-wrap" data-icon="shopping-bag"><svg aria-hidden="true"><use href="#ic-shopping-bag"/></svg></div>
           <span class="sidebar-btn__label">Merchandise</span>
         </button>
-
-        <!-- eVoucher (DS node 3065:42899) -->
         <button class="sidebar-btn" type="button">
-          <div class="sidebar-btn__icon-wrap">
-            <div class="sidebar-btn__icon-clip" data-icon="shopping-cart"><svg aria-hidden="true"><use href="#ic-shopping-cart"/></svg></div>
-          </div>
+          <div class="sidebar-btn__icon-wrap" data-icon="shopping-cart"><svg aria-hidden="true"><use href="#ic-shopping-cart"/></svg></div>
           <span class="sidebar-btn__label">eVoucher</span>
         </button>
-
-        <!-- Avatar (DS node 3065:42900) -->
         <button class="sidebar-btn" type="button">
-          <div class="sidebar-btn__icon-wrap">
-            <div class="sidebar-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-smile"/></svg></div>
-          </div>
+          <div class="sidebar-btn__icon-wrap"><svg aria-hidden="true"><use href="#ic-smile"/></svg></div>
           <span class="sidebar-btn__label">Avatar</span>
         </button>
 

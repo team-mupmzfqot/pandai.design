@@ -1923,4 +1923,217 @@ Triggered by mobile hamburger button (`< 1320px`).
 
 ---
 
-*Last updated: 2026-05-14 | Files: Nadia.test.git/nadia_Class.html | Branch: staging*
+---
+
+### Updates — May 2026 (Session 7)
+
+**Files updated:** `Class/nadia_Class-MyClasses.html`, `Class/nadia_Class-BrowseClasses.html`, `Rewards/nadia_Rewards-CoinQuest.html`, `Rewards/nadia_Rewards-Merchandise.html`, `Rewards/nadia_Rewards-MyRewards.html`
+
+#### Color token rules — all Nadia files
+
+> Source of truth: [`design.color.md`](../design.color.md) (Pandai DS 1.5, file `TLVKe3bgJTdVvuPAzgDq2f`). Never hardcode a hex value in a CSS rule — always reference a `var(--token)`.
+
+**Rule:** Token name = Figma path, kebab-cased. `Surface/primary/default` → `--surface-primary-default`. No `--pd-` prefix. No invented names.
+
+All `:root` blocks now include the canonical token set. New tokens added (2026-05-16):
+
+| Token | Hex | Usage |
+|---|---|---|
+| `--surface-primary-default-subtle` | `#d9f7ed` | Live Tuition badge bg, tint cards |
+| `--surface-primary-default-subtle-hover` | `#99ebce` | Button arrow circle bg (Default state) |
+| `--surface-secondary-default-subtle` | `#e8fbe8` | Card body bg, hover arrow bg |
+| `--surface-disabled-primary` | `#f2f2f2` | Disabled button/input bg |
+| `--text-default-heading` | `#404040` | Card titles, teacher name |
+| `--text-disabled-default` | `#bfbfbf` | Disabled labels |
+| `--icon-primary-focus` | `#00a36a` | Button arrow chevron stroke (Default) |
+| `--icon-secondary-on-color` | `#70bc6f` | Button arrow chevron stroke (Hover) |
+| `--icon-disabled-default` | `#bfbfbf` | Disabled icon strokes |
+| `--border-primary-default-subtle` | `#d9f7ed` | Light-mint inner borders |
+| `--border-general-default` | `#d9d9d9` | Neutral dividers, search pill border |
+| `--border-disabled-disabled` | `#bfbfbf` | Disabled button borders |
+
+**Also fixed:** `--icon-default-default` corrected from `#d9d9d9` → `#808080` per DS (`Icon/default/default`).
+
+**Existing tokens confirmed correct (no change needed):**
+
+| Token | Hex | Usage |
+|---|---|---|
+| `--surface-primary-default` | `#00cc85` | Primary fills, active badges |
+| `--surface-secondary-default` | `#b5f291` | Button bg Hover state |
+| `--surface-tertiary-default` | `#00564c` | Button bg Active/Pressed state |
+| `--border-primary-default` | `#00cc85` | Card borders, button arrow border |
+| `--border-primary-focus` | `#00a36a` | Primary button border (Default) |
+| `--border-secondary-focus` | `#70bc6f` | Primary button border (Hover) |
+| `--text-primary-on-color` | `#f6fdfb` | Button label (Default state) |
+| `--text-primary-default` | `#00cc85` | Green text, button label (Pressed) |
+| `--text-secondary-focus` | `#70bc6f` | Button label (Hover state) |
+| `--text-default-body` | `#666666` | Body copy, descriptions |
+| `--icon-primary-default` | `#00cc85` | Green icons, footer heart, menu icons |
+| `--icon-primary-on-color` | `#f6fdfb` | Icons on primary fills |
+
+#### File renames + moves (this session)
+
+| Old path | New path |
+|---|---|
+| `Nadia.test.git/nadia_Class.html` | `Nadia.test.git/Class/nadia_Class-MyClasses.html` |
+| `Nadia.test.git/My Rewards/nadia_Rewards-CoinQuest.html` | `Nadia.test.git/Rewards/nadia_Rewards-CoinQuest.html` |
+| `Nadia.test.git/My Rewards/nadia_Rewards-Merchandise.html` | `Nadia.test.git/Rewards/nadia_Rewards-Merchandise.html` |
+| `Nadia.test.git/My Rewards/nadia_Rewards-Myrewards.html` | `Nadia.test.git/Rewards/nadia_Rewards-MyRewards.html` |
+
+All moved files had relative asset paths updated with `../` prefix.
+
+---
+
+---
+
+### Updates — May 2026 (Session 8)
+
+**File:** `Nadia.test.git/Class/nadia_Class-MyClasses.html`
+
+#### Menu modal polish
+
+- **Tablet panel top alignment** — removed `padding-top: 80px` from `.mmenu-overlay.is-open` at `≥768px`; panel now sits flush at top of viewport
+- **Checkboxes removed** — all `<div class="menu-chk">` elements stripped from both mobile and tablet menu panels (22 deletions)
+- **Menu chevron-right colour** — `.mmenu-item-chevron` corrected from `color: var(--text-default-body)` (#666 grey) to `color: var(--icon-primary-default)` (#00cc85); confirmed via DS `VariableID:119:10` → `Icon/primary/default`
+
+#### Class card DS alignment (node 3528:52082)
+
+- **Live Tuition badge bg** — `#ccf5e7` → `#d9f7ed` (`--surface-primary-default-subtle`); DS specifies `Surface/primary/default-subtle`
+- **Enter Class button padding** — `2px 8px` → `2px 4px`; DS: `px: space-xxs (4px) py: scale/50-(2px)`
+- **Chevron `<use>` → inline SVG** — CSS `stroke:` on `<svg>` does not pierce `<use>` shadow DOM; replaced all 20 `btn-enter__arrow` + 2 Download App `<use href="#ic-chevron-btn*">` references with inlined paths + `stroke="currentColor"` so CSS cascade applies correctly
+
+---
+
+### Updates — May 2026 (Session 9)
+
+**New file:** `Nadia.test.git/Class/nadia_Class-BrowseClasses.html`
+
+Browse Classes sub-page of the Class section. Same navbar, mobile menu, footer, and SVG sprite as MyClasses. Asset paths use `../` prefix (file lives in `Class/` subfolder).
+
+#### Structure
+
+| Section | Notes |
+|---|---|
+| Section 1 — Navbar top | Identical to MyClasses (DS node 3544:61283) |
+| Section 2 — Nav menu pill | Class nav item active + dropdown; Browse Classes link points to this file |
+| Section 3 — Breadcrumb | Title: **Browse Classes** · Trail: `Class › Browse Classes` · DS node 3528:52796 |
+| Section 4 — Cards grid | 20 Class Card - 1.5 cards, 3-col → 2-col → 1-col responsive |
+
+#### Breadcrumb buttons (DS node 3528:52796)
+
+| Button | Style | Icon | Notes |
+|---|---|---|---|
+| Timetable | Secondary (outlined) | `Outline/calendar` | Same as MyClasses |
+| **Go to My Classes** | Secondary (outlined) | `Outline/airplay` | Links to `nadia_Class-MyClasses.html` |
+| Join Class | Primary (filled green) | `Outline/plus` | Same as MyClasses |
+
+**Airplay icon fix:** First version used `<polyline>` for the triangle — only drew 2 of 3 sides. Changed to `<polygon>` so the shape closes correctly.
+
+#### CTA — Premium Tag + Preview button
+
+Each card CTA has two elements: a tag label on the left and a Preview button on the right (`.cc__cta { justify-content: space-between }`).
+
+**Tag label variations (`.cc-premium-tag`):**
+
+| Tag text | Count | Cards |
+|---|---|---|
+| Premium Only | 16 | All except below |
+| RM 80.00 | 2 | ⑤ Bahasa Melayu, ⑪ English (DS node 3528:52817) |
+| Free | 2 | ⑧ Chinese Language, ⑮ KAFA (DS node 3528:52822) |
+
+All three tag variants share the same CSS: `font-size: 14px; font-weight: 600; color: var(--og-500)`.
+
+**Preview button — Button - 1.5 Secondary/S Student (DS nodes 1452:8292 Default · 8284 Hover · 8276 Pressed):**
+
+| State | btn bg | border | label | arrow bg | arrow border | chevron |
+|---|---|---|---|---|---|---|
+| Default | `#fff` | `#00cc85` | `#00cc85` | `#fff` | `inset 1px #00cc85` | `#00cc85` |
+| Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#b5f291` | `inset 1px #70bc6f` | `#70bc6f` |
+| Pressed | `#00564c` | `#00453d` | `#00cc85` | `#00cc85` | none | `#00564c` |
+
+**Arrow border:** `box-shadow: inset 0 0 0 1px` (Rule 30 — avoids consuming layout space; arrow is 16px frame, 2px padding, 12px clip).
+
+#### Shadow DOM issue — `<use>` vs inline SVG
+
+CSS `stroke` set on a `<svg>` element via a stylesheet rule **does not cascade into the shadow DOM** created by `<use href="#symbol-id"/>`. This caused the Preview button chevron to render with wrong colours (subject theme leaking via `currentColor`, or browser default black/dark).
+
+**Fix:** All 20 Preview button arrows use inline SVG paths — no `<use>`:
+```html
+<!-- ✗ stroke blocked by shadow DOM -->
+<svg><use href="#ic-chevron-btn"/></svg>
+
+<!-- ✓ stroke: var(--og-500) reaches path directly -->
+<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg>
+```
+
+**Rule:** Use `<use>` for icons where the colour never changes per-instance. Use inline paths when per-state colour control is needed via CSS.
+
+**Prompt to fix this in future:** `"inline the SVG path, don't use <use>"`
+
+#### Key DS nodes
+
+| Node | Purpose |
+|---|---|
+| `3528:52796` | Browse Classes breadcrumb row + 3 buttons |
+| `3528:52800` | Go to My Class button (airplay icon, Secondary/L) |
+| `3528:52802` | Full 20-card Browse Classes grid |
+| `3528:52804` | Class Card - 1.5 with Premium Only + Preview CTA |
+| `3528:52817` | RM 80.00 tag variant (English card) |
+| `3528:52822` | Free tag variant (KAFA card) |
+| `1452:8292` | Button - 1.5 Secondary/S Default |
+| `1452:8284` | Button - 1.5 Secondary/S Hover |
+| `1452:8276` | Button - 1.5 Secondary/S Pressed |
+
+---
+
+*Last updated: 2026-05-18 | File: Nadia.test.git/Class/nadia_Class-BrowseClasses.html | Branch: staging*
+
+---
+
+### Updates — May 2026 (Session 9)
+
+**Folder restructure — `My Rewards/` → `Rewards/`:**
+All Rewards HTML pages moved from `Nadia.test.git/My Rewards/` to `Nadia.test.git/Rewards/`. Old paths deleted from git.
+
+**`nadia_Rewards-Myrewards.html` — My Rewards view:**
+- Same two-panel sidebar; `My Rewards` button = `sidebar-btn--active` (icon: `ic-package`)
+- Breadcrumb: Rewards › My Rewards (DS node 3284:218453)
+- Right main: `.mr-grid` — `grid-template-columns: repeat(4, 1fr); gap: 16px` → 2-col at `≤1279px` → 1-col at `≤767px`
+- Cards: `.mr-card` — `flex-col; border: 1px #d9d9d9; border-radius: 24px`
+  - Image: `aspect-ratio: 250/148; object-fit: cover; bg: var(--og-50)` · source: `image-repo/Rewards-MyRewards/MyRewards-N.svg`
+  - Body: `padding: 16px; gap: 8px` — badge(s) + title (14px SemiBold `#404040`, 2-line clamp)
+  - Badge (`.mr-badge`): `Outline/star` 10px icon · `bg #ccf5e7; border 1px #00cc85; border-radius: 60px; padding: 2px 8px; font 10px Medium #00cc85`
+  - Divider: `height: 1px; bg #d9d9d9`
+  - Footer: coin icon (21px) + value · Show Voucher button (Primary/S, h:24px, `ic-chevron-btn` 12×12 clip)
+- Show Voucher button: active `bg #00cc85; border #00a36a` · hover `#b5f291/#70bc6f` · pressed `#00564c/#00453d`
+
+---
+
+### Updates — May 2026 (Session 10)
+
+**Left sidebar redesign — all 3 Rewards pages (DS node `3849:48401` Nav Side Menu Desktop 1.5):**
+
+Sidebar container: `width: 280px; min-width: 240px; border: 1px solid #00cc85; border-radius: 24px; padding: 16px; gap: 8px`
+
+**Score chip (`.sidebar-balance`):**
+- `bg: #fef1ce` (`Surface/gold/default-subtle`) · `border: 1px solid #fabb0a` (`Border/gold/default`) · `border-radius: 16px`
+- `padding: var(--sp-xs) var(--sp-xs) var(--sp-xs) var(--sp-xxxs)` · `gap: 2px`
+- Coin icon: `<img>` 24×24 `object-fit: contain` from local `image-repo/Rewards-*/P.Coin.svg`
+- Value "10,000": `font 18px Bold; color #fff; -webkit-text-stroke: 2px #c89608; paint-order: stroke fill` (Rule 26 — OUTSIDE 1px stroke → 2px CSS)
+
+**Nav buttons (`.sidebar-btn`):**
+- Icon container: single `<div class="sidebar-btn__icon-wrap">` 24×24 `overflow:hidden; position:relative` — no nested clip div
+- SVG: `position:absolute; inset:8.33%` (default); per-icon overrides via `data-icon` attribute:
+  - `data-icon="box"` (My Rewards): `inset: 5.17% 8.33% 5.12%`
+  - `data-icon="shopping-bag"` (Merchandise): `inset: 8.33% 12.5%`
+  - `data-icon="shopping-cart"` (eVoucher): `inset: 4.17% 4.17% 8.33%`
+- Inactive: `bg transparent; border 1px transparent; icon/label #666` · hover: `bg var(--og-50)`
+- Active (`.sidebar-btn--active`): `bg #b5f291; border 1px #00a36a; icon/label #00a36a`
+- Label: `font 14px SemiBold; line-height 20px`
+
+**Active button per page:**
+- `nadia_Rewards-CoinQuest.html` → `ic-stop-circle` (Coin Quest) active
+- `nadia_Rewards-Myrewards.html` → `ic-package` + `data-icon="box"` (My Rewards) active
+- `nadia_Rewards-Merchandise.html` → `ic-shopping-bag` + `data-icon="shopping-bag"` (Merchandise) active
+
+*Last updated: 2026-05-18 | File: Nadia.test.git/Rewards/nadia_Rewards-Myrewards.html | Branch: staging*

@@ -298,41 +298,44 @@ All known subject icon names (May 2026):
 **Geography note:** SVG export is 27,907 chars (complex globe). Use simplified DS-colored globe SVG instead.
 
 #### 17b. Badge bg / border / text colors
-Source from `Subject Badge/[Name] - M` (24px) or `Subject Badge/[Name] - L` (32px) components on the Iconography page. **Never approximate with Tailwind color tokens.**
+Source from `Subject Badge/[Name]` COMPONENT_SET on **`⚙️ Badges` page** (not Iconography). Each set has `Size=M` (32px) and `Size=S` (24px) variants. **Never approximate with Tailwind color tokens.**
 
-**Lookup:** `findAll(n => n.type === 'COMPONENT' && n.name === 'Subject Badge/[Name] - M')` on Iconography page.
+**Lookup:** `findAll(n => n.type === 'COMPONENT_SET' && n.name.startsWith('Subject Badge/'))` on Badges page.
 
-**L vs M:** bg colors are identical between sizes. Border colors differ slightly for some subjects (Add Math, Account). Since quiz cards use M size (24px), always check M variants for quiz card badges.
+**M vs S:** bg and border colors are identical between sizes. Size=M = 32px (was previously called "L"), Size=S = 24px (was previously called "M"). Since quiz cards use S size (24px), always check S variants for quiz card badges. The prototype base `.subject-badge` CSS = M (32px), quiz card override = S (24px).
 
 **Text color rule:** Almost all subjects use `#f2f2f2` (light text on dark bg). Exceptions — dark text on light bg:
 - `Science`: `--badge-text: #998027` (yellow bg)
-- `KAFA`: `--badge-text: #358a62` (mint green bg)
+- `KAFA`: `--badge-text: #538865` (mint green bg)
+- `Geography`: `--badge-text: #478220` (light green bg)
 
-**Confirmed badge colors — M variants (May 2026), all from DS Iconography:**
+**Confirmed badge colors — S variants (confirmed 2026-05-17, live DS audit), all from `⚙️ Badges` page:**
 
 | Subject | `--badge-bg` | `--badge-border` | Text |
 |---|---|---|---|
-| Add Math | `#283589` | `#202a6e` | `#f2f2f2` |
-| Account | `#0072ca` | `#005ba2` | `#f2f2f2` |
-| Bahasa Melayu | `#4d77ff` | `#3e5fcc` | `#f2f2f2` |
+| Add Math | `#283589` | `#182052` | `#f2f2f2` |
+| Account | `#0072ca` | `#004479` | `#f2f2f2` |
+| Bahasa Melayu | `#4d77ff` | `#2e4799` | `#f2f2f2` |
 | Biology | `#8431d8` | `#6a27ad` | `#f2f2f2` |
 | Business | `#efb42b` | `#bf9022` | `#f2f2f2` |
 | Chemistry | `#e20082` | `#b50068` | `#f2f2f2` |
+| Chinese Language | `#f94848` | `#c73a3a` | `#f2f2f2` |
 | Computer Science | `#d10070` | `#a7005a` | `#f2f2f2` |
 | Economy | `#ff5733` | `#cc4629` | `#f2f2f2` |
 | English | `#ff4d56` | `#cc3e45` | `#f2f2f2` |
-| Geography | `#77d836` | `#5fad2b` | `#f2f2f2` |
+| Geography | `#77d836` | `#5fad2b` | `#478220` |
 | History | `#a97c50` | `#876340` | `#f2f2f2` |
 | Islamic Studies | `#de4d7f` | `#b23e66` | `#f2f2f2` |
-| KAFA | `#8ae3a9` | `#6eb687` | `#358a62` |
+| KAFA | `#8ae3a9` | `#6eb687` | `#538865` |
 | Mathematics | `#42ac7b` | `#358a62` | `#f2f2f2` |
 | Moral Studies | `#0072ca` | `#005ba2` | `#f2f2f2` |
 | Physics | `#27a0d7` | `#1f80ac` | `#f2f2f2` |
+| Primary/Default | `#00cc85` | `#00a36a` | `#f2f2f2` |
 | RBT | `#353535` | `#2a2a2a` | `#f2f2f2` |
 | Science | `#ffd641` | `#ccab34` | `#998027` |
 
 **Structure confirmed (DS node inspection, May 2026):**
-- Overall: `height: 24px` (M), `border-radius: 60px`, `overflow: hidden`
+- Overall: `height: 32px` (M) / `24px` (S), `border-radius: 60px`, `overflow: hidden`
 - Icon slot: `padding: 4px 8px 4px 12px`, white bg, `width: 34px`
 - Label panel: `padding: 0 16px 0 12px`, `gap: 8px`, subject bg color
 - Pointer: 4×8px white SVG, `position: absolute; left: 0; top: 50%`
@@ -341,7 +344,10 @@ Source from `Subject Badge/[Name] - M` (24px) or `Subject Badge/[Name] - L` (32p
 **Mistakes made (May 2026):**
 - Used Tailwind/guessed colors for 8 subjects — RBT, KAFA, Account, Add Math, Economy, Business, CS, BM all had wrong bg and/or border colors.
 - Business text was set to `#78350F` (dark) — DS actually uses `#f2f2f2` (light).
-- KAFA text was missing `--badge-text: #358a62` override — rendered white text on mint green (unreadable).
+- KAFA text was initially documented as `#358a62` — live DS audit 2026-05-17 confirmed correct value is `#538865`.
+- Geography text exception was undocumented — DS uses `#478220` (dark green) on the light green bg. Missing `--badge-text` override renders white text on `#77d836` (unreadable).
+- Component location was wrong — badges are on `⚙️ Badges` page (COMPONENT_SETs), not Iconography page as previously documented.
+- Size names changed: old L/M are now DS M/S. Same px values (32px/24px), just renamed.
 
 ---
 
@@ -2814,4 +2820,1047 @@ Step 0d → Cross-check any CSS variable value against :root before using it
 
 ---
 
-*Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 87. SVG symbol icon audit — three layers must all be DS-consistent
+
+Every icon in the prototype has three interdependent layers. Fixing only one silently breaks the others.
+
+| Layer | What to check | Common error |
+|---|---|---|
+| **Symbol `viewBox`** | Coordinate space must match the exported DS instance dimensions | M-size viewBox used while rendering at L-size |
+| **Path coordinate scale** | Path `d=` values must be in the same coordinate space as the viewBox | Paths from M-size instance placed in L-size viewBox |
+| **CSS dimensions** | `width` + `height` on the `<svg>` must match DS instance frame | `width:auto` gives wrong width for non-square icons |
+
+**Audit workflow (mandatory before any icon change):**
+```
+1. grep all <symbol> IDs and viewBoxes in the file
+2. For each symbol: confirm viewBox matches the DS instance frame size via use_figma
+3. For each <svg><use>: confirm CSS width/height matches DS instance frame
+4. For status/subject icons: confirm exported paths came from the correct DS size (L vs M)
+```
+
+**Confirmed mistake (May 2026 icon audit):** Status badge symbols `ic-status-trophy`, `ic-status-coin`, `ic-status-lives`, `ic-status-ruby` had M-size path data (viewBox ~14-18px wide × 16px tall) but were rendered at L-size CSS (24px tall). Carousel chevrons missing 1px viewBox buffer per Rule 27. Subject badge icons using `height:auto` instead of explicit DS instance dimensions.
+
+---
+
+### 88. Status Badge icons — always export from the DS size that matches the rendered context
+
+The DS Status Badge component (`2312:10653`) has **two sizes**: L (48px badge, icon at 24px tall) and M (32px badge, icon at 16px tall). Path coordinate scales are completely different between sizes — they cannot be swapped.
+
+**DS-confirmed L-size icon dimensions (node `2312:10653`):**
+
+| Icon | DS L instance | viewBox to use | CSS rule |
+|---|---|---|---|
+| P.Trophy | w:20.23 h:24 | `0 0 21 24` | `height:24px; width:auto` |
+| P.Coin | w:24 h:24 | `0 0 24 24` | `height:24px; width:auto` |
+| P.Streak | w:17 h:24 | `0 0 17 24` | `height:24px; width:auto` |
+| P.Heart (Lives) | w:21.57 h:24 | `0 0 22 24` | `height:24px; width:auto` |
+| P.Ruby | w:24 h:**22** | `0 0 24 22` | `height:**22px**; width:auto` — see Rule 90 |
+
+**DS-confirmed M-size icon dimensions (for mobile scaling at 16px tall):**
+
+| Icon | DS M instance | Used at |
+|---|---|---|
+| P.Trophy | w:13.49 h:16 | Mobile `height:16px` |
+| P.Coin | w:16 h:16 | Mobile `height:16px` |
+| P.Streak | w:11.33 h:16 | Mobile `height:16px` |
+| P.Heart | w:14.67 h:16 | Mobile `height:16px` |
+| P.Ruby | w:17.45 h:16 | Mobile `height:16px` |
+
+**How to export paths from the correct DS size:**
+```js
+// use_figma — always target the instance node for the SIZE you are rendering at
+const node = figma.getNodeById('3747:1357');  // Trophy L-size instance
+const svg = await node.exportAsync({ format: 'SVG_STRING' });
+// The exported viewBox will match the instance frame — use it directly in <symbol>
+```
+
+**Mistake made (May 2026):** Symbols were built from M-size instances but rendered at L-size CSS. Trophy symbol `viewBox="0 0 14 16"` displayed at `height:24px` → actual render: 21×22.86px (letterboxed, 1.14px too short). Ruby `viewBox="0 0 18 16"` at `height:24px` → 27×24px (3px too wide). Fixed by re-exporting all 4 symbols from DS L-size instances.
+
+---
+
+### 89. Subject badge icon sizing — always explicit `width:Xpx; height:Xpx`, never `width:auto`
+
+DS-confirmed instance dimensions from the Subject Badge - 1.5 component (May 2026):
+
+| Badge size | DS node | DS icon instance | CSS rule |
+|---|---|---|---|
+| L (32px badge) | `2339:1343` | **20×20** | `width: 20px; height: 20px` |
+| M (24px badge) | `2339:1349` | **16×16** | `width: 16px; height: 16px` |
+
+**Why `width:auto` is wrong:** Subject icons are non-square (Add Math is 21:24, Chemistry is 15:24, etc.). `height:20px; width:auto` computes width from the viewBox aspect ratio — e.g., Add Math at `0 0 21 24` gives width = 20 × (21/24) = 17.5px. But the DS places the icon in a 20×20 instance frame, centering the icon within that frame. The CSS must mirror the 20×20 frame, not the icon's natural proportions.
+
+**Why `height:24px; width:auto` (old approach) was doubly wrong:** Height was 24px instead of 20px (20% too tall, filling the slot padding), AND width was auto (wrong proportions).
+
+**Complete override pattern for M-size badges in quiz cards:**
+```css
+/* Base — L badge icons (20×20) */
+.subject-badge__icon svg,
+.subject-badge__icon img { width: 20px; height: 20px; }
+
+/* Quiz card M badge override (16×16) */
+.quiz-card__header .subject-badge__icon svg,
+.quiz-card__header .subject-badge__icon img { width: 16px; height: 16px; }
+
+/* Section with L badges inside quiz cards (e.g. YourSelectedSubjects) */
+#SectionName-Desktop .quiz-card__header .subject-badge__icon svg,
+#SectionName-Desktop .quiz-card__header .subject-badge__icon img { width: 20px; height: 20px; }
+```
+
+**Mistake made (May 2026):** Base CSS used `height: 24px; width: auto` — icon was 20% taller than DS and non-square icons had wrong width. YourSelectedSubjects override used `height: 24px; width: auto` but intended L-size (20×20). All corrected to explicit pixel pairs.
+
+---
+
+### 90. Ruby status icon is non-square (24×22) — requires a dedicated height override
+
+Ruby L (DS node `3761:236`) is the **only status badge icon that is not 24px tall**. Its DS L dimensions are **w:24 h:22**. All other status icons are 24px tall.
+
+The global rule `.status-pill__icon svg { height: 24px; width: auto; }` renders Ruby at 24px tall, which computes width = 24 × (24/22) = **26.18px** — too wide and too tall.
+
+**Required CSS override:**
+```css
+.status-pill--ruby .status-pill__icon svg { height: 22px; }
+/* width:auto then computes: 22 × (24/22) = 24px ✓ — matches DS w:24 h:22 */
+```
+
+**Mobile size:** At `height:16px`, Ruby M is `w:17.45 h:16`. The `viewBox="0 0 24 22"` with `height:16px; width:auto` gives width = 16 × (24/22) = 17.45px ✓ — matches DS M exactly.
+
+**Pattern — any non-square status icon needs its own height override:**
+```css
+/* Standard icons (height=24px at L, height=16px at M): no override needed */
+.status-pill__icon svg { height: 24px; width: auto; }
+/* Non-square L icon — override height to DS native h, width:auto resolves to DS native w */
+.status-pill--ruby .status-pill__icon svg { height: 22px; }  /* DS: 24×22 */
+```
+
+**Check this whenever** adding a new status icon type: inspect the DS instance height. If it differs from 24px, add a class-scoped height override.
+
+---
+
+---
+
+### 91. Profile Menu - 1.5 — confirmed DS specs (node 3908:3679, May 2026)
+
+Dropdown panel that opens below the navbar avatar. Sourced from `⚙️ Menu Bar` page.
+
+**Container:**
+| Property | Value | Token |
+|---|---|---|
+| Width | 320px | — |
+| Background | white | `Surface/general/default` |
+| Border | 1px `#00cc85` | `Border/primary/default` |
+| Border-radius | 24px | `Corner Radius/corner-4xl` |
+| Padding | 16px all sides | `Spacing/component/md` |
+| Gap | 8px | `Spacing/component/xs` |
+
+**Positioning (prototype):**
+- `position: absolute; top: 80px; right: var(--page-padding-x)` anchored to `#NavbarPrimary-Desktop` (`position: relative`)
+- `top: 80px` = Navbar h:64 + gap 16px — aligns Profile Menu top with Nav Menu Bar top (DS confirmed: NavMenu y=80)
+- Escapes `.navbar-primary`'s `overflow: hidden` by living as a sibling element outside it
+- Open state: class `.is-open` → `opacity:1; transform:translateY(0); visibility:visible; pointer-events:auto`
+- Closed state: `opacity:0; transform:translateY(-8px); visibility:hidden; pointer-events:none`
+- Transition: `opacity 0.15s ease, transform 0.15s ease, visibility 0s linear <delay>`
+- Open trigger: click `.navbar-avatar`; Close trigger: `mouseleave` on the dropdown panel itself
+
+**Header block (node 3908:1481):**
+- Background: `#f6fef6` (`Surface/secondary/default-hover`) — CSS var: `--surface-secondary-default-hover`
+- Border: 1px `#00cc85`; Border-radius: 16px (`corner-2xl`); Padding: 16px vertical; Gap: 10px; centered column
+
+**Avatar (node 3908:1484):** 64×64px, border-radius 60px, 1px `#00cc85` border, white bg
+
+**Number Badge (node 3908:1485):** absolute `top:0; right:0` on 64×64 wrap; 20×20; green `#00cc85` bg; Poppins SemiBold 10px; `#f6fdfb` text
+
+**Name row:** Poppins Bold 18px / 28lh, `#00564c` (`Text/tertiary/default`)
+
+**Verified icon badge (node 3908:1491):** 12×12; bg `#00a2e8`; 1px white border; pill radius; 2px padding; 8×8 check icon white stroke
+
+**Username:** Poppins Medium 12px, `#666` (`Text/default/body`)
+
+**Plan pill (node 3908:1493):** white bg; 1px `#00cc85` border; pill radius; padding `2px 8px`; Poppins Medium 10px; `#00cc85` text
+
+**Upgrade link (node 3908:1495):** flex row; gap 8px; `Filled/star` icon 20×20 `#00cc85`; Poppins Regular 14px; `#00cc85` text
+
+**Menu items:** 7 rows + divider + Log Out — all use `Dropdown - Parts` → see Rule 92
+
+**Menu icons (all 24×24, `symbol`/`<use>`, `viewBox="-1 -1 26 26"`, `stroke="currentColor"`):**
+- My Profile: `ic-user-circle` (node 1942:23330)
+- Manage Account: `ic-user-check` (node 260:1300)
+- Subscribe Pandai Premium: `ic-star-24` (node 260:1192)
+- Payment History: `ic-credit-card` (node 260:656)
+- Share My Progress: `ic-progress-mobile` (node 1524:3597)
+- Learn and Earn: `ic-gift` (node 260:765)
+- Online Support: `ic-life-buoy` (node 260:855)
+- Log Out: `ic-power` (node 260:1057)
+- Upgrade link star: `ic-star-filled-24` (node 3074:60862) — `fill="currentColor"` on path
+
+**Divider:** 1px `#d9d9d9` (`Border/general/default`) horizontal rule between Online Support and Log Out
+
+**New CSS variable added (May 2026):**
+```css
+--surface-secondary-default-hover: #f6fef6;   /* Surface/secondary/default-hover — profile menu header bg */
+```
+
+---
+
+### 92. Dropdown - Parts — confirmed DS state tokens (node 1342:4370, May 2026)
+
+Component set on `⚙️ Dropdown Menu` page. Used inside Profile Menu - 1.5. Type used in profile menu: `Type=Check List` (default appearance) with interactive states from `Type=Main List`.
+
+**All states — confirmed from `get_design_context` (May 2026):**
+
+| State | Background | Border | Radius | Label color | Label weight |
+|---|---|---|---|---|---|
+| **Default** | none | none | — | `#666` (`Text/default/body`) | SemiBold 14px |
+| **Hover** | `#e8fbe8` (`Surface/secondary/default-subtle`) | `1px #00cc85` | **pill (108px)** | `#00cc85` (`Text/primary/default`) | SemiBold 14px |
+| **Selected** | `#b5f291` (`Surface/secondary/default`) | `1px #00a36a` | pill (108px) | `#00a36a` (`Text/primary/default-hover`) | SemiBold 14px |
+| **Disabled** | none | none | — | `#bfbfbf` (`Text/disabled/default`) | SemiBold 14px |
+
+**Icon color:** `#00cc85` in all states. Does not change on hover.
+
+**Padding (all states):** `px: 16px / py: 8px` (`Spacing/space-m` / `Spacing/space-xs`)
+
+**CSS implementation pattern (prototype):**
+```css
+/* Use box-shadow:inset for border — no layout shift (Rule 30) */
+/* border-radius: pill always — visible only when bg is present */
+.profile-dropdown__item {
+  padding:       8px 16px;
+  border-radius: 108px;               /* pill — matches DS hover shape */
+  transition:    background 0.12s ease, box-shadow 0.12s ease;
+}
+.profile-dropdown__item:hover {
+  background: #e8fbe8;                /* Surface/secondary/default-subtle */
+  box-shadow: inset 0 0 0 1px #00cc85; /* Border/primary/default */
+}
+.profile-dropdown__item:hover .profile-dropdown__item-label {
+  color: #00cc85;                     /* Text/primary/default */
+}
+.profile-dropdown__item:active {
+  background: #b5f291;                /* Surface/secondary/default — Selected palette */
+  box-shadow: inset 0 0 0 1px #00a36a; /* Border/primary/focus */
+}
+.profile-dropdown__item:active .profile-dropdown__item-label {
+  color: #00a36a;                     /* Text/primary/default-hover */
+}
+```
+
+**Mistake made (May 2026):**
+- Hover BG: used `#d9f7ed` (wrong) → correct is `#e8fbe8`
+- Hover border: missing entirely
+- Hover radius: `8px` (wrong) → correct is `108px` pill
+- Hover label: colour unchanged (wrong) → correct is `#00cc85`
+- None of these were visible from the Default state alone. **This is why Rule 93 exists.**
+
+---
+
+### 93. Always audit component anatomy — Nested Instances, Variants, States, Properties
+
+**This is the single most important workflow discipline.** Before writing any HTML or CSS for a DS component, audit all four anatomy layers:
+
+**1. Nested Instances**
+Every sub-component used inside a parent is its own COMPONENT_SET with its own variants and states. Always look each one up independently.
+```
+Profile Menu - 1.5 contains → Dropdown - Parts (node 1342:4370)
+Button - 1.5 contains        → chevron clip node (Rule 16)
+Carousel - 1.5 contains      → Button Icon - 1.5
+```
+Never implement a sub-component based on what the parent component's `get_design_context` shows. Always pull the nested component's own COMPONENT_SET.
+
+**2. Variants**
+List ALL variants in the COMPONENT_SET before writing any code:
+```js
+// use_figma to list all variants in a set
+const set = await figma.getNodeByIdAsync('<COMPONENT_SET_ID>');
+return set.children.map(c => c.name);
+```
+Never assume what variants exist. The variant you see in the parent screen may not be the Default variant.
+
+**3. States**
+Pull EVERY interactive state (Default, Hover, Pressed/Active, Selected, Disabled, Focus) via `get_design_context` BEFORE writing any CSS. Required tokens to extract per state:
+- Background token + hex
+- Border token + hex
+- Border-radius
+- Label/text color token + hex
+- Icon color token + hex
+
+**4. Properties**
+Check all `componentPropertyDefinitions` on the COMPONENT_SET:
+- `BOOLEAN` props (`visible`, `showIcon`, `showLabel`) → `visible: false` means exclude from HTML entirely (Rule 41)
+- `INSTANCE_SWAP` props → identifies which nested sub-component is in use
+- `TEXT` props → actual label content
+
+**Required workflow (every component, no exceptions):**
+```
+1. get_design_context on COMPONENT_SET node → read all variant names
+2. get_design_context on EACH state variant → extract tokens per state
+3. For EACH nested instance → repeat steps 1–2 on that sub-component's own set
+4. Check all componentPropertyDefinitions → confirm visible/hidden children
+5. ONLY THEN write HTML and CSS
+```
+
+**Mistake made (May 2026 — Profile Menu dropdown):**
+Implemented all menu items from the Profile Menu parent `get_design_context` output, which only showed the Default/Check List state. Did not separately audit `Dropdown - Parts` (node 1342:4370). The correct Hover state has `#e8fbe8` bg + `1px solid #00cc85` border + **pill border-radius (108px)** + `#00cc85` label — zero of which was visible from the parent's output. All hover styles required correction after the fact.
+
+**Rule added to CLAUDE.md as Rule 49. Memory saved as `feedback_check_component_anatomy.md`.**
+
+---
+
+### Mandatory workflow — BEFORE every design action, change, or decision (updated May 2026)
+
+**Non-negotiable. Applies to every session, every component, every fix — no exceptions.**
+
+```
+Step 0a → Read design-md/zul.design.md      ← ALL rules 1–93 + confirmed specs
+Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f  ← single source of truth
+Step 0c → Audit component anatomy (Rule 93):
+           - get_design_context on COMPONENT_SET node → list all variants
+           - get_design_context on each state variant → extract all tokens
+           - Repeat for every nested sub-component
+           - Check all componentPropertyDefinitions (visible/hidden/swap)
+Step 0d → get_variable_defs on exact sub-nodes for every fill/stroke/spacing
+Step 0e → Cross-check CSS variable value against :root before using it (Rule 83)
+Step 0f → For icons: confirm viewBox, path scale, AND CSS dimensions (Rule 87)
+Step 0g → get_screenshot after implementation → compare against DS side-by-side
+```
+
+**Why this matters — every mistake in this project came from skipping Step 0:**
+- Primary color guessed as `#2FAC51` instead of `#00cc85` — skipped 0b
+- Score badge border used wrong token — skipped 0e
+- Button pressed state wrong colour — skipped 0c (state variants not audited)
+- Profile menu hover styles all wrong — skipped 0c (nested instance not audited)
+- Footer height assumed 60px, DS changed to 44px — skipped 0b
+
+**A 2-minute DS inspection always saves more time than the bug it prevents.**
+
+---
+
+### 94. Inter-component gaps — always read DS screen frame children, never guess
+
+When positioning any floating element (dropdown, tooltip, popover) or setting `margin-top` between two stacked sections, always derive the value from the **DS screen frame's child node coordinates**, not from assumption or a "looks right" estimate.
+
+**Method:**
+```js
+// use_figma on the Screen frame node
+const home = await figma.getNodeByIdAsync('<screen-node-id>');
+home.children.map(c => ({ name: c.name, y: c.y, h: c.height }));
+// gap between A and B = B.y - (A.y + A.h)
+```
+
+**Confirmed DS screen layout — Home frame `3658:64086` (May 2026):**
+
+| Component | y | h | Bottom edge |
+|---|---|---|---|
+| Navbar Primary Desktop - 1.5 | 0 | 64 | **64** |
+| Nav Menu Desktop - 1.5 | **80** | 56 | 136 |
+| Content frame | 152 | 72 | — |
+
+**Gaps confirmed:**
+- Navbar → Nav Menu Bar: `80 − 64 = **16px**` (`Spacing/space-m`) ← prototype had 12px, corrected
+- Nav Menu Bar → Content: `152 − 136 = 16px` (`Spacing/space-m`)
+
+**Mistakes corrected (May 2026):**
+- `#NavTopMenu-Desktop { margin-top }` was `var(--spacing-space-s)` = 12px → corrected to `var(--spacing-space-m)` = **16px**
+- Profile Menu dropdown `top` was `68px` → corrected to **80px** (aligns top-to-top with Nav Menu Bar)
+
+---
+
+### 95. Absolute-positioned dropdown `top` = DS screen y-coordinate of the aligned element
+
+When a floating panel (dropdown, profile menu, popover) must align its top edge with another element on the page, its `top` value equals that element's **y-coordinate in the DS screen frame** — not the navbar height, not a guessed offset.
+
+**Formula:**
+```
+dropdown top = target_element.y  (from DS screen frame children)
+```
+
+**Confirmed — Profile Menu - 1.5 (May 2026):**
+- Nav Menu Bar top in DS screen: `y = 80px`
+- Profile Menu `top` must be: `80px`
+- Old value: `68px` (navbar h:64 + 4px arbitrary gap) → **wrong**
+- Correct value: `80px` → top-to-top aligned with Nav Menu Bar ✓
+
+**General pattern for any dropdown anchored to `#NavbarPrimary-Desktop`:**
+```css
+.my-dropdown {
+  position: absolute;
+  top: 80px;   /* = Nav Menu Bar y in DS screen — aligns with menu bar top */
+  right: var(--page-padding-x);
+}
+```
+
+**Why `top: 68px` was wrong:** It was calculated as navbar height (64px) + a 4px visual guess. The DS screen defines the actual spacing as 16px (Spacing/space-m), making the correct value 64 + 16 = 80px. Always use DS screen coordinates — never add arbitrary offsets.
+
+---
+
+### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-17)
+
+**Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
+
+> This is the single most important section in this file. Every mistake in this project — wrong colors, wrong states, wrong hover styles, wrong icon sizes, broken layout — traced back to skipping one of these steps. Read it before you type anything.
+
+```
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–109 + confirmed specs
+Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH. Not memory. Not docs. The DS.
+Step 0c → Audit component anatomy (Rule 49, 93):
+           - use_figma: find the component SET — list ALL variants by name
+           - get_design_context on each relevant state variant → extract all tokens
+           - Repeat for every nested sub-component (Rule 49)
+           - Check componentPropertyDefinitions → confirm visible/hidden/swap props
+Step 0d → For spacing/positioning: read DS screen frame y-coords (Rules 94–95)
+Step 0e → get_variable_defs on exact sub-nodes for every fill/stroke/spacing (Rule 12)
+Step 0f → Cross-check CSS variable value against :root before using it (Rule 83)
+Step 0g → For icons: confirm viewBox, path scale, AND CSS dimensions (Rule 87)
+Step 0h → For Subject Badges: run full audit script (Rule 101e) before touching any badge CSS
+Step 0i → get_screenshot after implementation → compare against DS side-by-side
+```
+
+**Why Step 0b matters more than docs:** zul.design.md and CLAUDE.md can lag the DS. In the 2026-05-17 badge audit, the HTML was ahead of the docs, and the docs had 4 wrong values. The DS was the only correct source. Always re-verify live — never trust any written record as a substitute for a DS lookup.
+
+**A 2-minute DS inspection always saves more time than the bug it prevents.**
+
+---
+
+---
+
+### Rule 96 — Complex illustrated icons → PNG, not SVG
+
+DS feature icons (e.g. `Feature/live-tuition`, `Feature/quiz`, `Feature/personality`) are multi-colour isometric illustrations with 15–56KB of SVG path data. They cannot be exported as SVG through the tool output limit (~15–20KB per call). Always export these as **2× PNG** via `exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 2 } })` and save as actual `.png` files.
+
+**Decision rule:** Before starting any icon export batch, check SVG byte sizes first (`exportAsync({ format: 'SVG_STRING' })` → `svg.length`). If any icon exceeds ~12KB, switch the entire batch to PNG immediately. Do not attempt SVG chunking.
+
+**PNG exception for Learn Menu (confirmed May 2026):** All 12 `Feature/*` icons in the Learn Menu use PNG (2×). This is the authorised exception — the icons are authentic Figma exports, not hand-coded.
+
+**Mistake made:** Spent an entire session alternating between SVG → chunked SVG → PNG → SVG instead of checking sizes first and committing to PNG after the first truncation. Commit to one format before the first export call.
+
+---
+
+### Rule 97 — Bulk HTML removal: always verify wrapper closing tags
+
+When removing a block of HTML by line range, the containing element's closing tag (`</section>`, `</div>`) may sit OUTSIDE the removed range but was logically tied to the content you're deleting. Removing the content without the closer — or vice versa — leaves the DOM structure broken.
+
+**Verification workflow (mandatory before any bulk HTML removal):**
+```
+1. grep -n "<section\|</section>" file.html  ← baseline: every open has a close
+2. Identify the FULL containing element boundary — not just the content block
+3. After removal: re-run the same grep and confirm every open still has a close
+```
+
+**Confirmed mistake (May 2026):** Removed Learn Menu HTML (lines 2150–2182 original). The `</section><!-- end NavbarPrimary-Desktop -->` was at line 2073 — BEFORE the removed range — and should have been preserved. It was missing from the output, breaking the HTML nesting of every element below the navbar. The bug manifested as: desktop page padding "too wide," responsive breakpoints not applying, NavTopMenu rendered inside NavbarPrimary-Desktop.
+
+**Root cause:** I trusted line-number math (`lines.slice(...)`) without verifying that every structural tag was accounted for. Always grep-verify after bulk file operations.
+
+---
+
+---
+
+### Rule 98 — `<button>` wrapper for DS icon buttons: explicit dimensions + full outline reset
+
+Any `<button>` used as the outer wrapper for a DS action icon component (e.g. `Nav Button - 1.5`) **must** have:
+
+```css
+.my-btn {
+  width:              44px;   /* exact DS component width */
+  height:             44px;   /* exact DS component height */
+  min-width:          44px;   /* prevents browser compression on press */
+  outline:            none;
+  -webkit-appearance: none;
+  appearance:         none;
+  border:             none;
+  background:         transparent;
+  padding:            0;
+}
+.my-btn:focus        { outline: none; }
+.my-btn:focus-visible { outline: none; }
+```
+
+**Why explicit dimensions:** Without `width`/`height`/`min-width`, the browser's default button sizing can compress the element on press (`:active`) — the button appears to narrow or shrink even when all child elements are the correct size. The button box must be pinned to exactly the DS frame dimensions.
+
+**Why three outline rules:** `outline: none` in the base rule prevents the ring in most browsers. `:focus` covers click focus in older browsers. `:focus-visible` overrides any browser UA stylesheet that re-adds the ring for keyboard navigation. All three together guarantee zero focus ring at all times.
+
+**Confirmed mistake (May 2026):** `.navbar-action-btn` had no `width`/`height` and no `outline: none`. The button compressed visually on press and showed a blue focus ring after click. Adding `width: 44px; height: 44px; min-width: 44px; outline: none` + the two pseudo-class overrides fixed both issues.
+
+---
+
+### Rule 99 — Nav Button - 1.5 Active state icon color: `Text/primary/on-color`, never grey
+
+When a nav action button enters `.is-active` (speech-bubble Union bg visible), the icon inside the clip must use **`var(--text-primary-on-color)`** = `#f6fdfb`. This is the near-white used for content rendered on a colored `Surface/primary` background — the same token used on Button labels.
+
+**Confirmed from DS node `3908:6163` (Nav Button - 1.5, Active state, May 2026):**
+- Icon vector fill: `rgb(246,253,251)` = `#f6fdfb` → maps to `Text/primary/on-color`
+- Stroke: same `#f6fdfb` at `weight: 1.5`
+
+**Wrong values to avoid:**
+| Wrong value | Why wrong |
+|---|---|
+| `#d9d9d9` | DS "default" icon grey — for inactive/rest state only |
+| `#808080` | `Icon/default/default` — for rest state icons |
+| `var(--icon-primary-default)` `#00cc85` | Hover/pressed state on the rect — not the Union active state |
+
+**Rule:** Always call `use_figma` on the Active state node specifically (not Default) to confirm icon fill. The token changes completely between states — never inherit Default state token assumptions for Active.
+
+---
+
+### Rule 100 — `clip-path: path()` inner border: outer-div border color + `::before` scaled fill
+
+CSS `clip-path` clips ALL box properties — `border`, `box-shadow: inset`, `outline` are all clipped away and cannot produce an inner border. To replicate a DS inner stroke on a `clip-path: path()` shape:
+
+1. Set the outer div's `background` to the **border color** (e.g. `var(--surface-primary-focus)` = `#00a36a`)
+2. Add a `::before` pseudo-element with the **fill color** (e.g. `var(--surface-primary-default)` = `#00cc85`), `clip-path: inherit`, and a scale transform that shrinks it by ~1px on all sides
+
+**CSS pattern:**
+```css
+.clip-shape {
+  background: var(--border-color);   /* outer ring color */
+  clip-path: path('M...');
+  position: relative;
+}
+.clip-shape::before {
+  content:          '';
+  position:         absolute;
+  inset:            0;
+  background:       var(--fill-color);  /* inner fill color */
+  clip-path:        inherit;
+  transform:        scale(Sx, Sy);
+  transform-origin: 50% 50%;
+}
+```
+
+**Scale formula for ~1px border:**
+```
+Sx = (W - 2) / W    →  e.g. (44 - 2) / 44 = 0.9545
+Sy = (H - 2) / H    →  e.g. (51.172 - 2) / 51.172 = 0.9609
+```
+
+`transform-origin: 50% 50%` centers the scale so the border is visually uniform on all sides.
+
+**`clip-path: inherit`** — the pseudo-element inherits the exact same `path(...)` from the parent. The scale is then applied to the already-clipped content, producing a smaller version of the same shape that reveals the outer fill color as a border ring.
+
+**Confirmed instance — Nav Button - 1.5 Union bg (node 3908:6165, May 2026):**
+- W=44, H=51.172 → Sx=0.9545, Sy=0.9609
+- Border color: `var(--surface-primary-focus)` = `#00a36a`
+- Fill color: `var(--surface-primary-default)` = `#00cc85`
+
+**Limitation:** The border is not perfectly uniform at 1px because scale() doesn't produce a true parallel offset of a complex curve. For the Union speech-bubble shape this is imperceptible at the rendered size (44px). For larger shapes where the imperfection would be visible, use an SVG `<path>` with native `fill` + `stroke` + `overflow: hidden` on the SVG wrapper instead.
+
+---
+
+---
+
+### Rule 101 — Subject Badge audit: DS is always authoritative — docs and implementations drift
+
+**What this rule is:** A standing lesson from the 2026-05-17 full Subject Badge live DS audit. Applies to Subject Badges specifically, and as a principle to all DS component audits.
+
+---
+
+#### 101a. Component location and size naming can change between sessions
+
+The Subject Badge component **moved pages** and **renamed its sizes** at some point between May 2026 and May 2026-05-17:
+
+| Property | Old (documented) | New (live DS 2026-05-17) |
+|---|---|---|
+| Page | `🔰 Iconography` | `⚙️ Badges` |
+| Node type | `COMPONENT` (individual) | `COMPONENT_SET` (variant set) |
+| Size=32px name | `- L` | `Size=M` |
+| Size=24px name | `- M` | `Size=S` |
+
+**Rule:** Never hardcode a page name or size variant name from memory when writing a Figma lookup script. Always discover dynamically:
+
+```js
+// CORRECT — discovers wherever they live
+const sets = [];
+for (const page of figma.root.children) {
+  await figma.setCurrentPageAsync(page);
+  const found = page.findAll(n => n.type === 'COMPONENT_SET' && n.name.startsWith('Subject Badge/'));
+  found.forEach(n => sets.push({ page: page.name, id: n.id, name: n.name, variants: n.children.map(c => c.name) }));
+}
+return sets;
+```
+
+---
+
+#### 101b. Always pull text color from the TEXT node inside the Label frame — per subject
+
+The badge text color is on the `TEXT` node inside the `Label` child frame, not on the component root or label panel. The extraction path is:
+
+```
+COMPONENT (variant node)
+  └── FRAME "Content"          → .strokes[0].color = border color
+        ├── FRAME "Subject Icon"  (white slot — skip)
+        └── FRAME "Label"      → .fills[0].color   = badge bg color
+              ├── TEXT "Subject" → .fills[0].color  = text color
+              └── VECTOR "Pointer"
+```
+
+**Correct extraction code:**
+```js
+const contentFrame = node.children.find(c => c.name === 'Content');
+const labelFrame   = contentFrame?.children.find(c => c.name === 'Label');
+const textNode     = labelFrame?.children.find(c => c.type === 'TEXT');
+
+const border = contentFrame?.strokes?.[0]?.color;
+const bg     = labelFrame?.fills?.[0]?.color;
+const text   = textNode?.fills?.[0]?.color;
+```
+
+**Why this matters:** A generic `findAll` walk will hit the Subject Icon's vector fills before the Label fill, returning the wrong color as the "badge bg". Always target named children directly.
+
+---
+
+#### 101c. Text exceptions are not always the documented ones — always audit all 20
+
+As of 2026-05-17 there are **three** dark-text exceptions (light backgrounds):
+
+| Subject | bg | `--badge-text` |
+|---|---|---|
+| Science | `#ffd641` (yellow) | `#998027` |
+| KAFA | `#8ae3a9` (mint green) | `#538865` |
+| Geography | `#77d836` (light green) | `#478220` |
+
+Geography was **not documented** prior to this audit. It renders white text on a light green badge — unreadable. The docs only listed Science and KAFA as exceptions.
+
+**Rule:** When running a Subject Badge audit, always extract text color for ALL subjects and compare each against `#f2f2f2`. Any subject whose bg is a light or mid-tone color is a candidate for a dark-text exception. Never assume the documented exceptions are complete.
+
+---
+
+#### 101d. Docs can be wrong while the implementation is right — always verify both
+
+In this audit, the HTML was **more accurate** than CLAUDE.md and zul.design.md for 3 border colors (Add Math, Account, Bahasa Melayu) and KAFA text. The docs had old values that were never corrected after a prior DS update.
+
+**Rule priority (descending):**
+```
+1. Live DS (use_figma → inspect node → extract color)   ← always authoritative
+2. Current HTML/CSS implementation                       ← may be ahead of docs
+3. zul.design.md + CLAUDE.md                            ← may lag the DS
+4. design.color.md                                       ← was already updated, still verify
+```
+
+When a doc value and the HTML value disagree, **go to the DS first** — one of the two is correct, but only the DS decides which.
+
+---
+
+#### 101e. Do a full Subject Badge color audit before any badge-related work
+
+Any time a session involves Subject Badges (adding a new subject, changing badge layout, implementing a new quiz card section), run the full audit script below before touching any CSS:
+
+```js
+// Full audit — run at session start when badges are in scope
+const badgesPage = figma.root.children.find(p => p.name.includes('Badges'));
+await figma.setCurrentPageAsync(badgesPage);
+const toHex = c => `#${[c.r,c.g,c.b].map(v=>Math.round(v*255).toString(16).padStart(2,'0')).join('')}`;
+const sets = badgesPage.findAll(n => n.type === 'COMPONENT_SET' && n.name.startsWith('Subject Badge/'));
+const results = [];
+for (const set of sets) {
+  const sVariant = set.children.find(c => c.name.includes('Size=S'));
+  if (!sVariant) continue;
+  const content = sVariant.children.find(c => c.name === 'Content');
+  const label   = content?.children.find(c => c.name === 'Label');
+  const text    = label?.children.find(c => c.type === 'TEXT');
+  results.push({
+    subject: set.name.replace('Subject Badge/', ''),
+    bg:     label?.fills?.[0]?.color ? toHex(label.fills[0].color) : '?',
+    border: content?.strokes?.[0]?.color ? toHex(content.strokes[0].color) : '?',
+    text:   text?.fills?.[0]?.color ? toHex(text.fills[0].color) : '?'
+  });
+}
+return results.sort((a,b) => a.subject.localeCompare(b.subject));
+```
+
+Compare output against CSS variables in the HTML. Any mismatch must be fixed before other work begins.
+
+---
+
+---
+
+### Rule 102 — Nav dropdown horizontal alignment: RIGHT-align to trigger button's right edge
+
+Any `position: absolute` dropdown inside `#NavbarPrimary-Desktop` that is triggered by a button near the **right side** of the navbar must be positioned so its **right edge aligns with the trigger button's right edge**. The panel extends leftward. Never left-align these dropdowns to the button's left edge — the panel would overflow off-screen to the right.
+
+**CSS default:**
+```css
+.my-dropdown {
+  position: absolute;
+  top:   80px;    /* navbar 64px + 16px gap — confirmed for all nav dropdowns */
+  right: 0;       /* JS overrides per button; default fallback at viewport right */
+  left:  auto;
+  width: Xpx;     /* DS-confirmed width */
+}
+```
+
+**JS pattern — `positionDropdown()`:**
+```js
+function positionDropdown() {
+  var btnRect     = btn.getBoundingClientRect();
+  var sectionRect = navSection.getBoundingClientRect();  // #NavbarPrimary-Desktop
+  // right-align: dropdown right edge = trigger button right edge
+  var rightOffset = sectionRect.right - btnRect.right;
+  var dropW       = dropdown.offsetWidth || dsWidth;
+  var maxRight    = sectionRect.width - dropW;   // clamp so it never clips left edge
+  dropdown.style.right = Math.max(0, Math.min(rightOffset, maxRight)) + 'px';
+  dropdown.style.left  = 'auto';
+}
+```
+
+**Why `sectionRect.right - btnRect.right`:** `sectionRect.right` = viewport right edge (the section is full-width). `btnRect.right` = button's right edge from viewport left. Their difference = distance from the button's right edge to the viewport right. Setting `right: this value` on an element inside the section moves the element's right edge to the button's right edge. ✓
+
+**All nav dropdowns confirmed at `top: 80px` (DS Frame 1707479685, May 2026):**
+| Dropdown | DS y | Width |
+|---|---|---|
+| Download Apps | 80px | 238px |
+| Notification | 80px | 320px |
+| Learn Menu | 80px | 365px |
+| Profile | 80px | 319px |
+
+**DS gallery frames ≠ real UI x-positions:** The DS screen frame "Frame 1707479685" shows all four dropdowns simultaneously as a component gallery. Their x-coordinates in that frame (23, 282, 623, 1009) are display-only positioning for the gallery layout — NOT the actual CSS `left` values. Only `y` (always 80) and `width` are reliable from that frame. Horizontal alignment must always be derived from the trigger button via JS.
+
+**Confirmed mistake (May 2026):** `positionDropdown()` computed `left = btnRect.left - sectionRect.left`. Since the waffle button is near the right edge of the navbar, the 365px dropdown was placed at `btnRect.left` (e.g. x=1196), which `maxLeft` clamped to x=1075 — positioning it partially over the right padding area and entirely to the right of the content. The fix: switch to `right`-based positioning so the panel sits correctly to the LEFT of the waffle button.
+
+---
+
+---
+
+### Rule 103 — Always check `src/image-repo/` before exporting assets from Figma
+
+Before exporting any icon, illustration, or image from Figma, **check the project's `src/image-repo/` directory first**. Authored assets stored there are the correct, production-ready versions — proper resolution, proper transparency, already prepared by the designer.
+
+**Directory structure confirmed (May 2026):**
+```
+pandai.design/
+  src/
+    image-repo/
+      Learn-Menu/       ← 12 feature icons (live-tuition, live-help, quiz, etc.)
+        chapters.png
+        experiments.png
+        live-help.png
+        live-tuition.png
+        personality.png
+        practice.png
+        quick-notes.png
+        quiz.png
+        rewards.png
+        textbook.png      ← maps to feature-textbooks.png in icons/
+        university.png
+        videos.png
+```
+
+**Workflow (mandatory for any image asset):**
+```
+1. Check src/image-repo/<ComponentName>/ — use these files if present
+2. Only if absent: export from Figma via use_figma or get_screenshot
+3. Copy to zul.test.git/icons/ with the correct feature-*.png naming
+```
+
+**Name mapping (src/image-repo/Learn-Menu → zul.test.git/icons):**
+| Source filename | Target filename |
+|---|---|
+| `chapters.png` | `feature-chapters.png` |
+| `experiments.png` | `feature-experiments.png` |
+| `live-help.png` | `feature-live-help.png` |
+| `live-tuition.png` | `feature-live-tuition.png` |
+| `personality.png` | `feature-personality.png` |
+| `practice.png` | `feature-practice.png` |
+| `quick-notes.png` | `feature-quick-notes.png` |
+| `quiz.png` | `feature-quiz.png` |
+| `rewards.png` | `feature-rewards.png` |
+| `textbook.png` | `feature-textbooks.png` |
+| `university.png` | `feature-university.png` |
+| `videos.png` | `feature-videos.png` |
+
+**Mistake made (May 2026):** Spent multiple sessions trying to export icons via `use_figma` (base64 too large to write) and `get_screenshot` (only 52×52px, 1–3KB — too small and blurry), when the correct 12–30KB RGBA transparent PNGs were already sitting in `src/image-repo/Learn-Menu/`.
+
+---
+
+### Rule 104 — `get_screenshot` is for visual reference only — never use it for asset export
+
+The Figma MCP `get_screenshot` tool returns a screenshot of a node at its **native 1× size** (e.g., 52×52px for a 52px component). This is appropriate for visual inspection during design review, but never for asset export into the prototype.
+
+**Confirmed behavior (May 2026):**
+- Returns PNG at component's native pixel dimensions (no upscaling)
+- Feature/* icons: returned at 52×52px
+- File size: 1–3KB (vs correct assets at 12–30KB)
+- Even though color type = 6 (RGBA), the small size causes blurriness at 70px CSS display
+
+**For checking transparency:** Use PowerShell to read byte 25 of the PNG (color type byte): `2` = RGB (no alpha), `6` = RGBA (alpha channel present). But RGBA alone doesn't guarantee the content is visually correct — check actual file size too. Correct Learn Menu icons are 12–30KB; anything under 5KB is a wrong export.
+
+**Use `get_screenshot` for:** Side-by-side visual comparison, design review, confirming layout before implementation.
+
+**Never use `get_screenshot` for:** Saving to `icons/` directory, using as `<img src>` in the prototype.
+
+---
+
+### Rule 105 — Learn Menu Button - Parts: only 3 states (Default / Hover / Selected)
+
+The DS component `Learn Menu Button - Parts` (node `3880:50098`) has **exactly 3 states**. There is no Pressed, Active, or Focus state.
+
+| State | bg | border | text |
+|---|---|---|---|
+| **Default** | transparent | none | `#404040` — `Text/default/heading` (`var(--text-default-heading)`) |
+| **Hover** | `#e8fbe8` — `Surface/secondary/default-subtle` | `1px #00cc85` — `Border/primary/default` | `#00564c` — `Text/tertiary/default` |
+| **Selected** | `#b5f291` — `Surface/secondary/default` | `1px #70bc6f` — `Border/secondary/focus` | `#00564c` — `Text/tertiary/default` |
+
+**Key details:**
+- `padding: 8px` all sides, `border-radius: 12px`, `min-height: 114px` per cell
+- Grid: `display: grid; grid-template-columns: repeat(3, 1fr)` — NO gap between cells (items pack flush)
+- Label: `font-size: 14px; font-weight: 600; line-height: 20px`
+- Default label color is `Text/default/heading` = `#404040` — **NOT** `Text/default/body` = `#666666`
+
+**Mistakes made (May 2026):**
+- Implemented `.is-pressing` dark-teal state (from Rule 40) — this palette does NOT apply to Learn Menu Button, which has no Pressed variant in the DS. Always pull states from the SPECIFIC component's COMPONENT_SET, not from a general rule.
+- Default label used `var(--text-default-body)` = `#666` — actual DS varName `106:34` maps to `Text/default/heading` = `#404040`.
+
+---
+
+---
+
+### Rule 106 — Navbar action button → dropdown: full anatomy checklist (confirmed May 2026)
+
+Every action button in `#NavbarPrimary-Desktop` that triggers a dropdown (bell, EN/locale, smartphone/download, waffle/learn) requires FOUR things. Missing any one of them breaks the behaviour.
+
+**1. HTML — button element:**
+```html
+<button class="navbar-action-btn" id="BUTTON-ID" type="button"
+        aria-label="Label" aria-haspopup="true">
+  <div class="nav-btn-content">
+    <div class="nav-btn-union-bg" aria-hidden="true"></div>  <!-- ← mandatory for active speech-bubble -->
+    <div class="nav-btn-rect"     aria-hidden="true"></div>
+    <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-ICON"/></svg></div>
+  </div>
+</button>
+```
+`nav-btn-union-bg` MUST be the first child of `nav-btn-content`. Without it, `.is-active` has no speech-bubble to show — the active state is completely invisible.
+
+**2. HTML — dropdown panel (inside `#NavbarPrimary-Desktop`, after `</div><!-- navbar primary -->`):**
+```html
+<div class="my-dropdown" id="DROPDOWN-ID" aria-label="..." role="menu">
+  <!-- items -->
+</div>
+```
+
+**3. CSS — panel:**
+```css
+.my-dropdown {
+  position:       absolute;
+  top:            80px;   /* confirmed for ALL nav dropdowns — never change */
+  right:          0;      /* JS overrides per button */
+  left:           auto;
+  z-index:        500;
+  width:          Xpx;   /* DS-confirmed width */
+  background:     var(--surface-general-default);
+  border:         1px solid var(--border-primary-default);
+  border-radius:  var(--corner-radius-corner-4xl);   /* 24px */
+  padding:        var(--spacing-space-m);             /* 16px */
+
+  /* Closed state */
+  opacity:        0;
+  transform:      translateY(-8px);
+  pointer-events: none;
+  visibility:     hidden;
+  transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
+}
+.my-dropdown.is-open {
+  opacity:        1;
+  transform:      translateY(0);
+  pointer-events: auto;
+  visibility:     visible;
+  transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
+}
+```
+
+**4. JS — IIFE (registered BEFORE non-critical JS per Rule 14):**
+```js
+(function () {
+  var btn        = document.getElementById('BUTTON-ID');
+  var navSection = document.getElementById('NavbarPrimary-Desktop');
+  var dropdown   = document.getElementById('DROPDOWN-ID');
+  if (!btn || !navSection || !dropdown) return;
+
+  function positionDropdown() {
+    var btnRect     = btn.getBoundingClientRect();
+    var sectionRect = navSection.getBoundingClientRect();
+    var rightOffset = sectionRect.right - btnRect.right;
+    var dropW       = dropdown.offsetWidth || DS_WIDTH;
+    dropdown.style.right = Math.max(0, Math.min(rightOffset, sectionRect.width - dropW)) + 'px';
+    dropdown.style.left  = 'auto';
+  }
+
+  btn.addEventListener('click', function () {
+    var willOpen = !dropdown.classList.contains('is-open');
+    closeAllOtherDropdowns();   // Rule 107
+    if (willOpen) positionDropdown();
+    dropdown.classList.toggle('is-open');
+    btn.classList.toggle('is-active', willOpen);
+  });
+
+  dropdown.addEventListener('mouseleave', function () {
+    dropdown.classList.remove('is-open');
+    btn.classList.remove('is-active');
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
+      dropdown.classList.remove('is-open');
+      btn.classList.remove('is-active');
+    }
+  }, true);
+
+  window.addEventListener('resize', function () {
+    if (dropdown.classList.contains('is-open')) positionDropdown();
+  });
+})();
+```
+
+**Confirmed DS panel specs — ALL four nav dropdowns (May 2026):**
+| Dropdown | DS node | Panel width | Items |
+|---|---|---|---|
+| Localization | `3928:3067` | 204px | 3 text-only (Dropdown - Parts) |
+| Download Apps | `3909:3405` | 238px | 3 icon + text (Dropdown - Parts) |
+| Notification | `3908:13057` | 320px | 4 notification items + CTA button |
+| Learn Menu | `3908:5091` | 365px | 12 feature grid items |
+
+**ALL nav dropdowns share `top: 80px`** — confirmed from DS screen frame. This is Navbar height (64px) + `Spacing/space-m` (16px) gap. Never change this value for any navbar-anchored dropdown.
+
+**Mistakes made (May 2026):**
+- Forgot `nav-btn-union-bg` on locale, bell, and smartphone buttons → `.is-active` showed no visual change at all. Fix: always use the full button HTML template above.
+- Used `aria-label="Language: English"` on the locale button → label should be generic (`"Language"`) since the active language is indicated by the selected item inside the dropdown, not the button label.
+
+---
+
+### Rule 107 — All navbar dropdowns are mutually exclusive — every click handler must close all others
+
+Only one dropdown can be open at any time. Every button click handler must close ALL other navbar dropdowns + deactivate their trigger buttons before opening its own. No exceptions.
+
+**Why:** Two open dropdowns overlap visually and create a broken UX. The DS only ever shows one dropdown open at a time.
+
+**Closing roster (current prototype, May 2026):**
+
+| Trigger | Must close |
+|---|---|
+| Avatar (profile) | learn, locale, notif, download |
+| Waffle (learn) | profile, locale, notif, download |
+| Locale (EN) | profile, learn, notif, download |
+| Bell (notification) | profile, learn, locale, download |
+| Smartphone (download) | profile, learn, locale, notif |
+
+**Pattern — expand the closing block in every handler as new dropdowns are added:**
+```js
+// Close all other dropdowns — update this list whenever a new dropdown is added
+var profileDd   = document.getElementById('profile-dropdown');
+var learnDd     = document.getElementById('learn-dropdown');
+var waffleBtn   = document.getElementById('waffle-btn');
+var localeDd    = document.getElementById('locale-dropdown');
+var localeBtn   = document.getElementById('locale-btn');
+var notifDd     = document.getElementById('notif-dropdown');
+var notifBtn    = document.getElementById('notif-btn');
+var downloadDd  = document.getElementById('download-dropdown');
+var downloadBtn = document.getElementById('download-btn');
+if (profileDd)  profileDd.classList.remove('is-open');
+if (learnDd)    learnDd.classList.remove('is-open');
+if (waffleBtn)  waffleBtn.classList.remove('is-active');
+if (localeDd)   localeDd.classList.remove('is-open');
+if (localeBtn)  localeBtn.classList.remove('is-active');
+if (notifDd)    notifDd.classList.remove('is-open');
+if (notifBtn)   notifBtn.classList.remove('is-active');
+if (downloadDd)  downloadDd.classList.remove('is-open');
+if (downloadBtn) downloadBtn.classList.remove('is-active');
+```
+
+**When adding a new dropdown:** Update EVERY existing click handler to include the new dropdown's ID in its closing block. Failing to do this leaves one handler that can open alongside the new dropdown.
+
+---
+
+### Rule 108 — Navbar Notification Button - Parts: structural state change, not just color
+
+The DS `Navbar Notification Button - Parts` (node `3908:13427`) has a **structural layout change** between Default and Hover/Pressed. The inner row wrapper and bottom divider exist ONLY in Default state. This cannot be replicated with color CSS alone — the padding and border-bottom on the inner body element must change.
+
+**Default state (node `3908:13427`):**
+- Content frame: white bg, `pt-12 px-12 pb-0`, no border, no radius
+- Inner row (`.notif-item__body`): `gap-8, pb-12, border-bottom: 1px solid #d9d9d9`
+- Items are separated by the bottom divider, not a gap on the container
+
+**Hover state (node `3908:13443`):**
+- Content frame: `Surface/secondary/default-hover (#f6fef6)` bg + `inset 0 0 0 1px #00cc85` + `border-radius: 16px (Radius/2xl)` + `p-12` ALL sides
+- Inner row: `border-bottom-color: transparent; padding-bottom: 0` — divider disappears
+- Text: `Text/tertiary/default (#00564c)`
+
+**Pressed state (node `3908:13456`):**
+- Same as Hover but bg: `Surface/primary/focus (#00a36a)`
+- Text: `Text/primary/default (#00cc85)`
+
+**CSS implementation pattern:**
+```css
+/* Default */
+.notif-item__content {
+  background:    var(--surface-general-default);
+  padding:       12px 12px 0;
+  border-radius: 0;
+}
+.notif-item__body {
+  padding-bottom: 12px;
+  border-bottom:  1px solid var(--border-general-default);
+}
+/* Hover */
+.notif-item:hover .notif-item__content {
+  background:    var(--surface-secondary-default-hover);  /* #f6fef6 */
+  box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+  border-radius: var(--corner-radius-corner-xl);          /* 16px */
+  padding:       12px;
+}
+.notif-item:hover .notif-item__body { border-bottom-color: transparent; padding-bottom: 0; }
+.notif-item:hover .notif-item__text { color: var(--text-tertiary-default); }
+/* Pressed */
+.notif-item:active .notif-item__content {
+  background:    var(--surface-primary-focus);            /* #00a36a */
+  box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+  border-radius: var(--corner-radius-corner-xl);
+  padding:       12px;
+}
+.notif-item:active .notif-item__body { border-bottom-color: transparent; padding-bottom: 0; }
+.notif-item:active .notif-item__text { color: var(--text-primary-default); }
+```
+
+**Avatar — 60×60 clip, DS `Outline/user-circle` at 50px:**
+- Clip container: `60×60, overflow: hidden`
+- Icon inside: `50×50px` (DS `inset: 8.33%` on 60px = 5px each side = 50px content area)
+- Use existing `ic-user-circle` symbol: `<svg style="width:50px;height:50px"><use href="#ic-user-circle"/></svg>`
+
+**"See all notification" button — Primary/L, 288px wide, no arrow:**
+- `max-height: 48px; padding: 8px 12px; border-radius: 60px`
+- bg: `var(--surface-primary-default)`; border: `var(--border-primary-focus)`; text: `var(--text-primary-on-color)`
+- Hover/Pressed: same Primary button palette from Rule 19
+
+---
+
+### Rule 109 — Coloured brand/store icons → 2× PNG export, even if small in bytes
+
+App store brand icons (Google Play, Apple App Store, Huawei AppGallery) are multi-colour filled illustrations. They cannot be used as `stroke="currentColor"` SVG symbols because they have multiple hard-coded fill colors (blue, orange, green, red, etc. for Play Store; gradient fills for App Store).
+
+**Export them as 2× PNG** using `exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 2 } })` — even though they are much smaller than the Feature/* illustrated icons from Rule 96 (1–5KB vs 15–56KB). The deciding factor is **multiple fill colors**, not file size.
+
+**Decision rule:**
+```
+Is the icon a single-color outline (stroke)?   → SVG symbol with stroke="currentColor"
+Is the icon multi-color / has fills?            → 2× PNG
+```
+
+**Confirmed store icon specs (DS node 3909:3405, May 2026):**
+| Icon | DS node | Native size | PNG @2× | Saved as |
+|---|---|---|---|---|
+| Google Play (Playstore) | `I3909:3405;3908:14084;2185:42800` | 24×26.8px | 1.2KB | `store-google-play.png` |
+| Apple App Store | `I3909:3405;3908:14085;2185:42800` | 24×24px | 3.1KB | `store-apple.png` |
+| Huawei AppGallery | `I3909:3405;3908:14086;2185:42800` | 24×24px | 3.1KB | `store-huawei.png` |
+
+**CSS for store icons (confirmed DS spec):**
+```css
+.download-dropdown__icon {
+  width:      24px;
+  height:     24px;
+  flex-shrink: 0;
+  object-fit: contain;  /* letterboxes Play Store's 24×26.8 within the 24×24 box */
+  display:    block;
+}
+```
+`object-fit: contain` is required for the Play Store icon which has a native height of 26.8px — without it the icon squishes to fit the 24×24 box.
+
+**Use `<a>` not `<div>` for download items:** Since each store item navigates to an external app store URL, use `<a class="download-dropdown__item" href="...">` — semantic, keyboard-accessible, and gets `:hover`/`:active` correctly on native mobile.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-18 (Rules 106–109 — nav dropdown anatomy, mutual exclusivity, notification structural states, store icon PNG export) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

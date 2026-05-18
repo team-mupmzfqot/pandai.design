@@ -193,7 +193,7 @@ Subjects live in the **Primitives** collection under `Subjects/*` and are wrappe
 
 ### 4.2 Subject Badge color matrix — full bg/border/text triplets ([CLAUDE.md Rule 17](CLAUDE.md))
 
-Source: Figma `🔰 Iconography` page, components `Subject Badge/[Name] - M` (24px) and `Subject Badge/[Name] - L` (32px). **Background hex is identical between L and M.** Border hex differs slightly for a few subjects.
+Source: Figma `⚙️ Badges` page, COMPONENT_SETs `Subject Badge/[Name]`. Each set has `Size=M` (32px) and `Size=S` (24px) variants — renamed from the previous L/M naming (same px values). **Background and border hex are identical between M and S.** Confirmed live DS audit 2026-05-17.
 
 Apply via per-subject class on the `.subject-badge` element:
 
@@ -214,27 +214,31 @@ Apply via per-subject class on the `.subject-badge` element:
 | Biology | `#8431d8` | `#6a27ad` | `#f2f2f2` |
 | Business | `#efb42b` | `#bf9022` | `#f2f2f2` |
 | Chemistry | `#e20082` | `#b50068` | `#f2f2f2` |
+| Chinese Language | `#f94848` | `#c73a3a` | `#f2f2f2` |
 | Computer Science | `#d10070` | `#a7005a` | `#f2f2f2` |
 | Economy | `#ff5733` | `#cc4629` | `#f2f2f2` |
 | English | `#ff4d56` | `#cc3e45` | `#f2f2f2` |
-| Geography | `#77d836` | `#5fad2b` | `#f2f2f2` |
+| **Geography** | `#77d836` | `#5fad2b` | **`#478220`** (dark text on light green bg) |
 | History | `#a97c50` | `#876340` | `#f2f2f2` |
 | Islamic Studies | `#de4d7f` | `#b23e66` | `#f2f2f2` |
-| **KAFA** | `#8ae3a9` | `#6eb687` | **`#358a62`** (dark text on mint bg) |
+| **KAFA** | `#8ae3a9` | `#6eb687` | **`#538865`** (dark text on mint bg) |
 | Mathematics | `#42ac7b` | `#358a62` | `#f2f2f2` |
 | Moral Studies | `#0072ca` | `#005ba2` | `#f2f2f2` |
 | Physics | `#27a0d7` | `#1f80ac` | `#f2f2f2` |
+| Primary/Default | `#00cc85` | `#00a36a` | `#f2f2f2` |
 | RBT | `#353535` | `#2a2a2a` | `#f2f2f2` |
 | **Science** | `#ffd641` | `#ccab34` | **`#998027`** (dark text on yellow bg) |
 
-**Two exceptions to `#f2f2f2` text:**
+**Three exceptions to `#f2f2f2` text:**
 - **Science** — yellow bg requires dark text `#998027`.
-- **KAFA** — mint-green bg requires dark text `#358a62`.
+- **KAFA** — mint-green bg requires dark text `#538865`.
+- **Geography** — light green bg requires dark text `#478220`.
 
-For these two, set `--badge-text` explicitly on the modifier class:
+For these three, set `--badge-text` explicitly on the modifier class:
 ```css
 .subject-badge--science { --badge-border: #ccab34; --badge-bg: #ffd641; --badge-text: #998027; }
-.subject-badge--kafa    { --badge-border: #6eb687; --badge-bg: #8ae3a9; --badge-text: #358a62; }
+.subject-badge--kafa    { --badge-border: #6eb687; --badge-bg: #8ae3a9; --badge-text: #538865; }
+.subject-badge--geo     { --badge-border: #5fad2b; --badge-bg: #77d836; --badge-text: #478220; }
 ```
 
 ### 4.3 Subject state variants — full state palette per subject
@@ -508,7 +512,7 @@ When implementing a new DS-derived component:
 | Disabled bg invented as `#e5e7eb` | `--surface-disabled-primary` `#f2f2f2` |
 | `box-shadow: <elevation>` on card | `border: 1px solid var(--border-primary-default)` |
 | Subject Business text `#78350F` | Subject Business text `#f2f2f2` (light text on amber bg) |
-| Subject KAFA missing text override → white text on mint | Set `--badge-text: #358a62` |
+| Subject KAFA missing text override → white text on mint | Set `--badge-text: #538865` |
 | Footer heart used `--surface-primary-default` | Use `--icon-primary-default` (semantic match — icon stroke, not container fill) |
 | `--surface-success-subtle`, `--pd-color-*` (invented tokens) | Only use names listed in §3 of this file |
 | Queried Teacher variant for student button states | Always verify `Type=Student` before trusting `get_variable_defs` ([CLAUDE.md Rule 18](CLAUDE.md)) |
@@ -526,7 +530,7 @@ Drop these directly into Claude Code / Codex / Cursor when working in this repo:
 
 > "When choosing between two tokens that share the same hex (e.g. `--icon-primary-default` and `--surface-primary-default`, both `#00cc85`), pick by semantic context: icon strokes use `--icon-*`, container fills use `--surface-*`, borders use `--border-*`, text uses `--text-*`. See [design.color.md](design.color.md) §3."
 
-> "For Subject Badges, copy the row from [design.color.md](design.color.md) §4.2 — never approximate from Tailwind or guess from the subject's brand color. Use the matrix exactly. Science and KAFA need explicit `--badge-text` overrides."
+> "For Subject Badges, copy the row from [design.color.md](design.color.md) §4.2 — never approximate from Tailwind or guess from the subject's brand color. Use the matrix exactly. Science, KAFA, and Geography need explicit `--badge-text` overrides."
 
 ---
 

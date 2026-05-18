@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pandai DS — Merchandise</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ══════════════════════════════════════════════════════════════
+       Pandai DS 1.5 — Primitive Tokens
+       ══════════════════════════════════════════════════════════════ */
+    :root {
+      /* OG-Green (Student / Brand) */
+      --og-50:  #e9fbf5;  --og-100: #ccf5e7;  --og-200: #99ebce;
+      --og-500: #00cc85;  --og-600: #00a36a;  --og-700: #007a50;
+
+      /* DS Semantic */
+      --Surface-general-default:       #fff;
+      --surface-primary:               var(--og-500);
+      --surface-primary-subtle:        var(--og-100);
+      --surface-secondary-subtle:      #e8fbe8;
+      --surface-secondary-50:          #f6fef6;
+      --border-primary:                var(--og-500);
+      --border-primary-focus:          var(--og-600);
+      --text-heading:                  #404040;
+      --text-body:                     #666666;
+      --text-on-color:                 #e9fbf5;
+
+      /* DS Corner Radius */
+      --r-rounded: 60px;  --r-4xl: 24px;  --r-2xl: 18px;  --r-xl: 16px;
+
+      /* DS Spacing */
+      --sp-xxxs: 2px;  --sp-xxs: 4px;  --sp-xs: 8px;  --sp-s: 12px;  --sp-m: 16px;
+      --sp-l: 20px;    --sp-xl: 24px;
+
+      /* Layout */
+      --page-max-width: 100%;
+      --page-padding-x: 60px;
+      --section-gap:    var(--sp-m);
+
+      /* DS Semantic tokens — Zul naming */
+      --surface-general-default:      #fff;
+      --surface-primary-default:      #00cc85;
+      --surface-secondary-default:    #b5f291;
+      --surface-tertiary-default:     #00564c;
+      --border-default:               #00cc85;
+      --border-primary-default:       #00cc85;
+      --border-primary-focus:         #00a36a;
+      --border-secondary-focus:       #70bc6f;
+      --border-tertiary-focus:        #00453d;
+      --text-default-body:            #666666;
+      --text-primary-default:         #00cc85;
+      --text-primary-on-color:        #f6fdfb;
+      --text-secondary-focus:         #70bc6f;
+      --icon-default-default:         #d9d9d9;
+      --icon-primary-default:         #00cc85;
+      --icon-primary-on-color:        #f6fdfb;
+      --icon-secondary-hover:         #70bc6f;
+      --corner-radius-corner-4xl:     24px;
+      --corner-radius-corner-rounded: 60px;
+      --corner-radius-corner-pill:    999px;
+      --spacing-space-xxs: 4px;
+      --spacing-space-xs:  8px;
+      --spacing-space-s:   12px;
+      --spacing-space-m:   16px;
+      --spacing-space-xl:  24px;
+      --spacing-space-2xl: 28px;
+      /* ── Canonical tokens per design.color.md (2026-05-16) ─────── */
+      /* Surface */
+      --surface-primary-default-subtle:       #d9f7ed;
+      --surface-primary-default-subtle-hover: #99ebce;
+      --surface-secondary-default-subtle:     #e8fbe8;
+      --surface-disabled-primary:             #f2f2f2;
+      /* Text */
+      --text-default-heading:                 #404040;
+      --text-disabled-default:                #bfbfbf;
+      /* Icon */
+      --icon-primary-focus:                   #00a36a;
+      --icon-secondary-on-color:              #70bc6f;
+      --icon-disabled-default:                #bfbfbf;
+      /* Border */
+      --border-primary-default-subtle:        #d9f7ed;
+      --border-general-default:               #d9d9d9;
+      --border-disabled-disabled:             #bfbfbf;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { min-height: 100%; background: var(--Surface-general-default, #fff); }
+
+    body {
+      font-family:    'Poppins', sans-serif;
+      background:     var(--Surface-general-default, #fff);
+      width:          100%;
+      min-width:      400px;
+      max-width:      var(--page-max-width);
+      margin:         0 auto;
+      padding-bottom: 90px;
+    }
+
+    .page-content {
+      padding:        12px var(--page-padding-x) 0;
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--section-gap);
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       NAVBAR — Navbar 1.5
+       ══════════════════════════════════════════════════════════════ */
+    /* ── Section 1: Brand bar ─────────────────────────────────── */
+    #NavBar-Primary-Desktop { padding: 0 var(--page-padding-x); }
+
+    .navbar-primary {
+      background:    var(--surface-general-default);
+      border-bottom: 1px solid var(--border-primary-default);
+      border-left:   1px solid var(--border-primary-default);
+      border-right:  1px solid var(--border-primary-default);
+      border-radius: 0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl);
+      display:       flex;
+      align-items:   center;
+      gap:           28px;
+      overflow:      hidden;
+      width:         100%;
+      padding:       var(--spacing-space-xs) var(--spacing-space-xl);
+    }
+    .navbar-logo { display: flex; align-items: center; flex-shrink: 0; height: 28px; }
+    .navbar-logo img { height: 28px; width: auto; display: block; }
+    .navbar-primary__right {
+      display: flex; flex: 1; align-items: center; justify-content: flex-end;
+      gap: var(--spacing-space-m);
+    }
+    .navbar-primary-icons { display: flex; align-items: center; gap: var(--spacing-space-xs); flex-shrink: 0; }
+    .navbar-primary-icon {
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface-general-default);
+      border-radius: 8px;
+      flex-shrink: 0; cursor: pointer;
+      color: #808080;
+      transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .navbar-primary-icon svg { display: block; width: 24px; height: 24px; }
+    .navbar-primary-icon:hover {
+      background: #e8fbe8;
+      box-shadow: inset 0 0 0 1px #00cc85;
+      color: #00cc85;
+    }
+    .navbar-primary-icon.is-pressed {
+      background: #00564c;
+      box-shadow: inset 0 0 0 1px #00cc85;
+      color: #00cc85;
+    }
+    .navbar-primary-icon.is-active {
+      background: #00cc85;
+      box-shadow: inset 0 0 0 1px #00a36a;
+      color: #f6fdfb;
+    }
+    .navbar-avatar-wrap { position: relative; flex-shrink: 0; }
+    .navbar-avatar {
+      width: 48px; height: 48px;
+      border-radius: var(--corner-radius-corner-rounded);
+      border: 1px solid var(--border-default);
+      background: var(--surface-general-default);
+      overflow: hidden; position: relative; flex-shrink: 0;
+    }
+    .navbar-avatar__img {
+      position: absolute; left: -7px; right: -7px; top: -1px;
+      aspect-ratio: 1 / 1; object-fit: cover;
+      pointer-events: none; display: block;
+    }
+    .navbar-badge {
+      position: absolute; top: 0; right: -0.5px;
+      min-width: 20px; height: 20px;
+      background: var(--surface-primary-default);
+      border-radius: var(--corner-radius-corner-rounded);
+      padding: var(--spacing-space-xxs);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 600; line-height: var(--spacing-space-s);
+      color: var(--text-primary-on-color);
+    }
+
+    /* ── Section 2: Nav menu pill ─────────────────────────────── */
+    #NavBar-Menu-Desktop { padding: var(--spacing-space-s) var(--page-padding-x) 0; }
+
+    .navbar-nav {
+      background:    var(--surface-general-default);
+      border:        1px solid var(--border-default);
+      border-radius: var(--corner-radius-corner-pill);
+      height:        56px;
+      display:       flex; align-items: flex-start;
+      gap:           var(--spacing-space-xs);
+      padding:       var(--spacing-space-xs);
+      width:         100%;
+    }
+    .nav-item {
+      display: flex; align-items: center;
+      padding: 8px 12px;
+      border-radius: var(--corner-radius-corner-rounded);
+      background: var(--surface-general-default);
+      flex-shrink: 0; cursor: pointer; user-select: none; text-decoration: none;
+    }
+    .nav-item__icon-wrap {
+      width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: var(--icon-primary-default);
+    }
+    .nav-item__icon-clip { width: 20px; height: 20px; overflow: hidden; flex-shrink: 0; }
+    .nav-item__icon-clip svg { display: block; width: 100%; height: 100%; }
+    .nav-label {
+      font-size: 14px; font-weight: 500; line-height: 20px;
+      color: var(--text-default-body); white-space: nowrap; padding: 0 8px;
+    }
+    .nav-chevron { width: 16px; height: 16px; overflow: hidden; flex-shrink: 0; color: var(--text-default-body); }
+    .nav-chevron svg { display: block; width: 100%; height: 100%; }
+    .nav-arrow-circle {
+      background: #99ebce; border-radius: var(--corner-radius-corner-rounded);
+      padding: 4px; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; max-height: 24px;
+      color: var(--border-primary-focus);
+    }
+    .nav-arrow-circle__clip { width: 16px; height: 16px; overflow: hidden; flex-shrink: 0; }
+    .nav-arrow-circle__clip svg { display: block; width: 100%; height: 100%; }
+    .nav-item:hover {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .nav-item:hover .nav-label,
+    .nav-item:hover .nav-chevron        { color: var(--text-secondary-focus); }
+    .nav-item:hover .nav-item__icon-wrap { color: var(--icon-secondary-hover); }
+    .nav-item.is-active {
+      background: var(--surface-primary-default);
+      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+    }
+    .nav-item.is-active .nav-label,
+    .nav-item.is-active .nav-chevron        { color: var(--text-primary-on-color); }
+    .nav-item.is-active .nav-item__icon-wrap { color: var(--icon-primary-on-color); }
+    .nav-item.is-pressed {
+      background: var(--surface-tertiary-default);
+      box-shadow: inset 0 0 0 1px var(--border-tertiary-focus);
+    }
+    .nav-item.is-pressed .nav-label,
+    .nav-item.is-pressed .nav-chevron        { color: var(--text-primary-default); }
+    .nav-item.is-pressed .nav-item__icon-wrap { color: var(--icon-primary-default); }
+    .nav-item-group { position: relative; flex-shrink: 0; }
+    .nav-dropdown {
+      display: none; position: absolute;
+      top: calc(100% + 6px); left: 0; z-index: 100;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-primary-default);
+      border-radius: 18px; padding: 12px;
+      flex-direction: column; gap: 4px;
+      min-width: 160px; white-space: nowrap;
+    }
+    .nav-item-group:hover .nav-dropdown                  { display: flex; }
+    .nav-item-group:hover .nav-arrow-circle__clip svg    { transform: rotate(180deg); }
+    .nav-submenu-item {
+      display: flex; align-items: center; height: 24px;
+      border-radius: var(--corner-radius-corner-rounded);
+      cursor: pointer; text-decoration: none; flex-shrink: 0;
+      padding: 0 4px; transition: background 0.1s ease;
+      color: var(--icon-primary-default);
+    }
+    .nav-submenu-item:hover { background: var(--og-50, #e9fbf5); }
+    .nav-submenu-item svg   { width: 20px; height: 20px; flex-shrink: 0; }
+    .nav-submenu-item span  { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-default-body); padding: 0 8px; }
+
+    /* Mobile Navbar */
+    .navbar-mobile {
+      height: 64px;
+      background: var(--surface-general-default);
+      border-bottom: 1px solid var(--border-primary-default);
+      border-left:   1px solid var(--border-primary-default);
+      border-right:  1px solid var(--border-primary-default);
+      border-radius: 0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--spacing-space-m) 24px;
+    }
+    .navbar-mobile__logo { display: flex; align-items: center; height: 28px; }
+    .navbar-mobile__logo img { height: 28px; width: auto; display: block; }
+    .navbar-mobile__menu-btn {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; user-select: none; flex-shrink: 0;
+      color: var(--icon-primary-default);
+      background: none; border: none; padding: 0;
+    }
+    .navbar-mobile__menu-btn svg { display: block; width: 24px; height: 24px; }
+
+    /* ── Responsive Navbar ─────────────────────────────────────── */
+    #NavBar-Primary-Desktop,
+    #NavBar-Menu-Desktop    { display: block; }
+    #NavBar-Mobile          { display: none; padding-left: var(--page-padding-x); padding-right: var(--page-padding-x); }
+
+    @media (max-width: 1319px) {
+      #NavBar-Primary-Desktop,
+      #NavBar-Menu-Desktop { display: none; }
+      #NavBar-Mobile       { display: block; }
+    }
+
+    /* Mobile Menu Modal */
+    .mmenu-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4); z-index: 200;
+      justify-content: flex-start; align-items: flex-start;
+    }
+    .mmenu-overlay.is-open { display: flex; }
+    @media (min-width: 768px) { .mmenu-overlay.is-open { justify-content: center; padding-top: 80px; } }
+    .mmenu-panel {
+      background: white; border: 1px solid var(--border-primary-default);
+      overflow: hidden; overflow-y: auto; scrollbar-width: none;
+    }
+    .mmenu-panel::-webkit-scrollbar { display: none; }
+    .mmenu-panel--mobile {
+      width: 329px; height: 100vh; max-height: 100vh;
+      border-radius: 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl) 0;
+    }
+    @media (min-width: 768px) { .mmenu-panel--mobile { display: none; } }
+    .mmenu-panel--tablet {
+      display: none;
+      width: min(calc(100vw - 64px), 800px);
+      max-height: calc(100vh - 100px);
+      border-radius: var(--corner-radius-corner-4xl);
+    }
+    @media (min-width: 768px) { .mmenu-panel--tablet { display: block; } }
+    .mmenu-menu-row { display: flex; gap: 0; padding: var(--spacing-space-m); }
+    .mmenu-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--spacing-space-xs); }
+    .mmenu-divider { width: 1px; flex-shrink: 0; background: #e5e5e5; margin: 0 var(--spacing-space-xs); align-self: stretch; }
+    .mmenu-cta--tablet { flex-direction: row; border-radius: 28px; align-items: center; }
+    .mmenu-cta--tablet .mmenu-item,
+    .mmenu-cta--tablet .btn-dl-app { flex: 1; }
+    .mmenu-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--spacing-space-m); background: white;
+    }
+    .mmenu-header-logo img { height: 34px; width: auto; display: block; }
+    .mmenu-close-btn {
+      background: none; border: none; padding: 0;
+      width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-default-body);
+    }
+    .mmenu-close-btn svg { display: block; width: 24px; height: 24px; }
+    .mmenu-body { padding: 0 var(--spacing-space-m) var(--spacing-space-m); display: flex; flex-direction: column; gap: var(--spacing-space-xs); }
+    .mmenu-search {
+      height: 40px; border: 1px solid #d9d9d9;
+      border-radius: var(--corner-radius-corner-pill);
+      padding: var(--spacing-space-xs) var(--spacing-space-s);
+      display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer;
+    }
+    .mmenu-search-placeholder { flex: 1; font-size: 14px; font-weight: 400; line-height: 20px; color: #bfbfbf; }
+    .mmenu-search-icon { width: 24px; height: 24px; flex-shrink: 0; color: #bfbfbf; }
+    .mmenu-search-icon svg { display: block; width: 100%; height: 100%; }
+    .mmenu-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: var(--spacing-space-xs) var(--spacing-space-m);
+      border-radius: var(--corner-radius-corner-pill);
+      cursor: pointer; user-select: none;
+    }
+    .mmenu-item--active { background: #b5f291; border: 1px solid var(--border-primary-focus); }
+    .mmenu-item-icon { width: 24px; height: 24px; flex-shrink: 0; color: var(--icon-primary-default); }
+    .mmenu-item-icon svg { display: block; width: 100%; height: 100%; }
+    .mmenu-item-label { flex: 1; min-width: 0; font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-default-body); }
+    .mmenu-item--active .mmenu-item-label { color: #00a36a; }
+    .mmenu-item-chevron { width: 24px; height: 24px; flex-shrink: 0; color: var(--text-default-body); }
+    .mmenu-item-chevron svg { display: block; width: 100%; height: 100%; }
+    .menu-chk {
+      width: 16px; height: 16px;
+      background: var(--surface-primary-default); border: 1px solid var(--border-primary-focus);
+      border-radius: 4px; padding: 2px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .menu-chk svg { display: block; width: 12px; height: 12px; }
+    .mmenu-cta {
+      background: #e8fbe8; border: 1px solid #d1f7d1;
+      border-radius: 20px; padding: var(--spacing-space-xs);
+      display: flex; flex-direction: column; gap: var(--spacing-space-xs);
+    }
+    .btn-dl-app {
+      display: flex; align-items: center;
+      background: var(--surface-primary-default); border: 1px solid var(--border-primary-focus);
+      border-radius: var(--corner-radius-corner-rounded);
+      padding: var(--spacing-space-xs) var(--spacing-space-s);
+      text-decoration: none; cursor: pointer;
+    }
+    .btn-dl-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .btn-dl-icon-clip { width: 20px; height: 20px; overflow: hidden; flex-shrink: 0; }
+    .btn-dl-icon-clip svg { display: block; width: 100%; height: 100%; }
+    .btn-dl-label { flex: 1; text-align: center; font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-primary-on-color); padding: 0 var(--spacing-space-xs); }
+    .btn-dl-arrow { background: #99ebce; border-radius: var(--corner-radius-corner-rounded); padding: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; max-height: 24px; color: var(--border-primary-focus); }
+    .btn-dl-arrow-clip { width: 16px; height: 16px; overflow: hidden; flex-shrink: 0; }
+    .btn-dl-arrow-clip svg { display: block; width: 100%; height: 100%; }
+    .mmenu-localization { display: flex; align-items: center; justify-content: space-between; padding: 0 60px; }
+    .mmenu-lang-btn {
+      width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+      background: none; border: none; padding: 0; cursor: pointer;
+      color: var(--text-default-body); font-size: 9px; font-weight: 700;
+      font-family: 'Poppins', sans-serif; line-height: 1;
+    }
+    .mmenu-lang-btn svg { display: block; width: 24px; height: 24px; }
+
+    /* ══════════════════════════════════════════════════════════════
+       Breadcrumb 1.5
+       ══════════════════════════════════════════════════════════════ */
+    .bc-row { display: flex; align-items: center; gap: 12px; min-height: 36px; }
+    .bc-left { flex: 1; width: 100%; min-width: 0; display: flex; align-items: center; gap: var(--sp-m); }
+    .bc-title { font-size: 24px; font-weight: 500; line-height: 36px; color: #00564c; white-space: nowrap; flex-shrink: 0; }
+    .bc-sep { width: 1px; height: 20px; background: #d9d9d9; flex-shrink: 0; }
+    .bc-trail { display: flex; align-items: center; gap: var(--sp-xs); flex-wrap: wrap; }
+    .bc-link {
+      display: inline-flex; align-items: center; gap: var(--sp-xs);
+      font-size: 14px; font-weight: 400; line-height: 20px;
+      color: var(--og-500); text-decoration: none; white-space: nowrap;
+    }
+    .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .bc-chevron {
+      width: 16px; height: 16px;
+      stroke: #bfbfbf; fill: none;
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+    .bc-link--current { color: #666; }
+
+    /* ══════════════════════════════════════════════════════════════
+       Two-panel Rewards layout
+       ══════════════════════════════════════════════════════════════ */
+    .rewards-layout { display: flex; gap: 12px; align-items: stretch; }
+
+    /* ── Rewards Sidebar — DS node 3849:48401 (Nav Side Menu Desktop 1.5) ─── */
+    .rewards-sidebar {
+      width:          280px;
+      min-width:      240px;
+      flex-shrink:    0;
+      background:     #fff;
+      border:         1px solid var(--og-500);   /* Border/primary/default */
+      border-radius:  24px;                       /* Radius/4xl */
+      padding:        var(--sp-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--sp-xs);
+    }
+    /* Score chip — Surface/gold/default-subtle #fef1ce, Border/gold/default #fabb0a */
+    .sidebar-balance {
+      background:      #fef1ce;
+      border:          1px solid #fabb0a;
+      border-radius:   16px;
+      padding:         var(--sp-xs) var(--sp-xs) var(--sp-xs) var(--sp-xxxs);
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      gap:             2px;
+      overflow:        hidden;
+      flex-shrink:     0;
+    }
+    .sidebar-balance__coin {
+      width:       24px;
+      height:      24px;
+      flex-shrink: 0;
+      display:     block;
+      object-fit:  contain;
+    }
+    /* strokeAlign: OUTSIDE 1px → 2px CSS (Rule 26) */
+    .sidebar-balance__value {
+      font-size:           18px;
+      font-weight:         700;
+      line-height:         28px;
+      color:               #fff;
+      -webkit-text-stroke: 2px #c89608;
+      paint-order:         stroke fill;
+      white-space:         nowrap;
+    }
+    .sidebar-divider {
+      height:      1px;
+      background:  #d9d9d9;
+      width:       100%;
+      flex-shrink: 0;
+      margin:      4px 0;
+    }
+    /* Nav items — Dropdown-Parts DS pattern, gap:10px, radius:108px */
+    .sidebar-btn {
+      width:         100%;
+      border-radius: 108px;
+      padding:       var(--sp-xs) var(--sp-m);
+      display:       flex;
+      align-items:   center;
+      gap:           10px;
+      cursor:        pointer;
+      background:    transparent;
+      border:        1px solid transparent;
+      flex-shrink:   0;
+      transition:    background 0.12s ease;
+      text-align:    left;
+    }
+    .sidebar-btn:not(.sidebar-btn--active):hover {
+      background:   #e8fbe8;    /* Surface/secondary/default-subtle */
+      border-color: #00cc85;    /* Border/primary/default */
+    }
+    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__icon-wrap { color: #00cc85; }
+    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__label     { color: #00cc85; }
+    .sidebar-btn--active {
+      background:   #b5f291;    /* Surface/secondary/default */
+      border-color: #00a36a;    /* Border/primary/focus */
+    }
+    /* Icon — 24×24 clip via padding (position:absolute;inset collapses in Chromium) */
+    .sidebar-btn__icon-wrap {
+      width:       24px;
+      height:      24px;
+      padding:     2px;           /* 8.33% of 24px — stop-circle, smile */
+      box-sizing:  border-box;
+      overflow:    hidden;
+      flex-shrink: 0;
+      color:       var(--icon-primary-default);
+    }
+    .sidebar-btn--active .sidebar-btn__icon-wrap { color: #00a36a; }
+    .sidebar-btn__icon-wrap svg { display: block; width: 100%; height: 100%; }
+    /* Per-icon DS padding from Figma Dropdown-Parts inspection */
+    .sidebar-btn__icon-wrap[data-icon="box"]           { padding: 1.24px 2px 1.23px; }
+    .sidebar-btn__icon-wrap[data-icon="shopping-bag"]  { padding: 2px 3px; }
+    .sidebar-btn__icon-wrap[data-icon="shopping-cart"] { padding: 1px 1px 2px; }
+    /* Label — Text/default/body #666, active: Text/primary/default-hover #00a36a */
+    .sidebar-btn__label {
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       #666;
+      flex:        1 0 0;
+      min-width:   0;
+      white-space: nowrap;
+    }
+    .sidebar-btn--active .sidebar-btn__label { color: #00a36a; }
+
+    /* RIGHT MAIN PANEL — Merchandise variant
+       bg: Secondary/50 #f6fef6 · border: 1px #00cc85 (DS node 3065:43478) */
+    .rewards-main {
+      flex: 1; min-width: 0;
+      border-radius: var(--r-2xl);
+      padding: var(--sp-m);
+      display: flex; flex-direction: column; gap: var(--sp-m);
+      overflow: hidden;
+    }
+    .rewards-main--merch {
+      background:   #f6fef6;
+      border:       1px solid #00cc85;
+    }
+
+    .merch-intro {
+      font-size: 14px; font-weight: 400; line-height: 20px;
+      color: #666; flex-shrink: 0;
+    }
+
+    /* Merchandise reward cards — 4-col grid */
+    .merch-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    /* Reward Card - 1.5 (DS node 3065:43481)
+       border: 1px #d9d9d9, radius: 24px, height: 329px              */
+    .rc {
+      border:         1px solid #d9d9d9;
+      border-radius:  24px;
+      overflow:       hidden;
+      display:        flex;
+      flex-direction: column;
+      background:     #fff;
+    }
+
+    /* Image — natural 250×148 SVG ratio, scales with card width */
+    .rc__img {
+      width:      100%;
+      height:     auto;
+      display:    block;
+      flex-shrink: 0;
+    }
+
+    /* Content — padding 16px, gap 8px */
+    .rc__body {
+      padding:        16px;
+      display:        flex;
+      flex-direction: column;
+      gap:            8px;
+      flex:           1;
+      min-height:     0;
+    }
+
+    /* Label badges row */
+    .rc__badges { display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+
+    /* Label Badge 1.5 — Premium / Premium Lite
+       bg: #ccf5e7 (Surface/primary/default-subtle)
+       border: 1px #00cc85 (Border/primary/default)
+       icon: Outline/video 10px, text: 10px Medium #00cc85           */
+    .lbadge-prem {
+      display:     inline-flex;
+      align-items: center;
+      gap:         4px;
+      padding:     2px 8px;
+      border-radius: 60px;
+      background:  #ccf5e7;
+      border:      1px solid #00cc85;
+      font-size:   10px;
+      font-weight: 500;
+      line-height: 12px;
+      color:       #00cc85;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .lbadge-prem svg { width: 10px; height: 10px; flex-shrink: 0; }
+
+    /* Card title — 14px SemiBold, #404040, 2-line clamp */
+    .rc__title {
+      font-size:             14px;
+      font-weight:           600;
+      line-height:           20px;
+      color:                 #404040;
+      overflow:              hidden;
+      text-overflow:         ellipsis;
+      display:               -webkit-box;
+      -webkit-line-clamp:    2;
+      -webkit-box-orient:    vertical;
+    }
+
+    /* Divider */
+    .rc__divider { height: 1px; background: #d9d9d9; flex-shrink: 0; }
+
+    /* CTA row — padding 16px, gap 2px */
+    .rc__cta {
+      padding:     16px;
+      display:     flex;
+      align-items: center;
+      gap:         2px;
+      flex-shrink: 0;
+    }
+    .rc__coin { display: flex; align-items: center; gap: 4px; flex: 1; min-width: 0; }
+    .rc__coin-icon  { width: 24px; height: 24px; flex-shrink: 0; display: block; object-fit: contain; }
+    .rc__coin-value { font-size: 14px; font-weight: 400; line-height: 20px; color: #666; }
+
+    /* Show Voucher — Button - 1.5 Primary/S (24px)
+       DS node confirmed from Reward Card - 1.5 (1437:8154 variant)   */
+    .btn-show {
+      display:         inline-flex;
+      align-items:     center;
+      border-radius:   60px;
+      padding:         2px 8px;
+      height:          24px;
+      background:      #00cc85;
+      border:          1px solid #00a36a;
+      cursor:          pointer;
+      text-decoration: none;
+      transition:      background 0.12s ease, border-color 0.12s ease;
+      flex-shrink:     0;
+    }
+    .btn-show__label {
+      font-size:   12px;
+      font-weight: 600;
+      line-height: 18px;
+      color:       #f6fdfb;
+      padding:     0 4px;
+      transition:  color 0.12s ease;
+      white-space: nowrap;
+    }
+    .btn-show__arrow {
+      width:           16px;
+      height:          16px;
+      border-radius:   60px;
+      background:      #99ebce;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+      padding:         2px;
+      color:           #00a36a;
+      transition:      background 0.12s ease, color 0.12s ease;
+    }
+    .btn-show__arrow svg { display: block; width: 12px; height: 12px; }
+
+    .btn-show:hover { background: #b5f291; border-color: #70bc6f; }
+    .btn-show:hover .btn-show__label { color: #70bc6f; }
+    .btn-show:hover .btn-show__arrow { background: #e8fbe8; color: #70bc6f; }
+    .btn-show:active { background: #00564c; border-color: #00453d; }
+    .btn-show:active .btn-show__label { color: #00cc85; }
+    .btn-show:active .btn-show__arrow { background: #00cc85; color: #00564c; }
+
+    /* Disabled state (Rule 2 — DS Disabled palette) */
+    .btn-show--disabled,
+    .btn-show--disabled:hover,
+    .btn-show--disabled:active {
+      background:     #f2f2f2;
+      border-color:   #bfbfbf;
+      cursor:         not-allowed;
+      pointer-events: none;
+    }
+    .btn-show--disabled .btn-show__label { color: #bfbfbf; }
+    .btn-show--disabled .btn-show__arrow {
+      background: #f2f2f2;
+      box-shadow: inset 0 0 0 1px #bfbfbf;
+      color:      #bfbfbf;
+    }
+
+    /* ── Responsive ────────────────────────────────────────────── */
+    @media (max-width: 1279px) {
+      :root         { --page-padding-x: 32px; }
+      .rewards-layout { flex-direction: column; }
+      .rewards-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; height: auto; }
+      .merch-grid   { grid-template-columns: repeat(2, 1fr); }
+      .bc-left      { align-items: flex-start; width: 100%; }
+    }
+
+    @media (max-width: 767px) {
+      :root         { --page-padding-x: var(--spacing-space-m); }
+      .merch-grid   { grid-template-columns: 1fr; }
+      .rc           { height: auto; }
+      .navbar-nav   { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+      .navbar-nav::-webkit-scrollbar { display: none; }
+      body          { padding-bottom: 102px; }
+      .footer__inner {
+        flex-direction: column; justify-content: center; align-items: center;
+        gap: var(--spacing-space-xs); height: auto;
+        padding: var(--spacing-space-s) var(--spacing-space-2xl);
+      }
+      .footer__left  { justify-content: center; }
+      .footer__right { justify-content: center; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       Footer - 1.5
+       ══════════════════════════════════════════════════════════════ */
+    .footer {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+      background: var(--Surface-general-default, #fff);
+      border-top: 1px solid var(--og-500);
+    }
+    .footer__inner {
+      height: 60px; display: flex; align-items: center;
+      justify-content: space-between;
+      padding-left: 28px; padding-right: 28px;
+    }
+    .footer__left  { display: flex; align-items: center; gap: var(--sp-xxs); flex-shrink: 0; }
+    .footer__text  { font-size: 14px; font-weight: 500; line-height: 20px; color: #666; white-space: nowrap; }
+    .footer__link  { font-size: 14px; font-weight: 500; line-height: 20px; color: var(--og-500); white-space: nowrap; cursor: pointer; text-decoration: none; }
+    .footer__right { display: flex; align-items: center; gap: var(--sp-xxs); flex-shrink: 0; }
+    .footer__heart {
+      width: 20px; height: 20px; flex-shrink: 0; display: block;
+      fill: none; stroke: var(--og-500); stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG sprite — all icon symbols -->
+  <svg aria-hidden="true" style="display:none">
+    <symbol id="ic-home" viewBox="-1 -1 20 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 7 L 9 0 L 18 7 L 18 18 C 18 18.5304 17.7893 19.0391 17.4142 19.4142 C 17.0391 19.7893 16.5304 20 16 20 L 2 20 C 1.4696 20 0.9609 19.7893 0.5858 19.4142 C 0.2107 19.0391 0 18.5304 0 18 L 0 7 Z"/><path d="M 6 20 L 6 10 L 12 10 L 12 20"/></symbol>
+    <symbol id="ic-check-circle" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 20 9.086 L 20 10.006 C 19.999 12.162 19.3 14.26 18.009 15.988 C 16.718 17.715 14.903 18.978 12.835 19.59 C 10.767 20.201 8.557 20.128 6.534 19.38 C 4.512 18.633 2.785 17.252 1.611 15.443 C 0.437 13.634 -0.12 11.494 0.022 9.342 C 0.164 7.19 0.997 5.142 2.398 3.503 C 3.799 1.864 5.693 0.721 7.796 0.246 C 9.9 -0.229 12.1 -0.012 14.07 0.866"/><path d="M 20 2.006 L 10 12.016 L 7 9.016"/></symbol>
+    <symbol id="ic-battle" viewBox="-1 -1 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 18 0 L 18 5 L 7 14 L 3 18 L 0 15 L 4 11 L 13 0 L 18 0 Z"/><path d="M 2 10 L 8 16"/><path d="M 11.32 14.32 L 15 18 L 18 15 L 14.635 11.635"/><path d="M 7 2.5 L 5 0 L 0 0 L 0 5 L 3 7.5"/></symbol>
+    <symbol id="ic-book-open" viewBox="-1 -1 22 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 0 L 6 0 C 7.061 0 8.078 0.421 8.828 1.172 C 9.579 1.922 10 2.939 10 4 L 10 18 C 10 17.204 9.684 16.441 9.121 15.879 C 8.559 15.316 7.796 15 7 15 L 0 15 L 0 0 Z"/><path d="M 20 0 L 14 0 C 12.939 0 11.922 0.421 11.172 1.172 C 10.421 1.922 10 2.939 10 4 L 10 18 C 10 17.204 10.316 16.441 10.879 15.879 C 11.441 15.316 12.204 15 13 15 L 20 15 L 20 0 Z"/></symbol>
+    <symbol id="ic-users" viewBox="-1 -1 24 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 16 18 L 16 16 C 16 14.939 15.579 13.922 14.828 13.172 C 14.078 12.421 13.061 12 12 12 L 4 12 C 2.939 12 1.922 12.421 1.172 13.172 C 0.421 13.922 0 14.939 0 16 L 0 18"/><path d="M 8 8 C 10.209 8 12 6.209 12 4 C 12 1.791 10.209 0 8 0 C 5.791 0 4 1.791 4 4 C 4 6.209 5.791 8 8 8 Z"/><path d="M 22 18 L 22 16 C 21.999 15.114 21.704 14.253 21.161 13.552 C 20.618 12.852 19.858 12.352 19 12.13"/><path d="M 15 0.13 C 15.86 0.35 16.623 0.851 17.168 1.552 C 17.712 2.254 18.008 3.117 18.008 4.005 C 18.008 4.893 17.712 5.756 17.168 6.458 C 16.623 7.159 15.86 7.66 15 7.88"/></symbol>
+    <symbol id="ic-book" viewBox="-1 -1 18 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 0 17.5 C 0 16.837 0.263 16.201 0.732 15.732 C 1.201 15.263 1.837 15 2.5 15 L 16 15"/><path d="M 2.5 0 L 16 0 L 16 20 L 2.5 20 C 1.837 20 1.201 19.737 0.732 19.268 C 0.263 18.799 0 18.163 0 17.5 L 0 2.5 C 0 1.837 0.263 1.201 0.732 0.732 C 1.201 0.263 1.837 0 2.5 0 Z"/></symbol>
+    <symbol id="ic-star" viewBox="-1 -1 22 21" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 10 0 L 13.09 6.26 L 20 7.27 L 15 12.14 L 16.18 19.02 L 10 15.77 L 3.82 19.02 L 5 12.14 L 0 7.27 L 6.91 6.26 L 10 0 Z"/></symbol>
+    <symbol id="ic-gift" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 18 10 L 18 20 L 2 20 L 2 10"/><path d="M 20 5 L 0 5 L 0 10 L 20 10 L 20 5 Z"/><path d="M 10 5 L 5.5 5 C 4.837 5 4.201 4.737 3.732 4.268 C 3.263 3.799 3 3.163 3 2.5 C 3 1.837 3.263 1.201 3.732 0.732 C 4.201 0.263 4.837 0 5.5 0 C 9 0 10 5 10 5 Z"/><path d="M 10 5 L 14.5 5 C 15.163 5 15.799 4.737 16.268 4.268 C 16.737 3.799 17 3.163 17 2.5 C 17 1.837 16.737 1.201 16.268 0.732 C 15.799 0.263 15.163 0 14.5 0 C 11 0 10 5 10 5 Z"/><path d="M 10 20 L 10 5"/></symbol>
+    <symbol id="ic-chevron-down-nav" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5L10 12.5L15 7.5"/></symbol>
+    <symbol id="ic-search" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 11 19 C 15.418 19 19 15.418 19 11 C 19 6.582 15.418 3 11 3 C 6.582 3 3 6.582 3 11 C 3 15.418 6.582 19 11 19 Z"/><path d="M 21 21 L 16.65 16.65"/></symbol>
+    <symbol id="ic-maximize" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 3 16 L 3 19 C 3 19.53 3.211 20.039 3.586 20.414 C 3.961 20.789 4.47 21 5 21 L 8 21"/><path d="M 8 3 L 5 3 C 4.47 3 3.961 3.211 3.586 3.586 C 3.211 3.961 3 4.47 3 5 L 3 8 M 21 8 L 21 5 C 21 4.47 20.789 3.961 20.414 3.586 C 20.039 3.211 19.53 3 19 3 L 16 3 M 16 21 L 19 21 C 19.53 21 20.039 20.789 20.414 20.414 C 20.789 20.039 21 19.53 21 19 L 21 16"/></symbol>
+    <symbol id="ic-smartphone" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 17 2 L 7 2 C 5.895 2 5 2.895 5 4 L 5 20 C 5 21.105 5.895 22 7 22 L 17 22 C 18.105 22 19 21.105 19 20 L 19 4 C 19 2.895 18.105 2 17 2 Z"/><path d="M 12 18 L 12.01 18"/></symbol>
+    <symbol id="ic-bell" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22 17 L 2 17 C 2.796 17 3.559 16.684 4.121 16.121 C 4.684 15.559 5 14.796 5 14 L 5 9 C 5 7.143 5.737 5.363 7.05 4.05 C 8.363 2.737 10.143 2 12 2 C 13.857 2 15.637 2.737 16.95 4.05 C 18.263 5.363 19 7.143 19 9 L 19 14 C 19 14.796 19.316 15.559 19.879 16.121 C 20.441 16.684 21.204 17 22 17 Z"/><path d="M 13.73 21 C 13.554 21.303 13.302 21.555 12.998 21.73 C 12.695 21.904 12.35 21.996 12 21.996 C 11.65 21.996 11.305 21.904 11.002 21.73 C 10.698 21.555 10.446 21.303 10.27 21"/></symbol>
+    <symbol id="ic-en" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 21.613 6 L 21.613 17.252 L 13.086 6 L 13.086 17.252"/><path d="M 9.129 6.05 L 3 6.05 L 3 11.651 L 3 17.252 L 9.129 17.252"/><path d="M 3 11.651 L 9.181 11.651"/></symbol>
+    <symbol id="ic-waffle" viewBox="-1 -1 18 18" fill="currentColor" stroke="none"><path d="M 8 9 C 8.552 9 9 8.552 9 8 C 9 7.448 8.552 7 8 7 C 7.448 7 7 7.448 7 8 C 7 8.552 7.448 9 8 9 Z"/><path d="M 15 9 C 15.552 9 16 8.552 16 8 C 16 7.448 15.552 7 15 7 C 14.448 7 14 7.448 14 8 C 14 8.552 14.448 9 15 9 Z"/><path d="M 1 9 C 1.552 9 2 8.552 2 8 C 2 7.448 1.552 7 1 7 C 0.448 7 0 7.448 0 8 C 0 8.552 0.448 9 1 9 Z"/><path d="M 8 2 C 8.552 2 9 1.552 9 1 C 9 0.448 8.552 0 8 0 C 7.448 0 7 0.448 7 1 C 7 1.552 7.448 2 8 2 Z"/><path d="M 15 2 C 15.552 2 16 1.552 16 1 C 16 0.448 15.552 0 15 0 C 14.448 0 14 0.448 14 1 C 14 1.552 14.448 2 15 2 Z"/><path d="M 1 2 C 1.552 2 2 1.552 2 1 C 2 0.448 1.552 0 1 0 C 0.448 0 0 0.448 0 1 C 0 1.552 0.448 2 1 2 Z"/><path d="M 8 16 C 8.552 16 9 15.552 9 15 C 9 14.448 8.552 14 8 14 C 7.448 14 7 14.448 7 15 C 7 15.552 7.448 16 8 16 Z"/><path d="M 15 16 C 15.552 16 16 15.552 16 15 C 16 14.448 15.552 14 15 14 C 14.448 14 14 14.448 14 15 C 14 15.552 14.448 16 15 16 Z"/><path d="M 1 16 C 1.552 16 2 15.552 2 15 C 2 14.448 1.552 14 1 14 C 0.448 14 0 14.448 0 15 C 0 15.552 0.448 16 1 16 Z"/></symbol>
+    <symbol id="ic-menu" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12H21M3 6H21M3 18H21"/></symbol>
+    <symbol id="ic-corner-down-right" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></symbol>
+    <!-- Sidebar nav icons -->
+    <symbol id="ic-stop-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><rect x="9" y="9" width="6" height="6"/></symbol>
+    <symbol id="ic-package" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/></symbol>
+    <symbol id="ic-shopping-bag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
+    <symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></symbol>
+    <symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></symbol>
+    <!-- Video icon — 10px label badge (Outline/video) -->
+    <symbol id="ic-video" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></symbol>
+    <!-- Show Voucher button chevron — Primary/S clip 12×12 (DS node 1437:8161) -->
+    <symbol id="ic-chevron-btn" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 9L7.5 6L4.5 3"/></symbol>
+    <!-- Button - 1.5 Size=M chevron clip — DS node 479:352, viewBox 0 0 16 16 -->
+    <symbol id="ic-chevron-btn-m" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12L10 8L6 4"/></symbol>
+    <!-- Outline/bar-chart 2 — Achievement icon -->
+    <symbol id="ic-bar-chart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="13" width="6" height="7" rx="1"/><rect x="9" y="9" width="6" height="11" rx="1"/><rect x="15" y="5" width="6" height="15" rx="1"/><line x1="4" y1="20" x2="18" y2="20"/></symbol>
+    <!-- Mobile menu modal icons -->
+    <symbol id="ic-x" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6L18 18"/></symbol>
+    <symbol id="ic-chevron-right" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18L15 12L9 6"/></symbol>
+    <symbol id="ic-clipboard" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4H18a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/></symbol>
+    <symbol id="ic-settings" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+  </svg>
+
+  <!-- Section 1: Brand bar — NavbarPrimary Desktop 1.5 -->
+  <section id="NavBar-Primary-Desktop">
+    <div class="navbar-primary">
+      <a class="navbar-logo" href="#">
+        <img src="../navbar/logo.png" alt="Pandai">
+      </a>
+      <div class="navbar-primary__right">
+        <div class="navbar-primary-icons">
+          <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
+          <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-maximize"/></svg></div>
+          <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
+          <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+          <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
+          <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-waffle"/></svg></div>
+        </div>
+        <div class="navbar-avatar-wrap">
+          <div class="navbar-avatar">
+            <img src="../navbar/icon-avatar-user.png" class="navbar-avatar__img" alt="User">
+          </div>
+          <span class="navbar-badge">15</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Nav menu pill — NavTopMenu Desktop 1.5 -->
+  <section id="NavBar-Menu-Desktop">
+    <div class="navbar-nav">
+
+      <div class="nav-item">
+        <div class="nav-item__icon-wrap"><div class="nav-item__icon-clip" data-icon="home"><svg aria-hidden="true"><use href="#ic-home"/></svg></div></div>
+        <span class="nav-label">Home</span>
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-item__icon-wrap"><div class="nav-item__icon-clip"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div></div>
+        <span class="nav-label">Quiz</span>
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-item__icon-wrap"><div class="nav-item__icon-clip" data-icon="battle"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div></div>
+        <span class="nav-label">Battle</span>
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-item__icon-wrap"><div class="nav-item__icon-clip" data-icon="practice"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div></div>
+        <span class="nav-label">Practice</span>
+      </div>
+
+      <div class="nav-item-group">
+        <div class="nav-item">
+          <div class="nav-item__icon-wrap"><div class="nav-item__icon-clip" data-icon="class"><svg aria-hidden="true"><use href="#ic-users"/></svg></div></div>
+          <span class="nav-label">Class</span>
+          <div class="nav-chevron"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div>
+        </div>
+        <div class="nav-dropdown" role="menu">
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>My Classes</span></a>
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Browse Classes</span></a>
+          <a href="#" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Timetable</span></a>
+        </div>
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-item__icon-wrap"><div class="nav-item__icon-clip" data-icon="learn"><svg aria-hidden="true"><use href="#ic-book"/></svg></div></div>
+        <span class="nav-label">Learn</span>
+        <div class="nav-chevron"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div>
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-item__icon-wrap"><div class="nav-item__icon-clip" data-icon="achievement"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></div></div>
+        <span class="nav-label">Achievement</span>
+        <div class="nav-chevron"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div>
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-item__icon-wrap"><div class="nav-item__icon-clip" data-icon="potential"><svg aria-hidden="true"><use href="#ic-star"/></svg></div></div>
+        <span class="nav-label">Potential</span>
+        <div class="nav-chevron"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div>
+      </div>
+
+      <!-- Rewards — active, with arrow circle (dropdown indicator) -->
+      <div class="nav-item-group">
+        <div class="nav-item is-active">
+          <div class="nav-item__icon-wrap"><div class="nav-item__icon-clip" data-icon="gift"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div></div>
+          <span class="nav-label">Rewards</span>
+          <div class="nav-arrow-circle"><div class="nav-arrow-circle__clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+        </div>
+        <div class="nav-dropdown" role="menu">
+          <a href="nadia_Rewards-CoinQuest.html"   class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Coin Quest</span></a>
+          <a href="nadia_Rewards-Myrewards.html"   class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>My Rewards</span></a>
+          <a href="nadia_Rewards-Merchandise.html" class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Merchandise</span></a>
+          <a href="#"                              class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>eVoucher</span></a>
+          <a href="#"                              class="nav-submenu-item" role="menuitem"><svg aria-hidden="true"><use href="#ic-corner-down-right"/></svg><span>Avatar</span></a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Mobile Navbar (< 1320px) -->
+  <section id="NavBar-Mobile">
+    <div class="navbar-mobile">
+      <a class="navbar-mobile__logo" href="#">
+        <img src="../navbar/logo.png" alt="Pandai">
+      </a>
+      <button class="navbar-mobile__menu-btn" aria-label="Open menu" type="button">
+        <svg aria-hidden="true"><use href="#ic-menu"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════
+       Page Content
+       ══════════════════════════════════════════════════════════ -->
+  <div class="page-content">
+
+    <!-- Breadcrumb — Merchandise (DS node 3284:219024) -->
+    <section class="bc-row" aria-label="Breadcrumb">
+      <div class="bc-left">
+        <span class="bc-title">Merchandise</span>
+        <span class="bc-sep" aria-hidden="true"></span>
+        <nav class="bc-trail" aria-label="Breadcrumb">
+          <a href="#" class="bc-link">
+            <svg aria-hidden="true"><use href="#ic-gift"/></svg>
+            Rewards
+            <svg class="bc-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <span class="bc-link bc-link--current" aria-current="page">Merchandise</span>
+        </nav>
+      </div>
+    </section>
+
+    <!-- Two-panel layout (DS node 3065:43313) -->
+    <div class="rewards-layout">
+
+            <!-- LEFT SIDEBAR — DS node 3849:48401 (Nav Side Menu Desktop 1.5) -->
+      <aside class="rewards-sidebar">
+
+        <!-- Score chip — Surface/gold/default-subtle #fef1ce, Border/gold/default #fabb0a -->
+        <div class="sidebar-balance">
+          <img class="sidebar-balance__coin" src="../image-repo/Rewards-Merchandise/P.Coin.svg" alt="Pandai Coin">
+          <span class="sidebar-balance__value">10,000</span>
+        </div>
+
+        <!-- Divider — 1px #d9d9d9 -->
+        <div class="sidebar-divider" aria-hidden="true"></div>
+
+        <button class="sidebar-btn" type="button">
+          <div class="sidebar-btn__icon-wrap"><svg aria-hidden="true"><use href="#ic-stop-circle"/></svg></div>
+          <span class="sidebar-btn__label">Coin Quest</span>
+        </button>
+        <button class="sidebar-btn" type="button">
+          <div class="sidebar-btn__icon-wrap" data-icon="box"><svg aria-hidden="true"><use href="#ic-package"/></svg></div>
+          <span class="sidebar-btn__label">My Rewards</span>
+        </button>
+        <button class="sidebar-btn sidebar-btn--active" type="button">
+          <div class="sidebar-btn__icon-wrap" data-icon="shopping-bag"><svg aria-hidden="true"><use href="#ic-shopping-bag"/></svg></div>
+          <span class="sidebar-btn__label">Merchandise</span>
+        </button>
+        <button class="sidebar-btn" type="button">
+          <div class="sidebar-btn__icon-wrap" data-icon="shopping-cart"><svg aria-hidden="true"><use href="#ic-shopping-cart"/></svg></div>
+          <span class="sidebar-btn__label">eVoucher</span>
+        </button>
+        <button class="sidebar-btn" type="button">
+          <div class="sidebar-btn__icon-wrap"><svg aria-hidden="true"><use href="#ic-smile"/></svg></div>
+          <span class="sidebar-btn__label">Avatar</span>
+        </button>
+
+      </aside>
+
+      <!-- RIGHT MAIN — Merchandise panel
+           bg: Secondary/50 #f6fef6 · border: 1px #00cc85 (DS node 3065:43478) -->
+      <main class="rewards-main rewards-main--merch">
+
+        <p class="merch-intro">Collect coins, redeem and enjoy these great rewards!</p>
+
+        <!-- Reward Cards grid — 4 columns desktop -->
+        <div class="merch-grid">
+
+          <!-- Card 1 — active "Show Voucher" (DS node 3065:43481) -->
+          <article class="rc">
+            <img class="rc__img"
+                 src="../image-repo/Rewards-Merchandise/Merchandise.svg"
+                 alt="Reward merchandise item">
+            <div class="rc__body">
+              <div class="rc__badges">
+                <span class="lbadge-prem">
+                  <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                  Premium
+                </span>
+                <span class="lbadge-prem">
+                  <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                  Premium Lite
+                </span>
+              </div>
+              <p class="rc__title">This is the title for the reward voucher</p>
+            </div>
+            <div class="rc__divider"></div>
+            <div class="rc__cta">
+              <div class="rc__coin">
+                <img class="rc__coin-icon"
+                     src="https://www.figma.com/api/mcp/asset/a09b2aee-e920-4da9-a373-f6136e97889e"
+                     alt="Pandai Coin">
+                <span class="rc__coin-value">120</span>
+              </div>
+              <a href="#" class="btn-show">
+                <span class="btn-show__label">Show Voucher</span>
+                <div class="btn-show__arrow">
+                  <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                </div>
+              </a>
+            </div>
+          </article>
+
+          <!-- Card 2 — active "Show Voucher" (DS node 3065:43482) -->
+          <article class="rc">
+            <img class="rc__img"
+                 src="../image-repo/Rewards-Merchandise/Merchandise-1.svg"
+                 alt="Reward merchandise item">
+            <div class="rc__body">
+              <div class="rc__badges">
+                <span class="lbadge-prem">
+                  <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                  Premium
+                </span>
+                <span class="lbadge-prem">
+                  <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                  Premium Lite
+                </span>
+              </div>
+              <p class="rc__title">This is the title for the reward voucher</p>
+            </div>
+            <div class="rc__divider"></div>
+            <div class="rc__cta">
+              <div class="rc__coin">
+                <img class="rc__coin-icon"
+                     src="https://www.figma.com/api/mcp/asset/a09b2aee-e920-4da9-a373-f6136e97889e"
+                     alt="Pandai Coin">
+                <span class="rc__coin-value">120</span>
+              </div>
+              <a href="#" class="btn-show">
+                <span class="btn-show__label">Show Voucher</span>
+                <div class="btn-show__arrow">
+                  <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                </div>
+              </a>
+            </div>
+          </article>
+
+          <!-- Card 3 — disabled "Show Voucher" (DS node 3065:43483) -->
+          <article class="rc">
+            <img class="rc__img"
+                 src="../image-repo/Rewards-Merchandise/Merchandise-2.svg"
+                 alt="Reward merchandise item">
+            <div class="rc__body">
+              <div class="rc__badges">
+                <span class="lbadge-prem">
+                  <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                  Premium
+                </span>
+                <span class="lbadge-prem">
+                  <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                  Premium Lite
+                </span>
+              </div>
+              <p class="rc__title">This is the title for the reward voucher</p>
+            </div>
+            <div class="rc__divider"></div>
+            <div class="rc__cta">
+              <div class="rc__coin">
+                <img class="rc__coin-icon"
+                     src="https://www.figma.com/api/mcp/asset/a09b2aee-e920-4da9-a373-f6136e97889e"
+                     alt="Pandai Coin">
+                <span class="rc__coin-value">120</span>
+              </div>
+              <span class="btn-show btn-show--disabled" aria-disabled="true">
+                <span class="btn-show__label">Show Voucher</span>
+                <div class="btn-show__arrow">
+                  <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                </div>
+              </span>
+            </div>
+          </article>
+
+          <!-- Card 4 — disabled "Show Voucher" (DS node 3065:43484) -->
+          <article class="rc">
+            <img class="rc__img"
+                 src="../image-repo/Rewards-Merchandise/Merchandise-3.svg"
+                 alt="Reward merchandise item">
+            <div class="rc__body">
+              <div class="rc__badges">
+                <span class="lbadge-prem">
+                  <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                  Premium
+                </span>
+                <span class="lbadge-prem">
+                  <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                  Premium Lite
+                </span>
+              </div>
+              <p class="rc__title">This is the title for the reward voucher</p>
+            </div>
+            <div class="rc__divider"></div>
+            <div class="rc__cta">
+              <div class="rc__coin">
+                <img class="rc__coin-icon"
+                     src="https://www.figma.com/api/mcp/asset/a09b2aee-e920-4da9-a373-f6136e97889e"
+                     alt="Pandai Coin">
+                <span class="rc__coin-value">120</span>
+              </div>
+              <span class="btn-show btn-show--disabled" aria-disabled="true">
+                <span class="btn-show__label">Show Voucher</span>
+                <div class="btn-show__arrow">
+                  <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                </div>
+              </span>
+            </div>
+          </article>
+
+        </div><!-- /.merch-grid -->
+      </main>
+
+    </div><!-- /.rewards-layout -->
+
+  </div><!-- /.page-content -->
+
+  <!-- Footer - 1.5 -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__left">
+        <span class="footer__text">&copy; 2026</span>
+        <a class="footer__link" href="#">Pandai.org</a>
+        <span class="footer__text">All Rights Reserved</span>
+      </div>
+      <div class="footer__right">
+        <span class="footer__text">Made with</span>
+        <svg class="footer__heart" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <span class="footer__text">in Malaysia</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Menu Modal -->
+  <div id="mmenu-overlay" class="mmenu-overlay" role="dialog" aria-modal="true" aria-label="Navigation menu" aria-hidden="true">
+
+    <!-- Mobile panel (< 768px) -->
+    <div class="mmenu-panel mmenu-panel--mobile" id="mmenu-panel-mobile">
+      <div class="mmenu-header">
+        <div class="mmenu-header-logo"><img src="../navbar/logo.png" alt="Pandai"></div>
+        <button class="mmenu-close-btn" id="mmenu-close" aria-label="Close menu" type="button">
+          <svg aria-hidden="true"><use href="#ic-x"/></svg>
+        </button>
+      </div>
+      <div class="mmenu-body">
+        <div class="mmenu-search">
+          <span class="mmenu-search-placeholder">Search</span>
+          <div class="mmenu-search-icon"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
+        </div>
+        <div class="mmenu-item mmenu-item--active">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-home"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Home</span>
+        </div>
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Quiz</span>
+        </div>
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Battle</span>
+        </div>
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-clipboard"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Practice</span>
+        </div>
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-users"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Class</span>
+          <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+        </div>
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-book"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Learn</span>
+          <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+        </div>
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Achievement</span>
+          <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+        </div>
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-star"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Potential</span>
+          <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+        </div>
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">Rewards</span>
+          <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+        </div>
+        <div class="mmenu-item">
+          <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-settings"/></svg></div>
+          <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+          <span class="mmenu-item-label">My Account</span>
+          <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+        </div>
+        <div class="mmenu-cta">
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Notification</span>
+          </div>
+          <a href="#" class="btn-dl-app">
+            <div class="btn-dl-icon"><div class="btn-dl-icon-clip"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div></div>
+            <span class="btn-dl-label">Download App</span>
+            <div class="btn-dl-arrow"><div class="btn-dl-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></div>
+          </a>
+        </div>
+        <div class="mmenu-localization">
+          <button class="mmenu-lang-btn" type="button" aria-label="English"><svg aria-hidden="true"><use href="#ic-en"/></svg></button>
+          <button class="mmenu-lang-btn" type="button" aria-label="Bahasa Melayu">BM</button>
+          <button class="mmenu-lang-btn" type="button" aria-label="Mandarin" style="font-size:8px;">中A</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tablet panel (≥ 768px) -->
+    <div class="mmenu-panel mmenu-panel--tablet" id="mmenu-panel-tablet">
+      <div class="mmenu-header">
+        <div class="mmenu-header-logo"><img src="../navbar/logo.png" alt="Pandai"></div>
+        <button class="mmenu-close-btn" aria-label="Close menu" type="button">
+          <svg aria-hidden="true"><use href="#ic-x"/></svg>
+        </button>
+      </div>
+      <div class="mmenu-body" style="padding-bottom:0">
+        <div class="mmenu-search">
+          <span class="mmenu-search-placeholder">Search</span>
+          <div class="mmenu-search-icon"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
+        </div>
+      </div>
+      <div class="mmenu-menu-row">
+        <div class="mmenu-col">
+          <div class="mmenu-item mmenu-item--active">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-home"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Home</span>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Quiz</span>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Battle</span>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-clipboard"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Practice</span>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-users"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Class</span>
+            <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+          </div>
+        </div>
+        <div class="mmenu-divider" aria-hidden="true"></div>
+        <div class="mmenu-col">
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-book"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Learn</span>
+            <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Achievement</span>
+            <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-star"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Potential</span>
+            <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Rewards</span>
+            <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+          </div>
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-settings"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">My Account</span>
+            <div class="mmenu-item-chevron"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></div>
+          </div>
+        </div>
+      </div>
+      <div class="mmenu-body" style="padding-top:0">
+        <div class="mmenu-cta mmenu-cta--tablet">
+          <div class="mmenu-item">
+            <div class="mmenu-item-icon"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+            <div class="menu-chk"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="2 6.5 5 9.5 10 3"/></svg></div>
+            <span class="mmenu-item-label">Notification</span>
+          </div>
+          <a href="#" class="btn-dl-app">
+            <div class="btn-dl-icon"><div class="btn-dl-icon-clip"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div></div>
+            <span class="btn-dl-label">Download App</span>
+            <div class="btn-dl-arrow"><div class="btn-dl-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></div>
+          </a>
+        </div>
+        <div class="mmenu-localization">
+          <button class="mmenu-lang-btn" type="button" aria-label="English"><svg aria-hidden="true"><use href="#ic-en"/></svg></button>
+          <button class="mmenu-lang-btn" type="button" aria-label="Bahasa Melayu">BM</button>
+          <button class="mmenu-lang-btn" type="button" aria-label="Mandarin" style="font-size:8px;">中A</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /#mmenu-overlay -->
+
+  <script>
+    // Mobile/tablet menu modal — open/close
+    (function() {
+      const overlay = document.getElementById('mmenu-overlay');
+      const menuBtn = document.querySelector('.navbar-mobile__menu-btn');
+      const openMenu  = () => { overlay.classList.add('is-open');    overlay.setAttribute('aria-hidden', 'false'); };
+      const closeMenu = () => { overlay.classList.remove('is-open'); overlay.setAttribute('aria-hidden', 'true');  };
+      if (menuBtn) menuBtn.addEventListener('click', openMenu);
+      overlay.querySelectorAll('.mmenu-close-btn').forEach(btn => btn.addEventListener('click', closeMenu));
+      overlay.addEventListener('click', e => { if (e.target === overlay) closeMenu(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+    })();
+
+    // Navbar primary icon pressed state
+    document.querySelectorAll('.navbar-primary-icon').forEach(btn => {
+      btn.addEventListener('mousedown',  () => btn.classList.add('is-pressed'));
+      const clearPressed = () => btn.classList.remove('is-pressed');
+      btn.addEventListener('mouseup',    clearPressed);
+      btn.addEventListener('mouseleave', clearPressed);
+    });
+
+    // Nav item pressed state
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('mousedown', () => item.classList.add('is-pressed'));
+      const clearPressed = () => item.classList.remove('is-pressed');
+      item.addEventListener('mouseup', clearPressed);
+      item.addEventListener('mouseleave', clearPressed);
+    });
+
+    // Sidebar active state
+    try {
+      document.querySelectorAll('.sidebar-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('sidebar-btn--active'));
+          btn.classList.add('sidebar-btn--active');
+        });
+      });
+    } catch(e) { console.warn('sidebar init:', e); }
+  </script>
+
+</body>
+</html>

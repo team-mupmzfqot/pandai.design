@@ -303,41 +303,44 @@ All known subject icon names (May 2026):
 **Geography note:** SVG export is 27,907 chars (complex globe). Use simplified DS-colored globe SVG instead.
 
 #### 17b. Badge bg / border / text colors
-Source from `Subject Badge/[Name] - M` (24px) or `Subject Badge/[Name] - L` (32px) components on the Iconography page. **Never approximate with Tailwind color tokens.**
+Source from `Subject Badge/[Name]` COMPONENT_SET on **`⚙️ Badges` page** (not Iconography). Each set has `Size=M` (32px) and `Size=S` (24px) variants. **Never approximate with Tailwind color tokens.**
 
-**Lookup:** `findAll(n => n.type === 'COMPONENT' && n.name === 'Subject Badge/[Name] - M')` on Iconography page.
+**Lookup:** `findAll(n => n.type === 'COMPONENT_SET' && n.name.startsWith('Subject Badge/'))` on Badges page.
 
-**L vs M:** bg colors are identical between sizes. Border colors differ slightly for some subjects (Add Math, Account). Since quiz cards use M size (24px), always check M variants for quiz card badges.
+**M vs S:** bg and border colors identical between sizes. Size=M = 32px (previously called "L"), Size=S = 24px (previously called "M"). Since quiz cards use S size (24px), always check S variants for quiz card badges.
 
 **Text color rule:** Almost all subjects use `#f2f2f2` (light text on dark bg). Exceptions — dark text on light bg:
 - `Science`: `--badge-text: #998027` (yellow bg)
-- `KAFA`: `--badge-text: #358a62` (mint green bg)
+- `KAFA`: `--badge-text: #538865` (mint green bg)
+- `Geography`: `--badge-text: #478220` (light green bg)
 
-**Confirmed badge colors — M variants (May 2026), all from DS Iconography:**
+**Confirmed badge colors — S variants (confirmed 2026-05-17, live DS audit), all from `⚙️ Badges` page:**
 
 | Subject | `--badge-bg` | `--badge-border` | Text |
 |---|---|---|---|
-| Add Math | `#283589` | `#202a6e` | `#f2f2f2` |
-| Account | `#0072ca` | `#005ba2` | `#f2f2f2` |
-| Bahasa Melayu | `#4d77ff` | `#3e5fcc` | `#f2f2f2` |
+| Add Math | `#283589` | `#182052` | `#f2f2f2` |
+| Account | `#0072ca` | `#004479` | `#f2f2f2` |
+| Bahasa Melayu | `#4d77ff` | `#2e4799` | `#f2f2f2` |
 | Biology | `#8431d8` | `#6a27ad` | `#f2f2f2` |
 | Business | `#efb42b` | `#bf9022` | `#f2f2f2` |
 | Chemistry | `#e20082` | `#b50068` | `#f2f2f2` |
+| Chinese Language | `#f94848` | `#c73a3a` | `#f2f2f2` |
 | Computer Science | `#d10070` | `#a7005a` | `#f2f2f2` |
 | Economy | `#ff5733` | `#cc4629` | `#f2f2f2` |
 | English | `#ff4d56` | `#cc3e45` | `#f2f2f2` |
-| Geography | `#77d836` | `#5fad2b` | `#f2f2f2` |
+| Geography | `#77d836` | `#5fad2b` | `#478220` |
 | History | `#a97c50` | `#876340` | `#f2f2f2` |
 | Islamic Studies | `#de4d7f` | `#b23e66` | `#f2f2f2` |
-| KAFA | `#8ae3a9` | `#6eb687` | `#358a62` |
+| KAFA | `#8ae3a9` | `#6eb687` | `#538865` |
 | Mathematics | `#42ac7b` | `#358a62` | `#f2f2f2` |
 | Moral Studies | `#0072ca` | `#005ba2` | `#f2f2f2` |
 | Physics | `#27a0d7` | `#1f80ac` | `#f2f2f2` |
+| Primary/Default | `#00cc85` | `#00a36a` | `#f2f2f2` |
 | RBT | `#353535` | `#2a2a2a` | `#f2f2f2` |
 | Science | `#ffd641` | `#ccab34` | `#998027` |
 
 **Structure confirmed (DS node inspection, May 2026):**
-- Overall: `height: 24px` (M), `border-radius: 60px`, `overflow: hidden`
+- Overall: `height: 32px` (M) / `24px` (S), `border-radius: 60px`, `overflow: hidden`
 - Icon slot: `padding: 4px 8px 4px 12px`, white bg, `width: 34px`
 - Label panel: `padding: 0 16px 0 12px`, `gap: 8px`, subject bg color
 - Pointer: 4×8px white SVG, `position: absolute; left: 0; top: 50%`
@@ -346,7 +349,10 @@ Source from `Subject Badge/[Name] - M` (24px) or `Subject Badge/[Name] - L` (32p
 **Mistakes made (May 2026):**
 - Used Tailwind/guessed colors for 8 subjects — RBT, KAFA, Account, Add Math, Economy, Business, CS, BM all had wrong bg and/or border colors.
 - Business text was set to `#78350F` (dark) — DS actually uses `#f2f2f2` (light).
-- KAFA text was missing `--badge-text: #358a62` override — rendered white text on mint green (unreadable).
+- KAFA text was initially documented as `#358a62` — live DS audit 2026-05-17 confirmed correct value is `#538865`.
+- Geography text exception was undocumented — DS uses `#478220` (dark green) on light green bg. Missing override renders white text on `#77d836` (unreadable).
+- Component location was wrong — badges are on `⚙️ Badges` page (COMPONENT_SETs), not Iconography page.
+- Size names changed: old L/M are now DS M/S. Same px values (32px/24px), just renamed.
 
 ---
 
@@ -1119,22 +1125,54 @@ The canonical color reference for this repo is [`design.color.md`](design.color.
 
 ---
 
+### 49. Always audit component anatomy before implementing any component
+
+Before writing a single CSS rule or HTML element for a DS component, always inspect its full anatomy:
+
+1. **Nested Instances** — every child instance (e.g. `Dropdown - Parts` inside `Profile Menu - 1.5`, `Button - 1.5` inside a card) is its own component set with its own states. Look each one up separately via `get_design_context` on the nested component's own node.
+2. **Variants** — list ALL variants in the component set before writing any code. Never assume what variants exist from the component name alone.
+3. **States** — pull every interactive state (Default, Hover, Pressed/Active, Selected, Disabled, Focus) via `get_design_context` BEFORE writing any `:hover`, `:active`, or JS class CSS.
+4. **Properties** — check boolean props (`visible`, `showIcon`, `showLabel`) and enum props (`type`, `size`, `role`). `visible: false` children must not be rendered; different `type` values can change the entire layout.
+
+**Workflow (mandatory):**
+```
+1. get_design_context on the COMPONENT SET node → read all variant names
+2. get_design_context on each relevant state variant → extract tokens per state
+3. For each nested instance → repeat steps 1–2 on that sub-component's own set
+4. Only then write HTML and CSS
+```
+
+**Mistake made (May 2026 — Dropdown - Parts / Profile Menu):**
+Implemented profile menu items from the Profile Menu `get_design_context` output only, which showed the Default state. Did not separately audit `Dropdown - Parts` (node `1342:4370`). The DS Hover state uses `#e8fbe8` bg + `1px solid #00cc85` border + **pill border-radius (108px)** + `#00cc85` label — none of which is visible from the Default state alone. Hover styles had to be corrected after the fact.
+
+---
+
 ### Mandatory workflow — BEFORE every session and every change
 
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision — including seemingly trivial fixes. No exceptions.
 
 ```
-0a. Read zul.design.md   → load all confirmed specs, session rules, known mistakes
-0b. Refer to live DS     → TLVKe3bgJTdVvuPAzgDq2f — single source of truth
-1.  search_design_system → confirm component exists in DS, get component key
-2.  use_figma            → find node ID across pages
-3.  get_design_context   → pull exact token bindings, dimensions, structure per variant
-4.  get_variable_defs    → confirm Semantic token names used on the node
-5.  Implement            → use only token values from steps 3–4, no assumptions
-6.  Validate             → compare against get_screenshot
+0a. Read design-md/zul.design.md  → ALL rules 1–105, confirmed specs, known mistakes — NO EXCEPTIONS
+0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f         → single source of truth, re-verify every value live
+0c. Audit component anatomy (Rule 49 / zul Rule 93):
+      → get_design_context on COMPONENT_SET node → list ALL variants
+      → get_design_context on EACH state variant → extract every token per state
+      → For EACH nested sub-component → repeat the above on its own COMPONENT_SET
+      → Check componentPropertyDefinitions → confirm visible/hidden/swap properties
+0d. For spacing/positioning: read DS screen frame children y-coordinates (zul Rules 94–95)
+      → gap = B.y − (A.y + A.h)  |  dropdown top = target element's y in screen frame
+0e. get_variable_defs on exact sub-nodes    → confirm Semantic token per fill/stroke/spacing
+0f. Cross-check CSS var against :root hex   → never guess token from name (Rule 83)
+0g. For icons: confirm viewBox + path scale + CSS dimensions all consistent (Rule 87)
+1.  search_design_system → confirm component in DS, get component key
+2.  use_figma            → find node IDs across pages
+3.  get_design_context   → pull token bindings, dimensions, structure per variant
+4.  get_variable_defs    → confirm Semantic token names on exact sub-nodes
+5.  Implement            → use only DS-confirmed values, zero assumptions
+6.  Validate             → compare against get_screenshot, fix before moving on
 ```
 
-> The biggest errors in this project come from skipping Step 0 and relying on memory. Even "small" fixes require DS inspection — the logo gap, the wordmark height, and the container width were all wrong without it. See Rule 73.
+> **Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes — all traceable to not reading zul.design.md and not auditing DS first. A 2-minute inspection always saves more time than the bug it prevents. See Rules 73, 83, 86, 93.
 
 ---
 
@@ -1559,4 +1597,121 @@ Start-Process "vscode://vscode.simpleBrowser/show?url=http%3A%2F%2Flocalhost%3A3
 
 ---
 
-*Generated: May 2026 | Last updated: May 2026 | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### 50. Complex illustrated DS icons — always export as 2× PNG, never SVG
+
+`Feature/*` icons (Learn Menu, feature tiles) are multi-colour isometric illustrations with 15–56KB of SVG data per icon. They exceed the tool output limit and cannot be exported as SVG in a single call.
+
+**Rule:** Before any icon batch export, check SVG sizes. If any icon > 12KB → use PNG for the entire batch. Do not attempt SVG chunking.
+
+```js
+// Step 1 — size check
+const svg = await node.exportAsync({ format: 'SVG_STRING' });
+// if svg.length > 12000 → switch to PNG
+
+// Step 2 — PNG export
+const bytes = await node.exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 2 } });
+const b64 = btoa(String.fromCharCode(...bytes));
+```
+
+**Learn Menu exception (confirmed May 2026):** All 12 `Feature/*` icons use 2× PNG. This is the authorised exception. The icons are authentic Figma exports.
+
+**Mistake made:** Alternated between SVG → chunked SVG → PNG across multiple sessions. Commit to one format before the first export call.
+
+---
+
+### 51. Bulk HTML removal — always grep-verify section tag balance before and after
+
+When removing a block of HTML by line range, wrapper closing tags (`</section>`, `</div>`) may sit just outside the removed range and get orphaned or accidentally included.
+
+**Mandatory checks:**
+```bash
+# Before removal — establish baseline
+grep -n "<section\|</section>" file.html
+
+# After removal — confirm every open has a close
+grep -n "<section\|</section>" file.html
+```
+
+Both counts must match. If any `<section id="...">` has no corresponding `</section>`, fix it before committing.
+
+**Mistake made (May 2026):** Removed Learn Menu HTML (lines 2150–2182). The `</section><!-- end NavbarPrimary-Desktop -->` at line 2073 was preserved in the slice range but ended up missing — breaking the HTML nesting. Result: all subsequent sections (NavTopMenu, main content) were rendered inside NavbarPrimary-Desktop, breaking page padding and responsive breakpoints. Root cause: trusted line-number math without verifying structural tag integrity.
+
+---
+
+---
+
+### 52. Navbar action button → dropdown: full anatomy checklist
+
+Every action button in `#NavbarPrimary-Desktop` that opens a dropdown (bell, EN/locale, smartphone/download, waffle/learn) requires ALL FOUR of these. Missing any one breaks the behaviour.
+
+1. **Button HTML** — `id`, `aria-haspopup="true"`, and `<div class="nav-btn-union-bg">` as first child of `nav-btn-content`. Without `nav-btn-union-bg`, `.is-active` shows no speech-bubble.
+2. **Dropdown HTML** — `<div class="my-dropdown" id="DROPDOWN-ID">` placed inside `#NavbarPrimary-Desktop` (after the `.navbar-primary` closing div).
+3. **CSS** — same pattern as all other nav dropdowns: white bg, `1px solid #00cc85` border, `24px` radius, `16px` padding, `top: 80px` (confirmed for ALL nav dropdowns), `opacity + translateY(-8px)` animation.
+4. **JS IIFE** — `positionDropdown()` (right-align to button), click toggle, `mouseleave` close, outside-click close, close-all-others block (Rule 53).
+
+See `design-md/zul.design.md` Rule 106 for the full code templates.
+
+---
+
+### 53. All navbar dropdowns are mutually exclusive — every click handler must close all others
+
+Only one dropdown can be open at a time. Every button click handler must close ALL other nav dropdowns (and deactivate their buttons) before opening its own.
+
+**When adding a new dropdown:** Update EVERY existing click handler to include the new dropdown ID in its closing block. The current roster (May 2026): `profile-dropdown`, `learn-dropdown` / `waffle-btn`, `locale-dropdown` / `locale-btn`, `notif-dropdown` / `notif-btn`, `download-dropdown` / `download-btn`.
+
+See `design-md/zul.design.md` Rule 107 for the full closing-block code pattern.
+
+---
+
+### 54. Notification item (Navbar Notification Button - Parts) — structural state, not color-only
+
+The DS component changes LAYOUT between Default and Hover/Pressed, not just color:
+- **Default**: inner row has `border-bottom: 1px solid #d9d9d9` + `padding-bottom: 12px`. Content frame: `pt-12 px-12 pb-0`, no border.
+- **Hover**: content frame gets `box-shadow: inset 0 0 0 1px #00cc85` + `border-radius: 16px` + `padding: 12px`. Inner row border disappears (`border-bottom-color: transparent`, `padding-bottom: 0`). Text: `#00564c`.
+- **Pressed**: same as hover but bg: `Surface/primary/focus #00a36a`. Text: `#00cc85`.
+
+Avatar: 60×60 clip, `ic-user-circle` at 50px (DS `inset: 8.33%` = 5px each side). See `design-md/zul.design.md` Rule 108 for the full CSS pattern.
+
+---
+
+### 55. Coloured brand/store icons → 2× PNG, not SVG symbols
+
+App store icons (Google Play, Apple App Store, Huawei AppGallery) have multiple hard-coded fill colors — they cannot be used as `stroke="currentColor"` SVG symbols. Export as 2× PNG even though they are small (1–5KB).
+
+**Decision rule:** single-color outline icon → SVG symbol. Multi-color / filled icon → 2× PNG.
+
+Use `object-fit: contain` on the `<img>` — Play Store's native height is 26.8px (not 24px), and `object-fit: contain` letterboxes it correctly within a 24×24 CSS box. Use `<a>` elements (not `<div>`) for download items — semantic and gets hover/active on mobile correctly.
+
+See `design-md/zul.design.md` Rule 109 for confirmed DS node IDs and file sizes.
+
+---
+
+### Mandatory workflow — BEFORE every session and every change
+
+**Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision — including seemingly trivial fixes. No exceptions.
+
+```
+0a. Read design-md/zul.design.md  → ALL rules 1–109, confirmed specs, known mistakes — NO EXCEPTIONS
+0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f         → single source of truth, re-verify every value live
+0c. Audit component anatomy (Rule 49 / zul Rule 93):
+      → get_design_context on COMPONENT_SET node → list ALL variants
+      → get_design_context on EACH state variant → extract every token per state
+      → For EACH nested sub-component → repeat the above on its own COMPONENT_SET
+      → Check componentPropertyDefinitions → confirm visible/hidden/swap properties
+0d. For spacing/positioning: read DS screen frame children y-coordinates (zul Rules 94–95)
+0e. get_variable_defs on exact sub-nodes    → confirm Semantic token per fill/stroke/spacing
+0f. Cross-check CSS var against :root hex   → never guess token from name (Rule 83)
+0g. For icons: confirm viewBox + path scale + CSS dimensions all consistent (Rule 87)
+1.  search_design_system → confirm component in DS, get component key
+2.  use_figma            → find node IDs across pages
+3.  get_design_context   → pull token bindings, dimensions, structure per variant
+4.  get_variable_defs    → confirm Semantic token names on exact sub-nodes
+5.  Implement            → use only DS-confirmed values, zero assumptions
+6.  Validate             → compare against get_screenshot, fix before moving on
+```
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-18 (Rules 52–55 — nav dropdown anatomy, mutual exclusivity, notification structural states, store icon PNG) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

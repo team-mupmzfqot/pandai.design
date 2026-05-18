@@ -25,6 +25,7 @@
       --surface-primary-default-subtle-hover:  #99ebce;
       --surface-secondary-default:             #b5f291;  /* Surface/secondary/default */
       --surface-secondary-default-subtle:      #e8fbe8;  /* Surface/secondary/default-subtle */
+      --surface-secondary-default-hover:       #f6fef6;  /* Surface/secondary/default-hover — profile menu header bg */
       --surface-disabled-primary:        #f2f2f2;
       --surface-tertiary-default:        #00564c;   /* Surface/tertiary/default — pressed state bg */
 
@@ -36,8 +37,9 @@
       --text-default-body:        #666666;   /* Text/default/body â€” used in navbar, footer */
       --text-default-secondary:   #6B7280;
       --text-default-placeholder: #f2f2f2;   /* Text/default/placeholder â€” subject badge label */
-      --text-primary-default:     #00cc85;
-      --text-primary-on-color:    #f6fdfb;   /* Text/primary/on-color — confirmed via get_variable_defs */
+      --text-primary-default:       #00cc85;
+      --text-primary-default-hover: #00a36a;   /* Text/primary/default-hover — Dropdown Selected label */
+      --text-primary-on-color:      #f6fdfb;   /* Text/primary/on-color — confirmed via get_variable_defs */
       --text-secondary-focus:     #70bc6f;  /* Text/secondary/focus */
       --text-on-color-heading:    #FFFFFF;   /* Text/on-color/heading â€” status pill */
       --text-disabled-default:    #bfbfbf;
@@ -948,7 +950,7 @@
     .subject-badge--chemistry { --badge-border: #b50068; --badge-bg: #e20082; }
     .subject-badge--physics   { --badge-border: #1f80ac; --badge-bg: #27a0d7; }
     .subject-badge--history   { --badge-border: #876340; --badge-bg: #a97c50; }
-    .subject-badge--geo       { --badge-border: #5fad2b; --badge-bg: #77d836; }
+    .subject-badge--geo       { --badge-border: #5fad2b; --badge-bg: #77d836; --badge-text: #478220; }
     .subject-badge--islamic   { --badge-border: #b23e66; --badge-bg: #de4d7f; }
     .subject-badge--moral     { --badge-border: #005ba2; --badge-bg: #0072ca; }
     .subject-badge--biology   { --badge-border: #6a27ad; --badge-bg: #8431d8; }
@@ -1184,7 +1186,7 @@
        Logo left · action icons + avatar right
        Border: b/l/r only · radius: 0 0 24px 24px
     ───────────────────────────────────────────────────── */
-    #NavbarPrimary-Desktop { display: block; padding: 0 var(--page-padding-x); }
+    #NavbarPrimary-Desktop { display: block; padding: 0 var(--page-padding-x); position: relative; }
 
     /* Navbar Top (node 1084:1787): flex, gap-28, items-center, px-60, py-8 */
     .navbar-primary {
@@ -1198,7 +1200,7 @@
       gap:           var(--spacing-space-2xl);   /* 28px — Spacing/space-2xl */
       padding:       var(--spacing-space-xs) var(--spacing-space-xl);   /* 8px · 24px — DS px-[Spacing/space-xl] */
       height:        64px;
-      overflow:      hidden;
+      overflow:      visible;   /* must be visible so Union tail (44×52) clears the navbar bottom edge */
     }
 
     /* Logo/Pandai/Logo Horizontal (node 1898:6965): height-only constraint, width auto */
@@ -1240,39 +1242,101 @@
       flex-shrink:     0;
     }
 
-    /* Nav Button - Parts (DS node 3427:63384): white bg, 10px padding, radius 8px (Radius/xl) */
+    /* Nav Button - 1.5 (DS node 3908:6148) — outer wrapper, no visual styling
+       Structure: button > .nav-btn-content > [.nav-btn-rect + .nav-btn-icon-clip] (+ .nav-btn-union-bg for waffle) */
     .navbar-action-btn {
-      background:      var(--surface-general-default);
-      border:          none;
-      padding:         10px;
-      border-radius:   8px;   /* Radius/xl */
-      cursor:          pointer;
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      flex-shrink:     0;
-      color:           var(--icon-default-default);   /* #808080 */
+      border:             none;
+      background:         transparent;
+      padding:            0;
+      cursor:             pointer;
+      -webkit-appearance: none;
+      appearance:         none;
+      outline:            none;
+      display:            flex;
+      align-items:        center;
+      justify-content:    center;
+      width:              44px;
+      height:             44px;
+      min-width:          44px;
+      flex-shrink:        0;
+      position:           relative;
+      overflow:           visible;
     }
-    .navbar-action-btn svg { display: block; width: 24px; height: 24px; flex-shrink: 0; }
+    .navbar-action-btn:focus        { outline: none; }
+    .navbar-action-btn:focus-visible { outline: none; }
 
-    /* Hover — Surface/secondary/default-subtle #e8fbe8 · 1px #00cc85 · Icon/primary/default */
-    .navbar-action-btn:hover {
-      background: var(--surface-secondary-default-subtle);
-      box-shadow: inset 0 0 0 1px var(--icon-primary-default);
-      color:      var(--icon-primary-default);
+    /* Content frame — DS: 44×44, flex items-start justify-between, relative */
+    .nav-btn-content {
+      position:        relative;
+      width:           44px;
+      height:          44px;
+      display:         flex;
+      align-items:     flex-start;
+      justify-content: space-between;
+      flex-shrink:     0;
     }
-    /* Pressed — Surface/tertiary/default #00564c · 1px #00cc85 · Icon/primary/default */
-    .navbar-action-btn:active {
-      background: var(--surface-tertiary-default);
-      box-shadow: inset 0 0 0 1px var(--icon-primary-default);
-      color:      var(--icon-primary-default);
+
+    /* Rectangle 10 — DS: bg square, 44×44, 8px radius, state-driven fills */
+    .nav-btn-rect {
+      width:         44px;
+      height:        44px;
+      background:    var(--surface-general-default);   /* Default: white */
+      border-radius: 8px;
+      flex-shrink:   0;
+      transition:    background 0.12s ease, box-shadow 0.12s ease;
     }
-    /* Active (toggled) — Surface/primary/default #00cc85 · 1px #00a36a · Icon/primary/on-color */
-    .navbar-action-btn.is-active {
-      background: var(--surface-primary-default);
-      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
-      color:      var(--text-primary-on-color);
+    .navbar-action-btn:hover   .nav-btn-rect { background: var(--surface-secondary-default-subtle); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+    .navbar-action-btn:active  .nav-btn-rect { background: var(--surface-primary-focus);            box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+    .navbar-action-btn.is-active .nav-btn-rect { background: transparent; box-shadow: none; }
+
+    /* Icon clip — DS: absolute left-50% top-50% translate-center, overflow-clip, 24×24 */
+    .nav-btn-icon-clip {
+      position:  absolute;
+      left:      50%;
+      top:       50%;
+      transform: translate(-50%, -50%);
+      width:     24px;
+      height:    24px;
+      overflow:  hidden;
+      z-index:   1;
     }
+    .nav-btn-icon-clip svg {
+      display:    block;
+      width:      24px;
+      height:     24px;
+      flex-shrink: 0;
+      color:      var(--icon-default-default);   /* Default: #808080 */
+      transition: color 0.12s ease;
+    }
+    .navbar-action-btn:hover  .nav-btn-icon-clip svg { color: var(--icon-primary-default); }
+    .navbar-action-btn:active .nav-btn-icon-clip svg { color: var(--icon-primary-default); }
+    .navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--text-primary-on-color); }   /* DS node 3908:6163: rgb(246,253,251) = #f6fdfb */
+
+    /* Union bg — DS Active state speech-bubble (node 3908:6165): 44×51.172
+       Outer = Border/primary/focus (#00a36a), inner ::before = Surface/primary/default (#00cc85)
+       scale(0.9545, 0.9609) from center ≈ 1px inset per side (DS inner stroke) */
+    .nav-btn-union-bg {
+      position:    absolute;
+      top:         0;
+      left:        0;
+      width:       44px;
+      height:      51.172px;
+      background:  var(--surface-primary-focus);   /* #00a36a — DS stroke color */
+      clip-path:   path('M36 0C40.4183 0 44 3.58172 44 8V36C44 40.4183 40.4183 44 36 44H31.6569C30.596 44 29.5786 44.4214 28.8284 45.1716L23.4141 50.5859C22.6331 51.3668 21.3669 51.3668 20.5859 50.5859L15.1716 45.1716C14.4214 44.4214 13.404 44 12.3431 44H8C3.58172 44 0 40.4183 0 36V8C0 3.58172 3.58172 0 8 0H36Z');
+      display:     none;
+      pointer-events: none;
+      z-index:     0;
+    }
+    .nav-btn-union-bg::before {
+      content:          '';
+      position:         absolute;
+      inset:            0;
+      background:       var(--surface-primary-default);  /* #00cc85 — fill color */
+      clip-path:        inherit;
+      transform:        scale(0.9545, 0.9609);
+      transform-origin: 50% 50%;
+    }
+    .navbar-action-btn.is-active .nav-btn-union-bg { display: block; }
 
     /* Avatar - 1.5 (node 684:621): flex items-start · 48×48 · border · overflow-clip */
     .navbar-avatar {
@@ -1288,6 +1352,8 @@
       overflow:      hidden;
       position:      relative;
       flex-shrink:   0;
+      cursor:        pointer;
+      user-select:   none;
     }
     /* Outline/user (node 684:622): IMAGE fill · 60×60px · position x:-6 y:0
        DS node inspection: w:60 h:60 x:-6 y:0 fill=IMAGE scaleMode=FILL */
@@ -1324,15 +1390,603 @@
       pointer-events:  none;
     }
 
-    /* ─────────────────────────────────────────────────────
-       NAV TOP MENU DESKTOP — Nav Top Menu Desktop - 1.5
-       DS node 3406:789 (Type=Desktop) / inner "Navbar Content" 3406:802
-       Pill container · 9 nav buttons · hover + active states
-    ───────────────────────────────────────────────────── */
+    /* ─── Profile Menu - 1.5 (DS node 3908:3679)
+       320px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding · 8px gap
+       Anchored to #NavbarPrimary-Desktop (position:relative) at right:page-padding-x, top:68px
+    ─────────────────────────────────────────────────────────────────────────────────────── */
+    .profile-dropdown {
+      position:       absolute;
+      top:            80px;   /* DS: NavMenu y=80 — top-to-top aligned with Menu Bar */
+      right:          var(--page-padding-x);
+      z-index:        500;
+      width:          320px;
+      background:     var(--surface-general-default);
+      border:         1px solid var(--border-primary-default);
+      border-radius:  var(--corner-radius-corner-4xl);
+      padding:        var(--spacing-space-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xs);
+
+      /* Closed state */
+      opacity:        0;
+      transform:      translateY(-8px);
+      pointer-events: none;
+      visibility:     hidden;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
+    }
+    .profile-dropdown.is-open {
+      opacity:        1;
+      transform:      translateY(0);
+      pointer-events: auto;
+      visibility:     visible;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
+    }
+
+    /* ─── Learn Menu - 1.5 (DS node 3908:5091)
+       364px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
+       Anchored to #NavTopMenu-Desktop (position:relative) below the nav pill
+       JS positions .style.right to right-align dropdown to waffle button's right edge
+    ─────────────────────────────────────────────────────────────────────── */
+    .learn-dropdown {
+      position:       absolute;
+      top:            80px;   /* DS confirmed: Navbar h:64 + 16px gap = 80 (same as all other nav dropdowns) */
+      right:          0;      /* JS overrides — right-aligned to waffle btn right edge, extends leftward */
+      left:           auto;
+      z-index:        500;
+      width:          365px;  /* DS node 3908:5492: w=365px */
+      background:     var(--surface-general-default);
+      border:         1px solid var(--border-primary-default);
+      border-radius:  var(--corner-radius-corner-4xl);
+      padding:        var(--spacing-space-m);
+
+      opacity:        0;
+      transform:      translateY(-8px);
+      pointer-events: none;
+      visibility:     hidden;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
+    }
+    .learn-dropdown.is-open {
+      opacity:        1;
+      transform:      translateY(0);
+      pointer-events: auto;
+      visibility:     visible;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
+    }
+
+    /* 3×4 grid — DS: grid-cols:3, min-h per cell 114px */
+    .learn-dropdown__grid {
+      display:               grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Cell — DS State=Default: transparent bg, no border, 12px radius, flex-col, gap 4px, p-8px */
+    .learn-dropdown__item {
+      display:         flex;
+      flex-direction:  column;
+      align-items:     center;
+      justify-content: center;
+      gap:             var(--spacing-space-xxs);
+      padding:         var(--spacing-space-xs);
+      border-radius:   var(--corner-radius-corner-lg);
+      min-height:      114px;
+      cursor:          pointer;
+      user-select:     none;
+      transition:      background 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    /* Hover — DS State=Hover: bg #e8fbe8, inset border #00cc85, text #00564c */
+    .learn-dropdown__item:hover {
+      background: var(--surface-secondary-default-subtle);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .learn-dropdown__item:hover .learn-dropdown__label {
+      color: var(--text-tertiary-default);
+    }
+
+    /* DS Selected: bg #b5f291, border #70bc6f, text #00564c
+       Use :is() to beat :hover specificity so hover doesn't override selected */
+    .learn-dropdown__item.is-selected,
+    .learn-dropdown__item.is-selected:hover {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .learn-dropdown__item.is-selected .learn-dropdown__label,
+    .learn-dropdown__item.is-selected:hover .learn-dropdown__label {
+      color: var(--text-tertiary-default);
+    }
+
+    /* 70×70 illustrated icon — PNG per Rule 50 */
+    .learn-dropdown__icon {
+      width:      70px;
+      height:     70px;
+      object-fit: contain;
+      display:    block;
+      flex-shrink: 0;
+    }
+
+    /* Label — DS State=Default: 14px SemiBold, #404040 (Text/default/heading, varName 106:34) */
+    .learn-dropdown__label {
+      font-family: var(--font-family);
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       var(--text-default-heading);
+      text-align:  center;
+      transition:  color 0.12s ease;
+    }
+
+    /* Header: light mint bg, 1px green border, 16px radius, py 16px, items centered */
+    .profile-dropdown__header {
+      background:     var(--surface-secondary-default-hover);
+      border:         1px solid var(--border-primary-default);
+      border-radius:  var(--corner-radius-corner-2xl);
+      padding:        var(--spacing-space-m) 0;
+      display:        flex;
+      flex-direction: column;
+      gap:            10px;
+      align-items:    center;
+      width:          100%;
+    }
+
+    /* Avatar wrapper — 64×64, holds absolute badge */
+    .profile-dropdown__avatar-wrap {
+      position:   relative;
+      width:      64px;
+      height:     64px;
+      flex-shrink: 0;
+    }
+    .profile-dropdown__avatar {
+      width:         64px;
+      height:        64px;
+      border-radius: var(--corner-radius-corner-rounded);
+      border:        1px solid var(--border-default);
+      background:    var(--surface-general-default);
+      overflow:      hidden;
+    }
+    .profile-dropdown__avatar img {
+      width:    100%;
+      height:   100%;
+      object-fit: cover;
+      display:  block;
+    }
+    .profile-dropdown__avatar-badge {
+      position:        absolute;
+      top:             0;
+      right:           0;
+      background:      var(--surface-primary-default);
+      color:           var(--text-primary-on-color);
+      font-size:       10px;
+      font-weight:     600;
+      line-height:     12px;
+      min-width:       20px;
+      height:          20px;
+      border-radius:   var(--corner-radius-corner-rounded);
+      padding:         4px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+    }
+
+    /* Name / username block */
+    .profile-dropdown__info {
+      display:        flex;
+      flex-direction: column;
+      align-items:    center;
+      width:          100%;
+      gap:            0;
+    }
+    .profile-dropdown__name-row {
+      display:         flex;
+      gap:             var(--spacing-space-xxs);
+      align-items:     center;
+      justify-content: center;
+    }
+    .profile-dropdown__name {
+      font-size:   18px;
+      font-weight: 700;
+      line-height: 28px;
+      color:       var(--text-tertiary-default);
+      white-space: nowrap;
+    }
+    /* Icon Badge - 1.5: 12×12, blue, 1px white border, 2px padding */
+    .profile-dropdown__verified {
+      width:           12px;
+      height:          12px;
+      background:      #00a2e8;
+      border:          1px solid white;
+      border-radius:   var(--corner-radius-corner-rounded);
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+      overflow:        hidden;
+      padding:         2px;
+      color:           white;
+    }
+    .profile-dropdown__username {
+      font-size:   12px;
+      font-weight: 500;
+      line-height: 12px;
+      color:       var(--text-default-body);
+      white-space: nowrap;
+    }
+    /* Pill Badge - 1.5: white bg, 1px green border, pill radius */
+    .profile-dropdown__plan {
+      background:    var(--surface-general-default);
+      border:        1px solid var(--border-primary-default);
+      border-radius: var(--corner-radius-corner-rounded);
+      padding:       2px var(--spacing-space-xs);
+      font-size:     10px;
+      font-weight:   500;
+      line-height:   12px;
+      color:         var(--text-primary-default);
+      white-space:   nowrap;
+    }
+    /* Upgrade link: Filled/star icon + text, gap 8px */
+    .profile-dropdown__upgrade {
+      display:     flex;
+      gap:         var(--spacing-space-xs);
+      align-items: center;
+      color:       var(--text-primary-default);
+      font-size:   14px;
+      font-weight: 400;
+      line-height: 20px;
+      white-space: nowrap;
+      cursor:      pointer;
+    }
+    .profile-dropdown__upgrade svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--icon-primary-default); }
+
+    /* Menu section */
+    .profile-dropdown__menu {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xs);
+      width:          100%;
+      background:     var(--surface-general-default);
+    }
+    /* Dropdown - Parts (DS node 1342:4370, Type=Check List/Main List)
+       Default: plain row · Hover: #e8fbe8 bg + 1px #00cc85 border + pill radius + green label
+       Active: #b5f291 bg + 1px #00a36a border (Selected palette) */
+    .profile-dropdown__item {
+      display:       flex;
+      gap:           10px;
+      align-items:   center;
+      padding:       var(--spacing-space-xs) var(--spacing-space-m);   /* 8px 16px */
+      cursor:        pointer;
+      border-radius: var(--corner-radius-corner-pill);   /* 108px — pill on hover per DS */
+      user-select:   none;
+      transition:    background 0.12s ease, box-shadow 0.12s ease;
+    }
+    /* Hover — Surface/secondary/default-subtle #e8fbe8 · 1px Border/primary/default #00cc85 */
+    .profile-dropdown__item:hover {
+      background: var(--surface-secondary-default-subtle);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .profile-dropdown__item:hover .profile-dropdown__item-label {
+      color: var(--text-primary-default);   /* #00cc85 — Text/primary/default */
+    }
+    /* Active/Pressed — Selected-state palette: Surface/secondary/default #b5f291 · Border/primary/focus #00a36a */
+    .profile-dropdown__item:active {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+    }
+    .profile-dropdown__item:active .profile-dropdown__item-label {
+      color: var(--border-primary-focus);   /* #00a36a — Text/primary/default-hover */
+    }
+    .profile-dropdown__item-icon { width: 24px; height: 24px; flex-shrink: 0; color: var(--icon-primary-default); }
+    .profile-dropdown__item-icon svg { display: block; width: 24px; height: 24px; }
+    .profile-dropdown__item-label {
+      flex:        1 0 0;
+      min-width:   1px;
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       var(--text-default-body);   /* #666 — Text/default/body */
+      transition:  color 0.12s ease;
+    }
+    /* Divider — 1px horizontal line */
+    .profile-dropdown__divider {
+      height:     1px;
+      background: var(--border-general-default);
+      width:      100%;
+      flex-shrink: 0;
+    }
+
+    /* ─── Localization dropdown (DS node 3928:3067, Navbar Download Apps - 1.5)
+       204px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
+       Right-aligned to EN button via JS positionDropdown · top: 80px
+    ─────────────────────────────────────────────────────────────────────────── */
+    .locale-dropdown {
+      position:       absolute;
+      top:            80px;
+      right:          0;
+      left:           auto;
+      z-index:        500;
+      width:          204px;
+      background:     var(--surface-general-default);
+      border:         1px solid var(--border-primary-default);
+      border-radius:  var(--corner-radius-corner-4xl);
+      padding:        var(--spacing-space-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xs);
+
+      opacity:        0;
+      transform:      translateY(-8px);
+      pointer-events: none;
+      visibility:     hidden;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
+    }
+    .locale-dropdown.is-open {
+      opacity:        1;
+      transform:      translateY(0);
+      pointer-events: auto;
+      visibility:     visible;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
+    }
+
+    /* Dropdown - Parts: 172×36, py-8 px-16, gap-10, pill radius on hover */
+    .locale-dropdown__item {
+      display:       flex;
+      gap:           10px;
+      align-items:   center;
+      padding:       var(--spacing-space-xs) var(--spacing-space-m);
+      cursor:        pointer;
+      border-radius: var(--corner-radius-corner-pill);
+      user-select:   none;
+      transition:    background 0.12s ease, box-shadow 0.12s ease;
+    }
+    /* Hover — Surface/secondary/default-subtle #e8fbe8 · Border/primary/default #00cc85 · text #00cc85 */
+    .locale-dropdown__item:hover {
+      background: var(--surface-secondary-default-subtle);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .locale-dropdown__item:hover .locale-dropdown__label {
+      color: var(--text-primary-default);
+    }
+    /* Selected — Surface/secondary/default #b5f291 · Border/primary/focus #00a36a · text #00a36a
+       DS node 1363:2887 — Type=Main List, State=Selected (no Pressed state exists in DS) */
+    .locale-dropdown__item.is-selected,
+    .locale-dropdown__item.is-selected:hover {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+    }
+    .locale-dropdown__item.is-selected .locale-dropdown__label,
+    .locale-dropdown__item.is-selected:hover .locale-dropdown__label {
+      color: var(--text-primary-default-hover);
+    }
+    /* Label: Body/B1 — 14px SemiBold, Text/default/body #666 */
+    .locale-dropdown__label {
+      font-family: var(--font-family);
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       var(--text-default-body);
+      transition:  color 0.12s ease;
+    }
+
+    /* ─── Notification dropdown (DS node 3908:13057, Navbar Notification - 1.5)
+       320px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
+       Right-aligned to bell button via JS · top: 80px · same animation as all other dropdowns
+    ──────────────────────────────────────────────────────────────────────────────────────── */
+    .notif-dropdown {
+      position:       absolute;
+      top:            80px;
+      right:          0;
+      left:           auto;
+      z-index:        500;
+      width:          320px;
+      background:     var(--surface-general-default);
+      border:         1px solid var(--border-primary-default);
+      border-radius:  var(--corner-radius-corner-4xl);
+      padding:        var(--spacing-space-m);
+      display:        flex;
+      flex-direction: column;
+
+      opacity:        0;
+      transform:      translateY(-8px);
+      pointer-events: none;
+      visibility:     hidden;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
+    }
+    .notif-dropdown.is-open {
+      opacity:        1;
+      transform:      translateY(0);
+      pointer-events: auto;
+      visibility:     visible;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
+    }
+
+    /* Navbar Notification Button - Parts (DS 3908:13427/13443/13456) */
+    .notif-item {
+      cursor:      pointer;
+      user-select: none;
+    }
+    /* Content frame — Default: white, pt-12 px-12 pb-0, no border */
+    .notif-item__content {
+      display:       flex;
+      background:    var(--surface-general-default);
+      padding:       12px 12px 0;
+      border-radius: 0;
+      transition:    background 0.12s ease, box-shadow 0.12s ease, border-radius 0.12s ease, padding 0.12s ease;
+    }
+    /* Inner row — Default: gap-8, pb-12, 1px bottom divider #d9d9d9 */
+    .notif-item__body {
+      display:        flex;
+      flex:           1 0 0;
+      min-width:      0;
+      gap:            8px;
+      align-items:    flex-start;
+      padding-bottom: 12px;
+      border-bottom:  1px solid var(--border-general-default);
+      transition:     border-color 0.12s ease, padding-bottom 0.12s ease;
+    }
+    /* Hover — Surface/secondary/default-hover #f6fef6 · 1px #00cc85 inset · 16px radius */
+    .notif-item:hover .notif-item__content {
+      background:    var(--surface-secondary-default-hover);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+      border-radius: var(--corner-radius-corner-xl);
+      padding:       12px;
+    }
+    .notif-item:hover .notif-item__body {
+      border-bottom-color: transparent;
+      padding-bottom:      0;
+    }
+    .notif-item:hover .notif-item__text { color: var(--text-tertiary-default); }
+    /* Pressed — Surface/primary/focus #00a36a · 1px #00cc85 inset · 16px radius */
+    .notif-item:active .notif-item__content {
+      background:    var(--surface-primary-focus);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+      border-radius: var(--corner-radius-corner-xl);
+      padding:       12px;
+    }
+    .notif-item:active .notif-item__body {
+      border-bottom-color: transparent;
+      padding-bottom:      0;
+    }
+    .notif-item:active .notif-item__text { color: var(--text-primary-default); }
+
+    /* Avatar — 60×60 clip, user-circle at 50px (DS inset 8.33% = 5px each side) */
+    .notif-item__avatar {
+      width:           60px;
+      height:          60px;
+      flex-shrink:     0;
+      overflow:        hidden;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      color:           var(--icon-primary-default);
+    }
+    .notif-item__avatar svg { width: 50px; height: 50px; flex-shrink: 0; }
+
+    /* Text stack */
+    .notif-item__texts       { display: flex; flex: 1 0 0; min-width: 0; align-items: flex-start; }
+    .notif-item__texts-inner { display: flex; flex: 1 0 0; flex-direction: column; gap: 4px; min-width: 0; max-width: 205px; }
+    .notif-item__text {
+      font-family: var(--font-family);
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       var(--text-default-body);
+      word-break:  break-word;
+      transition:  color 0.12s ease;
+    }
+    .notif-item__time {
+      font-family: var(--font-family);
+      font-size:   10px;
+      font-weight: 500;
+      line-height: 12px;
+      color:       var(--text-primary-default);
+      white-space: nowrap;
+    }
+    /* Unread indicator — 8×8 dot, pt-4 from top, Surface/primary/default #00cc85 */
+    .notif-item__indicator { display: flex; align-items: flex-start; padding-top: 4px; flex-shrink: 0; }
+    .notif-item__dot {
+      width:         8px;
+      height:        8px;
+      border-radius: var(--corner-radius-corner-rounded);
+      background:    var(--surface-primary-default);
+      flex-shrink:   0;
+    }
+
+    /* "See all notification" — Primary/L Button - 1.5, no arrow, full-width */
+    .notif-dropdown__footer { padding-top: var(--spacing-space-m); width: 100%; }
+    .notif-see-all {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      width:           100%;
+      max-height:      48px;
+      padding:         8px var(--spacing-space-s);
+      background:      var(--surface-primary-default);
+      border:          1px solid var(--border-primary-focus);
+      border-radius:   var(--corner-radius-corner-rounded);
+      cursor:          pointer;
+      user-select:     none;
+      font-family:     var(--font-family);
+      font-size:       14px;
+      font-weight:     600;
+      line-height:     20px;
+      color:           var(--text-primary-on-color);
+      transition:      background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+    }
+    .notif-see-all:hover  { background: var(--surface-secondary-default);  border-color: var(--border-secondary-focus); color: var(--text-secondary-focus); }
+    .notif-see-all:active { background: var(--surface-tertiary-default);   border-color: var(--border-tertiary-focus);  color: var(--text-primary-default); }
+
+    /* ─── Download Apps dropdown (DS node 3909:3405, Navbar Download Apps - 1.5)
+       238px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
+       3 items: Google Android, Apple iOS, Huawei · Right-aligned to smartphone button
+    ─────────────────────────────────────────────────────────────────────────── */
+    .download-dropdown {
+      position:       absolute;
+      top:            80px;
+      right:          0;
+      left:           auto;
+      z-index:        500;
+      width:          238px;
+      background:     var(--surface-general-default);
+      border:         1px solid var(--border-primary-default);
+      border-radius:  var(--corner-radius-corner-4xl);
+      padding:        var(--spacing-space-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xs);
+
+      opacity:        0;
+      transform:      translateY(-8px);
+      pointer-events: none;
+      visibility:     hidden;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
+    }
+    .download-dropdown.is-open {
+      opacity:        1;
+      transform:      translateY(0);
+      pointer-events: auto;
+      visibility:     visible;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
+    }
+    /* Dropdown - Parts: 206×40px, py-8 px-16, gap-10, pill radius on hover */
+    .download-dropdown__item {
+      display:       flex;
+      gap:           10px;
+      align-items:   center;
+      padding:       var(--spacing-space-xs) var(--spacing-space-m);
+      border-radius: var(--corner-radius-corner-pill);
+      cursor:        pointer;
+      user-select:   none;
+      transition:    background 0.12s ease, box-shadow 0.12s ease;
+    }
+    /* Hover — Surface/secondary/default-subtle #e8fbe8 · Border/primary/default #00cc85 · text #00cc85
+       DS node 1363:2881 — Type=Main List, State=Hover (no Pressed state exists in DS) */
+    .download-dropdown__item:hover {
+      background: var(--surface-secondary-default-subtle);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .download-dropdown__item:hover .download-dropdown__label { color: var(--text-primary-default); }
+    /* Store icon — 24×24, object-fit:contain (Play Store is 24×26.8 native) */
+    .download-dropdown__icon {
+      width:      24px;
+      height:     24px;
+      flex-shrink: 0;
+      object-fit: contain;
+      display:    block;
+    }
+    /* Label — Body/B1, 14px SemiBold, Text/default/body #666, w-140px */
+    .download-dropdown__label {
+      font-family: var(--font-family);
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       var(--text-default-body);
+      width:       140px;
+      transition:  color 0.12s ease;
+    }
+
     #NavTopMenu-Desktop {
       display:    block;
       padding:    0 var(--page-padding-x);   /* follows page padding — 60px desktop / 32px tablet / 16px mobile */
-      margin-top: var(--spacing-space-s);   /* 12px gap below Primary (DS gap-[Spacing/space-s]) */
+      margin-top: var(--spacing-space-m);   /* 16px — DS confirmed: Navbar y:0 h:64, NavMenu y:80 → gap = 16px */
     }
 
     /* Pill container: h:56px, full border, radius 999px — DS 3406:802 */
@@ -1637,6 +2291,7 @@
       <!-- Outline/bookmark (260:504) — path translated by x+5 y+3 to match 24x24 DS frame; viewBox -1 -1 26 26 for 1px stroke buffer --><symbol id="ic-bookmark" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 19 21 L 12 16 L 5 21 L 5 5 C 5 4.47 5.211 3.961 5.586 3.586 C 5.961 3.211 6.47 3 7 3 L 17 3 C 17.53 3 18.039 3.211 18.414 3.586 C 18.789 3.961 19 4.47 19 5 L 19 21 Z"/></symbol>
       <!-- Outline/clock (260:566) --><symbol id="ic-clock" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6V12L16 14M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
       <!-- Outline/EN (1104:2538) — vec x:3 y:6 +3+6 → vb -1 -1 26 26; no CSS clip, icon renders at natural 24x24 --><symbol id="ic-en" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 21.613 6 L 21.613 17.252 L 13.086 6 L 13.086 17.252"/><path d="M 9.129 6.05 L 3 6.05 L 3 11.651 L 3 17.252 L 9.129 17.252"/><path d="M 3 11.651 L 9.181 11.651"/></symbol>
+      <!-- Nav Button - 1.5 Active state Union bg (DS node 3908:6165) — 44×52 speech-bubble shape, green fill, downward tail at bottom-center --><symbol id="ic-nav-btn-union" viewBox="0 0 44 52"><path d="M36 0C40.4183 0 44 3.58172 44 8V36C44 40.4183 40.4183 44 36 44H31.6569C30.596 44 29.5786 44.4214 28.8284 45.1716L23.4141 50.5859C22.6331 51.3668 21.3669 51.3668 20.5859 50.5859L15.1716 45.1716C14.4214 44.4214 13.404 44 12.3431 44H8C3.58172 44 0 40.4183 0 36V8C0 3.58172 3.58172 0 8 0H36Z" fill="#00cc85"/></symbol>
       <!-- Filled/waffle-menu (3075:61110) — DS export, 9 filled dots, fill+stroke=currentColor --><symbol id="ic-waffle" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z"/><path d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z"/><path d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z"/><path d="M12 6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5C11 5.55228 11.4477 6 12 6Z"/><path d="M19 6C19.5523 6 20 5.55228 20 5C20 4.44772 19.5523 4 19 4C18.4477 4 18 4.44772 18 5C18 5.55228 18.4477 6 19 6Z"/><path d="M5 6C5.55228 6 6 5.55228 6 5C6 4.44772 5.55228 4 5 4C4.44772 4 4 4.44772 4 5C4 5.55228 4.44772 6 5 6Z"/><path d="M12 20C12.5523 20 13 19.5523 13 19C13 18.4477 12.5523 18 12 18C11.4477 18 11 18.4477 11 19C11 19.5523 11.4477 20 12 20Z"/><path d="M19 20C19.5523 20 20 19.5523 20 19C20 18.4477 19.5523 18 19 18C18.4477 18 18 18.4477 18 19C18 19.5523 18.4477 20 19 20Z"/><path d="M5 20C5.55228 20 6 19.5523 6 19C6 18.4477 5.55228 18 5 18C4.44772 18 4 18.4477 4 19C4 19.5523 4.44772 20 5 20Z"/></symbol>
       <!-- Outline/info (260:832) — vec x:2 y:2 +2+2 → vb -1 -1 26 26 --><symbol id="ic-info" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 12 22 C 17.523 22 22 17.523 22 12 C 22 6.477 22 2 12 2 C 6.477 2 2 6.477 2 12 C 2 17.523 6.477 22 12 22 Z"/><path d="M 12 16 L 12 12 M 12 8 L 12.01 8"/></symbol>
       <!-- Outline/heart (260:815) --><symbol id="ic-heart" viewBox="0 0 22.4031 19.7318" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 20.0413 2.36183 C 19.5305 1.85083 18.9241 1.44547 18.2566 1.16891 C 17.5892 0.892347 16.8738 0.75 16.1513 0.75 C 15.4288 0.75 14.7134 0.892347 14.0459 1.16891 C 13.3785 1.44547 12.772 1.85083 12.2613 2.36183 L 11.2013 3.42183 L 10.1413 2.36183 C 9.1096 1.33013 7.71032 0.750535 6.25129 0.750535 C 4.79226 0.750535 3.39298 1.33013 2.36129 2.36183 C 1.3296 3.39352 0.75 4.79279 0.75 6.25183 C 0.75 7.71086 1.3296 9.11013 2.36129 10.1418 L 3.42129 11.2018 L 11.2013 18.9818 L 18.9813 11.2018 L 20.0413 10.1418 C 20.5523 9.63107 20.9576 9.02464 21.2342 8.35718 C 21.5108 7.68972 21.6531 6.97431 21.6531 6.25183 C 21.6531 5.52934 21.5108 4.81393 21.2342 4.14647 C 20.9576 3.47901 20.5523 2.87258 20.0413 2.36183 Z"/></symbol>
@@ -1690,6 +2345,27 @@
 <path d="M2.45878 11.4366L2.48134 11.4498C2.47006 11.4423 2.45878 11.4357 2.4475 11.4301L2.45126 11.432L2.45878 11.4366Z" fill="#9A2E11"/>
 <path d="M5.43543 23.5195C5.42697 23.5139 5.41757 23.5064 5.40912 23.5008C5.3828 23.483 5.35648 23.4642 5.3311 23.4455C5.32734 23.4427 5.32265 23.4408 5.31889 23.437C5.28881 23.4146 5.25967 23.3921 5.23148 23.3686C5.2249 23.363 5.21738 23.3574 5.2108 23.3508C5.18918 23.3321 5.16756 23.3143 5.14594 23.2955C5.13749 23.288 5.12903 23.2805 5.11963 23.2721C5.09895 23.2534 5.07827 23.2346 5.05759 23.2149C5.05101 23.2084 5.0435 23.2028 5.03692 23.1962C5.0106 23.1709 4.98428 23.1446 4.95891 23.1175C4.95327 23.1118 4.94857 23.1053 4.94293 23.0997C4.92225 23.0781 4.90251 23.0566 4.88183 23.0341C4.87338 23.0247 4.86492 23.0153 4.85646 23.0059C4.83954 22.9863 4.82168 22.9666 4.80476 22.946C4.79724 22.9366 4.78878 22.9272 4.78127 22.9179C4.75871 22.8907 4.73615 22.8626 4.71453 22.8344C4.71171 22.8307 4.70889 22.8269 4.70607 22.8232C4.6854 22.796 4.66472 22.7688 4.64404 22.7407C4.63652 22.7304 4.629 22.7192 4.62054 22.7079C4.6055 22.6873 4.59141 22.6667 4.57731 22.6461C4.56885 22.6339 4.56133 22.6226 4.55381 22.6105C4.53877 22.587 4.52279 22.5636 4.50776 22.5402C4.50212 22.5308 4.49648 22.5224 4.49084 22.513C4.4711 22.4821 4.4523 22.4502 4.43256 22.4174C4.42598 22.4052 4.41847 22.394 4.41189 22.3818C4.39967 22.3602 4.38651 22.3377 4.37429 22.3162C4.36677 22.3021 4.35925 22.289 4.35173 22.275C4.33951 22.2534 4.32824 22.2309 4.31602 22.2084C4.30944 22.1953 4.30286 22.1831 4.29534 22.17C4.27842 22.1372 4.2615 22.1035 4.24552 22.0697C4.23989 22.0575 4.23331 22.0444 4.22767 22.0322C4.21639 22.0088 4.20605 21.9854 4.19477 21.9619C4.18725 21.946 4.18067 21.931 4.17315 21.9151C4.16375 21.8935 4.15435 21.872 4.14496 21.8504C4.13838 21.8345 4.1318 21.8186 4.12522 21.8036C4.11394 21.7764 4.10266 21.7501 4.09232 21.723C4.0848 21.7033 4.07728 21.6845 4.06976 21.6649C4.05942 21.6386 4.04909 21.6124 4.03969 21.5861C4.03311 21.5693 4.02747 21.5515 4.02089 21.5346C4.01337 21.513 4.00585 21.4915 3.99833 21.4709C3.99175 21.4531 3.98611 21.4353 3.97953 21.4175C3.97201 21.395 3.9645 21.3715 3.95698 21.3481C3.95134 21.3322 3.94664 21.3162 3.941 21.3003C3.92972 21.2647 3.91844 21.2281 3.90716 21.1916C3.90152 21.1738 3.89682 21.156 3.89118 21.1372C3.8846 21.1157 3.87803 21.0932 3.87239 21.0716C3.86675 21.0529 3.86205 21.0332 3.85641 21.0145C3.85077 20.9929 3.84419 20.9704 3.83855 20.9489C3.83385 20.9301 3.82915 20.9114 3.82445 20.8936C3.81505 20.857 3.80565 20.8195 3.79719 20.783C3.79249 20.7652 3.78874 20.7464 3.78498 20.7286C3.77934 20.7061 3.77464 20.6837 3.769 20.6602C3.7643 20.6405 3.76148 20.6199 3.75678 20.6002C3.75302 20.5787 3.74832 20.5571 3.74362 20.5356C3.73986 20.5159 3.73516 20.4962 3.7314 20.4756C3.7267 20.4503 3.722 20.425 3.7173 20.3997C3.71166 20.3706 3.70602 20.3407 3.70132 20.3116C3.69663 20.2872 3.69287 20.2619 3.68817 20.2376C3.68441 20.2169 3.68159 20.1963 3.67783 20.1757C3.67407 20.1542 3.67125 20.1326 3.66749 20.111C3.66467 20.0904 3.65997 20.0698 3.65715 20.0483C3.65339 20.0248 3.65057 20.0023 3.64775 19.9789C3.64493 19.9583 3.64211 19.9386 3.63929 19.918C3.63459 19.8805 3.62989 19.844 3.62519 19.8065C3.62237 19.7858 3.62049 19.7662 3.61861 19.7455C3.61579 19.7231 3.61391 19.7015 3.6111 19.679C3.60922 19.6575 3.6064 19.6368 3.60452 19.6153C3.60264 19.5928 3.59982 19.5712 3.59794 19.5487C3.59606 19.5281 3.59418 19.5084 3.5923 19.4878C3.58948 19.4503 3.58572 19.4129 3.5829 19.3754C3.58102 19.3548 3.58008 19.3341 3.5782 19.3135C3.57632 19.291 3.57538 19.2676 3.5735 19.2451C3.57256 19.2235 3.57068 19.2029 3.56974 19.1814C3.5688 19.1598 3.56786 19.1383 3.56598 19.1167C3.56504 19.0961 3.5641 19.0745 3.56316 19.0539C3.56222 19.0296 3.56128 19.0052 3.56034 18.9808C3.5594 18.949 3.55846 18.9171 3.55752 18.8852C3.55752 18.8609 3.55658 18.8374 3.55564 18.8131C3.55564 18.7915 3.55564 18.7709 3.5547 18.7503C3.5547 18.7297 3.5547 18.7081 3.5547 18.6875C3.5547 18.6659 3.5547 18.6453 3.5547 18.6238C3.5547 18.6022 3.5547 18.5807 3.5547 18.5591C3.5547 18.5319 3.5547 18.5057 3.5547 18.4785C3.5547 18.4485 3.5547 18.4176 3.55658 18.3876C3.55658 18.366 3.55752 18.3445 3.55846 18.3229C3.55846 18.3033 3.5594 18.2836 3.56034 18.2639C3.56034 18.2423 3.56222 18.2198 3.56316 18.1983C3.56316 18.1795 3.56504 18.1599 3.56598 18.1411C3.56692 18.1196 3.56786 18.098 3.5688 18.0765C3.56974 18.054 3.57162 18.0324 3.57256 18.0109C3.57444 17.9752 3.57726 17.9396 3.57914 17.904C3.58008 17.8862 3.58196 17.8684 3.5829 17.8506C3.58478 17.8281 3.58666 17.8056 3.58854 17.7831C3.58948 17.7663 3.59136 17.7494 3.5923 17.7325C3.59418 17.71 3.59606 17.6866 3.59794 17.6641C3.59888 17.6491 3.60076 17.6341 3.60264 17.6191C3.60452 17.5976 3.6064 17.576 3.60921 17.5554C3.61955 17.4598 3.62895 17.3661 3.64023 17.2733C3.64023 17.2667 3.64117 17.2611 3.64211 17.2546C3.64681 17.2161 3.65057 17.1787 3.65527 17.1402C3.65715 17.1262 3.65903 17.1121 3.65997 17.0981C3.66373 17.0634 3.66843 17.0296 3.67219 16.9959C3.67407 16.979 3.67595 16.9631 3.67877 16.9462C3.68253 16.9144 3.68723 16.8816 3.69099 16.8497C3.69287 16.8319 3.69569 16.8141 3.69757 16.7972C3.70132 16.7663 3.70602 16.7363 3.70978 16.7063C3.7126 16.6885 3.71448 16.6707 3.7173 16.652C3.73046 16.5536 3.74456 16.458 3.75866 16.3643C3.76242 16.3408 3.76524 16.3174 3.769 16.2949C3.77276 16.2724 3.77558 16.2499 3.77934 16.2284C3.7831 16.2049 3.78686 16.1815 3.79061 16.159C3.79437 16.1375 3.79719 16.1159 3.80095 16.0953C3.80471 16.0719 3.80847 16.0484 3.81223 16.025C3.81599 16.0044 3.81881 15.9838 3.82257 15.9641C3.82633 15.9407 3.83103 15.9172 3.83479 15.8938C3.83855 15.8751 3.84137 15.8554 3.84513 15.8366C3.84983 15.8113 3.85453 15.787 3.85829 15.7617C3.86111 15.7448 3.86487 15.7279 3.86769 15.7111C3.87333 15.6783 3.87991 15.6464 3.88554 15.6145C3.88742 15.6042 3.8893 15.593 3.89212 15.5827C3.89964 15.5452 3.90622 15.5086 3.91374 15.4721C3.91656 15.4571 3.92032 15.4421 3.92314 15.4271C3.92784 15.4037 3.93254 15.3793 3.93818 15.3559C3.94194 15.339 3.94476 15.3231 3.94852 15.3062C3.95322 15.2846 3.95792 15.2631 3.96262 15.2415C3.96638 15.2247 3.97014 15.2078 3.97389 15.1919C3.97859 15.1712 3.98329 15.1506 3.98799 15.1309C3.99175 15.1141 3.99551 15.0981 3.99927 15.0813C4.00397 15.0616 4.00867 15.041 4.01337 15.0213C4.01713 15.0054 4.02089 14.9894 4.02465 14.9744C4.02935 14.9538 4.03405 14.9332 4.03969 14.9135C4.04345 14.8995 4.04627 14.8845 4.05003 14.8704C4.05755 14.8376 4.066 14.8058 4.07446 14.7748C4.07822 14.7598 4.08198 14.7448 4.08574 14.7298C4.09044 14.712 4.09514 14.6942 4.09984 14.6774C4.10454 14.6614 4.1083 14.6446 4.113 14.6286C4.11676 14.6136 4.12146 14.5977 4.12522 14.5827C4.12992 14.5658 4.13462 14.5499 4.13838 14.534C4.14214 14.5199 4.1459 14.5059 4.15059 14.4918C4.15529 14.4749 4.15999 14.459 4.16469 14.4431C4.16845 14.4299 4.17221 14.4168 4.17597 14.4037C4.18067 14.3868 4.18537 14.3709 4.19101 14.355C4.19477 14.3428 4.19853 14.3315 4.20135 14.3203C4.20605 14.3034 4.21169 14.2866 4.21639 14.2697C4.21921 14.2613 4.22203 14.2528 4.22391 14.2444C4.24364 14.1816 4.26432 14.1207 4.28406 14.0626C4.28688 14.0551 4.28876 14.0476 4.29158 14.041C4.29722 14.0242 4.30286 14.0082 4.30944 13.9914C4.31226 13.9839 4.31508 13.9754 4.3179 13.9679C4.32354 13.952 4.32918 13.9361 4.33575 13.9201C4.33857 13.9126 4.34139 13.9051 4.34421 13.8986C4.34985 13.8826 4.35643 13.8667 4.36207 13.8517C4.36395 13.8461 4.36685 13.8405 4.36873 13.8348C4.37531 13.818 4.38181 13.8011 4.38839 13.7852C4.38933 13.7824 4.39125 13.7805 4.39219 13.7767C4.42321 13.7008 4.45418 13.6287 4.48426 13.564C4.4852 13.5612 4.48712 13.5593 4.48806 13.5565C4.49464 13.5425 4.50118 13.5275 4.5087 13.5134C4.51058 13.5097 4.51246 13.5059 4.51434 13.5022C4.52091 13.489 4.52749 13.4759 4.53407 13.4628C4.53595 13.459 4.53783 13.4562 4.53877 13.4525C4.54535 13.4394 4.55287 13.4262 4.55945 13.4131C4.56039 13.4112 4.56133 13.4094 4.56227 13.4075C4.59329 13.3494 4.6243 13.2969 4.65532 13.2501C4.6619 13.2397 4.66942 13.2294 4.676 13.2191C4.67694 13.2173 4.67882 13.2154 4.67976 13.2135C4.68634 13.2041 4.69386 13.1948 4.70043 13.1864C4.70234 13.1845 4.70424 13.1817 4.70519 13.1798C4.71177 13.1713 4.71735 13.1629 4.72299 13.1545C4.72487 13.1526 4.72581 13.1507 4.72769 13.1488C4.73427 13.1404 4.74085 13.132 4.74743 13.1245C4.74743 13.1245 4.74837 13.1226 4.74931 13.1217C4.77845 13.087 4.80664 13.0579 4.8339 13.0345C4.83578 13.0336 4.83672 13.0317 4.8386 13.0308C4.84424 13.0261 4.84988 13.0214 4.85552 13.0167C4.8574 13.0148 4.85928 13.0139 4.86116 13.012C4.8668 13.0083 4.87244 13.0036 4.87713 12.9998C4.87901 12.998 4.88089 12.997 4.88371 12.9961C4.88935 12.9923 4.89499 12.9886 4.89969 12.9858C4.90157 12.9848 4.90345 12.9839 4.90533 12.983C4.91097 12.9802 4.91661 12.9764 4.92225 12.9736C4.92225 12.9736 4.92319 12.9736 4.92413 12.9736C4.94387 12.9642 4.96267 12.9577 4.98052 12.953C4.98146 12.953 4.9824 12.953 4.98334 12.953C4.98898 12.952 4.99368 12.9511 4.99932 12.9502C5.0012 12.9502 5.00308 12.9502 5.00402 12.9502C5.00872 12.9502 5.01436 12.9502 5.01906 12.9502C5.01906 12.9502 5.02094 12.9502 5.02188 12.9502L2.4804 11.4516L2.45784 11.4385L2.45032 11.4338H2.44844L2.44656 11.432L2.41555 11.4132L2.41085 11.4104L2.38171 11.3935L2.37701 11.3907L2.34881 11.3748L2.34318 11.371L2.31216 11.3532L2.21065 11.2942L2.17963 11.2754L2.17493 11.2726L2.1458 11.2558L2.1411 11.253L2.11008 11.2352L2.00857 11.1761L1.97756 11.1574L1.97286 11.1546L1.94372 11.1377L1.93902 11.1349L1.91082 11.1189L1.90518 11.1152L1.87417 11.0974L1.77266 11.0383L1.74164 11.0196L1.73694 11.0168L1.70781 10.9999L1.70311 10.9971L1.67209 10.9793L1.57058 10.9203L1.39764 10.8996C0.989725 11.0477 0.368454 12.46 0.0535892 15.4964C-0.174806 17.6894 0.295143 20.5843 2.07812 21.5796C2.0894 21.5861 2.10068 21.5927 2.11196 21.5993C2.12324 21.6058 2.13452 21.6124 2.1458 21.6189C2.15708 21.6255 2.16835 21.6321 2.17963 21.6386C2.19091 21.6452 2.20219 21.6517 2.21347 21.6583C2.22475 21.6649 2.23603 21.6714 2.24731 21.678C2.25858 21.6845 2.26986 21.6911 2.28114 21.6977C2.29242 21.7042 2.3037 21.7108 2.31498 21.7173C2.32626 21.7239 2.33754 21.7305 2.34881 21.737C2.36009 21.7436 2.37137 21.7501 2.38265 21.7567C2.39393 21.7633 2.40521 21.7698 2.41649 21.7764C2.42777 21.7829 2.43904 21.7895 2.45032 21.7961C2.4616 21.8026 2.47288 21.8092 2.48416 21.8157C2.49544 21.8223 2.50672 21.8289 2.518 21.8354C2.52927 21.842 2.54055 21.8485 2.55183 21.8551C2.56311 21.8617 2.57439 21.8682 2.58567 21.8748C2.59695 21.8813 2.60823 21.8879 2.6195 21.8945C2.63078 21.901 2.64206 21.9076 2.65334 21.9141C2.66462 21.9207 2.6759 21.9273 2.68718 21.9338C2.69846 21.9404 2.70973 21.947 2.72101 21.9535C2.73229 21.9601 2.74357 21.9666 2.75485 21.9732C2.76613 21.9798 2.77741 21.9863 2.78869 21.9929C2.79996 21.9994 2.81124 22.006 2.82252 22.0126C2.8338 22.0191 2.84508 22.0257 2.85636 22.0322C2.86764 22.0388 2.87892 22.0454 2.89019 22.0519C2.90147 22.0585 2.91275 22.065 2.92403 22.0716C2.93531 22.0782 2.94659 22.0847 2.95787 22.0913C2.96915 22.0978 2.98042 22.1044 2.9917 22.111C3.00298 22.1175 3.01426 22.1241 3.02554 22.1306C3.03682 22.1372 3.0481 22.1438 3.05938 22.1503C3.07065 22.1569 3.08193 22.1634 3.09321 22.17C3.10449 22.1766 3.11577 22.1831 3.12705 22.1897C3.13833 22.1962 3.14961 22.2028 3.16088 22.2094C3.17216 22.2159 3.18344 22.2225 3.19472 22.229C3.206 22.2356 3.21728 22.2422 3.22856 22.2487C3.23984 22.2553 3.25112 22.2618 3.26239 22.2684C3.27367 22.275 3.28495 22.2815 3.29623 22.2881C3.30751 22.2946 3.31879 22.3012 3.33007 22.3078C3.34134 22.3143 3.35262 22.3209 3.3639 22.3274C3.37518 22.334 3.38646 22.3406 3.39774 22.3471C3.40902 22.3537 3.4203 22.3602 3.43157 22.3668C3.44285 22.3734 3.45413 22.3799 3.46541 22.3865C3.47669 22.393 3.48797 22.3996 3.49925 22.4062C3.51053 22.4127 3.5218 22.4193 3.53308 22.4258C3.54436 22.4324 3.55564 22.439 3.56692 22.4455C3.5782 22.4521 3.58948 22.4586 3.60076 22.4652C3.61203 22.4718 3.62331 22.4783 3.63459 22.4849C3.64587 22.4914 3.65715 22.498 3.66843 22.5046C3.67971 22.5111 3.69099 22.5177 3.70227 22.5242C3.71354 22.5308 3.72482 22.5374 3.7361 22.5439C3.74738 22.5505 3.75866 22.557 3.76994 22.5636C3.78122 22.5702 3.79249 22.5767 3.80377 22.5833C3.81505 22.5898 3.82633 22.5964 3.83761 22.603C3.84889 22.6095 3.86017 22.6161 3.87145 22.6226C3.88272 22.6292 3.894 22.6358 3.90528 22.6423C3.91656 22.6489 3.92784 22.6554 3.93912 22.662C3.9504 22.6686 3.96168 22.6751 3.97295 22.6817C3.98423 22.6882 3.99551 22.6948 4.00679 22.7014C4.01807 22.7079 4.02935 22.7145 4.04063 22.721C4.05191 22.7276 4.06318 22.7342 4.07446 22.7407C4.08574 22.7473 4.09702 22.7539 4.1083 22.7604C4.11958 22.767 4.13086 22.7735 4.14214 22.7801C4.15341 22.7867 4.16469 22.7932 4.17597 22.7998C4.18725 22.8063 4.19853 22.8129 4.20981 22.8195C4.22109 22.826 4.23237 22.8326 4.24364 22.8391C4.25492 22.8457 4.2662 22.8523 4.27748 22.8588C4.28876 22.8654 4.30004 22.8719 4.31132 22.8785C4.3226 22.8851 4.33387 22.8916 4.34515 22.8982C4.35643 22.9047 4.36771 22.9113 4.37899 22.9179C4.39027 22.9244 4.40155 22.931 4.41283 22.9375C4.4241 22.9441 4.43538 22.9507 4.44666 22.9572C4.45794 22.9638 4.46922 22.9703 4.4805 22.9769C4.49178 22.9835 4.50306 22.99 4.51434 22.9966C4.52561 23.0031 4.53689 23.0097 4.54817 23.0163C4.55945 23.0228 4.57073 23.0294 4.58201 23.0359C4.59329 23.0425 4.60456 23.0491 4.61584 23.0556C4.62712 23.0622 4.6384 23.0687 4.64968 23.0753C4.66096 23.0819 4.67224 23.0884 4.68352 23.095C4.69479 23.1015 4.70607 23.1081 4.71735 23.1147C4.72863 23.1212 4.73991 23.1278 4.75119 23.1343C4.76247 23.1409 4.77375 23.1475 4.78503 23.154C4.7963 23.1606 4.80758 23.1671 4.81886 23.1737C4.83014 23.1803 4.84142 23.1868 4.8527 23.1934C4.86398 23.1999 4.87526 23.2065 4.88653 23.2131C4.89781 23.2196 4.90909 23.2262 4.92037 23.2327C4.93165 23.2393 4.94293 23.2459 4.95421 23.2524C4.96549 23.259 4.97676 23.2655 4.98804 23.2721C4.99932 23.2787 5.0106 23.2852 5.02188 23.2918C5.03316 23.2983 5.04444 23.3049 5.05571 23.3115C5.06699 23.318 5.07827 23.3246 5.08955 23.3311C5.10083 23.3377 5.11211 23.3443 5.12339 23.3508C5.13467 23.3574 5.14594 23.3639 5.15722 23.3705C5.1685 23.3771 5.17978 23.3836 5.19106 23.3902C5.20234 23.3967 5.21362 23.4033 5.2249 23.4099C5.23617 23.4164 5.24745 23.423 5.25873 23.4295C5.27001 23.4361 5.28129 23.4427 5.29257 23.4492C5.30385 23.4558 5.31513 23.4623 5.3264 23.4689C5.33768 23.4755 5.34896 23.482 5.36024 23.4886C5.37152 23.4951 5.3828 23.5017 5.39408 23.5083C5.40536 23.5148 5.41663 23.5214 5.42791 23.5279C5.43919 23.5345 5.45047 23.5411 5.46175 23.5476C5.47303 23.5542 5.48431 23.5607 5.49559 23.5673C5.50686 23.5739 5.51814 23.5804 5.52942 23.587L5.54352 23.5954C5.53788 23.5926 5.53318 23.5889 5.52848 23.5861C5.52002 23.5804 5.51156 23.5757 5.50311 23.5701C5.47961 23.5551 5.45611 23.5401 5.43261 23.5242L5.43543 23.5195Z" fill="var(--fill-0, #84280F)"/>
 </g></symbol>
+
+      <!-- Profile Menu icons — all DS exports, viewBox -1 -1 26 26 (1px stroke buffer per Rule 27) -->
+      <!-- Outline/user-circle (1942:23330) — My Profile -->
+      <symbol id="ic-user-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20C18 18.4087 17.3679 16.8826 16.2426 15.7574C15.1174 14.6321 13.5913 14 12 14M12 14C10.4087 14 8.88258 14.6321 7.75736 15.7574C6.63214 16.8826 6 18.4087 6 20M12 14C14.2091 14 16 12.2091 16 10C16 7.79086 14.2091 6 12 6C9.79086 6 8 7.79086 8 10C8 12.2091 9.79086 14 12 14ZM22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
+      <!-- Outline/user-check (260:1300) — Manage Account -->
+      <symbol id="ic-user-check" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M17 11L19 13L23 9M12.5 7C12.5 9.20914 10.7091 11 8.5 11C6.29086 11 4.5 9.20914 4.5 7C4.5 4.79086 6.29086 3 8.5 3C10.7091 3 12.5 4.79086 12.5 7Z"/></symbol>
+      <!-- Outline/star 24px (260:1192) — Subscribe Pandai Premium -->
+      <symbol id="ic-star-24" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></symbol>
+      <!-- Filled/star 24px (3074:60862) — Upgrade link icon -->
+      <symbol id="ic-star-filled-24" viewBox="-1 -1 26 26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/></symbol>
+      <!-- Outline/credit-card (260:656) — Payment History -->
+      <symbol id="ic-credit-card" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 10H23M3 4H21C22.1046 4 23 4.89543 23 6V18C23 19.1046 22.1046 20 21 20H3C1.89543 20 1 19.1046 1 18V6C1 4.89543 1.89543 4 3 4Z"/></symbol>
+      <!-- Outline/progress-mobile (1524:3597) — Share My Progress -->
+      <symbol id="ic-progress-mobile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12C7 12.9889 7.29325 13.9556 7.84265 14.7779C8.39206 15.6001 9.17295 16.241 10.0866 16.6194C11.0002 16.9978 12.0056 17.0969 12.9755 16.9039C13.9454 16.711 14.8363 16.2348 15.5355 15.5355C16.2348 14.8363 16.711 13.9454 16.904 12.9755C17.0969 12.0055 16.9979 11.0002 16.6195 10.0866C16.241 9.17295 15.6001 8.39206 14.7779 7.84265C13.9556 7.29325 12.9889 7 12 7M6.29 18.957C7.40519 19.8723 8.72407 20.506 10.1355 20.8048C11.5469 21.1036 13.0095 21.0588 14.3999 20.674C15.7904 20.2893 17.0679 19.5759 18.1249 18.594C19.182 17.6122 19.9874 16.3906 20.4735 15.0322C20.9596 13.6739 21.112 12.2186 20.9179 10.789C20.7237 9.35947 20.1888 7.99752 19.3581 6.81797C18.5275 5.63842 17.4254 4.67585 16.1448 4.01139C14.8643 3.34693 13.4427 3 12 3M11 12C11 12.2652 11.1054 12.5196 11.2929 12.7071C11.4804 12.8946 11.7348 13 12 13C12.2652 13 12.5196 12.8946 12.7071 12.7071C12.8946 12.5196 13 12.2652 13 12C13 11.7348 12.8946 11.4804 12.7071 11.2929C12.5196 11.1054 12.2652 11 12 11C11.7348 11 11.4804 11.1054 11.2929 11.2929C11.1054 11.4804 11 11.7348 11 12Z"/></symbol>
+      <!-- Outline/gift (260:765) — Learn and Earn -->
+      <symbol id="ic-gift" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V22H4V12M12 22V7M12 7H7.5C6.83696 7 6.20107 6.73661 5.73223 6.26777C5.26339 5.79893 5 5.16304 5 4.5C5 3.83696 5.26339 3.20107 5.73223 2.73223C6.20107 2.26339 6.83696 2 7.5 2C11 2 12 7 12 7ZM12 7H16.5C17.163 7 17.7989 6.73661 18.2678 6.26777C18.7366 5.79893 19 5.16304 19 4.5C19 3.83696 18.7366 3.20107 18.2678 2.73223C17.7989 2.26339 17.163 2 16.5 2C13 2 12 7 12 7ZM2 7H22V12H2V7Z"/></symbol>
+      <!-- Outline/life-buoy (260:855) — Online Support -->
+      <symbol id="ic-life-buoy" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.93 4.93L9.17 9.17M14.83 14.83L19.07 19.07M19.07 4.93L14.83 9.17M4.93 19.07L9.17 14.83M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z"/></symbol>
+      <!-- Outline/power (260:1057) — Log Out -->
+      <symbol id="ic-power" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64C19.6184 7.89879 20.4753 9.50244 20.8223 11.2482C21.1693 12.9939 20.9909 14.8034 20.3096 16.4478C19.6284 18.0921 18.4748 19.4976 16.9948 20.4864C15.5148 21.4752 13.7749 22.0029 11.995 22.0029C10.2151 22.0029 8.47515 21.4752 6.99517 20.4864C5.51519 19.4976 4.36164 18.0921 3.68036 16.4478C2.99909 14.8034 2.82069 12.9939 3.16772 11.2482C3.51475 9.50244 4.37162 7.89879 5.63 6.64M12 2V12"/></symbol>
+
     </defs>
   </svg>
 
@@ -1717,22 +2393,45 @@
           <!-- Top Icons (node 1084:1909): flex, gap-8, h-full, justify-end -->
           <div class="navbar-primary__icons">
             <button class="navbar-action-btn" aria-label="Search" type="button">
-              <svg aria-hidden="true"><use href="#ic-search"/></svg>
+              <div class="nav-btn-content">
+                <div class="nav-btn-rect" aria-hidden="true"></div>
+                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
+              </div>
             </button>
             <button class="navbar-action-btn" aria-label="Maximize" type="button">
-              <svg aria-hidden="true"><use href="#ic-maximize"/></svg>
+              <div class="nav-btn-content">
+                <div class="nav-btn-rect" aria-hidden="true"></div>
+                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-maximize"/></svg></div>
+              </div>
             </button>
-            <button class="navbar-action-btn" aria-label="Mobile app" type="button">
-              <svg aria-hidden="true"><use href="#ic-smartphone"/></svg>
+            <button class="navbar-action-btn" aria-label="Download app" id="download-btn" type="button" aria-haspopup="true">
+              <div class="nav-btn-content">
+                <div class="nav-btn-union-bg" aria-hidden="true"></div>
+                <div class="nav-btn-rect" aria-hidden="true"></div>
+                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
+              </div>
             </button>
-            <button class="navbar-action-btn" aria-label="Notifications" type="button">
-              <svg aria-hidden="true"><use href="#ic-bell"/></svg>
+            <button class="navbar-action-btn" aria-label="Notifications" id="notif-btn" type="button" aria-haspopup="true">
+              <div class="nav-btn-content">
+                <div class="nav-btn-union-bg" aria-hidden="true"></div>
+                <div class="nav-btn-rect" aria-hidden="true"></div>
+                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+              </div>
             </button>
-            <button class="navbar-action-btn" aria-label="Language: English" type="button">
-              <svg aria-hidden="true"><use href="#ic-en"/></svg>
+            <button class="navbar-action-btn" aria-label="Language" id="locale-btn" type="button" aria-haspopup="true">
+              <div class="nav-btn-content">
+                <div class="nav-btn-union-bg" aria-hidden="true"></div>
+                <div class="nav-btn-rect" aria-hidden="true"></div>
+                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
+              </div>
             </button>
-            <button class="navbar-action-btn" aria-label="App menu" type="button">
-              <svg aria-hidden="true"><use href="#ic-waffle"/></svg>
+            <!-- Learn Menu trigger — waffle icon, Active state shows Union speech-bubble -->
+            <button class="navbar-action-btn" aria-label="App menu" id="waffle-btn" type="button" aria-haspopup="true">
+              <div class="nav-btn-content">
+                <div class="nav-btn-union-bg" aria-hidden="true"></div>
+                <div class="nav-btn-rect" aria-hidden="true"></div>
+                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-waffle"/></svg></div>
+              </div>
             </button>
           </div>
         </div>
@@ -1748,8 +2447,286 @@
       </div>
 
     </div>
-  </section><!-- end NavbarPrimary-Desktop -->
 
+    <!-- Profile Menu - 1.5 (DS node 3908:3679)
+         Opens on avatar click · closes on mouseleave · positioned below navbar at right:page-padding-x -->
+    <div class="profile-dropdown" id="profile-dropdown" aria-label="Profile menu">
+
+      <!-- Header: mint bg · 1px green border · 16px radius -->
+      <div class="profile-dropdown__header">
+
+        <!-- Avatar 64×64 + Number Badge (level 15) -->
+        <div class="profile-dropdown__avatar-wrap">
+          <div class="profile-dropdown__avatar">
+            <img src="icons/avatar-user.png" alt="">
+          </div>
+          <span class="profile-dropdown__avatar-badge">15</span>
+        </div>
+
+        <!-- Name / username / plan pill -->
+        <div class="profile-dropdown__info">
+          <div class="profile-dropdown__name-row">
+            <span class="profile-dropdown__name">Diana Adam</span>
+            <!-- Icon Badge - 1.5: blue #00a2e8 · 1px white border · check icon 8×8 -->
+            <span class="profile-dropdown__verified" aria-label="Verified">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17L4 12"/></svg>
+            </span>
+          </div>
+          <span class="profile-dropdown__username">@dianaadam26</span>
+        </div>
+
+        <!-- Pill Badge - 1.5: Free plan -->
+        <span class="profile-dropdown__plan">Free</span>
+
+        <!-- Upgrade link: Filled/star + text -->
+        <a class="profile-dropdown__upgrade" href="#">
+          <svg aria-hidden="true"><use href="#ic-star-filled-24"/></svg>
+          Upgrade to Pandai Premium
+        </a>
+
+      </div><!-- end header -->
+
+      <!-- Menu items (DS Dropdown - Parts rows) -->
+      <div class="profile-dropdown__menu">
+
+        <div class="profile-dropdown__item" role="button" tabindex="0">
+          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-user-circle"/></svg></div>
+          <span class="profile-dropdown__item-label">My Profile</span>
+        </div>
+
+        <div class="profile-dropdown__item" role="button" tabindex="0">
+          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-user-check"/></svg></div>
+          <span class="profile-dropdown__item-label">Manage Account</span>
+        </div>
+
+        <div class="profile-dropdown__item" role="button" tabindex="0">
+          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-star-24"/></svg></div>
+          <span class="profile-dropdown__item-label">Subscribe Pandai Premium</span>
+        </div>
+
+        <div class="profile-dropdown__item" role="button" tabindex="0">
+          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-credit-card"/></svg></div>
+          <span class="profile-dropdown__item-label">Payment History</span>
+        </div>
+
+        <div class="profile-dropdown__item" role="button" tabindex="0">
+          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-progress-mobile"/></svg></div>
+          <span class="profile-dropdown__item-label">Share My Progress</span>
+        </div>
+
+        <div class="profile-dropdown__item" role="button" tabindex="0">
+          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div>
+          <span class="profile-dropdown__item-label">Learn and Earn</span>
+        </div>
+
+        <div class="profile-dropdown__item" role="button" tabindex="0">
+          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-life-buoy"/></svg></div>
+          <span class="profile-dropdown__item-label">Online Support</span>
+        </div>
+
+        <div class="profile-dropdown__divider" role="separator"></div>
+
+        <div class="profile-dropdown__item" role="button" tabindex="0">
+          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-power"/></svg></div>
+          <span class="profile-dropdown__item-label">Log Out</span>
+        </div>
+
+      </div><!-- end menu -->
+
+    </div><!-- end profile-dropdown -->
+
+    <!-- Learn Menu - 1.5 (DS node 3908:5091)
+         Triggered by waffle button · closes on mouseleave / outside click
+         JS positions .style.left to align to waffle button · 0.15s snappy animation -->
+    <div class="learn-dropdown" id="learn-dropdown" aria-label="Learn menu" role="menu">
+      <div class="learn-dropdown__grid">
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Live Tuition">
+          <img class="learn-dropdown__icon" src="icons/feature-live-tuition.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Live Tuition</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Live Help">
+          <img class="learn-dropdown__icon" src="icons/feature-live-help.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Live Help</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quiz">
+          <img class="learn-dropdown__icon" src="icons/feature-quiz.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Quiz</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Practice">
+          <img class="learn-dropdown__icon" src="icons/feature-practice.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Practice</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Chapters">
+          <img class="learn-dropdown__icon" src="icons/feature-chapters.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Chapters</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Textbooks">
+          <img class="learn-dropdown__icon" src="icons/feature-textbooks.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Textbooks</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quick Notes">
+          <img class="learn-dropdown__icon" src="icons/feature-quick-notes.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Quick Notes</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Videos">
+          <img class="learn-dropdown__icon" src="icons/feature-videos.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Videos</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Experiments">
+          <img class="learn-dropdown__icon" src="icons/feature-experiments.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Experiments</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Personality">
+          <img class="learn-dropdown__icon" src="icons/feature-personality.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Personality</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="University">
+          <img class="learn-dropdown__icon" src="icons/feature-university.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">University</span>
+        </div>
+
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Rewards">
+          <img class="learn-dropdown__icon" src="icons/feature-rewards.png" alt="" width="70" height="70">
+          <span class="learn-dropdown__label">Rewards</span>
+        </div>
+
+      </div>
+    </div><!-- end learn-dropdown -->
+
+    <!-- Localization dropdown (DS node 3928:3067, Navbar Download Apps - 1.5)
+         Triggered by EN button · right-aligned to EN button right edge via JS
+         3 language options: Bahasa Melayu (default selected), English, Chinese -->
+    <div class="locale-dropdown" id="locale-dropdown" aria-label="Select language" role="menu">
+
+      <div class="locale-dropdown__item is-selected" role="menuitem" tabindex="0" data-lang="ms" aria-label="Bahasa Melayu">
+        <span class="locale-dropdown__label">Bahasa Melayu</span>
+      </div>
+
+      <div class="locale-dropdown__item" role="menuitem" tabindex="0" data-lang="en" aria-label="English">
+        <span class="locale-dropdown__label">English</span>
+      </div>
+
+      <div class="locale-dropdown__item" role="menuitem" tabindex="0" data-lang="zh" aria-label="Chinese">
+        <span class="locale-dropdown__label">Chinese</span>
+      </div>
+
+    </div><!-- end locale-dropdown -->
+
+    <!-- Navbar Notification - 1.5 (DS node 3908:13057, Type=Default)
+         320px panel · 4 items · "See all notification" button
+         Triggered by bell button · right-aligned to bell button right edge via JS -->
+    <div class="notif-dropdown" id="notif-dropdown" aria-label="Notifications" role="menu">
+
+      <!-- Navbar Notification Button - Parts ×4 (DS 3908:13427) -->
+      <div class="notif-item" role="menuitem" tabindex="0">
+        <div class="notif-item__content">
+          <div class="notif-item__body">
+            <div class="notif-item__avatar" aria-hidden="true">
+              <svg><use href="#ic-user-circle"/></svg>
+            </div>
+            <div class="notif-item__texts">
+              <div class="notif-item__texts-inner">
+                <p class="notif-item__text">Your quiz result for Chapter 3 is ready. Check your score now!</p>
+                <span class="notif-item__time">2 Hours Ago...</span>
+              </div>
+            </div>
+            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notif-item" role="menuitem" tabindex="0">
+        <div class="notif-item__content">
+          <div class="notif-item__body">
+            <div class="notif-item__avatar" aria-hidden="true">
+              <svg><use href="#ic-user-circle"/></svg>
+            </div>
+            <div class="notif-item__texts">
+              <div class="notif-item__texts-inner">
+                <p class="notif-item__text">Live Tuition for Add Maths starts in 30 minutes. Join now!</p>
+                <span class="notif-item__time">5 Hours Ago...</span>
+              </div>
+            </div>
+            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notif-item" role="menuitem" tabindex="0">
+        <div class="notif-item__content">
+          <div class="notif-item__body">
+            <div class="notif-item__avatar" aria-hidden="true">
+              <svg><use href="#ic-user-circle"/></svg>
+            </div>
+            <div class="notif-item__texts">
+              <div class="notif-item__texts-inner">
+                <p class="notif-item__text">You earned 50 coins from completing today's daily challenge.</p>
+                <span class="notif-item__time">1 Day Ago...</span>
+              </div>
+            </div>
+            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notif-item" role="menuitem" tabindex="0">
+        <div class="notif-item__content">
+          <div class="notif-item__body">
+            <div class="notif-item__avatar" aria-hidden="true">
+              <svg><use href="#ic-user-circle"/></svg>
+            </div>
+            <div class="notif-item__texts">
+              <div class="notif-item__texts-inner">
+                <p class="notif-item__text">New Quick Notes for Physics Chapter 5 are now available.</p>
+                <span class="notif-item__time">6 Days Ago...</span>
+              </div>
+            </div>
+            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- "See all notification" — Primary/L Button - 1.5, no arrow, full-width -->
+      <div class="notif-dropdown__footer">
+        <button class="notif-see-all" type="button">See all notification</button>
+      </div>
+
+    </div><!-- end notif-dropdown -->
+
+    <!-- Download Apps dropdown (DS node 3909:3405, Navbar Download Apps - 1.5)
+         238px panel · 3 items with app store icons
+         Triggered by smartphone button · right-aligned to button right edge via JS -->
+    <div class="download-dropdown" id="download-dropdown" aria-label="Download app" role="menu">
+
+      <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Google Android">
+        <img class="download-dropdown__icon" src="icons/store-google-play.png" alt="Google Play" width="24" height="24">
+        <span class="download-dropdown__label">Google Android</span>
+      </a>
+
+      <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Apple iOS">
+        <img class="download-dropdown__icon" src="icons/store-apple.png" alt="App Store" width="24" height="24">
+        <span class="download-dropdown__label">Apple iOS</span>
+      </a>
+
+      <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Huawei AppGallery">
+        <img class="download-dropdown__icon" src="icons/store-huawei.png" alt="AppGallery" width="24" height="24">
+        <span class="download-dropdown__label">Huawei</span>
+      </a>
+
+    </div><!-- end download-dropdown -->
+
+  </section><!-- end NavbarPrimary-Desktop -->
 
   <!-- ═══════════════════════════════════════════════════════════════
        NAV TOP MENU DESKTOP — Nav Top Menu Desktop - 1.5
@@ -1856,6 +2833,7 @@
       </div>
 
     </nav>
+
   </section><!-- end NavTopMenu-Desktop -->
 
 
@@ -2493,6 +3471,290 @@
        CAROUSEL SCRIPT
   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <script>
+
+    // Profile dropdown — avatar click → toggle open; mouseleave dropdown → close (Rule 14: critical first)
+    (function () {
+      var avatar   = document.querySelector('.navbar-avatar');
+      var dropdown = document.getElementById('profile-dropdown');
+      if (!avatar || !dropdown) return;
+
+      avatar.addEventListener('click', function () {
+        var learnDd      = document.getElementById('learn-dropdown');
+        var waffleBtn    = document.getElementById('waffle-btn');
+        var localeDd     = document.getElementById('locale-dropdown');
+        var localeBtn    = document.getElementById('locale-btn');
+        var notifDd      = document.getElementById('notif-dropdown');
+        var notifBtn     = document.getElementById('notif-btn');
+        var downloadDd   = document.getElementById('download-dropdown');
+        var downloadBtn  = document.getElementById('download-btn');
+        if (learnDd)     learnDd.classList.remove('is-open');
+        if (waffleBtn)   waffleBtn.classList.remove('is-active');
+        if (localeDd)    localeDd.classList.remove('is-open');
+        if (localeBtn)   localeBtn.classList.remove('is-active');
+        if (notifDd)     notifDd.classList.remove('is-open');
+        if (notifBtn)    notifBtn.classList.remove('is-active');
+        if (downloadDd)  downloadDd.classList.remove('is-open');
+        if (downloadBtn) downloadBtn.classList.remove('is-active');
+        dropdown.classList.toggle('is-open');
+      });
+
+      dropdown.addEventListener('mouseleave', function () {
+        dropdown.classList.remove('is-open');
+      });
+    })();
+
+    // Learn Menu dropdown — waffle btn click → position + toggle; mouseleave → close (Rule 14: critical first)
+    (function () {
+      var waffleBtn  = document.getElementById('waffle-btn');
+      var navSection = document.getElementById('NavbarPrimary-Desktop');
+      var dropdown   = document.getElementById('learn-dropdown');
+      if (!waffleBtn || !navSection || !dropdown) return;
+
+      function positionDropdown() {
+        var btnRect     = waffleBtn.getBoundingClientRect();
+        var sectionRect = navSection.getBoundingClientRect();
+        // Right-align: dropdown right edge = waffle button right edge → extends leftward
+        // right = distance from section's right edge to the button's right edge
+        var rightOffset = sectionRect.right - btnRect.right;
+        var dropW       = dropdown.offsetWidth || 365;
+        // Clamp so the dropdown never clips past the section's left edge
+        var maxRight    = sectionRect.width - dropW;
+        dropdown.style.right = Math.max(0, Math.min(rightOffset, maxRight)) + 'px';
+        dropdown.style.left  = 'auto';
+      }
+
+      waffleBtn.addEventListener('click', function () {
+        var willOpen = !dropdown.classList.contains('is-open');
+        var profileDd   = document.getElementById('profile-dropdown');
+        var localeDd    = document.getElementById('locale-dropdown');
+        var localeBtn   = document.getElementById('locale-btn');
+        var notifDd     = document.getElementById('notif-dropdown');
+        var notifBtn    = document.getElementById('notif-btn');
+        var downloadDd  = document.getElementById('download-dropdown');
+        var downloadBtn = document.getElementById('download-btn');
+        if (profileDd)  profileDd.classList.remove('is-open');
+        if (localeDd)   localeDd.classList.remove('is-open');
+        if (localeBtn)  localeBtn.classList.remove('is-active');
+        if (notifDd)    notifDd.classList.remove('is-open');
+        if (notifBtn)   notifBtn.classList.remove('is-active');
+        if (downloadDd)  downloadDd.classList.remove('is-open');
+        if (downloadBtn) downloadBtn.classList.remove('is-active');
+        if (willOpen) positionDropdown();
+        dropdown.classList.toggle('is-open');
+        waffleBtn.classList.toggle('is-active', willOpen);
+      });
+
+      dropdown.addEventListener('mouseleave', function () {
+        dropdown.classList.remove('is-open');
+        waffleBtn.classList.remove('is-active');
+      });
+
+      // Close on outside click
+      document.addEventListener('click', function (e) {
+        if (!dropdown.contains(e.target) && !waffleBtn.contains(e.target)) {
+          dropdown.classList.remove('is-open');
+          waffleBtn.classList.remove('is-active');
+        }
+      }, true);
+
+      // Reposition on resize if open
+      window.addEventListener('resize', function () {
+        if (dropdown.classList.contains('is-open')) positionDropdown();
+      });
+
+      // Persistent Selected state on menu items — DS has Default/Hover/Selected only (no Pressed)
+      var allItems = Array.from(dropdown.querySelectorAll('.learn-dropdown__item'));
+      allItems.forEach(function (item) {
+        item.addEventListener('click', function () {
+          allItems.forEach(function (i) { i.classList.remove('is-selected'); });
+          item.classList.add('is-selected');
+        });
+      });
+    })();
+
+    // Locale dropdown — EN button click → position + toggle; mouseleave → close (Rule 14: critical first)
+    (function () {
+      var localeBtn  = document.getElementById('locale-btn');
+      var navSection = document.getElementById('NavbarPrimary-Desktop');
+      var dropdown   = document.getElementById('locale-dropdown');
+      if (!localeBtn || !navSection || !dropdown) return;
+
+      function positionDropdown() {
+        var btnRect     = localeBtn.getBoundingClientRect();
+        var sectionRect = navSection.getBoundingClientRect();
+        // Right-align dropdown's right edge to the EN button's right edge
+        var rightOffset = sectionRect.right - btnRect.right;
+        var dropW       = dropdown.offsetWidth || 204;
+        var maxRight    = sectionRect.width - dropW;
+        dropdown.style.right = Math.max(0, Math.min(rightOffset, maxRight)) + 'px';
+        dropdown.style.left  = 'auto';
+      }
+
+      localeBtn.addEventListener('click', function () {
+        var willOpen    = !dropdown.classList.contains('is-open');
+        var profileDd   = document.getElementById('profile-dropdown');
+        var learnDd     = document.getElementById('learn-dropdown');
+        var waffleBtn   = document.getElementById('waffle-btn');
+        var notifDd     = document.getElementById('notif-dropdown');
+        var notifBtn    = document.getElementById('notif-btn');
+        var downloadDd  = document.getElementById('download-dropdown');
+        var downloadBtn = document.getElementById('download-btn');
+        if (profileDd)  profileDd.classList.remove('is-open');
+        if (learnDd)    learnDd.classList.remove('is-open');
+        if (waffleBtn)  waffleBtn.classList.remove('is-active');
+        if (notifDd)    notifDd.classList.remove('is-open');
+        if (notifBtn)   notifBtn.classList.remove('is-active');
+        if (downloadDd)  downloadDd.classList.remove('is-open');
+        if (downloadBtn) downloadBtn.classList.remove('is-active');
+        if (willOpen) positionDropdown();
+        dropdown.classList.toggle('is-open');
+        localeBtn.classList.toggle('is-active', willOpen);
+      });
+
+      dropdown.addEventListener('mouseleave', function () {
+        dropdown.classList.remove('is-open');
+        localeBtn.classList.remove('is-active');
+      });
+
+      // Close on outside click
+      document.addEventListener('click', function (e) {
+        if (!dropdown.contains(e.target) && !localeBtn.contains(e.target)) {
+          dropdown.classList.remove('is-open');
+          localeBtn.classList.remove('is-active');
+        }
+      }, true);
+
+      // Reposition on resize if open
+      window.addEventListener('resize', function () {
+        if (dropdown.classList.contains('is-open')) positionDropdown();
+      });
+
+      // Language selection — persistent selected state, auto-close after pick
+      var allItems = Array.from(dropdown.querySelectorAll('.locale-dropdown__item'));
+      allItems.forEach(function (item) {
+        item.addEventListener('click', function () {
+          allItems.forEach(function (i) { i.classList.remove('is-selected'); });
+          item.classList.add('is-selected');
+          setTimeout(function () {
+            dropdown.classList.remove('is-open');
+            localeBtn.classList.remove('is-active');
+          }, 150);
+        });
+      });
+    })();
+
+    // Download Apps dropdown — smartphone button click → position + toggle; mouseleave → close (Rule 14: critical first)
+    (function () {
+      var downloadBtn = document.getElementById('download-btn');
+      var navSection  = document.getElementById('NavbarPrimary-Desktop');
+      var dropdown    = document.getElementById('download-dropdown');
+      if (!downloadBtn || !navSection || !dropdown) return;
+
+      function positionDropdown() {
+        var btnRect     = downloadBtn.getBoundingClientRect();
+        var sectionRect = navSection.getBoundingClientRect();
+        var rightOffset = sectionRect.right - btnRect.right;
+        var dropW       = dropdown.offsetWidth || 238;
+        var maxRight    = sectionRect.width - dropW;
+        dropdown.style.right = Math.max(0, Math.min(rightOffset, maxRight)) + 'px';
+        dropdown.style.left  = 'auto';
+      }
+
+      downloadBtn.addEventListener('click', function () {
+        var willOpen    = !dropdown.classList.contains('is-open');
+        var profileDd   = document.getElementById('profile-dropdown');
+        var learnDd     = document.getElementById('learn-dropdown');
+        var waffleBtn   = document.getElementById('waffle-btn');
+        var localeDd    = document.getElementById('locale-dropdown');
+        var localeBtn   = document.getElementById('locale-btn');
+        var notifDd     = document.getElementById('notif-dropdown');
+        var notifBtn    = document.getElementById('notif-btn');
+        if (profileDd)  profileDd.classList.remove('is-open');
+        if (learnDd)    learnDd.classList.remove('is-open');
+        if (waffleBtn)  waffleBtn.classList.remove('is-active');
+        if (localeDd)   localeDd.classList.remove('is-open');
+        if (localeBtn)  localeBtn.classList.remove('is-active');
+        if (notifDd)    notifDd.classList.remove('is-open');
+        if (notifBtn)   notifBtn.classList.remove('is-active');
+        if (willOpen) positionDropdown();
+        dropdown.classList.toggle('is-open');
+        downloadBtn.classList.toggle('is-active', willOpen);
+      });
+
+      dropdown.addEventListener('mouseleave', function () {
+        dropdown.classList.remove('is-open');
+        downloadBtn.classList.remove('is-active');
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!dropdown.contains(e.target) && !downloadBtn.contains(e.target)) {
+          dropdown.classList.remove('is-open');
+          downloadBtn.classList.remove('is-active');
+        }
+      }, true);
+
+      window.addEventListener('resize', function () {
+        if (dropdown.classList.contains('is-open')) positionDropdown();
+      });
+    })();
+
+    // Notification dropdown — bell button click → position + toggle; mouseleave → close (Rule 14: critical first)
+    (function () {
+      var notifBtn   = document.getElementById('notif-btn');
+      var navSection = document.getElementById('NavbarPrimary-Desktop');
+      var dropdown   = document.getElementById('notif-dropdown');
+      if (!notifBtn || !navSection || !dropdown) return;
+
+      function positionDropdown() {
+        var btnRect     = notifBtn.getBoundingClientRect();
+        var sectionRect = navSection.getBoundingClientRect();
+        // Right-align: dropdown right edge = bell button right edge → extends leftward
+        var rightOffset = sectionRect.right - btnRect.right;
+        var dropW       = dropdown.offsetWidth || 320;
+        var maxRight    = sectionRect.width - dropW;
+        dropdown.style.right = Math.max(0, Math.min(rightOffset, maxRight)) + 'px';
+        dropdown.style.left  = 'auto';
+      }
+
+      notifBtn.addEventListener('click', function () {
+        var willOpen    = !dropdown.classList.contains('is-open');
+        var profileDd   = document.getElementById('profile-dropdown');
+        var learnDd     = document.getElementById('learn-dropdown');
+        var waffleBtn   = document.getElementById('waffle-btn');
+        var localeDd    = document.getElementById('locale-dropdown');
+        var localeBtn   = document.getElementById('locale-btn');
+        var downloadDd  = document.getElementById('download-dropdown');
+        var downloadBtn = document.getElementById('download-btn');
+        if (profileDd)  profileDd.classList.remove('is-open');
+        if (learnDd)    learnDd.classList.remove('is-open');
+        if (waffleBtn)  waffleBtn.classList.remove('is-active');
+        if (localeDd)   localeDd.classList.remove('is-open');
+        if (localeBtn)  localeBtn.classList.remove('is-active');
+        if (downloadDd)  downloadDd.classList.remove('is-open');
+        if (downloadBtn) downloadBtn.classList.remove('is-active');
+        if (willOpen) positionDropdown();
+        dropdown.classList.toggle('is-open');
+        notifBtn.classList.toggle('is-active', willOpen);
+      });
+
+      dropdown.addEventListener('mouseleave', function () {
+        dropdown.classList.remove('is-open');
+        notifBtn.classList.remove('is-active');
+      });
+
+      // Close on outside click
+      document.addEventListener('click', function (e) {
+        if (!dropdown.contains(e.target) && !notifBtn.contains(e.target)) {
+          dropdown.classList.remove('is-open');
+          notifBtn.classList.remove('is-active');
+        }
+      }, true);
+
+      // Reposition on resize if open
+      window.addEventListener('resize', function () {
+        if (dropdown.classList.contains('is-open')) positionDropdown();
+      });
+    })();
 
     // Nav Top Menu — active page toggle + pressed feedback (Rule 14: critical handlers first)
     document.querySelectorAll('.nav-menu-btn').forEach(btn => {
