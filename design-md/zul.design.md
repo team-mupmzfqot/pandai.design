@@ -3863,4 +3863,123 @@ Is the icon multi-color / has fills?            → 2× PNG
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-18 (Rules 106–109 — nav dropdown anatomy, mutual exclusivity, notification structural states, store icon PNG export) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 110 — Never approximate button states — always `get_design_context` on the exact DS node
+
+Every interactive state (hover, selected, disabled) for every component MUST be read from the DS before writing a single CSS rule. No guessing, no deriving from memory, no adapting from a similar component.
+
+**Mandatory workflow for any button/item state:**
+```
+1. get_design_context on the COMPONENT SET node → list ALL variant names
+2. get_design_context on EACH state variant → extract exact values
+3. Write CSS only after step 2 is complete
+```
+
+**What "approximating" looks like — and why it always breaks:**
+
+| Approximation | Reality (DS) | Bug caused |
+|---|---|---|
+| `box-shadow: inset 0 0 0 1px #00cc85` | `border: 1px solid #00cc85` | Invisible difference normally, but breaks on some elements / renders differently |
+| `border-radius: 999px` | `border-radius: 108px` (Radius/pill) | Visually same on small items, but semantically wrong and breaks if item height changes |
+| No default border | `border: 1px solid transparent` | 2px layout shift when border appears on hover |
+| `:active` CSS on Dropdown - Parts | No pressed state exists in DS | Invented state with wrong colors |
+| Selected border `#70bc6f` | `#00a36a` (Border/primary/focus) | Wrong color |
+| Selected text `#00564c` | `#00a36a` (Text/primary/default-hover) | Wrong color |
+
+**Confirmed Dropdown - Parts states (DS node 1342:4370, May 2026):**
+
+| State | bg | border | radius | label |
+|---|---|---|---|---|
+| Default | transparent | `1px solid transparent` | 108px | `#666` (`Text/default/body`) |
+| Hover | `#e8fbe8` | `1px solid #00cc85` | 108px | `#00cc85` (`Text/primary/default`) |
+| Selected | `#b5f291` | `1px solid #00a36a` | 108px | `#00a36a` (`Text/primary/default-hover`) |
+| Disabled | transparent | transparent | 0 | `#bfbfbf` (`Text/disabled/default`) |
+
+**No Pressed state exists** in Dropdown - Parts. Never add `:active` CSS for this component.
+
+**Why `border: 1px solid transparent` in default:** The DS uses a real `border: 1px solid` on hover/selected states. In CSS, adding a border shifts layout by 2px (border-box). Declaring a transparent border in default reserves the space — no layout jump when hover border appears.
+
+---
+
+### Rule 111 — Colored multi-fill SVG icons → SVG symbols with hardcoded fills, not `<img src="*.png">`
+
+Rule 36 ("every icon must be a `<symbol>` + `<use href>`) applies to ALL icons — including colored brand icons. The exception in Rule 109 ("colored icons → 2× PNG") was wrong. Colored icons CAN be SVG symbols — their paths simply use hardcoded fill values instead of `fill="currentColor"`.
+
+**Correct approach for colored brand icons (Google Play, Apple, Huawei etc.):**
+1. Export SVG string via `exportAsync({ format: 'SVG_STRING' })`
+2. Check SVG byte size — if < ~12KB, embed as symbol (most brand icons are < 2KB)
+3. For icons with `<linearGradient>` or `<clipPath>`: define those in the main `<svg><defs>` block (NOT inside the symbol), reference them from the symbol via `url(#id)` — this is required because `url(#id)` resolves from document root, not from within a `<use>` shadow instance
+4. Define a `<symbol id="ic-store-*">` in `<defs>` with the SVG paths and hardcoded fills
+5. Reference via `<svg class="..."><use href="#ic-store-*"/></svg>`
+
+**Why `<img src="*.png">` is wrong:**
+- Violates Rule 36 (all icons must be symbols)
+- PNG requires HTTP request per icon
+- Cannot be inspected or updated from the defs block
+- Inconsistent rendering at different device pixel ratios
+
+**Confirmed store icon SVG sizes (DS node 3909:3405, May 2026):**
+| Icon | SVG size | Verdict |
+|---|---|---|
+| Google Play | 908 bytes | Symbol ✓ |
+| Apple App Store | 1607 bytes | Symbol ✓ (gradient in main defs) |
+| Huawei AppGallery | 1837 bytes | Symbol ✓ (gradient in main defs) |
+
+**Updated decision rule:**
+```
+Single-color outline stroke icon  → SVG symbol with stroke="currentColor"
+Multi-color / filled icon (< 12KB) → SVG symbol with hardcoded fills
+Multi-color illustrated icon (> 12KB) → 2× PNG (Feature/* icons only)
+```
+
+---
+
+### Rule 112 — Shared positioning/spacing values → CSS custom property in `:root`
+
+Any value that is shared across multiple components and may need to change together must be stored as a CSS custom property in `:root` — never hardcoded in each rule separately.
+
+**Pattern:**
+```css
+:root {
+  --nav-dropdown-top: 72px;  /* navbar 64px + gap. DS=80px (16px). Change here to apply everywhere. */
+}
+.profile-dropdown { top: var(--nav-dropdown-top); }
+.learn-dropdown   { top: var(--nav-dropdown-top); }
+.locale-dropdown  { top: var(--nav-dropdown-top); }
+.notif-dropdown   { top: var(--nav-dropdown-top); }
+.download-dropdown{ top: var(--nav-dropdown-top); }
+```
+
+**Why:** When the same value appears in 5 places and the user says "change X to Y," hardcoded values require 5 edits with 5 opportunities for inconsistency. A CSS variable requires 1 edit and is guaranteed consistent.
+
+**Rule:** Before writing any value that will appear more than once, check if a CSS variable already exists. If not, create one and use it everywhere.
+
+**Confirmed instances in this prototype:**
+- `--nav-dropdown-top` — all 5 nav dropdown `top` values (currently 72px = 64 + 8px gap)
+- `--page-max-width` — body + container max-width
+- `--page-padding-x` — horizontal padding on all page sections
+- `--section-gap` — gap between all `.main-content` sections
+
+---
+
+### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-18)
+
+**Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
+
+```
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–112 + confirmed specs
+Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH
+Step 0c → get_design_context on COMPONENT SET    ← list ALL variant names first
+Step 0d → get_design_context on EACH state       ← extract every token before writing CSS
+Step 0e → get_variable_defs on exact sub-nodes   ← confirm Semantic tokens
+Step 0f → Cross-check CSS var against :root hex  ← never guess from token name
+Step 0g → For icons: exportAsync SVG_STRING first ← check size before deciding PNG vs symbol
+Step 0h → get_screenshot after implementation    ← compare against DS side-by-side
+```
+
+**The single biggest mistake in this project:** Writing CSS from memory or approximation instead of reading the DS first. Every wrong button state, every wrong border, every wrong radius came from skipping Step 0c/0d. The DS takes 30 seconds to read. A bug takes 30 minutes to find and fix.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-18 (Rules 110–112 — no approximation, SVG symbols for all icons, CSS variables for shared values) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

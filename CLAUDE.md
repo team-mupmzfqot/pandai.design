@@ -1714,4 +1714,75 @@ See `design-md/zul.design.md` Rule 109 for confirmed DS node IDs and file sizes.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-18 (Rules 52–55 — nav dropdown anatomy, mutual exclusivity, notification structural states, store icon PNG) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### 56. Never approximate button states — get_design_context on the exact DS node first
+
+Before writing any CSS for a button/item state (hover, selected, disabled), call `get_design_context` on the DS component set node and read every variant. No guessing from memory or adapting from a similar component.
+
+**Confirmed Dropdown - Parts states (DS node 1342:4370):**
+
+| State | bg | border | radius | label |
+|---|---|---|---|---|
+| Default | transparent | `1px solid transparent` | 108px | `#666` |
+| Hover | `#e8fbe8` | `1px solid #00cc85` | 108px | `#00cc85` |
+| Selected | `#b5f291` | `1px solid #00a36a` | 108px | `#00a36a` |
+
+**Key patterns:**
+- Use `border: 1px solid transparent` in default — prevents 2px layout shift when hover border appears
+- `border-radius: 108px` (Radius/pill) — not 999px
+- No Pressed/Active state exists — never add `:active` CSS for Dropdown - Parts
+- Transition: `background, border-color` — not `box-shadow`
+
+See `design-md/zul.design.md` Rule 110 for the full breakdown and mistake table.
+
+---
+
+### 57. Colored SVG icons → SVG symbols with hardcoded fills, NOT `<img src="*.png">`
+
+Rule 36 (all icons must be symbols) applies to ALL icons including colored brand icons. Store icons (Google Play, Apple, Huawei) are < 2KB SVGs — always embed as `<symbol>` with hardcoded fills.
+
+For icons with `<linearGradient>` or `<clipPath>`: place those defs in the main `<svg><defs>` block (not inside the symbol) — `url(#id)` resolves from document root, not from `<use>` shadow instances.
+
+**Updated decision rule:**
+- Single-color outline → `<symbol>` with `stroke="currentColor"`
+- Multi-color / filled, < 12KB → `<symbol>` with hardcoded fills
+- Illustrated icon > 12KB → 2× PNG (Feature/* icons only)
+
+See `design-md/zul.design.md` Rule 111.
+
+---
+
+### 58. Shared values → CSS custom property in `:root`, never hardcoded in each rule
+
+Any value used across multiple components (e.g. all dropdown `top` positions) must be a CSS variable. Change once → applies everywhere. Current shared variables:
+
+| Variable | Value | Controls |
+|---|---|---|
+| `--nav-dropdown-top` | `72px` | All 5 nav dropdown top positions |
+| `--page-max-width` | `100%` | Body + container max-width |
+| `--page-padding-x` | `60px` | Horizontal page padding |
+| `--section-gap` | `var(--spacing-space-m)` | Gap between main content sections |
+
+See `design-md/zul.design.md` Rule 112.
+
+---
+
+### Mandatory workflow — BEFORE every session and every change
+
+**Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision. No exceptions.
+
+```
+0a. Read design-md/zul.design.md       → ALL rules 1–112, confirmed specs, known mistakes
+0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs
+0c. get_design_context on COMPONENT SET → list ALL variant names
+0d. get_design_context on EACH state   → extract every token BEFORE writing CSS
+0e. get_variable_defs on sub-nodes     → confirm Semantic tokens
+0f. Cross-check CSS var against :root  → never guess from token name
+0g. exportAsync SVG_STRING for icons   → check size before PNG vs symbol decision
+0h. get_screenshot after implement     → compare against DS, fix before moving on
+```
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-18 (Rules 56–58 — no approximation, SVG symbols for all icons, CSS variables for shared values) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
