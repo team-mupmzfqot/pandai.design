@@ -1802,4 +1802,46 @@ See `design-md/zul.design.md` Rule 112.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-19 (Rule 59 / zul Rule 117 — Button - 1.5 full state table: Text/primary/on-color corrected #f6fdfb→#e1f9ea, Pressed corrected to #00a36a, State=Active documented for all variants; Rule 19 table updated) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### 60. `strokeAlign: INSIDE` = `box-shadow: inset` — never `border: 1px solid`
+
+**Non-negotiable. Every component with an INSIDE stroke. No exceptions.**
+
+Figma `strokeAlign: INSIDE` renders the stroke inside the frame's bounding box — **zero layout effect**. CSS `border: 1px solid` adds pixels OUTSIDE, making the element larger than DS intended.
+
+```css
+/* ✓ Correct — matches strokeAlign: INSIDE */
+box-shadow: inset 0 0 0 1px var(--token);
+
+/* ✗ Wrong — adds 2px to element's visual size */
+border: 1px solid var(--token);
+```
+
+**How to check:** `use_figma` → read `node.strokeAlign`. If `"INSIDE"` → `box-shadow: inset`.
+
+**Confirmed instance — Secondary/M button arrow circle (2026-05-19):**
+All 5 states: `w:20 h:20`, `padding:2px`, `strokeAlign: INSIDE`. State changes = only `box-shadow` color + `background`. Never change `width`, `height`, or `padding` between states unless raw DS node confirms it.
+
+**`get_design_context` generated code can misreport padding.** It showed `p-[1px]` for Default but raw `use_figma` confirmed `padding: 2` for all states. Always verify exact dimensions via raw `use_figma` node inspection (`paddingTop/Right/Bottom/Left`, `strokeAlign`, `width`, `height`).
+
+---
+
+### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-19)
+
+**Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision. No exceptions.
+
+```
+0a. Read design-md/zul.design.md       → ALL rules 1–118, confirmed specs, known mistakes
+0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs
+0c. get_design_context on COMPONENT SET → list ALL variant names
+0d. get_design_context on EACH state   → extract every token BEFORE writing CSS
+0e. get_variable_defs on sub-nodes     → confirm Semantic tokens
+0f. use_figma raw node inspection      → confirm exact padding, strokeAlign, width, height
+0g. exportAsync SVG_STRING for icons   → check size before PNG vs symbol decision
+0h. get_screenshot after implement     → compare against DS, fix before moving on
+```
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-19 (Rule 60 / zul Rule 118 — strokeAlign:INSIDE=box-shadow:inset, raw use_figma inspection required for exact dimensions, Secondary/M arrow confirmed 20×20 padding:2px all states) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

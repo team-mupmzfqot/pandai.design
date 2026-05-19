@@ -4184,12 +4184,76 @@ The DS COMPONENT_SET `State=Active` variant is a **plain rounded square** — no
 
 ---
 
+### Rule 118 — `strokeAlign: INSIDE` in Figma = `box-shadow: inset` in CSS — NEVER `border: 1px solid`
+
+**Source:** Confirmed from raw `use_figma` node inspection of Button - 1.5 Secondary/M arrow circle (nodes 538:1923–538:1899), 2026-05-19.
+
+#### The rule
+
+Figma `strokeAlign: INSIDE` means the stroke renders **inside** the frame's bounding box and has **zero effect on layout dimensions**. The correct CSS equivalent is:
+
+```css
+box-shadow: inset 0 0 0 Npx <color>;
+```
+
+Using `border: Npx solid` instead is **always wrong** for INSIDE strokes — it adds pixels OUTSIDE the element's natural size, making the element larger than the DS intended.
+
+| Figma stroke setting | CSS equivalent | Layout effect |
+|---|---|---|
+| `strokeAlign: INSIDE` | `box-shadow: inset 0 0 0 Npx color` | None — stays inside bounds |
+| `strokeAlign: OUTSIDE` | `outline: Npx solid color` | None — outside box model |
+| `strokeAlign: CENTER` | `border: Npx solid color` (with `box-sizing`) | Adds to box when width is explicit |
+
+**How to check in `use_figma`:** Inspect `node.strokeAlign` on the frame. If `"INSIDE"` → `box-shadow: inset`. Always check — never assume.
+
+#### Confirmed instance — Secondary/M arrow circle (2026-05-19)
+
+All 5 states (`538:1923`, `1915`, `1907`, `3029:19996`, `538:1899`) have:
+- `w: 20, h: 20` — explicit fixed size
+- `pt:2 pr:2 pb:2 pl:2` — 2px padding all sides (same for ALL states)
+- `strokeAlign: "INSIDE"`, `strokeWeight: 1`
+- Content area = 20 − 2×2 = **16px** (matches 16×16 icon clip)
+
+**CSS:**
+```css
+.btn-secondary-arrow__circle {
+  width:      20px;
+  height:     20px;
+  padding:    2px;
+  box-shadow: inset 0 0 0 1px var(--border-primary-default);  /* Default */
+}
+/* State overrides — only box-shadow and background change, never padding or size */
+:hover  .circle { background: #b5f291; box-shadow: inset 0 0 0 1px #70bc6f; }
+:active .circle { background: #00cc85; box-shadow: none; }
+.is-active .circle { background: transparent; box-shadow: inset 0 0 0 1px #d9f7ed; }
+:disabled .circle { background: transparent; box-shadow: inset 0 0 0 1px #bfbfbf; }
+```
+
+#### Root cause of the bug that required 3 attempts
+
+Attempt 1: `box-shadow: inset` + `padding: 1px` → 18px (wrong, DS is 20px)
+Attempt 2: `border: 1px solid` + `padding: 1px` → 22px visually (border adds outside: 18+2+2=22px)
+Attempt 3 (correct): `box-shadow: inset` + `padding: 2px` + `width: 20px; height: 20px` → exactly 20px
+
+The error in attempt 1 came from trusting `get_design_context` code output which showed `p-[1px]` for Default — but raw `use_figma` node inspection confirmed `paddingTop/Right/Bottom/Left: 2` for ALL states. **`get_design_context` generated code can misreport exact padding values. Always verify dimensions via raw `use_figma` node inspection.**
+
+#### When `get_design_context` is not enough — use raw `use_figma` inspection
+
+`get_design_context` generates React/Tailwind code for layout guidance — it is not a pixel-perfect spec. It can:
+- Misrepresent padding (showed `p-[1px]` but DS had `padding: 2`)
+- Omit stroke alignment (`INSIDE` vs `OUTSIDE` vs `CENTER`)
+- Miss whether sizing is `AUTO` or `FIXED`
+
+**For any element where exact dimensions matter**, always follow with a raw `use_figma` node inspection reading `paddingTop/Right/Bottom/Left`, `strokeAlign`, `strokeWeight`, `width`, `height`, `primaryAxisSizingMode`, `counterAxisSizingMode`.
+
+---
+
 ### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-19)
 
 **Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
 
 ```
-Step 0a → Read design-md/zul.design.md          ← ALL rules 1–116 + confirmed specs
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–118 + confirmed specs
 Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH
 Step 0c → get_design_context on COMPONENT SET    ← list ALL variant names first
 Step 0d → get_design_context on EACH state       ← extract every token before writing CSS
@@ -4203,4 +4267,4 @@ Step 0h → get_screenshot after implementation    ← compare against DS side-b
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-19 (Rule 116 — Nav Button - 1.5 full confirmed spec: corrected Active icon #e1f9ea, no speech-bubble tail, COMPONENT_SET is canonical source not standalone nodes; Rule 99 superseded) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+*Generated: May 2026 | Last updated: 2026-05-19 (Rule 118 — strokeAlign:INSIDE = box-shadow:inset never border; raw use_figma node inspection required for exact dimensions; Secondary/M arrow circle confirmed 20×20 padding:2px all states) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
