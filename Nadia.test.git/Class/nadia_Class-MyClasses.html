@@ -152,7 +152,7 @@
       display:       flex;
       align-items:   center;
       gap:           28px;                            /* spacing/space-2xl */
-      overflow:      visible;
+      overflow:      hidden;
       width:         100%;
       padding:       var(--spacing-space-xs) var(--spacing-space-xl);  /* 8px 24px */
     }
@@ -1259,39 +1259,16 @@
 
     /* ══════════════════════════════════════════════════════════════
        Waffle button active state — DS node 3887:50052
-       Union speech-bubble bg + Learn Menu dropdown
+       Standard is-active (green bg) + Learn Menu dropdown
        ══════════════════════════════════════════════════════════════ */
 
-    /* Waffle button — needs relative positioning for the union bg child */
-    #waffle-btn { position: relative; }
-
-    /* Union bg image — hidden by default, visible when active */
-    .waffle-union-bg {
-      display:         none;
-      position:        absolute;
-      top:             0;
-      left:            0;
-      width:           44px;
-      height:          52px;    /* 51.172px — extends ~8px below button */
-      pointer-events:  none;
-      z-index:         0;
-    }
-    #waffle-btn > svg { position: relative; z-index: 1; }
-
-    /* Active state — override standard is-active green rect with union shape */
-    #waffle-btn.is-active {
-      background: transparent;
-      box-shadow: none;
-      color: var(--icon-primary-default);   /* #00cc85 green filled waffle */
-    }
-    #waffle-btn.is-active .waffle-union-bg { display: block; }
-
     /* ── Learn Menu panel — DS node 3908:5492 ─────────────────── */
+    /* right is set by JS (positionLearnMenu) to align with waffle button right edge */
     .learn-menu {
       display:       none;
       position:      absolute;
-      top:           calc(100% - 8px);   /* overlap the union tab slightly */
-      right:         var(--spacing-space-xl);    /* 24px — aligns with navbar padding */
+      top:           100%;       /* directly below the brand bar section */
+      right:         0;          /* fallback — overridden by JS */
       z-index:       300;
       background:    var(--surface-general-default);
       border:        1px solid var(--border-primary-default);
@@ -1414,7 +1391,6 @@
           <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
           <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
           <div id="waffle-btn" class="navbar-primary-icon" aria-haspopup="true" aria-expanded="false" title="Learn Menu">
-            <img class="waffle-union-bg" src="../../zul.test.git/icons/nav-btn-union.png" alt="" aria-hidden="true">
             <svg aria-hidden="true"><use href="#ic-waffle"/></svg>
           </div>
         </div>
@@ -2465,7 +2441,15 @@
       const learnMenu  = document.getElementById('learn-menu');
       if (!waffleBtn || !learnMenu) return;
 
+      // Right-align dropdown with waffle button's right edge using live DOM measurement
+      function positionLearnMenu() {
+        const bRect = waffleBtn.getBoundingClientRect();
+        // right: distance from viewport right to button's right edge
+        learnMenu.style.right = (window.innerWidth - bRect.right) + 'px';
+      }
+
       function openLearnMenu() {
+        positionLearnMenu();
         learnMenu.classList.add('is-open');
         waffleBtn.classList.add('is-active');
         waffleBtn.setAttribute('aria-expanded', 'true');
@@ -2487,6 +2471,11 @@
       // Close on outside click or Escape
       document.addEventListener('click', closeLearnMenu);
       document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLearnMenu(); });
+
+      // Reposition on resize in case layout shifts
+      window.addEventListener('resize', function() {
+        if (learnMenu.classList.contains('is-open')) positionLearnMenu();
+      });
     })();
 
     // Mobile/tablet menu modal — open/close handlers
