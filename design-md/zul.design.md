@@ -4246,6 +4246,42 @@ The error in attempt 1 came from trusting `get_design_context` code output which
 
 **For any element where exact dimensions matter**, always follow with a raw `use_figma` node inspection reading `paddingTop/Right/Bottom/Left`, `strokeAlign`, `strokeWeight`, `width`, `height`, `primaryAxisSizingMode`, `counterAxisSizingMode`.
 
+#### INSIDE stroke with image/bg children — use `::after`, not `box-shadow: inset`
+
+`box-shadow: inset` paints **behind** all child elements. If a child (image div, background fill) covers the element's boundary, the inset shadow is hidden — the border disappears.
+
+**Rule:** When the element has image or background-fill children that reach the edge (cards, carousels), replicate Figma INSIDE stroke with a `::after` pseudo-element that paints **on top**:
+
+```css
+.card {
+  position: relative;
+  overflow:  hidden;
+  /* NO border, NO box-shadow on the card itself */
+}
+.card::after {
+  content:        '';
+  position:       absolute;
+  inset:          0;
+  border:         1px solid var(--border-token);
+  border-radius:  inherit;   /* matches parent radius */
+  pointer-events: none;
+  z-index:        1;         /* above all children */
+}
+```
+
+`pointer-events: none` is mandatory — without it the pseudo-element blocks clicks on card content.
+
+**When to use each approach:**
+
+| Situation | Pattern |
+|---|---|
+| No image/bg child reaches the edge (button, nav icon) | `box-shadow: inset 0 0 0 1px` |
+| Image or bg-fill child covers the boundary (card, carousel) | `::after` with `border` |
+
+**Confirmed instances (2026-05-20):**
+- Quiz Card - 1.5: `::after` border needed — image column fills 100% of card edge, covers inset shadow
+- Nav Button - 1.5 rect: `box-shadow: inset` works — no image child covers the rect boundary
+
 ---
 
 ### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-19)
@@ -4267,4 +4303,4 @@ Step 0h → get_screenshot after implementation    ← compare against DS side-b
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-19 (Rule 118 — strokeAlign:INSIDE = box-shadow:inset never border; raw use_figma node inspection required for exact dimensions; Secondary/M arrow circle confirmed 20×20 padding:2px all states) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+*Generated: May 2026 | Last updated: 2026-05-20 (Rule 118 addendum — box-shadow:inset is hidden by image children; use ::after pseudo-element with border for cards/carousels that have edge-reaching image content) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

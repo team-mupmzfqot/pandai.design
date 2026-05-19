@@ -884,14 +884,25 @@
       max-height:     148px;
       min-width:      0;
       background:     var(--surface-general-default);
-      box-shadow:     inset 0 0 0 1px var(--card-subject-color, var(--border-default));
       border-radius:  var(--corner-radius-corner-2xl);
       display:        flex;
       flex-direction: row;
       align-items:    flex-start;
       overflow:       hidden;
       cursor:         default;
-      transition:     box-shadow 0.15s;
+      position:       relative;
+    }
+    /* DS strokeAlign:INSIDE — ::after overlays the border on top of image children
+       box-shadow:inset paints behind content and gets covered by the image div.
+       ::after + pointer-events:none renders the border above all children (Rule 118). */
+    .quiz-card::after {
+      content:        '';
+      position:       absolute;
+      inset:          0;
+      border:         1px solid var(--card-subject-color, var(--border-default));
+      border-radius:  var(--corner-radius-corner-2xl);
+      pointer-events: none;
+      z-index:        1;
     }
 
     /* Image — explicit 148×148px square, grey bg placeholder (DS: aspect-[128/128] self-stretch) */
