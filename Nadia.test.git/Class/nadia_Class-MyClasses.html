@@ -1304,7 +1304,7 @@
     .learn-menu {
       display:       none;
       position:      absolute;
-      top:           100%;       /* directly below the brand bar section */
+      top:           calc(100% + calc(var(--spacing-space-s) / 2));  /* halfway into the 12px gap between section 1 and 2 */
       right:         0;          /* fallback — overridden by JS */
       z-index:       300;
       background:    var(--surface-general-default);
