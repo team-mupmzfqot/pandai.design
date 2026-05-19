@@ -1258,6 +1258,295 @@
     .mmenu-lang-btn svg { display: block; width: 24px; height: 24px; }
 
     /* ══════════════════════════════════════════════════════════════
+       Nav Primary Dropdowns — shared panel + item states
+       DS: Dropdown - Parts / CLAUDE.md Rule 56
+       ══════════════════════════════════════════════════════════════ */
+
+    /* Shared panel base — sibling of .navbar-primary, no overflow:hidden clip */
+    .nav-dd-panel {
+      display:        none;
+      position:       absolute;
+      top:            calc(100% + calc(var(--spacing-space-s) / 2));
+      right:          0;                       /* fallback — overridden by JS */
+      z-index:        300;
+      background:     var(--surface-general-default);
+      border:         1px solid var(--border-primary-default);
+      border-radius:  var(--corner-radius-corner-4xl);   /* 24px */
+      padding:        var(--spacing-space-m);             /* 16px */
+    }
+    .nav-dd-panel.is-open { display: block; }
+
+    /* Dropdown - Parts item */
+    .nav-dd-item {
+      display:        flex;
+      align-items:    center;
+      gap:            10px;
+      padding:        var(--spacing-space-xs) var(--spacing-space-m);  /* 8px 16px */
+      border-radius:  var(--corner-radius-corner-pill);   /* 999px */
+      border:         1px solid transparent;
+      cursor:         pointer;
+      user-select:    none;
+      transition:     background 0.15s, border-color 0.15s;
+      font-family:    'Poppins', sans-serif;
+      font-size:      14px;
+      font-weight:    600;
+      line-height:    20px;
+      color:          var(--text-default-body);            /* #666 */
+      white-space:    nowrap;
+      width:          100%;
+    }
+    .nav-dd-item:hover {
+      background:   #e8fbe8;
+      border-color: var(--border-primary-default);
+      color:        var(--text-primary-default);
+    }
+    .nav-dd-item:hover .nav-dd-icon { color: var(--icon-primary-default); }
+    .nav-dd-item.is-selected {
+      background:   var(--surface-secondary-default);     /* #b5f291 */
+      border-color: var(--border-primary-focus);          /* #00a36a */
+      color:        var(--border-primary-focus);          /* #00a36a */
+    }
+    .nav-dd-item.is-selected .nav-dd-icon { color: var(--icon-primary-focus); }
+
+    /* Icon slot inside dropdown items */
+    .nav-dd-icon {
+      width:       24px;
+      height:      24px;
+      flex-shrink: 0;
+      overflow:    hidden;
+      display:     flex;
+      align-items: center;
+      justify-content: center;
+      color:       var(--icon-default-default);            /* #808080 */
+    }
+    .nav-dd-icon svg { display: block; width: 100%; height: 100%; }
+    .nav-dd-icon img { display: block; width: 24px; height: 24px; object-fit: contain; }
+
+    /* ── Language panel (locale) ─────────────────────────────── */
+    #locale-dropdown { min-width: 200px; }
+
+    /* ── Notification panel ─────────────────────────────────── */
+    #notif-dropdown { width: 320px; }
+
+    .notif-item {
+      display: flex;
+      gap: 0;
+      width: 100%;
+    }
+    .notif-item__content {
+      flex: 1;
+      background: white;
+      padding: var(--spacing-space-s) var(--spacing-space-s) 0;  /* pt:12 px:12 pb:0 */
+    }
+    .notif-item__row {
+      display:       flex;
+      gap:           8px;
+      align-items:   flex-start;
+      padding-bottom: var(--spacing-space-s);   /* 12px */
+      border-bottom: 1px solid var(--border-general-default);   /* #d9d9d9 */
+    }
+    .notif-item:last-of-type .notif-item__row { border-bottom: none; }
+
+    /* Avatar 60×60 — Outline/user-circle */
+    .notif-avatar {
+      width:         60px;
+      height:        60px;
+      border-radius: var(--corner-radius-corner-rounded);
+      border:        1px solid var(--border-primary-default);
+      overflow:      hidden;
+      flex-shrink:   0;
+      display:       flex;
+      align-items:   center;
+      justify-content: center;
+      color:         var(--icon-primary-default);
+      background:    var(--surface-general-default);
+    }
+    .notif-avatar svg { width: 50px; height: 50px; }
+
+    .notif-texts {
+      flex:    1;
+      min-width: 0;
+      display: flex;
+      gap:     4px;
+      flex-direction: column;
+    }
+    .notif-msg {
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       var(--text-default-body);
+      max-width:   205px;
+    }
+    .notif-time {
+      font-size:   10px;
+      font-weight: 500;
+      line-height: 12px;
+      color:       var(--text-primary-default);
+    }
+
+    .notif-indicator-wrap {
+      display:    flex;
+      align-items: flex-start;
+      padding-top: 4px;
+      flex-shrink: 0;
+    }
+    .notif-dot {
+      width:         8px;
+      height:        8px;
+      border-radius: var(--corner-radius-corner-rounded);
+      background:    var(--surface-primary-default);
+      flex-shrink:   0;
+    }
+
+    /* "See all notification" CTA */
+    .notif-cta {
+      padding-top: var(--spacing-space-m);
+      width:       100%;
+    }
+    .btn-notif-cta {
+      display:        flex;
+      align-items:    center;
+      justify-content: center;
+      width:          100%;
+      max-height:     48px;
+      padding:        var(--spacing-space-xs) var(--spacing-space-s);
+      background:     var(--surface-primary-default);
+      border:         1px solid var(--border-primary-focus);
+      border-radius:  var(--corner-radius-corner-rounded);
+      font-family:    'Poppins', sans-serif;
+      font-size:      14px;
+      font-weight:    600;
+      line-height:    20px;
+      color:          var(--text-primary-on-color);
+      cursor:         pointer;
+      text-align:     center;
+    }
+
+    /* ── Download App panel ──────────────────────────────────── */
+    #download-dropdown { min-width: 220px; }
+
+    /* ── Profile panel ───────────────────────────────────────── */
+    #profile-dropdown { width: 320px; overflow: hidden; }
+
+    .profile-header {
+      background:     #f6fef6;        /* Surface/secondary/default-hover */
+      border:         1px solid var(--border-primary-default);
+      border-radius:  18px;           /* radius/2xl */
+      padding:        var(--spacing-space-m);
+      display:        flex;
+      flex-direction: column;
+      align-items:    center;
+      gap:            10px;
+      width:          100%;
+      margin-bottom:  var(--spacing-space-xs);
+    }
+
+    /* Avatar 64×64 */
+    .profile-avatar-wrap { position: relative; flex-shrink: 0; }
+    .profile-avatar {
+      width:         64px;
+      height:        64px;
+      border-radius: var(--corner-radius-corner-rounded);
+      border:        1px solid var(--border-primary-default);
+      overflow:      hidden;
+      position:      relative;
+      background:    var(--surface-general-default);
+    }
+    .profile-avatar__img {
+      position:   absolute;
+      left: -7px; right: -8px; top: -1px;
+      aspect-ratio: 1/1;
+      object-fit:  cover;
+      display:     block;
+    }
+    .profile-badge {
+      position:      absolute;
+      top: 0; right: -2px;
+      min-width:     20px;
+      height:        20px;
+      background:    var(--surface-primary-default);
+      border-radius: var(--corner-radius-corner-rounded);
+      padding:       var(--spacing-space-xxs);
+      display:       flex;
+      align-items:   center;
+      justify-content: center;
+      font-size:     10px;
+      font-weight:   600;
+      line-height:   var(--spacing-space-s);
+      color:         var(--text-primary-on-color);
+    }
+
+    .profile-name-row {
+      display:     flex;
+      align-items: center;
+      gap:         4px;
+    }
+    .profile-name {
+      font-size:   18px;
+      font-weight: 700;
+      line-height: 28px;
+      color:       var(--surface-tertiary-default);   /* #00564c */
+      white-space: nowrap;
+    }
+    .profile-check-badge {
+      width:         14px;
+      height:        14px;
+      background:    #00a2e8;    /* surface/informative/default */
+      border-radius: var(--corner-radius-corner-rounded);
+      border:        1px solid white;
+      display:       flex;
+      align-items:   center;
+      justify-content: center;
+      flex-shrink:   0;
+      overflow:      hidden;
+    }
+    .profile-check-badge svg { width: 8px; height: 8px; }
+
+    .profile-username {
+      font-size:   12px;
+      font-weight: 500;
+      line-height: var(--spacing-space-s);
+      color:       var(--text-default-body);
+      white-space: nowrap;
+    }
+    .profile-plan-pill {
+      background:    var(--surface-general-default);
+      border:        1px solid var(--border-primary-default);
+      border-radius: var(--corner-radius-corner-rounded);
+      padding:       2px var(--spacing-space-xs);
+      font-size:     10px;
+      font-weight:   500;
+      line-height:   12px;
+      color:         var(--text-primary-default);
+    }
+    .profile-upgrade-link {
+      display:     flex;
+      align-items: center;
+      gap:         var(--spacing-space-xs);
+      font-size:   14px;
+      font-weight: 400;
+      color:       var(--text-primary-default);
+      text-decoration: none;
+      cursor:      pointer;
+      white-space: nowrap;
+    }
+    .profile-upgrade-link svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+    .profile-menu {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xs);
+      width:          100%;
+    }
+
+    .profile-divider {
+      height:     1px;
+      background: var(--border-general-default);   /* #d9d9d9 */
+      width:      100%;
+      margin:     4px 0;
+    }
+
+    /* ══════════════════════════════════════════════════════════════
        Waffle button active state — DS node 3887:50052
        Union speech-bubble overlay (outside overflow:hidden context)
        ══════════════════════════════════════════════════════════════ */
@@ -1432,6 +1721,18 @@
     <symbol id="ic-website" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3.6 9 L20.4 9 M3.6 15 L20.4 15"/><path d="M11.5 3 C9.9 5.7 9 8.8 9 12 C9 15.2 9.9 18.3 11.5 21"/><path d="M12.5 3 C14.1 5.7 15 8.8 15 12 C15 15.2 14.1 18.3 12.5 21"/></symbol>
     <!-- Outline/plus — DS node 260:1051, vector offset x:5 y:5 -->
     <symbol id="ic-plus" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5 L12 19 M5 12 L19 12"/></symbol>
+    <!-- Outline/user-circle — notification avatar + profile menu icon -->
+    <symbol id="ic-user-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></symbol>
+    <!-- Outline/user-check — Manage Account -->
+    <symbol id="ic-user-check" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></symbol>
+    <!-- Outline/credit-card — Payment History -->
+    <symbol id="ic-credit-card" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></symbol>
+    <!-- Outline/progress-mobile — Share My Progress -->
+    <symbol id="ic-progress-mobile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><polyline points="9 10 12 7 15 10"/><line x1="12" y1="7" x2="12" y2="14"/><line x1="9" y1="18" x2="15" y2="18"/></symbol>
+    <!-- Outline/life-buoy — Online Support -->
+    <symbol id="ic-life-buoy" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/></symbol>
+    <!-- Outline/power — Log Out -->
+    <symbol id="ic-power" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></symbol>
     <!-- Mobile menu modal icons -->
     <!-- Outline/x — close button, path at inset:25% of 24×24 -->
     <symbol id="ic-x" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6L18 18"/></symbol>
@@ -1461,18 +1762,159 @@
         <div class="navbar-primary-icons">
           <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
           <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-maximize"/></svg></div>
-          <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
-          <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
-          <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
+          <div id="download-btn" class="navbar-primary-icon" aria-haspopup="true" aria-expanded="false" title="Download App"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
+          <div id="notif-btn"    class="navbar-primary-icon" aria-haspopup="true" aria-expanded="false" title="Notifications"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+          <div id="locale-btn"   class="navbar-primary-icon" aria-haspopup="true" aria-expanded="false" title="Language"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
           <div id="waffle-btn" class="navbar-primary-icon" aria-haspopup="true" aria-expanded="false" title="Learn Menu">
             <svg aria-hidden="true"><use href="#ic-waffle"/></svg>
           </div>
         </div>
-        <div class="navbar-avatar-wrap">
+        <div id="profile-btn" class="navbar-avatar-wrap" aria-haspopup="true" aria-expanded="false" title="Profile" style="cursor:pointer">
           <div class="navbar-avatar">
             <img src="../navbar/icon-avatar-user.png" class="navbar-avatar__img" alt="User">
           </div>
           <span class="navbar-badge">15</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Language dropdown (EN / locale-btn) — DS node 3928:3067 ── -->
+    <div id="locale-dropdown" class="nav-dd-panel" role="menu" aria-label="Language">
+      <div class="nav-dd-item is-selected" role="menuitem">English</div>
+      <div class="nav-dd-item" role="menuitem">Bahasa Melayu</div>
+      <div class="nav-dd-item" role="menuitem">Chinese</div>
+    </div>
+
+    <!-- ── Notification dropdown (bell / notif-btn) — DS node 3908:13827 ── -->
+    <div id="notif-dropdown" class="nav-dd-panel" role="menu" aria-label="Notifications">
+      <!-- Notification item × 4 -->
+      <div class="notif-item">
+        <div class="notif-item__content">
+          <div class="notif-item__row">
+            <div class="notif-avatar"><svg aria-hidden="true"><use href="#ic-user-circle"/></svg></div>
+            <div class="notif-texts">
+              <span class="notif-msg">This will be the reminder on this notification menu...</span>
+              <span class="notif-time">6 Days Ago...</span>
+            </div>
+            <div class="notif-indicator-wrap"><div class="notif-dot"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-item__content">
+          <div class="notif-item__row">
+            <div class="notif-avatar"><svg aria-hidden="true"><use href="#ic-user-circle"/></svg></div>
+            <div class="notif-texts">
+              <span class="notif-msg">This will be the reminder on this notification menu...</span>
+              <span class="notif-time">6 Days Ago...</span>
+            </div>
+            <div class="notif-indicator-wrap"><div class="notif-dot"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-item__content">
+          <div class="notif-item__row">
+            <div class="notif-avatar"><svg aria-hidden="true"><use href="#ic-user-circle"/></svg></div>
+            <div class="notif-texts">
+              <span class="notif-msg">This will be the reminder on this notification menu...</span>
+              <span class="notif-time">6 Days Ago...</span>
+            </div>
+            <div class="notif-indicator-wrap"><div class="notif-dot"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-item__content">
+          <div class="notif-item__row">
+            <div class="notif-avatar"><svg aria-hidden="true"><use href="#ic-user-circle"/></svg></div>
+            <div class="notif-texts">
+              <span class="notif-msg">This will be the reminder on this notification menu...</span>
+              <span class="notif-time">6 Days Ago...</span>
+            </div>
+            <div class="notif-indicator-wrap"><div class="notif-dot"></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- CTA -->
+      <div class="notif-cta">
+        <button class="btn-notif-cta" type="button">See all notification</button>
+      </div>
+    </div>
+
+    <!-- ── Download App dropdown (smartphone / download-btn) — DS node 3909:3405 ── -->
+    <div id="download-dropdown" class="nav-dd-panel" role="menu" aria-label="Download App">
+      <div class="nav-dd-item" role="menuitem">
+        <div class="nav-dd-icon"><img src="../../zul.test.git/icons/store-google-play.png" alt="Google Play"></div>
+        Google Android
+      </div>
+      <div class="nav-dd-item" role="menuitem">
+        <div class="nav-dd-icon"><img src="../../zul.test.git/icons/store-apple.png" alt="App Store"></div>
+        Apple iOS
+      </div>
+      <div class="nav-dd-item" role="menuitem">
+        <div class="nav-dd-icon"><img src="../../zul.test.git/icons/store-huawei.png" alt="App Gallery"></div>
+        Huawei
+      </div>
+    </div>
+
+    <!-- ── Profile dropdown (avatar / profile-btn) — DS node 3908:4194 ── -->
+    <div id="profile-dropdown" class="nav-dd-panel" role="menu" aria-label="Profile">
+      <!-- Profile header card -->
+      <div class="profile-header">
+        <div class="profile-avatar-wrap">
+          <div class="profile-avatar">
+            <img src="../navbar/icon-avatar-user.png" class="profile-avatar__img" alt="User avatar">
+          </div>
+          <span class="profile-badge">15</span>
+        </div>
+        <div class="profile-name-row">
+          <span class="profile-name">Diana Adam</span>
+          <span class="profile-check-badge" aria-hidden="true">
+            <svg viewBox="0 0 8 8" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1.5 4 3 5.5 6.5 2.5"/></svg>
+          </span>
+        </div>
+        <span class="profile-username">@dianaadam26</span>
+        <span class="profile-plan-pill">Free</span>
+        <a class="profile-upgrade-link" href="#">
+          <svg aria-hidden="true"><use href="#ic-star"/></svg>
+          Upgrade to Pandai Premium
+        </a>
+      </div>
+      <!-- Menu items -->
+      <div class="profile-menu" role="group">
+        <div class="nav-dd-item is-selected" role="menuitem">
+          <div class="nav-dd-icon"><svg aria-hidden="true"><use href="#ic-user-circle"/></svg></div>
+          My Profile
+        </div>
+        <div class="nav-dd-item" role="menuitem">
+          <div class="nav-dd-icon"><svg aria-hidden="true"><use href="#ic-user-check"/></svg></div>
+          Manage Account
+        </div>
+        <div class="nav-dd-item" role="menuitem">
+          <div class="nav-dd-icon"><svg aria-hidden="true"><use href="#ic-star"/></svg></div>
+          Subscribe Pandai Premium
+        </div>
+        <div class="nav-dd-item" role="menuitem">
+          <div class="nav-dd-icon"><svg aria-hidden="true"><use href="#ic-credit-card"/></svg></div>
+          Payment History
+        </div>
+        <div class="nav-dd-item" role="menuitem">
+          <div class="nav-dd-icon"><svg aria-hidden="true"><use href="#ic-progress-mobile"/></svg></div>
+          Share My Progress
+        </div>
+        <div class="nav-dd-item" role="menuitem">
+          <div class="nav-dd-icon"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div>
+          Learn and Earn
+        </div>
+        <div class="nav-dd-item" role="menuitem">
+          <div class="nav-dd-icon"><svg aria-hidden="true"><use href="#ic-life-buoy"/></svg></div>
+          Online Support
+        </div>
+        <div class="profile-divider" aria-hidden="true"></div>
+        <div class="nav-dd-item" role="menuitem">
+          <div class="nav-dd-icon"><svg aria-hidden="true"><use href="#ic-power"/></svg></div>
+          Log Out
         </div>
       </div>
     </div>
@@ -2527,6 +2969,73 @@
   </div><!-- /#mmenu-overlay -->
 
   <script>
+    // ── Shared nav primary dropdown manager (locale / notif / download / profile)
+    // Mutually exclusive with each other and with the waffle learn menu (Rule 53)
+    (function() {
+      var panels = [
+        { btnId: 'locale-btn',   panelId: 'locale-dropdown'   },
+        { btnId: 'notif-btn',    panelId: 'notif-dropdown'    },
+        { btnId: 'download-btn', panelId: 'download-dropdown' },
+        { btnId: 'profile-btn',  panelId: 'profile-dropdown'  },
+      ];
+
+      function positionPanel(btn, panel) {
+        var bRect = btn.getBoundingClientRect();
+        panel.style.right = (window.innerWidth - bRect.right) + 'px';
+        panel.style.left  = 'auto';
+      }
+
+      // Exposed globally so the waffle IIFE can call it
+      window._closeNavDDs = function() {
+        panels.forEach(function(d) {
+          var btn   = document.getElementById(d.btnId);
+          var panel = document.getElementById(d.panelId);
+          if (btn)   { btn.classList.remove('is-active'); btn.setAttribute('aria-expanded','false'); }
+          if (panel) panel.classList.remove('is-open');
+        });
+      };
+
+      function closeAll() {
+        window._closeNavDDs();
+        // Also close waffle learn menu if open
+        var learnMenu     = document.getElementById('learn-menu');
+        var waffleOverlay = document.getElementById('waffle-active-overlay');
+        var waffleBtn     = document.getElementById('waffle-btn');
+        if (learnMenu)     learnMenu.classList.remove('is-open');
+        if (waffleOverlay) waffleOverlay.classList.remove('is-visible');
+        if (waffleBtn)     { waffleBtn.classList.remove('is-active'); waffleBtn.setAttribute('aria-expanded','false'); }
+      }
+
+      panels.forEach(function(d) {
+        var btn   = document.getElementById(d.btnId);
+        var panel = document.getElementById(d.panelId);
+        if (!btn || !panel) return;
+
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var isOpen = panel.classList.contains('is-open');
+          closeAll();
+          if (!isOpen) {
+            positionPanel(btn, panel);
+            panel.classList.add('is-open');
+            btn.classList.add('is-active');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        });
+        panel.addEventListener('click', function(e) { e.stopPropagation(); });
+      });
+
+      document.addEventListener('click', window._closeNavDDs);
+      document.addEventListener('keydown', function(e) { if (e.key === 'Escape') window._closeNavDDs(); });
+      window.addEventListener('resize', function() {
+        panels.forEach(function(d) {
+          var btn   = document.getElementById(d.btnId);
+          var panel = document.getElementById(d.panelId);
+          if (btn && panel && panel.classList.contains('is-open')) positionPanel(btn, panel);
+        });
+      });
+    })();
+
     // Waffle button → Learn Menu dropdown (DS nodes 3887:50052 + 3908:5492)
     (function() {
       const waffleBtn     = document.getElementById('waffle-btn');
@@ -2550,6 +3059,7 @@
       }
 
       function openLearnMenu() {
+        if (window._closeNavDDs) window._closeNavDDs();  // close other nav dropdowns (Rule 53)
         positionAll();
         learnMenu.classList.add('is-open');
         waffleOverlay.classList.add('is-visible');
