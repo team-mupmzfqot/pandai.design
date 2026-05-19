@@ -2240,3 +2240,27 @@ Row 4: Personality · University · Rewards
 - Handler registered FIRST, before mobile menu IIFE (critical handlers before non-critical JS — Rule 14)
 
 *Last updated: 2026-05-19 | File: Nadia.test.git/Class/nadia_Class-MyClasses.html | Branch: staging*
+
+---
+
+### Updates — May 2026 (Session 13)
+
+**File:** `Nadia.test.git/Class/nadia_Class-MyClasses.html`
+
+#### Section 1 + Section 2 audit — DS node 3528:51331 (Nav Top Menu Desktop - 1.5)
+
+**DS node inspected:** `3528:51331` — Nav Top Menu Desktop pill (Section 2)
+
+**Findings:**
+- All nav item states were verified correct against DS:
+  - Default: white bg, `#666666` label (`--text-default-body`), `#00cc85` icon ✓
+  - Hover: bg `#b5f291` (`--surface-secondary-default`), inset border `#70bc6f` (`--border-secondary-focus`), label/icon `#70bc6f` ✓
+  - Active/Selected: bg `#00cc85` (`--surface-primary-default`), inset border `#00a36a` (`--border-primary-focus`), label/icon `#f6fdfb` (`--text-primary-on-color`) ✓
+  - Pressed (`is-pressed`): bg `#00564c` (`--surface-tertiary-default`), inset border `#00453d` (`--border-tertiary-focus`), label/icon `#00cc85` ✓
+
+**Fix applied:**
+- `.nav-label { font-weight: 500 → 600 }` — DS text style is `Body/B1` (Poppins SemiBold 14px). Was incorrectly set to `font-weight: 500` (Medium); corrected to `font-weight: 600` (SemiBold).
+
+**Mistake documented:** `font-weight: 500` (Medium) was used instead of `600` (SemiBold) for nav pill labels. DS `Body/B1` is always SemiBold. Check DS text style weight before defaulting to `500`.
+
+*Last updated: 2026-05-19 | File: Nadia.test.git/Class/nadia_Class-MyClasses.html | Branch: staging*
