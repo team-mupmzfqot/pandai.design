@@ -1348,11 +1348,13 @@
     }
     .learn-menu__item:hover span { color: #00564c; }   /* text/tertiary/default */
 
-    /* Selected — Surface/secondary/default + Border/secondary/focus */
+    /* Active (pressed) + Selected — Surface/secondary/default + Border/secondary/focus */
+    .learn-menu__item:active,
     .learn-menu__item.is-selected {
       background:   var(--surface-secondary-default);   /* #b5f291 */
       border-color: var(--border-secondary-focus);      /* #70bc6f */
     }
+    .learn-menu__item:active span,
     .learn-menu__item.is-selected span { color: #00564c; }
 
     .learn-menu__item img {
