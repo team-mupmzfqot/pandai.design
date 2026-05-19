@@ -141,7 +141,7 @@
        ══════════════════════════════════════════════════════════════ */
 
     /* ── Section 1: Brand bar ─────────────────────────────────── */
-    #NavBar-Primary-Desktop { padding: 0 var(--page-padding-x); }
+    #NavBar-Primary-Desktop { padding: 0 var(--page-padding-x); position: relative; }
 
     .navbar-primary {
       background:    var(--surface-general-default);
@@ -152,7 +152,7 @@
       display:       flex;
       align-items:   center;
       gap:           28px;                            /* spacing/space-2xl */
-      overflow:      hidden;
+      overflow:      visible;
       width:         100%;
       padding:       var(--spacing-space-xs) var(--spacing-space-xl);  /* 8px 24px */
     }
@@ -1257,6 +1257,95 @@
     }
     .mmenu-lang-btn svg { display: block; width: 24px; height: 24px; }
 
+    /* ══════════════════════════════════════════════════════════════
+       Waffle button active state — DS node 3887:50052
+       Union speech-bubble bg + Learn Menu dropdown
+       ══════════════════════════════════════════════════════════════ */
+
+    /* Waffle button — needs relative positioning for the union bg child */
+    #waffle-btn { position: relative; }
+
+    /* Union bg image — hidden by default, visible when active */
+    .waffle-union-bg {
+      display:         none;
+      position:        absolute;
+      top:             0;
+      left:            0;
+      width:           44px;
+      height:          52px;    /* 51.172px — extends ~8px below button */
+      pointer-events:  none;
+      z-index:         0;
+    }
+    #waffle-btn > svg { position: relative; z-index: 1; }
+
+    /* Active state — override standard is-active green rect with union shape */
+    #waffle-btn.is-active {
+      background: transparent;
+      box-shadow: none;
+      color: var(--icon-primary-default);   /* #00cc85 green filled waffle */
+    }
+    #waffle-btn.is-active .waffle-union-bg { display: block; }
+
+    /* ── Learn Menu panel — DS node 3908:5492 ─────────────────── */
+    .learn-menu {
+      display:       none;
+      position:      absolute;
+      top:           calc(100% - 8px);   /* overlap the union tab slightly */
+      right:         var(--spacing-space-xl);    /* 24px — aligns with navbar padding */
+      z-index:       300;
+      background:    var(--surface-general-default);
+      border:        1px solid var(--border-primary-default);
+      border-radius: var(--corner-radius-corner-4xl);   /* 24px */
+      padding:       var(--spacing-space-m);            /* 16px */
+      width:         364px;
+      box-shadow:    none;  /* DS: no elevation/shadow on containers */
+    }
+    .learn-menu.is-open { display: block; }
+
+    /* 3-column × 4-row grid */
+    .learn-menu__grid {
+      display:               grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:                   0;
+    }
+
+    /* Each item cell */
+    .learn-menu__item {
+      display:         flex;
+      flex-direction:  column;
+      align-items:     center;
+      justify-content: center;
+      gap:             4px;                /* Spacing/space-xxs */
+      padding:         8px;               /* Spacing/space-xs */
+      border-radius:   12px;              /* corner-radius/xl */
+      min-height:      114px;
+      cursor:          pointer;
+      user-select:     none;
+      background:      none;
+      border:          none;
+      font-family:     'Poppins', sans-serif;
+      width:           100%;
+      transition:      background 0.15s ease;
+    }
+    .learn-menu__item:hover  { background: var(--surface-secondary-default-subtle); }  /* #e8fbe8 */
+    .learn-menu__item:active { background: var(--surface-secondary-default); }         /* #b5f291 */
+
+    .learn-menu__item img {
+      width:        70px;
+      height:       70px;
+      object-fit:   contain;
+      display:      block;
+      flex-shrink:  0;
+    }
+    .learn-menu__item span {
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       var(--text-default-body);   /* #666666 */
+      text-align:  center;
+      white-space: nowrap;
+    }
+
   </style>
 </head>
 <body>
@@ -1324,7 +1413,10 @@
           <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
           <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
           <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
-          <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-waffle"/></svg></div>
+          <div id="waffle-btn" class="navbar-primary-icon" aria-haspopup="true" aria-expanded="false" title="Learn Menu">
+            <img class="waffle-union-bg" src="../../zul.test.git/icons/nav-btn-union.png" alt="" aria-hidden="true">
+            <svg aria-hidden="true"><use href="#ic-waffle"/></svg>
+          </div>
         </div>
         <div class="navbar-avatar-wrap">
           <div class="navbar-avatar">
@@ -1334,6 +1426,61 @@
         </div>
       </div>
     </div>
+
+    <!-- Learn Menu — DS node 3908:5492 — 3×4 grid, 12 feature items -->
+    <div id="learn-menu" class="learn-menu" role="menu" aria-label="Learn Menu">
+      <div class="learn-menu__grid">
+        <button class="learn-menu__item" role="menuitem" type="button">
+          <img src="../../zul.test.git/icons/feature-live-tuition.png" alt="">
+          <span>Live Tuition</span>
+        </button>
+        <button class="learn-menu__item" role="menuitem" type="button">
+          <img src="../../zul.test.git/icons/feature-live-help.png" alt="">
+          <span>Live Help</span>
+        </button>
+        <button class="learn-menu__item" role="menuitem" type="button">
+          <img src="../../zul.test.git/icons/feature-quiz.png" alt="">
+          <span>Quiz</span>
+        </button>
+        <button class="learn-menu__item" role="menuitem" type="button">
+          <img src="../../zul.test.git/icons/feature-practice.png" alt="">
+          <span>Practice</span>
+        </button>
+        <button class="learn-menu__item" role="menuitem" type="button">
+          <img src="../../zul.test.git/icons/feature-chapters.png" alt="">
+          <span>Chapters</span>
+        </button>
+        <button class="learn-menu__item" role="menuitem" type="button">
+          <img src="../../zul.test.git/icons/feature-textbooks.png" alt="">
+          <span>Textbooks</span>
+        </button>
+        <button class="learn-menu__item" role="menuitem" type="button">
+          <img src="../../zul.test.git/icons/feature-quick-notes.png" alt="">
+          <span>Quick Notes</span>
+        </button>
+        <button class="learn-menu__item" role="menuitem" type="button">
+          <img src="../../zul.test.git/icons/feature-videos.png" alt="">
+          <span>Videos</span>
+        </button>
+        <button class="learn-menu__item" role="menuitem" type="button">
+          <img src="../../zul.test.git/icons/feature-experiments.png" alt="">
+          <span>Experiments</span>
+        </button>
+        <button class="learn-menu__item" role="menuitem" type="button">
+          <img src="../../zul.test.git/icons/feature-personality.png" alt="">
+          <span>Personality</span>
+        </button>
+        <button class="learn-menu__item" role="menuitem" type="button">
+          <img src="../../zul.test.git/icons/feature-university.png" alt="">
+          <span>University</span>
+        </button>
+        <button class="learn-menu__item" role="menuitem" type="button">
+          <img src="../../zul.test.git/icons/feature-rewards.png" alt="">
+          <span>Rewards</span>
+        </button>
+      </div>
+    </div><!-- /#learn-menu -->
+
   </section><!-- end NavBar-Primary-Desktop -->
 
   <!-- Section 2: Nav menu pill — NavTopMenu Desktop 1.5 -->
@@ -2312,6 +2459,36 @@
   </div><!-- /#mmenu-overlay -->
 
   <script>
+    // Waffle button → Learn Menu dropdown (DS nodes 3887:50052 + 3908:5492)
+    (function() {
+      const waffleBtn  = document.getElementById('waffle-btn');
+      const learnMenu  = document.getElementById('learn-menu');
+      if (!waffleBtn || !learnMenu) return;
+
+      function openLearnMenu() {
+        learnMenu.classList.add('is-open');
+        waffleBtn.classList.add('is-active');
+        waffleBtn.setAttribute('aria-expanded', 'true');
+      }
+      function closeLearnMenu() {
+        learnMenu.classList.remove('is-open');
+        waffleBtn.classList.remove('is-active');
+        waffleBtn.setAttribute('aria-expanded', 'false');
+      }
+
+      waffleBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        learnMenu.classList.contains('is-open') ? closeLearnMenu() : openLearnMenu();
+      });
+
+      // Keep menu open when interacting inside it
+      learnMenu.addEventListener('click', function(e) { e.stopPropagation(); });
+
+      // Close on outside click or Escape
+      document.addEventListener('click', closeLearnMenu);
+      document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLearnMenu(); });
+    })();
+
     // Mobile/tablet menu modal — open/close handlers
     (function() {
       const overlay = document.getElementById('mmenu-overlay');
