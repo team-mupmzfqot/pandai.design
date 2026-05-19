@@ -382,9 +382,10 @@ These are the confirmed state values for the Pandai student home screen. All fro
 
 | State | Btn bg | Border | Label | Arrow bg | Chevron | DS node |
 |---|---|---|---|---|---|---|
-| Default | `#00cc85` | `#00a36a` | `#f6fdfb` | `#99ebce` | `#00a36a` | `1437:8154` |
+| Default | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` | `1437:8154` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` | `1437:8146` |
-| Pressed | `#00564c` | `#00453d` | `#00cc85` | `#00cc85` | `#00564c` | `1437:8138` |
+| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` | `1437:8138` |
+| Active | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` | `3029:19941` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` | `1437:8130` |
 
 **Pressed state tokens (confirmed from node `1437:8138`):**
@@ -1801,4 +1802,4 @@ See `design-md/zul.design.md` Rule 112.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-19 (Rule 59 / zul Rule 116 — Nav Button - 1.5 full confirmed spec, no speech-bubble tail, corrected Active icon #e1f9ea; Rule 52 item 1 and Rule 99 superseded) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+*Generated: May 2026 | Last updated: 2026-05-19 (Rule 59 / zul Rule 117 — Button - 1.5 full state table: Text/primary/on-color corrected #f6fdfb→#e1f9ea, Pressed corrected to #00a36a, State=Active documented for all variants; Rule 19 table updated) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

@@ -373,23 +373,26 @@ This means:
 
 ### 19. Button - 1.5 Primary/S — all confirmed Student states (node 1437:8154)
 
-These are the confirmed state values for the Pandai student home screen. All from DS `get_variable_defs` on each state node (May 2026).
+These are the confirmed state values for the Pandai student home screen. All from DS `get_variable_defs` on each state node. **Last re-confirmed: 2026-05-19.**
 
 | State | Btn bg | Border | Label | Arrow bg | Chevron | DS node |
 |---|---|---|---|---|---|---|
-| Default | `#00cc85` | `#00a36a` | `#f6fdfb` | `#99ebce` | `#00a36a` | `1437:8154` |
+| Default | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` | `1437:8154` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` | `1437:8146` |
-| Pressed | `#00564c` | `#00453d` | `#00cc85` | `#00cc85` | `#00564c` | `1437:8138` |
+| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` | `1437:8138` |
+| Active | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` | `3029:19941` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` | `1437:8130` |
 
-**Pressed state tokens (confirmed from node `1437:8138`):**
-- Btn bg: `Surface/tertiary/default` (#00564c) — NOT `Surface/primary/focus` (#00a36a)
-- Border: `Border/tertiary/focus` (#00453d)
-- Label: `Text/primary/default` (#00cc85) — NOT `Text/primary/on-color` (#f6fdfb)
+**Pressed state tokens (confirmed from node `1437:8138`, re-verified 2026-05-19):**
+- Btn bg: `Surface/primary/focus` (#00a36a)
+- Border: `Border/primary/default` (#00cc85)
+- Label: `Text/primary/default` (#00cc85)
 - Arrow bg: `Surface/primary/default` (#00cc85)
-- Chevron: `Icon/tertiary/default` (#00564c)
+- Chevron: `Icon/primary/focus` (#00a36a)
 
-**Mistake made:** Pressed state used `Surface/primary/focus` (#00a36a) for bg and `Text/primary/on-color` (#f6fdfb) for label. DS uses Tertiary palette for Pressed — darker bg (`#00564c`) with the primary green as the label color — the inverse of Default.
+**Default/Active label = `Text/primary/on-color` = `#e1f9ea`** — DS updated this token (previously documented as `#f6fdfb`, corrected 2026-05-19). Both Default and Active share identical tokens.
+
+**`State=Active`** is a new persistent-selected state (added to COMPONENT_SET 2026-05-19). Visually identical to Default. Use for "currently selected" scenarios — distinct from the momentary Pressed feedback.
 
 ---
 
@@ -1456,13 +1459,13 @@ try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 - Description: `Body/B1` — Poppins SemiBold 14px, `line-height: 20px`, `Text/default/heading #404040`
 - Two cards side by side: `display: flex; gap: var(--spacing-space-m)` (16px)
 
-**Button inside Static Card — Primary/M states (node 473:529):**
+**Button inside Static Card — Primary/M states (node 473:529) — re-confirmed 2026-05-19:**
 
 | State | btn bg | border | label | arrow bg | arrow chevron |
 |---|---|---|---|---|---|
-| Default | `#00cc85` | `#00a36a` | `#f6fdfb` | `#99ebce` | `#00a36a` |
+| Default | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` |
-| Pressed | `#00564c` | `#00453d` | `#00cc85` | `#00cc85` | `#00564c` |
+| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` |
 
 - Arrow chevron color comes from arrow sub-node (`479:351`) variable defs — NOT the parent button node
@@ -1488,7 +1491,7 @@ try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 
 **Button - 1.5 (Primary/S, Type=Student) inside Quiz Card — confirmed May 2026:**
 - Button: `max-height: 24px`, `px: 8px`, `py: 2px`, `border-radius: 60px` (pill)
-- Text slot: `px: 4px`, font `Body/B5` (Poppins SemiBold 12px, line-height 18px), color `Text/primary/on-color #f6fdfb`
+- Text slot: `px: 4px`, font `Body/B5` (Poppins SemiBold 12px, line-height 18px), color `Text/primary/on-color #e1f9ea`
 - Arrow: 16×16 circle (`bg: #99ebce`, `border-radius: 60px`, `padding: 2px`) → 12×12 clip (NO padding) → `ic-chevron-btn`
 - Arrow chevron: `#00a36a` (`Surface/primary/focus`) — from arrow clip sub-node, not parent button
 - **Symbol:** `ic-chevron-btn` — `viewBox="0 0 12 12"`, path `M4.5 9L7.5 6L4.5 3`, DS node `1437:8161`
@@ -4059,6 +4062,59 @@ At the cap: both `max-width` and `max-height` are satisfied simultaneously at th
 - At viewports > ~2000px: cap kicks in at 920 × 400px, ratio held ✓
 
 **Mistake made:** First commit added only `max-height: 350px` — width stayed at formula value, aspect ratio broken. Corrected in second commit by adding `max-width: calc(350px * 428 / 186)`.
+
+---
+
+### Rule 117 — Button - 1.5: full confirmed state table (all variants, Student, 2026-05-19)
+
+**Source:** DS `TLVKe3bgJTdVvuPAzgDq2f`, COMPONENT_SET `473:529`, `get_variable_defs` on every state node. Applies to all sizes (S / M / L) within each variant.
+
+#### Two token corrections confirmed this audit
+
+| Token | Old (wrong) | Correct | Affects |
+|---|---|---|---|
+| `Text/primary/on-color` | `#f6fdfb` | **`#e1f9ea`** | Default + Active label/icon on all Primary buttons |
+| Pressed bg (all variants) | `#00564c` (dark teal) | **`#00a36a`** | Was wrong in docs; HTML was already correct |
+
+#### Primary (S / M / L) — Student
+
+| State | btn bg | border | label/icon | arrow bg | arrow chevron | node (M) |
+|---|---|---|---|---|---|---|
+| Default | `#00cc85` | `#00a36a` | **`#e1f9ea`** | `#99ebce` | `#00a36a` | `479:344` |
+| Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` | `479:335` |
+| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` | `479:326` |
+| Active | `#00cc85` | `#00a36a` | **`#e1f9ea`** | `#99ebce` | `#00a36a` | `3029:19929` |
+| Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | — | `#bfbfbf` | `479:317` |
+
+#### Secondary (S / M / L) — Student
+
+| State | btn bg | border | label/icon | node (M) |
+|---|---|---|---|---|
+| Default | `#ffffff` | `#00cc85` | `#00cc85` | `538:1923` |
+| Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `538:1915` |
+| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `538:1907` |
+| Active | `#00cc85` | `#00a36a` | **`#e1f9ea`** | `3029:19996` |
+
+#### Tertiary (S / M / L) — Student
+
+| State | btn bg | border | label/icon | node (L) |
+|---|---|---|---|---|
+| Default | `#ffffff` | transparent | `#666666` | `538:2067` |
+| Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `538:2059` |
+| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `3029:20022` |
+| Active | `#00cc85` | `#00a36a` | **`#e1f9ea`** | `538:2051` |
+
+#### State=Active — what it is and when to use it
+
+`State=Active` was added to the COMPONENT_SET for all three variants. It represents a **persistent selected state** (e.g. "currently viewing this page"), not a momentary press. Visually identical to Primary Default (same green bg, same mint label). The distinction from Pressed: Active is a sustained state toggled by JS; Pressed is a momentary `:active`/`mousedown` feedback.
+
+**CSS mapping:**
+```css
+.btn.is-active { background: var(--surface-primary-default); border-color: var(--border-primary-focus); }
+.btn.is-active .btn__label { color: var(--text-primary-on-color); }  /* #e1f9ea */
+```
+
+Not all buttons on the home screen need `.is-active` — only those that represent the user's current selection.
 
 ---
 
