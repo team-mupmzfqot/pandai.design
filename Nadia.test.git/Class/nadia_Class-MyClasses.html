@@ -1300,12 +1300,12 @@
     }
 
     /* ── Learn Menu panel — DS node 3908:5492 ─────────────────── */
-    /* left is set by JS positionAll() — centered below the waffle button midpoint */
+    /* right is set by JS positionAll() — right-aligned with waffle button right edge */
     .learn-menu {
       display:       none;
       position:      absolute;
       top:           100%;       /* directly below the brand bar section */
-      left:          0;          /* fallback — overridden by JS */
+      right:         0;          /* fallback — overridden by JS */
       z-index:       300;
       background:    var(--surface-general-default);
       border:        1px solid var(--border-primary-default);
@@ -2535,19 +2535,14 @@
       const navSection    = document.getElementById('NavBar-Primary-Desktop');
       if (!waffleBtn || !learnMenu || !waffleOverlay) return;
 
-      // Position learn-menu centered below the waffle button midpoint + overlay on button
+      // Position learn-menu right edge = waffle button right edge + overlay on button
       function positionAll() {
-        const bRect     = waffleBtn.getBoundingClientRect();
-        const sRect     = navSection.getBoundingClientRect();
-        const menuW     = learnMenu.offsetWidth || 364;
+        const bRect = waffleBtn.getBoundingClientRect();
+        const sRect = navSection.getBoundingClientRect();
 
-        // Center panel horizontally below the waffle button's midpoint
-        const btnMidFromSection = (bRect.left + bRect.width / 2) - sRect.left;
-        let menuLeft = btnMidFromSection - menuW / 2;
-        // Clamp — don't let panel overflow the section edges
-        menuLeft = Math.max(0, Math.min(menuLeft, sRect.width - menuW));
-        learnMenu.style.left  = menuLeft + 'px';
-        learnMenu.style.right = 'auto';
+        // Right-align panel with waffle button's right edge
+        learnMenu.style.right = (window.innerWidth - bRect.right) + 'px';
+        learnMenu.style.left  = 'auto';
 
         // Union overlay: top-left corner exactly on the waffle button
         waffleOverlay.style.left = (bRect.left - sRect.left) + 'px';
