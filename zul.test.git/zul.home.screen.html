@@ -747,21 +747,54 @@
       padding:     0 var(--spacing-space-xxs);
       white-space: nowrap;
     }
-    /* Hover — DS Secondary/M/Hover (538:1915): bg #b5f291, border #70bc6f, text/icon #70bc6f */
+    /* Right arrow — DS node I2881:36280;538:1929 — 20×20, padding:2, INSIDE stroke (Rule 118) */
+    .btn-add-classes__arrow {
+      width:           20px;
+      height:          20px;
+      background:      var(--surface-general-default);
+      box-shadow:      inset 0 0 0 1px var(--border-primary-default);
+      border-radius:   var(--corner-radius-corner-rounded);
+      padding:         2px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+      color:           var(--text-primary-default);
+      transition:      background 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
+    }
+    .btn-add-classes__arrow-clip {
+      width:    16px;
+      height:   16px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .btn-add-classes__arrow-clip svg { display: block; width: 100%; height: 100%; }
+
+    /* Hover — DS 538:1915 */
     .btn-add-classes:hover {
       background:   var(--surface-secondary-default);
       border-color: var(--border-secondary-focus);
     }
     .btn-add-classes:hover .btn-add-classes__text,
     .btn-add-classes:hover .btn-add-classes__icon { color: var(--text-secondary-focus); }
+    .btn-add-classes:hover .btn-add-classes__arrow {
+      background:  var(--surface-secondary-default);
+      box-shadow:  inset 0 0 0 1px var(--border-secondary-focus);
+      color:       var(--text-secondary-focus);
+    }
 
-    /* Pressed — DS 538:1907 — Surface/primary/focus #00a36a, Border/primary/default #00cc85 */
+    /* Pressed — DS 538:1907 */
     .btn-add-classes:active {
       background:   var(--surface-primary-focus);
       border-color: var(--border-primary-default);
     }
     .btn-add-classes:active .btn-add-classes__text,
     .btn-add-classes:active .btn-add-classes__icon { color: var(--text-primary-default); }
+    .btn-add-classes:active .btn-add-classes__arrow {
+      background:  var(--surface-primary-default);
+      box-shadow:  none;
+      color:       var(--surface-primary-focus);
+    }
 
     /* Button - 1.5 Secondary/M + R Arrow — "View Activity History" (DS node 538:1923)
        All 5 states confirmed from DS 2026-05-19. */
@@ -3126,6 +3159,9 @@
                   <svg class="icon-ds-16" aria-hidden="true"><use href="#ic-plus"/></svg>
                 </span>
                 <span class="btn-add-classes__text">Modify List</span>
+                <span class="btn-add-classes__arrow">
+                  <span class="btn-add-classes__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+                </span>
               </span>
             </button>
           </div>
