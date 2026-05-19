@@ -48,7 +48,7 @@
       --icon-default-default:     #808080;   /* Icon/default/default — action icons, inactive (DS confirmed 2026-05-14) */
       --icon-primary-default:     #00cc85;   /* Icon/primary/default — nav button icons, default */
       --icon-secondary-hover:     #70bc6f;   /* Icon/secondary/hover — nav button icons, hover state */
-      --icon-primary-on-color:    #f6fdfb;   /* Icon/primary/on-color — nav button icons, active/pressed */
+      --icon-primary-on-color:    #e1f9ea;   /* Icon/primary/on-color — nav button active icon (DS confirmed 3908:6148) */
       --icon-tertiary-default:    #00564c;   /* Icon/tertiary/default — pressed arrow chevron */
 
       /* Border */
@@ -1260,7 +1260,7 @@
     }
 
     /* Nav Button - 1.5 (DS node 3908:6148) — outer wrapper, no visual styling
-       Structure: button > .nav-btn-content > [.nav-btn-rect + .nav-btn-icon-clip] (+ .nav-btn-union-bg for waffle) */
+       Structure: button > .nav-btn-content > [.nav-btn-rect + .nav-btn-icon-clip] */
     .navbar-action-btn {
       border:             none;
       background:         transparent;
@@ -1304,7 +1304,7 @@
     }
     .navbar-action-btn:hover   .nav-btn-rect { background: var(--surface-secondary-default-subtle); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
     .navbar-action-btn:active  .nav-btn-rect { background: var(--surface-primary-focus);            box-shadow: inset 0 0 0 1px var(--border-primary-default); }
-    .navbar-action-btn.is-active .nav-btn-rect { background: transparent; box-shadow: none; }
+    .navbar-action-btn.is-active .nav-btn-rect { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
 
     /* Icon clip — DS: absolute left-50% top-50% translate-center, overflow-clip, 24×24 */
     .nav-btn-icon-clip {
@@ -1327,33 +1327,7 @@
     }
     .navbar-action-btn:hover  .nav-btn-icon-clip svg { color: var(--icon-primary-default); }
     .navbar-action-btn:active .nav-btn-icon-clip svg { color: var(--icon-primary-default); }
-    .navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--text-primary-on-color); }   /* DS node 3908:6163: rgb(246,253,251) = #f6fdfb */
-
-    /* Union bg — DS Active state speech-bubble (node 3908:6165): 44×51.172
-       Outer = Border/primary/focus (#00a36a), inner ::before = Surface/primary/default (#00cc85)
-       scale(0.9545, 0.9609) from center ≈ 1px inset per side (DS inner stroke) */
-    .nav-btn-union-bg {
-      position:    absolute;
-      top:         0;
-      left:        0;
-      width:       44px;
-      height:      51.172px;
-      background:  var(--surface-primary-focus);   /* #00a36a — DS stroke color */
-      clip-path:   path('M36 0C40.4183 0 44 3.58172 44 8V36C44 40.4183 40.4183 44 36 44H31.6569C30.596 44 29.5786 44.4214 28.8284 45.1716L23.4141 50.5859C22.6331 51.3668 21.3669 51.3668 20.5859 50.5859L15.1716 45.1716C14.4214 44.4214 13.404 44 12.3431 44H8C3.58172 44 0 40.4183 0 36V8C0 3.58172 3.58172 0 8 0H36Z');
-      display:     none;
-      pointer-events: none;
-      z-index:     0;
-    }
-    .nav-btn-union-bg::before {
-      content:          '';
-      position:         absolute;
-      inset:            0;
-      background:       var(--surface-primary-default);  /* #00cc85 — fill color */
-      clip-path:        inherit;
-      transform:        scale(0.9545, 0.9609);
-      transform-origin: 50% 50%;
-    }
-    .navbar-action-btn.is-active .nav-btn-union-bg { display: block; }
+    .navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--icon-primary-on-color); }   /* Icon/primary/on-color #e1f9ea — DS node 3908:6148 Active */
 
     /* Avatar - 1.5 (node 684:621): flex items-start · 48×48 · border · overflow-clip */
     .navbar-avatar {
@@ -2455,29 +2429,24 @@
             </button>
             <button class="navbar-action-btn" aria-label="Download app" id="download-btn" type="button" aria-haspopup="true">
               <div class="nav-btn-content">
-                <div class="nav-btn-union-bg" aria-hidden="true"></div>
                 <div class="nav-btn-rect" aria-hidden="true"></div>
                 <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
               </div>
             </button>
             <button class="navbar-action-btn" aria-label="Notifications" id="notif-btn" type="button" aria-haspopup="true">
               <div class="nav-btn-content">
-                <div class="nav-btn-union-bg" aria-hidden="true"></div>
                 <div class="nav-btn-rect" aria-hidden="true"></div>
                 <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
               </div>
             </button>
             <button class="navbar-action-btn" aria-label="Language" id="locale-btn" type="button" aria-haspopup="true">
               <div class="nav-btn-content">
-                <div class="nav-btn-union-bg" aria-hidden="true"></div>
                 <div class="nav-btn-rect" aria-hidden="true"></div>
                 <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
               </div>
             </button>
-            <!-- Learn Menu trigger — waffle icon, Active state shows Union speech-bubble -->
             <button class="navbar-action-btn" aria-label="App menu" id="waffle-btn" type="button" aria-haspopup="true">
               <div class="nav-btn-content">
-                <div class="nav-btn-union-bg" aria-hidden="true"></div>
                 <div class="nav-btn-rect" aria-hidden="true"></div>
                 <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-waffle"/></svg></div>
               </div>

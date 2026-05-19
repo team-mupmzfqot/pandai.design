@@ -1646,7 +1646,7 @@ Both counts must match. If any `<section id="...">` has no corresponding `</sect
 
 Every action button in `#NavbarPrimary-Desktop` that opens a dropdown (bell, EN/locale, smartphone/download, waffle/learn) requires ALL FOUR of these. Missing any one breaks the behaviour.
 
-1. **Button HTML** — `id`, `aria-haspopup="true"`, and `<div class="nav-btn-union-bg">` as first child of `nav-btn-content`. Without `nav-btn-union-bg`, `.is-active` shows no speech-bubble.
+1. **Button HTML** — `id`, `aria-haspopup="true"`. No `nav-btn-union-bg` — the speech-bubble tail is NOT part of the DS COMPONENT_SET Active state (Rule 116). Active state is a plain rounded square.
 2. **Dropdown HTML** — `<div class="my-dropdown" id="DROPDOWN-ID">` placed inside `#NavbarPrimary-Desktop` (after the `.navbar-primary` closing div).
 3. **CSS** — same pattern as all other nav dropdowns: white bg, `1px solid #00cc85` border, `24px` radius, `16px` padding, `top: var(--nav-dropdown-top)` (CSS variable, currently 72px), `opacity + translateY(-8px)` animation.
 4. **JS IIFE** — `positionDropdown()` (right-align to button), click toggle, `mouseleave` close, outside-click close, close-all-others block (Rule 53).
@@ -1768,7 +1768,7 @@ See `design-md/zul.design.md` Rule 112.
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision. No exceptions.
 
 ```
-0a. Read design-md/zul.design.md       → ALL rules 1–115, confirmed specs, known mistakes
+0a. Read design-md/zul.design.md       → ALL rules 1–116, confirmed specs, known mistakes
 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs
 0c. get_design_context on COMPONENT SET → list ALL variant names
 0d. get_design_context on EACH state   → extract every token BEFORE writing CSS
@@ -1780,4 +1780,25 @@ See `design-md/zul.design.md` Rule 112.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-18 (Rules 56–58 — no approximation, SVG symbols for all icons, CSS variables for shared values) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 59. Nav Button - 1.5 — full confirmed spec (COMPONENT_SET 3908:6148)
+
+**44×44px square icon button. Radius/xl = 8px. 4 states — all from COMPONENT_SET `3908:6148`, never from standalone named components.**
+
+| State | bg | bg hex | border | border hex | icon | icon hex |
+|---|---|---|---|---|---|---|
+| Default | `Surface/general/default` | `#ffffff` | none | — | `Icon/default/default` | `#808080` |
+| Hover | `Surface/secondary/default-subtle` | `#e8fbe8` | `Border/primary/default` | `#00cc85` | `Icon/primary/default` | `#00cc85` |
+| Pressed | `Surface/primary/focus` | `#00a36a` | `Border/primary/default` | `#00cc85` | `Icon/primary/default` | `#00cc85` |
+| Active | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` | `#00a36a` | `Icon/primary/on-color` | `#e1f9ea` |
+
+**Active state = plain rounded square. No speech-bubble tail. No `nav-btn-union-bg`.**
+
+**`--icon-primary-on-color` = `#e1f9ea`** — NOT `#f6fdfb` (that is `Text/primary/on-color`, a different token).
+
+**Supersedes Rule 52 item 1 and Rule 99.** Both were based on standalone node `3908:6163` (a VECTOR artifact), not the COMPONENT_SET.
+
+**Root lesson:** A standalone component named `ComponentName/Active` is NOT equivalent to `State=Active` inside the COMPONENT_SET. Always use the COMPONENT_SET as the canonical source.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-19 (Rule 59 / zul Rule 116 — Nav Button - 1.5 full confirmed spec, no speech-bubble tail, corrected Active icon #e1f9ea; Rule 52 item 1 and Rule 99 superseded) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

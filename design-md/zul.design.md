@@ -3280,22 +3280,15 @@ Any `<button>` used as the outer wrapper for a DS action icon component (e.g. `N
 
 ---
 
-### Rule 99 — Nav Button - 1.5 Active state icon color: `Text/primary/on-color`, never grey
+### ~~Rule 99~~ — SUPERSEDED BY RULE 116
 
-When a nav action button enters `.is-active` (speech-bubble Union bg visible), the icon inside the clip must use **`var(--text-primary-on-color)`** = `#f6fdfb`. This is the near-white used for content rendered on a colored `Surface/primary` background — the same token used on Button labels.
+This rule stated that the Nav Button - 1.5 Active icon color = `Text/primary/on-color` (`#f6fdfb`). **This was wrong.** It was derived from the standalone `Nav Button - 1.5/Active` VECTOR node (`3908:6163`), which is not a variant of the COMPONENT_SET (`3908:6148`). The COMPONENT_SET is the canonical reference.
 
-**Confirmed from DS node `3908:6163` (Nav Button - 1.5, Active state, May 2026):**
-- Icon vector fill: `rgb(246,253,251)` = `#f6fdfb` → maps to `Text/primary/on-color`
-- Stroke: same `#f6fdfb` at `weight: 1.5`
+**Correct value:** `Icon/primary/on-color` = `#e1f9ea` (confirmed from the COMPONENT_SET Active variant via `get_variable_defs` on `4389:165880`, May 2026).
 
-**Wrong values to avoid:**
-| Wrong value | Why wrong |
-|---|---|
-| `#d9d9d9` | DS "default" icon grey — for inactive/rest state only |
-| `#808080` | `Icon/default/default` — for rest state icons |
-| `var(--icon-primary-default)` `#00cc85` | Hover/pressed state on the rect — not the Union active state |
+**Root cause of error:** Inspecting a standalone `/Active` component instead of the proper COMPONENT_SET variant. The standalone node had different (incorrect) values. Always use the COMPONENT_SET as the source — never standalone named components.
 
-**Rule:** Always call `use_figma` on the Active state node specifically (not Default) to confirm icon fill. The token changes completely between states — never inherit Default state token assumptions for Active.
+**See Rule 116 for the full corrected Nav Button - 1.5 spec.**
 
 ---
 
@@ -4069,12 +4062,78 @@ At the cap: both `max-width` and `max-height` are satisfied simultaneously at th
 
 ---
 
-### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-18)
+### Rule 116 — Nav Button - 1.5: full confirmed spec, no speech-bubble tail in Active state
+
+**Source:** DS file `TLVKe3bgJTdVvuPAzgDq2f`, COMPONENT_SET node `3908:6148` on `⚙️ Navigation Bar` page. Audited via `get_variable_defs` on each state's bg node + `use_figma` for icon vector tokens (May 2026).
+
+**Component:** 44×44px square icon button. `Radius/xl` = **8px** (rounded square — NOT pill). Icon clip: 24×24, `inset: 16.67%`.
+
+#### Confirmed state table
+
+| State | bg token | bg hex | border | border hex | icon token | icon hex |
+|---|---|---|---|---|---|---|
+| Default | `Surface/general/default` | `#ffffff` | none | — | `Icon/default/default` | `#808080` |
+| Hover | `Surface/secondary/default-subtle` | `#e8fbe8` | `Border/primary/default` | `#00cc85` | `Icon/primary/default` | `#00cc85` |
+| Pressed | `Surface/primary/focus` | `#00a36a` | `Border/primary/default` | `#00cc85` | `Icon/primary/default` | `#00cc85` |
+| Active | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` | `#00a36a` | `Icon/primary/on-color` | `#e1f9ea` |
+
+#### CSS implementation
+
+```css
+/* Default rect */
+.nav-btn-rect { background: var(--surface-general-default); border-radius: 8px; }
+
+/* Hover */
+.navbar-action-btn:hover .nav-btn-rect {
+  background:  var(--surface-secondary-default-subtle);
+  box-shadow:  inset 0 0 0 1px var(--border-primary-default);
+}
+/* Pressed */
+.navbar-action-btn:active .nav-btn-rect {
+  background:  var(--surface-primary-focus);
+  box-shadow:  inset 0 0 0 1px var(--border-primary-default);
+}
+/* Active (dropdown open / selected) */
+.navbar-action-btn.is-active .nav-btn-rect {
+  background:  var(--surface-primary-default);
+  box-shadow:  inset 0 0 0 1px var(--border-primary-focus);
+}
+
+/* Icons */
+.nav-btn-icon-clip svg                       { color: var(--icon-default-default); }   /* #808080 */
+.navbar-action-btn:hover  .nav-btn-icon-clip svg { color: var(--icon-primary-default); }  /* #00cc85 */
+.navbar-action-btn:active .nav-btn-icon-clip svg { color: var(--icon-primary-default); }  /* #00cc85 */
+.navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--icon-primary-on-color); } /* #e1f9ea */
+```
+
+**`box-shadow: inset` rule:** Use `inset 0 0 0 1px` instead of `border` — prevents 2px layout shift when border appears on hover/active. Never use `border:` on the rect.
+
+#### No speech-bubble tail in Active state
+
+The DS COMPONENT_SET `State=Active` variant is a **plain rounded square** — no pointed tail. The tail (union/speech-bubble shape) appeared only in the standalone `Nav Button - 1.5/Active` node (`3908:6163`), which is a VECTOR artifact, not a variant of the set.
+
+**Rule:** Never add decorative geometry (tails, arrows, speech bubbles) to a component state unless `get_design_context` on the COMPONENT_SET variant explicitly includes it in the node tree.
+
+#### Corrected mistakes (May 2026)
+
+| What was wrong | Correct value |
+|---|---|
+| `--icon-primary-on-color: #f6fdfb` | `#e1f9ea` (`Icon/primary/on-color`) |
+| Active rect `background: transparent; box-shadow: none` | `Surface/primary/default` + `Border/primary/focus` inset shadow |
+| Active icon `color: var(--text-primary-on-color)` | `color: var(--icon-primary-on-color)` |
+| Speech-bubble `nav-btn-union-bg` shown on Active | Removed — not in COMPONENT_SET Active variant |
+| Rule 99 referenced standalone VECTOR node `3908:6163` | Must always use COMPONENT_SET (`3908:6148`) as source |
+
+**Root lesson:** A standalone component named `ComponentName/Active` is NOT the same as `State=Active` inside the COMPONENT_SET. Always inspect the COMPONENT_SET variants — standalone named components can have divergent or outdated values.
+
+---
+
+### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-19)
 
 **Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
 
 ```
-Step 0a → Read design-md/zul.design.md          ← ALL rules 1–115 + confirmed specs
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–116 + confirmed specs
 Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH
 Step 0c → get_design_context on COMPONENT SET    ← list ALL variant names first
 Step 0d → get_design_context on EACH state       ← extract every token before writing CSS
@@ -4088,4 +4147,4 @@ Step 0h → get_screenshot after implementation    ← compare against DS side-b
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-18 (Rule 115 — max-height + max-width pairing to preserve aspect ratio) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+*Generated: May 2026 | Last updated: 2026-05-19 (Rule 116 — Nav Button - 1.5 full confirmed spec: corrected Active icon #e1f9ea, no speech-bubble tail, COMPONENT_SET is canonical source not standalone nodes; Rule 99 superseded) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
