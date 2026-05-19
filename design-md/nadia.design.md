@@ -2194,3 +2194,49 @@ Sidebar container: `width: 280px; min-width: 240px; border: 1px solid #00cc85; b
 - Flex row `justify-content: space-between; flex-wrap: wrap; gap: 16px`
 
 *Last updated: 2026-05-18 | File: Nadia.test.git/Rewards/nadia_Rewards-Merchandise.html | Branch: staging*
+
+---
+
+### Updates — May 2026 (Session 12 cont.)
+
+**File:** `Nadia.test.git/Class/nadia_Class-MyClasses.html`
+
+#### Waffle button active state + Learn Menu dropdown
+
+**DS nodes:** `3887:50052` (Navbar Primary active waffle) + `3908:5492` (Learn Menu - 1.5 panel)
+
+**Active state — waffle button (node 3887:50052):**
+- `id="waffle-btn"` added; `aria-haspopup="true"` + `aria-expanded` attribute wired to JS toggle
+- Union speech-bubble bg: `<img class="waffle-union-bg" src="../../zul.test.git/icons/nav-btn-union.png">` (44×52px, `position:absolute top:0 left:0`) — hidden by default, shown when `.is-active`
+- `.is-active` override: `background: transparent; box-shadow: none; color: #00cc85` (green filled waffle icon via `currentColor`)
+- `#waffle-btn > svg` has `position: relative; z-index: 1` so it renders above the union bg layer
+
+**Changes to `.navbar-primary` to support dropdown:**
+- `overflow: hidden` → `overflow: visible` — required so the union PNG extension and dropdown are not clipped by the navbar bar
+
+**Learn Menu panel (node 3908:5492):**
+- Placed as a sibling of `.navbar-primary` inside `#NavBar-Primary-Desktop` (outside overflow-clipping context)
+- `#NavBar-Primary-Desktop { position: relative }` established as containing block
+- Panel: `position: absolute; top: calc(100% - 8px); right: var(--spacing-space-xl)` (24px from right = aligned with `.navbar-primary` padding)
+- `background: white; border: 1px solid #00cc85; border-radius: 24px; padding: 16px; width: 364px`
+- Grid: `display: grid; grid-template-columns: repeat(3, 1fr); gap: 0` — 4 rows × 3 columns = 12 items
+- Each item: `flex-col gap-4px; padding: 8px; border-radius: 12px; min-height: 114px`
+- Icon: `width: 70px; height: 70px; object-fit: contain`
+- Label: `14px SemiBold #666666`
+- Hover: `bg #e8fbe8` | Active/pressed: `bg #b5f291`
+
+**12 feature items (order from DS):**
+Row 1: Live Tuition · Live Help · Quiz
+Row 2: Practice · Chapters · Textbooks
+Row 3: Quick Notes · Videos · Experiments
+Row 4: Personality · University · Rewards
+
+**Image paths:** `../../zul.test.git/icons/feature-*.png` (all 12 confirmed present)
+
+**JS handler:**
+- Click waffle → toggle `.is-active` + `.is-open` + `aria-expanded`
+- `stopPropagation` on waffle click + on menu click (prevents outside-click handler from immediately closing)
+- Outside-click + Escape → close both
+- Handler registered FIRST, before mobile menu IIFE (critical handlers before non-critical JS — Rule 14)
+
+*Last updated: 2026-05-19 | File: Nadia.test.git/Class/nadia_Class-MyClasses.html | Branch: staging*
