@@ -2263,4 +2263,52 @@ Row 4: Personality · University · Rewards
 
 **Mistake documented:** `font-weight: 500` (Medium) was used instead of `600` (SemiBold) for nav pill labels. DS `Body/B1` is always SemiBold. Check DS text style weight before defaulting to `500`.
 
+---
+
+### Updates — May 2026 (Session 13 cont.)
+
+**File:** `Nadia.test.git/Class/nadia_Class-MyClasses.html`
+
+#### Section 2 audit — DS node 3528:51331 (Nav Top Menu Desktop - 1.5)
+
+**Full DS audit against current implementation — 4 issues found and fixed:**
+
+**1. Per-icon clip inset padding CSS rules were completely missing**
+- DS spec (CLAUDE.md Rule 8): every icon has a unique inset `%` within the 20×20 clip container.
+- Implementation had zero `[data-icon]` CSS rules — all icons were filling the full 20px clip (too large).
+- Fix: added `box-sizing: border-box` to `.nav-item__icon-clip` + 9 per-icon padding rules:
+  ```css
+  .nav-item__icon-clip { box-sizing: border-box; }
+  .nav-item__icon-clip[data-icon="home"]        { padding: 8.33% 12.5%; }
+  .nav-item__icon-clip[data-icon="quiz"]        { padding: 8.33%; }
+  .nav-item__icon-clip[data-icon="battle"]      { padding: 12.5%; }
+  .nav-item__icon-clip[data-icon="practice"]    { padding: 12.5% 8.33%; }
+  .nav-item__icon-clip[data-icon="class"]       { padding: 12.5% 4.17%; }
+  .nav-item__icon-clip[data-icon="learn"]       { padding: 8.33% 16.67%; }
+  .nav-item__icon-clip[data-icon="achievement"] { padding: 16.67% 12.5%; }
+  .nav-item__icon-clip[data-icon="potential"]   { padding: 8.33% 8.33% 12.42% 8.33%; }
+  .nav-item__icon-clip[data-icon="gift"]        { padding: 8.33%; }
+  ```
+- DS source for `achievement` (Outline/bar-chart 2): node `I3528:51331;3406:810` → inset `16.67% 12.5%`.
+- Why `border-box`: percentage padding without `border-box` would grow the 20×20 clip — `border-box` keeps outer dimensions fixed at 20×20 while shrinking the content area for the SVG.
+
+**2. Quiz clip div missing `data-icon="quiz"` attribute**
+- Without the attribute, the `padding: 8.33%` rule couldn't apply.
+- Fix: added `data-icon="quiz"` to the check-circle clip div.
+
+**3. `.navbar-nav { align-items: flex-start }` → `align-items: center`**
+- DS confirms `items-center` on the Navbar Content container.
+- Visually equivalent here (items are exactly 40px, container 56px - 8px×2 padding = 40px) but corrected for DS fidelity.
+
+**4. Active item hover override — `.nav-item.is-active:hover`**
+- Without this, hovering the active Class item triggered `.nav-item:hover` (bg #b5f291) overriding `.nav-item.is-active` (bg #00cc85). The active item visually changed colour on hover.
+- Fix: added `.nav-item.is-active:hover` rules at higher specificity to lock the active state.
+
+**DS confirmed correct (no changes needed):**
+- All state token values: Default / Hover / Active / Pressed colours ✓
+- `.nav-arrow-circle` specs: bg `#99ebce`, padding `4px`, border-radius `60px`, chevron `#00a36a` ✓
+- `.nav-chevron` 16×16 clip for Learn, Achievement, Potential, Rewards ✓
+- `ic-bar-chart` symbol `viewBox="-1 -1 26 26"` — standard DS 24×24 frame ✓
+- Font: `Body/B1` SemiBold 14px (corrected in Session 13) ✓
+
 *Last updated: 2026-05-19 | File: Nadia.test.git/Class/nadia_Class-MyClasses.html | Branch: staging*

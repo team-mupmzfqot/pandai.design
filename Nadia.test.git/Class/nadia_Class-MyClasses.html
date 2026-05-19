@@ -248,7 +248,7 @@
       border-radius: var(--corner-radius-corner-pill);
       height:        56px;
       display:       flex;
-      align-items:   flex-start;
+      align-items:   center;
       gap:           var(--spacing-space-xs);         /* 8px */
       padding:       var(--spacing-space-xs);         /* 8px */
       width:         100%;
@@ -276,8 +276,19 @@
     .nav-item__icon-clip {
       width: 20px; height: 20px;
       overflow: hidden; flex-shrink: 0;
+      box-sizing: border-box;           /* padding insets stay inside 20×20 outer */
     }
     .nav-item__icon-clip svg { display: block; width: 100%; height: 100%; }
+    /* Per-icon inset padding — DS confirmed positions (CLAUDE.md Rule 8, node 3528:51331) */
+    .nav-item__icon-clip[data-icon="home"]        { padding: 8.33% 12.5%; }
+    .nav-item__icon-clip[data-icon="quiz"]        { padding: 8.33%; }
+    .nav-item__icon-clip[data-icon="battle"]      { padding: 12.5%; }
+    .nav-item__icon-clip[data-icon="practice"]    { padding: 12.5% 8.33%; }
+    .nav-item__icon-clip[data-icon="class"]       { padding: 12.5% 4.17%; }
+    .nav-item__icon-clip[data-icon="learn"]       { padding: 8.33% 16.67%; }
+    .nav-item__icon-clip[data-icon="achievement"] { padding: 16.67% 12.5%; }
+    .nav-item__icon-clip[data-icon="potential"]   { padding: 8.33% 8.33% 12.42% 8.33%; }
+    .nav-item__icon-clip[data-icon="gift"]        { padding: 8.33%; }
     .nav-label {
       font-size: 14px; font-weight: 600; line-height: 20px;
       color:      var(--text-default-body);
@@ -332,6 +343,14 @@
     .nav-item.is-pressed .nav-label,
     .nav-item.is-pressed .nav-chevron        { color: var(--text-primary-default); }
     .nav-item.is-pressed .nav-item__icon-wrap { color: var(--icon-primary-default); }
+    /* Active item must not revert to hover state on mouseover */
+    .nav-item.is-active:hover {
+      background: var(--surface-primary-default);
+      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+    }
+    .nav-item.is-active:hover .nav-label,
+    .nav-item.is-active:hover .nav-chevron        { color: var(--text-primary-on-color); }
+    .nav-item.is-active:hover .nav-item__icon-wrap { color: var(--icon-primary-on-color); }
 
     /* Class dropdown */
     .nav-item-group { position: relative; flex-shrink: 0; }
@@ -2003,7 +2022,7 @@
       </div>
 
       <div class="nav-item">
-        <div class="nav-item__icon-wrap"><div class="nav-item__icon-clip"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div></div>
+        <div class="nav-item__icon-wrap"><div class="nav-item__icon-clip" data-icon="quiz"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div></div>
         <span class="nav-label">Quiz</span>
       </div>
 
