@@ -4502,53 +4502,8 @@
       });
     })();
 
-    // ─── Nav Menu Mobile — Account btn triggers top dropdown (mobile ≤767px only)
-    (function () {
-      var accountBtn  = document.getElementById('account-btn');
-      var mobilePanel = document.getElementById('NavMenu-Mobile');
-      var mobileOverlay = document.getElementById('mobile-overlay');
-      var closeBtn    = document.getElementById('nav-menu-mobile-close');
-      if (!mobilePanel || !mobileOverlay) return;
-
-      var leaveTimer = null;
-
-      function openMobileMenu() {
-        clearTimeout(leaveTimer);
-        mobilePanel.classList.add('is-open');
-        mobileOverlay.classList.add('is-open');
-        mobilePanel.setAttribute('aria-hidden', 'false');
-        if (accountBtn) accountBtn.classList.add('is-active');
-      }
-      function closeMobileMenu() {
-        mobilePanel.classList.remove('is-open');
-        mobileOverlay.classList.remove('is-open');
-        mobilePanel.setAttribute('aria-hidden', 'true');
-        if (accountBtn) accountBtn.classList.remove('is-active');
-      }
-
-      if (accountBtn) {
-        accountBtn.addEventListener('click', function () {
-          mobilePanel.classList.contains('is-open') ? closeMobileMenu() : openMobileMenu();
-        });
-      }
-
-      mobileOverlay.addEventListener('click', closeMobileMenu);
-      if (closeBtn) closeBtn.addEventListener('click', closeMobileMenu);
-
-      // Mouseleave timeout — same snappy delay as desktop dropdowns
-      mobilePanel.addEventListener('mouseleave', function () {
-        leaveTimer = setTimeout(closeMobileMenu, 300);
-      });
-      mobilePanel.addEventListener('mouseenter', function () {
-        clearTimeout(leaveTimer);
-      });
-
-      // Auto-close when viewport grows beyond mobile
-      window.addEventListener('resize', function () {
-        if (mobilePanel.classList.contains('is-open') && window.innerWidth > 767) closeMobileMenu();
-      });
-    })();
-
+    // Nav Menu Mobile IIFE is in a separate <script> AFTER the DOM elements it references
+    // (account-btn, NavMenu-Mobile, mobile-overlay are defined after this script block)
 
     try {
       (function () {
@@ -4614,8 +4569,6 @@
       console.warn('Carousel init error:', e);
     }
   </script>
-
-
 
   <!-- Navbar Mobile - 1.5 (DS node 3406:735)
        Fixed bottom bar · height 56px · top border #00cc85
@@ -4737,6 +4690,53 @@
     </div>
 
   </div><!-- end NavMenu-Mobile -->
+
+  <!-- Mobile menu script placed AFTER its DOM elements so getElementById finds them -->
+  <script>
+    (function () {
+      var accountBtn    = document.getElementById('account-btn');
+      var mobilePanel   = document.getElementById('NavMenu-Mobile');
+      var mobileOverlay = document.getElementById('mobile-overlay');
+      var closeBtn      = document.getElementById('nav-menu-mobile-close');
+      if (!mobilePanel || !mobileOverlay) return;
+
+      var leaveTimer = null;
+
+      function openMobileMenu() {
+        clearTimeout(leaveTimer);
+        mobilePanel.classList.add('is-open');
+        mobileOverlay.classList.add('is-open');
+        mobilePanel.setAttribute('aria-hidden', 'false');
+        if (accountBtn) accountBtn.classList.add('is-active');
+      }
+      function closeMobileMenu() {
+        mobilePanel.classList.remove('is-open');
+        mobileOverlay.classList.remove('is-open');
+        mobilePanel.setAttribute('aria-hidden', 'true');
+        if (accountBtn) accountBtn.classList.remove('is-active');
+      }
+
+      if (accountBtn) {
+        accountBtn.addEventListener('click', function () {
+          mobilePanel.classList.contains('is-open') ? closeMobileMenu() : openMobileMenu();
+        });
+      }
+
+      mobileOverlay.addEventListener('click', closeMobileMenu);
+      if (closeBtn) closeBtn.addEventListener('click', closeMobileMenu);
+
+      mobilePanel.addEventListener('mouseleave', function () {
+        leaveTimer = setTimeout(closeMobileMenu, 300);
+      });
+      mobilePanel.addEventListener('mouseenter', function () {
+        clearTimeout(leaveTimer);
+      });
+
+      window.addEventListener('resize', function () {
+        if (mobilePanel.classList.contains('is-open') && window.innerWidth > 767) closeMobileMenu();
+      });
+    })();
+  </script>
 
 </body>
 </html>
