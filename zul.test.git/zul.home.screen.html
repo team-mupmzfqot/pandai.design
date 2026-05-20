@@ -2470,10 +2470,9 @@
     ───────────────────────────────────────────────────── */
     .nav-menu-mobile {
       position:       fixed;
-      top:            0;
+      bottom:         72px;  /* 56px navbar + 16px gap — anchored above bottom navbar */
       left:           0;
       width:          300px;
-      /* Cap height so menu sits 16px above the 56px bottom navbar (56+16=72px from bottom) */
       max-height:     calc(100dvh - 72px);
       z-index:        500;
       background:     var(--surface-general-default);
