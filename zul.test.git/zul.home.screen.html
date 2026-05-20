@@ -2471,9 +2471,10 @@
     .nav-menu-mobile {
       position:       fixed;
       top:            0;
-      left:           var(--page-padding-x);
-      right:          var(--page-padding-x);
-      bottom:         0;
+      left:           0;                       /* no left gap — panel starts at viewport edge */
+      right:          var(--page-padding-x);   /* right edge respects page padding */
+      /* no bottom: 0 — height hugs content (DS: HUG sizing, h:740) */
+      max-height:     100dvh;
       z-index:        500;
       background:     var(--surface-general-default);
       /* DS strokeWeights: top:1 right:1 bottom:1 left:0 — left edge is flat against page */
