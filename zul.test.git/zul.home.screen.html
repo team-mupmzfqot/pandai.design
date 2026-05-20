@@ -113,6 +113,7 @@
       --page-padding-x:          60px;
       --nav-dropdown-top:        72px;   /* navbar 64px + gap. DS=80px (16px gap). Change here to revert. */
       --section-gap:             var(--spacing-space-m);   /* Spacing/space-m = 16px */
+      --overlay-dark:            rgba(26, 26, 26, 0.5);    /* Overlay/Overlay-Dark → Foundation/black 50 (DS confirmed) */
       --check-in-card-max-width: 390px;
     }
 
@@ -2192,6 +2193,435 @@
     }
 
     /* ─────────────────────────────────────────────────────
+       HAMBURGER → X ANIMATION
+       3 separate <path> elements, each with explicit transform-origin
+       in the 24×24 SVG coordinate space. translateY moves line to
+       center (y=12), then rotate forms the X arms.
+    ───────────────────────────────────────────────────── */
+    /* transform-box:view-box makes % origins relative to the SVG viewport (0 0 24 24),
+       not the path's own fill-box. With fill-box (browser default), 12px 6px resolves
+       to the wrong pivot point, causing paths to rotate out of bounds and shift layout.
+       overflow:hidden on .ham-svg clamps any residual ink overflow so it never
+       contributes to the button's or navbar's measured width. */
+    .ham-svg { overflow: hidden; display: block; }
+    .ham-top { transform-box: view-box; transform-origin: 50% 25%; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .ham-mid { transform-box: view-box; transform-origin: 50% 50%; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.2s ease; }
+    .ham-bot { transform-box: view-box; transform-origin: 50% 75%; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+    /* 50% 25% = (12,6) · 50% 50% = (12,12) · 50% 75% = (12,18) in 24×24 viewport */
+    .navbar-mobile__menu-btn.is-open .ham-top { transform: translateY(6px)  rotate(45deg);  }
+    .navbar-mobile__menu-btn.is-open .ham-mid { opacity: 0; transform: scaleX(0); }
+    .navbar-mobile__menu-btn.is-open .ham-bot { transform: translateY(-6px) rotate(-45deg); }
+
+    /* ─────────────────────────────────────────────────────
+       NAV MENU TABLET — Nav Menu Tablet - 1.5 (DS node 3427:4590)
+       White panel · border L/R/B #00cc85 · no top border
+       Rounded bottom corners 24px · position absolute under #NavBar-Mobile
+       Slides down (opacity+translateY) · z-index 300
+    ───────────────────────────────────────────────────── */
+    /* #NavBar-Mobile raised to z-index 300 so it paints above the tablet overlay (z-index 250).
+       Dropdown (#NavMenu-Tablet) is a sibling element — position:fixed so it uses the viewport
+       as containing block (position:absolute;top:100% would resolve to ICB, placing it off-screen). */
+    #NavBar-Mobile { position: relative; z-index: 300; }
+
+    /* Tablet fullscreen overlay — Overlay/Overlay-Dark = rgba(26,26,26,0.5)
+       Sits between page content (z-index 0) and navbar+dropdown (z-index 300).
+       Same snappy transition as desktop navbar dropdowns (0.15s ease). */
+    .tablet-overlay {
+      position:       fixed;
+      inset:          0;
+      z-index:        250;
+      background:     var(--overlay-dark);
+      opacity:        0;
+      pointer-events: none;
+      visibility:     hidden;
+    }
+    .tablet-overlay.is-open {
+      opacity:        1;
+      pointer-events: auto;
+      visibility:     visible;
+    }
+
+    .nav-menu-tablet {
+      /* Fixed below the 64px navbar — works regardless of DOM position (sibling of #NavBar-Mobile).
+         position:absolute would resolve to the ICB since the containing block is not the navbar. */
+      position:       fixed;
+      top:            0;
+      left:           var(--page-padding-x);
+      right:          var(--page-padding-x);
+      z-index:        300;
+      background:     var(--surface-general-default);
+      border-bottom:  1px solid var(--border-primary-default);
+      border-left:    1px solid var(--border-primary-default);
+      border-right:   1px solid var(--border-primary-default);
+      border-radius:  0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl);
+      overflow:       hidden;
+      padding:        16px;
+      box-sizing:     border-box;
+      display:        flex;
+      flex-direction: column;
+      opacity:        0;
+      transform:      translateY(-8px);
+      pointer-events: none;
+      visibility:     hidden;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
+    }
+    .nav-menu-tablet.is-open {
+      opacity:        1;
+      transform:      translateY(0);
+      pointer-events: auto;
+      visibility:     visible;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
+    }
+
+    .nav-menu-tablet__header {
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      gap:             10px;
+      padding:         0 16px 16px;
+      background:      var(--surface-general-default);
+    }
+    .nav-menu-tablet__logo { display: flex; align-items: center; }
+    .nav-menu-tablet__close {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      color:      var(--icon-default-default);
+      background: none; border: none; padding: 0;
+      cursor:     pointer;
+    }
+    .nav-menu-tablet__close:hover { color: var(--icon-primary-default); }
+
+    .nav-menu-tablet__search { padding: 0 16px; }
+    .nav-menu-tablet__search-btn {
+      display:       flex;
+      align-items:   center;
+      gap:           10px;
+      width:         100%;
+      height:        40px;
+      padding:       var(--spacing-space-xs) var(--spacing-space-s);
+      background:    var(--surface-general-default);
+      border:        none;
+      box-shadow:    inset 0 0 0 1px var(--border-general-default);
+      border-radius: var(--corner-radius-corner-pill);
+      cursor:        pointer;
+    }
+    .nav-menu-tablet__search-btn:hover { box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+    .nav-menu-tablet__search-text {
+      flex:        1 0 0;
+      font-family: var(--font-family);
+      font-size:   14px;
+      font-weight: 500;
+      line-height: 20px;
+      color:       var(--border-general-default);
+      text-align:  left;
+    }
+    .nav-menu-tablet__search-icon { display: flex; flex-shrink: 0; color: var(--icon-default-default); }
+    .nav-menu-tablet__search-icon svg { width: 24px; height: 24px; display: block; }
+
+    .nav-menu-tablet__menu {
+      display:    flex;
+      gap:        8px;
+      padding:    16px;
+      background: var(--surface-general-default);
+    }
+    .nav-menu-tablet__col { display: flex; flex-direction: column; gap: 8px; flex: 1 0 0; min-width: 0; }
+    /* 32px-wide spacer with a centred 1px divider line */
+    .nav-menu-tablet__divider { width: 32px; flex-shrink: 0; position: relative; align-self: stretch; }
+    .nav-menu-tablet__divider::after {
+      content:    '';
+      position:   absolute;
+      left:       50%;
+      top:        0;
+      bottom:     0;
+      width:      1px;
+      background: var(--border-general-default);
+      transform:  translateX(-50%);
+    }
+
+    /* Shared menu items — used in both tablet and mobile menus */
+    .nav-menu-item {
+      display:       flex;
+      align-items:   center;
+      gap:           10px;
+      padding:       var(--spacing-space-xs) var(--spacing-space-m);
+      border-radius: 0;
+      cursor:        pointer;
+      user-select:   none;
+      transition:    background 0.12s ease, border-radius 0.12s ease, box-shadow 0.12s ease;
+    }
+    .nav-menu-item:hover { background: var(--surface-secondary-default-subtle); box-shadow: inset 0 0 0 1px var(--border-primary-default); border-radius: 108px; }
+    .nav-menu-item:hover .nav-menu-item__label { color: var(--text-primary-default); }
+    .nav-menu-item:hover .nav-menu-item__arrow { color: var(--icon-primary-default); }
+    .nav-menu-item.is-active { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border-radius: 108px; }
+    .nav-menu-item.is-active .nav-menu-item__label { color: var(--text-primary-default-hover); }
+    .nav-menu-item__icon  { display: flex; flex-shrink: 0; color: var(--icon-primary-default); }
+    .nav-menu-item__icon svg { width: 24px; height: 24px; display: block; }
+    .nav-menu-item__label {
+      flex:        1 0 0;
+      font-family: var(--font-family);
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       var(--text-default-body);
+      transition:  color 0.12s ease;
+    }
+    .nav-menu-item__arrow { display: flex; flex-shrink: 0; color: var(--icon-default-default); transition: color 0.12s ease; }
+    .nav-menu-item__arrow svg { width: 24px; height: 24px; display: block; }
+
+    /* DS nav menu items have no checkbox indicator — active state uses pill background only */
+    .nav-menu-check { display: none; }
+
+    /* CTA row: Notification + Download App button */
+    .nav-menu-tablet__footer { padding: 0; display: flex; flex-direction: column; }
+    .nav-menu-cta {
+      display:       flex;
+      gap:           8px;
+      align-items:   center;
+      padding:       8px;
+      background:    var(--surface-secondary-default-subtle);
+      box-shadow:    inset 0 0 0 1px #d1f7d1;
+      border-radius: 28px;
+    }
+    .nav-menu-cta__notif {
+      display:     flex;
+      flex:        1 0 0;
+      align-items: center;
+      gap:         10px;
+      padding:     var(--spacing-space-xs) var(--spacing-space-m);
+      cursor:      pointer;
+      color:       var(--icon-primary-default);
+    }
+    .nav-menu-cta__notif svg  { width: 24px; height: 24px; display: block; flex-shrink: 0; }
+    .nav-menu-cta__notif-label {
+      font-family: var(--font-family);
+      font-size:   14px;
+      font-weight: 600;
+      color:       var(--text-default-body);
+    }
+    .nav-menu-cta__btn {
+      /* DS node 3427:2586 — Button - 1.5 Primary/L(ish): 40px h, pad t:8 r:12 b:8 l:12
+         primaryAxisAlignItems:CENTER → icon+label+arrow grouped and centred inside the pill */
+      display:        flex;
+      align-items:    center;
+      justify-content: center;
+      flex:           1 0 0;
+      min-width:      0;
+      height:         40px;
+      padding:        8px 12px;
+      background:     var(--surface-primary-default);
+      border:         none;
+      box-shadow:     inset 0 0 0 1px var(--border-primary-focus);
+      border-radius:  var(--corner-radius-corner-rounded);
+      cursor:         pointer;
+      color:          var(--icon-primary-on-color);  /* #e1f9ea — DS text+icon fill */
+      font-family:    var(--font-family);
+      font-size:      14px;
+      font-weight:    600;
+      gap:            0;
+      transition:     background 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
+    }
+    .nav-menu-cta__btn:hover  { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); color: var(--text-secondary-focus); }
+    .nav-menu-cta__btn:active { background: var(--surface-primary-focus);     box-shadow: inset 0 0 0 1px var(--border-primary-default); color: var(--text-primary-default); }
+    /* Icon frame: 24×24, smartphone at 20×20 (2px inset each side — DS Icon frame) */
+    .nav-menu-cta__btn-icon     { display: flex; flex-shrink: 0; width: 24px; height: 24px; align-items: center; justify-content: center; }
+    .nav-menu-cta__btn-icon svg { width: 20px; height: 20px; display: block; }
+    /* Label: DS pad l:8 r:8 — no flex:1, no growing */
+    .nav-menu-cta__btn-text     { padding: 0 8px; white-space: nowrap; }
+    /* R Arrow: 24×24 pill, #99ebce bg, 4px pad → 16px clip, chevron #00a36a */
+    .nav-menu-cta__btn-arrow    {
+      display: flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px;
+      background:    #99ebce;
+      border-radius: var(--corner-radius-corner-rounded);
+      flex-shrink:   0;
+      padding:       4px;
+      color:         var(--border-primary-focus);  /* chevron stroke #00a36a */
+    }
+    .nav-menu-cta__btn:hover  .nav-menu-cta__btn-arrow { background: var(--surface-secondary-default-subtle); }
+    .nav-menu-cta__btn:active .nav-menu-cta__btn-arrow { background: var(--surface-primary-default); }
+    .nav-menu-cta__btn-arrow svg { width: 16px; height: 16px; display: block; }
+
+    /* Language switcher row */
+    .nav-menu-locale {
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      gap:             8px;
+      padding:         16px 60px 0;
+    }
+    .nav-menu-locale__btn {
+      display: flex; align-items: center;
+      cursor: pointer;
+      color:      var(--text-primary-default);  /* #00cc85 — BM and Mandarin */
+      background: none; border: none; padding: 4px;
+    }
+    /* EN is the active locale — DS uses #00564C (Surface/tertiary/default) for selected locale stroke */
+    .nav-menu-locale__btn:first-child { color: var(--surface-tertiary-default, #00564c); }
+    .nav-menu-locale__btn:hover { opacity: 0.7; }
+    .nav-menu-locale__btn svg { width: 24px; height: 24px; display: block; }
+
+    /* ─────────────────────────────────────────────────────
+       NAV MENU MOBILE — Nav Menu Mobile - 1.5 (DS node 3427:2185)
+       Full-height left panel · width 329px · slides from left
+       Border T/R/B #00cc85 · no left border · rounded right corners 24px
+       16px padding-bottom (DS Space/space-m)
+    ───────────────────────────────────────────────────── */
+    .nav-menu-mobile {
+      position:       fixed;
+      top:            0;
+      left:           0;
+      bottom:         0;
+      z-index:        600;
+      width:          329px;
+      max-width:      calc(100vw - 40px);
+      background:     var(--surface-general-default);
+      border-top:     1px solid var(--border-primary-default);
+      border-right:   1px solid var(--border-primary-default);
+      border-bottom:  1px solid var(--border-primary-default);
+      border-radius:  0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl) 0;
+      display:        flex;
+      flex-direction: column;
+      overflow-y:     auto;
+      padding-bottom: var(--spacing-space-m);
+      transform:      translateX(-110%);
+      visibility:     hidden;
+      transition:     transform 0.25s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0.25s;
+    }
+    .nav-menu-mobile.is-open {
+      transform:  translateX(0);
+      visibility: visible;
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0s;
+    }
+    .mobile-overlay {
+      position:       fixed;
+      inset:          0;
+      z-index:        590;
+      background:     rgba(0,0,0,0.35);
+      opacity:        0;
+      pointer-events: none;
+      visibility:     hidden;
+    }
+    .mobile-overlay.is-open {
+      opacity:        1;
+      pointer-events: auto;
+      visibility:     visible;
+    }
+
+    .nav-menu-mobile__header {
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      padding:         var(--spacing-space-m);
+      flex-shrink:     0;
+    }
+    .nav-menu-mobile__logo      { display: flex; align-items: center; gap: 4.2px; height: 34px; padding-left: var(--spacing-space-xs); }
+    .nav-menu-mobile__logo-mark { display: block; height: 34px; width: auto; }
+    .nav-menu-mobile__logo-text { display: block; height: auto; max-height: 24px; width: auto; }
+    .nav-menu-mobile__close {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--icon-default-default);
+      background: none; border: none; padding: 0; cursor: pointer;
+    }
+    .nav-menu-mobile__close:hover { color: var(--icon-primary-default); }
+    .nav-menu-mobile__content {
+      display: flex; flex-direction: column;
+      gap:     var(--spacing-space-xs);
+      padding: 0 var(--spacing-space-m) var(--spacing-space-m);
+      flex-shrink: 0;
+    }
+    .nav-menu-mobile__footer  { padding: 0 var(--spacing-space-m); flex-shrink: 0; }
+    .nav-menu-mobile__locale  {
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      padding:         var(--spacing-space-m) 40px 0;
+      flex-shrink:     0;
+    }
+
+    /* ─────────────────────────────────────────────────────
+       NAVBAR MOBILE BOTTOM — Navbar Mobile - 1.5 (DS node 3406:735)
+       Fixed bottom · height 56px · top border #00cc85
+       4 buttons: Quiz / Practice / Score / Account
+       Shown only at mobile (≤767px)
+    ───────────────────────────────────────────────────── */
+    .navbar-bottom {
+      position:        fixed;
+      bottom:          0;
+      left:            0;
+      right:           0;
+      z-index:         400;
+      height:          56px;
+      background:      var(--surface-general-default);
+      border-top:      1px solid var(--border-primary-default);
+      display:         none;
+      align-items:     center;
+      justify-content: center;
+      gap:             var(--spacing-space-xxs);
+      padding:         var(--spacing-space-m);
+    }
+    /* Button - 1.5 Tertiary/S/Student — all states confirmed from DS nodes
+       1452:8381 Default · 1452:8373 Hover · 3029:20042 Pressed · 1452:8365 Active · 1452:8357 Disabled
+       strokeAlign: INSIDE → box-shadow:inset, never border (Rule 60)
+       Dimensions: h:24px, padding:2px 4px, border-radius:60px (pill) */
+    .navbar-bottom__btn {
+      display:       flex;
+      align-items:   center;
+      height:        24px;
+      max-height:    24px;
+      padding:       2px 4px;             /* DS: paddingTop:2 paddingRight:4 paddingBottom:2 paddingLeft:4 */
+      background:    var(--surface-general-default);   /* Default: Surface/general/default #ffffff */
+      border-radius: var(--corner-radius-corner-rounded);   /* 60px pill */
+      box-shadow:    none;                /* Default: no stroke */
+      border:        none;
+      cursor:        pointer;
+      user-select:   none;
+      white-space:   nowrap;
+      transition:    background 0.12s ease, box-shadow 0.12s ease;
+    }
+    /* Hover: Surface/secondary/default #b5f291 · Border/secondary/focus inset 1px #70bc6f */
+    .navbar-bottom__btn:hover {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    /* Pressed (mousedown): Surface/primary/focus #00a36a · Border/primary/default inset 1px #00cc85 */
+    .navbar-bottom__btn:active {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    /* Active (currently selected / menu open): Surface/primary/default #00cc85 · Border/primary/focus inset 1px #00a36a */
+    .navbar-bottom__btn.is-active {
+      background: var(--surface-primary-default);
+      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+    }
+
+    /* Icon slot: 20×20 wrapper, 16×16 SVG — separate color per state */
+    .navbar-bottom__icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 20px; height: 20px; flex-shrink: 0;
+      color: var(--icon-primary-default);          /* Default: Icon/primary/default #00cc85 */
+      transition: color 0.12s ease;
+    }
+    .navbar-bottom__icon svg { width: 16px; height: 16px; display: block; }
+    .navbar-bottom__btn:hover  .navbar-bottom__icon { color: var(--icon-secondary-hover); }    /* Hover  — Icon/secondary/hover  #70bc6f */
+    .navbar-bottom__btn:active .navbar-bottom__icon { color: var(--icon-primary-default); }   /* Pressed — Icon/primary/default #00cc85 (Arrow vis=false, leading icon confirmed) */
+    .navbar-bottom__btn.is-active .navbar-bottom__icon { color: var(--icon-primary-on-color); } /* Active  — Icon/primary/on-color #e1f9ea */
+
+    /* Label: 12px SemiBold · px:4px — separate color per state */
+    .navbar-bottom__label {
+      font-family: var(--font-family);
+      font-size:   12px;
+      font-weight: 600;
+      line-height: 18px;
+      color:       var(--text-default-body);        /* Default: Text/default/body #666666 */
+      padding:     0 4px;
+      transition:  color 0.12s ease;
+    }
+    .navbar-bottom__btn:hover  .navbar-bottom__label { color: var(--text-secondary-focus); }  /* #70bc6f */
+    .navbar-bottom__btn:active .navbar-bottom__label { color: var(--text-primary-default); }  /* #00cc85 */
+    .navbar-bottom__btn.is-active .navbar-bottom__label { color: var(--text-primary-on-color); } /* #e1f9ea */
+
+    /* ─────────────────────────────────────────────────────
        RESPONSIVE LAYOUT
        Desktop : ≥ 1440px → desktop navbar, 3-col quiz grid, 60px padding
        < 1440px           → mobile navbar
@@ -2199,9 +2629,12 @@
        Mobile  : < 768px         → 1-col quiz grid, 16px padding
     ───────────────────────────────────────────────────── */
 
-    #NavBar-Mobile         { display: none; padding: 0 var(--page-padding-x); }
+    #NavBar-Mobile { display: none; padding: 0 var(--page-padding-x); position: relative; z-index: 300;
+                     transition: opacity 0.15s ease; }
+    /* Hamburger click hides the navbar bar while dropdown slides in over the same space */
+    #NavBar-Mobile.is-hidden-for-menu { opacity: 0; pointer-events: none; }
 
-    /* Navbar breakpoint: ≤1319px → mobile navbar, hide desktop navbars */
+    /* Navbar breakpoint: ≤1319px → show mobile bar, hide desktop navbars */
     @media (max-width: 1319px) {
       #NavbarPrimary-Desktop { display: none; }
       #NavTopMenu-Desktop    { display: none; }
@@ -2296,20 +2729,10 @@
       /* Status badges: allow wrapping when pills don't fit in a single row */
       .status-badges { flex-wrap: wrap; }
 
-      /* Taller stacked footer: 12+20+8+20+12 = 72px; body needs 72px + 30px DS gap */
-      body { padding-bottom: 102px; }
-
-      /* Footer — stack vertically, center both groups */
-      .footer__inner {
-        flex-direction: column;
-        justify-content: center;
-        align-items:     center;
-        gap:             var(--spacing-space-xs);   /* 8px between rows */
-        height:          auto;
-        padding:         var(--spacing-space-s) var(--spacing-space-2xl);  /* 12px 28px — DS padLeft/padRight:28 */
-      }
-      .footer__left  { justify-content: center; }
-      .footer__right { justify-content: center; }
+      /* Mobile bottom navbar visible; desktop footer hidden */
+      .navbar-bottom { display: flex; }
+      .footer        { display: none; }
+      body           { padding-bottom: 56px; }   /* bottom navbar height only */
     }
   </style>
 </head>
@@ -2454,6 +2877,21 @@
           <path fill-rule="evenodd" clip-rule="evenodd" d="M12 8C9.79417 8 8 6.20563 8 4H8.56501C8.56501 5.8939 10.1061 7.4348 12 7.4348C13.8939 7.4348 15.435 5.8939 15.435 4H16C16 6.20563 14.2056 8 12 8Z" fill="white"/>
         </g>
       </symbol>
+
+      <!-- Outline/check (inside Checkbox-1.5, 12×12 space) — white checkmark on green bg -->
+      <symbol id="ic-check" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6L4.5 8.5L10 3"/></symbol>
+      <!-- Outline/x (611:2575) — X close icon, paths at 24×24 DS frame → viewBox -1 -1 26 26 (Rule 27) -->
+      <symbol id="ic-x" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6L18 18"/></symbol>
+      <!-- Outline/clipboard (611:2947) — Practice icon for nav menus -->
+      <symbol id="ic-clipboard" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></symbol>
+      <!-- Outline/settings (611:2627) — My Account icon for nav menus -->
+      <symbol id="ic-settings" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+      <!-- Outline/BM (DS node I3427:1435;2662:43842) — DS-exported path, vec 20×12 at x:2 y:6 in 24×24 frame -->
+      <symbol id="ic-bm" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12C6.42826 12 7.3185 11.6839 7.97487 11.1213C8.63125 10.5587 9 9.79565 9 9C9 8.20435 8.63125 7.44129 7.97487 6.87868C7.3185 6.31607 6.42826 6 5.5 6H2V18H5.5C6.42826 18 7.3185 17.6839 7.97487 17.1213C8.63125 16.5587 9 15.7956 9 15C9 14.2044 8.63125 13.4413 7.97487 12.8787C7.3185 12.3161 6.42826 12 5.5 12ZM5.5 12H2M12 18V6L17 15L22 6V18"/></symbol>
+      <!-- Outline/Mandarin (DS node I3427:1436;2662:44021) — DS-exported path, vec 17×18 at x:4 y:3 in 24×24 frame -->
+      <symbol id="ic-mandarin" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.1178H11.4117M9.29405 3V5.11762C9.29405 9.79545 6.92338 13.5881 4 13.5881M5.0578 9.35284C5.0578 11.6229 8.18341 13.4907 12.1518 13.5881M12.47 21L16.7052 11.4707L20.9405 21M19.9885 18.8821H13.4238"/></symbol>
+      <!-- Pandai full logo — DS node 3427:1401 (142×34) — mark (leaf) + wordmark, exact DS paths -->
+      <symbol id="ic-pandai-logo-large" viewBox="0 0 142 34"><path d="M27.2819 16.9843H32.7344L32.5331 17.2947C29.7675 21.4995 26.0983 25.162 21.865 27.9639C25.1554 25.4489 27.2819 21.4681 27.2819 16.9921V16.9843Z" fill="#95E3E6"/><path d="M32.5332 16.6778L32.7304 16.9843H27.2819C27.2819 12.19 24.8319 7.96163 21.1351 5.50162C25.7038 8.4214 29.6294 12.2686 32.5174 16.6581L32.5332 16.6778Z" fill="#B4F3BF"/><path d="M19.0638 4.36593C17.4029 3.635 15.5683 3.23024 13.643 3.23024C11.2639 3.23024 9.02693 3.8472 7.07795 4.93181L4.26099 0L4.6279 0.0117892C10.2224 0.420481 15.1737 2.43643 19.0638 4.36593Z" fill="#CAFBDC"/><path d="M4.26092 0L7.07788 4.93181C3.15229 7.11281 0.402398 11.1879 0.0394287 15.9272C0.331382 10.1898 1.68857 4.94753 4.07549 0.330097L4.24909 0H4.26092Z" fill="#86D9AC"/><path d="M20.6813 28.7184C20.6301 28.7538 20.5748 28.7853 20.5235 28.8167L20.417 28.8756C20.0422 29.0996 19.6635 29.3158 19.2847 29.5201C19.2729 29.5201 19.261 29.5319 19.2492 29.5358C17.5369 30.3178 15.6392 30.754 13.6429 30.754C11.2244 30.754 8.95191 30.1174 6.97925 28.9975L13.9112 16.9843L20.6813 28.7184Z" fill="#76D59F"/><path d="M27.2819 16.9843V16.9921C27.2819 21.4681 25.1554 25.4489 21.865 27.9639C21.4744 28.2272 21.0799 28.4748 20.6814 28.7184L13.9113 16.9843H27.2819Z" fill="#7CD988"/><path d="M27.2819 16.9843H13.9113L20.6065 5.1676C20.784 5.27371 20.9576 5.38374 21.1312 5.50163C24.828 7.96164 27.2741 12.19 27.278 16.9843H27.2819Z" fill="#A5E695"/><path d="M20.4959 5.09685C20.5354 5.12042 20.5709 5.144 20.6064 5.16758L13.9112 16.9843L7.07788 4.9318C9.02687 3.84719 11.2639 3.23022 13.6429 3.23022C15.5682 3.23022 17.4028 3.63499 19.0638 4.36592C19.5293 4.59777 19.9791 4.82569 20.4131 5.04969C20.4288 5.05755 20.4446 5.06541 20.4565 5.07327C20.4722 5.08113 20.4841 5.08899 20.4959 5.09685Z" fill="#99EBB2"/><path d="M13.9112 16.9843H0V16.8585C0.011836 16.5481 0.0236719 16.2415 0.0394532 15.935V15.9272C0.402423 11.1879 3.15231 7.11279 7.07791 4.93179L13.9112 16.9843Z" fill="#66D59D"/><path d="M13.9112 16.9843L6.97927 28.9975C3.04973 26.7693 0.319571 22.6352 0.0276172 17.8488C0.0157813 17.5659 0.00789064 17.279 0 16.9921V16.9843H13.9112Z" fill="#4FBE88"/><path d="M6.97949 28.9975L4.11913 33.9921L3.94948 33.666C1.56256 28.9503 0.244825 23.6373 0.027832 17.8488C0.319786 22.6352 3.04995 26.7693 6.97949 28.9975Z" fill="#82D9DE"/><path d="M4.1189 33.9921L6.97925 28.9974C8.95192 30.1174 11.2244 30.754 13.6429 30.754C15.6392 30.754 17.5369 30.3178 19.2492 29.5358C14.6845 32.0469 9.7252 33.5363 4.49765 33.9685L4.12284 34V33.9921H4.1189Z" fill="#9DE6F1"/><path d="M42.2307 28.6477V21.8846H47.5371C49.5769 21.8846 51.3523 21.5506 52.8633 20.8786C54.3744 20.2106 55.5343 19.2439 56.3391 17.9824C57.144 16.721 57.5503 15.2434 57.5503 13.5458C57.5503 11.8481 57.1479 10.343 56.3391 9.09338C55.5343 7.84373 54.3744 6.88488 52.8633 6.21289C51.3523 5.54484 49.5769 5.20688 47.5371 5.20688H37.8593V28.6359H42.2267L42.2307 28.6477ZM47.3359 18.2064H42.2307V8.90083H47.3359C49.2415 8.90083 50.6855 9.30166 51.6718 10.1073C52.6582 10.9089 53.1513 12.0603 53.1513 13.5536C53.1513 15.0469 52.6582 16.1983 51.6718 17C50.6855 17.8017 49.2415 18.2064 47.3359 18.2064ZM67.2913 28.8835C68.5223 28.8835 69.6506 28.6713 70.6685 28.2469C71.6864 27.8225 72.5426 27.1858 73.2369 26.337V28.6477H77.2336V10.7753H73.0357V12.9524C72.3177 12.1704 71.4734 11.5809 70.4989 11.1801C69.5244 10.7792 68.4552 10.5788 67.2913 10.5788C65.5436 10.5788 63.9812 10.96 62.6043 11.7184C61.2274 12.4769 60.1503 13.5418 59.377 14.9133C58.6038 16.2848 58.2171 17.8881 58.2171 19.7154C58.2171 21.5428 58.6038 23.15 59.377 24.5372C60.1503 25.9205 61.2234 26.9933 62.6043 27.7517C63.9812 28.5102 65.5436 28.8913 67.2913 28.8913V28.8835ZM67.7608 25.3035C66.2143 25.3035 64.9439 24.7887 63.9457 23.7631C62.9475 22.7374 62.4504 21.3856 62.4504 19.7115C62.4504 18.0374 62.9475 16.6895 63.9457 15.66C64.9439 14.6304 66.2143 14.1195 67.7608 14.1195C69.3074 14.1195 70.5817 14.6343 71.5917 15.66C72.5978 16.6856 73.1028 18.0374 73.1028 19.7115C73.1028 21.3856 72.5978 22.7335 71.5917 23.7631C70.5857 24.7887 69.3074 25.3035 67.7608 25.3035ZM82.3151 28.6477V19.6093C82.3151 17.8685 82.7649 16.5363 83.6605 15.6089C84.5561 14.6815 85.7752 14.2217 87.3217 14.2217C88.6868 14.2217 89.7402 14.6186 90.478 15.4085C91.2158 16.2023 91.5866 17.3772 91.5866 18.9413V28.6477H95.7845V18.4068C95.7845 15.8171 95.1019 13.8641 93.7368 12.5476C92.3718 11.2312 90.5569 10.571 88.2923 10.571C86.9706 10.571 85.7831 10.7832 84.7297 11.2076C83.6763 11.632 82.8043 12.2568 82.11 13.0821V10.7714H78.1134V28.6477H82.3112H82.3151ZM106.184 28.8835C107.415 28.8835 108.544 28.6713 109.562 28.2469C110.579 27.8225 111.436 27.1858 112.13 26.337V28.6477H116.162V5.12436H111.964V12.9838C111.27 12.1821 110.429 11.577 109.443 11.1761C108.457 10.7753 107.372 10.5749 106.184 10.5749C104.46 10.5749 102.91 10.9561 101.533 11.7145C100.156 12.4729 99.0749 13.5458 98.2897 14.929C97.5046 16.3123 97.114 17.9078 97.114 19.7154C97.114 21.5231 97.5046 23.1225 98.2897 24.5176C99.0749 25.9126 100.156 26.9894 101.533 27.7478C102.91 28.5062 104.46 28.8874 106.184 28.8874V28.8835ZM106.685 25.3035C105.679 25.3035 104.772 25.0756 103.963 24.6158C103.158 24.16 102.519 23.5037 102.05 22.6588C101.58 21.81 101.343 20.8275 101.343 19.7115C101.343 18.5955 101.58 17.613 102.05 16.7642C102.519 15.9154 103.158 15.2631 103.963 14.8072C104.768 14.3514 105.675 14.1195 106.685 14.1195C107.695 14.1195 108.599 14.3474 109.408 14.8072C110.212 15.2631 110.852 15.9193 111.321 16.7642C111.791 17.613 112.027 18.5955 112.027 19.7115C112.027 20.8275 111.791 21.81 111.321 22.6588C110.852 23.5076 110.212 24.16 109.408 24.6158C108.603 25.0717 107.695 25.3035 106.685 25.3035ZM126.554 28.8835C127.785 28.8835 128.913 28.6713 129.931 28.2469C130.949 27.8225 131.805 27.1858 132.5 26.337V28.6477H136.496V10.7753H132.298V12.9524C131.58 12.1704 130.736 11.5809 129.762 11.1801C128.787 10.7792 127.718 10.5788 126.554 10.5788C124.806 10.5788 123.244 10.96 121.867 11.7184C120.49 12.4769 119.413 13.5418 118.64 14.9133C117.866 16.2848 117.48 17.8881 117.48 19.7154C117.48 21.5428 117.866 23.15 118.64 24.5372C119.413 25.9205 120.486 26.9933 121.867 27.7517C123.244 28.5102 124.806 28.8913 126.554 28.8913V28.8835ZM127.024 25.3035C125.477 25.3035 124.207 24.7887 123.208 23.7631C122.21 22.7374 121.713 21.3856 121.713 19.7115C121.713 18.0374 122.21 16.6895 123.208 15.66C124.207 14.6343 125.477 14.1195 127.024 14.1195C128.57 14.1195 129.844 14.6343 130.854 15.66C131.86 16.6856 132.365 18.0374 132.365 19.7115C132.365 21.3856 131.86 22.7335 130.854 23.7631C129.848 24.7887 128.57 25.3035 127.024 25.3035ZM139.862 9.32917C140.465 9.32917 140.958 9.12482 141.345 8.7122C141.732 8.29958 141.925 7.79264 141.925 7.1914C141.925 6.62551 141.728 6.15395 141.333 5.78062C140.939 5.4073 140.449 5.21867 139.862 5.21867C139.274 5.21867 138.788 5.41516 138.39 5.80813C137.995 6.2011 137.798 6.68839 137.798 7.27392C137.798 7.85945 137.995 8.34674 138.39 8.73971C138.785 9.13268 139.274 9.32917 139.862 9.32917ZM142 28.7342V10.8618H137.802V28.7342H142Z" fill="#444A56"/></symbol>
 
     </defs>
   </svg>
@@ -2930,11 +3368,140 @@
         <img src="icons/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
         <img src="icons/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
       </a>
-      <button class="navbar-mobile__menu-btn" aria-label="Open menu" type="button">
-        <svg aria-hidden="true"><use href="#ic-menu"/></svg>
+      <button class="navbar-mobile__menu-btn" id="tablet-menu-btn" aria-label="Open menu" type="button">
+        <svg class="ham-svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <path class="ham-top" d="M3 6H21"/>
+          <path class="ham-mid" d="M3 12H21"/>
+          <path class="ham-bot" d="M3 18H21"/>
+        </svg>
       </button>
     </div>
   </section><!-- end NavBar-Mobile -->
+
+
+  <!-- Nav Menu Tablet - 1.5 (DS node 3427:4590)
+       Full-width dropdown · position absolute below #NavBar-Mobile
+       Triggered by hamburger btn in #NavBar-Mobile · tablet only (769px-1319px) -->
+  <div id="NavMenu-Tablet" class="nav-menu-tablet" aria-hidden="true">
+
+    <!-- Header: Logo + X close -->
+    <div class="nav-menu-tablet__header">
+      <a class="nav-menu-tablet__logo" href="#" aria-label="Pandai">
+        <svg width="117" height="28" aria-label="Pandai" role="img" style="display:block;flex-shrink:0;"><use href="#ic-pandai-logo-large"/></svg>
+      </a>
+      <button class="nav-menu-tablet__close" id="nav-menu-tablet-close" type="button" aria-label="Close menu">
+        <svg width="24" height="24" aria-hidden="true"><use href="#ic-x"/></svg>
+      </button>
+    </div>
+
+    <!-- Search bar -->
+    <div class="nav-menu-tablet__search">
+      <button class="nav-menu-tablet__search-btn" type="button">
+        <span class="nav-menu-tablet__search-text">Search</span>
+        <span class="nav-menu-tablet__search-icon"><svg width="24" height="24" aria-hidden="true"><use href="#ic-search"/></svg></span>
+      </button>
+    </div>
+
+    <!-- 2-column menu -->
+    <div class="nav-menu-tablet__menu">
+
+      <!-- Left column: Home, Quiz, Battle, Practice, Class -->
+      <div class="nav-menu-tablet__col">
+        <div class="nav-menu-item is-active" role="button" tabindex="0" aria-label="Home">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-home"/></svg></span>
+          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
+          <span class="nav-menu-item__label">Home</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Quiz">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></span>
+          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
+          <span class="nav-menu-item__label">Quiz</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Battle">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
+          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
+          <span class="nav-menu-item__label">Battle</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Practice">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-clipboard"/></svg></span>
+          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
+          <span class="nav-menu-item__label">Practice</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Class">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-users"/></svg></span>
+          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
+          <span class="nav-menu-item__label">Class</span>
+          <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+        </div>
+      </div>
+
+      <!-- Vertical divider -->
+      <div class="nav-menu-tablet__divider" aria-hidden="true"></div>
+
+      <!-- Right column: Learn, Achievement, Potential, Rewards, My Account -->
+      <div class="nav-menu-tablet__col">
+        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Learn">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-book"/></svg></span>
+          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
+          <span class="nav-menu-item__label">Learn</span>
+          <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Achievement">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></span>
+          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
+          <span class="nav-menu-item__label">Achievement</span>
+          <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Potential">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-star"/></svg></span>
+          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
+          <span class="nav-menu-item__label">Potential</span>
+          <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Rewards">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-gift"/></svg></span>
+          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
+          <span class="nav-menu-item__label">Rewards</span>
+          <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="0" aria-label="My Account">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-settings"/></svg></span>
+          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
+          <span class="nav-menu-item__label">My Account</span>
+          <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+        </div>
+      </div>
+
+    </div><!-- end 2-col menu -->
+
+    <!-- Footer: CTA + Language switcher -->
+    <div class="nav-menu-tablet__footer">
+      <!-- CTA: Notification + Download App -->
+      <div class="nav-menu-cta">
+        <div class="nav-menu-cta__notif" role="button" tabindex="0" aria-label="Notification">
+          <svg aria-hidden="true"><use href="#ic-bell"/></svg>
+          <span class="nav-menu-cta__notif-label">Notification</span>
+        </div>
+        <button class="nav-menu-cta__btn" type="button">
+          <span class="nav-menu-cta__btn-icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></span>
+          <span class="nav-menu-cta__btn-text">Download App</span>
+          <span class="nav-menu-cta__btn-arrow"><svg width="16" height="16" aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+        </button>
+      </div>
+      <!-- Language switcher: EN / BM / Mandarin -->
+      <div class="nav-menu-locale">
+        <button class="nav-menu-locale__btn" type="button" aria-label="English"><svg aria-hidden="true"><use href="#ic-en"/></svg></button>
+        <button class="nav-menu-locale__btn" type="button" aria-label="Bahasa Melayu"><svg aria-hidden="true"><use href="#ic-bm"/></svg></button>
+        <button class="nav-menu-locale__btn" type="button" aria-label="Mandarin"><svg aria-hidden="true"><use href="#ic-mandarin"/></svg></button>
+      </div>
+    </div>
+
+  </div><!-- end NavMenu-Tablet -->
+
+  <!-- Tablet overlay — Overlay/Overlay-Dark rgba(26,26,26,0.5) · z-index 250
+       Behind navbar (300) and dropdown (300), in front of page content (0).
+       Click closes the dropdown. -->
+  <div id="tablet-overlay" class="tablet-overlay" aria-hidden="true"></div>
 
 
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -3863,6 +4430,102 @@
     if (flipper) setInterval(() => flipper.classList.toggle('is-flipped'), 3000);
 
     // Carousel — wrapped in try/catch so any error never blocks other JS
+
+    // ─── Nav Menu Tablet — hamburger toggle + X close (Rule 14: registered first)
+    (function () {
+      var menuBtn     = document.getElementById('tablet-menu-btn');
+      var menuPanel   = document.getElementById('NavMenu-Tablet');
+      var closeBtn    = document.getElementById('nav-menu-tablet-close');
+      var tabOverlay  = document.getElementById('tablet-overlay');
+      var tabletNavbar = document.getElementById('NavBar-Mobile');
+      if (!menuBtn || !menuPanel) return;
+
+      function openTabletMenu() {
+        menuPanel.classList.add('is-open');
+        menuPanel.setAttribute('aria-hidden', 'false');
+        menuBtn.classList.add('is-open');
+        menuBtn.setAttribute('aria-label', 'Close menu');
+        if (tabOverlay)   { tabOverlay.classList.add('is-open');  tabOverlay.setAttribute('aria-hidden', 'false'); }
+        // Fade out the tablet navbar bar — dropdown occupies the same fixed position on top
+        if (tabletNavbar) tabletNavbar.classList.add('is-hidden-for-menu');
+      }
+      function closeTabletMenu() {
+        menuPanel.classList.remove('is-open');
+        menuPanel.setAttribute('aria-hidden', 'true');
+        menuBtn.classList.remove('is-open');
+        menuBtn.setAttribute('aria-label', 'Open menu');
+        if (tabOverlay)   { tabOverlay.classList.remove('is-open'); tabOverlay.setAttribute('aria-hidden', 'true'); }
+        // Restore the tablet navbar bar
+        if (tabletNavbar) tabletNavbar.classList.remove('is-hidden-for-menu');
+      }
+
+      menuBtn.addEventListener('click', function () {
+        if (window.innerWidth <= 767) return;
+        menuPanel.classList.contains('is-open') ? closeTabletMenu() : openTabletMenu();
+      });
+
+      if (closeBtn) closeBtn.addEventListener('click', closeTabletMenu);
+
+      // Click overlay to close
+      if (tabOverlay) tabOverlay.addEventListener('click', closeTabletMenu);
+
+      // Auto-close if viewport leaves tablet range
+      window.addEventListener('resize', function () {
+        var w = window.innerWidth;
+        if (menuPanel.classList.contains('is-open') && (w >= 1320 || w <= 767)) closeTabletMenu();
+      });
+    })();
+
+    // ─── Nav Menu Mobile — Account btn + hamburger (at mobile) + X close + overlay
+    (function () {
+      var accountBtn  = document.getElementById('account-btn');
+      var menuBtn     = document.getElementById('tablet-menu-btn');
+      var mobilePanel = document.getElementById('NavMenu-Mobile');
+      var overlay     = document.getElementById('mobile-overlay');
+      var closeBtn    = document.getElementById('nav-menu-mobile-close');
+      if (!mobilePanel || !overlay) return;
+
+      function openMobileMenu() {
+        mobilePanel.classList.add('is-open');
+        overlay.classList.add('is-open');
+        mobilePanel.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        if (accountBtn) accountBtn.classList.add('is-active');
+        if (menuBtn) { menuBtn.classList.add('is-open'); menuBtn.setAttribute('aria-label', 'Close menu'); }
+      }
+      function closeMobileMenu() {
+        mobilePanel.classList.remove('is-open');
+        overlay.classList.remove('is-open');
+        mobilePanel.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (accountBtn) accountBtn.classList.remove('is-active');
+        if (menuBtn) { menuBtn.classList.remove('is-open'); menuBtn.setAttribute('aria-label', 'Open menu'); }
+      }
+
+      if (accountBtn) {
+        accountBtn.addEventListener('click', function () {
+          mobilePanel.classList.contains('is-open') ? closeMobileMenu() : openMobileMenu();
+        });
+      }
+
+      // Hamburger at mobile (<=767px) opens the mobile panel
+      if (menuBtn) {
+        menuBtn.addEventListener('click', function () {
+          if (window.innerWidth > 767) return;
+          mobilePanel.classList.contains('is-open') ? closeMobileMenu() : openMobileMenu();
+        });
+      }
+
+      overlay.addEventListener('click', closeMobileMenu);
+      if (closeBtn) closeBtn.addEventListener('click', closeMobileMenu);
+
+      // Auto-close if viewport leaves mobile range
+      window.addEventListener('resize', function () {
+        if (mobilePanel.classList.contains('is-open') && window.innerWidth > 767) closeMobileMenu();
+      });
+    })();
+
+
     try {
       (function () {
         const content = document.querySelector('.carousel__content');
@@ -3927,6 +4590,130 @@
       console.warn('Carousel init error:', e);
     }
   </script>
+
+
+
+  <!-- Navbar Mobile - 1.5 (DS node 3406:735)
+       Fixed bottom bar · height 56px · top border #00cc85
+       4 buttons: Quiz / Practice / Score / Account
+       Shown only at mobile (<=767px) via media query -->
+  <nav id="NavBar-Bottom" class="navbar-bottom" aria-label="Mobile navigation">
+    <button class="navbar-bottom__btn" type="button" aria-label="Quiz">
+      <span class="navbar-bottom__icon"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></span>
+      <span class="navbar-bottom__label">Quiz</span>
+    </button>
+    <button class="navbar-bottom__btn" type="button" aria-label="Practice">
+      <span class="navbar-bottom__icon"><svg aria-hidden="true"><use href="#ic-clipboard"/></svg></span>
+      <span class="navbar-bottom__label">Practice</span>
+    </button>
+    <button class="navbar-bottom__btn" type="button" aria-label="Score">
+      <span class="navbar-bottom__icon"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></span>
+      <span class="navbar-bottom__label">Score</span>
+    </button>
+    <button class="navbar-bottom__btn" id="account-btn" type="button" aria-label="Account">
+      <span class="navbar-bottom__icon"><svg aria-hidden="true"><use href="#ic-menu"/></svg></span>
+      <span class="navbar-bottom__label">Account</span>
+    </button>
+  </nav>
+
+  <!-- Dim overlay for Nav Menu Mobile -->
+  <div id="mobile-overlay" class="mobile-overlay" aria-hidden="true"></div>
+
+  <!-- Nav Menu Mobile - 1.5 (DS node 3427:2185)
+       Full-height left panel · width 329px · slides from left
+       Triggered by Account btn in #NavBar-Bottom (or hamburger at mobile) -->
+  <div id="NavMenu-Mobile" class="nav-menu-mobile" aria-hidden="true">
+
+    <!-- Header: Logo + X close -->
+    <div class="nav-menu-mobile__header">
+      <a class="nav-menu-mobile__logo" href="#" aria-label="Pandai">
+        <img src="icons/logo-mark.svg" class="nav-menu-mobile__logo-mark" alt="">
+        <img src="icons/logo-text.svg" class="nav-menu-mobile__logo-text" alt="Pandai">
+      </a>
+      <button class="nav-menu-mobile__close" id="nav-menu-mobile-close" type="button" aria-label="Close menu">
+        <svg width="24" height="24" aria-hidden="true"><use href="#ic-x"/></svg>
+      </button>
+    </div>
+
+    <!-- Single-column menu -->
+    <div class="nav-menu-mobile__content">
+      <!-- Search -->
+      <button class="nav-menu-tablet__search-btn" type="button" style="width:100%">
+        <span class="nav-menu-tablet__search-text">Search</span>
+        <span class="nav-menu-tablet__search-icon"><svg width="24" height="24" aria-hidden="true"><use href="#ic-search"/></svg></span>
+      </button>
+      <!-- Menu items -->
+      <div class="nav-menu-item is-active" role="button" tabindex="0" aria-label="Home">
+        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-home"/></svg></span>
+        <span class="nav-menu-item__label">Home</span>
+      </div>
+      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Quiz">
+        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></span>
+        <span class="nav-menu-item__label">Quiz</span>
+      </div>
+      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Battle">
+        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
+        <span class="nav-menu-item__label">Battle</span>
+      </div>
+      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Practice">
+        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-clipboard"/></svg></span>
+        <span class="nav-menu-item__label">Practice</span>
+      </div>
+      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Class">
+        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-users"/></svg></span>
+        <span class="nav-menu-item__label">Class</span>
+        <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+      </div>
+      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Learn">
+        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-book"/></svg></span>
+        <span class="nav-menu-item__label">Learn</span>
+        <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+      </div>
+      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Achievement">
+        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></span>
+        <span class="nav-menu-item__label">Achievement</span>
+        <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+      </div>
+      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Potential">
+        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-star"/></svg></span>
+        <span class="nav-menu-item__label">Potential</span>
+        <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+      </div>
+      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Rewards">
+        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-gift"/></svg></span>
+        <span class="nav-menu-item__label">Rewards</span>
+        <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+      </div>
+      <div class="nav-menu-item" role="button" tabindex="0" aria-label="My Account">
+        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-settings"/></svg></span>
+        <span class="nav-menu-item__label">My Account</span>
+        <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+      </div>
+    </div>
+
+    <!-- Footer CTA: Notification + Download App (stacked) -->
+    <div class="nav-menu-mobile__footer">
+      <div class="nav-menu-cta" style="flex-direction:column">
+        <div class="nav-menu-cta__notif" role="button" tabindex="0" aria-label="Notification" style="width:100%">
+          <svg aria-hidden="true"><use href="#ic-bell"/></svg>
+          <span class="nav-menu-cta__notif-label">Notification</span>
+        </div>
+        <button class="nav-menu-cta__btn" type="button" style="width:100%">
+          <span class="nav-menu-cta__btn-icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></span>
+          <span class="nav-menu-cta__btn-text">Download App</span>
+          <span class="nav-menu-cta__btn-arrow"><svg width="16" height="16" aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Language switcher: EN / BM / Mandarin -->
+    <div class="nav-menu-mobile__locale">
+      <button class="nav-menu-locale__btn" type="button" aria-label="English"><svg aria-hidden="true"><use href="#ic-en"/></svg></button>
+      <button class="nav-menu-locale__btn" type="button" aria-label="Bahasa Melayu"><svg aria-hidden="true"><use href="#ic-bm"/></svg></button>
+      <button class="nav-menu-locale__btn" type="button" aria-label="Mandarin"><svg aria-hidden="true"><use href="#ic-mandarin"/></svg></button>
+    </div>
+
+  </div><!-- end NavMenu-Mobile -->
 
 </body>
 </html>

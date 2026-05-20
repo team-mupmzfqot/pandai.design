@@ -4303,4 +4303,173 @@ Step 0h → get_screenshot after implementation    ← compare against DS side-b
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-20 (Rule 118 addendum — box-shadow:inset is hidden by image children; use ::after pseudo-element with border for cards/carousels that have edge-reaching image content) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 119. Nav Menu Tablet - 1.5 — full confirmed specs (DS node 3427:2184, 2026-05-21)
+
+Always inspect the DS before touching this component. Every padding, gap, radius, and color is exact.
+
+**Outer container (3427:2184): 1288×482, position:fixed, top:0**
+- `padding: 16px` all sides — outer auto-layout inset
+- `overflow: hidden` — DS `clipsContent:true`
+- `box-sizing: border-box`
+- Stroke: top:0 / right:1 / bottom:1 / left:1 px `#00cc85` INSIDE → `border-right/bottom/left: 1px solid var(--border-primary-default)` (no border-top)
+- `border-radius: 0 0 24px 24px`
+- `display:flex; flex-direction:column`
+
+**Header (3427:1399): h:50, pad t:0 r:16 b:16 l:16, gap:10**
+- Logo (DS node 3427:1401): full 142×34 single SVG — use `<symbol id="ic-pandai-logo-large">` at **117×28** (user-confirmed display size, proportionally scaled)
+- Close button: `Outline/x` icon, 24×24, `color: var(--icon-default-default)` (#808080)
+
+**Search (3427:53151): pad t:0 r:16 b:0 l:16**
+- Search button: `height:40px; box-shadow: inset 0 0 0 1px var(--border-general-default); border:none; border-radius: var(--corner-radius-corner-pill)` (Rule 60)
+- Hover: `box-shadow: inset 0 0 0 1px var(--border-primary-default)`
+
+**Menu (3427:1417): pad 16px all, gap:8px**
+- Columns: `flex:1 0 0; gap:8px`
+- Divider: `width:32px; flex-shrink:0; position:relative; align-self:stretch` with `::after { left:50%; width:1px; background:var(--border-general-default); transform:translateX(-50%) }`
+
+**Nav menu items (Dropdown - Parts):**
+- Default: `border-radius:0; box-shadow:none; background:transparent` — **NO checkbox badge** (`.nav-menu-check { display:none }`)
+- Hover: `background:var(--surface-secondary-default-subtle); box-shadow: inset 0 0 0 1px var(--border-primary-default); border-radius:108px`
+- Active/Selected: `background:var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border-radius:108px`
+- Transition: `background 0.12s ease, border-radius 0.12s ease, box-shadow 0.12s ease`
+
+**Footer (3427:2689): pad:0, flex-col — contains CTA + Localization as children**
+
+**CTA (3427:2585): h:56, pad:8, gap:8**
+- `background:var(--surface-secondary-default-subtle); box-shadow: inset 0 0 0 1px #d1f7d1; border-radius:28px` (Rule 60)
+- Notification section: `Dropdown - Parts` default state (pad:8/16)
+
+**Localization (3427:1433): pad t:16 r:60 b:0 l:60, gap:8px, justify-content:space-between**
+- EN button: `color: var(--surface-tertiary-default)` = `#00564c` — active/selected locale uses dark teal
+- BM + Mandarin: `color: var(--text-primary-default)` = `#00cc85` (primary green)
+
+**Mistake made (2026-05-21):**
+- Header padding was `16px 16px 16px 24px` — correct is `0 16px 16px`
+- Search had extra bottom padding — correct is `0 16px` (no bottom)
+- Menu padding was `0 16px 16px` — correct is `16px` all sides
+- Divider was a 1px line element — correct is a 32px spacer with centred `::after` line
+- Nav items had `border-radius: 60px` always (pill) — correct is `border-radius: 0` in default state
+- Nav items used `border: 1px solid transparent` hack — replace with `box-shadow:none` and transition `box-shadow` instead
+- Footer had extra padding — correct is `padding:0`
+- `.nav-menu-locale` was a sibling of footer — must be a child of footer div (matches DS frame hierarchy)
+- CTA used `border: 1px solid #d1f7d1` — Rule 60 violation, use `box-shadow: inset 0 0 0 1px`
+- All nav items showed `.nav-menu-check` green badge — DS has NO checkbox indicator; active state is pill bg only
+
+---
+
+### Rule 120. Logo — always use `<symbol id="ic-pandai-logo-large">` for the full DS logo
+
+The Pandai full logo (mark + wordmark) is a single 142×34 DS component. **Never split it into two `<img>` files and re-join with CSS gap** — the two-image approach has sizing drift and the gap value must be hand-calculated.
+
+**Rule:** Export the full logo SVG from DS node 3427:1401 as a single `<symbol id="ic-pandai-logo-large" viewBox="0 0 142 34">` in the SVG defs block. Reference with `<svg width="W" height="H"><use href="#ic-pandai-logo-large"/></svg>` sized at the required display size.
+
+**DS confirmed sizes (2026-05-21):**
+
+| Context | Display size | DS node |
+|---|---|---|
+| Nav Menu Tablet header | **117×28** (142×34 scaled to h:28) | 3427:1401 |
+| Tablet Navbar (NavBar-Mobile) | **116.5×28** | 1943:22622 |
+| Desktop Navbar primary | Uses separate mark+text img files | 1084:1909 |
+
+**Why 116.5 vs 117:** The tablet navbar uses `Logo/Pandai/Logo Horizontal` (a different Figma component, 116.48×28) which has a slightly narrower mark (26.85px, not 33px). The nav menu dropdown uses the full corporate logo (142×34) scaled down. Both round to ~117px so the difference is invisible at 28px height.
+
+**Tablet Navbar logo (node 1943:22622) — confirmed CSS (current implementation is correct):**
+- Mark: `height: 28px; width: auto` → renders at 26.85×28
+- Wordmark: `height: 19.573px; width: auto` → renders at 85.42×19.57
+- Gap: `4.2px` (DS: 4.21px)
+
+**Mistake made (2026-05-21):** Nav menu tablet header used two `<img>` tags with wrong gap (`4.2px` instead of the correct `5px` for the full logo). Fixed by using `ic-pandai-logo-large` symbol at exactly `117×28`.
+
+---
+
+### Rule 121. Locale icons — always use real DS SVG paths, never HTML text fallbacks
+
+`<text>BM</text>` and `<text>中</text>` are not DS icons — they render using browser fonts at whatever size the OS provides, never matching the DS proportions.
+
+**Rule:** All locale icons must be `<symbol>` elements with DS-exported `<path>` data. Use `viewBox="-1 -1 26 26"` (1px buffer, Rule 27) and `stroke="currentColor"` so color is controlled via CSS.
+
+**DS-confirmed locale icon specs (nodes from 3427:1433, 2026-05-21):**
+
+| Icon | DS node | Stroke color in DS | CSS color |
+|---|---|---|---|
+| EN (Outline/EN) | I3427:1434;1441:7779 | `#00564c` | `var(--surface-tertiary-default)` — dark teal (active/selected locale) |
+| BM (Outline/BM) | I3427:1435;2662:43842 | `#00cc85` | `var(--text-primary-default)` — primary green |
+| Mandarin | I3427:1436;2662:44021 | `#00cc85` | `var(--text-primary-default)` — primary green |
+
+**EN is always dark teal** because it is the active/currently-selected locale in the prototype. BM and Mandarin are unselected (primary green). Apply via CSS: `.nav-menu-locale__btn:first-child { color: var(--surface-tertiary-default); }`.
+
+All three icons render at `width: 24px; height: 24px` inside buttons with `padding: 4px`.
+
+**Mistake made (2026-05-21):** `ic-bm` and `ic-mandarin` were implemented as `<text>` SVG elements — browser renders system fonts, never matching DS letterform proportions. Fixed by replacing with DS-exported path data.
+
+---
+
+### Rule 122. Button - 1.5 Large variant — confirmed DS specs (node 3427:2586, 2026-05-21)
+
+This is the "Download App" button in the Nav Menu Tablet CTA. It is a **larger variant** than M/S documented in Rule 31.
+
+| Property | Value | Notes |
+|---|---|---|
+| Height | **40px** | NOT 48px — DS confirmed |
+| Padding | `t:8 r:12 b:8 l:12` | Different from Rule 31 M/S (`t:2 r:8 b:2 l:8`) |
+| Font | 14px SemiBold | Different from Rule 31 M/S (12px) |
+| primaryAxisAlignItems | CENTER | Content group centred in pill — use `justify-content:center` |
+| Gap | 0 | No gap between Content and R Arrow |
+| Fill | `#00cc85` | `var(--surface-primary-default)` |
+| Stroke | `#00a36a` INSIDE | `box-shadow: inset 0 0 0 1px var(--border-primary-focus)` (Rule 60) — NEVER `border:` |
+| Text+icon color | **`#e1f9ea`** | `var(--icon-primary-on-color)` — NOT `--text-primary-on-color` (#f6fdfb) |
+| Icon | 24×24 frame, 20×20 smartphone (2px inset) | Icon container: `width:24px; height:24px; align-items:center; justify-content:center` |
+| Label padding | `0 8px` | DS Label frame: `pad l:8 r:8` |
+| R Arrow | 24×24, fill `#99ebce`, pad 4px | chevron `#00a36a` (`var(--border-primary-focus)`) |
+| Arrow justify | `center` | DS positions chevron centred in circle — NOT `flex-end` |
+
+**Correct CSS pattern:**
+```css
+.nav-menu-cta__btn {
+  display: flex; align-items: center; justify-content: center;
+  flex: 1 0 0; min-width: 0; height: 40px; padding: 8px 12px;
+  background: var(--surface-primary-default);
+  border: none; box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+  border-radius: var(--corner-radius-corner-rounded);
+  color: var(--icon-primary-on-color); /* #e1f9ea */
+  font-size: 14px; font-weight: 600; gap: 0;
+}
+.nav-menu-cta__btn-icon     { width:24px; height:24px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.nav-menu-cta__btn-icon svg { width:20px; height:20px; display:block; }
+.nav-menu-cta__btn-text     { padding: 0 8px; white-space:nowrap; }
+.nav-menu-cta__btn-arrow    { display:flex; align-items:center; justify-content:center; width:24px; height:24px; background:#99ebce; border-radius:var(--corner-radius-corner-rounded); padding:4px; flex-shrink:0; color:var(--border-primary-focus); }
+```
+
+**Mistakes made (2026-05-21):**
+- `max-height: 48px` instead of `height: 40px`
+- `border: 1px solid` instead of `box-shadow: inset` (Rule 60)
+- `color: var(--text-primary-on-color)` (#f6fdfb) instead of `var(--icon-primary-on-color)` (#e1f9ea) — different tokens, different values
+- `gap: 8px` between items — DS gap:0; spacing comes from label's internal `padding: 0 8px`
+- `flex:1 0 0` on text pushing icon left and arrow right — DS uses CENTER grouping, no growing text
+- `justify-content: flex-end` on arrow — DS uses center
+- Chevron inherited wrong color from button `color:`; must set `color: var(--border-primary-focus)` on arrow container explicitly
+
+---
+
+### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-21)
+
+**Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
+
+```
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–122 + confirmed specs + mistake log
+Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH — NOT memory, NOT docs
+Step 0c → get_design_context on COMPONENT SET    ← list ALL variant names first
+Step 0d → get_design_context on EACH state       ← extract every token before writing CSS
+Step 0e → get_variable_defs on exact sub-nodes   ← confirm Semantic tokens on the specific sub-node
+Step 0f → Cross-check CSS var against :root hex  ← never guess from token name
+Step 0g → For icons: exportAsync SVG_STRING       ← real DS paths only — NEVER html text fallbacks
+Step 0h → get_screenshot after implementation    ← compare against DS side-by-side before reporting done
+```
+
+**Every mistake in this project** — wrong button height, wrong color, wrong border type, wrong item radius, wrong checkbox badge, wrong logo approach — came from skipping Step 0. Thirty seconds of DS inspection prevents thirty minutes of debugging.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-21 (Rules 119–122 — Nav Menu Tablet full specs, logo symbol pattern, locale icon DS paths, Button-1.5 Large variant) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
