@@ -4472,4 +4472,110 @@ Step 0h → get_screenshot after implementation    ← compare against DS side-b
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-21 (Rules 119–122 — Nav Menu Tablet full specs, logo symbol pattern, locale icon DS paths, Button-1.5 Large variant) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 123. Nav Menu Mobile - 1.5 — full confirmed specs (DS node 3427:2442, 2026-05-21)
+
+**Always inspect COMPONENT, not COMPONENT_SET.** Node 3427:2185 is the COMPONENT_SET "Nav Menu Mobile - 1.5". The actual renderable component is 3427:2442 "Type=Mobile" inside it. Specs come from the COMPONENT, not the COMPONENT_SET wrapper.
+
+**Root container (3427:2442):** 329×740, VERTICAL, no outer padding/gap, fill white
+- Stroke: top:1 / right:1 / bottom:1 / **left:0** — `strokeLeftWeight: 0`
+- Corner radii: `tl:0, tr:24, br:24, bl:0` — right side rounded, left side flat
+- CSS: `border-top/right/bottom: 1px solid var(--border-primary-default); border-radius: 0 24px 24px 0;`
+- **NO border-left** — left edge is flat against the page (panel slides in from left side)
+
+**Prototype positioning (2026-05-21):**
+- `position: fixed; bottom: 72px; left: 0; width: 300px;`
+- `bottom: 72px` = 56px (bottom navbar height) + 16px (gap) — panel sits above bottom navbar
+- `max-height: calc(100dvh - 72px); overflow-y: auto` — scrolls on short viewports
+- Panel grows **upward** from the bottom anchor (not downward from top)
+
+**Header (3427:2443):** h:60, pad t:16 r:16 b:16 l:16, gap:10 — logo 117×28 + X close (same as tablet)
+
+**Menu frame (3427:2461):** pad t:0 r:16 b:16 l:16, gap:8, VERTICAL
+- **Inner menu (3427:2462):** contains Search + all nav items + CTA (all gap:8)
+- **Localization (3427:2479):** LAST child of Menu frame (NOT inner menu), pad t:0 r:60 b:0 l:60
+
+**CTA (3427:2477):** h:104, pad:8, gap:8, VERTICAL layout, fill:#e8fbe8, box-shadow:inset 1px #d1f7d1, **cornerRadius:20** (NOT 28 like tablet CTA)
+
+**Structure rule — CTA and Locale are INSIDE `.nav-menu-mobile__content`:**
+```html
+<div class="nav-menu-mobile__content">  <!-- Menu frame: pad 0 16px 16px 16px, gap 8px -->
+  [search + all nav items]
+  <div class="nav-menu-cta">...</div>           <!-- last in inner menu -->
+  <div class="nav-menu-mobile__locale">...</div> <!-- after CTA, still inside content -->
+</div>
+```
+There is **NO separate footer wrapper** — the previous `.nav-menu-mobile__footer` is wrong.
+
+**Locale (inside content):** `padding: 0 60px` — total offset from panel edge = 16px (content) + 60px (locale) = 76px.
+
+**Mobile layout at ≤767px:**
+- `#NavBar-Mobile { display: none }` — top hamburger navbar hidden entirely
+- `body { padding-top: 16px }` — 16px breathing room at top
+- `#NavBar-Bottom` visible — this IS the mobile navigation
+- `body { padding-bottom: 56px }` — bottom navbar clearance
+
+**Mistakes made (2026-05-21):**
+- Border was `R/B/L` — correct is `T/R/B` (no left, not no top)
+- Radius was `0 0 24px 24px` — correct is `0 24px 24px 0` (right side rounded)
+- CTA placed in a separate footer wrapper — must be inside inner menu (`.nav-menu-mobile__content`)
+- Locale placed OUTSIDE `.nav-menu-mobile__content` — must be inside as last child
+- CTA radius was 28px (tablet value) — mobile CTA is 20px
+- `bottom: 0` (full height stretch) — DS sizes: HUG, not fixed
+- `left: var(--page-padding-x)` (16px gap) — correct is `left: 0` (no gap at left)
+- `top: 0` (menu at top of screen) — correct is `bottom: 72px` (above bottom navbar)
+- `padding-top: 60px` — user-confirmed correct value is 16px
+
+---
+
+### Rule 124. Script ordering — DOM elements MUST exist before getElementById runs
+
+`document.getElementById()` returns `null` for elements that aren't yet in the DOM. If a `<script>` block runs before the HTML elements it references, all `getElementById()` calls return `null` and any early-return guard (`if (!el) return`) silently exits the IIFE — **registering zero event handlers**.
+
+**Rule:** Any script that references DOM elements by ID must run AFTER those elements in the HTML source order. For elements at the end of `<body>`, add a **separate `<script>` block immediately after them**, not inside the main `<script>` that comes earlier in the file.
+
+```html
+<!-- WRONG — script at line 4153, elements at line 4620+ -->
+<script>
+  document.getElementById('account-btn')  // null! element not in DOM yet
+</script>
+...
+<nav id="NavBar-Bottom">...</nav>        <!-- too late -->
+<div id="NavMenu-Mobile">...</div>       <!-- too late -->
+
+<!-- CORRECT — second script block AFTER the elements -->
+<nav id="NavBar-Bottom">...</nav>
+<div id="NavMenu-Mobile">...</div>
+<script>
+  document.getElementById('account-btn')  // found! element exists
+</script>
+```
+
+**How to apply:** When elements are placed at the very end of `<body>` (fixed navbars, overlays, mobile menus), add a dedicated `<script>` block immediately after the last element and before `</body>`. The main `<script>` block higher up can still run for elements that exist by that point.
+
+**Confirmed mistake (2026-05-21):** Mobile menu IIFE was inside the main `<script>` (line ~4505) but `#account-btn`, `#NavMenu-Mobile`, and `#mobile-overlay` were at lines 4620+. All three returned `null`. `if (!mobilePanel || !mobileOverlay) return` exited immediately — no Account button handler was ever attached, so nothing happened on click.
+
+---
+
+### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-21)
+
+**Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
+
+```
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–124 + confirmed specs + mistake log
+Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH — NOT memory, NOT docs
+Step 0c → get_design_context on COMPONENT (not COMPONENT_SET) → list ALL variant names
+Step 0d → use_figma to confirm exact strokeWeights per side (top/right/bottom/left individually)
+Step 0e → use_figma to confirm exact cornerRadius per corner (tl/tr/br/bl individually)
+Step 0f → get_variable_defs on exact sub-nodes → confirm Semantic tokens
+Step 0g → exportAsync SVG_STRING for icons → real DS paths only
+Step 0h → get_screenshot after implementation → compare against DS side-by-side
+Step 0i → For JS: confirm ALL referenced elements exist in DOM BEFORE the script runs
+```
+
+**Every mistake in this project** came from skipping Step 0. Always check per-side strokeWeights and per-corner radii — `strokeAlign`, `cornerRadius`, `topLeftRadius` etc. are separate properties that must be individually confirmed.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-21 (Rules 123–124 — Nav Menu Mobile full specs, script ordering DOM bug) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
