@@ -2461,42 +2461,49 @@
     .nav-menu-locale__btn svg { width: 24px; height: 24px; display: block; }
 
     /* ─────────────────────────────────────────────────────
-       NAV MENU MOBILE — Nav Menu Mobile - 1.5 (DS node 3427:2185)
-       Full-height left panel · width 329px · slides from left
-       Border T/R/B #00cc85 · no left border · rounded right corners 24px
-       16px padding-bottom (DS Space/space-m)
+       NAV MENU MOBILE — Nav Menu Mobile - 1.5 (DS node 3427:2442, Type=Mobile)
+       Left panel · spans content width · full viewport height · snappy opacity+translateX
+       Border R/B/L #00cc85 · no top border · rounded bottom corners 24px
+       Triggered by Account btn in bottom navbar · z-index 500
+       Stacking: content(0) → mobile-overlay(350) → navbar-bottom(400) → mobile-menu(500)
+       Both navbar-bottom and mobile-menu are "at the front" above the overlay.
     ───────────────────────────────────────────────────── */
     .nav-menu-mobile {
       position:       fixed;
       top:            0;
-      left:           0;
+      left:           var(--page-padding-x);
+      right:          var(--page-padding-x);
       bottom:         0;
-      z-index:        600;
-      width:          329px;
-      max-width:      calc(100vw - 40px);
+      z-index:        500;
       background:     var(--surface-general-default);
-      border-top:     1px solid var(--border-primary-default);
-      border-right:   1px solid var(--border-primary-default);
       border-bottom:  1px solid var(--border-primary-default);
-      border-radius:  0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl) 0;
+      border-left:    1px solid var(--border-primary-default);
+      border-right:   1px solid var(--border-primary-default);
+      border-radius:  0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl);
+      box-sizing:     border-box;
+      overflow-y:     auto;
       display:        flex;
       flex-direction: column;
-      overflow-y:     auto;
-      padding-bottom: var(--spacing-space-m);
-      transform:      translateX(-110%);
+      opacity:        0;
+      transform:      translateX(-8px);
+      pointer-events: none;
       visibility:     hidden;
-      transition:     transform 0.25s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0.25s;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
     }
     .nav-menu-mobile.is-open {
-      transform:  translateX(0);
-      visibility: visible;
-      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0s;
+      opacity:        1;
+      transform:      translateX(0);
+      pointer-events: auto;
+      visibility:     visible;
+      transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
     }
+    /* Overlay — DS Overlay/Overlay-Dark rgba(26,26,26,0.5) · snap on/off, no transition
+       z-index 350 = above content, below navbar-bottom(400) so bottom nav stays visible */
     .mobile-overlay {
       position:       fixed;
       inset:          0;
-      z-index:        590;
-      background:     rgba(0,0,0,0.35);
+      z-index:        350;
+      background:     var(--overlay-dark);
       opacity:        0;
       pointer-events: none;
       visibility:     hidden;
@@ -2507,35 +2514,49 @@
       visibility:     visible;
     }
 
+    /* Header — DS 3427:2443: h:60, pad t:16 r:16 b:16 l:16, gap:10 */
     .nav-menu-mobile__header {
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      padding:         var(--spacing-space-m);
+      gap:             10px;
+      padding:         16px;
       flex-shrink:     0;
+      background:      var(--surface-general-default);
     }
-    .nav-menu-mobile__logo      { display: flex; align-items: center; gap: 4.2px; height: 34px; padding-left: var(--spacing-space-xs); }
-    .nav-menu-mobile__logo-mark { display: block; height: 34px; width: auto; }
-    .nav-menu-mobile__logo-text { display: block; height: auto; max-height: 24px; width: auto; }
+    .nav-menu-mobile__logo { display: flex; align-items: center; flex-shrink: 0; }
     .nav-menu-mobile__close {
       width: 40px; height: 40px;
       display: flex; align-items: center; justify-content: center;
       color: var(--icon-default-default);
-      background: none; border: none; padding: 0; cursor: pointer;
+      background: none; border: none; padding: 0; cursor: pointer; flex-shrink: 0;
     }
     .nav-menu-mobile__close:hover { color: var(--icon-primary-default); }
+
+    /* Menu — DS 3427:2461: pad t:0 r:16 b:16 l:16, gap:8 */
     .nav-menu-mobile__content {
-      display: flex; flex-direction: column;
-      gap:     var(--spacing-space-xs);
-      padding: 0 var(--spacing-space-m) var(--spacing-space-m);
+      display:     flex;
+      flex-direction: column;
+      gap:         8px;
+      padding:     0 16px 16px;
       flex-shrink: 0;
     }
-    .nav-menu-mobile__footer  { padding: 0 var(--spacing-space-m); flex-shrink: 0; }
-    .nav-menu-mobile__locale  {
+
+    /* Footer — same pattern as tablet: pad:0, flex-col contains CTA + locale */
+    .nav-menu-mobile__footer { padding: 0; display: flex; flex-direction: column; flex-shrink: 0; }
+
+    /* CTA stacked vertically in mobile (vs side-by-side in tablet) */
+    .nav-menu-mobile .nav-menu-cta { flex-direction: column; }
+    .nav-menu-mobile .nav-menu-cta__notif { width: 100%; }
+    .nav-menu-mobile .nav-menu-cta__btn   { width: 100%; }
+
+    /* Locale — same as tablet: pad t:16 r:60 b:0 l:60, gap:8 */
+    .nav-menu-mobile__locale {
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      padding:         var(--spacing-space-m) 40px 0;
+      gap:             8px;
+      padding:         16px 60px 0;
       flex-shrink:     0;
     }
 
@@ -2729,10 +2750,15 @@
       /* Status badges: allow wrapping when pills don't fit in a single row */
       .status-badges { flex-wrap: wrap; }
 
+      /* Mobile: hide top hamburger navbar → replaced by bottom Navbar Mobile - 1.5 */
+      #NavBar-Mobile { display: none; }
+      /* 60px top padding replaces the space the top navbar occupied */
+      body { padding-top: 60px; }
+
       /* Mobile bottom navbar visible; desktop footer hidden */
       .navbar-bottom { display: flex; }
       .footer        { display: none; }
-      body           { padding-bottom: 56px; }   /* bottom navbar height only */
+      body           { padding-bottom: 56px; }   /* bottom navbar height */
     }
   </style>
 </head>
@@ -4476,30 +4502,28 @@
       });
     })();
 
-    // ─── Nav Menu Mobile — Account btn + hamburger (at mobile) + X close + overlay
+    // ─── Nav Menu Mobile — Account btn triggers top dropdown (mobile ≤767px only)
     (function () {
       var accountBtn  = document.getElementById('account-btn');
-      var menuBtn     = document.getElementById('tablet-menu-btn');
       var mobilePanel = document.getElementById('NavMenu-Mobile');
-      var overlay     = document.getElementById('mobile-overlay');
+      var mobileOverlay = document.getElementById('mobile-overlay');
       var closeBtn    = document.getElementById('nav-menu-mobile-close');
-      if (!mobilePanel || !overlay) return;
+      if (!mobilePanel || !mobileOverlay) return;
+
+      var leaveTimer = null;
 
       function openMobileMenu() {
+        clearTimeout(leaveTimer);
         mobilePanel.classList.add('is-open');
-        overlay.classList.add('is-open');
+        mobileOverlay.classList.add('is-open');
         mobilePanel.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
         if (accountBtn) accountBtn.classList.add('is-active');
-        if (menuBtn) { menuBtn.classList.add('is-open'); menuBtn.setAttribute('aria-label', 'Close menu'); }
       }
       function closeMobileMenu() {
         mobilePanel.classList.remove('is-open');
-        overlay.classList.remove('is-open');
+        mobileOverlay.classList.remove('is-open');
         mobilePanel.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
         if (accountBtn) accountBtn.classList.remove('is-active');
-        if (menuBtn) { menuBtn.classList.remove('is-open'); menuBtn.setAttribute('aria-label', 'Open menu'); }
       }
 
       if (accountBtn) {
@@ -4508,18 +4532,18 @@
         });
       }
 
-      // Hamburger at mobile (<=767px) opens the mobile panel
-      if (menuBtn) {
-        menuBtn.addEventListener('click', function () {
-          if (window.innerWidth > 767) return;
-          mobilePanel.classList.contains('is-open') ? closeMobileMenu() : openMobileMenu();
-        });
-      }
-
-      overlay.addEventListener('click', closeMobileMenu);
+      mobileOverlay.addEventListener('click', closeMobileMenu);
       if (closeBtn) closeBtn.addEventListener('click', closeMobileMenu);
 
-      // Auto-close if viewport leaves mobile range
+      // Mouseleave timeout — same snappy delay as desktop dropdowns
+      mobilePanel.addEventListener('mouseleave', function () {
+        leaveTimer = setTimeout(closeMobileMenu, 300);
+      });
+      mobilePanel.addEventListener('mouseenter', function () {
+        clearTimeout(leaveTimer);
+      });
+
+      // Auto-close when viewport grows beyond mobile
       window.addEventListener('resize', function () {
         if (mobilePanel.classList.contains('is-open') && window.innerWidth > 767) closeMobileMenu();
       });
@@ -4624,25 +4648,24 @@
        Triggered by Account btn in #NavBar-Bottom (or hamburger at mobile) -->
   <div id="NavMenu-Mobile" class="nav-menu-mobile" aria-hidden="true">
 
-    <!-- Header: Logo + X close -->
+    <!-- Header — DS 3427:2443: h:60, pad:16, gap:10 — logo 117×28 + X close -->
     <div class="nav-menu-mobile__header">
       <a class="nav-menu-mobile__logo" href="#" aria-label="Pandai">
-        <img src="icons/logo-mark.svg" class="nav-menu-mobile__logo-mark" alt="">
-        <img src="icons/logo-text.svg" class="nav-menu-mobile__logo-text" alt="Pandai">
+        <svg width="117" height="28" aria-label="Pandai" role="img" style="display:block;flex-shrink:0;"><use href="#ic-pandai-logo-large"/></svg>
       </a>
       <button class="nav-menu-mobile__close" id="nav-menu-mobile-close" type="button" aria-label="Close menu">
         <svg width="24" height="24" aria-hidden="true"><use href="#ic-x"/></svg>
       </button>
     </div>
 
-    <!-- Single-column menu -->
+    <!-- Menu — DS 3427:2461: pad t:0 r:16 b:16 l:16, gap:8 -->
     <div class="nav-menu-mobile__content">
-      <!-- Search -->
+      <!-- Search — DS 3427:2463: pill, stroke #d9d9d9 INSIDE, pad t:8 r:12 b:8 l:12 -->
       <button class="nav-menu-tablet__search-btn" type="button" style="width:100%">
         <span class="nav-menu-tablet__search-text">Search</span>
         <span class="nav-menu-tablet__search-icon"><svg width="24" height="24" aria-hidden="true"><use href="#ic-search"/></svg></span>
       </button>
-      <!-- Menu items -->
+      <!-- Home — Active state (DS 3427:2464): fill #b5f291, stroke #00a36a, radius 999 -->
       <div class="nav-menu-item is-active" role="button" tabindex="0" aria-label="Home">
         <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-home"/></svg></span>
         <span class="nav-menu-item__label">Home</span>
@@ -4691,26 +4714,26 @@
       </div>
     </div>
 
-    <!-- Footer CTA: Notification + Download App (stacked) -->
+    <!-- Footer — CTA + locale stacked (pad:0, same pattern as tablet footer) -->
     <div class="nav-menu-mobile__footer">
-      <div class="nav-menu-cta" style="flex-direction:column">
-        <div class="nav-menu-cta__notif" role="button" tabindex="0" aria-label="Notification" style="width:100%">
+      <!-- CTA: Notification + Download App — stacked vertically in mobile via CSS -->
+      <div class="nav-menu-cta">
+        <div class="nav-menu-cta__notif" role="button" tabindex="0" aria-label="Notification">
           <svg aria-hidden="true"><use href="#ic-bell"/></svg>
           <span class="nav-menu-cta__notif-label">Notification</span>
         </div>
-        <button class="nav-menu-cta__btn" type="button" style="width:100%">
+        <button class="nav-menu-cta__btn" type="button">
           <span class="nav-menu-cta__btn-icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></span>
           <span class="nav-menu-cta__btn-text">Download App</span>
           <span class="nav-menu-cta__btn-arrow"><svg width="16" height="16" aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
         </button>
       </div>
-    </div>
-
-    <!-- Language switcher: EN / BM / Mandarin -->
-    <div class="nav-menu-mobile__locale">
-      <button class="nav-menu-locale__btn" type="button" aria-label="English"><svg aria-hidden="true"><use href="#ic-en"/></svg></button>
-      <button class="nav-menu-locale__btn" type="button" aria-label="Bahasa Melayu"><svg aria-hidden="true"><use href="#ic-bm"/></svg></button>
-      <button class="nav-menu-locale__btn" type="button" aria-label="Mandarin"><svg aria-hidden="true"><use href="#ic-mandarin"/></svg></button>
+      <!-- Language switcher — same layout as tablet locale -->
+      <div class="nav-menu-mobile__locale">
+        <button class="nav-menu-locale__btn" type="button" aria-label="English"><svg aria-hidden="true"><use href="#ic-en"/></svg></button>
+        <button class="nav-menu-locale__btn" type="button" aria-label="Bahasa Melayu"><svg aria-hidden="true"><use href="#ic-bm"/></svg></button>
+        <button class="nav-menu-locale__btn" type="button" aria-label="Mandarin"><svg aria-hidden="true"><use href="#ic-mandarin"/></svg></button>
+      </div>
     </div>
 
   </div><!-- end NavMenu-Mobile -->
