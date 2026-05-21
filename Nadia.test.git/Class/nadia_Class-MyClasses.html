@@ -267,7 +267,7 @@
     }
 
     /* ── Section 2: Nav menu pill ─────────────────────────────── */
-    #NavBar-Menu-Desktop { padding: var(--spacing-space-s) var(--page-padding-x) 0; }
+    #NavBar-Menu-Desktop { padding: var(--spacing-space-m) var(--page-padding-x) 0; }   /* 16px gap — DS node 4661:37833 */
 
     .navbar-nav {
       background:    var(--surface-general-default);
@@ -1639,7 +1639,7 @@
 Y     .learn-menu {
       display:       none;
       position:      absolute;
-      top:           calc(100% + calc(var(--spacing-space-s) / 2));  /* halfway into the 12px gap between section 1 and 2 */
+      top:           100%;   /* flush below Section 1 — overlays content as dropdown, not in the section gap */
       right:         0;          /* fallback — overridden by JS */
       z-index:       300;
       background:    var(--surface-general-default);
