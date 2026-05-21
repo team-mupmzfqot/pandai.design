@@ -2342,4 +2342,28 @@ Row 4: Personality · University · Rewards
 
 **Mistake documented:** `Surface/primary/default-subtle` was set to `#d9f7ed` — DS node confirms `#e1f9ea`. Always verify tint/subtle token hex values against live DS node fallbacks.
 
+---
+
+### Updates — May 2026 (Session 14 cont.)
+
+**File:** `Nadia.test.git/Class/nadia_Class-MyClasses.html`
+
+#### Button - 1.5 state audit — DS node 473:529 (full component set)
+
+**Tertiary/L/Student states verified from live DS sublayer nodes:**
+
+| State | DS node | bg | border | label | Previous value | Match? |
+|---|---|---|---|---|---|---|
+| Default | `538:2067` | white | none | `#666` | white | ✓ |
+| Hover | `538:2059` | `#b5f291` | `1px #70bc6f` | `#70bc6f` | same | ✓ |
+| **Pressed** | `3029:20022` | **`#00a36a`** | **`1px #00cc85`** | `#00cc85` | `#00564c` bg / `#00453d` border | **WRONG** |
+| Active | `538:2051` | `#00cc85` | `1px #00a36a` | `#f6fdfb` | same | ✓ |
+
+**Fix applied — Pressed state corrected:**
+- bg: `Surface/tertiary/default (#00564c)` → `Surface/primary/focus (#00a36a)` — DS has been updated
+- border: `Border/tertiary/focus (#00453d)` → `Border/primary/default (#00cc85)`
+- Added `--surface-primary-focus: #00a36a` to CSS `:root`
+
+**CLAUDE.md correction needed:** Rules 38, 40, and previous session notes documenting Pressed = `#00564c` are now outdated. DS node `3029:20022` is the authoritative source: Tertiary/L/Student Pressed = `#00a36a` bg + `#00cc85` border.
+
 *Last updated: 2026-05-21 | File: Nadia.test.git/Class/nadia_Class-MyClasses.html | Branch: staging*

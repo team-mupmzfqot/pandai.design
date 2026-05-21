@@ -70,6 +70,7 @@
       --spacing-space-2xl: 28px;
       /* ── Canonical tokens per design.color.md (2026-05-16) ─────── */
       /* Surface */
+      --surface-primary-focus:                 #00a36a;  /* Surface/primary/focus — DS node 3029:20022 */
       --surface-primary-default-subtle:       #e1f9ea;  /* DS node 4661:37835 confirmed */
       --surface-primary-default-subtle-hover: #99ebce;
       --surface-secondary-default-subtle:     #e8fbe8;
@@ -363,12 +364,12 @@
     .nav-item.is-active .nav-chevron        { color: var(--text-primary-on-color); }
     .nav-item.is-active .nav-item__icon-wrap { color: var(--icon-primary-on-color); }
     .nav-item.is-pressed {
-      background: var(--surface-tertiary-default);
-      box-shadow: inset 0 0 0 1px var(--border-tertiary-focus);
+      background: var(--surface-primary-focus);          /* #00a36a — DS node 3029:20022 */
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);  /* #00cc85 */
     }
     .nav-item.is-pressed .nav-label,
-    .nav-item.is-pressed .nav-chevron        { color: var(--text-primary-default); }
-    .nav-item.is-pressed .nav-item__icon-wrap { color: var(--icon-primary-default); }
+    .nav-item.is-pressed .nav-chevron        { color: var(--text-primary-default); }  /* #00cc85 */
+    .nav-item.is-pressed .nav-item__icon-wrap { color: var(--icon-primary-default); } /* #00cc85 */
     /* Active item must not revert to hover state on mouseover */
     .nav-item.is-active:hover {
       background: var(--surface-primary-default);
