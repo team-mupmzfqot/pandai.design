@@ -1427,6 +1427,36 @@
     .navbar-action-btn:active .nav-btn-icon-clip svg { color: var(--icon-primary-default); }
     .navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--icon-primary-on-color); }   /* Icon/primary/on-color #e1f9ea — DS node 3908:6148 Active */
 
+    /* Number Badge - 1.5 (DS node 618:417, Type=Primary/M)
+       20px circle · #00cc85 bg · #e1f9ea text · 60px radius · 4px padding
+       Positioned absolute top-right over icon — center aligns with icon top-right corner */
+    .num-badge {
+      position:        absolute;
+      top:             1px;
+      right:           1px;
+      z-index:         2;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      height:          20px;
+      max-height:      20px;
+      min-width:       20px;
+      padding:         var(--spacing-space-xxs);        /* 4px — DS Spacing/space-xxs */
+      border-radius:   var(--corner-radius-corner-rounded); /* 60px — pill */
+      overflow:        hidden;
+      font-family:     'Poppins', sans-serif;
+      font-size:       10px;
+      font-weight:     600;
+      line-height:     1;
+      text-align:      center;
+      white-space:     nowrap;
+      pointer-events:  none;
+    }
+    .num-badge--primary {
+      background: var(--surface-primary-default);       /* #00cc85 */
+      color:      var(--text-primary-on-color);         /* #e1f9ea */
+    }
+
     /* Avatar - 1.5 (node 684:621): flex items-start · 48×48 · border · overflow-clip */
     .navbar-avatar {
       display:       flex;
@@ -3176,6 +3206,7 @@
               <div class="nav-btn-content">
                 <div class="nav-btn-rect" aria-hidden="true"></div>
                 <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+                <div class="num-badge num-badge--primary" aria-label="5 notifications" aria-live="polite">5</div>
               </div>
             </button>
             <button class="navbar-action-btn" aria-label="Language" id="locale-btn" type="button" aria-haspopup="true">

@@ -5324,4 +5324,70 @@ When a component's internal padding uses a CSS custom property that is already r
 
 ---
 
+### Rule 146. Number Badge - 1.5 — confirmed DS specs + `line-height: 1` in flex badges
+
+**DS node:** `618:417` (COMPONENT_SET, page: Component)
+
+**Primary/M variant (node `618:418`) — confirmed specs:**
+
+| Property | Value | DS token |
+|---|---|---|
+| Height | 20px | `Scale/500 (20)` |
+| Max-height | 20px | — |
+| Min-width | 20px | — (makes it a circle for single digit) |
+| Padding | 4px all sides | `Spacing/space-xxs` |
+| Border-radius | 60px | `Corner Radius/corner-rounded` |
+| Background | `#00cc85` | `Surface/primary/default` |
+| Text color | `#e1f9ea` | `Text/primary/on-color` |
+| Font | Poppins SemiBold 10px | `Body/B7` |
+| Overflow | hidden | — |
+
+**Other variants:** Tertiary (`#f2f2f2` bg, `#bfbfbf` text), Success (`#00cc85` bg), Alert (`#ff9f43` bg), Warning (`#ff4c51` bg), Info (`#00a2e8` bg), Teacher (`#ff5c98` bg). All use `Text/warning/on-color` (white) except Primary/Success (`Text/primary/on-color` #e1f9ea) and Tertiary (`Icon/disabled/default` #bfbfbf).
+
+**CSS implementation (confirmed 2026-05-22):**
+```css
+.num-badge {
+  position:        absolute;
+  top:             1px;
+  right:           1px;
+  z-index:         2;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  height:          20px;
+  max-height:      20px;
+  min-width:       20px;
+  padding:         var(--spacing-space-xxs);        /* 4px */
+  border-radius:   var(--corner-radius-corner-rounded); /* 60px */
+  overflow:        hidden;
+  font-family:     'Poppins', sans-serif;
+  font-size:       10px;
+  font-weight:     600;
+  line-height:     1;   /* ← CRITICAL — see below */
+  text-align:      center;
+  white-space:     nowrap;
+  pointer-events:  none;
+}
+.num-badge--primary {
+  background: var(--surface-primary-default);   /* #00cc85 */
+  color:      var(--text-primary-on-color);      /* #e1f9ea */
+}
+```
+
+**CRITICAL — `line-height: 1` not the DS text style value:**
+
+The DS `Body/B7` specifies `line-height: 12px` (`Spacing/space-s`). That value is correct for multi-line text blocks. Inside a **fixed-height flex badge** (`height: 20px; display: flex; align-items: center`), using `line-height: 12px` shifts the text baseline and makes the number appear visually off-center. Use `line-height: 1` instead — this makes the line box exactly `10px` (= `font-size: 10px`), and flexbox `align-items: center` centers it cleanly with zero drift.
+
+**Rule:** Always use `line-height: 1` for any DS component that is a fixed-height pill/circle rendered with `display: flex; align-items: center`. Apply `line-height: 1` regardless of what the DS text style specifies — the text style line-height is for flowing text, not for flex-centered badges.
+
+**Positioning over a navbar action icon:**
+
+The `.navbar-action-btn` is 44×44px. The icon is 24×24, centered at `left: 10px; top: 10px` inside the button. The badge at `top: 1px; right: 1px` places its center at approximately `(34px, 11px)` from the container's top-left — directly over the icon's top-right corner with a 1px inset from the button edge.
+
+**Parent requirements:** `position: relative; overflow: visible` on the parent container (`.nav-btn-content` already satisfies both).
+
+**Mistake made (2026-05-22):** Initially used `line-height: var(--spacing-space-s)` (12px) from the DS `Body/B7` text style. The "5" appeared slightly off-center. Fixed by changing to `line-height: 1`.
+
+---
+
 *Generated: May 2026 | Last updated: 2026-05-22 (Rules 144–145 — fixed-height card mobile override; CSS variable cascade verification before adding explicit overrides) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
