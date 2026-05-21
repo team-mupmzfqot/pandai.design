@@ -162,6 +162,36 @@
        SECTION 1 â€” Status Pill (left) Â· Welcome text (right)
        Status Pill - 1.5  (node 2312:10652, Type=Score)
     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* welcome-row wrapper — transparent on desktop/tablet; flex row on mobile only */
+    .welcome-row { display: contents; }
+
+    /* Avatar-Mobile (Avatar - 1.5 Size=L Type=Image, node 684:621) — hidden on desktop/tablet */
+    #Avatar-Mobile { display: none; }
+
+    /* Avatar - 1.5 Size=XXL Type=Image (node 2002:26998): 100×100 pill circle, green border, subtle green bg */
+    .welcome-avatar {
+      width:         100px;
+      height:        100px;
+      min-width:     100px;
+      min-height:    100px;
+      border-radius: var(--corner-radius-corner-rounded);   /* 60px pill */
+      border:        1px solid var(--border-default);       /* #00cc85 */
+      background:    var(--surface-primary-default-subtle); /* #d9f7ed */
+      overflow:      hidden;
+      position:      relative;
+      flex-shrink:   0;
+    }
+    .welcome-avatar__image {
+      position:        absolute;
+      inset:           0;
+      width:           100%;
+      height:          100%;
+      object-fit:      cover;
+      object-position: center;
+      pointer-events:  none;
+      display:         block;
+    }
+
     .section-welcome {
       display:         flex;
       align-items:     center;
@@ -1416,15 +1446,14 @@
     /* Outline/user (node 684:622): IMAGE fill · 60×60px · position x:-6 y:0
        DS node inspection: w:60 h:60 x:-6 y:0 fill=IMAGE scaleMode=FILL */
     .navbar-avatar__image {
-      position:       absolute;
-      left:           -6px;
-      top:            0;
-      width:          60px;
-      height:         60px;
-      object-fit:     cover;
-      pointer-events: none;
-      display:        block;
-      max-width:      none;
+      position:        absolute;
+      inset:           0;
+      width:           100%;
+      height:          100%;
+      object-fit:      cover;
+      object-position: center;
+      pointer-events:  none;
+      display:         block;
     }
 
     /* Number Badge - 1.5 (node 1084:1826): absolute right-[-0.48px] top-0 within Avatar group */
@@ -2675,33 +2704,47 @@
       .welcome-text__name { font-size: 24px; line-height: 36px; }
 
 
-      /* Welcome section — Tablet: stack vertically, left-aligned, reorder items */
-      .section-welcome {
-        flex-direction: column;
-        align-items:    flex-start;
-      }
-      .welcome-text  { order: 1; text-align: left; flex: unset; }
-      .status-badges { order: 2; }
-      .check-in-card { order: 3; width: 100%; }
+      /* Avatar - 1.5 Size=XL on tablet (64×64, node 684:627) */
+      .welcome-avatar { width: 64px; height: 64px; min-width: 64px; min-height: 64px; }
+
+      /* Welcome section — Tablet + Mobile: welcome-row flex-wrap layout
+         Row 1: welcome-text (flex:1) + Avatar-Mobile
+         Row 2: status-badges (full-width)
+         Row 3: check-in-card (full-width)
+         #Welcome-Desktop → display:contents so its children join .welcome-row directly */
+      .welcome-row     { display: flex; flex-wrap: wrap; gap: var(--spacing-space-m); }
+      #Welcome-Desktop { display: contents; }
+      .welcome-text    { order: 1; flex: 1; min-width: 0; text-align: left; }
+      #Avatar-Mobile   { display: flex; flex-shrink: 0; order: 2; }
+      .status-badges   { order: 3; flex-basis: 100%; }
+      .check-in-card   { order: 4; flex-basis: 100%; width: 100%; }
+
+      /* Status badges — each pill fills equal share of the full-width row */
+      .status-pill             { flex: 1; min-width: 0; }
+      .status-pill-flipper     { flex: 1; min-width: 0; }
+      .status-pill-flipper__inner { width: 100%; }
+      .status-pill-face--front { width: 100%; }
     }
 
     /* Mobile */
     @media (max-width: 767px) {
       :root {
-        --page-padding-x:          var(--spacing-space-m);   /* 16px */
-        --check-in-card-max-width: none;
+        --page-padding-x: var(--spacing-space-m);   /* 16px */
       }
       /* DS Responsives: H1→20px, T1/T2→16px, T3/T4/T5→14px at mobile */
       .welcome-text__name    { font-size: 20px; line-height: 32px; }
       .static-card__title    { font-size: 16px; line-height: 24px; }
       .section-header__title { font-size: 16px; line-height: 24px; }
-      /* Status Badge Size=M (DS 2026-05-14 — h:32px max-w:89px, no label, icon container 24×24px)
-         M icon container: 24px - 4px top - 4px bottom = 16px content area for icon. */
-      .status-pill        { height: 32px; max-height: 32px; min-height: unset; min-width: 89px; padding: 4px 2px 4px 4px; }
-      .status-pill__label { display: none; }
-      .status-pill__value { font-size: 14px; font-weight: 600; line-height: 20px; }
-      .status-pill__icon  { width: 24px; height: 24px; padding: 4px 2px; }
-      .status-pill__icon svg { height: 16px; }
+      /* Status Badge Size=M mobile — each pill fills equal share of the full-width .status-badges row.
+         Icon ellipse, corners, padding, gap all untouched — only text frame fills the pill width. */
+      .status-pill              { height: 32px; max-height: 32px; min-height: unset; min-width: 0; padding: 4px 2px 4px 4px; flex: 1; }
+      .status-pill-flipper      { flex: 1; min-width: 0; }
+      .status-pill-flipper__inner { width: 100%; }
+      .status-pill-face--front  { width: 100%; }
+      .status-pill__label       { display: none; }
+      .status-pill__value       { font-size: 14px; font-weight: 600; line-height: 20px; }
+      .status-pill__icon        { width: 24px; height: 24px; padding: 4px 2px; flex-shrink: 0; }
+      .status-pill__icon svg    { height: 16px; }
 
       /* Single-column quiz grid */
       .primary-card__content {
@@ -2749,6 +2792,9 @@
 
       /* Status badges: allow wrapping when pills don't fit in a single row */
       .status-badges { flex-wrap: wrap; }
+
+      /* Avatar - 1.5 Size=L on mobile (48×48) — tablet uses XXL (100×100) */
+      .welcome-avatar { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
 
       /* Mobile: hide top hamburger navbar → replaced by bottom Navbar Mobile - 1.5 */
       #NavBar-Mobile { display: none; }
@@ -2985,7 +3031,7 @@
 
         <!-- Avatar - 1.5 Size=L Type=Image (node 684:621): 48×48 circle · image fill 60×60 at x:-6 y:0 -->
         <div class="navbar-avatar" aria-label="Profile">
-          <img class="navbar-avatar__image" src="icons/avatar-user.png" alt="User avatar">
+          <img class="navbar-avatar__image" src="../src/image-repo/Home/Avatar-Aidan.png" alt="User avatar">
         </div>
 
         <!-- Number Badge - 1.5 (node 1084:1826): absolute right:-0.48px top:0 of Avatar group -->
@@ -3540,6 +3586,7 @@
              SECTION 1 â€” Status Pill (left) Â· Welcome (right)
              Status Pill - 1.5, Type=Score  (node 2312:10652)
         â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+        <div class="welcome-row">
         <section id="Welcome-Desktop" class="section-welcome" aria-label="Welcome">
 
 
@@ -3627,6 +3674,16 @@
           </div>
 
         </section><!-- end section 1 -->
+
+          <!-- Avatar-Mobile — Avatar - 1.5 Size=L Type=Image (node 684:621)
+               Mobile-only: visible at ≤767px, sits right of #Welcome-Desktop -->
+          <section id="Avatar-Mobile" aria-label="User profile">
+            <div class="welcome-avatar">
+              <img class="welcome-avatar__image" src="../src/image-repo/Home/Avatar-Aidan.png" alt="User avatar">
+            </div>
+          </section>
+
+        </div><!-- end welcome-row -->
 
 
         <!-- â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€

@@ -4578,4 +4578,160 @@ Step 0i → For JS: confirm ALL referenced elements exist in DOM BEFORE the scri
 
 ---
 
+### Rule 125. Avatar - 1.5 — all confirmed size variants (DS node 650:435, ⚙️ Avatar page)
+
+All sizes confirmed via `use_figma` on COMPONENT_SET `650:435`. All Type=Image variants share the same token bindings — only frame size differs.
+
+| Size | Node (Type=Image) | px |
+|---|---|---|
+| S | `684:618` | 24×24 |
+| M | `684:624` | 32×32 |
+| L | `684:621` | 48×48 |
+| XL | `684:627` | 64×64 |
+| XXL | `2002:26998` | 100×100 |
+
+**Shared token bindings (all sizes, Type=Image):**
+- Border: `1px solid var(--border-default)` (`#00cc85`)
+- Background: `var(--surface-primary-default-subtle)` (`#d9f7ed`)
+- Border-radius: `var(--corner-radius-corner-rounded)` (`60px` — pill circle)
+- Overflow: `hidden`
+
+**Responsive breakpoint sizing used in prototype (2026-05-21):**
+- Desktop: hidden (avatar lives in navbar only)
+- Tablet `≤1279px`: XL (64×64)
+- Mobile `≤767px`: L (48×48)
+
+---
+
+### Rule 126. Real photo images in DS avatar containers — always `inset: 0`, never DS placeholder offsets
+
+The DS exports avatar components with an `Outline/user` icon placeholder. This icon is positioned at a specific offset within the frame (e.g. `left: -7px; top: -1px; width: 62px` for XXL, `left: -6px; width: 60px` for L). These offsets are geometry specific to that placeholder icon — **they must never be used for real user photos**.
+
+**Rule:** Any `<img>` inside an avatar container that shows a real photo must use:
+```css
+.avatar__image {
+  position:        absolute;
+  inset:           0;
+  width:           100%;
+  height:          100%;
+  object-fit:      cover;
+  object-position: center;
+  pointer-events:  none;
+  display:         block;
+}
+```
+
+This applies to ALL avatar sizes and ALL contexts (navbar, welcome section, profile dropdown, notification items).
+
+**Confirmed mistake (2026-05-21):** Both `navbar-avatar__image` (`left: -6px; width: 60px`) and `welcome-avatar__image` (`left: -7px; width: 62px`) used placeholder offsets, causing the real photo (Avatar-Aidan.png) to appear off-centre. Fixed to `inset: 0; width: 100%; height: 100%; object-fit: cover`.
+
+---
+
+### Rule 127. `display: contents` — transparent wrapper for flex/grid layout
+
+When a wrapper element must exist in HTML (for semantic grouping or JS targeting) but must NOT create a box in the layout, use `display: contents`. The element's children then participate directly in the parent's flex/grid context as if the wrapper weren't there.
+
+**When to use:** A wrapper `<div>` or `<section>` groups children in HTML, but on a specific breakpoint those children need to be direct flex items of the grandparent.
+
+**CSS pattern:**
+```css
+/* Grandparent — the real flex container */
+.welcome-row { display: flex; flex-wrap: wrap; gap: 16px; }
+
+/* Wrapper — transparent at this breakpoint */
+#Welcome-Desktop { display: contents; }
+
+/* Children — now direct flex items of .welcome-row */
+.welcome-text  { order: 1; flex: 1; }
+.status-badges { order: 3; flex-basis: 100%; }
+.check-in-card { order: 4; flex-basis: 100%; }
+```
+
+**Caveats:**
+- `display: contents` removes the element's box — `background`, `border`, `padding`, `overflow` on the element itself are ignored. Only use when the wrapper has no visible styles.
+- Works from Safari 11.1+, Chrome 65+, Firefox 59+, Edge 79+.
+
+**Confirmed instance (2026-05-21):** `#Welcome-Desktop` uses `display: contents` at `≤1279px` so its children (welcome-text, status-badges, check-in-card) become direct flex items of `.welcome-row`. This allows `flex-wrap` to put welcome-text + Avatar in row 1, status-badges full-width in row 2, check-in-card full-width in row 3.
+
+---
+
+### Rule 128. Breakpoint cascade — structural layout in the outermost breakpoint only
+
+CSS media queries are inclusive: `@media (max-width: 1279px)` applies to ALL viewports ≤1279px, including mobile (≤767px). Never duplicate structural layout rules across breakpoints — put them once in the widest applicable breakpoint and let narrower breakpoints inherit.
+
+**Rule:** Structural changes (flex direction, `display: contents`, `order`, `flex-basis`) go in the **outermost (widest) breakpoint** where they first apply. Narrower breakpoints only add **size-specific overrides** (font sizes, px dimensions, padding values).
+
+```css
+/* WRONG — duplicating structural layout in both tablet and mobile */
+@media (max-width: 1279px) {
+  .welcome-row { display: flex; flex-wrap: wrap; }
+  #Welcome-Desktop { display: contents; }
+}
+@media (max-width: 767px) {
+  .welcome-row { display: flex; flex-wrap: wrap; }   /* redundant */
+  #Welcome-Desktop { display: contents; }            /* redundant */
+}
+
+/* CORRECT — structure once at tablet; mobile inherits + adds size overrides only */
+@media (max-width: 1279px) {
+  .welcome-row { display: flex; flex-wrap: wrap; gap: 16px; }
+  #Welcome-Desktop { display: contents; }
+  .welcome-text { order: 1; flex: 1; }
+  #Avatar-Mobile { display: flex; order: 2; }
+  .status-badges { order: 3; flex-basis: 100%; }
+  .check-in-card { order: 4; flex-basis: 100%; }
+}
+@media (max-width: 767px) {
+  /* Size-specific overrides only */
+  .welcome-avatar { width: 48px; height: 48px; }
+  .status-pill { height: 32px; flex: 1; }
+}
+```
+
+**Confirmed instance (2026-05-21):** Welcome section welcome-row layout was initially added to mobile block, then moved entirely to tablet block when the same layout was needed at tablet. Mobile block now only has `welcome-avatar` size override and pill size overrides.
+
+---
+
+### Rule 129. Status pills — `flex: 1` pattern for equal-fill rows
+
+To make status pills share a row's full width equally (all 4 getting the same allocation), apply `flex: 1; min-width: 0` to each pill and the flipper. The flipper also needs `width: 100%` on its inner rotating element and front-face pill so the pill inside fills the flex allocation.
+
+**CSS pattern:**
+```css
+/* Status badges container must be full-width */
+.status-badges { width: 100%; }   /* or flex-basis: 100% if inside a flex-wrap row */
+
+/* Each pill + flipper shares width equally */
+.status-pill             { flex: 1; min-width: 0; }
+.status-pill-flipper     { flex: 1; min-width: 0; }
+.status-pill-flipper__inner { width: 100%; }   /* rotating wrapper fills flipper */
+.status-pill-face--front { width: 100%; }      /* front pill fills inner */
+```
+
+Inside each pill, `.status-pill__texts` already has `flex: 1` from base CSS — the text area fills whatever space remains after the icon. **Do not touch `.status-pill__icon`** — it stays at its fixed size (32px desktop / 24px mobile) with `flex-shrink: 0`.
+
+**Confirmed instance (2026-05-21):** Applied at `≤1279px` (tablet + mobile). Mobile additionally sets `height: 32px` size reduction. The `min-width: 0` is required to allow pills to shrink below their previous `min-width: 115px` / `min-width: 89px` floor.
+
+---
+
+### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-21)
+
+**Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
+
+```
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–129 + confirmed specs + mistake log
+Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH — NOT memory, NOT docs
+Step 0c → get_design_context on COMPONENT (not COMPONENT_SET) → list ALL variant names
+Step 0d → use_figma to confirm exact strokeWeights per side (top/right/bottom/left individually)
+Step 0e → use_figma to confirm exact cornerRadius per corner (tl/tr/br/bl individually)
+Step 0f → get_variable_defs on exact sub-nodes → confirm Semantic tokens
+Step 0g → exportAsync SVG_STRING for icons → real DS paths only
+Step 0h → get_screenshot after implementation → compare against DS side-by-side
+Step 0i → For JS: confirm ALL referenced elements exist in DOM BEFORE the script runs
+```
+
+**Every mistake in this project** came from skipping Step 0. Always check per-side strokeWeights and per-corner radii — `strokeAlign`, `cornerRadius`, `topLeftRadius` etc. are separate properties that must be individually confirmed.
+
+---
+
 *Generated: May 2026 | Last updated: 2026-05-21 (Rules 123–124 — Nav Menu Mobile full specs, script ordering DOM bug) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
