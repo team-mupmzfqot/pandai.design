@@ -5176,7 +5176,7 @@ function closeDropdown() {
 **Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
 
 ```
-Step 0a → Read design-md/zul.design.md          ← ALL rules 1–141 + confirmed specs + mistake log
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–143 + confirmed specs + mistake log
 Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH — NOT memory, NOT docs
 Step 0c → get_design_context on COMPONENT SET → list ALL variant names
 Step 0d → get_design_context on EACH state variant → extract every token BEFORE writing CSS
@@ -5196,4 +5196,96 @@ Step 0n → For any non-infinite carousel: implement maxOffset snap in offsetFor
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-21 (Rules 139–141 — Nav Top Menu dropdowns: Dropdown-Parts spec + 5 button content maps, dropdown positioning left/right alignment, nav button is-active persistence rule) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 142. Nav dropdown buttons — `openDropdown()` / `closeDropdown()` / `restoreHome()` pattern
+
+Every dropdown nav button (Class, Learn, Achievement, Potential, Rewards) must use three explicit functions. Never rely on the general handler to manage their `is-active` state.
+
+```js
+function restoreHome() {
+  var homeBtn = navSection.querySelector('[aria-label="Home"]');
+  if (homeBtn) { homeBtn.classList.add('is-active'); homeBtn.setAttribute('aria-current', 'page'); }
+}
+
+function openDropdown() {
+  // Remove is-active from ALL nav buttons, then set this button active
+  document.querySelectorAll('.nav-menu-btn').forEach(function (b) {
+    b.classList.remove('is-active'); b.removeAttribute('aria-current');
+  });
+  btn.classList.add('is-active');
+  btn.setAttribute('aria-current', 'page');
+  positionDropdown();
+  dropdown.classList.add('is-open');
+}
+
+function closeDropdown() {
+  dropdown.classList.remove('is-open');
+  btn.classList.remove('is-active');
+  btn.removeAttribute('aria-current');
+  restoreHome();   /* always restore Home when dropdown closes */
+}
+```
+
+`closeDropdown()` must be called on ALL three close paths:
+1. `dropdown.addEventListener('mouseleave', closeDropdown)`
+2. `document.addEventListener('click', ..., true)` outside-click
+3. `btn.addEventListener('click', ...)` when `willOpen === false` (toggle close)
+
+**General handler must have `aria-haspopup` guard** so it never fights the IIFE:
+```js
+btn.addEventListener('click', () => {
+  if (btn.getAttribute('aria-haspopup') === 'true') return;  // dropdown IIFE handles these
+  // ... remove all is-active, add to clicked btn
+});
+```
+
+**Active state contract (confirmed 2026-05-21):**
+- Open dropdown → button = `is-active`, Home = default
+- Close dropdown (any path) → button = default, **Home = `is-active`**
+- Click another button → that button = `is-active`, all others = default
+
+**Three wrong iterations that led to this pattern:**
+1. `closeDropdown()` had `btn.classList.remove('is-active')` but no Home restore → Home stayed dark after panel closed.
+2. Added `aria-haspopup` guard to general handler but no `openDropdown()` in IIFE → dropdown buttons never showed active.
+3. Removed guard, `closeDropdown()` had no `is-active` management → button stayed highlighted forever after close.
+4. ✅ Final: guard in general handler + explicit `openDropdown()` / `closeDropdown()` with `restoreHome()` in IIFE.
+
+---
+
+### Rule 143. Non-dropdown nav buttons — `mouseleave` + 3 s delay to restore Home
+
+Quiz, Battle, and Practice have no dropdown. They follow the same Home-restore contract but their "interaction end" event is `mouseleave` from the button, with a **3-second delay** so the active state doesn't flash away too quickly.
+
+```js
+['Quiz', 'Battle', 'Practice'].forEach(function (label) {
+  var btn = navSection.querySelector('[aria-label="' + label + '"]');
+  if (!btn) return;
+  var timer = null;
+  btn.addEventListener('mouseleave', function () {
+    if (!btn.classList.contains('is-active')) return;  // guard — only act when active
+    timer = setTimeout(function () {
+      btn.classList.remove('is-active');
+      btn.removeAttribute('aria-current');
+      var homeBtn = navSection.querySelector('[aria-label="Home"]');
+      if (homeBtn) { homeBtn.classList.add('is-active'); homeBtn.setAttribute('aria-current', 'page'); }
+    }, 3000);
+  });
+  btn.addEventListener('mouseenter', function () { clearTimeout(timer); });
+  // mouseenter cancels the pending restore if user hovers back within 3 s
+});
+```
+
+**Why 3 s and not immediate:** An instant restore makes the active state feel like a flicker. 3 s gives the user a clear "this is now selected" moment before the system reverts to Home.
+
+**Timer safety:** The `if (!btn.classList.contains('is-active')) return` guard prevents the timer from starting if the button was already deactivated by clicking another button before the mouse left. If another button is clicked while the timer is running, the general handler removes `is-active` from this button; when the timer eventually fires it is a no-op (button is no longer active).
+
+**Full nav active-state contract (all buttons, confirmed 2026-05-21):**
+
+| Button | Active trigger | Returns to default / Home restored |
+|---|---|---|
+| Home | Page load (HTML) + click | When any other button is clicked |
+| Quiz / Battle / Practice | Click | 3 s after `mouseleave` from button |
+| Class / Learn / Achievement / Potential / Rewards | Click (dropdown opens) | Dropdown closes (mouseleave / outside-click / toggle) |
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-21 (Rules 142–143 — nav dropdown openDropdown/closeDropdown/restoreHome pattern; Quiz/Battle/Practice 3 s mouseleave delay) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

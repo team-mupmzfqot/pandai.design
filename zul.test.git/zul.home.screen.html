@@ -4869,15 +4869,31 @@
           }
         }
 
+        function restoreHome() {
+          var homeBtn = navSection.querySelector('[aria-label="Home"]');
+          if (homeBtn) { homeBtn.classList.add('is-active'); homeBtn.setAttribute('aria-current', 'page'); }
+        }
+
+        function openDropdown() {
+          document.querySelectorAll('.nav-menu-btn').forEach(function (b) {
+            b.classList.remove('is-active'); b.removeAttribute('aria-current');
+          });
+          btn.classList.add('is-active');
+          btn.setAttribute('aria-current', 'page');
+          positionDropdown();
+          dropdown.classList.add('is-open');
+        }
+
         function closeDropdown() {
           dropdown.classList.remove('is-open');
-          /* no is-active management — dropdown buttons never receive is-active;
-             Home stays active as the default state on this page */
+          btn.classList.remove('is-active');
+          btn.removeAttribute('aria-current');
+          restoreHome();   /* always restore Home when any dropdown closes */
         }
 
         btn.addEventListener('click', function () {
           var willOpen = !dropdown.classList.contains('is-open');
-          // Close all other nav-menu dropdowns (Rule 53) — no is-active to clear
+          // Close all other nav-menu dropdowns (Rule 53)
           menuMap.forEach(function (c) {
             if (c.dropId !== config.dropId) {
               var dd = document.getElementById(c.dropId);
@@ -4898,14 +4914,11 @@
             if (d) d.classList.remove('is-open');
             if (b) b.classList.remove('is-active');
           });
-          if (willOpen) positionDropdown();
-          dropdown.classList.toggle('is-open', willOpen);
+          if (willOpen) { openDropdown(); } else { closeDropdown(); }
         });
 
-        // Close + clear active on mouseleave
         dropdown.addEventListener('mouseleave', closeDropdown);
 
-        // Close + clear active on outside click
         document.addEventListener('click', function (e) {
           if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
             closeDropdown();
@@ -4927,12 +4940,35 @@
       });
     })();
 
+    // Quiz, Battle, Practice — no dropdown, same Home-restore pattern as dropdown buttons.
+    // Click → is-active. Mouseleave → 3 s delay, then default + Home restored.
+    // Mouseenter within the 3 s cancels the timer (user hovered back).
+    (function () {
+      var navSection = document.getElementById('NavTopMenu-Desktop');
+      if (!navSection) return;
+      ['Quiz', 'Battle', 'Practice'].forEach(function (label) {
+        var btn = navSection.querySelector('[aria-label="' + label + '"]');
+        if (!btn) return;
+        var timer = null;
+        btn.addEventListener('mouseleave', function () {
+          if (!btn.classList.contains('is-active')) return;
+          timer = setTimeout(function () {
+            btn.classList.remove('is-active');
+            btn.removeAttribute('aria-current');
+            var homeBtn = navSection.querySelector('[aria-label="Home"]');
+            if (homeBtn) { homeBtn.classList.add('is-active'); homeBtn.setAttribute('aria-current', 'page'); }
+          }, 3000);
+        });
+        btn.addEventListener('mouseenter', function () { clearTimeout(timer); });
+      });
+    })();
+
     // Nav Top Menu — active page toggle + pressed feedback (Rule 14: critical handlers first)
-    // All buttons follow the same rule: is-active persists until ANOTHER button is clicked.
-    // Dropdown buttons stay active after their panel closes — only a new click displaces them.
-    // Home is the initial active button on this page (set in HTML).
+    // Dropdown buttons (aria-haspopup) manage is-active via the IIFE — skip here.
+    // Non-dropdown buttons (Home, Quiz, Battle, Practice) are managed here.
     document.querySelectorAll('.nav-menu-btn').forEach(btn => {
       btn.addEventListener('click', () => {
+        if (btn.getAttribute('aria-haspopup') === 'true') return;
         document.querySelectorAll('.nav-menu-btn').forEach(b => {
           b.classList.remove('is-active');
           b.removeAttribute('aria-current');
