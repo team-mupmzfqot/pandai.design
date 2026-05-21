@@ -5068,12 +5068,115 @@ startAuto();
 
 ---
 
+### Rule 139. Nav Top Menu dropdowns — `Dropdown - Parts` DS spec (node 2185:42800, 2026-05-21)
+
+The 5 dropdown buttons in `Nav Top Menu Desktop - 1.5` (Class, Learn, Achievement, Potential, Rewards) open sub-navigation panels using the **`Dropdown - Parts`** component set.
+
+**Panel container — confirmed from DS nodes 4753:69867 / 69817 / 74267 / 69767 / 70068:**
+- Background: `Surface/general/default` white
+- Border: `1px solid #00cc85` (`--border-primary-default`)
+- Border-radius: **24px** (`corner-4xl`)
+- Padding: **16px** (`Spacing/space-m`) all sides
+- Width: **242px** (16px pad × 2 + 210px item)
+
+**Each menu item — `Dropdown - Parts` (DS node `2185:42800`):**
+- Width: **210px**; layout: flex row; gap: **10px**; padding: `8px 16px`; border-radius: **108px** (pill)
+- Border: `1px solid transparent` at Default — prevents layout shift on hover (Rule 56)
+
+| State | bg | border | label |
+|---|---|---|---|
+| Default | transparent | transparent | `#666` |
+| Hover | `#e8fbe8` | `#00cc85` | `#00cc85` |
+| Selected | `#b5f291` | `#70bc6f` | `#00a36a` |
+
+**Icon slot:** 24×24 `overflow: hidden` clip, `color: var(--icon-primary-default)`. Icons: `viewBox="-1 -1 26 26"` (Rule 27).
+
+**Items gap:** `Spacing/space-xs` = **8px**.
+
+**Confirmed DS content (2026-05-21):**
+
+| Button | DS node | Menu items (icon symbol) |
+|---|---|---|
+| Class | `4753:69867` | My Classes (`ic-airplay`), Browse Classes (`ic-globe`), Timetable (`ic-layout`), Assignments (`ic-edit`) |
+| Learn | `4753:69817` | Learning Hub (`ic-folder`), Quick Notes (`ic-file-text`), Videos (`ic-film`), Experiments (`ic-experiment`), Textbooks (`ic-book`), Bookmarks (`ic-bookmark`) |
+| Achievement | `4742:74267` | Score Card (`ic-pie-chart`), Report Card (`ic-filled-check-circle`), History (`ic-calendar`), Badges (`ic-shield`), Leaderboard (`ic-award`), School Leaderboard (`ic-flag`), Certificates (`ic-certificate`), Goals & Rewards (`ic-progress-mobile`) |
+| Potential | `4753:69767` | Personality Test (`ic-sun`), Competition (`ic-bar-chart-3`), University Matching (`ic-mortar-board`) |
+| Rewards | `4753:70068` | Coin Quests (`ic-stop-circle`), My Rewards (`ic-package`), Merchandise (`ic-shopping-bag`), eVoucher (`ic-shopping-cart`), Avatar (`ic-smile`) |
+
+**Mistake:** Do not use `ic-bar-chart` for Competition — DS uses `Outline/bar-chart 3` (`ic-bar-chart-3`), a distinct 3-column layout icon.
+
+---
+
+### Rule 140. Nav Top Menu dropdown positioning — anchor, JS left/right align per button
+
+**Required on `#NavTopMenu-Desktop`:** `position: relative; overflow: visible` — allows absolutely-positioned dropdown children to extend below the 56px pill height.
+
+**Top offset:** `top: 64px` = 56px pill + 8px gap. Same `0.15s ease` opacity + `translateY(-8px)` animation as all navbar dropdowns.
+
+**Left-align (default):** dropdown left edge = button left edge. Use for buttons in the left/centre of the nav bar.
+```js
+var leftOffset = btnRect.left - sectionRect.left;
+dropdown.style.left  = Math.max(0, Math.min(leftOffset, sectionRect.width - dropW)) + 'px';
+dropdown.style.right = 'auto';
+```
+
+**Right-align:** dropdown right edge = button right edge. Use for any button near the right end where left-align would overflow the viewport (confirmed: Rewards button).
+```js
+var rightOffset = sectionRect.right - btnRect.right;
+dropdown.style.right = Math.max(0, Math.min(rightOffset, sectionRect.width - dropW)) + 'px';
+dropdown.style.left  = 'auto';
+```
+
+**Rule:** Before choosing alignment, check if left-align would overflow the right edge at the minimum supported viewport (1320px for desktop navbar). If yes, use right-align.
+
+---
+
+### Rule 141. Nav button `is-active` — persists until another button is clicked, never on dropdown close
+
+All `.nav-menu-btn` elements (including dropdown buttons) follow the same rule:
+
+> **`is-active` is set on click and cleared only when another button is clicked — never by `closeDropdown()`.**
+
+`closeDropdown()` toggles only `is-open` on the dropdown panel. The button stays highlighted after the panel closes to show the user which section they are in.
+
+**Initial state:** Home has `is-active` in HTML — it is the default active button on the home screen.
+
+**JS pattern (confirmed 2026-05-21):**
+```js
+// General handler — ALL .nav-menu-btn including dropdown buttons. No aria-haspopup guard.
+document.querySelectorAll('.nav-menu-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-menu-btn').forEach(b => {
+      b.classList.remove('is-active');
+      b.removeAttribute('aria-current');
+    });
+    btn.classList.add('is-active');
+    btn.setAttribute('aria-current', 'page');
+  });
+  btn.addEventListener('mousedown',  () => btn.classList.add('is-pressing'));
+  btn.addEventListener('mouseup',    () => btn.classList.remove('is-pressing'));
+  btn.addEventListener('mouseleave', () => btn.classList.remove('is-pressing'));
+});
+
+// closeDropdown() — ONLY removes is-open, NEVER touches is-active
+function closeDropdown() {
+  dropdown.classList.remove('is-open');
+}
+```
+
+**Three mistakes made in sequence (2026-05-21):**
+1. Added `btn.classList.remove('is-active')` in `closeDropdown()` → button lost highlight on every mouseleave. **Fix: remove that line.**
+2. Added `aria-haspopup === 'true'` guard to skip dropdown buttons from the general handler → dropdown buttons never showed active state. **Fix: remove the guard.**
+3. Correct final pattern: no guard in general handler, no `is-active` removal in `closeDropdown()`.
+
+---
+
 ### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-21)
 
 **Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
 
 ```
-Step 0a → Read design-md/zul.design.md          ← ALL rules 1–138 + confirmed specs + mistake log
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–141 + confirmed specs + mistake log
 Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH — NOT memory, NOT docs
 Step 0c → get_design_context on COMPONENT SET → list ALL variant names
 Step 0d → get_design_context on EACH state variant → extract every token BEFORE writing CSS
@@ -5093,4 +5196,4 @@ Step 0n → For any non-infinite carousel: implement maxOffset snap in offsetFor
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-21 (Rules 134–138 — nested carousel layout, JS card widths, peek formula, maxOffset snap, auto-scroll pattern) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+*Generated: May 2026 | Last updated: 2026-05-21 (Rules 139–141 — Nav Top Menu dropdowns: Dropdown-Parts spec + 5 button content maps, dropdown positioning left/right alignment, nav button is-active persistence rule) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
