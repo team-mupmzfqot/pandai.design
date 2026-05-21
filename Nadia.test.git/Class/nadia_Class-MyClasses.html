@@ -70,7 +70,7 @@
       --spacing-space-2xl: 28px;
       /* ── Canonical tokens per design.color.md (2026-05-16) ─────── */
       /* Surface */
-      --surface-primary-default-subtle:       #d9f7ed;
+      --surface-primary-default-subtle:       #e1f9ea;  /* DS node 4661:37835 confirmed */
       --surface-primary-default-subtle-hover: #99ebce;
       --surface-secondary-default-subtle:     #e8fbe8;
       --surface-disabled-primary:             #f2f2f2;
@@ -167,6 +167,32 @@
       justify-content: flex-end;
       gap:             var(--spacing-space-m);        /* 16px */
     }
+    /* Search bar — Dropdown - Parts, DS node 4689:4319 (node 4661:37835) */
+    .navbar-search {
+      flex:          1 0 0;
+      min-width:     0;
+      height:        40px;
+      border:        1px solid var(--border-primary-default);  /* #00cc85 */
+      border-radius: var(--corner-radius-corner-pill);         /* 999px */
+      background:    var(--surface-general-default);
+      padding:       8px 12px;                                 /* py:8 px:12 */
+      display:       flex;
+      align-items:   center;
+      cursor:        pointer;
+      text-align:    left;
+    }
+    .navbar-search__label {
+      font-family:  'Poppins', sans-serif;
+      font-size:    14px;
+      font-weight:  500;                   /* Body/B2 Medium */
+      line-height:  20px;
+      color:        var(--text-default-body);  /* #666 */
+      white-space:  nowrap;
+      flex:         1 0 0;
+      min-width:    0;
+      overflow:     hidden;
+      text-overflow: ellipsis;
+    }
     .navbar-primary-icons {
       display: flex; align-items: center; gap: var(--spacing-space-xs); flex-shrink: 0;
     }
@@ -212,7 +238,7 @@
       height:        48px;
       border-radius: var(--corner-radius-corner-rounded);  /* 60px pill */
       border:        1px solid var(--border-default);       /* border/default #00cc85 */
-      background:    var(--surface-general-default);
+      background:    var(--surface-primary-default-subtle); /* #e1f9ea — DS confirmed */
       overflow:      hidden;
       position:      relative;   /* anchor for absolute img */
       flex-shrink:   0;
@@ -1609,7 +1635,7 @@
 
     /* ── Learn Menu panel — DS node 3908:5492 ─────────────────── */
     /* right is set by JS positionAll() — right-aligned with waffle button right edge */
-    .learn-menu {
+Y     .learn-menu {
       display:       none;
       position:      absolute;
       top:           calc(100% + calc(var(--spacing-space-s) / 2));  /* halfway into the 12px gap between section 1 and 2 */
@@ -1778,6 +1804,10 @@
         <img src="../navbar/logo.png" alt="Pandai">
       </a>
       <div class="navbar-primary__right">
+        <!-- Search bar — Dropdown - Parts, DS node 4689:4319 -->
+        <button class="navbar-search" type="button" aria-label="Search">
+          <span class="navbar-search__label">Search</span>
+        </button>
         <div class="navbar-primary-icons">
           <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
           <div class="navbar-primary-icon"><svg aria-hidden="true"><use href="#ic-maximize"/></svg></div>

@@ -2312,3 +2312,34 @@ Row 4: Personality · University · Rewards
 - Font: `Body/B1` SemiBold 14px (corrected in Session 13) ✓
 
 *Last updated: 2026-05-19 | File: Nadia.test.git/Class/nadia_Class-MyClasses.html | Branch: staging*
+
+---
+
+### Updates — May 2026 (Session 14)
+
+**File:** `Nadia.test.git/Class/nadia_Class-MyClasses.html`
+
+#### Section 1 + Section 2 full DS audit — nodes 4661:37835 + 4661:37836
+
+**DS nodes audited:** `4661:37835` (NavBar Primary Desktop - 1.5) + `4661:37836` (Nav Top Menu Desktop - 1.5)
+
+**Section 1 — 3 fixes applied:**
+
+**1. MISSING: Search bar (Dropdown - Parts, DS node 4689:4319)**
+- DS shows a "Search" pill (`flex:1 0 0`, `h:40px`, `border: 1px solid #00cc85`, `border-radius: 999px`) filling available width between logo and action icons.
+- Was completely absent from the HTML.
+- Fix: added `.navbar-search` `<button>` + CSS: `flex:1 0 0; height:40px; border:1px solid var(--border-primary-default); border-radius:var(--corner-radius-corner-pill); padding:8px 12px`. Label: `Body/B2` Poppins Medium 14px `#666`.
+
+**2. Avatar background wrong: white → `#e1f9ea`**
+- DS node 684:621: `bg-[var(--surface/primary/default-subtle, #e1f9ea)]`.
+- Fix: `.navbar-avatar { background: var(--surface-primary-default-subtle) }`.
+
+**3. CSS variable `--surface-primary-default-subtle` corrected: `#d9f7ed` → `#e1f9ea`**
+- DS fallback from node 4661:37835 is `#e1f9ea`.
+
+**Section 2 — no new issues found**
+- Full re-audit against DS 4661:37836 confirms all states match DS tokens ✓
+
+**Mistake documented:** `Surface/primary/default-subtle` was set to `#d9f7ed` — DS node confirms `#e1f9ea`. Always verify tint/subtle token hex values against live DS node fallbacks.
+
+*Last updated: 2026-05-21 | File: Nadia.test.git/Class/nadia_Class-MyClasses.html | Branch: staging*
