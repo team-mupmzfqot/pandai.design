@@ -2692,6 +2692,41 @@
       #NavBar-Mobile         { display: block; }
     }
 
+    /* RECENT ACTIVITIES CAROUSEL — Section 6
+       Flex layout: [btn-side] [viewport overflow:hidden] [btn-side]
+       16px padding all around each button — cards never overlap buttons. */
+    #YourRecentActivities-Desktop .primary-card__content {
+      display:     flex;
+      align-items: center;
+      gap:         var(--spacing-space-m);
+      padding:     var(--spacing-space-m);
+      overflow:    hidden;
+    }
+    .recent-carousel__btn-side {
+      flex-shrink: 0;
+      align-self:  stretch;
+      display:     flex;
+      align-items: center;
+    }
+    .recent-carousel__btn-side .carousel__btn { height: 100%; }
+    .recent-carousel__viewport {
+      flex:      1;
+      min-width: 0;
+      overflow:  hidden;
+    }
+    .recent-carousel__track {
+      display:     flex;
+      gap:         var(--spacing-space-m);
+      flex-shrink: 0;
+      transition:  transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    /* min/max enforced; JS sets exact width per viewport */
+    .recent-carousel__track .quiz-card {
+      flex-shrink: 0;
+      min-width:   250px;
+      max-width:   370px;
+    }
+
     /* Tablet */
     @media (max-width: 1279px) {
       :root {
@@ -2794,6 +2829,7 @@
       .quiz-card {
         min-width: 0;
       }
+
 
       /* Subject Badge M variant at mobile — switch Section 4 back to M (16px icon, 24px badge).
          M badge = 24px tall: 4px top + 16px icon + 4px bottom = 24px. */
@@ -4128,53 +4164,93 @@
             </button>
           </div>
 
-          <!-- Primary Card content — 3 Quiz Cards -->
+          <!-- Primary Card content — Quiz Card Carousel (4 cards, 3 visible, left/right nav) -->
           <div class="primary-card__content">
 
-            <!-- 1 — Additional Mathematics -->
-            <article class="quiz-card subject-add-math">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--add-math"><span class="subject-badge__icon"><svg width="21" height="24" viewBox="0 0 21 24" aria-hidden="true"><use href="#ic-subj-add-math"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Add. Math</span></span></span>
-                    <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.3</span>
-                  </div>
-                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Trigonometric Functions and Graphs</p></div>
-                </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
-              </div>
-            </article>
+            <!-- Left Button — 16px clear gap via flex layout, no card overlap -->
+            <div class="recent-carousel__btn-side">
+              <button class="carousel__btn" id="recentPrev" aria-label="Previous">
+                <span class="carousel__btn__icon">
+                  <svg width="20" height="20" aria-hidden="true"><use href="#ic-chevron-left"/></svg>
+                </span>
+              </button>
+            </div>
 
-            <!-- 2 — Biology -->
-            <article class="quiz-card subject-biology">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--biology"><span class="subject-badge__icon"><svg width="17" height="24" viewBox="0 0 17 24" aria-hidden="true"><use href="#ic-subj-biology"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Biology</span></span></span>
-                    <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.2</span>
-                  </div>
-                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Human Circulatory System</p></div>
-                </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
-              </div>
-            </article>
+            <!-- Viewport — clips the scrolling track -->
+            <div class="recent-carousel__viewport">
+            <div class="recent-carousel__track" id="recentTrack">
 
-            <!-- 3 — Economy -->
-            <article class="quiz-card subject-economy">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
-              <div class="quiz-card__content">
-                <div class="quiz-card__main">
-                  <div class="quiz-card__header">
-                    <span class="subject-badge subject-badge--economy"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-economy"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Economy</span></span></span>
-                    <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.5</span>
+              <!-- 1 — Additional Mathematics -->
+              <article class="quiz-card subject-add-math">
+                <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
+                <div class="quiz-card__content">
+                  <div class="quiz-card__main">
+                    <div class="quiz-card__header">
+                      <span class="subject-badge subject-badge--add-math"><span class="subject-badge__icon"><svg width="21" height="24" viewBox="0 0 21 24" aria-hidden="true"><use href="#ic-subj-add-math"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Add. Math</span></span></span>
+                      <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.3</span>
+                    </div>
+                    <div class="quiz-card__texts"><p class="quiz-card__subtitle">Trigonometric Functions and Graphs</p></div>
                   </div>
-                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Theory of Production and Cost</p></div>
+                  <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
-              </div>
-            </article>
+              </article>
+
+              <!-- 2 — Biology -->
+              <article class="quiz-card subject-biology">
+                <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
+                <div class="quiz-card__content">
+                  <div class="quiz-card__main">
+                    <div class="quiz-card__header">
+                      <span class="subject-badge subject-badge--biology"><span class="subject-badge__icon"><svg width="17" height="24" viewBox="0 0 17 24" aria-hidden="true"><use href="#ic-subj-biology"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Biology</span></span></span>
+                      <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.2</span>
+                    </div>
+                    <div class="quiz-card__texts"><p class="quiz-card__subtitle">Human Circulatory System</p></div>
+                  </div>
+                  <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
+                </div>
+              </article>
+
+              <!-- 3 — Economy -->
+              <article class="quiz-card subject-economy">
+                <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
+                <div class="quiz-card__content">
+                  <div class="quiz-card__main">
+                    <div class="quiz-card__header">
+                      <span class="subject-badge subject-badge--economy"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-economy"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Economy</span></span></span>
+                      <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.5</span>
+                    </div>
+                    <div class="quiz-card__texts"><p class="quiz-card__subtitle">Theory of Production and Cost</p></div>
+                  </div>
+                  <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
+                </div>
+              </article>
+
+              <!-- 4 — Physics (new) -->
+              <article class="quiz-card subject-physics">
+                <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
+                <div class="quiz-card__content">
+                  <div class="quiz-card__main">
+                    <div class="quiz-card__header">
+                      <span class="subject-badge subject-badge--physics"><span class="subject-badge__icon"><svg width="22" height="24" viewBox="0 0 22 24" aria-hidden="true"><use href="#ic-subj-physics"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Physics</span></span></span>
+                      <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.7</span>
+                    </div>
+                    <div class="quiz-card__texts"><p class="quiz-card__subtitle">Electromagnetic Induction</p></div>
+                  </div>
+                  <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
+                </div>
+              </article>
+
+            </div><!-- end recentTrack -->
+            </div><!-- end recent-carousel__viewport -->
+
+            <!-- Right Button -->
+            <div class="recent-carousel__btn-side">
+              <button class="carousel__btn" id="recentNext" aria-label="Next">
+                <span class="carousel__btn__icon">
+                  <svg width="20" height="20" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+                </span>
+              </button>
+            </div>
 
           </div><!-- end primary-card__content -->
 
@@ -4635,6 +4711,79 @@
       })();
     } catch (e) {
       console.warn('Carousel init error:', e);
+    }
+
+    /* Recent Activities Carousel — Section 6
+       4 cards, wrap-around prev/next. visibleCount() computed live from card size. */
+    try {
+      (function () {
+        const viewport = document.querySelector('#YourRecentActivities-Desktop .recent-carousel__viewport');
+        const track    = document.getElementById('recentTrack');
+        const btnPrev  = document.getElementById('recentPrev');
+        const btnNext  = document.getElementById('recentNext');
+        if (!viewport || !track || !btnPrev || !btnNext) return;
+
+        const TOTAL = 4;
+        let idx = 0;
+
+        function gap() { return parseFloat(getComputedStyle(track).columnGap) || 16; }
+
+        function setCardWidths() {
+          const vw    = viewport.offsetWidth;
+          const g     = gap();
+          // 2 full cards + 20% peek: 2.2×cardW + 2×gap = vw → cardW = (vw - 2g) / 2.2
+          const cardW = Math.min(370, Math.max(250, (vw - 2 * g) / 2.2));
+          track.querySelectorAll('.quiz-card').forEach(c => { c.style.width = cardW + 'px'; });
+        }
+
+        function cw() { return track.querySelector('.quiz-card').offsetWidth; }
+
+        function visibleCount() {
+          return Math.max(1, Math.floor((viewport.offsetWidth + gap()) / (cw() + gap())));
+        }
+
+        function maxIdx() { return Math.max(0, TOTAL - visibleCount()); }
+
+        /* Max offset: last card right edge exactly at viewport right — never empty area */
+        function maxOffset() {
+          return Math.max(0, TOTAL * cw() + (TOTAL - 1) * gap() - viewport.offsetWidth);
+        }
+
+        function offsetFor(i) {
+          return -Math.min(i * (cw() + gap()), maxOffset());
+        }
+
+        function jump(i) {
+          track.style.transition = 'none';
+          track.style.transform  = `translateX(${offsetFor(i)}px)`;
+          track.offsetHeight;
+          track.style.transition = '';
+        }
+
+        function slide(i) {
+          const max = maxIdx();
+          idx = ((i % (max + 1)) + (max + 1)) % (max + 1);
+          track.style.transform = `translateX(${offsetFor(idx)}px)`;
+        }
+
+        let timer;
+        function startAuto() { timer = setInterval(() => slide(idx + 1), 5000); }
+        function resetAuto() { clearInterval(timer); startAuto(); }
+
+        setCardWidths();
+        jump(0);
+        window.addEventListener('resize', () => {
+          setCardWidths();
+          idx = Math.min(idx, maxIdx());
+          jump(idx);
+        });
+        btnPrev.addEventListener('click', () => { slide(idx - 1); resetAuto(); });
+        btnNext.addEventListener('click', () => { slide(idx + 1); resetAuto(); });
+
+        startAuto();
+      })();
+    } catch (e) {
+      console.warn('Recent activities carousel error:', e);
     }
   </script>
 

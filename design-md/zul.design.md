@@ -4890,10 +4890,207 @@ Step 0i → For JS: confirm ALL referenced elements exist in DOM BEFORE the scri
 Step 0j → For carousel/slider JS: confirm pre-clone anchor is captured BEFORE the loop (Rule 130)
 Step 0k → For indicator: use_figma to inspect dot children — get_design_context returns a flat image (Rule 131)
 Step 0l → For any component with radius: re-verify cornerRadius from exact DS node, never trust session notes (Rule 132)
+Step 0m → For nested carousel (inside white box): use inline flex btn-side layout, never absolute btn-wraps (Rule 134)
+Step 0n → For carousel JS: always implement maxOffset snap so the last position never shows empty area (Rule 137)
 ```
 
 **Every mistake in this project** came from skipping Step 0. Always check per-side strokeWeights and per-corner radii — `strokeAlign`, `cornerRadius`, `topLeftRadius` etc. are separate properties that must be individually confirmed.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-21 (Rules 123–124 — Nav Menu Mobile full specs, script ordering DOM bug) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 134. Carousel inside a white container — inline flex btn-sides, not absolute btn-wraps
+
+When a carousel lives inside a white box (e.g. Primary Card, any `section-frame` child), use an **inline flex layout** for the button + viewport structure. Never use `position: absolute` btn-wraps inside an `overflow: hidden` container — cards overlap the buttons and the fix requires knowing the exact button pixel width (not a CSS variable).
+
+**Correct HTML structure:**
+```html
+<div class="primary-card__content">                <!-- flex container -->
+  <div class="recent-carousel__btn-side">          <!-- flex-shrink:0, align-self:stretch -->
+    <button class="carousel__btn" id="prevBtn">...</button>
+  </div>
+  <div class="recent-carousel__viewport">          <!-- flex:1, overflow:hidden -->
+    <div class="recent-carousel__track" id="track">
+      <!-- cards -->
+    </div>
+  </div>
+  <div class="recent-carousel__btn-side">
+    <button class="carousel__btn" id="nextBtn">...</button>
+  </div>
+</div>
+```
+
+**CSS:**
+```css
+/* White box override */
+#SectionName .primary-card__content {
+  display:     flex;
+  align-items: center;
+  gap:         var(--spacing-space-m);   /* 16px clear space on both sides of each button */
+  padding:     var(--spacing-space-m);   /* 16px clear space between button and box edge */
+  overflow:    hidden;
+}
+.recent-carousel__btn-side {
+  flex-shrink: 0;
+  align-self:  stretch;
+  display:     flex;
+  align-items: center;
+}
+.recent-carousel__btn-side .carousel__btn { height: 100%; }   /* green pill spans full card height */
+.recent-carousel__viewport {
+  flex:      1;
+  min-width: 0;
+  overflow:  hidden;
+}
+.recent-carousel__track {
+  display:     flex;
+  gap:         var(--spacing-space-m);
+  flex-shrink: 0;
+  transition:  transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+```
+
+**Why absolute btn-wraps fail inside a white box:**
+- Cards in the track start at `x=track_padding`, the absolute button is also at `x=btn_wrap_padding` → same position → overlap.
+- Fixing overlap requires `track-padding = btn_wrap_padding + btn_width + desired_gap`. The btn pixel width is not a CSS variable → formula is fragile.
+- Inline flex approach: the viewport is a genuine flex sibling of the buttons. Gap and padding on the parent create clean spacing automatically — no pixel arithmetic needed.
+
+**Confirmed instance:** `#YourRecentActivities-Desktop .primary-card__content` (May 2026).
+
+---
+
+### Rule 135. JS-computed card widths when `%` is circular in nested flex
+
+In a flex carousel track, `width: X%` on a card references the **track's own width** — which is the sum of all cards. Circular. CSS `calc()` with `100vw` minus layout offsets is fragile (requires knowing btn pixel widths). The correct solution: **measure the viewport `offsetWidth` in JS and set each card's `style.width` explicitly.**
+
+```js
+function setCardWidths() {
+  const vw    = viewport.offsetWidth;   // live measurement — always accurate
+  const g     = gap();
+  const cardW = Math.min(MAX_W, Math.max(MIN_W, formula(vw, g)));
+  track.querySelectorAll('.quiz-card').forEach(c => { c.style.width = cardW + 'px'; });
+}
+```
+
+**Call on init AND on resize:**
+```js
+setCardWidths();
+jump(0);
+window.addEventListener('resize', () => {
+  setCardWidths();
+  idx = Math.min(idx, maxIdx());
+  jump(idx);
+});
+```
+
+**CSS `min-width` / `max-width` must mirror JS clamps exactly.** If CSS has `max-width: 370px` but JS sets `style.width = 529px`, the browser applies `max-width` silently. Then `cw()` (which reads `offsetWidth`) returns 370px — different from what JS computed. `offsetFor()` and `visibleCount()` break.
+
+**Rule:** CSS `min-width` / `max-width` = JS `Math.max(MIN_W, ...)` / `Math.min(MAX_W, ...)`. Always update both together.
+
+---
+
+### Rule 136. Peek carousel — 2 full + N% visible formula
+
+To show exactly **k full cards** plus **p% of the next card**:
+
+```
+cardW = (viewportW − (k − 1) × gap) / (k + p)
+```
+
+For **2 full + 20% peek** (`k=2`, `p=0.2`):
+```
+cardW = (viewportW − 2 × gap) / 2.2
+```
+
+Derivation: `k×cardW + (k−1)×gap + p×cardW = viewportW` → `(k+p)×cardW = viewportW − (k−1)×gap`
+
+**In JS:**
+```js
+const cardW = Math.min(MAX_W, Math.max(MIN_W, (vw - 2 * g) / 2.2));
+```
+
+When `cardW` hits `MAX_W`, the peek fraction increases beyond 20% and more cards become visible — that is correct behaviour. `visibleCount()` adapts automatically via `Math.floor((vw + g) / (cw() + g))`.
+
+**Common variants:**
+| Spec | Divisor |
+|---|---|
+| 1 full + 20% peek | 1.2 |
+| 2 full + 20% peek | 2.2 |
+| 3 full + 20% peek | 3.2 |
+| 2 full + 50% peek | 2.5 |
+
+---
+
+### Rule 137. Never-empty-area snap — `maxOffset` clamping in `offsetFor()`
+
+A non-infinite carousel with a fixed card count and `max-width` can run out of content before the last scroll position, leaving empty space on the right. Fix: clamp `offsetFor()` to `maxOffset` — the exact pixel distance that places the last card's right edge at the viewport right edge.
+
+```js
+function maxOffset() {
+  return Math.max(0, TOTAL * cw() + (TOTAL - 1) * gap() - viewport.offsetWidth);
+}
+
+function offsetFor(i) {
+  return -Math.min(i * (cw() + gap()), maxOffset());
+}
+```
+
+**How it works:**
+- `maxOffset()` = total content width − viewport width = maximum valid scroll distance.
+- If a step `i × step` exceeds `maxOffset`, it snaps to `maxOffset` instead.
+- At wide viewports where `maxOffset < step`, multiple indices produce the same offset — the carousel doesn't visually advance past the last valid position, but the wrap-around still works correctly.
+
+**Always implement this in every non-infinite carousel.** The empty-area bug is invisible at narrow screens but obvious on wide desktops where fewer scroll steps are needed.
+
+**Confirmed instance:** `#YourRecentActivities-Desktop` recent activities carousel (May 2026).
+
+---
+
+### Rule 138. Auto-scroll in secondary carousels — match main carousel settings exactly
+
+Any secondary carousel (inside a card, section, or panel) must use the **same auto-scroll pattern** as the main `#Carousel-Desktop`:
+
+```js
+let timer;
+function startAuto() { timer = setInterval(() => slide(idx + 1), 5000); }
+function resetAuto() { clearInterval(timer); startAuto(); }
+
+btnPrev.addEventListener('click', () => { slide(idx - 1); resetAuto(); });
+btnNext.addEventListener('click', () => { slide(idx + 1); resetAuto(); });
+
+startAuto();
+```
+
+- **5000ms interval** — advances one position every 5 seconds.
+- **`resetAuto()` on button click** — restarts the 5s timer on manual interaction so the next auto-advance doesn't fire immediately.
+- **`startAuto()` at end of IIFE** — begins automatically on page load.
+
+**Never change the interval on secondary carousels without changing the main carousel too** — mismatched timings feel broken when multiple carousels are on screen simultaneously.
+
+---
+
+### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-21)
+
+**Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
+
+```
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–138 + confirmed specs + mistake log
+Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH — NOT memory, NOT docs
+Step 0c → get_design_context on COMPONENT SET → list ALL variant names
+Step 0d → get_design_context on EACH state variant → extract every token BEFORE writing CSS
+Step 0e → get_variable_defs on exact sub-nodes → confirm Semantic tokens
+Step 0f → use_figma raw node inspection → confirm exact padding, strokeAlign, width, height
+Step 0g → exportAsync SVG_STRING for icons → check size before PNG vs symbol decision
+Step 0h → get_screenshot after implement → compare against DS, fix before moving on
+Step 0i → For carousel/slider JS: capture pre-clone anchor BEFORE the loop (Rule 130)
+Step 0j → For indicator dots: use_figma inspect — get_design_context returns flat image (Rule 131)
+Step 0k → For any radius: re-verify cornerRadius from exact DS node, never trust prior notes (Rule 132)
+Step 0l → For nested carousel (inside white box): use inline flex btn-side layout (Rule 134)
+Step 0m → For JS card widths: measure viewport.offsetWidth live, set style.width explicitly (Rule 135)
+Step 0n → For any non-infinite carousel: implement maxOffset snap in offsetFor() (Rule 137)
+```
+
+**Every mistake in this project** came from skipping Step 0. DS state tokens, radii, colors, and layout values are confirmed only by live DS inspection — never by memory or prior session notes.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-21 (Rules 134–138 — nested carousel layout, JS card widths, peek formula, maxOffset snap, auto-scroll pattern) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
