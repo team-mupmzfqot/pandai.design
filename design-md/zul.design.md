@@ -1397,7 +1397,7 @@ idx = total = 4  →  centers orig0 = first card in HTML
 | 3 | `Static-Card/3.jpg` | |
 | 4 | `Static-Card/2 (3).png` | repeat |
 
-**Page section structure (confirmed May 2026):**
+**Page section structure (confirmed May 2026, updated 2026-05-22):**
 ```html
 <main>
   <div class="page-container">
@@ -1406,12 +1406,13 @@ idx = total = 4  →  centers orig0 = first card in HTML
       <section id="Carousel-Desktop" aria-label="Featured" class="carousel">
       <section id="StaticNewsCard-Desktop" class="static-cards-row">
       <section id="YourSelectedSubjects-Desktop" class="section-frame" aria-label="Your Selected Subjects">
+      <section id="YourRecentActivities-Desktop" class="section-frame" aria-label="Your Recent Activities">
     </div>
   </div>
 </main>
 ```
 
-**Section rename (May 2026):** Section #4 was renamed from `id="static-newscards"` to `id="StaticNewsCard-Desktop"`. Sections #5 (YourSelectedSubjects) and #6 (Recent Activity) were removed; a new #5 (YourSelectedSubjects) was rebuilt with Primary Card - 1.5 (Secondary Card variant) containing 18 Quiz Cards in a 3-column grid.
+**Section rename (May 2026):** Section #4 was renamed from `id="static-newscards"` to `id="StaticNewsCard-Desktop"`. A new #5 (YourSelectedSubjects) was rebuilt with Primary Card - 1.5 (Secondary Card variant) containing 18 Quiz Cards in a 3-column grid. Section #6 (YourRecentActivities) was subsequently added back as a Recent Activities carousel.
 
 **Mobile Navbar — confirmed DS specs (node `1943:22641`, May 2026):**
 - Height: **64px** (not 68px — earlier session note was wrong; always re-inspect)
