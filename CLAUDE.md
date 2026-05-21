@@ -1827,12 +1827,12 @@ All 5 states: `w:20 h:20`, `padding:2px`, `strokeAlign: INSIDE`. State changes =
 
 ---
 
-### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-19)
+### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-21)
 
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision. No exceptions.
 
 ```
-0a. Read design-md/zul.design.md       → ALL rules 1–118, confirmed specs, known mistakes
+0a. Read design-md/zul.design.md       → ALL rules 1–133, confirmed specs, known mistakes
 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs
 0c. get_design_context on COMPONENT SET → list ALL variant names
 0d. get_design_context on EACH state   → extract every token BEFORE writing CSS
@@ -1840,6 +1840,7 @@ All 5 states: `w:20 h:20`, `padding:2px`, `strokeAlign: INSIDE`. State changes =
 0f. use_figma raw node inspection      → confirm exact padding, strokeAlign, width, height
 0g. exportAsync SVG_STRING for icons   → check size before PNG vs symbol decision
 0h. get_screenshot after implement     → compare against DS, fix before moving on
+0i. For carousel/slider JS: capture pre-clone anchor BEFORE the loop (Rule 130)
 ```
 
 ---

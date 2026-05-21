@@ -4714,12 +4714,171 @@ Inside each pill, `.status-pill__texts` already has `flex: 1` from base CSS — 
 
 ---
 
+### Rule 130. Infinite-loop carousel — always capture `firstChild` BEFORE the pre-clone loop
+
+**Root cause confirmed: 2026-05-21**
+
+For an infinite-loop carousel, you need `total` pre-clones inserted BEFORE the original cards, and `total` post-clones appended AFTER. The pre-clones must be in the **same order** as the originals so that position `total − 1` (just left of the first original card) is a clone of the **last** original card.
+
+**The bug — live `track.firstChild` in a loop reverses the order:**
+
+```js
+// WRONG — each inserted clone becomes the new firstChild → clones reversed
+origCards.forEach(c => track.insertBefore(c.cloneNode(true), track.firstChild));
+```
+
+Trace with 4 cards [A, B, C, D]:
+1. `insertBefore(clone_A, firstChild=A)` → [clone_A, A, B, C, D]
+2. `insertBefore(clone_B, firstChild=clone_A)` → [clone_B, clone_A, A, B, C, D]
+3. `insertBefore(clone_C, firstChild=clone_B)` → [clone_C, clone_B, clone_A, A, B, C, D]
+4. `insertBefore(clone_D, firstChild=clone_C)` → [clone_D, clone_C, clone_B, clone_A, A, B, C, D]
+
+Result: pre-clones = [D, C, B, A]. Position `total−1` = clone_A — the **first** card's clone.
+Going left from card A animates to clone_A (visually identical to A). The user sees no change. The button appears broken.
+
+**The fix — capture `firstChild` once before the loop:**
+
+```js
+// CORRECT — all clones insert before the same fixed reference → correct order
+const firstOriginal = track.firstChild;
+origCards.forEach(c => track.insertBefore(c.cloneNode(true), firstOriginal));
+origCards.forEach(c => track.appendChild(c.cloneNode(true)));
+```
+
+Trace with 4 cards [A, B, C, D]:
+1. `insertBefore(clone_A, A)` → [clone_A, A, B, C, D]
+2. `insertBefore(clone_B, A)` → [clone_A, clone_B, A, B, C, D]
+3. `insertBefore(clone_C, A)` → [clone_A, clone_B, clone_C, A, B, C, D]
+4. `insertBefore(clone_D, A)` → [clone_A, clone_B, clone_C, clone_D, A, B, C, D]
+
+Result: pre-clones = [A, B, C, D]. Position `total−1` = clone_D — the **last** card's clone. ✓
+
+Final track: [clone_A, clone_B, clone_C, clone_D, A, B, C, D, clone_A, clone_B, clone_C, clone_D]
+
+**Why this matters:**
+- `idx = total` (start at first original)
+- Going left → `slide(total − 1)` → shows clone_D → after `transitionend`, `jump(total*2 − 1)` → seamlessly at real D ✓
+- Going right → `slide(total + 1)` → shows B ✓ (post-clones unaffected, already correct)
+
+**Symptom** of the bug: clicking the left/prev button from the first card appears to do nothing — the carousel animates but the center card looks unchanged (clone of card0 = visually identical to card0). Users conclude the button is broken.
+
+**Rule:** Whenever writing any carousel pre-clone loop with `insertBefore`, **always capture the insertion anchor before the loop**, never read it fresh inside each iteration.
+
+---
+
+### Rule 131. Carousel indicator — exact DS specs (Desktop + Mobile), never guess dot color
+
+Always pull indicator values from the DS component directly before writing CSS. The indicator node returns a flat image in `get_design_context` — use `use_figma` to inspect children for exact dot dimensions.
+
+**Desktop indicator — DS node `1376:2406` (Carousel - 1.5, Type=Desktop):**
+
+| Property | Value |
+|---|---|
+| Frame | 108×20px |
+| Dot size | 12×12px |
+| Gap | 10px |
+| Padding | 4px (all sides) |
+| Inactive dot fill | `Surface/general/default-secondary` → **`#f2f2f2`** |
+| Active dot fill | `Surface/primary/default` → **`#00cc85`** |
+
+**Mobile indicator — DS node `3060:881` (Carousel - 1.5, Type=Mobile):**
+
+| Property | Value |
+|---|---|
+| Frame | 88×12px |
+| Dot size | **8×8px** |
+| Gap | 10px |
+| Padding | `0 4px` (horizontal only — dots at y:0 in 12px frame) |
+| Inactive dot fill | `Surface/general/default-secondary` → **`#f2f2f2`** (same token) |
+| Active dot fill | `Surface/primary/default` → **`#00cc85`** (same token) |
+
+**CSS implementation:**
+
+```css
+/* Base (desktop) */
+.carousel__indicator {
+  display:     flex;
+  align-items: center;
+  gap:         10px;
+  padding:     4px;
+  flex-shrink: 0;
+}
+.carousel__dot {
+  width:         12px;
+  height:        12px;
+  border-radius: 50%;
+  flex-shrink:   0;
+  background:    var(--surface-general-default-secondary);  /* #f2f2f2 */
+}
+.carousel__dot.is-active {
+  background: var(--surface-primary-default);  /* #00cc85 */
+}
+
+/* Mobile override */
+@media (max-width: 767px) {
+  .carousel__indicator { padding: 0 4px; height: 12px; align-items: center; }
+  .carousel__dot       { width: 8px; height: 8px; }
+}
+```
+
+**Dot count = card count.** The DS design uses 5 dots because it was designed with 5 cards. Match dots to the actual number of cards in the prototype (4 cards → 4 dots).
+
+**Mistakes made (2026-05-21):**
+- Inactive dot used `var(--border-general-default)` = `#d9d9d9`. DS token is `Surface/general/default-secondary` = `#f2f2f2`. The darker grey made dots look visually heavier ("bigger") than DS design.
+- `get_design_context` returns the indicator as a flat image asset — must use `use_figma` node inspection to get exact child dimensions.
+- Had 5 dots hard-coded for 4 carousel cards — one dot was permanently grey and never activated.
+
+---
+
+### Rule 132. Carousel content frame — border-radius is 18px (`corner-2xl`), NOT 24px (`corner-4xl`)
+
+**DS node `1376:2209` confirmed (2026-05-21):** All four corners = **18px**.
+
+```css
+/* Correct */
+.carousel__content    { border-radius: var(--corner-radius-corner-2xl); }  /* 18px */
+.carousel__btn-wrap--prev { border-radius: var(--corner-radius-corner-2xl) 0 0 var(--corner-radius-corner-2xl); }
+.carousel__btn-wrap--next { border-radius: 0 var(--corner-radius-corner-2xl) var(--corner-radius-corner-2xl) 0; }
+```
+
+**Mistake made:** Prior CLAUDE.md notes said 24px (`corner-4xl`). DS node inspection is authoritative — always re-verify radius from the exact node, never trust session notes.
+
+---
+
+### Rule 133. Carousel card max-height — always pair max-width to preserve aspect ratio
+
+When capping a carousel card's height with `max-height`, always pair it with a matching `max-width` so the aspect ratio never breaks at any viewport.
+
+**Formula:**
+```css
+max-height: Hpx;
+max-width:  calc(Hpx * cardW / cardH);   /* e.g. calc(250px * 428 / 186) ≈ 575px */
+```
+
+**DS card native size:** 428×186px (`aspect-ratio: 428/186`).
+
+**Current prototype fan-mode value (set 2026-05-21):** `max-height: 250px` → `max-width: calc(250px * 428 / 186)` ≈ 575px.
+
+**DS desktop carousel dimensions (confirmed 2026-05-21, node `1200:1789`):**
+
+| Element | Width | Height |
+|---|---|---|
+| Outer frame | 1559px | 263px |
+| Content frame | 1559px | 235px (= 263 − 8 gap − 20 indicator) |
+| Single card | 428px | 186px |
+
+The DS native card height is **186px**. Fan mode intentionally shows larger cards (half viewport width). The `max-height` is a prototype design decision — confirm with the designer before changing.
+
+**Mistake made:** `max-height: 400px` was set without a DS reference, allowing cards to grow to more than double the DS height. Always confirm the cap against DS dimensions.
+
+---
+
 ### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-21)
 
 **Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
 
 ```
-Step 0a → Read design-md/zul.design.md          ← ALL rules 1–129 + confirmed specs + mistake log
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–133 + confirmed specs + mistake log
 Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH — NOT memory, NOT docs
 Step 0c → get_design_context on COMPONENT (not COMPONENT_SET) → list ALL variant names
 Step 0d → use_figma to confirm exact strokeWeights per side (top/right/bottom/left individually)
@@ -4728,6 +4887,9 @@ Step 0f → get_variable_defs on exact sub-nodes → confirm Semantic tokens
 Step 0g → exportAsync SVG_STRING for icons → real DS paths only
 Step 0h → get_screenshot after implementation → compare against DS side-by-side
 Step 0i → For JS: confirm ALL referenced elements exist in DOM BEFORE the script runs
+Step 0j → For carousel/slider JS: confirm pre-clone anchor is captured BEFORE the loop (Rule 130)
+Step 0k → For indicator: use_figma to inspect dot children — get_design_context returns a flat image (Rule 131)
+Step 0l → For any component with radius: re-verify cornerRadius from exact DS node, never trust session notes (Rule 132)
 ```
 
 **Every mistake in this project** came from skipping Step 0. Always check per-side strokeWeights and per-corner radii — `strokeAlign`, `cornerRadius`, `topLeftRadius` etc. are separate properties that must be individually confirmed.

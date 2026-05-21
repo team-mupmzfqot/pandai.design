@@ -28,6 +28,7 @@
       --surface-secondary-default-subtle:      #e8fbe8;  /* Surface/secondary/default-subtle */
       --surface-secondary-default-hover:       #f6fef6;  /* Surface/secondary/default-hover — profile menu header bg */
       --surface-disabled-primary:        #f2f2f2;
+      --surface-general-default-secondary: #f2f2f2;  /* Surface/general/default-secondary — carousel indicator inactive dot */
       --surface-tertiary-default:        #00564c;   /* Surface/tertiary/default — pressed state bg */
 
       /* Border */
@@ -414,7 +415,7 @@
       overflow:     hidden;
       display:      flex;
       align-items:  center;
-      border-radius: var(--corner-radius-corner-4xl);   /* DS Content frame radius:24 */
+      border-radius: var(--corner-radius-corner-2xl);   /* DS Content frame radius:18 — confirmed 1376:2209 */
     }
 
     /* Track — flex row of cards */
@@ -470,14 +471,14 @@
       border-top:    1px solid var(--border-default);
       border-left:   1px solid var(--border-default);
       border-bottom: 1px solid var(--border-default);
-      border-radius: var(--corner-radius-corner-4xl) 0 0 var(--corner-radius-corner-4xl);
+      border-radius: var(--corner-radius-corner-2xl) 0 0 var(--corner-radius-corner-2xl);
     }
     .carousel__btn-wrap--next {
       right:         0;
       border-top:    1px solid var(--border-default);
       border-right:  1px solid var(--border-default);
       border-bottom: 1px solid var(--border-default);
-      border-radius: 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl) 0;
+      border-radius: 0 var(--corner-radius-corner-2xl) var(--corner-radius-corner-2xl) 0;
     }
 
     /* Button Icon - 1.5/S/Default: pill, full height of wrapper content */
@@ -506,7 +507,7 @@
 
     /* Indicator (node 1376:2406): 5 dots, 12×12, gap:10, padding:4 */
     .carousel__indicator {
-      display:     none;
+      display:     flex;
       flex-shrink: 0;
       align-items: center;
       gap:         10px;
@@ -517,7 +518,7 @@
       height:        12px;
       border-radius: 50%;
       flex-shrink:   0;
-      background:    var(--border-general-default);   /* inactive: #d9d9d9 */
+      background:    var(--surface-general-default-secondary);   /* inactive: Surface/general/default-secondary #f2f2f2 — DS confirmed 1376:2406 */
     }
     .carousel__dot.is-active { background: var(--surface-primary-default); }  /* active: #00cc85 */
 
@@ -532,8 +533,8 @@
         width:        calc((100vw - 2 * var(--page-padding-x) - 2 * var(--spacing-space-m)) / 2);
         height:       auto;
         aspect-ratio: 428 / 186;
-        max-height:   400px;
-        max-width:    calc(400px * 428 / 186);   /* ~920px — aligns with max-height to preserve ratio */
+        max-height:   250px;
+        max-width:    calc(250px * 428 / 186);   /* ~575px — aligns with max-height to preserve ratio */
       }
     }
 
@@ -2777,6 +2778,17 @@
       .carousel__track {
         gap: var(--spacing-space-xs);   /* 8px — DS mobile gap */
       }
+      /* Indicator — Mobile variant (DS node 3060:881): 88×12px, 8×8px dots, gap 10px, h-padding 4px */
+      .carousel__indicator {
+        padding:     0 4px;   /* horizontal only — dots at y:0 in 12px frame */
+        gap:         10px;
+        height:      12px;
+        align-items: center;
+      }
+      .carousel__dot {
+        width:  8px;
+        height: 8px;
+      }
 
       /* Quiz card: allow narrower on mobile */
       .quiz-card {
@@ -3745,7 +3757,6 @@
             <span class="carousel__dot"></span>
             <span class="carousel__dot"></span>
             <span class="carousel__dot"></span>
-            <span class="carousel__dot"></span>
           </div>
 
         </section><!-- end section 2 -->
@@ -4569,7 +4580,8 @@
         const btnNext = document.getElementById('carouselNext');
         const origCards = Array.from(track.querySelectorAll('.carousel__card'));
         const total = origCards.length;
-        origCards.forEach(c => track.insertBefore(c.cloneNode(true), track.firstChild));
+        const firstOriginal = track.firstChild;
+        origCards.forEach(c => track.insertBefore(c.cloneNode(true), firstOriginal));
         origCards.forEach(c => track.appendChild(c.cloneNode(true)));
 
         let idx  = total;
