@@ -5289,4 +5289,39 @@ Quiz, Battle, and Practice have no dropdown. They follow the same Home-restore c
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-21 (Rules 142–143 — nav dropdown openDropdown/closeDropdown/restoreHome pattern; Quiz/Battle/Practice 3 s mouseleave delay) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 144. Fixed-height cards on mobile — always override to `height: auto`
+
+DS components that have an explicit fixed height at desktop (e.g. `.static-card { height: 220px }`) must have that height lifted to `height: auto` in the mobile breakpoint so the card hugs its content. The override must be applied to **both the card and its content child** — otherwise the child retains `height: 100%` which resolves to the parent's now-implicit height and may still force a fixed size.
+
+```css
+@media (max-width: 767px) {
+  .static-cards-row .static-card                         { flex-basis: 100%; height: auto; }
+  .static-cards-row .static-card .static-card__content  { height: auto; }
+}
+```
+
+**Confirmed instance — Static Card - 1.5 (2026-05-22):**
+Desktop has `height: 220px` on `.static-card` and `height: 100%` on `.static-card__content`. At mobile both are overridden to `height: auto` so the card shrinks to fit its texts and button.
+
+**Mistake to avoid:** Overriding only the outer card and leaving the child at `height: 100%` — the child still forces a height equal to whatever the browser computes for the parent.
+
+---
+
+### Rule 145. Verify padding cascades via CSS variable before adding explicit overrides
+
+When a component's internal padding uses a CSS custom property that is already re-declared in the mobile `:root` block, the padding resolves correctly on mobile with **zero additional rules**. Always trace the variable chain before writing an explicit mobile override — the override may already exist at the `:root` level.
+
+**Confirmed instance — Static Card content right padding (2026-05-22):**
+`.static-card__content { padding: var(--spacing-space-l) var(--page-padding-x) }`. At mobile, `:root { --page-padding-x: var(--spacing-space-m) }` (16px). Right padding inside the card is therefore 16px on mobile — correct — with no additional rule needed.
+
+**Workflow:**
+```
+1. Identify the CSS variable used for the padding/spacing in question
+2. Search for that variable name in the mobile @media block
+3. If it is re-declared there → the cascade handles it, no override needed
+4. Only write an explicit override if the variable is NOT re-declared at the target breakpoint
+```
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-22 (Rules 144–145 — fixed-height card mobile override; CSS variable cascade verification before adding explicit overrides) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

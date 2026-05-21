@@ -947,7 +947,7 @@
       height:         148px;
       min-height:     148px;
       max-height:     148px;
-      min-width:      0;
+      min-width:      300px;
       background:     var(--surface-general-default);
       border-radius:  var(--corner-radius-corner-2xl);
       display:        flex;
@@ -2813,7 +2813,7 @@
     /* min/max enforced; JS sets exact width per viewport */
     .recent-carousel__track .quiz-card {
       flex-shrink: 0;
-      min-width:   250px;
+      min-width:   300px;
       max-width:   370px;
     }
 
@@ -2877,9 +2877,10 @@
         grid-template-columns: 1fr;
       }
 
-      /* Wrap static cards downward — each card full width, wraps to next row */
+      /* Wrap static cards downward — each card full width, wraps to next row, height hugs content */
       .static-cards-row { flex-wrap: wrap; }
-      .static-cards-row .static-card { flex-basis: 100%; }
+      .static-cards-row .static-card { flex-basis: 100%; height: auto; }
+      .static-cards-row .static-card .static-card__content { height: auto; }
 
       /* Carousel — Mobile variant (DS Type=Mobile, node 3060:869)
          Full-width bleed (no page padding), no nav buttons, no rounded frame, 152px height */
@@ -2915,9 +2916,9 @@
         height: 8px;
       }
 
-      /* Quiz card: allow narrower on mobile */
+      /* Quiz card: floor at 300px on mobile */
       .quiz-card {
-        min-width: 0;
+        min-width: 300px;
       }
 
 
