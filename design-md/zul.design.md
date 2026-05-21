@@ -5390,4 +5390,290 @@ The `.navbar-action-btn` is 44×44px. The icon is 24×24, centered at `left: 10p
 
 ---
 
+### 147. Complete DS Component Asset Index — use this before every session
+
+**Audited via MCP on 2026-05-22. All component sets and standalone components live in `TLVKe3bgJTdVvuPAzgDq2f`.**
+
+**MANDATORY:** Before implementing any component, look it up here first to get its correct node ID, then call `get_design_context` on that node. Never search from scratch or guess a node ID.
+
+#### ⚙️ Accordion
+| Component Set | Node ID |
+|---|---|
+| Accordion 1.5 | `361:726` |
+
+#### ⚙️ Alert
+| Component Set | Node ID |
+|---|---|
+| Alert - 1.5 | `1372:2363` |
+
+#### ⚙️ Avatar
+| Component Set | Node ID |
+|---|---|
+| Avatar - 1.5 | `650:435` |
+| Avatar Stacked - 1.5 | `2196:43696` |
+
+#### ⚙️ Badges
+| Component Set | Node ID |
+|---|---|
+| Pill Badge - 1.5 | `602:460` |
+| Label Badge - 1.5 | `843:666` |
+| Icon Badge - 1.5 | `618:344` |
+| Number Badge - 1.5 | `618:417` |
+| Indicator Badge - 1.5 | `3283:80855` |
+| Status Badge - 1.5 | `2312:10653` |
+| Subject Badge/RBT | `3283:85760` |
+| Subject Badge/KAFA | `3283:85852` |
+| Subject Badge/History | `3302:67103` |
+| Subject Badge/English | `3302:67112` |
+| Subject Badge/Biology | `3302:67121` |
+| Subject Badge/Physics | `3302:67217` |
+| Subject Badge/Primary | `3302:67226` |
+| Subject Badge/Science | `3302:67235` |
+| Subject Badge/Account | `3302:67244` |
+| Subject Badge/Business | `3309:67505` |
+| Subject Badge/Economy | `3309:67514` |
+| Subject Badge/Add-Math | `3309:67526` |
+| Subject Badge/Chemistry | `3309:67537` |
+| Subject Badge/Geography | `3309:67546` |
+| Subject Badge/Math | `3309:67555` |
+| Subject Badge/Moral | `3309:67564` |
+| Subject Badge/Islamic | `3309:67573` |
+| Subject Badge/BMelayu | `3309:67585` |
+| Subject Badge/Comp-Science | `3309:67594` |
+| Subject Badge/Chinese-Lang | `3309:67603` |
+
+#### ⚙️ Breadcrumbs
+| Component Set | Node ID |
+|---|---|
+| Breadcrumb - 1.5 | `837:1033` |
+
+#### ⚙️ Button
+| Component Set | Node ID |
+|---|---|
+| Button - 1.5 | `473:529` |
+
+#### ⚙️ Button Group
+| Component Set | Node ID |
+|---|---|
+| Button Group - 1.5 | `646:1011` |
+| Button Group - Parts | `646:673` |
+
+#### ⚙️ Cards
+| Component | Type | Node ID |
+|---|---|---|
+| Primary Card - 1.5 | Set | `2339:5393` |
+| Quiz Card - 1.5 | Set | `2339:5345` |
+| Practice Card - 1.5 | Set | `2339:4823` |
+| Coin Quest Card 1.5 | Set | `2339:5019` |
+| Reward Card - 1.5 | Set | `2339:5294` |
+| Class Card - 1.5 | Set | `2339:5252` |
+| Quick Notes Card - 1.5 | Set | `2339:5071` |
+| Quick Notes Card - Parts | Set | `2339:5100` |
+| Static Card - 1.5 | Standalone | `2616:2959` |
+| Stats Card - 1.5 | Standalone | `2758:4136` |
+
+#### ⚙️ Carousel
+| Component Set | Node ID |
+|---|---|
+| Carousel - 1.5 | `3060:868` |
+| Carousel - Parts | `3060:915` |
+
+#### ⚙️ Checkbox
+| Component Set | Node ID |
+|---|---|
+| Checkbox - 1.5 | `587:532` |
+
+#### ⚙️ Divider
+| Component Set | Node ID |
+|---|---|
+| Divider - 1.5 | `833:3821` |
+
+#### ⚙️ Dropdown Menu
+| Component Set | Node ID |
+|---|---|
+| Dropdown List - 1.5 | `2185:42740` |
+| Button - Dropdown - 1.5 | `1366:2125` |
+| Dropdown - Parts | `1342:4370` |
+
+#### ⚙️ File Uploader
+| Component | Type | Node ID |
+|---|---|---|
+| File Uploader | Set | `2764:1426` |
+| File Uploader - 1.5 | Standalone | `2783:33363` |
+
+#### ⚙️ Footer
+| Component Set | Node ID |
+|---|---|
+| Footer - 1.5 | `2337:9925` |
+
+#### ⚙️ Icon Button
+| Component Set | Node ID |
+|---|---|
+| Button Icon - 1.5 | `488:1440` |
+
+#### ⚙️ Image Container
+| Component | Type | Node ID |
+|---|---|---|
+| Image Icon - 1.5 | Standalone | `2771:33` |
+| Image Thumbnail - 1.5 | Standalone | `2314:44251` |
+
+#### ⚙️ Input Field
+| Component Set | Node ID |
+|---|---|
+| Input Field 1.5 | `726:683` |
+| Input Group 1.5 | `1259:1816` |
+| Upload Image - 1.5 | `2783:33309` |
+
+#### ⚙️ Link
+| Component Set | Node ID |
+|---|---|
+| Link - 1.5 | `701:531` |
+
+#### ⚙️ Menu Bar
+| Component Set | Node ID |
+|---|---|
+| Nav Side Menu Desktop - 1.5 | `3481:109607` |
+| Nav Top Menu Desktop - 1.5 | `3406:788` |
+| Nav Menu Tablet - 1.5 | `3427:4590` |
+| Nav Menu Mobile - 1.5 | `3427:2185` |
+| Learn Menu Button - Parts | `3880:50098` |
+| Learn Menu - 1.5 | `3908:5091` |
+| Profile Menu - 1.5 | `3908:3679` |
+| Navbar Notification - 1.5 | `3908:13101` |
+| Navbar Notification Button - Parts | `3908:13442` |
+| Navbar Download Apps - 1.5 | `3909:3178` |
+
+#### ⚙️ Modal
+| Component | Type | Node ID |
+|---|---|---|
+| Modal Alerts - 1.5 | Set | `1800:14715` |
+| Selection Modal - 1.5 | Standalone | `1839:15458` |
+
+#### ⚙️ Navigation Bar
+| Component Set | Node ID |
+|---|---|
+| Navbar Primary Desktop - 1.5 | `2337:21975` |
+| Navbar Teacher Desktop - 1.5 | `3468:97437` |
+| Nav Button - 1.5 | `3908:6148` |
+| Navbar Tablet - 1.5 | `2337:22738` |
+| Navbar Mobile - 1.5 | `3406:735` |
+| Header Mobile - 1.5 | `4668:118079` |
+
+#### ⚙️ Pagination
+| Component Set | Node ID |
+|---|---|
+| Pagination - 1.5 | `2337:9426` |
+
+#### ⚙️ Popup Menu
+| Component Set | Node ID |
+|---|---|
+| Nav Tablet Menu - 1.5 | `3427:53188` |
+| Nav Menu - 1.5 | `3427:53235` |
+| Navbar Menu BG - Parts | `3427:53276` |
+| Menu Button - Parts | `3427:53282` |
+| Navbar Learn Menu 1.5 | `3427:53292` |
+
+#### ⚙️ Progress Bar
+| Component Set | Node ID |
+|---|---|
+| Progress Bar - 1.5 | `690:513` |
+
+#### ⚙️ Progress Indicator
+| Component | Type | Node ID |
+|---|---|---|
+| Progress Slider - with Icon - 1.5 | Set | `2032:28985` |
+| Check-In Card - 1.5 | Standalone | `2600:82` |
+
+#### ⚙️ Radio Button
+| Component Set | Node ID |
+|---|---|
+| Radio Button - 1.5 | `582:3041` |
+| Radio Field - 1.5 | `2752:235` |
+
+#### ⚙️ Slider
+| Component Set | Node ID |
+|---|---|
+| Slider - 1.5 | `1733:4385` |
+| Scroll Bar - 1.5 | `2337:9879` |
+
+#### ⚙️ Spinner
+| Component Set | Node ID |
+|---|---|
+| Spinner - 1.5 | `491:1881` |
+
+#### ⚙️ Tab Bar
+| Component Set | Node ID |
+|---|---|
+| Tab Bar - Parts | `707:588` |
+| Tab Bar - 1.5 | `1522:5370` |
+
+#### ⚙️ Table
+| Component | Type | Node ID |
+|---|---|---|
+| Heading Cell - 1.5 | Set | `4591:95445` |
+| Body Cell - 1.5 | Set | `4591:96188` |
+| Slot | Standalone | `2251:37516` |
+
+#### ⚙️ Tag
+| Component Set | Node ID |
+|---|---|
+| Tag - 1.5 | `1351:1926` |
+
+#### ⚙️ Text Area
+| Component Set | Node ID |
+|---|---|
+| Text Area 1.5 | `1250:1793` |
+
+#### ⚙️ Timestamp
+| Component | Type | Node ID |
+|---|---|---|
+| Timestamp - 1.5 | Standalone | `2753:1289` |
+
+#### ⚙️ Toggle
+| Component Set | Node ID |
+|---|---|
+| Toggle - 1.5 | `2338:10005` |
+
+#### ⚙️ Tooltip
+| Component Set | Node ID |
+|---|---|
+| Tooltip BG - Parts | `1452:8811` |
+| Tooltip - 1.5 | `1375:2153` |
+
+#### 🔰 Iconography — standalone components (no component sets)
+
+**Outline/** (~260 icons) — `activity`, `airplay`, `alert-circle`, `alert-octagon`, `alert-triangle`, `bell`, `bell-off`, `book`, `book-open`, `bookmark`, `battle`, `calendar`, `check-circle`, `check-square`, `check`, `chevron-down`, `chevron-left`, `chevron-right`, `chevron-up`, `clock`, `code`, `copy`, `download`, `edit`, `edit-2`, `edit-3`, `eye`, `eye-off`, `filter`, `gift`, `globe`, `grid`, `heart`, `help-circle`, `home`, `image`, `info`, `layers`, `link`, `link-2`, `list`, `lock`, `log-in`, `log-out`, `mail`, `map-pin`, `maximize`, `menu`, `message-circle`, `message-square`, `mic`, `minus`, `monitor`, `more-horizontal`, `more-vertical`, `music`, `pause`, `phone`, `play`, `plus`, `plus-circle`, `power`, `refresh-cw`, `rotate-cw`, `save`, `search`, `send`, `settings`, `share`, `shield`, `shopping-cart`, `sidebar`, `sliders`, `smartphone`, `star`, `sun`, `tag`, `target`, `trash`, `trash-2`, `tv`, `type`, `unlock`, `upload`, `user`, `user-circle`, `user-check`, `user-plus`, `users`, `video`, `volume`, `wifi`, `x`, `x-circle`, `zap`, `zoom-in`, `zoom-out`, `waffle-menu`, `EN`, `BM`, `Mandarin`, `AI`, `flipcard`, `fano`, `mortar-board`, `progress-mobile`, `bag`, `battle`, `presentation`, `certificate`, `ticket`, `unlink`, `key`, `pen-tool`, `facebook`, `linkedin`, `twitter`, `youtube`, `instagram`, `github`, `gitlab`, + more
+
+**Filled/** — Mirror set of all Outline icons with filled rendering
+
+**Subject/** — 20 subject icons:
+`Accounting`, `AddMath`, `Biology`, `BMelayu`, `Business`, `Chemistry`, `Chinese Lang`, `Computer Science`, `Economy`, `English`, `Geography`, `History`, `Islamic Studies`, `KAFA`, `Math`, `Moral Studies`, `Physics`, `Reka Bentuk & Teknologi`, `Science`
+
+**Feature/** — ~40 feature tile icons (illustrated, >12KB → export as 2× PNG per Rule 50):
+`ask-tutor`, `Quiz Battle`, `Quiz`, `Videos`, `Term Exams`, `rewards`, `coins`, `flashcard`, `notes`, `topical`, `chapters`, `live-tuition`, `competition`, `timetable`, `certs`, `shop`, `tutor`, `personality`, `scoreboard`, `bookmarks`, `avatar`, `schoolboard`, `textbook`, `lab`, `assignment`, `history`, `classroom`, `goal`, `claim`, `Support`, `University`, `e-voucher`
+
+**F-Teacher/** — 11 teacher-specific feature icons (2× PNG):
+`Competition PT`, `My Question Set`, `E-Ladap`, `My School Profile`, `Lesson Plan`, `School Leaderboard PT`, `Tutor Centre`, `Magic Tools`, `My Assesment`, `Classroom`, `My Question Bank`
+
+**App Store/** — `AppGallery`, `AppStore`, `Playstore` (SVG symbols with hardcoded fills per Rule 57)
+
+**Media/** — `Google`, `Google2`, `Microsoft`, `Microsoft-2`, `iOS`
+
+**Status icons** — `P.Coin`, `P.Trophy`, `P.Streak`, `P.Heart`, `P.Ruby`
+
+**Misc** — `LT-DLP`, `Fano Emblem`
+
+**Total: 76 named component sets + ~20 standalone components + ~700+ icon components**
+
+**Lookup workflow (mandatory before any implementation):**
+```
+1. Find component name in this index → get node ID
+2. get_design_context on COMPONENT_SET node → list all variants
+3. get_design_context on target state variant → extract tokens
+4. get_variable_defs on exact sub-nodes → confirm Semantic tokens
+5. Only then write HTML/CSS
+```
+
+---
+
 *Generated: May 2026 | Last updated: 2026-05-22 (Rules 144–145 — fixed-height card mobile override; CSS variable cascade verification before adding explicit overrides) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
