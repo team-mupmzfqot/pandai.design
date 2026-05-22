@@ -443,6 +443,35 @@
       width: 140px;
     }
 
+    /* ── Nav subtopic dropdowns (shared)  DS node 4742:74267 etc. ── */
+    #MenuBar-Desktop { position: relative; }
+    .nav-subtopic-dropdown {
+      position: absolute; z-index: 200;
+      width: 242px;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-4xl);
+      padding: var(--space-m);
+      display: flex; flex-direction: column; gap: var(--space-xs);
+      opacity: 0; transform: translateY(-8px); pointer-events: none;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    .nav-subtopic-dropdown.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .nav-subtopic-dropdown__item {
+      text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+      padding: var(--space-xs) var(--space-m);
+      border-radius: var(--corner-rounded);
+      border: 1px solid transparent;
+      color: var(--text-default-body);
+      cursor: pointer; user-select: none;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .nav-subtopic-dropdown__item svg { width: 24px; height: 24px; flex-shrink: 0; color: var(--icon-primary-default); }
+    .nav-subtopic-dropdown__item-label { font-size: 14px; font-weight: 600; line-height: 20px; color: inherit; flex: 1; }
+    .nav-subtopic-dropdown__item:hover { background: var(--surface-secondary-default-subtle); border-color: var(--border-primary-default); color: var(--text-primary-default); }
+    .nav-subtopic-dropdown__item.is-active { background: var(--surface-secondary-default); border-color: var(--border-primary-focus); color: var(--text-primary-focus); }
+
     /* ───────────────────────────────────────────────
        PAGE SHELL
     ─────────────────────────────────────────────── */
@@ -689,7 +718,7 @@
     .an-subject-badge {
       display: inline-flex; align-items: center;
       height: 32px; border-radius: 60px;
-      border: 1px solid #2e4799;
+      border: 1px solid var(--badge-border, #2e4799);
       overflow: hidden; flex-shrink: 0;
     }
     .an-subject-badge__icon {
@@ -703,9 +732,9 @@
       position: relative;
       display: flex; align-items: center;
       height: 32px; padding: 0 16px 0 12px;
-      background: #4d77ff;
+      background: var(--badge-bg, #4d77ff);
       font-size: 14px; font-weight: 500; line-height: 20px;
-      color: #f2f2f2; white-space: nowrap; font-family: var(--font);
+      color: var(--badge-text, #f2f2f2); white-space: nowrap; font-family: var(--font);
     }
     .an-subject-badge__pointer {
       position: absolute; left: 0; top: 50%;
@@ -746,7 +775,7 @@
       border: 1px solid var(--border-general-default);
       border-radius: var(--corner-2xl);
       padding: 28px 60px 54px;
-      overflow: hidden;
+      overflow: visible;
       display: flex; align-items: center; justify-content: center;
     }
 
@@ -781,6 +810,10 @@
       color: white; white-space: nowrap;
       align-self: flex-start;
     }
+    .an-mastery-pill.mastery--good,
+    .an-mastery-pill.mastery--satisfactory,
+    .an-mastery-pill.mastery--minimal      { background: #ff8c00; }
+    .an-mastery-pill.mastery--inadequate   { background: #f94848; }
 
     /* Stat lines */
     .an-grade__stat {
@@ -860,6 +893,41 @@
     .an-legend__pill--easy   { background: var(--surface-primary-default); }  /* green  */
     .an-legend__pill--medium { background: var(--surface-alert-default);   }  /* orange */
     .an-legend__pill--hard   { background: var(--surface-warning-default); }  /* red    */
+
+    .an-legend__pill-wrap {
+      position: relative; display: inline-flex;
+    }
+    .an-legend__pill-wrap .an-legend__pill { cursor: help; }
+
+    .an-tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: var(--space-s);
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-general-default);
+      border-radius: 4px;
+      font-size: 14px; font-weight: 500; line-height: 20px;
+      color: var(--text-default-body);
+      white-space: nowrap;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      z-index: 20;
+    }
+    .an-tooltip::after {
+      content: '';
+      position: absolute;
+      bottom: -5px; left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 8px; height: 8px;
+      background: var(--surface-general-default);
+      border-right: 1px solid var(--border-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+    }
+    .an-legend__pill-wrap:hover .an-tooltip {
+      opacity: 1; transform: translateX(-50%) translateY(0);
+    }
 
     .an-legend__value {
       font-size: 14px; font-weight: 600; line-height: 20px;
@@ -1292,6 +1360,34 @@
     <symbol id="ic-power" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64C19.6184 7.89879 20.4753 9.50244 20.8223 11.2482C21.1693 12.9939 20.9909 14.8034 20.3096 16.4478C19.6284 18.0921 18.4748 19.4976 16.9948 20.4864C15.5148 21.4752 13.7749 22.0029 11.995 22.0029C10.2151 22.0029 8.47515 21.4752 6.99517 20.4864C5.51519 19.4976 4.36164 18.0921 3.68036 16.4478C2.99909 14.8034 2.82069 12.9939 3.16772 11.2482C3.51475 9.50244 4.37162 7.89879 5.63 6.64M12 2V12"/></symbol>
     <symbol id="ic-check-sm" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17L4 12"/></symbol>
     <symbol id="ic-filled-star" viewBox="-1 -1 26 26" fill="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <!-- Achievement subtopic icons -->
+    <symbol id="ic-pie-chart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(0.5,2)"><path d="M19.21 13.89C18.57 15.39 17.58 16.72 16.31 17.75C15.05 18.78 13.55 19.49 11.94 19.8C10.34 20.12 8.68 20.04 7.12 19.57C5.56 19.1 4.13 18.26 2.97 17.11C1.81 15.96 0.95 14.54 0.46 12.98C-0.03 11.43-0.13 9.77 0.17 8.16C0.47 6.56 1.16 5.05 2.17 3.77C3.19 2.49 4.5 1.48 6 0.83M20 10C20 8.69 19.74 7.39 19.24 6.17C18.74 4.96 18 3.86 17.07 2.93C16.14 2 15.04 1.26 13.83 0.76C12.61 0.26 11.31 0 10 0L10 10L20 10Z"/></g></symbol>
+    <symbol id="ic-calendar" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(3,2)"><path d="M16 2L2 2C0.9 2 0 2.9 0 4L0 18C0 19.1 0.9 20 2 20L16 20C17.1 20 18 19.1 18 18L18 4C18 2.9 17.1 2 16 2ZM13 0L13 4M5 0L5 4M0 8L18 8"/></g></symbol>
+    <symbol id="ic-shield" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(4,2)"><path d="M8 20C8 20 16 16 16 10L16 3L8 0L0 3L0 10C0 16 8 20 8 20Z"/></g></symbol>
+    <symbol id="ic-award" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(5,1)"><path d="M7 14C10.87 14 14 10.87 14 7C14 3.13 10.87 0 7 0C3.13 0 0 3.13 0 7C0 10.87 3.13 14 7 14ZM3.21 12.89L2 22L7 19L12 22L10.79 12.88"/></g></symbol>
+    <symbol id="ic-flag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(4,2)"><path d="M0 13C0 13 1 12 4 12C7 12 9 14 12 14C15 14 16 13 16 13L16 1C16 1 15 2 12 2C9 2 7 0 4 0C1 0 0 1 0 1L0 13ZM0 13L0 20"/></g></symbol>
+    <symbol id="ic-certificate" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(3,4)"><path d="M9 10C9 10.8 9.32 11.56 9.88 12.12C10.44 12.68 11.2 13 12 13C12.8 13 13.56 12.68 14.12 12.12C14.68 11.56 15 10.8 15 10C15 9.2 14.68 8.44 14.12 7.88C13.56 7.32 12.8 7 12 7C11.2 7 10.44 7.32 9.88 7.88C9.32 8.44 9 9.2 9 10ZM10 12.5L10 17L12 15.5L14 17L14 12.5M7 14L2 14C1.47 14 0.96 13.79 0.59 13.41C0.21 13.04 0 12.53 0 12L0 2C0 0.9 0.9 0 2 0L16 0C16.53 0 17.04 0.21 17.41 0.59C17.79 0.96 18 1.47 18 2L18 12C18 12.35 17.91 12.7 17.73 13C17.56 13.3 17.3 13.55 17 13.73M3 4L15 4M3 7L6 7M3 10L5 10"/></g></symbol>
+    <!-- Learn subtopic icons -->
+    <symbol id="ic-folder" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,3)"><path d="M20 16C20 16.53 19.79 17.04 19.41 17.41C19.04 17.79 18.53 18 18 18L2 18C1.47 18 0.96 17.79 0.59 17.41C0.21 17.04 0 16.53 0 16L0 2C0 1.47 0.21 0.96 0.59 0.59C0.96 0.21 1.47 0 2 0L7 0L9 3L18 3C18.53 3 19.04 3.21 19.41 3.59C19.79 3.96 20 4.47 20 5L20 16Z"/></g></symbol>
+    <symbol id="ic-file-text" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(4,2)"><path d="M10 0L2 0C1.47 0 0.96 0.21 0.59 0.59C0.21 0.96 0 1.47 0 2L0 18C0 18.53 0.21 19.04 0.59 19.41C0.96 19.79 1.47 20 2 20L14 20C14.53 20 15.04 19.79 15.41 19.41C15.79 19.04 16 18.53 16 18L16 6L10 0ZM10 0L10 6L16 6M6 7L4 7M12 11L4 11M12 15L4 15"/></g></symbol>
+    <symbol id="ic-film" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,2)"><path d="M17.82 0L2.18 0C0.98 0 0 0.98 0 2.18L0 17.82C0 19.02 0.98 20 2.18 20L17.82 20C19.02 20 20 19.02 20 17.82L20 2.18C20 0.98 19.02 0 17.82 0ZM5 0L5 20M15 0L15 20M0 10L20 10M0 5L5 5M0 15L5 15M15 15L20 15M15 5L20 5"/></g></symbol>
+    <symbol id="ic-experiment" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(5.93,3)"><path d="M3.07 0L9.07 0M4.07 6L8.07 6M4.07 0L4.07 6L0.07 17C0.02 17.1 0 17.2 0 17.31C0 17.42 0.03 17.53 0.07 17.62C0.12 17.72 0.19 17.81 0.28 17.87C0.37 17.94 0.47 17.98 0.57 18L11.57 18C11.68 17.98 11.78 17.94 11.87 17.87C11.95 17.81 12.02 17.72 12.07 17.62C12.12 17.53 12.15 17.42 12.15 17.31C12.15 17.2 12.12 17.1 12.07 17L8.07 6L8.07 0"/></g></symbol>
+    <symbol id="ic-bookmark" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(5,3)"><path d="M14 18L7 13L0 18L0 2C0 1.47 0.21 0.96 0.59 0.59C0.96 0.21 1.47 0 2 0L12 0C12.53 0 13.04 0.21 13.41 0.59C13.79 0.96 14 1.47 14 2L14 18Z"/></g></symbol>
+    <!-- Class subtopic icons -->
+    <symbol id="ic-airplay" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,3)"><path d="M3 14L2 14C1.47 14 0.96 13.79 0.59 13.41C0.21 13.04 0 12.53 0 12L0 2C0 1.47 0.21 0.96 0.59 0.59C0.96 0.21 1.47 0 2 0L18 0C18.53 0 19.04 0.21 19.41 0.59C19.79 0.96 20 1.47 20 2L20 12C20 12.53 19.79 13.04 19.41 13.41C19.04 13.79 18.53 14 18 14L17 14M10 12L15 18L5 18L10 12Z"/></g></symbol>
+    <symbol id="ic-globe" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,2)"><path d="M10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20ZM10 0C12.5 2.74 13.92 6.29 14 10C13.92 13.71 12.5 17.26 10 20C7.5 17.26 6.08 13.71 6 10C6.08 6.29 7.5 2.74 10 0ZM20 10L0 10"/></g></symbol>
+    <symbol id="ic-layout" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(3,3)"><path d="M16 0L2 0C0.9 0 0 0.9 0 2L0 16C0 17.1 0.9 18 2 18L16 18C17.1 18 18 17.1 18 16L18 2C18 0.9 17.1 0 16 0ZM0 6L18 6M6 18L6 6"/></g></symbol>
+    <symbol id="ic-edit" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,2)"><path d="M18 12.66L18 18C18 18.53 17.79 19.04 17.41 19.41C17.04 19.79 16.53 20 16 20L2 20C1.47 20 0.96 19.79 0.59 19.41C0.21 19.04 0 18.53 0 18L0 4C0 3.47 0.21 2.96 0.59 2.59C0.96 2.21 1.47 2 2 2L7.34 2M16 0L20 4L10 14L6 14L6 10L16 0Z"/></g></symbol>
+    <!-- Potential subtopic icons -->
+    <symbol id="ic-sun" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(1,1)"><path d="M11 16C13.76 16 16 13.76 16 11C16 8.24 13.76 6 11 6C8.24 6 6 8.24 6 11C6 13.76 8.24 16 11 16ZM11 0L11 2M11 20L11 22M3.22 3.22L4.64 4.64M17.36 17.36L18.78 18.78M0 11L2 11M20 11L22 11M3.22 18.78L4.64 17.36M17.36 4.64L18.78 3.22"/></g></symbol>
+    <symbol id="ic-bar-chart-3" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(3,4)"><path d="M0 9C0 8.73 0.11 8.48 0.29 8.29C0.48 8.11 0.73 8 1 8L5 8C5.27 8 5.52 8.11 5.71 8.29C5.89 8.48 6 8.73 6 9L6 15C6 15.27 5.89 15.52 5.71 15.71C5.52 15.89 5.27 16 5 16L1 16C0.73 16 0.48 15.89 0.29 15.71C0.11 15.52 0 15.27 0 15L0 9ZM12 5C12 4.73 12.11 4.48 12.29 4.29C12.48 4.11 12.73 4 13 4L17 4C17.27 4 17.52 4.11 17.71 4.29C17.89 4.48 18 4.73 18 5L18 15C18 15.27 17.89 15.52 17.71 15.71C17.52 15.89 17.27 16 17 16L13 16C12.73 16 12.48 15.89 12.29 15.71C12.11 15.52 12 15.27 12 15L12 5ZM6 1C6 0.73 6.11 0.48 6.29 0.29C6.48 0.11 6.73 0 7 0L11 0C11.27 0 11.52 0.11 11.71 0.29C11.89 0.48 12 0.73 12 1L12 15C12 15.27 11.89 15.52 11.71 15.71C11.52 15.89 11.27 16 11 16L7 16C6.73 16 6.48 15.89 6.29 15.71C6.11 15.52 6 15.27 6 15L6 1ZM1 16L15 16"/></g></symbol>
+    <symbol id="ic-mortar-board" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,5)"><path d="M20 4L10 0L0 4L10 8L20 4L20 10M4 5.6L4 11C4 11.8 4.63 12.56 5.76 13.12C6.88 13.68 8.41 14 10 14C11.59 14 13.12 13.68 14.24 13.12C15.37 12.56 16 11.8 16 11L16 5.6"/></g></symbol>
+    <!-- Rewards subtopic icons -->
+    <symbol id="ic-stop-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,2)"><path d="M10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20ZM13 7L7 7L7 13L13 13L13 7Z"/></g></symbol>
+    <symbol id="ic-package" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,1.24)"><path d="M10.89 0.21L18.89 4.21C19.22 4.37 19.5 4.63 19.7 4.95C19.9 5.26 20 5.63 20 6L20 15.53C20 15.9 19.9 16.27 19.7 16.58C19.5 16.9 19.22 17.15 18.89 17.32L10.89 21.32C10.61 21.46 10.31 21.53 10 21.53C9.68 21.53 9.38 21.46 9.1 21.32L1.1 17.32C0.77 17.15 0.49 16.89 0.29 16.58C0.1 16.26 0 15.89 0 15.52L0 6C0 5.63 0.1 5.26 0.3 4.95C0.5 4.63 0.78 4.37 1.11 4.21L9.11 0.21C9.39 0.07 9.69 0 10 0C10.31 0 10.61 0.07 10.89 0.21ZM0.32 4.92L10 9.76L19.68 4.92M10 9.76L10 21.52M5 2.26L15 7.26"/></g></symbol>
+    <symbol id="ic-shopping-bag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(3,2)"><path d="M3 0L0 4L0 18C0 18.53 0.21 19.04 0.59 19.41C0.96 19.79 1.47 20 2 20L16 20C16.53 20 17.04 19.79 17.41 19.41C17.79 19.04 18 18.53 18 18L18 4L15 0L3 0ZM13 8C13 9.06 12.58 10.08 11.83 10.83C11.08 11.58 10.06 12 9 12C7.94 12 6.92 11.58 6.17 10.83C5.42 10.08 5 9.06 5 8M0 4L18 4"/></g></symbol>
+    <symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(1,1)"><path d="M8 21C8.55 21 9 20.55 9 20C9 19.45 8.55 19 8 19C7.45 19 7 19.45 7 20C7 20.55 7.45 21 8 21ZM19 21C19.55 21 20 20.55 20 20C20 19.45 19.55 19 19 19C18.45 19 18 19.45 18 20C18 20.55 18.45 21 19 21ZM0 0L4 0L6.68 13.39C6.77 13.85 7.02 14.26 7.39 14.56C7.75 14.85 8.21 15.01 8.68 15L18.4 15C18.87 15.01 19.33 14.85 19.69 14.56C20.06 14.26 20.31 13.85 20.4 13.39L22 5L5 5"/></g></symbol>
+    <symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,2)"><path d="M10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20ZM6 12C6 12 7.5 14 10 14C12.5 14 14 12 14 12M7 7L7.01 7M13 7L13.01 7"/></g></symbol>
 
   </defs>
 </svg>
@@ -1502,7 +1598,7 @@
       </div>
     </div>
 
-    <div class="nav-btn">
+    <div class="nav-btn" id="class-nav-btn" aria-haspopup="true" aria-expanded="false">
       <div class="nav-btn__inner">
         <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="class"><svg aria-hidden="true"><use href="#ic-users"/></svg></div></div>
         <span class="nav-btn__label">Class</span>
@@ -1510,7 +1606,7 @@
       </div>
     </div>
 
-    <div class="nav-btn">
+    <div class="nav-btn" id="learn-nav-btn" aria-haspopup="true" aria-expanded="false">
       <div class="nav-btn__inner">
         <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="learn"><svg aria-hidden="true"><use href="#ic-book"/></svg></div></div>
         <span class="nav-btn__label">Learn</span>
@@ -1519,7 +1615,7 @@
     </div>
 
     <!-- Achievement — active (is-active) — DS node 3406:810 uses Outline/bar-chart-2 -->
-    <div class="nav-btn is-active">
+    <div class="nav-btn is-active" id="achievement-nav-btn" aria-haspopup="true" aria-expanded="false">
       <div class="nav-btn__inner">
         <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="achievement"><svg aria-hidden="true"><use href="#ic-bar-chart-2"/></svg></div></div>
         <span class="nav-btn__label">Achievement</span>
@@ -1527,7 +1623,7 @@
       </div>
     </div>
 
-    <div class="nav-btn">
+    <div class="nav-btn" id="potential-nav-btn" aria-haspopup="true" aria-expanded="false">
       <div class="nav-btn__inner">
         <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="potential"><svg aria-hidden="true"><use href="#ic-star"/></svg></div></div>
         <span class="nav-btn__label">Potential</span>
@@ -1535,7 +1631,7 @@
       </div>
     </div>
 
-    <div class="nav-btn">
+    <div class="nav-btn" id="rewards-nav-btn" aria-haspopup="true" aria-expanded="false">
       <div class="nav-btn__inner">
         <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div></div>
         <span class="nav-btn__label">Rewards</span>
@@ -1545,6 +1641,53 @@
 
   </div>
 </nav>
+
+<!-- Class Subtopic dropdown  DS node 4753:69867 -->
+<div class="nav-subtopic-dropdown" id="class-dropdown" role="menu" aria-hidden="true">
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-airplay"/></svg><span class="nav-subtopic-dropdown__item-label">My Classes</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-globe"/></svg><span class="nav-subtopic-dropdown__item-label">Browse Classes</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-layout"/></svg><span class="nav-subtopic-dropdown__item-label">Timetable</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-edit"/></svg><span class="nav-subtopic-dropdown__item-label">Assignments</span></div>
+</div>
+
+<!-- Learn Subtopic dropdown  DS node 4753:69817 -->
+<div class="nav-subtopic-dropdown" id="learn-dropdown" role="menu" aria-hidden="true">
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-folder"/></svg><span class="nav-subtopic-dropdown__item-label">Learning Hub</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-file-text"/></svg><span class="nav-subtopic-dropdown__item-label">Quick Notes</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-film"/></svg><span class="nav-subtopic-dropdown__item-label">Videos</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-experiment"/></svg><span class="nav-subtopic-dropdown__item-label">Experiments</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-book"/></svg><span class="nav-subtopic-dropdown__item-label">Textbooks</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-bookmark"/></svg><span class="nav-subtopic-dropdown__item-label">Bookmarks</span></div>
+</div>
+
+<!-- Achievement Subtopic dropdown  DS node 4742:74267 -->
+<div class="nav-subtopic-dropdown" id="achievement-dropdown" role="menu" aria-hidden="true">
+  <a class="nav-subtopic-dropdown__item" href="scoreCard.html" role="menuitem"><svg aria-hidden="true"><use href="#ic-pie-chart"/></svg><span class="nav-subtopic-dropdown__item-label">Score Card</span></a>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-filled-check-circle"/></svg><span class="nav-subtopic-dropdown__item-label">Report Card</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-calendar"/></svg><span class="nav-subtopic-dropdown__item-label">History</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-shield"/></svg><span class="nav-subtopic-dropdown__item-label">Badges</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-award"/></svg><span class="nav-subtopic-dropdown__item-label">Leaderboard</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-flag"/></svg><span class="nav-subtopic-dropdown__item-label">School Leaderboard</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-certificate"/></svg><span class="nav-subtopic-dropdown__item-label">Certificates</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-progress-mobile"/></svg><span class="nav-subtopic-dropdown__item-label">Goals &amp; Rewards</span></div>
+</div>
+
+<!-- Potential Subtopic dropdown  DS node 4753:69767 -->
+<div class="nav-subtopic-dropdown" id="potential-dropdown" role="menu" aria-hidden="true">
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-sun"/></svg><span class="nav-subtopic-dropdown__item-label">Personality Test</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-bar-chart-3"/></svg><span class="nav-subtopic-dropdown__item-label">Competition</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-mortar-board"/></svg><span class="nav-subtopic-dropdown__item-label">University Matching</span></div>
+</div>
+
+<!-- Rewards Subtopic dropdown  DS node 4753:70068 -->
+<div class="nav-subtopic-dropdown" id="rewards-dropdown" role="menu" aria-hidden="true">
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-stop-circle"/></svg><span class="nav-subtopic-dropdown__item-label">Coin Quests</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-package"/></svg><span class="nav-subtopic-dropdown__item-label">My Rewards</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-shopping-bag"/></svg><span class="nav-subtopic-dropdown__item-label">Merchandise</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-shopping-cart"/></svg><span class="nav-subtopic-dropdown__item-label">eVoucher</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-smile"/></svg><span class="nav-subtopic-dropdown__item-label">Avatar</span></div>
+</div>
+
 </section><!-- end MenuBar-Desktop -->
 
 <!-- Slide-in panel — Tablet (3427:2184) + Mobile (3427:2442) -->
@@ -1666,7 +1809,7 @@
   <!-- ── BREADCRUMBS  DS 3282:68210 ── -->
   <section id="Breadcrumbs-Desktop">
     <div class="pd-breadcrumbs15">
-      <h1 class="pd-breadcrumbs__title">Analysis for Bahasa Melayu Form 5</h1>
+      <h1 id="an-breadcrumb-title" class="pd-breadcrumbs__title">Analysis for Bahasa Melayu Form 5</h1>
       <div class="pd-breadcrumbs__sep"></div>
       <div class="pd-breadcrumbs__links">
 
@@ -1685,7 +1828,7 @@
 
         <!-- Level 3: Bahasa Melayu — State=Active, Icon Left=false, Icon Right=false -->
         <span class="pd-link15" style="cursor:default">
-          <span class="pd-link15__text">Bahasa Melayu</span>
+          <span id="an-breadcrumb-subject" class="pd-link15__text">Bahasa Melayu</span>
         </span>
 
       </div>
@@ -1705,11 +1848,11 @@
 
         <!-- Subject Badge BM — L size (32px)
              DS: Subject Badge/Bahasa Melayu - L, border #2e4799 bg #4d77ff -->
-        <div class="an-subject-badge">
+        <div id="an-badge" class="an-subject-badge">
           <div class="an-subject-badge__icon">
-            <img src="assets/subject-icons/icon-bmelayu.svg" alt="Bahasa Melayu" width="20" height="20">
+            <img id="an-badge-icon" src="assets/subject-icons/icon-bmelayu.svg" alt="Bahasa Melayu" width="20" height="20">
           </div>
-          <div class="an-subject-badge__label">
+          <div id="an-badge-label" class="an-subject-badge__label">
             <svg class="an-subject-badge__pointer" width="4" height="8" viewBox="0 0 4 8" fill="white" aria-hidden="true">
               <path d="M 0 0 L 4 4 L 0 8 Z"/>
             </svg>
@@ -1739,12 +1882,12 @@
             <div class="an-grade">
               <!-- "A 97%" — A is Bold 56px, 97% is Regular 56px, both #404040 -->
               <div class="an-grade__title-row">
-                <span class="an-grade__letter">A</span>
-                <span class="an-grade__pct">97%</span>
+                <span id="an-grade-letter" class="an-grade__letter">A</span>
+                <span id="an-grade-pct" class="an-grade__pct">97%</span>
               </div>
               <!-- Details: mastery pill + stats — grouped so mobile can flip to row layout -->
               <div class="an-grade__details">
-                <span class="an-mastery-pill">Mastery</span>
+                <span id="an-mastery-pill" class="an-mastery-pill">Mastery</span>
                 <p class="an-grade__stat">555 Questions Answered</p>
                 <p class="an-grade__stat">70 Set Submitted</p>
               </div>
@@ -1867,15 +2010,24 @@
                   <p class="an-legend__title">Result by Thinking Skills</p>
                   <div class="an-legend__rows">
                     <div class="an-legend__row">
-                      <span class="an-legend__pill an-legend__pill--easy">LOTS</span>
+                      <span class="an-legend__pill-wrap">
+                        <span class="an-legend__pill an-legend__pill--easy">LOTS</span>
+                        <span class="an-tooltip" role="tooltip">Lower Order Thinking Skills</span>
+                      </span>
                       <span class="an-legend__value">80%</span>
                     </div>
                     <div class="an-legend__row">
-                      <span class="an-legend__pill an-legend__pill--medium">MOTS</span>
+                      <span class="an-legend__pill-wrap">
+                        <span class="an-legend__pill an-legend__pill--medium">MOTS</span>
+                        <span class="an-tooltip" role="tooltip">Medium Order Thinking Skills</span>
+                      </span>
                       <span class="an-legend__value">75%</span>
                     </div>
                     <div class="an-legend__row">
-                      <span class="an-legend__pill an-legend__pill--hard">HOTS</span>
+                      <span class="an-legend__pill-wrap">
+                        <span class="an-legend__pill an-legend__pill--hard">HOTS</span>
+                        <span class="an-tooltip" role="tooltip">High Order Thinking Skills</span>
+                      </span>
                       <span class="an-legend__value">90%</span>
                     </div>
                   </div>
@@ -2363,16 +2515,210 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
   })();
 
+  /* ── Subject-aware page init — reads ?subject= URL param and swaps all elements ── */
+  (function () {
+    function scoreToGrade(pct) {
+      if (pct > 90) return 'A+';
+      if (pct > 80) return 'A';
+      if (pct > 70) return 'A-';
+      if (pct > 65) return 'B+';
+      if (pct > 60) return 'B';
+      if (pct > 55) return 'C+';
+      if (pct > 50) return 'C';
+      if (pct > 45) return 'D';
+      if (pct > 40) return 'E';
+      return 'F';
+    }
+
+    var MASTERY = {
+      'A+': 'Mastery', 'A': 'Mastery', 'A-': 'Mastery',
+      'B+': 'Good',      'B': 'Good',
+      'C+': 'Satisfactory', 'C': 'Satisfactory',
+      'D':  'Minimal',
+      'E':  'Inadequate', 'F': 'Inadequate'
+    };
+
+    var MASTERY_CLASS = {
+      'Mastery':      'mastery--cemerlang',
+      'Good':         'mastery--good',
+      'Satisfactory': 'mastery--satisfactory',
+      'Minimal':      'mastery--minimal',
+      'Inadequate':   'mastery--inadequate'
+    };
+
+    var SUBJECTS = {
+      'Chinese Language': { score: 80, icon: 'assets/subject-icons/icon-chinese-lang.svg', alt: 'Chinese Language', bg: '#f94848', border: '#c73a3a', text: '#f2f2f2' },
+      'English':          { score: 90, icon: 'assets/subject-icons/icon-english.svg',       alt: 'English',          bg: '#ff4d56', border: '#cc3e45', text: '#f2f2f2' },
+      'Bahasa Melayu':    { score: 76, icon: 'assets/subject-icons/icon-bmelayu.svg',        alt: 'Bahasa Melayu',    bg: '#4d77ff', border: '#2e4799', text: '#f2f2f2' },
+      'Mathematics':      { score: 80, icon: 'assets/subject-icons/icon-math.svg',           alt: 'Mathematics',      bg: '#42ac7b', border: '#358a62', text: '#f2f2f2' },
+      'Pendidikan Islam': { score: 84, icon: 'assets/subject-icons/icon-islamic.svg',        alt: 'Pendidikan Islam', bg: '#de4d7f', border: '#b23e66', text: '#f2f2f2' },
+      'Pendidikan Moral': { score: 50, icon: 'assets/subject-icons/icon-moral.svg',          alt: 'Pendidikan Moral', bg: '#0072ca', border: '#005ba2', text: '#f2f2f2' },
+      'Science':          { score: 85, icon: 'assets/subject-icons/icon-science.svg',        alt: 'Science',          bg: '#ffd641', border: '#ccab34', text: '#998027' },
+      'Add Math':         { score: 72, icon: 'assets/subject-icons/icon-add-math.svg',       alt: 'Add Math',         bg: '#283589', border: '#182052', text: '#f2f2f2' },
+      'Biology':          { score: 88, icon: 'assets/subject-icons/icon-biology.svg',        alt: 'Biology',          bg: '#8431d8', border: '#6a27ad', text: '#f2f2f2' },
+      'Chemistry':        { score: 65, icon: 'assets/subject-icons/icon-chemistry.svg',      alt: 'Chemistry',        bg: '#e20082', border: '#b50068', text: '#f2f2f2' },
+      'Physics':          { score: 78, icon: 'assets/subject-icons/icon-physics.svg',        alt: 'Physics',          bg: '#27a0d7', border: '#1f80ac', text: '#f2f2f2' },
+      'History':          { score: 91, icon: 'assets/subject-icons/icon-history.svg',        alt: 'History',          bg: '#a97c50', border: '#876340', text: '#f2f2f2' },
+      'Geography':        { score: 60, icon: 'assets/subject-icons/icon-geography.svg',      alt: 'Geography',        bg: '#77d836', border: '#5fad2b', text: '#478220' },
+      'Economy':          { score: 55, icon: 'assets/subject-icons/icon-economy.svg',        alt: 'Economy',          bg: '#ff5733', border: '#cc4629', text: '#f2f2f2' },
+      'Account':          { score: 83, icon: 'assets/subject-icons/icon-account.svg',        alt: 'Account',          bg: '#0072ca', border: '#004479', text: '#f2f2f2' },
+      'Business':         { score: 70, icon: 'assets/subject-icons/icon-business.svg',       alt: 'Business',         bg: '#efb42b', border: '#bf9022', text: '#f2f2f2' },
+      'Computer Science': { score: 95, icon: 'assets/subject-icons/icon-comp-science.svg',  alt: 'Computer Science', bg: '#d10070', border: '#a7005a', text: '#f2f2f2' },
+      'KAFA':             { score: 77, icon: 'assets/subject-icons/icon-kafa.svg',           alt: 'KAFA',             bg: '#8ae3a9', border: '#6eb687', text: '#538865' },
+      'RBT':              { score: 82, icon: 'assets/subject-icons/icon-rbt.svg',            alt: 'RBT',              bg: '#353535', border: '#2a2a2a', text: '#f2f2f2' }
+    };
+
+    var params  = new URLSearchParams(window.location.search);
+    var subject = params.get('subject') || 'Bahasa Melayu';
+    var d       = SUBJECTS[subject] || SUBJECTS['Bahasa Melayu'];
+    var grade   = scoreToGrade(d.score);
+    var mastery = MASTERY[grade] || 'Mastery';
+
+    // Breadcrumb
+    var titleEl   = document.getElementById('an-breadcrumb-title');
+    var subjectEl = document.getElementById('an-breadcrumb-subject');
+    if (titleEl)   titleEl.textContent = 'Analysis for ' + subject + ' Form 5';
+    if (subjectEl) subjectEl.textContent = subject;
+
+    // Subject badge — update CSS vars + icon + label
+    var badgeEl      = document.getElementById('an-badge');
+    var badgeIconEl  = document.getElementById('an-badge-icon');
+    var badgeLabelEl = document.getElementById('an-badge-label');
+    if (badgeEl) {
+      badgeEl.style.setProperty('--badge-bg',     d.bg);
+      badgeEl.style.setProperty('--badge-border', d.border);
+      badgeEl.style.setProperty('--badge-text',   d.text || '#f2f2f2');
+    }
+    if (badgeIconEl)  { badgeIconEl.src = d.icon; badgeIconEl.alt = d.alt; }
+    if (badgeLabelEl) {
+      var ptr = badgeLabelEl.querySelector('.an-subject-badge__pointer');
+      badgeLabelEl.textContent = subject;
+      if (ptr) badgeLabelEl.insertBefore(ptr, badgeLabelEl.firstChild);
+    }
+
+    // Grade letter + percentage
+    var gradeLetterEl = document.getElementById('an-grade-letter');
+    var gradePctEl    = document.getElementById('an-grade-pct');
+    if (gradeLetterEl) gradeLetterEl.textContent = grade;
+    if (gradePctEl)    gradePctEl.textContent    = d.score + '%';
+
+    // Mastery pill — swap text + color class
+    var masteryEl = document.getElementById('an-mastery-pill');
+    if (masteryEl) {
+      masteryEl.textContent = mastery;
+      masteryEl.className   = 'an-mastery-pill ' + (MASTERY_CLASS[mastery] || '');
+    }
+  })();
+
   /* Nav button handlers — registered before non-critical JS */
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('is-active'));
       btn.classList.add('is-active');
+      /* Close all subtopic dropdowns when switching nav buttons */
+      const subtopicIds = ['class-dropdown','learn-dropdown','achievement-dropdown','potential-dropdown','rewards-dropdown'];
+      const subtopicBtnIds = ['class-nav-btn','learn-nav-btn','achievement-nav-btn','potential-nav-btn','rewards-nav-btn'];
+      subtopicIds.forEach(id => { const d = document.getElementById(id); if (d) { d.classList.remove('is-open'); d.setAttribute('aria-hidden','true'); } });
+      subtopicBtnIds.forEach(id => { if (id !== btn.id) { const b = document.getElementById(id); if (b) b.setAttribute('aria-expanded','false'); } });
     });
     btn.addEventListener('mousedown',  () => btn.classList.add('is-pressed'));
     btn.addEventListener('mouseup',    () => btn.classList.remove('is-pressed'));
     btn.addEventListener('mouseleave', () => btn.classList.remove('is-pressed'));
   });
+
+  /* ── Achievement nav btn → subtopic dropdown  DS node 4742:74267 ── */
+  (function() {
+    const achieveBtn = document.getElementById('achievement-nav-btn');
+    const dropdown   = document.getElementById('achievement-dropdown');
+    if (!achieveBtn || !dropdown) return;
+
+    function openAchieve() {
+      const navSec  = document.getElementById('MenuBar-Desktop');
+      const btnRect = achieveBtn.getBoundingClientRect();
+      const secRect = navSec.getBoundingClientRect();
+      dropdown.style.right = Math.round(secRect.right - btnRect.right) + 'px';
+      dropdown.style.left  = 'auto';
+      dropdown.style.top   = Math.round(btnRect.bottom - secRect.top + 16) + 'px';
+      dropdown.classList.add('is-open');
+      dropdown.setAttribute('aria-hidden', 'false');
+      achieveBtn.setAttribute('aria-expanded', 'true');
+    }
+    function closeAchieve() {
+      dropdown.classList.remove('is-open');
+      dropdown.setAttribute('aria-hidden', 'true');
+      achieveBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    achieveBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      dropdown.classList.contains('is-open') ? closeAchieve() : openAchieve();
+    });
+    document.addEventListener('click', e => {
+      if (!dropdown.contains(e.target) && e.target !== achieveBtn) closeAchieve();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAchieve(); });
+
+    dropdown.querySelectorAll('.nav-subtopic-dropdown__item').forEach(item => {
+      item.addEventListener('click', () => {
+        dropdown.querySelectorAll('.nav-subtopic-dropdown__item').forEach(i => i.classList.remove('is-active'));
+        item.classList.add('is-active');
+      });
+    });
+  })();
+
+  /* ── Generic helper for Class / Learn / Potential / Rewards subtopic dropdowns ── */
+  (function() {
+    const configs = [
+      { btnId: 'class-nav-btn',     ddId: 'class-dropdown'     },
+      { btnId: 'learn-nav-btn',     ddId: 'learn-dropdown'     },
+      { btnId: 'potential-nav-btn', ddId: 'potential-dropdown' },
+      { btnId: 'rewards-nav-btn',   ddId: 'rewards-dropdown'   },
+    ];
+    const allBtnIds = ['class-nav-btn','learn-nav-btn','achievement-nav-btn','potential-nav-btn','rewards-nav-btn'];
+    const allDdIds  = ['class-dropdown','learn-dropdown','achievement-dropdown','potential-dropdown','rewards-dropdown'];
+
+    function closeAll() {
+      allDdIds.forEach(id => { const d = document.getElementById(id); if (d) { d.classList.remove('is-open'); d.setAttribute('aria-hidden','true'); } });
+      allBtnIds.forEach(id => { const b = document.getElementById(id); if (b) b.setAttribute('aria-expanded','false'); });
+    }
+
+    configs.forEach(({ btnId, ddId }) => {
+      const btn = document.getElementById(btnId);
+      const dd  = document.getElementById(ddId);
+      if (!btn || !dd) return;
+
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const isOpen = dd.classList.contains('is-open');
+        closeAll();
+        if (!isOpen) {
+          const navSec  = document.getElementById('MenuBar-Desktop');
+          const btnRect = btn.getBoundingClientRect();
+          const secRect = navSec.getBoundingClientRect();
+          dd.style.right = Math.round(secRect.right - btnRect.right) + 'px';
+          dd.style.left  = 'auto';
+          dd.style.top   = Math.round(btnRect.bottom - secRect.top + 16) + 'px';
+          dd.classList.add('is-open');
+          dd.setAttribute('aria-hidden', 'false');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      dd.querySelectorAll('.nav-subtopic-dropdown__item').forEach(item => {
+        item.addEventListener('click', () => {
+          dd.querySelectorAll('.nav-subtopic-dropdown__item').forEach(i => i.classList.remove('is-active'));
+          item.classList.add('is-active');
+        });
+      });
+    });
+
+    document.addEventListener('click', e => {
+      const insideAny = allDdIds.some(id => { const d = document.getElementById(id); return d && d.contains(e.target); })
+                     || allBtnIds.some(id => document.getElementById(id) === e.target);
+      if (!insideAny) closeAll();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAll(); });
+  })();
 </script>
 
 </body>
