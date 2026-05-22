@@ -1710,16 +1710,16 @@
       width:          100%;
     }
 
-    /* Avatar wrapper — 64×64, holds absolute badge */
+    /* Avatar wrapper — 100×100, holds absolute badge */
     .profile-dropdown__avatar-wrap {
       position:   relative;
-      width:      64px;
-      height:     64px;
+      width:      100px;
+      height:     100px;
       flex-shrink: 0;
     }
     .profile-dropdown__avatar {
-      width:         64px;
-      height:        64px;
+      width:         100px;
+      height:        100px;
       border-radius: var(--corner-radius-corner-rounded);
       border:        1px solid var(--border-default);
       background:    var(--surface-general-default);
@@ -1730,23 +1730,6 @@
       height:   100%;
       object-fit: cover;
       display:  block;
-    }
-    .profile-dropdown__avatar-badge {
-      position:        absolute;
-      top:             0;
-      right:           0;
-      background:      var(--surface-primary-default);
-      color:           var(--text-primary-on-color);
-      font-size:       10px;
-      font-weight:     600;
-      line-height:     12px;
-      min-width:       20px;
-      height:          20px;
-      border-radius:   var(--corner-radius-corner-rounded);
-      padding:         4px;
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
     }
 
     /* Name / username block */
@@ -3317,12 +3300,11 @@
       <!-- Header: mint bg · 1px green border · 16px radius -->
       <div class="profile-dropdown__header">
 
-        <!-- Avatar 64×64 + Number Badge (level 15) -->
+        <!-- Avatar 100×100 -->
         <div class="profile-dropdown__avatar-wrap">
           <div class="profile-dropdown__avatar">
-            <img src="icons/avatar-user.png" alt="">
+            <img src="../src/image-repo/Home/Avatar-Aidan.png" alt="User avatar">
           </div>
-          <span class="profile-dropdown__avatar-badge">15</span>
         </div>
 
         <!-- Name / username / plan pill -->

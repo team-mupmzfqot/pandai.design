@@ -5860,4 +5860,47 @@ Step 0h → get_screenshot after implementation → compare against DS side-by-s
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-22 (Rules 144–145 — fixed-height card mobile override; CSS variable cascade verification before adding explicit overrides) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 152. Profile Menu Dropdown — Avatar specs (confirmed 2026-05-22)
+
+**DS source:** Profile Menu - 1.5, node `3908:3679`. Avatar node `3908:1484`.
+
+**Confirmed design decisions:**
+- Avatar size: **XXL = 100×100px** (overrides DS default of XL=64px — user decision 2026-05-22)
+- Avatar image: must **always match the Navbar avatar** — use the same `src` path for both
+- Number Badge: **removed** from the Profile Dropdown avatar (user decision 2026-05-22)
+- Border: `1px solid #00cc85` (`Border/default`) — `box-shadow: inset` per Rule 60
+- Border-radius: `60px` (`corner-rounded`)
+- `overflow: hidden`
+- Image: `width:100%; height:100%; object-fit:cover; display:block` (Rule 25/26)
+
+**Mistakes made (2026-05-22):**
+- Profile Dropdown avatar used `icons/avatar-user.png` (placeholder) while Navbar used the real photo. Rule: always sync the avatar `src` between Navbar and Profile Dropdown — they represent the same user.
+- Assumed badge should stay — DS has it but user explicitly removed it. Always confirm with user before adding/keeping decorative badges.
+
+**CSS structure:**
+```css
+.profile-dropdown__avatar-wrap {
+  position:    relative;
+  width:       100px;
+  height:      100px;
+  flex-shrink: 0;
+}
+.profile-dropdown__avatar {
+  width:         100px;
+  height:        100px;
+  border-radius: var(--corner-radius-corner-rounded);  /* 60px */
+  box-shadow:    inset 0 0 0 1px var(--border-default); /* strokeAlign:INSIDE */
+  background:    var(--surface-general-default);
+  overflow:      hidden;
+}
+.profile-dropdown__avatar img {
+  width:       100%;
+  height:      100%;
+  object-fit:  cover;
+  display:     block;
+}
+```
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-22 (Rule 152 — Profile Menu Dropdown avatar XXL=100px, image sync with Navbar, badge removed) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
