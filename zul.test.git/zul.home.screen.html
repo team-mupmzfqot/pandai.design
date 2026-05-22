@@ -45,6 +45,7 @@
       --text-secondary-focus:     #70bc6f;  /* Text/secondary/focus */
       --text-on-color-heading:    #FFFFFF;   /* Text/on-color/heading â€” status pill */
       --text-disabled-default:    #bfbfbf;
+      --text-default-caption:     #bfbfbf;   /* Text/default/caption — DS Search placeholder (DS node 1363:2852) */
 
       /* Icon */
       --icon-default-default:     #808080;   /* Icon/default/default — action icons, inactive (DS confirmed 2026-05-14) */
@@ -1329,16 +1330,78 @@
     .navbar-primary__logo-mark { display: block; height: 28px;     width: auto; }
     .navbar-primary__logo-text { display: block; height: 19.573px; width: auto; }
 
-    /* Avatar group (node 1084:1836): flex-1, gap-16, items-center, justify-end, relative */
+    /* Avatar group (node 1084:1836): gap-16, items-center, justify-end, relative
+       flex-shrink:0 — margin-left:auto on search frame handles right-push. */
     .navbar-primary__actions {
       display:         flex;
-      flex:            1 0 0;
+      flex-shrink:     0;
       gap:             var(--spacing-space-m);   /* 16px — Spacing/space-m */
       align-items:     center;
       justify-content: flex-end;
       position:        relative;
-      min-width:       1px;
     }
+
+    /* ── Navbar Search Bar — Dropdown-Parts/Search (DS node 1342:4370)
+          Sits between logo and action buttons, fills all available space.
+          Default state: #d9d9d9 border · Focus state: #00cc85 border (Rule 60 — INSIDE stroke = box-shadow:inset) */
+    .navbar-search-frame {
+      margin-left:    auto;    /* consumes all free space to the left → right edge anchored to actions, grows leftward */
+      margin-right:   -20px;   /* flex gap is 28px; -20px reduces effective gap to 8px between bar and search btn */
+      flex-shrink:    0;
+      display:        flex;
+      align-items:    center;
+      overflow:       hidden;
+      max-width:      0;
+      opacity:        0;
+      pointer-events: none;
+      transition:     max-width 0.3s ease, opacity 0.2s ease;
+    }
+    .navbar-search-frame.is-open {
+      min-width:      600px;
+      max-width:      1200px;   /* large enough to never constrain; flex:1 governs actual width */
+      opacity:        1;
+      pointer-events: auto;
+    }
+
+    /* Type=Search / State=Focus (DS node 1366:2119)
+       h:40px · pad:8px 12px · rounded-pill · Poppins Medium 14px */
+    .navbar-search {
+      display:       flex;
+      align-items:   center;
+      gap:           var(--spacing-space-xs);    /* 8px — DS gap between input and icon */
+      width:         100%;
+      height:        40px;
+      padding:       var(--spacing-space-xs) var(--spacing-space-s);   /* 8px 12px */
+      border-radius: var(--corner-radius-corner-pill);   /* 999px — Radius/pill */
+      box-shadow:    inset 0 0 0 1px var(--border-general-default);   /* Default: #d9d9d9 */
+      background:    var(--surface-general-default);
+      transition:    box-shadow 0.15s ease;
+      box-sizing:    border-box;
+    }
+    .navbar-search:focus-within {
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);   /* Focus: #00cc85 */
+    }
+
+    /* Input field — resets all browser defaults, fills flex row */
+    .navbar-search__input {
+      flex:        1 0 0;
+      min-width:   0;
+      border:      none;
+      outline:     none;
+      background:  transparent;
+      font-family: var(--font-family);
+      font-size:   14px;
+      font-weight: 500;   /* Poppins Medium — DS Body/B2 */
+      line-height: 20px;
+      color:       var(--text-default-body);   /* #666 — Text/default/body */
+      padding:     0;
+    }
+    .navbar-search__input::placeholder {
+      color: var(--text-default-caption);   /* #bfbfbf — Text/default/caption */
+    }
+
+    /* Search icon — hidden per user request */
+    .navbar-search__icon { display: none; }
 
     /* Row wrapper (DS: flex-row items-center self-stretch) around Top Icons */
     .navbar-primary__icons-wrap {
@@ -3177,7 +3240,18 @@
         <img src="icons/logo-text.svg" class="navbar-primary__logo-text" alt="Pandai">
       </a>
 
-      <!-- Avatar group (node 1084:1836): flex-1, gap-16, justify-end, relative -->
+      <!-- Navbar Search Frame — Dropdown-Parts/Search (DS node 1342:4370, Type=Search, State=Focus)
+           Own frame fills empty area between logo and action buttons. Rearrange-friendly. -->
+      <div class="navbar-search-frame" id="NavbarSearch-Desktop">
+        <div class="navbar-search">
+          <input class="navbar-search__input" type="text" placeholder="Search" aria-label="Search Pandai">
+          <div class="navbar-search__icon" aria-hidden="true">
+            <svg width="24" height="24" aria-hidden="true"><use href="#ic-search"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Avatar group (node 1084:1836): gap-16, justify-end, relative -->
       <div class="navbar-primary__actions">
 
         <!-- Row wrap (flex-row, items-center, self-stretch) -->
@@ -4575,6 +4649,63 @@
        CAROUSEL SCRIPT
   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <script>
+
+    // Search bar — btn click → open + focus + start 3s timer; inactivity → close + reset btn (Rule 14: critical first)
+    (function () {
+      var searchBtn   = document.querySelector('#NavbarPrimary-Desktop .navbar-action-btn[aria-label="Search"]');
+      var searchFrame = document.getElementById('NavbarSearch-Desktop');
+      var searchInput = searchFrame ? searchFrame.querySelector('.navbar-search__input') : null;
+      if (!searchBtn || !searchFrame || !searchInput) return;
+
+      var closeTimer = null;
+      var isOpen     = false;
+
+      function openSearch() {
+        isOpen = true;
+        searchFrame.classList.add('is-open');
+        searchBtn.classList.add('is-active');
+        setTimeout(function () { searchInput.focus(); }, 50);   /* delay so the expand transition is visible first */
+        resetTimer();
+      }
+
+      function closeSearch() {
+        isOpen = false;
+        clearTimer();
+        searchFrame.classList.remove('is-open');
+        searchBtn.classList.remove('is-active');
+        searchInput.value = '';
+        searchInput.blur();
+      }
+
+      function resetTimer() {
+        clearTimer();
+        closeTimer = setTimeout(closeSearch, 3000);
+      }
+
+      function clearTimer() {
+        if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+      }
+
+      /* Search button: click to open; click again while open → close */
+      searchBtn.addEventListener('click', function () {
+        if (isOpen) { closeSearch(); } else { openSearch(); }
+      });
+
+      /* Reset 3s timer on any typing; Escape closes immediately */
+      searchInput.addEventListener('input', resetTimer);
+      searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { closeSearch(); return; }
+        resetTimer();
+      });
+      searchInput.addEventListener('focus', resetTimer);
+
+      /* Click anywhere outside the search frame + button → close */
+      document.addEventListener('click', function (e) {
+        if (!isOpen) return;
+        if (searchFrame.contains(e.target) || searchBtn.contains(e.target)) return;
+        closeSearch();
+      });
+    })();
 
     // Profile dropdown — avatar click → toggle open; mouseleave dropdown → close (Rule 14: critical first)
     (function () {

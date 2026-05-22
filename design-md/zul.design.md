@@ -5676,4 +5676,188 @@ The `.navbar-action-btn` is 44×44px. The icon is 24×24, centered at `left: 10p
 
 ---
 
+---
+
+### 148. Dropdown - Parts / Search Variant — confirmed DS specs (May 2026)
+
+**COMPONENT_SET:** `Dropdown - Parts` · node `1342:4370`
+
+| Variant | Node | Key specs |
+|---|---|---|
+| Type=Search, State=Default | `1363:2850` | h:40px, px:12px, py:8px, pill (999px radius), border `#d9d9d9` (Border/general/default), text `#bfbfbf` (Text/default/caption) |
+| Type=Search, State=Focus | `1366:2119` | Same dimensions, border `#00cc85` (Border/primary/default), text `#666` (Text/default/body) |
+
+**Implementation rules:**
+- Wrap `<input>` in a pill `<div>` — do not use `<button>` (must be typeable)
+- CSS `:focus-within` on the wrapper div = DS Focus state (green border)
+- INSIDE stroke (Rule 60) → `box-shadow: inset 0 0 0 1px <color>` — never `border: 1px solid`
+- Add `--text-default-caption: #bfbfbf` to `:root` for the placeholder token
+- `<input>` needs: `border:none; outline:none; background:transparent; font-family; font-size:14px; font-weight:500; line-height:20px; color:var(--text-default-body); padding:0`
+- Placeholder: `::placeholder { color: var(--text-default-caption) }`
+
+**Token additions required in `:root`:**
+```css
+--text-default-caption: #bfbfbf;   /* Text/default/caption — Search placeholder */
+```
+
+**Search bar structure in prototype (`zul.home.screen.html`):**
+- Own `<div id="NavbarSearch-Desktop" class="navbar-search-frame">` — direct child of `.navbar-primary`
+- Sibling of logo `<a>` and `.navbar-primary__actions`
+- Hidden by default; shown on search button click
+
+---
+
+### 149. `margin-left: auto` — right-anchored expanding element (appears from right)
+
+When a flex element must **expand leftward** (appear to slide in from the right), use `margin-left: auto` instead of `flex: 1` on that element.
+
+**How it works:**
+- `margin-left: auto` consumes all remaining free space as the element's LEFT margin
+- This anchors the element's **RIGHT edge** fixed against its next sibling (+ flex gap)
+- As `max-width` grows, the LEFT edge expands leftward — the animation appears from the right ✓
+
+**Critical constraint — sibling must have NO `flex-grow`:**
+- `flex-grow` on any sibling is resolved BEFORE auto margins
+- If a sibling has `flex-grow: 1`, it absorbs all free space first → auto margin gets 0 → stops working
+- All siblings of a `margin-left: auto` element must be `flex-shrink: 0` (no flex-grow)
+
+**Reducing gap to a specific target:**
+```css
+/* flex gap = 28px; target gap to next sibling = 8px → margin-right = 8 - 28 = -20px */
+.my-element { margin-right: -20px; }
+```
+Negative `margin-right` reduces the effective gap between the element's right edge and its next sibling. The auto margin on the left adjusts to compensate — the next sibling stays at exactly the same position. ✓
+
+**Confirmed — Navbar Search Bar (May 2026):**
+```css
+.navbar-search-frame {
+  margin-left:  auto;    /* right edge anchored to action buttons */
+  margin-right: -20px;   /* reduces 28px flex gap to 8px between bar and search btn */
+  flex-shrink:  0;
+  max-width:    0;        /* collapsed by default */
+}
+.navbar-search-frame.is-open {
+  min-width: 600px;
+  max-width: 1200px;
+}
+/* .navbar-primary__actions must be flex-shrink:0, NO flex-grow */
+```
+
+**Mistake made:** Used `flex: 1 0 0` on both search frame and actions → bar expanded leftward (from logo side). Switched to `margin-left: auto` + `flex-shrink: 0` on actions → bar now expands rightward from the action buttons side. ✓
+
+---
+
+### 150. `min-width` in `.is-open` only — never alongside `max-width: 0` in collapsed state
+
+When `min-width > max-width`, CSS spec mandates `min-width` wins. If `min-width: 600px` is set on the base rule alongside `max-width: 0`, the element renders at 600px even when "hidden".
+
+**Rule:** Always put `min-width` exclusively in the `.is-open` state selector.
+
+```css
+/* WRONG — min-width wins over max-width: 0, element is always visible */
+.element { max-width: 0; min-width: 600px; }
+
+/* CORRECT — min-width only applies when open */
+.element         { max-width: 0; }
+.element.is-open { min-width: 600px; max-width: 1200px; }
+```
+
+---
+
+### 151. JS inactivity auto-close pattern — triggered element with 3s timer
+
+Standard pattern for an element that opens on button click and auto-closes after 3s of no user activity.
+
+```js
+(function () {
+  var triggerBtn = document.querySelector('#MySection .my-trigger-btn');
+  var panel      = document.getElementById('MyPanel');
+  var input      = panel ? panel.querySelector('input') : null;
+  if (!triggerBtn || !panel || !input) return;
+
+  var closeTimer = null;
+  var isOpen     = false;
+
+  function openPanel() {
+    isOpen = true;
+    panel.classList.add('is-open');
+    triggerBtn.classList.add('is-active');       // DS Active state on trigger button
+    setTimeout(function () { input.focus(); }, 50); // delay = transition plays first
+    resetTimer();
+  }
+
+  function closePanel() {
+    isOpen = false;
+    clearTimer();
+    panel.classList.remove('is-open');
+    triggerBtn.classList.remove('is-active');    // return button to Default state
+    input.value = '';
+    input.blur();
+  }
+
+  function resetTimer() {
+    clearTimer();
+    closeTimer = setTimeout(closePanel, 3000);   // 3s inactivity → auto-close
+  }
+
+  function clearTimer() {
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+  }
+
+  triggerBtn.addEventListener('click', function () {
+    if (isOpen) { closePanel(); } else { openPanel(); }
+  });
+
+  input.addEventListener('input',   resetTimer);   // typing resets timer
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { closePanel(); return; }
+    resetTimer();
+  });
+  input.addEventListener('focus', resetTimer);
+
+  document.addEventListener('click', function (e) {  // click outside → close
+    if (!isOpen) return;
+    if (panel.contains(e.target) || triggerBtn.contains(e.target)) return;
+    closePanel();
+  });
+})();
+```
+
+**Key rules:**
+- Register this IIFE **first** in the script block — before carousel/non-critical JS (Rule 14)
+- `setTimeout(focus, 50)` — 50ms delay so the expand CSS transition is visible before the keyboard pops up
+- `mouseleave` is NOT needed here (unlike nav buttons) — the 3s timer handles lingering
+- When trigger is a `<div>`, also add `mousedown`/`mouseup` pressed state (Rule 39)
+- Close-all-other-dropdowns block: if search coexists with other dropdown panels, add `closePanel()` to every other panel's open handler (Rule 53)
+
+**Confirmed — Navbar Search Bar (May 2026):**
+- Trigger: `.navbar-action-btn[aria-label="Search"]` inside `#NavbarPrimary-Desktop`
+- Panel: `#NavbarSearch-Desktop` (`.navbar-search-frame`)
+- Input: `.navbar-search__input`
+- Timer: 3000ms; resets on `input` + `keydown` + `focus`
+
+---
+
+### Mandatory session workflow — BEFORE every design action, change, or decision
+
+> **Non-negotiable. Every session. Every component. Every fix. Every decision. No exceptions.**
+> This is the most important rule in this file. Skip it and you will reproduce a mistake that has already been made.
+
+```
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–151 + confirmed specs
+Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH. Not memory. Not docs.
+Step 0c → Audit component anatomy (Rules 49, 93):
+           - use_figma: find the COMPONENT SET → list ALL variants by name
+           - get_design_context on each relevant state variant → extract all tokens
+           - Repeat for every nested sub-component
+           - Check componentPropertyDefinitions → confirm visible/hidden/swap props
+Step 0d → For spacing/positioning: read DS screen frame y-coords (Rules 94–95)
+Step 0e → get_variable_defs on exact sub-nodes for every fill/stroke/spacing (Rule 12)
+Step 0f → Cross-check CSS variable value against :root before using it (Rule 83)
+Step 0g → For icons: confirm viewBox, path scale, AND CSS dimensions (Rule 87)
+Step 0h → get_screenshot after implementation → compare against DS side-by-side
+```
+
+---
+
 *Generated: May 2026 | Last updated: 2026-05-22 (Rules 144–145 — fixed-height card mobile override; CSS variable cascade verification before adding explicit overrides) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
