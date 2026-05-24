@@ -1153,7 +1153,7 @@ Implemented profile menu items from the Profile Menu `get_design_context` output
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision — including seemingly trivial fixes. No exceptions.
 
 ```
-0a. Read design-md/zul.design.md  → ALL rules 1–115, confirmed specs, known mistakes — NO EXCEPTIONS
+0a. Read design-md/zul.design.md  → ALL rules 1–156, confirmed specs, known mistakes — NO EXCEPTIONS
 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f         → single source of truth, re-verify every value live
 0c. Audit component anatomy (Rule 49 / zul Rule 93):
       → get_design_context on COMPONENT_SET node → list ALL variants
@@ -1689,7 +1689,7 @@ This rule was wrong. Multi-color brand icons CAN be SVG symbols using hardcoded 
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision — including seemingly trivial fixes. No exceptions.
 
 ```
-0a. Read design-md/zul.design.md  → ALL rules 1–115, confirmed specs, known mistakes — NO EXCEPTIONS
+0a. Read design-md/zul.design.md  → ALL rules 1–156, confirmed specs, known mistakes — NO EXCEPTIONS
 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f         → single source of truth, re-verify every value live
 0c. Audit component anatomy (Rule 49 / zul Rule 93):
       → get_design_context on COMPONENT_SET node → list ALL variants
@@ -1769,7 +1769,7 @@ See `design-md/zul.design.md` Rule 112.
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision. No exceptions.
 
 ```
-0a. Read design-md/zul.design.md       → ALL rules 1–116, confirmed specs, known mistakes
+0a. Read design-md/zul.design.md       → ALL rules 1–156, confirmed specs, known mistakes
 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs
 0c. get_design_context on COMPONENT SET → list ALL variant names
 0d. get_design_context on EACH state   → extract every token BEFORE writing CSS
@@ -1832,7 +1832,7 @@ All 5 states: `w:20 h:20`, `padding:2px`, `strokeAlign: INSIDE`. State changes =
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision. No exceptions.
 
 ```
-0a. Read design-md/zul.design.md       → ALL rules 1–133, confirmed specs, known mistakes
+0a. Read design-md/zul.design.md       → ALL rules 1–156, confirmed specs, known mistakes
 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs
 0c. get_design_context on COMPONENT SET → list ALL variant names
 0d. get_design_context on EACH state   → extract every token BEFORE writing CSS
@@ -1841,8 +1841,21 @@ All 5 states: `w:20 h:20`, `padding:2px`, `strokeAlign: INSIDE`. State changes =
 0g. exportAsync SVG_STRING for icons   → check size before PNG vs symbol decision
 0h. get_screenshot after implement     → compare against DS, fix before moving on
 0i. For carousel/slider JS: capture pre-clone anchor BEFORE the loop (Rule 130)
+0j. Re-audit tokens if last audit > 3 days ago (Rule 153) — resolve every variable ID
+    to current hex BEFORE writing any CSS. Token values change without notice.
 ```
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-19 (Rule 60 / zul Rule 118 — strokeAlign:INSIDE=box-shadow:inset, raw use_figma inspection required for exact dimensions, Secondary/M arrow confirmed 20×20 padding:2px all states) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 61. DS token values can change between sessions — always re-audit before any work
+
+See `design-md/zul.design.md` Rules 153–156 for the full audit workflow and confirmed value updates (2026-05-24):
+- `Text/primary/on-color` + `Icon/primary/on-color` → `Foundation/white` = `#ffffff` (was `#e1f9ea`)
+- Disabled button arrow bg → `Surface/disabled/on color` = `#e5e5e5` (was incorrectly using `Surface/disabled/primary` = `#f2f2f2`)
+- Button - 1.5 now has `Type=Teacher` variants (45 new, no impact on student prototype)
+
+**Rule:** Never trust memory or prior session notes for token hex values. Always resolve live from DS before coding.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-24 (Rule 61 / zul Rules 153–156 — DS token audit workflow, Text/Icon/primary/on-color → #ffffff, Surface/disabled/on color = #e5e5e5, Teacher variants in Button-1.5) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

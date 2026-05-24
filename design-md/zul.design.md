@@ -5903,4 +5903,137 @@ Step 0h → get_screenshot after implementation → compare against DS side-by-s
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-22 (Rule 152 — Profile Menu Dropdown avatar XXL=100px, image sync with Navbar, badge removed) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 153. Always re-audit DS token values at the start of any session — they can change without notice
+
+Token values confirmed in a prior session are **not guaranteed to hold**. Designers update Semantic variable aliases in Figma silently — no changelog, no notification. A token that resolved to `#e1f9ea` five days ago can resolve to `#ffffff` today.
+
+**Mandatory check before any component work:**
+```
+1. For every component being implemented or modified:
+   → use_figma → get the COMPONENT_SET node
+   → inspect variant children: fills, strokes, boundVariables
+   → resolve every variable ID via figma.variables.getVariableByIdAsync()
+   → compare resolved hex against :root CSS variable value in the prototype
+2. If any value differs → treat the DS as authoritative, update the prototype
+3. Document the change in zul.design.md + memory files in the same commit
+```
+
+**What triggered this rule (2026-05-24):**
+Ran a full Button - 1.5 audit. Found that `Text/primary/on-color` and `Icon/primary/on-color` had both changed from `#e1f9ea` to `Foundation/white` (`#ffffff`) with no prior notice. Memory from 2026-05-19 still said `#e1f9ea` — a 5-day-old stale record. The prototype was silently incorrect for 5 days.
+
+**When to run the audit:**
+- Before starting any new section or component implementation
+- Before making any token-based change to an existing component
+- If the last audit of a component was > 3 days ago
+
+---
+
+### Rule 154. `Text/primary/on-color` + `Icon/primary/on-color` = `Foundation/white` = `#ffffff` (updated 2026-05-24)
+
+**Previous value:** `#e1f9ea` (light mint green-white) — confirmed 2026-05-19  
+**Current value:** `#ffffff` (pure white, `Foundation/white`) — confirmed 2026-05-24
+
+Both tokens now alias `Foundation/white` in Semantic Light mode:
+- `Text/primary/on-color` → Light (106:0) → `VariableID:106:12` = `Foundation/white` = `#ffffff`
+- `Icon/primary/on-color` → Light (106:0) → `VariableID:106:12` = `Foundation/white` = `#ffffff`
+
+**CSS variables (prototype):**
+```css
+--text-primary-on-color: #ffffff;   /* Foundation/white — DS updated 2026-05-24 */
+--icon-primary-on-color: #ffffff;   /* Foundation/white — DS updated 2026-05-24 */
+```
+
+**Where these tokens are used in the prototype (all now render white):**
+- Button Primary label text (all sizes S/M/L, Default + Active states)
+- Button Secondary active state label text
+- Nav button `is-active` icon color
+- Nav menu CTA (`Download App`) button text + icon
+- Number Badge primary text
+- Notification "See All" button text
+- Navbar bottom active label + icon
+
+**Mistake to avoid:** Never treat a prior confirmed value as permanent. `#e1f9ea` appears in many old CLAUDE.md rules and comments — all superseded by this rule.
+
+---
+
+### Rule 155. Button - 1.5 disabled arrow bg = `Surface/disabled/on color` = `#e5e5e5` (confirmed 2026-05-24)
+
+The **right-arrow circle** background in a disabled button uses `Surface/disabled/on color` = `#e5e5e5` — **not** `Surface/disabled/primary` (#f2f2f2).
+
+| Element | Token | Hex |
+|---|---|---|
+| Outer button bg (disabled) | `Surface/disabled/primary` | `#f2f2f2` |
+| Right arrow circle bg (disabled) | `Surface/disabled/on color` | `#e5e5e5` |
+| Border (disabled) | `Border/disabled/disabled` | `#bfbfbf` |
+| Label + icon (disabled) | `Icon/disabled/default` | `#bfbfbf` |
+
+**CSS:**
+```css
+.btn:disabled { background: var(--surface-disabled-primary); ... }          /* #f2f2f2 outer */
+.btn:disabled .btn__arrow { background: var(--surface-disabled-on-color); } /* #e5e5e5 arrow */
+```
+
+**CSS variable to add:**
+```css
+--surface-disabled-on-color: #e5e5e5;  /* Surface/disabled/on color — disabled button arrow bg */
+```
+
+**Mistake made:** Prototype was using `--surface-disabled-primary` (#f2f2f2) for both the outer button and the arrow circle. Only caught via live DS variable audit (`VariableID:1260:1895` → `Surface/disabled/on color`).
+
+---
+
+### Rule 156. Button - 1.5 now has `Type=Teacher` variants — always list all COMPONENT_SET children before auditing
+
+The Button - 1.5 COMPONENT_SET (node `473:529`) grew from **45 → 90 variants** when 45 `Type=Teacher` variants were added (all 3 Variants × 3 Sizes × 5 States).
+
+**Impact on student prototype:** none — student prototype uses `Type=Student` only.
+
+**General lesson:** A COMPONENT_SET can gain new variant types at any time. Before reading state tokens from a component, always list all children names first:
+
+```js
+const btnSet = await figma.getNodeByIdAsync('473:529');
+return btnSet.children.map(c => c.name);
+// → confirms which Type= values exist before picking the right variant
+```
+
+**Never assume** a component set has the same variant structure as the last time you checked. If you query a node by index (`children[3]`) instead of by name, you will silently read the wrong variant after the set is updated.
+
+**Rule:** Always select state variants by name filter, never by index:
+```js
+const defaultVariant = btnSet.children.find(c =>
+  c.name.includes('Type=Student') &&
+  c.name.includes('State=Default') &&
+  c.name.includes('Variants=Primary') &&
+  c.name.includes('Size=M')
+);
+```
+
+---
+
+### Mandatory Step 0 — Updated (2026-05-24)
+
+> **BEFORE every session, every component, every change, every decision — no exceptions.**
+
+```
+Step 0a → Read zul.design.md Rules 1–156 — ALL of them, every session. No skipping.
+Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f — single live source of truth.
+           NOT memory. NOT prior notes. NOT CLAUDE.md comments. The live DS.
+Step 0c → Audit component anatomy (Rule 49, Rule 153):
+           - use_figma: find the COMPONENT SET → list ALL variants by name
+           - get_design_context on each relevant state variant → extract all tokens
+           - Repeat for every nested sub-component
+           - Check componentPropertyDefinitions → confirm visible/hidden/swap props
+Step 0d → For spacing/positioning: read DS screen frame y-coords (Rules 94–95)
+Step 0e → get_variable_defs on exact sub-nodes for every fill/stroke/spacing (Rule 12)
+Step 0f → Cross-check CSS variable value against :root before using it (Rule 83)
+Step 0g → For icons: confirm viewBox, path scale, AND CSS dimensions (Rule 87)
+Step 0h → get_screenshot after implementation → compare against DS side-by-side
+Step 0i → Re-audit tokens if last audit > 3 days ago (Rule 153) — resolve every
+           variable ID to current hex before writing a single line of CSS
+```
+
+**Why every step matters:** Every mistake in this project traces back to skipping Step 0. Wrong colors, wrong hover states, wrong disabled states, stale tokens — all caught immediately with a 2-minute inspection. All invisible without one.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-24 (Rules 153–156 — DS token audit workflow, Text/Icon/primary/on-color → #ffffff, Surface/disabled/on color = #e5e5e5, Teacher variants in Button-1.5) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
