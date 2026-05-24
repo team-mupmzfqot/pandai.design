@@ -28,6 +28,7 @@
       --surface-secondary-default-subtle:      #e8fbe8;  /* Surface/secondary/default-subtle */
       --surface-secondary-default-hover:       #f6fef6;  /* Surface/secondary/default-hover — profile menu header bg */
       --surface-disabled-primary:        #f2f2f2;
+      --surface-disabled-on-color:       #e5e5e5;   /* Surface/disabled/on color — disabled button arrow bg (DS confirmed 2026-05-24) */
       --surface-general-default-secondary: #f2f2f2;  /* Surface/general/default-secondary — carousel indicator inactive dot */
       --surface-tertiary-default:        #00564c;   /* Surface/tertiary/default — pressed state bg */
 
@@ -41,7 +42,7 @@
       --text-default-placeholder: #f2f2f2;   /* Text/default/placeholder â€” subject badge label */
       --text-primary-default:       #00cc85;
       --text-primary-default-hover: #00a36a;   /* Text/primary/default-hover — Dropdown Selected label */
-      --text-primary-on-color:      #e1f9ea;   /* Text/primary/on-color — DS updated (confirmed 2026-05-19, all button variants) */
+      --text-primary-on-color:      #ffffff;   /* Text/primary/on-color — Foundation/white (DS updated 2026-05-24, was #e1f9ea) */
       --text-secondary-focus:     #70bc6f;  /* Text/secondary/focus */
       --text-on-color-heading:    #FFFFFF;   /* Text/on-color/heading â€” status pill */
       --text-disabled-default:    #bfbfbf;
@@ -51,7 +52,7 @@
       --icon-default-default:     #808080;   /* Icon/default/default — action icons, inactive (DS confirmed 2026-05-14) */
       --icon-primary-default:     #00cc85;   /* Icon/primary/default — nav button icons, default */
       --icon-secondary-hover:     #70bc6f;   /* Icon/secondary/hover — nav button icons, hover state */
-      --icon-primary-on-color:    #e1f9ea;   /* Icon/primary/on-color — nav button active icon (DS confirmed 3908:6148) */
+      --icon-primary-on-color:    #ffffff;   /* Icon/primary/on-color — Foundation/white (DS updated 2026-05-24, was #e1f9ea) */
       --icon-tertiary-default:    #00564c;   /* Icon/tertiary/default — pressed arrow chevron */
 
       /* Border */
@@ -653,7 +654,7 @@
     }
     .static-card__btn:disabled .static-card__btn-label { color: var(--text-disabled-default); }   /* #bfbfbf */
     .static-card__btn:disabled .static-card__btn-arrow {
-      background: var(--surface-disabled-primary);   /* #f2f2f2 */
+      background: var(--surface-disabled-on-color);  /* #e5e5e5 — Surface/disabled/on color (DS confirmed 2026-05-24) */
       color:      var(--icon-disabled-default);      /* #bfbfbf */
     }
 
@@ -1183,7 +1184,7 @@
     .btn-quiz-cta:disabled .btn-quiz-cta__text,
     .btn-quiz-cta.is-disabled .btn-quiz-cta__text  { color: var(--text-disabled-default); }   /* #bfbfbf */
     .btn-quiz-cta:disabled .btn-quiz-cta__arrow,
-    .btn-quiz-cta.is-disabled .btn-quiz-cta__arrow { background: var(--surface-disabled-primary); color: var(--border-disabled-disabled); }
+    .btn-quiz-cta.is-disabled .btn-quiz-cta__arrow { background: var(--surface-disabled-on-color); color: var(--border-disabled-disabled); }  /* #e5e5e5 — Surface/disabled/on color */
 
     .btn-quiz-cta__text {
       font-size:   12px;
