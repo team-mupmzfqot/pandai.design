@@ -6036,4 +6036,87 @@ Step 0i → Re-audit tokens if last audit > 3 days ago (Rule 153) — resolve ev
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-24 (Rules 153–156 — DS token audit workflow, Text/Icon/primary/on-color → #ffffff, Surface/disabled/on color = #e5e5e5, Teacher variants in Button-1.5) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 157. Fullscreen toggle — always source minimize icon from DS, use `fullscreenchange` for ESC (confirmed 2026-05-25)
+
+The navbar Maximize button toggles the browser into/out of fullscreen. The paired icon for `Outline/maximize` (node `260:915`) is **`Outline/minimize-2`** (node `260:941`) on the `🔰 Iconography` page.
+
+**DS icon specs:**
+
+| Icon | Node | Symbol ID | ViewBox | Path |
+|---|---|---|---|---|
+| `Outline/maximize` | `260:915` | `ic-maximize` | `-1 -1 26 26` | (4-corner outward arrows) |
+| `Outline/minimize-2` | `260:941` | `ic-minimize` | `-1 -1 26 26` | `M10 20V14H4M10 14L3 21M14 4V10H20M14 10L21 3` |
+
+**HTML — button requires both `id` on button AND `id` on the `<svg>`:**
+```html
+<button class="navbar-action-btn" id="maximize-btn" aria-label="Enter fullscreen" type="button">
+  <div class="nav-btn-content">
+    <div class="nav-btn-rect" aria-hidden="true"></div>
+    <div class="nav-btn-icon-clip"><svg aria-hidden="true" id="maximize-icon"><use href="#ic-maximize"/></svg></div>
+  </div>
+</button>
+```
+
+**JS pattern (self-contained IIFE, registered after all other scripts):**
+```js
+(function () {
+  var btn  = document.getElementById('maximize-btn');
+  var icon = document.getElementById('maximize-icon');
+  if (!btn || !icon) return;
+
+  function isFullscreen() {
+    return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
+  }
+
+  function enterFullscreen() {
+    var el = document.documentElement;
+    if (el.requestFullscreen)            el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    else if (el.mozRequestFullScreen)    el.mozRequestFullScreen();
+  }
+
+  function exitFullscreen() {
+    if (document.exitFullscreen)            document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    else if (document.mozCancelFullScreen)  document.mozCancelFullScreen();
+  }
+
+  function syncIcon() {
+    if (isFullscreen()) {
+      icon.querySelector('use').setAttribute('href', '#ic-minimize');
+      btn.setAttribute('aria-label', 'Exit fullscreen');
+      btn.classList.add('is-active');
+    } else {
+      icon.querySelector('use').setAttribute('href', '#ic-maximize');
+      btn.setAttribute('aria-label', 'Enter fullscreen');
+      btn.classList.remove('is-active');
+    }
+  }
+
+  btn.addEventListener('click', function () {
+    isFullscreen() ? exitFullscreen() : enterFullscreen();
+  });
+
+  document.addEventListener('fullscreenchange',       syncIcon);
+  document.addEventListener('webkitfullscreenchange', syncIcon);
+  document.addEventListener('mozfullscreenchange',    syncIcon);
+})();
+```
+
+**Key rules:**
+1. **ESC is handled natively by the browser.** Do NOT add a `keydown` listener for ESC. The browser exits fullscreen on ESC and fires `fullscreenchange` automatically — `syncIcon()` catches it.
+2. **`syncIcon()` must update three things together:** `<use href>` (icon swap), `aria-label` (accessibility), and `is-active` class (DS active state — green bg, light icon).
+3. **Always add vendor prefixes** for `requestFullscreen`, `exitFullscreen`, and `fullscreenchange` — webkit and moz for Safari/Firefox compatibility.
+4. **`isFullscreen()` must check all three vendor-prefixed properties** — a single `document.fullscreenElement` misses Safari.
+5. **Source icon from DS always** — never draw custom arrows. `Outline/minimize-2` is the correct DS counterpart to `Outline/maximize`.
+
+**`is-active` state visual (Nav Button - 1.5, Rule 59):**
+- bg: `Surface/primary/default` = `#00cc85`
+- border: `box-shadow: inset 0 0 0 1px #00a36a`
+- icon: `Icon/primary/on-color` = `#ffffff`
+
+**Mistake to avoid:** Adding a `keydown` ESC listener that calls `exitFullscreen()` explicitly — this fires BEFORE the browser exits, causing a race condition where `isFullscreen()` still returns `true` at sync time. Always rely solely on `fullscreenchange`.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-25 (Rule 157 — fullscreen toggle, Outline/minimize-2 node 260:941, fullscreenchange for ESC) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

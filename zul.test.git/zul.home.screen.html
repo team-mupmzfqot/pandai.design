@@ -3048,6 +3048,7 @@
       <!-- Outline/arrow-right (260:451) --><symbol id="ic-arrow-right" viewBox="-1 -1 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 7 0 L 14 7 L 7 14"/><path d="M 0 7 L 14 7"/></symbol>
       <!-- Outline/search (260:1103) — vec x:3 y:3 +3+3 → vb -1 -1 26 26 --><symbol id="ic-search" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 11 19 C 15.418 19 19 15.418 19 11 C 19 6.582 15.418 3 11 3 C 6.582 3 3 6.582 3 11 C 3 15.418 6.582 19 11 19 Z"/><path d="M 21 21 L 16.65 16.65"/></symbol>
       <!-- Outline/maximize (260:915) — vec x:3 y:3 +3+3 → vb -1 -1 26 26 --><symbol id="ic-maximize" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 3 16 L 3 19 C 3 19.53 3.211 20.039 3.586 20.414 C 3.961 20.789 4.47 21 5 21 L 8 21"/><path d="M 8 3 L 5 3 C 4.47 3 3.961 3.211 3.586 3.586 C 3.211 3.961 3 4.47 3 5 L 3 8 M 21 8 L 21 5 C 21 4.47 20.789 3.961 20.414 3.586 C 20.039 3.211 19.53 3 19 3 L 16 3 M 16 21 L 19 21 C 19.53 21 20.039 20.789 20.414 20.414 C 20.789 20.039 21 19.53 21 19 L 21 16"/></symbol>
+      <!-- Outline/minimize-2 (260:941) — vec x:3 y:3, frame coords → vb -1 -1 26 26 --><symbol id="ic-minimize" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 20V14H4M10 14L3 21M14 4V10H20M14 10L21 3"/></symbol>
       <!-- Outline/smartphone (260:1178) — vec x:5 y:2 +5+2 → vb -1 -1 26 26 --><symbol id="ic-smartphone" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 17 2 L 7 2 C 5.895 2 5 2.895 5 4 L 5 20 C 5 21.105 5.895 22 7 22 L 17 22 C 18.105 22 19 21.105 19 20 L 19 4 C 19 2.895 18.105 2 17 2 Z"/><path d="M 12 18 L 12.01 18"/></symbol>
       <!-- Outline/bell (260:491) — vec x:2 y:2 +2+2 → vb -1 -1 26 26 --><symbol id="ic-bell" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22 17 L 2 17 C 2.796 17 3.559 16.684 4.121 16.121 C 4.684 15.559 5 14.796 5 14 L 5 9 C 5 7.143 5.737 5.363 7.05 4.05 C 8.363 2.737 10.143 2 12 2 C 13.857 2 15.637 2.737 16.95 4.05 C 18.263 5.363 19 7.143 19 9 L 19 14 C 19 14.796 19.316 15.559 19.879 16.121 C 20.441 16.684 21.204 17 22 17 Z"/><path d="M 13.73 21 C 13.554 21.303 13.302 21.555 12.998 21.73 C 12.695 21.904 12.35 21.996 12 21.996 C 11.65 21.996 11.305 21.904 11.002 21.73 C 10.698 21.555 10.446 21.303 10.27 21"/></symbol>
       <!-- Outline/bookmark (260:504) — path translated by x+5 y+3 to match 24x24 DS frame; viewBox -1 -1 26 26 for 1px stroke buffer --><symbol id="ic-bookmark" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 19 21 L 12 16 L 5 21 L 5 5 C 5 4.47 5.211 3.961 5.586 3.586 C 5.961 3.211 6.47 3 7 3 L 17 3 C 17.53 3 18.039 3.211 18.414 3.586 C 18.789 3.961 19 4.47 19 5 L 19 21 Z"/></symbol>
@@ -3249,10 +3250,10 @@
                 <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
               </div>
             </button>
-            <button class="navbar-action-btn" aria-label="Maximize" type="button">
+            <button class="navbar-action-btn" id="maximize-btn" aria-label="Enter fullscreen" type="button">
               <div class="nav-btn-content">
                 <div class="nav-btn-rect" aria-hidden="true"></div>
-                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-maximize"/></svg></div>
+                <div class="nav-btn-icon-clip"><svg aria-hidden="true" id="maximize-icon"><use href="#ic-maximize"/></svg></div>
               </div>
             </button>
             <button class="navbar-action-btn" aria-label="Download app" id="download-btn" type="button" aria-haspopup="true">
@@ -4136,7 +4137,7 @@
 
         </section><!-- end section 2 -->
 
-        <!-- Static Card - 1.5  (node 2616:2895) — two side-by-side promotional banner cards -->
+        <!-- Static Card - 1.5  (node 2616:2895) — three side-by-side promotional banner cards -->
         <section id="StaticNewsCard-Desktop" aria-label="Static Newscards" class="static-cards-row">
 
           <!-- Static Card 1 -->
@@ -4164,6 +4165,21 @@
               </div>
               <button class="static-card__btn">
                 <span class="static-card__btn-label">Try Now</span>
+                <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Static Card 3 -->
+          <div class="static-card">
+            <div class="static-card__content">
+              <div class="static-card__bg"></div>
+              <div class="static-card__texts">
+                <h2 class="static-card__title">SPM Live Revision</h2>
+                <p class="static-card__desc">Join tonight's free class with top teachers</p>
+              </div>
+              <button class="static-card__btn">
+                <span class="static-card__btn-label">Join Now</span>
                 <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
               </button>
             </div>
@@ -5484,6 +5500,53 @@
       window.addEventListener('resize', function () {
         if (mobilePanel.classList.contains('is-open') && window.innerWidth > 767) closeMobileMenu();
       });
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var btn  = document.getElementById('maximize-btn');
+      var icon = document.getElementById('maximize-icon');
+      if (!btn || !icon) return;
+
+      function isFullscreen() {
+        return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
+      }
+
+      function enterFullscreen() {
+        var el = document.documentElement;
+        if (el.requestFullscreen)       el.requestFullscreen();
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+        else if (el.mozRequestFullScreen)    el.mozRequestFullScreen();
+      }
+
+      function exitFullscreen() {
+        if (document.exitFullscreen)         document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        else if (document.mozCancelFullScreen)  document.mozCancelFullScreen();
+      }
+
+      function syncIcon() {
+        if (isFullscreen()) {
+          icon.querySelector('use').setAttribute('href', '#ic-minimize');
+          btn.setAttribute('aria-label', 'Exit fullscreen');
+          btn.classList.add('is-active');
+        } else {
+          icon.querySelector('use').setAttribute('href', '#ic-maximize');
+          btn.setAttribute('aria-label', 'Enter fullscreen');
+          btn.classList.remove('is-active');
+        }
+      }
+
+      btn.addEventListener('click', function () {
+        isFullscreen() ? exitFullscreen() : enterFullscreen();
+      });
+
+      document.addEventListener('fullscreenchange',       syncIcon);
+      document.addEventListener('webkitfullscreenchange', syncIcon);
+      document.addEventListener('mozfullscreenchange',    syncIcon);
+
+      /* ESC is handled natively by the browser — fullscreenchange fires on exit */
     })();
   </script>
 
