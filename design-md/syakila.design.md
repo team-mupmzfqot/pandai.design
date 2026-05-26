@@ -2485,4 +2485,77 @@ git push origin staging
 
 Active = solid green pill with white/light text. Pressed = dark teal (momentary click feedback).
 
+---
+
+## Session 7 — Asset migration + Geography badge fix (2026-05-26)
+
+### Asset folder convention
+
+All DS icons and images for the Syakila prototype must live in:
+
+```
+src/image-repo/Achievement/assets/<subfolder>/
+```
+
+Organized by feature/component — never dumped flat into the root of `assets/`. Current subfolders:
+
+| Subfolder | Contents |
+|---|---|
+| `subject-icons/` | All 18 subject icons (PNG + SVG) |
+| *(root)* | Logos, nav icons, battle icons, feature images |
+
+HTML files in `syakila.test.git/` reference them via relative path:
+```html
+../src/image-repo/Achievement/assets/subject-icons/icon-math.png
+```
+
+**Why:** Assets were previously in `syakila.test.git/assets/` (local to prototype folder). Moved to `src/image-repo/Achievement/assets/` so all shared assets live in one organized, version-controlled location under the main `src/` tree.
+
+---
+
+### Geography badge — icon updated in DS 1.5
+
+The Geography subject icon (DS node `3880:63782`) was updated to a complex multi-color illustrated globe. It must be exported as **2× PNG**, not SVG — the SVG export is 27,000+ chars and exceeds tool limits.
+
+- **File:** `src/image-repo/Achievement/assets/subject-icons/icon-geography.png`
+- **Export:** `exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 2 } })`
+- **Do not use:** `icon-geography.svg` — old simplified version, no longer matches DS
+
+---
+
+### Geography badge — text color must be explicitly set
+
+Geography uses **dark text `#478220`** on its light green `#77d836` background. The badge CSS defaults to `var(--badge-text, #f2f2f2)` (white). For any badge with a light background, `--badge-text` must be set explicitly in the inline style — otherwise text is invisible.
+
+**Confirmed Geography badge values (DS node `3309:67546`, Size=M + Size=S):**
+
+| Property | Value |
+|---|---|
+| `--badge-bg` | `#77d836` |
+| `--badge-border` | `#5fad2b` |
+| `--badge-text` | `#478220` (dark — exception to default white) |
+| Icon | `icon-geography.png` (2× PNG from DS node `3880:63782`) |
+
+**Implementation in `syakila.html`:**
+```html
+<div class="pd-subject-badge" style="--badge-bg:#77d836;--badge-border:#5fad2b;--badge-text:#478220">
+```
+
+**Bugs fixed this session:**
+- `syakila.html` — missing `--badge-text:#478220`, fell back to white `#f2f2f2`
+- `scoreCard.html` — had `#f2f2f2` hardcoded as text color in JS data object
+- All 3 files — icon reference updated from `.svg` → `.png`
+
+**Rule:** Geography, KAFA, and Science all use dark text on light backgrounds. Any badge with a light `--badge-bg` MUST include an explicit `--badge-text` override — never rely on the `#f2f2f2` default.
+
+---
+
+### Subjects using dark badge text (exceptions to #f2f2f2 default)
+
+| Subject | `--badge-bg` | `--badge-text` |
+|---|---|---|
+| Geography | `#77d836` | `#478220` |
+| KAFA | `#8ae3a9` | `#538865` |
+| Science | `#ffd641` | `#998027` |
+
 *Last updated: May 2026 (Session 6)*
