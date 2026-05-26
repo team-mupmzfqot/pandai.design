@@ -1143,7 +1143,7 @@
       .an-analytics-card { padding: var(--space-m); }
       .an-analytics-row  { display: flex; flex-direction: column; gap: var(--space-m); }
 
-      /* ── Grade: horizontal 2-col layout — grade letter left, details right ── */
+      /* ── Grade: grade letter left, details right ── */
       .an-grade {
         display: flex; flex-direction: row;
         align-items: flex-start;
@@ -1153,13 +1153,26 @@
       .an-grade__title-row { font-size: 40px; flex-shrink: 0; }
       .an-grade__details   { flex: 1; min-width: 0; gap: var(--space-xxs); }
 
-      /* ── Donuts: hide charts, show both legends as side-by-side mini tables ── */
-      .an-donut-wrap  { display: none; }
-      .an-donut-pairs { flex-direction: row; gap: var(--space-s); align-items: flex-start; }
-      .an-donut-col   { flex: 1; min-width: 0; flex-direction: column; gap: 4px; width: auto; }
+      /* Divider between mastery pill and stats */
+      .an-grade__stat:first-of-type {
+        border-top: 1px solid var(--border-general-default);
+        padding-top: var(--space-xxs);
+        margin-top: var(--space-xxs);
+      }
 
-      /* Legend: full-width bordered table */
-      .an-legend        { width: 100%; min-width: 0; align-items: stretch; }
+      /* ── Divider + donut section: each row = donut left + legend table right ── */
+      .an-donut-pairs {
+        flex-direction: column; gap: var(--space-s);
+        border-top: 1px solid var(--border-general-default);
+        padding-top: var(--space-s);
+        align-items: stretch;
+      }
+      .an-donut-col   { width: 100%; flex-direction: row; align-items: flex-start; gap: var(--space-s); }
+      .an-donut-wrap  { flex-shrink: 0; }
+      .an-donut-wrap svg { width: 100px; height: 100px; }
+
+      /* Legend: bordered table alongside the donut */
+      .an-legend        { flex: 1; min-width: 0; align-items: stretch; }
       .an-legend__title { display: block; font-size: 10px; line-height: 14px; }
       .an-legend__rows  { gap: 0; border: 1px solid var(--border-general-default); border-radius: var(--corner-m); overflow: hidden; }
       .an-legend__row   { width: 100%; padding: 6px 8px; border-bottom: 1px solid var(--border-general-default); margin: 0; }
