@@ -6555,4 +6555,117 @@ grep -n 'src="icons/\|image-repo/Home/' file.html
 
 ---
 
+### Rule 166. Always check DS `layoutMode` before setting CSS `flex-direction`
+
+**Source:** Static Card - 1.5 img-col oversize bug (2026-05-27).
+
+Every Figma auto-layout frame has a `layoutMode` property: `HORIZONTAL` or `VERTICAL`. In CSS this maps directly to `flex-direction: row` or `flex-direction: column`. **Never assume the direction — always confirm via `use_figma` inspection.**
+
+**The mistake:** The Static Card img-col (`Vector` frame) is `layoutMode: VERTICAL`. Because `flex-direction` was not explicitly set, it defaulted to `row`. The illustration inside had `flex: 1 0 0` which in a row container grows **horizontally without bound** — the illustration expanded to fill the entire card width, overflowing massively.
+
+**Correct mapping:**
+
+| Figma `layoutMode` | CSS |
+|---|---|
+| `HORIZONTAL` | `flex-direction: row` |
+| `VERTICAL` | `flex-direction: column` |
+
+**`flex: 1 0 0` direction depends entirely on the container's flex-direction:**
+- In a `row` container → grows horizontally (can become unbounded if no max-width on parent)
+- In a `column` container → grows vertically (constrained by the parent's height)
+
+**Workflow:** Before implementing any component that uses `flex: 1 0 0` or `FILL` sizing on a child, call `use_figma` and check `node.layoutMode` on the parent container. Set `flex-direction` in CSS to match before applying any child sizing rules.
+
+**Confirmed — Static Card img-col (DS node inspection 2026-05-27):**
+- `name: "Vector"`, `layoutMode: VERTICAL` → CSS: `flex-direction: column`
+- Child illustration: `szH: FIXED` (100px), `szV: FILL` → CSS: `width: 100px; flex: 1 0 0`
+- With card height 220px and `padding: t:60 b:60`, illustration fills 220−120 = **100px** vertically
+
+---
+
+### Rule 167. `szV: FILL` child with `align-items: center` parent — always add `align-self: stretch`
+
+**Source:** Static Card right-col gradient not filling height (2026-05-27).
+
+When a Figma auto-layout parent has `crossAlign: CENTER` (`align-items: center`) and a child has `szV: FILL` (or `szH: FILL` on the cross axis), that child **overrides the parent's alignment** using `align-self: stretch` in CSS. Without this, the child uses the parent's `center` and does not fill the full height.
+
+**Symptom:** The right column had a gradient background that only covered a portion of the card height — the right col was centred (not stretched) because `.static-card__content` uses `align-items: center`.
+
+**Fix:**
+```css
+/* Parent has align-items: center (crossAlign: CENTER in DS) */
+.static-card__content { align-items: center; }
+
+/* Child has szV: FILL → must override with align-self: stretch */
+.static-card__right   { align-self: stretch; }
+.static-card__img-col { align-self: stretch; }
+```
+
+**Rule:** Any time a child has `szV: FILL` (or `szH: FILL` for horizontal cross axis) and the parent uses `align-items: center`, always add `align-self: stretch` on the child.
+
+---
+
+### Rule 168. Static Card - 1.5 — full confirmed DS specs (updated 2026-05-27)
+
+**DS file:** `TLVKe3bgJTdVvuPAzgDq2f`, `⚙️ Cards` page, component set `Static Card - 1.5`.
+
+**Card outer:** `height: 220px`, `border: 1px solid #00cc85`, `border-radius: 24px`, `overflow: hidden`, `display: flex`, `background: white`.
+
+**Content frame (outer, node `2616:2959`):**
+- `layoutMode: HORIZONTAL`, `gap: 12px`
+- `align-items: center` (crossAlign: CENTER), `justify-content: flex-end` (mainAlign: MAX)
+- `padding: 0` — all padding lives in the child columns
+
+**Deco group:** `position: absolute`, `width: 456px; height: 461px`, `left: -144px; top: -90.5px`, `z-index: 0` (behind columns), `pointer-events: none`. Clipped by card `overflow: hidden`.
+
+**Image column (`Vector` frame):**
+- `layoutMode: VERTICAL` → CSS: `flex-direction: column`
+- `szH: HUG` → width determined by content + padding
+- `szV: FILL` → `align-self: stretch`
+- `padding: t:60 r:0 b:60 l:28` (user-adjusted left from DS 60px → 28px for 3-col prototype layout)
+- `align-items: flex-start` (crossAlign: MIN), `justify-content: center` (mainAlign: CENTER)
+
+**Illustration (inside img-col):**
+- `szH: FIXED` → `width: 100px`
+- `szV: FILL` → `flex: 1 0 0; min-height: 1px` (fills 220−60−60 = 100px)
+- `overflow: hidden`; image inside: `width: 100%; height: 100%; object-fit: contain`
+
+**Right column (`Content` frame, inner):**
+- `szH: FILL` → `flex: 1 0 0; min-width: 0`
+- `szV: FILL` → `align-self: stretch`
+- `layoutMode: VERTICAL`, `align-items: flex-end` (crossAlign: MAX), `justify-content: center` (mainAlign: CENTER)
+- `gap: 12px`
+- Padding (user-adjusted from DS 60px → 28px for prototype):
+  - Primary / Tertiary: `padding-right: 28px`
+  - Secondary: `padding: 0 28px`
+- Per-variant gradient (DS update applied by user 2026-05-27):
+  - Primary: `linear-gradient(to right, rgba(255,255,201,0) 0%, var(--accents-butter) 40%)`
+  - Secondary: `linear-gradient(to right, rgba(246,254,246,0) 0%, var(--surface-secondary-default-hover) 39.9%)`
+  - Tertiary: no gradient
+
+**Variant backgrounds (on content frame):**
+- Primary: `background: var(--butter-400)` = `#ffffd4`
+- Secondary: `background: var(--surface-secondary-default-hover)` = `#f6fef6`
+- Tertiary: `background: var(--surface-subtle)` = `#F8FAFC`
+
+**New CSS variable:**
+```css
+--accents-butter: #ffffc9;   /* Accents/Butter — Static Card right-col gradient end */
+```
+
+**Mobile overrides (`@media (max-width: 767px)`):**
+```css
+.static-card__img-col                       { padding: 16px 0 16px 16px; }
+.static-card--primary   .static-card__right { padding-right: 16px; }
+.static-card--secondary .static-card__right { padding: 0 16px; }
+.static-card--tertiary  .static-card__right { padding-right: 16px; }
+```
+
+**Mistakes made (2026-05-27):**
+1. Set `flex-direction: row` (default) on img-col — DS is VERTICAL. `flex: 1 0 0` on illustration grew horizontally without bound. Fix: `flex-direction: column` on img-col.
+2. Did not add `align-self: stretch` on right-col — parent `align-items: center` prevented gradient from filling full card height.
+3. Used 60px padding throughout — prototype uses 28px left/right for better proportions in 3-column grid.
+
+---
+
 *Generated: May 2026 | Last updated: 2026-05-26 (Rules 164–165 — component-scoped asset folder convention, local-first asset setup workflow) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

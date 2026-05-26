@@ -31,6 +31,8 @@
       --surface-disabled-on-color:       #e5e5e5;   /* Surface/disabled/on color — disabled button arrow bg (DS confirmed 2026-05-24) */
       --surface-general-default-secondary: #f2f2f2;  /* Surface/general/default-secondary — carousel indicator inactive dot */
       --surface-tertiary-default:        #00564c;   /* Surface/tertiary/default — pressed state bg */
+      --butter-400:                      #ffffd4;   /* Butter/400 — Static Card - 1.5 bg (DS confirmed 2616:2946) */
+      --accents-butter:                  #ffffc9;   /* Accents/Butter — Static Card right-col gradient end */
 
       /* Border */
 
@@ -564,16 +566,99 @@
     }
 
     .static-card__content {
-      flex:            1 0 0;   /* fills card width */
+      flex:            1 0 0;
       min-width:       0;
       height:          100%;
-      position:        relative;   /* contains the absolute bg image */
+      position:        relative;
+      display:         flex;
+      flex-direction:  row;
+      align-items:     center;
+      justify-content: flex-end;
+      gap:             12px;
+    }
+
+    /* Variant backgrounds (DS node 5176:77365 — Primary/Secondary=butter/400, Tertiary=no fill) */
+    .static-card--primary .static-card__content   { background: var(--butter-400); }
+    .static-card--secondary .static-card__content { background: var(--surface-secondary-default-hover); }   /* Surface/secondary/default-hover #f6fef6 — DS node 5176:77367 */
+    .static-card--tertiary .static-card__content   { background: var(--surface-subtle); }
+
+    /* Full-card background image — Tertiary only (DS: absolute inset-0 object-cover) */
+    .static-card__content-bg {
+      position:       absolute;
+      inset:          0;
+      width:          100%;
+      height:         100%;
+      object-fit:     cover;
+      pointer-events: none;
+      z-index:        0;
+      opacity:        0.15;   /* Tertiary bg is subtle in prototype */
+    }
+
+    /* Decorative circle group — DS: abs positioned 456×461, left:-144px top:-90.5px, clipped by card */
+    .static-card__deco {
+      position:       absolute;
+      width:          456px;
+      height:         461px;
+      left:           -144px;
+      top:            -90.5px;
+      pointer-events: none;
+      z-index:        0;
+    }
+    .static-card__deco img { display: block; width: 100%; height: 100%; }
+
+    /* Left image/illustration column — DS: layoutMode VERTICAL, HUG width, FILL height, crossAlign:MIN */
+    .static-card__img-col {
+      display:         flex;
+      flex-direction:  column;
+      align-items:     flex-start;
+      justify-content: center;
+      flex-shrink:     0;
+      overflow:        hidden;
+      align-self:      stretch;
+      padding:         60px 0 60px 28px;
+      position:        relative;
+      z-index:         1;
+    }
+
+    /* Illustration — DS: szH FIXED 100px, szV FILL (fills 220-60-60=100px column height) */
+    .static-card__illustration {
+      width:      100px;
+      flex:       1 0 0;
+      min-height: 1px;
+      overflow:   hidden;
+    }
+    .static-card__illustration img {
+      display:    block;
+      width:      100%;
+      height:     100%;
+      object-fit: contain;
+    }
+
+    /* Right column — texts + button (DS: szV FILL → align-self:stretch, gradient per variant) */
+    .static-card__right {
+      flex:            1 0 0;
+      min-width:       0;
+      align-self:      stretch;
       display:         flex;
       flex-direction:  column;
       align-items:     flex-end;
       justify-content: center;
       gap:             var(--spacing-space-s);   /* 12px */
-      padding:         var(--spacing-space-l) var(--page-padding-x);   /* 20px 60px */
+      position:        relative;
+      z-index:         1;
+    }
+
+    /* Per-variant right column gradient + padding (DS update) */
+    .static-card--primary .static-card__right {
+      background:    linear-gradient(to right, rgba(255,255,201,0) 0%, var(--accents-butter) 40%);
+      padding-right: 28px;
+    }
+    .static-card--secondary .static-card__right {
+      background: linear-gradient(to right, rgba(246,254,246,0) 0%, var(--surface-secondary-default-hover) 39.9%);
+      padding:    0 28px;
+    }
+    .static-card--tertiary .static-card__right {
+      padding-right: 28px;
     }
 
     /* Background image placeholder — absolute, covers full content area (DS: inset-0 object-cover) */
@@ -2965,6 +3050,10 @@
       .static-cards-row { flex-wrap: wrap; }
       .static-cards-row .static-card { flex-basis: 100%; height: auto; }
       .static-cards-row .static-card .static-card__content { height: auto; }
+      .static-card__img-col { padding: 16px 0 16px 16px; }   /* reduced padding at mobile */
+      .static-card--primary .static-card__right   { padding-right: 16px; }
+      .static-card--secondary .static-card__right { padding: 0 16px; }
+      .static-card--tertiary .static-card__right  { padding-right: 16px; }
 
       /* Carousel — Mobile variant (DS Type=Mobile, node 3060:869)
          Full-width bleed (no page padding), no nav buttons, no rounded frame, 152px height */
@@ -4146,48 +4235,78 @@
         <!-- Static Card - 1.5  (node 2616:2895) — three side-by-side promotional banner cards -->
         <section id="StaticNewsCard-Desktop" aria-label="Static Newscards" class="static-cards-row">
 
-          <!-- Static Card 1 -->
-          <div class="static-card">
+          <!-- Static Card 1 — Secondary variant — Start Learning Today -->
+          <div class="static-card static-card--secondary">
             <div class="static-card__content">
-              <div class="static-card__bg"></div>
-              <div class="static-card__texts">
-                <h2 class="static-card__title">Start Learning Today</h2>
-                <p class="static-card__desc">Continue where you left off</p>
+              <!-- Decorative circles: green palette (DS node 5176:77368) -->
+              <div class="static-card__deco">
+                <img src="assets/static-card/deco-secondary.svg" alt="">
               </div>
-              <button class="static-card__btn">
-                <span class="static-card__btn-label">Continue</span>
-                <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
-              </button>
+              <div class="static-card__img-col">
+                <div class="static-card__illustration">
+                  <img src="assets/static-card/illustration-target.svg" alt="Graphic/P.Target">
+                </div>
+              </div>
+              <div class="static-card__right">
+                <div class="static-card__texts">
+                  <h2 class="static-card__title">Start Learning Today</h2>
+                  <p class="static-card__desc">Continue where you left off</p>
+                </div>
+                <button class="static-card__btn">
+                  <span class="static-card__btn-label">Continue</span>
+                  <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
+                </button>
+              </div>
             </div>
           </div>
 
-          <!-- Static Card 2 -->
-          <div class="static-card">
+          <!-- Static Card 2 — Primary variant — This Week's Challenge -->
+          <div class="static-card static-card--primary">
             <div class="static-card__content">
-              <div class="static-card__bg"></div>
-              <div class="static-card__texts">
-                <h2 class="static-card__title">This Week's Challenge</h2>
-                <p class="static-card__desc">Complete 5 exercises to earn coins</p>
+              <!-- Decorative circles: warm palette — orange/yellow/blue (DS node 5176:77352) -->
+              <div class="static-card__deco">
+                <img src="assets/static-card/deco-primary.svg" alt="">
               </div>
-              <button class="static-card__btn">
-                <span class="static-card__btn-label">Try Now</span>
-                <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
-              </button>
+              <div class="static-card__img-col">
+                <div class="static-card__illustration">
+                  <img src="assets/static-card/illustration.svg" alt="">
+                </div>
+              </div>
+              <div class="static-card__right">
+                <div class="static-card__texts">
+                  <h2 class="static-card__title">This Week's Challenge</h2>
+                  <p class="static-card__desc">Complete 5 exercises to earn coins</p>
+                </div>
+                <button class="static-card__btn">
+                  <span class="static-card__btn-label">Continue</span>
+                  <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
+                </button>
+              </div>
             </div>
           </div>
 
-          <!-- Static Card 3 -->
-          <div class="static-card">
+          <!-- Static Card 3 — Tertiary variant — SPM Live Revision -->
+          <div class="static-card static-card--tertiary">
             <div class="static-card__content">
-              <div class="static-card__bg"></div>
-              <div class="static-card__texts">
-                <h2 class="static-card__title">SPM Live Revision</h2>
-                <p class="static-card__desc">Join tonight's free class with top teachers</p>
+              <!-- Decorative circles: white/neutral palette (DS node 5176:77410) -->
+              <div class="static-card__deco">
+                <img src="assets/static-card/deco-tertiary.svg" alt="">
               </div>
-              <button class="static-card__btn">
-                <span class="static-card__btn-label">Join Now</span>
-                <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
-              </button>
+              <div class="static-card__img-col">
+                <div class="static-card__illustration">
+                  <img src="assets/static-card/illustration.svg" alt="">
+                </div>
+              </div>
+              <div class="static-card__right">
+                <div class="static-card__texts">
+                  <h2 class="static-card__title">SPM live Revision</h2>
+                  <p class="static-card__desc">Join tonight's free class with top teachers</p>
+                </div>
+                <button class="static-card__btn">
+                  <span class="static-card__btn-label">Join Now</span>
+                  <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
+                </button>
+              </div>
             </div>
           </div>
 
