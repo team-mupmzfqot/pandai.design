@@ -6119,4 +6119,151 @@ The navbar Maximize button toggles the browser into/out of fullscreen. The paire
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-25 (Rule 157 — fullscreen toggle, Outline/minimize-2 node 260:941, fullscreenchange for ESC) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 158. Sed line-range assembly — unclosed HTML comment before `<script>` silently disables all JS (2026-05-26)
+
+When building an HTML file by concatenating `sed -n 'X,Yp'` extractions from a source, HTML block comments that span an extraction boundary get **orphaned**:
+
+- The `<!--` opener lands in one extraction range.
+- The `-->` closer lives at a line number that falls in the **gap between two ranges** — it is never written.
+- The resulting file has an unclosed `<!--` immediately before a `<script>` tag.
+- The browser parses the `<script>` tag and ALL of its content as **comment text**. No JS executes. No error is thrown. CSS hover effects work normally, so the UI looks correct — only click/keyboard handlers are silently absent.
+
+**In this session (2026-05-26):** The footer was extracted as lines `4628–4651`. Line 4651 was the opening `<!--` of a comment block. The closing `-->` was at line 4652. Script 1 started at line 4653. The gap (line 4652) was never extracted — the 694-line script block ran inside an unclosed comment. Every navbar, dropdown, hamburger, and mobile menu handler was silently dead.
+
+**Detection:**
+```bash
+# After any sed assembly — scan for orphaned comment openers before script tags
+grep -n "<!--" file.html | while read line; do
+  linenum=$(echo "$line" | cut -d: -f1)
+  # Check if that line's comment opener has a closer on the same line
+  content=$(sed -n "${linenum}p" file.html)
+  echo "$content" | grep -q "-->" || echo "POSSIBLE ORPHAN at line $linenum: $content"
+done
+```
+
+**Simpler fix — always verify after assembly:**
+```bash
+# Quick: check for any <!-- not followed by --> before the next <script>
+grep -n "<script>\|<!--\|-->" file.html | head -40
+# Manually confirm every <!-- has a --> before the next <script>
+```
+
+**Rules:**
+1. **Never end a `sed` extraction range mid-comment.** If the last line of your range is `<!-- ═══...`, extend the range until after the closing `-->`.
+2. **After every multi-range assembly**, run the detection check above before opening in a browser.
+3. **If an orphaned opener is found**, delete it (and its label line if any) with `sed -i 'N,Md'` — do not try to close it with `-->` because the content between the opener and the script may already be intentionally removed.
+4. **CSS `:hover` working ≠ JS working.** If buttons look interactive but clicks do nothing, check for unclosed HTML comments before the first `<script>` tag.
+
+**How to avoid during assembly:**
+```bash
+# Check what is on the last line of each sed range before committing to it
+sed -n '4651p' source.html   # if it starts with <!-- → extend range to include -->
+```
+
+---
+
+### Rule 159. Page Template — assembly pattern, structure, and mandatory checks (2026-05-26)
+
+**File:** `zul.test.git/zul.page.template.html` — navigation shell + PageViewport placeholder for all breakpoints.
+
+#### What to extract from the home screen source
+
+| Layer | Source lines | Notes |
+|---|---|---|
+| `:root` + reset + base layout | `18–163` | Tokens + `html/body/page-container/main-content/icon-ds` |
+| Footer + nav CSS | `1244–3026` | Skip `165–1243` (home-screen-specific: welcome, carousel, cards) |
+| SVG defs block | `3030–3220` | Full hidden `<svg><defs>` block — all icon symbols |
+| NavbarPrimary-Desktop HTML | `3221–3578` | Includes all dropdowns |
+| NavTopMenu-Desktop HTML | `3579–3820` | Includes comment block + section |
+| NavBar-Mobile HTML | `3821–3840` | Hamburger for tablet |
+| NavMenu-Tablet + overlay | `3841–3965` | Slide-down panel + dim overlay |
+| Footer HTML | `4628–4651` | **Stop before line 4652** (comment closer — Rule 158) |
+| Script 1 | `4653–5347` | All nav JS handlers + carousel try/catch |
+| NavBar-Bottom | `5353–5371` | Mobile bottom tab bar |
+| mobile-overlay | `5373` | Single div |
+| NavMenu-Mobile | `5378–5466` | Full mobile slide-out panel |
+| Script 2 | `5469–5513` | Mobile menu IIFE (must come AFTER NavMenu-Mobile in DOM) |
+| Script 3 | `5515–5560` | Maximize/fullscreen IIFE |
+
+#### New CSS to add (not in source)
+
+```css
+.page-viewport {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 320px;
+  background: var(--surface-general-default);
+  box-shadow: inset 0 0 0 1px var(--border-general-default);
+  border-radius: var(--corner-radius-corner-4xl);
+}
+.page-viewport__placeholder {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: var(--spacing-space-xs); padding: var(--spacing-space-xl);
+  color: var(--text-disabled-default);
+  font-size: 14px; font-weight: 500; text-align: center;
+  pointer-events: none; user-select: none;
+}
+```
+
+#### HTML structure
+
+```html
+<body>
+  <!-- Hidden SVG defs (all symbols) -->
+  <svg style="position:absolute;width:0;height:0;overflow:hidden" ...><defs>...</defs></svg>
+
+  <section id="Navigation-Shell">
+    <section id="NavbarPrimary-Desktop">...</section>
+    <section id="NavTopMenu-Desktop">...</section>
+    <section id="NavBar-Mobile">...</section>
+    <div id="NavMenu-Tablet" ...></div>
+    <div id="tablet-overlay" ...></div>
+  </section><!-- end Navigation-Shell -->
+
+  <main>
+    <div class="page-container">
+      <div class="main-content">
+        <section id="PageViewport" class="page-viewport">
+          <div class="page-viewport__placeholder">
+            <svg ...><use href="#ic-plus"/></svg>
+            <span>Drop DS component instances here</span>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">...</footer>
+
+  <script> <!-- ALL nav JS handlers --> </script>
+
+  <nav id="NavBar-Bottom" ...>...</nav>
+  <div id="mobile-overlay" ...></div>
+  <div id="NavMenu-Mobile" ...>...</div>
+
+  <script> <!-- mobile menu IIFE --> </script>
+  <script> <!-- maximize IIFE --> </script>
+</body>
+```
+
+**`<section id="Navigation-Shell">` is semantic grouping only.** Fixed-position children (`NavMenu-Tablet`, `NavMenu-Mobile`, `NavBar-Bottom`) escape their DOM parent and use the viewport — the section wrapper does not affect their rendering.
+
+#### Post-assembly mandatory checks (Rule 158)
+
+```bash
+# 1. Verify SVG defs block closes before Navigation-Shell
+grep -n "</defs>\|</svg>\|<section id=\"Navigation-Shell\"" file.html | head -5
+
+# 2. Verify no orphaned <!-- before any <script>
+grep -n "<!--\|-->\|<script>" file.html | grep -B1 "<script>" | head -20
+
+# 3. Confirm all script blocks open and close cleanly
+grep -n "^  <script>\|^  </script>" file.html
+```
+
+**Mistake made (2026-05-26):** Footer sed range `4628–4651` included the `<!--` opener at line 4651. The `-->` closer at line 4652 was in the gap — never written. Script 1 (lines 4653–5347) ran inside an unclosed comment. All navbar buttons appeared interactive (CSS hover worked) but every click handler was dead. Fix: `sed -i '2983,2984d'` to delete the orphaned comment lines.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-26 (Rules 158–159 — sed assembly orphaned comment bug, page template assembly pattern) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

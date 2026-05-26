@@ -1858,4 +1858,57 @@ See `design-md/zul.design.md` Rules 153–156 for the full audit workflow and co
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-24 (Rule 61 / zul Rules 153–156 — DS token audit workflow, Text/Icon/primary/on-color → #ffffff, Surface/disabled/on color = #e5e5e5, Teacher variants in Button-1.5) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 62. Sed line-range assembly — unclosed `<!--` before `<script>` silently kills all JS
+
+When building an HTML file by concatenating `sed -n 'X,Yp'` extractions, an HTML comment whose `<!--` opener lands at the end of one range and whose `-->` closer falls in the **gap** between ranges is never written. The browser treats the entire `<script>` block that follows as comment text — no error, no warning, CSS hover works, but ALL click handlers are silently dead.
+
+**Confirmed instance (2026-05-26):** Footer extracted as lines `4628–4651`. Line 4651 = `<!--`. Closer at line 4652 was the gap. Script 1 (lines `4653–5347`) ran inside an unclosed comment. Every navbar button appeared interactive but no handler ever registered.
+
+**Fix:** `sed -i 'N,Md'` to delete the orphaned opener lines. Or: extend the footer range to include the `-->` line.
+
+**Post-assembly mandatory check:**
+```bash
+grep -n "<!--\|-->\|<script>" file.html | grep -B1 "<script>" | head -20
+```
+
+**CSS `:hover` working ≠ JS working.** If buttons look interactive but clicks do nothing, check for unclosed `<!--` before the first `<script>` tag.
+
+See `design-md/zul.design.md` Rule 158 for the full detection/fix pattern.
+
+---
+
+### 63. Page Template — structure and assembly pattern (`zul.page.template.html`)
+
+**File:** `zul.test.git/zul.page.template.html`
+
+**CSS layers (from home screen, skip home-specific CSS lines 165–1243):**
+- Lines `18–163`: `:root` tokens + reset + base layout
+- Lines `1244–3026`: footer + all navbar CSS + responsive breakpoints
+- New: `.page-viewport` + `.page-viewport__placeholder` added after
+
+**HTML structure:**
+```
+<body>
+  <svg defs block />  ← all icon symbols, hidden
+  <section id="Navigation-Shell">
+    NavbarPrimary-Desktop + NavTopMenu-Desktop + NavBar-Mobile
+    NavMenu-Tablet + tablet-overlay
+  </section>
+  <main> → .page-container → .main-content →
+    <section id="PageViewport" class="page-viewport">  ← drop zone
+  <footer>
+  <script> ALL nav JS handlers </script>   ← Rule 62: no comment before this
+  NavBar-Bottom + mobile-overlay + NavMenu-Mobile
+  <script> mobile menu IIFE </script>      ← must come AFTER NavMenu-Mobile DOM
+  <script> maximize IIFE </script>
+```
+
+**`<section id="Navigation-Shell">` is semantic only** — fixed-position children escape DOM stacking and use the viewport regardless.
+
+**Mandatory post-assembly check (Rule 62):** always verify no `<!--` is orphaned before a `<script>` tag after any sed assembly.
+
+See `design-md/zul.design.md` Rule 159 for full line-number table and extraction details.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-26 (Rules 62–63 / zul Rules 158–159 — sed assembly orphaned comment bug, page template assembly pattern) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
