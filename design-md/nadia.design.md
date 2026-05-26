@@ -2578,3 +2578,186 @@ Integrate the existing My Classes screen into `zul.page.template.html` as a base
 **Rule:** For every non-Home page built from `zul.page.template.html`, `restoreHome()` must be changed to restore the correct active page button. The `document.addEventListener` guard (`is-open` check) must also be added — it is always the correct behaviour and should be considered a template bug fix when applied per-page.
 
 *Last updated: 2026-05-26 | Session 13 — Template Integration + Nav Fix | Branch: staging*
+
+---
+
+## Session 13 — MyRewards Template Integration + Nav Active Fix
+
+*2026-05-26 | Branch: staging | File: `Nadia.test.git/Rewards/nadia_Rewards-Myrewards.html`*
+
+### Task 1 — MyRewards: integrate `zul.page.template.html` as base layout
+
+**File created:** `Nadia.test.git/Rewards/nadia_Rewards-Myrewards.html`
+
+**Assembly approach:**
+- Extracted template CSS (lines 12–2004), SVG defs (2008–2191), Navigation Shell (2209–2956), footer (2980–2999), and all scripts (3002–3902) from `zul.page.template.html`
+- Applied asset path replacements and Rewards active state
+- Appended page-specific CSS, extra SVG symbols, and page-specific JS
+- Placed MyRewards content (breadcrumb + sidebar + voucher card grid) inside `<main>`
+- Tag balance: 6/6 `<section>`, 1/1 `<main>` ✅
+
+**Page-specific CSS additions:**
+```css
+/* Two-panel layout */
+.rewards-layout { display: flex; gap: 12px; align-items: stretch; }
+/* Sidebar */
+.rewards-sidebar { width: 280px; min-width: 240px; flex-shrink: 0;
+  background: #fff; border: 1px solid var(--border-primary-default);
+  border-radius: var(--corner-radius-corner-4xl); padding: var(--spacing-space-m);
+  display: flex; flex-direction: column; gap: var(--spacing-space-xs); }
+/* Voucher card grid */
+.mr-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-space-m); }
+```
+
+**Extra SVG symbols added** (not in template sprite):
+- `ic-video` — used in Premium badge on voucher cards
+- `ic-corner-down-right` — sub-item indicator
+
+**Responsive breakpoints:**
+- Tablet `≤ 1279px`: `rewards-layout` → `flex-direction: column`; grid → 2 columns
+- Mobile `≤ 767px`: grid → 1 column
+
+---
+
+### Task 2 — Rewards active in all 3 nav contexts
+
+**Nav active state swaps:**
+
+| Nav context | Element | Before | After |
+|---|---|---|---|
+| `#NavTopMenu-Desktop` | `.nav-menu-btn` | Home `is-active` | **Rewards `is-active`** + `aria-haspopup="true"` + `aria-current="page"` |
+| `#NavMenu-Tablet` | `.nav-menu-item` | Home `is-active` | **Rewards `is-active`** + `aria-current="page"` |
+| `#NavMenu-Mobile` | `.nav-menu-item` | Home `is-active` | **Rewards `is-active`** + `aria-current="page"` |
+
+---
+
+### Task 3 — Navbar Primary: fix asset paths
+
+**Problem:** Assembly script used old `../navbar/` paths (Nadia-specific PNGs) but the file sits in `Nadia.test.git/Rewards/` which needs `../../src/image-repo/page.template/...` paths — same as CoinQuest and Merchandise.
+
+**Paths fixed (6 occurrences):**
+
+| Element | Old path | New path |
+|---|---|---|
+| Desktop logo mark | `../navbar/logo-mark.png` | `../../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-mark.svg` |
+| Desktop logo wordmark | `../navbar/logo-wordmark.png` | `../../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-text.svg` |
+| Navbar avatar | `../navbar/icon-avatar-user.png` | `../../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png` |
+| Profile dropdown avatar | `../navbar/icon-avatar-user.png` | `../../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png` |
+| Mobile logo mark | `../navbar/logo-mark.png` | `../../src/image-repo/page.template/assets/main/NavBar-Mobile/logo-mark.svg` |
+| Mobile logo wordmark | `../navbar/logo-wordmark.png` | `../../src/image-repo/page.template/assets/main/NavBar-Mobile/logo-text.svg` |
+
+**Rule confirmed:** All Nadia pages in `Nadia.test.git/Rewards/` use `../../src/image-repo/page.template/assets/main/...` paths. Never `../navbar/`.
+
+---
+
+### Task 4 — Sidebar clicks breaking Rewards nav active state
+
+**Problem:** Clicking any `.sidebar-btn` (in the main content area) caused the Rewards `nav-menu-btn` to lose its `is-active` state and Home to become active instead.
+
+**Root cause:** The `document.addEventListener('click', ...)` inside the nav-menu dropdown IIFE fires on *every* click anywhere on the page. When the Rewards dropdown was already closed, `closeDropdown()` ran regardless:
+1. `dropdown.classList.remove('is-open')` — no-op
+2. `btn.classList.remove('is-active')` — ❌ removed Rewards is-active
+3. `restoreHome()` — ❌ added is-active to Home
+
+**Fix 1 — Guard in `closeDropdown()`:**
+```javascript
+function closeDropdown() {
+  if (!dropdown.classList.contains('is-open')) return;  // ← guard added
+  dropdown.classList.remove('is-open');
+  btn.classList.remove('is-active');
+  btn.removeAttribute('aria-current');
+  restoreCurrentPage();  // ← renamed from restoreHome()
+}
+```
+
+**Fix 2 — `restoreHome()` → `restoreCurrentPage()`:**
+```javascript
+function restoreCurrentPage() {
+  var rewardsBtn = navSection.querySelector('[aria-label="Rewards"]');
+  if (rewardsBtn) { rewardsBtn.classList.add('is-active'); rewardsBtn.setAttribute('aria-current', 'page'); }
+}
+```
+
+**Fix 3 — Quiz/Battle/Practice mouseleave timer** (also called `restoreHome()`):
+```javascript
+var rewardsBtn = navSection.querySelector('[aria-label="Rewards"]');
+if (rewardsBtn) { rewardsBtn.classList.add('is-active'); rewardsBtn.setAttribute('aria-current', 'page'); }
+```
+
+**Rule for all Rewards sub-pages:** Every page in `Nadia.test.git/Rewards/` must apply these three fixes — replacing all `restoreHome()` calls with `restoreCurrentPage()` that targets Rewards, and adding the `is-open` guard to `closeDropdown()`.
+
+### File state
+- `Nadia.test.git/Rewards/nadia_Rewards-Myrewards.html` — ~397 KB
+- Full template Navigation Shell, Rewards active in all 3 nav contexts
+- Sidebar toggle + voucher button pressed feedback JS
+- No orphaned `<!--` before `<script>` (Rule 62 clear)
+
+*Last updated: 2026-05-26 | Session 13 — MyRewards Integration + Nav Active Fix | Branch: staging*
+
+---
+
+## Session 14 — Merchandise rebuild + nav persistence fix (data-active-nav pattern) (2026-05-26)
+
+### Task 1 — Merchandise.html: template integration
+
+**Files changed:**
+- `Nadia.test.git/Rewards/nadia_Rewards-Merchandise.html` — rebuilt from `nadia_Rewards-CoinQuest.html` as base (4-step Python transformation):
+  1. Title → `Pandai — Merchandise`
+  2. Breadcrumb `bc-title` + `bc-link--current` → `Merchandise`
+  3. Sidebar active → Merchandise button (`sidebar-btn--active`)
+  4. Main panel → Merchandise-specific content (`.rewards-main--merch`, 4 merch cards, `ic-video` symbol injected)
+
+**Merchandise content spec (from DS Figma):**
+- Main bg: `#e8fbe8` / border: `1px solid #00cc85` / radius: `24px`
+- 4-column merch grid (`repeat(4,1fr)`, `gap:16px`); 2-col at ≤1279px; 1-col at ≤767px
+- Each card: white bg, `1px solid #d9d9d9` border, `24px` radius
+- Premium/Lite label badge: `ic-video` icon + text, `#d9f7ed` bg, `#00cc85` border/text
+- CTA button `.btn-show`: `24px` height, `#00cc85` bg, pill radius — enabled (cards 1–2) + disabled (cards 3–4)
+- Coin icon: local `../image-repo/Rewards-Merchandise/P.Coin.svg`
+
+---
+
+### Task 2 — Nav persistence: Rewards stays active (generic `data-active-nav` pattern)
+
+**Problem:** Clicking the Rewards nav-menu-btn or any sidebar button caused the nav to revert to Home active.
+
+**Root cause:** `restoreHome()` inside the nav dropdown IIFE fires on every `closeDropdown()` path (button toggle, mouseleave, capture-phase outside-click) and unconditionally activates Home — even on sub-pages where Rewards should stay active.
+
+**Previous attempt (now removed from both files):** `MutationObserver` + `requestAnimationFrame` in the sidebar script. Unreliable — raced against `restoreHome()` running synchronously.
+
+**Correct fix — `data-active-nav` pattern (3 parts per file):**
+
+| Part | Change |
+|---|---|
+| `<body data-active-nav="Rewards">` | Page-level signal — marks this page as belonging to Rewards section |
+| `restoreHome()` in nav dropdown IIFE | Reads `data-active-nav`; if set, restores THAT button instead of Home |
+| Sidebar script | Simplified — MutationObserver block removed |
+
+**Updated `restoreHome()` (in the nav dropdown IIFE, same code in both files):**
+```js
+function restoreHome() {
+  var persistLabel = document.body.getAttribute('data-active-nav');
+  if (persistLabel) {
+    var persistBtn = navSection.querySelector('[aria-label="' + persistLabel + '"]');
+    if (persistBtn) { persistBtn.classList.add('is-active'); persistBtn.setAttribute('aria-current', 'page'); return; }
+  }
+  var homeBtn = navSection.querySelector('[aria-label="Home"]');
+  if (homeBtn) { homeBtn.classList.add('is-active'); homeBtn.setAttribute('aria-current', 'page'); }
+}
+```
+
+**Behaviour after fix:**
+- Rewards dropdown opens → Rewards `is-active` ✓
+- Dropdown closes (any path) → `restoreHome()` reads `data-active-nav="Rewards"` → Rewards restored ✓
+- Sidebar button clicked → outside-click fires `closeDropdown()` → same result, Rewards stays ✓
+- Home page / Class pages (no `data-active-nav`) → original Home restore behaviour ✓
+
+**Files updated:**
+- `Nadia.test.git/Rewards/nadia_Rewards-Merchandise.html` — `<body data-active-nav="Rewards">` + updated `restoreHome()` + MutationObserver removed
+- `Nadia.test.git/Rewards/nadia_Rewards-CoinQuest.html` — same changes (was using an earlier hardcoded Rewards-only version; replaced with generic pattern)
+
+**Note — `nadia_Rewards-Myrewards.html`:** Uses a different nav implementation (Session 13 Task 4 pattern — `is-open` guard + `restoreCurrentPage()`). The `data-active-nav` pattern has NOT been applied there yet. When updating MyRewards in future, align it to this generic pattern.
+
+**Rule for all Rewards sub-pages:** Add `data-active-nav="Rewards"` to `<body>` and update `restoreHome()` to the generic version above. No MutationObserver or `is-open` guard needed.
+
+*Last updated: 2026-05-26 | Session 14 — Merchandise rebuild + data-active-nav nav fix | Branch: staging*
