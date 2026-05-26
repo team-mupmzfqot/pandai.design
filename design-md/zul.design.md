@@ -3777,11 +3777,13 @@ The DS `Navbar Notification Button - Parts` (node `3908:13427`) has a **structur
 - Inner row: `border-bottom-color: transparent; padding-bottom: 0` — divider disappears
 - Text: `Text/tertiary/default (#00564c)`
 
-**Pressed state (node `3908:13456`):**
-- Same as Hover but bg: `Surface/primary/focus (#00a36a)`
+**Focus state (node `3908:13456`) — DS state name is "Focus", not "Pressed":**
+- Same border/radius/padding as Hover but bg: `Surface/secondary/default-subtle (#e8fbe8)`
 - Text: `Text/primary/default (#00cc85)`
 
-**CSS implementation pattern:**
+> **Corrected 2026-05-26:** Earlier docs said Pressed bg = `Surface/primary/focus (#00a36a)` — WRONG. Live DS inspection of `3908:13457` (Focus Content frame) confirmed `fills: Surface/secondary/default-subtle = #e8fbe8`. The dark green `#00a36a` was never the correct value.
+
+**CSS implementation pattern (confirmed 2026-05-26):**
 ```css
 /* Default */
 .notif-item__content {
@@ -3802,15 +3804,18 @@ The DS `Navbar Notification Button - Parts` (node `3908:13427`) has a **structur
 }
 .notif-item:hover .notif-item__body { border-bottom-color: transparent; padding-bottom: 0; }
 .notif-item:hover .notif-item__text { color: var(--text-tertiary-default); }
-/* Pressed */
-.notif-item:active .notif-item__content {
-  background:    var(--surface-primary-focus);            /* #00a36a */
+/* Focus / keyboard focus */
+.notif-item:active .notif-item__content,
+.notif-item:focus-visible .notif-item__content {
+  background:    var(--surface-secondary-default-subtle); /* #e8fbe8 */
   box-shadow:    inset 0 0 0 1px var(--border-primary-default);
   border-radius: var(--corner-radius-corner-xl);
   padding:       12px;
 }
-.notif-item:active .notif-item__body { border-bottom-color: transparent; padding-bottom: 0; }
-.notif-item:active .notif-item__text { color: var(--text-primary-default); }
+.notif-item:active .notif-item__body,
+.notif-item:focus-visible .notif-item__body { border-bottom-color: transparent; padding-bottom: 0; }
+.notif-item:active .notif-item__text,
+.notif-item:focus-visible .notif-item__text { color: var(--text-primary-default); }
 ```
 
 **Avatar — 60×60 clip, DS `Outline/user-circle` at 50px:**
@@ -3825,13 +3830,23 @@ The DS `Navbar Notification Button - Parts` (node `3908:13427`) has a **structur
 - CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — **no inset** (Rule 60 / Rule 160 OUTSIDE pattern)
 - Never use `border: 1px solid` — it pushes the dot to 10px and shifts the indicator row
 
-**"See all notification" button — Button - 1.5 (DS node `3908:13010`, confirmed 2026-05-26):**
-- `height: 40px` (paddingTop:8 + content:24 + paddingBottom:8) — NOT `max-height: 48px`
+**"See all notification" button — Button - 1.5, Variants=Primary, Size=L, Type=Student (DS node `3908:13010`, confirmed 2026-05-26):**
+- `height: 40px` (paddingTop:8 + content:24 + paddingBottom:8)
 - `padding: 8px var(--spacing-space-s); border-radius: 60px; width: 100%`
-- bg: `var(--surface-primary-default)`; border: `var(--border-primary-focus)`; text: `var(--text-primary-on-color)`
-- Hover/Pressed: same Primary button palette from Rule 19
+- Default bg: `Surface/primary/default (#00cc85)`; border: `Border/primary/focus (#00a36a)`; text: `Text/primary/on-color (#ffffff)`
 
-**Confirmed mistake (2026-05-26):** Template had `max-height: 48px` on `.notif-see-all`. DS button h=40px (pad 8+8). Fixed to `height: 40px`.
+**Confirmed states (DS node `473:529` component set, 2026-05-26):**
+| State | BG | Border | Text |
+|---|---|---|---|
+| Default | `#00cc85` `Surface/primary/default` | `#00a36a` `Border/primary/focus` | `#ffffff` `Text/primary/on-color` |
+| Hover | `#b5f291` `Surface/secondary/default` | `#70bc6f` `Border/secondary/focus` | `#70bc6f` `Text/secondary/focus` |
+| Pressed | `#00a36a` `Surface/primary/focus` | `#00cc85` `Border/primary/default` | `#00cc85` `Text/primary/default` |
+
+> **Corrected 2026-05-26 DS audit:** Pressed bg = `Surface/primary/focus (#00a36a)`, NOT `Surface/tertiary/default (#00564c)`. Template previously used Tertiary palette for Pressed (wrong). Primary/L Pressed confirmed from DS node `473:650`.
+
+**Confirmed mistakes (2026-05-26):**
+1. Template had `max-height: 48px` — corrected to `height: 40px`.
+2. Template active state used `Surface/tertiary/default` — corrected to `Surface/primary/focus`.
 
 ---
 

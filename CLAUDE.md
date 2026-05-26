@@ -906,21 +906,23 @@ When looking up states for a component used inside a larger DS assembly (e.g. a 
 
 ---
 
-### 40. Button - 1.5 Pressed palette is consistent across all variants
+### 40. Button - 1.5 Pressed palette — PRIMARY and SECONDARY use primary-focus; TERTIARY uses dark teal
 
-All three variants (Primary, Secondary, Tertiary) share the **same Pressed state colour palette** — dark teal. The variant only changes the Default/Hover appearance, not the Pressed.
+~~Rule was wrong: "all variants share dark teal for Pressed".~~ Primary and Secondary Pressed uses `Surface/primary/focus` (#00a36a). Only Tertiary Pressed uses `Surface/tertiary/default` (#00564c).
 
-**Confirmed Pressed state — all variants, Student type (May 2026):**
+**Confirmed Pressed state — Student type (from DS node inspection 2026-05-26):**
 
-| Property | Value | Token |
-|---|---|---|
-| Background | `#00564c` | `Surface/tertiary/default` |
-| Border | `#00453d` | `Border/tertiary/focus` |
-| Label/icon | `#00cc85` | `Text/primary/default` / `Icon/primary/default` |
+| Variant | BG | BG Token | Border | Border Token | Label |
+|---|---|---|---|---|---|
+| **Primary** (S/M/L) | `#00a36a` | `Surface/primary/focus` | `#00cc85` | `Border/primary/default` | `#00cc85` |
+| **Secondary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
+| **Tertiary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
 
-This applies to: `Primary/S`, `Primary/M`, `Primary/L`, `Secondary/M`, `Tertiary/M`, `Tertiary/L`.
+**Note:** Secondary and Tertiary Pressed share dark teal. Primary Pressed is lighter (`#00a36a`).
 
-**Mistake corrected (May 2026):** CLAUDE.md Rule 2 previously stated Secondary/M Pressed = "fills solid with `Surface/primary/default` (#00cc85)". This was wrong — actual DS node `538:1907` shows dark teal (#00564c), not primary green. Never rely on old notes for pressed state colours — always pull from DS.
+**Confirmed nodes:** Primary/L/Student Pressed = `473:650` (bg `#00a36a`, border `#00cc85`). Secondary/M Pressed = `538:1907` (bg `#00564c`). Tertiary/L Pressed = `3029:20022`.
+
+**Mistake made (2026-05-26):** Rule 40 previously stated ALL variants use `Surface/tertiary/default` (#00564c) — this was wrong for Primary. DS inspection of `473:650` (Primary/L Pressed) confirmed `Surface/primary/focus` (#00a36a). Always pull from DS per variant, never assume consistency.
 
 ---
 
@@ -2037,4 +2039,4 @@ See `design-md/zul.design.md` Rule 165.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-26 (Rules 54/60 updated, zul Rule 169 — Indicator Badge OUTSIDE stroke + CTA button height confirmed from Notification dropdown audit) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+*Generated: May 2026 | Last updated: 2026-05-26 (Rule 40 corrected — Primary Pressed ≠ dark teal; Rules 54/108 corrected — notif item Focus bg = #e8fbe8, CTA Pressed = Surface/primary/focus) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
