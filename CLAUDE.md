@@ -2088,4 +2088,18 @@ See `design-md/zul.design.md` Rule 172.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-27 (Rules 69–70 — DS state name mapping, synchronous JS counter pattern; Rules 40/54/108 corrected) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 71. Number Badge DS position — on the Avatar, not action buttons
+
+In the DS Navbar (confirmed `use_figma` on `866:5576`, 2026-05-27), the **Number Badge sits on the Avatar** at `top: 0; right: 0` of the 56×56 avatar frame — **not on any action button**. The bell/notification button has no badge in the DS.
+
+The prototype intentionally places the badge on the bell button. When doing so:
+- Add `transition: opacity 0.15s ease` to the `.num-badge` base rule.
+- Hide it on dropdown open: `#notif-btn.is-active .num-badge { opacity: 0; }` — pure CSS, no JS.
+
+**Rule:** Always use `use_figma` + sibling x/y coordinates to confirm which element a badge belongs to. Never trust `get_design_context` text alone for absolute positioning.
+
+See `design-md/zul.design.md` Rules 173–174.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-27 (Rule 71 — Number Badge DS position on Avatar; CSS-only badge hide on active; Rules 69–70 — DS state name mapping, synchronous JS counter) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

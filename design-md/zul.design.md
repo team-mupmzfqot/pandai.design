@@ -6828,4 +6828,53 @@ function resetNotifItems() {
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-27 (Rules 170–172 — notification item DS states, Primary Pressed palette correction, read/dismiss JS pattern) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 173. Number Badge DS position — on the Avatar, not on action buttons
+
+**Source:** DS live inspection, `use_figma` on Navbar Primary Desktop - 1.5 (`866:5576`), 2026-05-27.
+
+In the DS Navbar, the **Number Badge is placed on the Avatar** (top-right corner), not on any action button. The notification bell button carries no badge in the DS design.
+
+**Confirmed DS positions (Content frame, 1135.52×56px):**
+
+| Element | x | y | w | h |
+|---|---|---|---|---|
+| Top Button Icons (all 6 action buttons) | 759.52 | 0 | 304 | 56 |
+| Avatar - 1.5 | 1079.52 | 0 | 56 | 56 |
+| Number Badge - 1.5 | 1116 | 0 | 20 | 20 |
+
+**Badge position relative to Avatar:** `right: 0; top: 0` (badge right edge = avatar right edge, badge top = avatar top).
+
+```css
+/* DS-correct position — badge on avatar */
+.navbar-avatar-wrap { position: relative; }
+.navbar-avatar-wrap .num-badge { top: 0; right: 0; }
+```
+
+**Prototype decision:** The prototype keeps the badge on the bell button (`#notif-btn`) as a user-facing notification count. This is intentional divergence from DS — the badge is hidden when the dropdown opens (Rule 174) to avoid visual conflict with the Active button state.
+
+**Rule:** Always inspect the DS Navbar component with `use_figma` before assuming which element a badge belongs to. `get_design_context` text output can be misleading about absolute positions — use sibling x/y coordinates from `use_figma` to verify.
+
+---
+
+### Rule 174. Hiding a badge on button active state — CSS-only via `is-active` class
+
+When a badge should disappear while a button's dropdown is open (active), use pure CSS scoped to the `is-active` selector. No JS needed — the existing `is-active` toggle on the button drives it automatically.
+
+**Pattern:**
+```css
+.num-badge { transition: opacity 0.15s ease; }          /* add to base rule */
+#notif-btn.is-active .num-badge { opacity: 0; }         /* hide when dropdown open */
+```
+
+**Why `opacity: 0` over `display: none`:**
+- `display: none` cannot be transitioned — badge disappears/appears instantly.
+- `opacity: 0` + `transition` gives a smooth 0.15s fade that matches the dropdown open animation timing.
+- `pointer-events: none` is already set on `.num-badge` baseline, so there is no interaction concern.
+
+**Why no JS needed:** The notification IIFE already toggles `is-active` on `#notif-btn` on open, removes it on mouseleave and outside-click. The CSS rule responds to that class change automatically on all three paths.
+
+**Applies to both files:** `zul.page.template.html` and `zul.home.screen.html` — always apply interactive state CSS to both files simultaneously (Rule 63/67).
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-27 (Rules 173–174 — Number Badge DS position on Avatar, CSS-only badge hide on active button) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
