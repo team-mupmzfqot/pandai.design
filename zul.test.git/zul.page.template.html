@@ -998,7 +998,13 @@
     .notif-item.is-read .notif-item__indicator { opacity: 0; pointer-events: none; }
 
     /* "See all notification" — Primary/L Button - 1.5, no arrow, full-width */
-    .notif-dropdown__footer { padding-top: var(--spacing-space-m); width: 100%; }
+    .notif-dropdown__footer {
+      padding-top: var(--spacing-space-m);
+      width:       100%;
+      transition:  padding-top 0.3s ease;
+    }
+    /* When all items are dismissed, drop footer padding (dropdown's own 16px padding is enough) */
+    .notif-dropdown.is-empty .notif-dropdown__footer { padding-top: 0; }
     .notif-see-all {
       display:         flex;
       align-items:     center;
@@ -3334,6 +3340,14 @@
 
       // Notification item interaction — click 1: mark read (hide dot) · click 2: dismiss (collapse)
       var notifItems = dropdown.querySelectorAll('.notif-item');
+
+      function checkAllDismissed() {
+        var allGone = Array.prototype.every.call(notifItems, function (item) {
+          return item.style.pointerEvents === 'none';
+        });
+        dropdown.classList.toggle('is-empty', allGone);
+      }
+
       notifItems.forEach(function (item) {
         item.dataset.clicks = '0';
         item.addEventListener('click', function () {
@@ -3344,18 +3358,21 @@
             item.classList.add('is-read');
           } else if (n >= 2) {
             // Second press — collapse and hide the item
-            item.style.transition  = 'max-height 0.3s ease, opacity 0.2s ease';
-            item.style.maxHeight   = item.scrollHeight + 'px';
+            item.style.transition    = 'max-height 0.3s ease, opacity 0.2s ease';
+            item.style.maxHeight     = item.scrollHeight + 'px';
             item.getBoundingClientRect(); // flush layout so transition fires
-            item.style.maxHeight   = '0';
-            item.style.opacity     = '0';
+            item.style.maxHeight     = '0';
+            item.style.opacity       = '0';
             item.style.pointerEvents = 'none';
+            // After collapse, check if all items are now gone
+            setTimeout(checkAllDismissed, 310);
           }
         });
       });
 
       dropdown.addEventListener('mouseleave', function () {
         // Reset all items instantly (dropdown is closing, reset won't be seen)
+        dropdown.classList.remove('is-empty');
         notifItems.forEach(function (item) {
           item.dataset.clicks      = '0';
           item.classList.remove('is-read');
