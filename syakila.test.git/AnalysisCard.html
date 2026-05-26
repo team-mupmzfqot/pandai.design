@@ -1065,17 +1065,29 @@
     @media (max-width: 1279px) {
       :root { --page-padding-x: 32px; }
 
-      /* Analytics card: reduce padding, stack grade + donuts vertically */
+      /* Analytics card: reduce padding */
       .an-analytics-card { padding: 24px; }
-      .an-analytics-row  { flex-direction: column; gap: 24px; align-items: stretch; }
 
-      /* Grade: expand to full width, keep flex-col stacking */
-      .an-grade { width: 100%; }
+      /* 2-column grid: grade (fixed 180px left) | donuts (flexible right) */
+      .an-analytics-row {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: 28px;
+        align-items: start;
+      }
 
-      /* Donut pairs: stack vertically — each col is a row of (donut + legend) */
-      .an-donut-pairs { width: 100%; flex-direction: column; gap: 24px; }
-      .an-donut-col   { width: 100%; flex-direction: row; align-items: center; gap: 24px; }
-      .an-donut-wrap svg { width: 140px; height: 140px; flex-shrink: 0; }
+      /* Grade: auto-sized by grid, slightly smaller font */
+      .an-grade { width: auto; }
+      .an-grade__title-row { font-size: 44px; }
+
+      /* Right column: both donuts side by side (same as desktop), scaled down */
+      .an-donut-col { gap: 16px; }
+      .an-donut-wrap svg { width: 120px; height: 120px; flex-shrink: 0; }
+
+      /* Legend: tighten row width to fit smaller columns */
+      .an-legend__title { font-size: 14px; }
+      .an-legend__row { width: auto; min-width: 100px; }
+      .an-legend__rows { gap: 16px; }
 
       /* Table: reduce fixed columns so table fits without horizontal scroll */
       .an-col--chapter { width: 60px; }
@@ -1127,73 +1139,91 @@
       /* Outer card + analytics card: tighter padding */
       .an-outer          { padding: 12px; }
       .an-analytics-card { padding: var(--space-m); }
-      .an-analytics-row  { gap: var(--space-m); }
+      .an-analytics-row  { display: flex; flex-direction: column; gap: var(--space-m); }
 
-      /* ── Grade: tighter vertical stack ── */
-      .an-grade            { gap: var(--space-xs); }
-      .an-grade__title-row { font-size: 32px; }
-      .an-grade__details   { gap: var(--space-xxs); }  /* 4px between pill/stats */
+      /* ── Grade: horizontal 2-col layout — grade letter left, details right ── */
+      .an-grade {
+        display: flex; flex-direction: row;
+        align-items: flex-start;
+        gap: var(--space-m);
+        width: 100%;
+      }
+      .an-grade__title-row { font-size: 40px; flex-shrink: 0; }
+      .an-grade__details   { flex: 1; min-width: 0; gap: var(--space-xxs); }
 
-      /* ── Donuts: stack vertically — each item is donut left + legend right ── */
+      /* ── Donuts: each item is donut left + legend right ── */
       .an-donut-pairs { flex-direction: column; gap: var(--space-m); }
       .an-donut-col   { width: 100%; flex-direction: row; align-items: center; justify-content: flex-start; gap: var(--space-m); }
-      .an-donut-wrap svg { width: 100px; height: 100px; flex-shrink: 0; }
+      .an-donut-wrap svg { width: 120px; height: 120px; flex-shrink: 0; }
 
       /* Legend: left-aligned, compact rows */
       .an-legend        { align-items: flex-start; flex-shrink: 1; min-width: 0; }
       .an-legend__title { display: none; }
       .an-legend__rows  { gap: var(--space-xs); }
-      .an-legend__row   { width: 130px; margin: 0; }
+      .an-legend__row   { width: auto; min-width: 110px; margin: 0; }
 
-      /* ── Table: card layout — each row becomes a 2-line flex card ── */
+      /* ── Table: 2-column grid card layout per row ── */
       .an-table-outer { overflow-x: visible; }
       .an-table       { min-width: unset; }
 
-      /* Hide header row — labels inferred from layout position */
+      /* Hide thead — context comes from position */
       .an-table thead { display: none; }
 
-      /* Table + body: block flow */
+      /* Reset table/tbody to block so rows can be grid containers */
       .an-table,
-      .an-table tbody,
-      .an-table tbody tr { display: block; }
+      .an-table tbody { display: block; }
 
-      /* Each row: flex with wrap → creates 2 lines
-         Line 1: [Chapter 32px] [Topic flex-1]
-         Line 2: [Score  32px] [Status flex-1]         */
+      /* Each row: 2-col × 2-row grid
+         Col 1 (32px): Chapter badge | Score value
+         Col 2 (1fr):  Topic name   | Status dot+label   */
       .an-table tbody tr {
-        display: flex; flex-wrap: wrap; align-items: center;
-        gap: 4px 10px;
+        display: grid;
+        grid-template-columns: 32px 1fr;
+        grid-template-rows: auto auto;
+        column-gap: 10px;
+        row-gap: 6px;
         padding: 12px var(--space-m);
         border-bottom: 1px solid var(--border-general-default);
       }
       .an-table tbody tr:last-child { border-bottom: none; }
 
-      /* All cells: strip table borders + padding */
-      .an-td { display: block; border: none !important; padding: 0; height: auto; }
+      /* All cells: strip table chrome */
+      .an-td { border: none !important; padding: 0; height: auto; }
 
-      /* Chapter — left anchor, line 1 */
+      /* Chapter — col 1, row 1 — small circle badge */
       .an-td--chapter {
-        width: 32px; flex-shrink: 0;
-        font-size: 12px; font-weight: 600; text-align: center;
+        grid-column: 1; grid-row: 1;
+        width: 28px; height: 28px;
+        background: var(--surface-general-default-secondary);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 11px; font-weight: 600;
+        color: var(--text-default-body);
+        justify-self: center;
       }
 
-      /* Topic — fills rest of line 1 */
+      /* Topic — col 2, row 1 */
       .an-table tbody tr .an-td:nth-child(2) {
-        flex: 1; min-width: 0;
+        grid-column: 2; grid-row: 1;
         font-size: 13px; font-weight: 500;
+        color: var(--text-default-heading);
+        align-self: center;
       }
 
-      /* Score — left anchor, line 2 (same 32px as Chapter above it) */
+      /* Score — col 1, row 2 */
       .an-table tbody tr .an-td:nth-child(3) {
-        width: 32px; flex-shrink: 0;
-        font-size: 12px; font-weight: 600; text-align: center;
+        grid-column: 1; grid-row: 2;
+        font-size: 12px; font-weight: 600;
         color: var(--text-primary-focus);
+        text-align: center;
+        align-self: center;
       }
 
-      /* Status — fills rest of line 2 */
+      /* Status — col 2, row 2 */
       .an-table tbody tr .an-td:nth-child(4) {
-        flex: 1; min-width: 0;
+        grid-column: 2; grid-row: 2;
         font-size: 13px;
+        align-self: center;
       }
 
       /* Topic pills: tighter gap */
@@ -1418,7 +1448,7 @@
       </div>
       <div class="navbar-avatar-wrap" id="avatar-btn" role="button" aria-haspopup="true" aria-expanded="false">
         <div class="navbar-avatar">
-          <img src="assets/avatar-user.png" class="navbar-avatar__img" alt="Syakila">
+          <img src="../src/image-repo/Achievement/assets/avatar-user.png" class="navbar-avatar__img" alt="Syakila">
         </div>
         <span class="navbar-badge">15</span>
       </div>
@@ -1428,18 +1458,18 @@
 
 <!-- Learn Menu 1.5 popup  DS node 3908:2462 — 3×4 grid of 12 feature items -->
 <div class="learn-menu" id="learn-menu" role="menu" aria-hidden="true">
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="assets/feature-live-tuition.svg" alt="Live Tuition"></div><span class="learn-menu__label">Live Tuition</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="assets/feature-live-help.svg" alt="Live Help"></div><span class="learn-menu__label">Live Help</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="assets/feature-quiz.svg" alt="Quiz"></div><span class="learn-menu__label">Quiz</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="assets/feature-practice.svg" alt="Practice"></div><span class="learn-menu__label">Practice</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="assets/feature-chapters.svg" alt="Chapters"></div><span class="learn-menu__label">Chapters</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="assets/feature-textbook.svg" alt="Textbooks"></div><span class="learn-menu__label">Textbooks</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="assets/feature-quick-notes.svg" alt="Quick Notes"></div><span class="learn-menu__label">Quick Notes</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="assets/feature-videos.png" alt="Videos"></div><span class="learn-menu__label">Videos</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="assets/feature-experiments.svg" alt="Experiments"></div><span class="learn-menu__label">Experiments</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="assets/feature-personality.svg" alt="Personality"></div><span class="learn-menu__label">Personality</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="assets/feature-university.svg" alt="University"></div><span class="learn-menu__label">University</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="assets/feature-rewards.svg" alt="Rewards"></div><span class="learn-menu__label">Rewards</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-live-tuition.svg" alt="Live Tuition"></div><span class="learn-menu__label">Live Tuition</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-live-help.svg" alt="Live Help"></div><span class="learn-menu__label">Live Help</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-quiz.svg" alt="Quiz"></div><span class="learn-menu__label">Quiz</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-practice.svg" alt="Practice"></div><span class="learn-menu__label">Practice</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-chapters.svg" alt="Chapters"></div><span class="learn-menu__label">Chapters</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-textbook.svg" alt="Textbooks"></div><span class="learn-menu__label">Textbooks</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-quick-notes.svg" alt="Quick Notes"></div><span class="learn-menu__label">Quick Notes</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-videos.png" alt="Videos"></div><span class="learn-menu__label">Videos</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-experiments.svg" alt="Experiments"></div><span class="learn-menu__label">Experiments</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-personality.svg" alt="Personality"></div><span class="learn-menu__label">Personality</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-university.svg" alt="University"></div><span class="learn-menu__label">University</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-rewards.svg" alt="Rewards"></div><span class="learn-menu__label">Rewards</span></div>
 </div>
 
 <!-- Profile Menu popup  DS node 3908:4194 -->
@@ -1530,15 +1560,15 @@
 <!-- Download Apps Dropdown  DS node 3909:3059 -->
 <div class="download-dropdown" id="download-dropdown" role="menu" aria-hidden="true">
   <a class="download-dropdown__item" href="#" role="menuitem">
-    <img src="assets/icon-playstore.png" alt="Google Play" width="24" height="24">
+    <img src="../src/image-repo/Achievement/assets/icon-playstore.png" alt="Google Play" width="24" height="24">
     <span class="download-dropdown__item-label">Google Android</span>
   </a>
   <a class="download-dropdown__item" href="#" role="menuitem">
-    <img src="assets/icon-appstore.png" alt="App Store" width="24" height="24">
+    <img src="../src/image-repo/Achievement/assets/icon-appstore.png" alt="App Store" width="24" height="24">
     <span class="download-dropdown__item-label">Apple iOS</span>
   </a>
   <a class="download-dropdown__item" href="#" role="menuitem">
-    <img src="assets/icon-appgallery.png" alt="Huawei AppGallery" width="24" height="24">
+    <img src="../src/image-repo/Achievement/assets/icon-appgallery.png" alt="Huawei AppGallery" width="24" height="24">
     <span class="download-dropdown__item-label">Huawei</span>
   </a>
 </div>
@@ -1850,7 +1880,7 @@
              DS: Subject Badge/Bahasa Melayu - L, border #2e4799 bg #4d77ff -->
         <div id="an-badge" class="an-subject-badge">
           <div class="an-subject-badge__icon">
-            <img id="an-badge-icon" src="assets/subject-icons/icon-bmelayu.svg" alt="Bahasa Melayu" width="20" height="20">
+            <img id="an-badge-icon" src="../src/image-repo/Achievement/assets/subject-icons/icon-bmelayu.svg" alt="Bahasa Melayu" width="20" height="20">
           </div>
           <div id="an-badge-label" class="an-subject-badge__label">
             <svg class="an-subject-badge__pointer" width="4" height="8" viewBox="0 0 4 8" fill="white" aria-hidden="true">
@@ -2547,25 +2577,25 @@
     };
 
     var SUBJECTS = {
-      'Chinese Language': { score: 80, icon: 'assets/subject-icons/icon-chinese-lang.svg', alt: 'Chinese Language', bg: '#f94848', border: '#c73a3a', text: '#f2f2f2' },
-      'English':          { score: 90, icon: 'assets/subject-icons/icon-english.svg',       alt: 'English',          bg: '#ff4d56', border: '#cc3e45', text: '#f2f2f2' },
-      'Bahasa Melayu':    { score: 76, icon: 'assets/subject-icons/icon-bmelayu.svg',        alt: 'Bahasa Melayu',    bg: '#4d77ff', border: '#2e4799', text: '#f2f2f2' },
-      'Mathematics':      { score: 80, icon: 'assets/subject-icons/icon-math.svg',           alt: 'Mathematics',      bg: '#42ac7b', border: '#358a62', text: '#f2f2f2' },
-      'Pendidikan Islam': { score: 84, icon: 'assets/subject-icons/icon-islamic.svg',        alt: 'Pendidikan Islam', bg: '#de4d7f', border: '#b23e66', text: '#f2f2f2' },
-      'Pendidikan Moral': { score: 50, icon: 'assets/subject-icons/icon-moral.svg',          alt: 'Pendidikan Moral', bg: '#0072ca', border: '#005ba2', text: '#f2f2f2' },
-      'Science':          { score: 85, icon: 'assets/subject-icons/icon-science.svg',        alt: 'Science',          bg: '#ffd641', border: '#ccab34', text: '#998027' },
-      'Add Math':         { score: 72, icon: 'assets/subject-icons/icon-add-math.svg',       alt: 'Add Math',         bg: '#283589', border: '#182052', text: '#f2f2f2' },
-      'Biology':          { score: 88, icon: 'assets/subject-icons/icon-biology.svg',        alt: 'Biology',          bg: '#8431d8', border: '#6a27ad', text: '#f2f2f2' },
-      'Chemistry':        { score: 65, icon: 'assets/subject-icons/icon-chemistry.svg',      alt: 'Chemistry',        bg: '#e20082', border: '#b50068', text: '#f2f2f2' },
-      'Physics':          { score: 78, icon: 'assets/subject-icons/icon-physics.svg',        alt: 'Physics',          bg: '#27a0d7', border: '#1f80ac', text: '#f2f2f2' },
-      'History':          { score: 91, icon: 'assets/subject-icons/icon-history.svg',        alt: 'History',          bg: '#a97c50', border: '#876340', text: '#f2f2f2' },
-      'Geography':        { score: 60, icon: 'assets/subject-icons/icon-geography.svg',      alt: 'Geography',        bg: '#77d836', border: '#5fad2b', text: '#478220' },
-      'Economy':          { score: 55, icon: 'assets/subject-icons/icon-economy.svg',        alt: 'Economy',          bg: '#ff5733', border: '#cc4629', text: '#f2f2f2' },
-      'Account':          { score: 83, icon: 'assets/subject-icons/icon-account.svg',        alt: 'Account',          bg: '#0072ca', border: '#004479', text: '#f2f2f2' },
-      'Business':         { score: 70, icon: 'assets/subject-icons/icon-business.svg',       alt: 'Business',         bg: '#efb42b', border: '#bf9022', text: '#f2f2f2' },
-      'Computer Science': { score: 95, icon: 'assets/subject-icons/icon-comp-science.svg',  alt: 'Computer Science', bg: '#d10070', border: '#a7005a', text: '#f2f2f2' },
-      'KAFA':             { score: 77, icon: 'assets/subject-icons/icon-kafa.svg',           alt: 'KAFA',             bg: '#8ae3a9', border: '#6eb687', text: '#538865' },
-      'RBT':              { score: 82, icon: 'assets/subject-icons/icon-rbt.svg',            alt: 'RBT',              bg: '#353535', border: '#2a2a2a', text: '#f2f2f2' }
+      'Chinese Language': { score: 80, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-chinese-lang.svg', alt: 'Chinese Language', bg: '#f94848', border: '#c73a3a', text: '#f2f2f2' },
+      'English':          { score: 90, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-english.svg',       alt: 'English',          bg: '#ff4d56', border: '#cc3e45', text: '#f2f2f2' },
+      'Bahasa Melayu':    { score: 76, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-bmelayu.svg',        alt: 'Bahasa Melayu',    bg: '#4d77ff', border: '#2e4799', text: '#f2f2f2' },
+      'Mathematics':      { score: 80, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-math.svg',           alt: 'Mathematics',      bg: '#42ac7b', border: '#358a62', text: '#f2f2f2' },
+      'Pendidikan Islam': { score: 84, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-islamic.svg',        alt: 'Pendidikan Islam', bg: '#de4d7f', border: '#b23e66', text: '#f2f2f2' },
+      'Pendidikan Moral': { score: 50, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-moral.svg',          alt: 'Pendidikan Moral', bg: '#0072ca', border: '#005ba2', text: '#f2f2f2' },
+      'Science':          { score: 85, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-science.svg',        alt: 'Science',          bg: '#ffd641', border: '#ccab34', text: '#998027' },
+      'Add Math':         { score: 72, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-add-math.svg',       alt: 'Add Math',         bg: '#283589', border: '#182052', text: '#f2f2f2' },
+      'Biology':          { score: 88, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-biology.svg',        alt: 'Biology',          bg: '#8431d8', border: '#6a27ad', text: '#f2f2f2' },
+      'Chemistry':        { score: 65, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-chemistry.svg',      alt: 'Chemistry',        bg: '#e20082', border: '#b50068', text: '#f2f2f2' },
+      'Physics':          { score: 78, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-physics.svg',        alt: 'Physics',          bg: '#27a0d7', border: '#1f80ac', text: '#f2f2f2' },
+      'History':          { score: 91, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-history.svg',        alt: 'History',          bg: '#a97c50', border: '#876340', text: '#f2f2f2' },
+      'Geography':        { score: 60, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-geography.png',      alt: 'Geography',        bg: '#77d836', border: '#5fad2b', text: '#478220' },
+      'Economy':          { score: 55, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-economy.svg',        alt: 'Economy',          bg: '#ff5733', border: '#cc4629', text: '#f2f2f2' },
+      'Account':          { score: 83, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-account.svg',        alt: 'Account',          bg: '#0072ca', border: '#004479', text: '#f2f2f2' },
+      'Business':         { score: 70, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-business.svg',       alt: 'Business',         bg: '#efb42b', border: '#bf9022', text: '#f2f2f2' },
+      'Computer Science': { score: 95, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-comp-science.svg',  alt: 'Computer Science', bg: '#d10070', border: '#a7005a', text: '#f2f2f2' },
+      'KAFA':             { score: 77, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-kafa.svg',           alt: 'KAFA',             bg: '#8ae3a9', border: '#6eb687', text: '#538865' },
+      'RBT':              { score: 82, icon: '../src/image-repo/Achievement/assets/subject-icons/icon-rbt.svg',            alt: 'RBT',              bg: '#353535', border: '#2a2a2a', text: '#f2f2f2' }
     };
 
     var params  = new URLSearchParams(window.location.search);
