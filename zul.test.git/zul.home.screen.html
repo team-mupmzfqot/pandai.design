@@ -1605,12 +1605,14 @@
       text-align:      center;
       white-space:     nowrap;
       pointer-events:  none;
+      transition:      opacity 0.15s ease;
     }
     .num-badge--primary {
       background: var(--surface-primary-default);          /* #00cc85 */
       color:      var(--text-primary-on-color);            /* #ffffff */
       box-shadow: 0 0 0 1px var(--border-on-color);        /* 1px white border OUTSIDE (strokeAlign:OUTSIDE) */
     }
+    #notif-btn.is-active .num-badge { opacity: 0; }
 
     /* Avatar - 1.5 (node 684:621): flex items-start · 48×48 · border · overflow-clip */
     .navbar-avatar {
