@@ -1153,7 +1153,7 @@ Implemented profile menu items from the Profile Menu `get_design_context` output
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision — including seemingly trivial fixes. No exceptions.
 
 ```
-0a. Read design-md/zul.design.md  → ALL rules 1–156, confirmed specs, known mistakes — NO EXCEPTIONS
+0a. Read design-md/zul.design.md  → ALL rules 1–160, confirmed specs, known mistakes — NO EXCEPTIONS
 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f         → single source of truth, re-verify every value live
 0c. Audit component anatomy (Rule 49 / zul Rule 93):
       → get_design_context on COMPONENT_SET node → list ALL variants
@@ -1689,7 +1689,7 @@ This rule was wrong. Multi-color brand icons CAN be SVG symbols using hardcoded 
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision — including seemingly trivial fixes. No exceptions.
 
 ```
-0a. Read design-md/zul.design.md  → ALL rules 1–156, confirmed specs, known mistakes — NO EXCEPTIONS
+0a. Read design-md/zul.design.md  → ALL rules 1–160, confirmed specs, known mistakes — NO EXCEPTIONS
 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f         → single source of truth, re-verify every value live
 0c. Audit component anatomy (Rule 49 / zul Rule 93):
       → get_design_context on COMPONENT_SET node → list ALL variants
@@ -1769,7 +1769,7 @@ See `design-md/zul.design.md` Rule 112.
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision. No exceptions.
 
 ```
-0a. Read design-md/zul.design.md       → ALL rules 1–156, confirmed specs, known mistakes
+0a. Read design-md/zul.design.md       → ALL rules 1–160, confirmed specs, known mistakes
 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs
 0c. get_design_context on COMPONENT SET → list ALL variant names
 0d. get_design_context on EACH state   → extract every token BEFORE writing CSS
@@ -1804,26 +1804,39 @@ See `design-md/zul.design.md` Rule 112.
 
 ---
 
-### 60. `strokeAlign: INSIDE` = `box-shadow: inset` — never `border: 1px solid`
+### 60. `strokeAlign` → CSS mapping — always verify with `use_figma` before writing any ring/border
 
-**Non-negotiable. Every component with an INSIDE stroke. No exceptions.**
+**Non-negotiable. Three values, three different CSS patterns.**
 
-Figma `strokeAlign: INSIDE` renders the stroke inside the frame's bounding box — **zero layout effect**. CSS `border: 1px solid` adds pixels OUTSIDE, making the element larger than DS intended.
+| Figma `strokeAlign` | CSS | Why |
+|---|---|---|
+| `INSIDE` | `box-shadow: inset 0 0 0 Npx var(--token)` | Ring stays inside bounds, zero layout effect |
+| `OUTSIDE` | `box-shadow: 0 0 0 Npx var(--token)` | Ring outside bounds, follows `border-radius`, zero layout effect |
+| `CENTER` | `border: Npx solid var(--token)` | Half inside/outside, affects box model |
+
+**Never use `border: 1px solid` for INSIDE strokes** — it adds pixels outside, making the element larger than DS intended.
+**Never use `outline` for OUTSIDE strokes** — `outline` ignores `border-radius`, producing a square ring on circular/pill elements.
 
 ```css
-/* ✓ Correct — matches strokeAlign: INSIDE */
+/* strokeAlign: INSIDE */
 box-shadow: inset 0 0 0 1px var(--token);
 
-/* ✗ Wrong — adds 2px to element's visual size */
-border: 1px solid var(--token);
+/* strokeAlign: OUTSIDE */
+box-shadow: 0 0 0 1px var(--token);   /* NO inset */
 ```
 
-**How to check:** `use_figma` → read `node.strokeAlign`. If `"INSIDE"` → `box-shadow: inset`.
+**How to check:** `use_figma` → `node.strokeAlign`. Three values = three patterns. Never assume.
 
-**Confirmed instance — Secondary/M button arrow circle (2026-05-19):**
+**Confirmed INSIDE — Secondary/M button arrow circle (2026-05-19):**
 All 5 states: `w:20 h:20`, `padding:2px`, `strokeAlign: INSIDE`. State changes = only `box-shadow` color + `background`. Never change `width`, `height`, or `padding` between states unless raw DS node confirms it.
 
-**`get_design_context` generated code can misreport padding.** It showed `p-[1px]` for Default but raw `use_figma` confirmed `padding: 2` for all states. Always verify exact dimensions via raw `use_figma` node inspection (`paddingTop/Right/Bottom/Left`, `strokeAlign`, `width`, `height`).
+**Confirmed OUTSIDE — Number Badge - 1.5 Primary/M (`618:418`, 2026-05-26):**
+`strokeAlign: OUTSIDE`, `strokeWeight: 1`, stroke = white (`Border/on-color` = `--border-on-color: #ffffff`).
+CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — no `inset`.
+
+**`get_design_context` generated code can misreport padding.** Always verify via raw `use_figma` (`paddingTop/Right/Bottom/Left`, `strokeAlign`, `strokeWeight`, `width`, `height`).
+
+**See also:** zul.design.md Rule 118 (INSIDE full reference), Rule 160 (OUTSIDE confirmed pattern).
 
 ---
 
@@ -1832,7 +1845,7 @@ All 5 states: `w:20 h:20`, `padding:2px`, `strokeAlign: INSIDE`. State changes =
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision. No exceptions.
 
 ```
-0a. Read design-md/zul.design.md       → ALL rules 1–156, confirmed specs, known mistakes
+0a. Read design-md/zul.design.md       → ALL rules 1–160, confirmed specs, known mistakes
 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs
 0c. get_design_context on COMPONENT SET → list ALL variant names
 0d. get_design_context on EACH state   → extract every token BEFORE writing CSS

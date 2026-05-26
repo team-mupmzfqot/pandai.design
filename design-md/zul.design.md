@@ -4202,10 +4202,17 @@ Using `border: Npx solid` instead is **always wrong** for INSIDE strokes — it 
 | Figma stroke setting | CSS equivalent | Layout effect |
 |---|---|---|
 | `strokeAlign: INSIDE` | `box-shadow: inset 0 0 0 Npx color` | None — stays inside bounds |
-| `strokeAlign: OUTSIDE` | `outline: Npx solid color` | None — outside box model |
+| `strokeAlign: OUTSIDE` | `box-shadow: 0 0 0 Npx color` (**not** `outline`) | None — outside box model, follows border-radius |
 | `strokeAlign: CENTER` | `border: Npx solid color` (with `box-sizing`) | Adds to box when width is explicit |
 
-**How to check in `use_figma`:** Inspect `node.strokeAlign` on the frame. If `"INSIDE"` → `box-shadow: inset`. Always check — never assume.
+**How to check in `use_figma`:** Inspect `node.strokeAlign` on the frame. Always check — never assume.
+
+**Why `box-shadow` not `outline` for OUTSIDE:** `outline` does not follow `border-radius` — circular/pill badges get a square ring. `box-shadow: 0 0 0 Npx` renders the ring outside the border-box, correctly follows `border-radius`, and has no layout effect. Always prefer `box-shadow` for OUTSIDE strokes on rounded elements.
+
+**Confirmed OUTSIDE instance — Number Badge - 1.5 Primary/M (node `618:418`, 2026-05-26):**
+- `strokeAlign: "OUTSIDE"`, `strokeWeight: 1`, stroke color = white (`Border/on-color`)
+- CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — NO `inset`
+- Token `--border-on-color: #ffffff` added to `:root`
 
 #### Confirmed instance — Secondary/M arrow circle (2026-05-19)
 
@@ -5338,13 +5345,27 @@ When a component's internal padding uses a CSS custom property that is already r
 | Padding | 4px all sides | `Spacing/space-xxs` |
 | Border-radius | 60px | `Corner Radius/corner-rounded` |
 | Background | `#00cc85` | `Surface/primary/default` |
-| Text color | `#e1f9ea` | `Text/primary/on-color` |
+| Text color | `#ffffff` | `Text/primary/on-color` (updated 2026-05-24, was `#e1f9ea`) |
 | Font | Poppins SemiBold 10px | `Body/B7` |
+| Border | 1px white OUTSIDE | `Border/on-color` = `#ffffff` → `box-shadow: 0 0 0 1px` (**new, confirmed 2026-05-26**) |
 | Overflow | hidden | — |
 
-**Other variants:** Tertiary (`#f2f2f2` bg, `#bfbfbf` text), Success (`#00cc85` bg), Alert (`#ff9f43` bg), Warning (`#ff4c51` bg), Info (`#00a2e8` bg), Teacher (`#ff5c98` bg). All use `Text/warning/on-color` (white) except Primary/Success (`Text/primary/on-color` #e1f9ea) and Tertiary (`Icon/disabled/default` #bfbfbf).
+**`--border-on-color: #ffffff`** — new `:root` token added 2026-05-26. Maps to DS `Border/on-color`. Used on all Number Badge variants.
 
-**CSS implementation (confirmed 2026-05-22):**
+**All 6 types (M size, confirmed 2026-05-26 live DS audit):**
+
+| Type | bg | text | DS node |
+|---|---|---|---|
+| Primary | `#00cc85` (`--surface-primary-default`) | `#ffffff` | `618:418` |
+| Success | `#00cc85` (same as Primary) | `#ffffff` | `618:511` |
+| Alert | `#ff9f43` (`--surface-alert-default`) | `#ffffff` | `618:520` |
+| Warning | `#ff4c51` (`--surface-warning-default`) | `#ffffff` | `618:538` |
+| Info | `#00a2e8` (`--surface-informative-default`) | `#ffffff` | `618:544` |
+| Tertiary | `#f2f2f2` (`--surface-disabled-primary`) | `#bfbfbf` (`--icon-disabled-default`) | `618:499` |
+
+All types carry the white `strokeAlign: OUTSIDE` border. See Rule 118 / Rule 160 for the CSS pattern.
+
+**CSS implementation (updated 2026-05-26):**
 ```css
 .num-badge {
   position:        absolute;
@@ -5357,7 +5378,7 @@ When a component's internal padding uses a CSS custom property that is already r
   height:          20px;
   max-height:      20px;
   min-width:       20px;
-  padding:         var(--spacing-space-xxs);        /* 4px */
+  padding:         var(--spacing-space-xxs);           /* 4px */
   border-radius:   var(--corner-radius-corner-rounded); /* 60px */
   overflow:        hidden;
   font-family:     'Poppins', sans-serif;
@@ -5369,10 +5390,27 @@ When a component's internal padding uses a CSS custom property that is already r
   pointer-events:  none;
 }
 .num-badge--primary {
-  background: var(--surface-primary-default);   /* #00cc85 */
-  color:      var(--text-primary-on-color);      /* #e1f9ea */
+  background: var(--surface-primary-default);          /* #00cc85 */
+  color:      var(--text-primary-on-color);             /* #ffffff */
+  box-shadow: 0 0 0 1px var(--border-on-color);         /* white OUTSIDE border — strokeAlign:OUTSIDE */
 }
 ```
+
+**`.navbar-badge` (avatar profile badge, node `1084:1826`) — same Primary spec + same border:**
+```css
+.navbar-badge {
+  position:   absolute;
+  top:        0;
+  right:      -0.48px;  /* DS: right-[-0.48px] relative to Avatar group */
+  /* ... same height/min-width/padding/border-radius/font as .num-badge ... */
+  background: var(--surface-primary-default);
+  box-shadow: 0 0 0 1px var(--border-on-color);
+  line-height: 1;       /* ← CRITICAL — NOT var(--spacing-space-s) */
+  color:      var(--text-primary-on-color);
+}
+```
+
+**Bug fixed 2026-05-26:** `.navbar-badge` had `line-height: var(--spacing-space-s)` (12px). This caused off-center vertical alignment (line box taller than font, shifting the number up inside the flex container). Fixed to `line-height: 1`.
 
 **CRITICAL — `line-height: 1` not the DS text style value:**
 
@@ -5386,7 +5424,9 @@ The `.navbar-action-btn` is 44×44px. The icon is 24×24, centered at `left: 10p
 
 **Parent requirements:** `position: relative; overflow: visible` on the parent container (`.nav-btn-content` already satisfies both).
 
-**Mistake made (2026-05-22):** Initially used `line-height: var(--spacing-space-s)` (12px) from the DS `Body/B7` text style. The "5" appeared slightly off-center. Fixed by changing to `line-height: 1`.
+**Mistakes made:**
+- 2026-05-22: Used `line-height: var(--spacing-space-s)` (12px) from `Body/B7`. The "5" appeared slightly off-center. Fixed to `line-height: 1`.
+- 2026-05-26: `.navbar-badge` retained `line-height: var(--spacing-space-s)` after the `.num-badge` fix — both classes must always use `line-height: 1`. Fixed in both `.num-badge--primary` and `.navbar-badge` simultaneously.
 
 ---
 
@@ -6266,4 +6306,52 @@ grep -n "^  <script>\|^  </script>" file.html
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-26 (Rules 158–159 — sed assembly orphaned comment bug, page template assembly pattern) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 160. `strokeAlign: OUTSIDE` → `box-shadow: 0 0 0 Npx` — never `outline` (confirmed 2026-05-26)
+
+**Source:** Live `use_figma` inspection of Number Badge - 1.5 Primary/M (`618:418`).
+
+#### The rule
+
+`strokeAlign: OUTSIDE` means the stroke paints **beyond** the element's bounding box — zero layout effect, renders ring outside the element's natural size. The correct CSS equivalent is:
+
+```css
+box-shadow: 0 0 0 Npx <color>;   /* NO inset — outside stroke */
+```
+
+**Never use `outline`** for rounded elements — `outline` does not follow `border-radius` in most browsers, producing a square ring around circular/pill badges. `box-shadow` (no `inset`) follows `border-radius` and produces the correct rounded ring.
+
+| Figma stroke | CSS | Why |
+|---|---|---|
+| `strokeAlign: INSIDE` | `box-shadow: inset 0 0 0 Npx color` | Ring inside bounds, no layout effect |
+| `strokeAlign: OUTSIDE` | `box-shadow: 0 0 0 Npx color` | Ring outside bounds, no layout effect, follows border-radius |
+| `strokeAlign: CENTER` | `border: Npx solid color` | Half inside / half outside, affects box model |
+
+**Always verify with `use_figma` → `node.strokeAlign`** before writing any ring/border CSS. The three values require three different CSS approaches — never assume.
+
+**Workflow:**
+```js
+const node = await figma.getNodeByIdAsync('NODE_ID');
+return { strokeAlign: node.strokeAlign, strokeWeight: node.strokeWeight, strokes: node.strokes };
+// INSIDE  → box-shadow: inset 0 0 0 Npx color
+// OUTSIDE → box-shadow: 0 0 0 Npx color
+// CENTER  → border: Npx solid color
+```
+
+**Confirmed instance:** Number Badge - 1.5 (`618:418`) — `strokeAlign: "OUTSIDE"`, `strokeWeight: 1`, stroke = white (`#ffffff`, `Border/on-color`).
+
+```css
+/* ✓ Correct */
+.num-badge--primary { box-shadow: 0 0 0 1px var(--border-on-color); }
+
+/* ✗ Wrong — inset renders ring inside element, opposite of DS */
+.num-badge--primary { box-shadow: inset 0 0 0 1px var(--border-on-color); }
+
+/* ✗ Wrong — outline ignores border-radius, gives square ring on circular badge */
+.num-badge--primary { outline: 1px solid var(--border-on-color); }
+```
+
+**See also:** Rule 118 (full INSIDE/OUTSIDE/CENTER reference table).
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-26 (Rule 160 — strokeAlign:OUTSIDE CSS pattern; Rule 118 updated; Rule 146 updated — Number Badge white border, text color, navbar-badge line-height fix) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

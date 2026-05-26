@@ -64,6 +64,7 @@
       --border-general-default:   #d9d9d9;   /* Border/general/default — carousel cards */
       --border-tertiary-focus:    #00453d;   /* Border/tertiary/focus — pressed state border */
       --border-disabled-disabled: #bfbfbf;   /* Border/disabled/disabled */
+      --border-on-color:          #ffffff;   /* Border/on-color — white border on Number Badge (DS 618:417 updated 2026-05-26) */
 
       /* Corner Radius (confirmed from design contexts) */
       --corner-radius-corner-pill:    999px;  /* Corner Radius/corner-pill â€” nav row 2 */
@@ -416,7 +417,8 @@
     .navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--icon-primary-on-color); }   /* Icon/primary/on-color #e1f9ea — DS node 3908:6148 Active */
 
     /* Number Badge - 1.5 (DS node 618:417, Type=Primary/M)
-       20px circle · #00cc85 bg · #e1f9ea text · 60px radius · 4px padding
+       20px circle · #00cc85 bg · #ffffff text · 1px white border · 60px radius · 4px padding
+       6 types: Primary/Success=#00cc85, Alert=#ff9f43, Warning=#ff4c51, Info=#00a2e8, Tertiary=#f2f2f2
        Positioned absolute top-right over icon — center aligns with icon top-right corner */
     .num-badge {
       position:        absolute;
@@ -441,8 +443,9 @@
       pointer-events:  none;
     }
     .num-badge--primary {
-      background: var(--surface-primary-default);       /* #00cc85 */
-      color:      var(--text-primary-on-color);         /* #e1f9ea */
+      background: var(--surface-primary-default);          /* #00cc85 */
+      color:      var(--text-primary-on-color);            /* #ffffff */
+      box-shadow: 0 0 0 1px var(--border-on-color);        /* 1px white border OUTSIDE (strokeAlign:OUTSIDE) */
     }
 
     /* Avatar - 1.5 (node 684:621): flex items-start · 48×48 · border · overflow-clip */
@@ -482,6 +485,7 @@
       right:           -0.48px;   /* DS: right-[-0.48px] relative to Avatar group */
       background:      var(--surface-primary-default);
       border-radius:   var(--corner-radius-corner-rounded);
+      box-shadow:      0 0 0 1px var(--border-on-color);          /* 1px white border OUTSIDE (strokeAlign:OUTSIDE) */
       min-width:       20px;
       height:          20px;
       padding:         var(--spacing-space-xxs);   /* 4px */
@@ -490,7 +494,7 @@
       justify-content: center;
       font-size:       10px;
       font-weight:     600;
-      line-height:     var(--spacing-space-s);   /* 12px */
+      line-height:     1;          /* Rule 146: never DS line-height in fixed-height flex badge */
       color:           var(--text-primary-on-color);
       overflow:        hidden;
       pointer-events:  none;
