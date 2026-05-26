@@ -1979,4 +1979,50 @@ Never add the DS gap to `body.padding-bottom` — it already comes from `.main-c
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-26 (Rules 64–66 / zul Rules 161–163 — flex fill chain, margin:0 auto width fix, fixed footer gap math) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### 67. Image assets — one component-scoped subfolder per DS instance, under `src/image-repo/[page]/assets/[variant]/`
+
+Every page's file-based images (those used via `<img src>`) live in:
+```
+src/image-repo/[page-name]/assets/[variant]/[ComponentName]/
+```
+
+Each DS component instance that uses `<img>` files gets its own subfolder named after its HTML section `id`. If the same asset appears in two components (e.g. logo in both desktop and mobile navbar), **copy it into each component folder separately** — never cross-reference between folders.
+
+**Confirmed — page.template (2026-05-26):**
+```
+src/image-repo/page.template/assets/main/
+├── NavbarPrimary-Desktop/   logo-mark.svg, logo-text.svg, Avatar-Aidan.png
+├── LearnMenu/               feature-*.png × 12
+└── NavBar-Mobile/           logo-mark.svg, logo-text.svg
+```
+
+**Path from `zul.test.git/` HTML files:** `../src/image-repo/[page]/assets/[variant]/[Component]/file`
+
+**Inline SVG symbols (`<use href="#ic-*">`) are exempt** — they have no file path and need no folder entry.
+
+See `design-md/zul.design.md` Rule 164.
+
+---
+
+### 68. Local-first asset setup — create + copy files locally before committing
+
+Create folders and copy files locally first, then commit. A single `git pull` then gives teammates both structure and files with no separate setup.
+
+```
+1. New-Item -ItemType Directory -Force   ← create folders
+2. Copy-Item source dest                 ← copy files into component subfolders
+3. Get-ChildItem -Recurse -File          ← verify all files present
+4. Update all <img src> paths in HTML
+5. grep for old paths — must return empty
+6. git add → commit → push
+```
+
+Never commit an empty folder — Git tracks files, not directories.
+
+See `design-md/zul.design.md` Rule 165.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-26 (Rules 67–68 / zul Rules 164–165 — component-scoped asset folders, local-first asset workflow) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

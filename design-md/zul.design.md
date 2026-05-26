@@ -6481,4 +6481,78 @@ body {
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-26 (Rules 161–163 — flex fill chain, margin:0 auto width fix, fixed footer gap math) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 164. Component-scoped image asset folders — one subfolder per DS component instance
+
+**Source:** zul.page.template.html asset organisation session (2026-05-26).
+
+Every page prototype gets its own asset directory under `src/image-repo/`. Inside it, each DS component instance that uses file-based images (not inline SVG symbols) gets its own named subfolder matching the HTML section `id`.
+
+**Folder convention:**
+```
+src/image-repo/
+└── [page-name]/
+    └── assets/
+        └── [variant]/          ← e.g. "main" for the primary/default page variant
+            ├── [ComponentA]/   ← named after the DS component instance (matches section id)
+            │   └── image.png
+            ├── [ComponentB]/
+            │   └── image.svg
+            └── [ComponentC]/
+                └── image.png
+```
+
+**Confirmed structure — page.template (2026-05-26):**
+```
+src/image-repo/page.template/assets/main/
+├── NavbarPrimary-Desktop/   logo-mark.svg, logo-text.svg, Avatar-Aidan.png
+├── LearnMenu/               feature-*.png × 12
+└── NavBar-Mobile/           logo-mark.svg, logo-text.svg
+```
+
+**Rules:**
+- If the same asset appears in two component instances (e.g. logo in NavbarPrimary-Desktop AND NavBar-Mobile), **copy it into each component folder separately** — never cross-reference between component folders.
+- Never reference assets from a different page's folder (e.g. `image-repo/Home/`) inside a page template — copy them into the correct component folder first.
+- Inline SVG symbols (`<use href="#ic-*">`) have no file path and need no folder entry — this rule applies only to `<img src>` file references.
+- Folder name must match the HTML `<section id="">` or `<div id="">` of the component it serves.
+
+**Path from `zul.test.git/` to `src/`:** use `../src/` prefix — `../` steps up from `zul.test.git/` to the repo root.
+
+```html
+<!-- Template at: zul.test.git/zul.page.template.html -->
+<img src="../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-mark.svg">
+<!--          ↑ steps up to pandai.design/ root -->
+```
+
+**Mistake made:** Original template referenced `icons/logo-mark.svg` (local to `zul.test.git/icons/`) and `../src/image-repo/Home/Avatar-Aidan.png` (wrong page folder). Both were migrated to the component-scoped structure.
+
+---
+
+### Rule 165. Local-first asset setup — create folders and copy files before committing
+
+**Source:** zul.page.template.html asset organisation session (2026-05-26).
+
+Always create the asset folder structure and copy the files **locally first**, then commit and push. This way a single `git pull` gives teammates both the folder structure and the files — no separate manual setup step needed.
+
+**Workflow:**
+```
+1. Create target folders (PowerShell New-Item -ItemType Directory -Force)
+2. Copy source files into component subfolders (PowerShell Copy-Item)
+3. Verify all files exist (Get-ChildItem -Recurse -File)
+4. Update all <img src> paths in the HTML to point to the new locations
+5. Verify no old paths remain (grep for old path pattern)
+6. git add + git commit + git push
+```
+
+**Never commit the folder structure without the files** — an empty folder is invisible to Git (Git tracks files, not directories). Always copy the actual files in step 2 before committing.
+
+**Verification command (step 5):**
+```bash
+grep -n 'src="icons/\|image-repo/Home/' file.html
+# Must return no output — confirms all old paths are gone
+```
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-26 (Rules 164–165 — component-scoped asset folder convention, local-first asset setup workflow) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
