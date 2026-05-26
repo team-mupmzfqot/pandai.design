@@ -2033,12 +2033,18 @@
       --text-body:     #666666;
     }
 
-    /* ── PageViewport override for Browse Classes layout ────────── */
-    #PageViewport {
-      align-items:    stretch;
-      justify-content: flex-start;
-      padding:        var(--spacing-space-m);
-      gap:            var(--spacing-space-m);
+    /* ── Browse Classes viewport — replaces page-viewport card ─── */
+    .viewport-browseclasses {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-m);   /* 16px between breadcrumb and cards */
+      width:          100%;
+      /* no border-radius, no box-shadow — plain flow section */
+    }
+    /* bc-row left-aligned: flex row, items at start, fills width */
+    .viewport-browseclasses .bc-row {
+      align-items: flex-start;
+      width:       100%;
     }
 
     /* ── DS Avatar 1.5 — node 3065:40786 ───────────────────────── */
@@ -3313,7 +3319,7 @@
     <div class="page-container">
       <div class="main-content">
 
-        <section id="PageViewport" class="page-viewport" aria-label="Browse Classes">
+        <section id="viewport-browseclasses" class="viewport-browseclasses" aria-label="Browse Classes">
 
           <!-- ── Breadcrumb 1.5 — DS node 3528:52796 ── -->
           <section id="BrowseClasses-Breadcrumb-Desktop" class="bc-row" aria-label="Breadcrumb">
@@ -3779,7 +3785,7 @@
 
           </section><!-- /#BrowseClasses-Cards-Desktop -->
 
-        </section>
+        </section><!-- /#viewport-browseclasses -->
 
       </div>
     </div>
