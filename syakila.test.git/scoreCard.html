@@ -982,19 +982,58 @@
       .footer { display: none; }
       body { padding-bottom: 86px; }
 
-      /* Score card layout */
-      .sc-left, .sc-mid { width: 100%; flex: none; }
-      .sc-subjects { gap: 8px; }
-      .sc-mini-stat-card { padding: 12px; }
+      /* ── Top: Grade (filled) + Score (standalone) side by side ── */
+      .sc-card-outer { flex-direction: row; flex-wrap: wrap; gap: var(--space-xs); }
+      .sc-left {
+        flex: 1; min-width: 0; width: auto;
+        background: var(--surface-primary-default-subtle);
+        border-color: var(--border-primary-default);
+        padding: var(--space-s); gap: var(--space-xs);
+      }
+      .sc-mid {
+        flex: 1; min-width: 0; width: auto;
+        background: transparent; border: none;
+        padding: var(--space-xs) 0; gap: var(--space-s);
+      }
+
+      /* Grade donut: scale down for narrow column */
+      .sc-donut-wrap svg { width: 110px; height: 110px; }
+      .sc-donut-label    { font-size: 18px; }
+
+      /* Mini-stat: tighter inside narrow column */
+      .sc-mini-stat-card  { padding: 8px; }
+      .sc-mini-stat-item  { padding: 0 8px; }
       .sc-mini-stat-value { font-size: 20px; line-height: 28px; }
       .sc-mini-stat-label { font-size: 10px; line-height: 14px; }
-      /* DS Responsives mobile: H4 → 18px/28lh, T1/T2 → 16px/24lh */
+
+      /* Score graph: scale to column width */
+      .sc-graph svg { width: 100%; height: auto; }
+
+      /* Typography */
       .sc-overview-title { font-size: 18px; line-height: 28px; }
-      .sc-mid__subtitle { font-size: 16px; line-height: 24px; }
-      .sc-mid__value    { font-size: 24px; line-height: 32px; }
-      .sc-stat-value    { font-size: 16px; line-height: 24px; }
-      .sc-stat-label    { font-size: 10px; line-height: 14px; }
-      .sc-donut-label   { font-size: 22px; }
+      .sc-mid__subtitle  { font-size: 16px; line-height: 24px; }
+      .sc-mid__value     { font-size: 24px; line-height: 32px; }
+
+      /* ── Subject pills: left-align to fill container width ── */
+      .sc-subjects { justify-content: flex-start; gap: 8px; }
+
+      /* ── Description: 2-column grid, each stat half is its own cell ── */
+      .sc-right {
+        flex-basis: 100%;
+        display: grid; grid-template-columns: 1fr 1fr;
+        gap: var(--space-xs);
+      }
+      .sc-stat-card:not(.sc-stat-card--sm) { display: contents; }
+      .sc-stat-half {
+        background: var(--surface-general-default);
+        border: 1px solid var(--sc-inner-border, var(--border-general-default));
+        border-radius: var(--corner-m);
+        padding: var(--space-s); gap: var(--space-xxs);
+      }
+      .sc-stat-half + .sc-stat-half { padding-left: var(--space-s); border-left: none; }
+      .sc-stat-card--sm { grid-column: 1 / -1; padding: var(--space-s); border-radius: var(--corner-m); }
+      .sc-stat-value { font-size: 16px; line-height: 24px; }
+      .sc-stat-label { font-size: 10px; line-height: 14px; }
       .menubar-overlay {
         display: flex;
         align-items: center;
