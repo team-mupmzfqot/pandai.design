@@ -128,7 +128,7 @@
     img  { display: block; }
     a    { text-decoration: none; color: inherit; }
     button { font-family: var(--font-family); cursor: pointer; }
-    html { min-width: 390px; }
+    html { min-width: 390px; height: 100%; }
 
     body {
       font-family:    var(--font-family);
@@ -138,14 +138,27 @@
       min-width:      390px;
       max-width:      var(--page-max-width);
       margin:         0 auto;
-      padding-bottom: 74px; /* 44px fixed footer + 30px DS gap */
+      padding-bottom: 60px; /* reserve footer height; main-content padding-bottom adds the 16px DS gap */
+      min-height:     100vh;
+      display:        flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex:           1;
+      display:        flex;
+      flex-direction: column;
     }
 
     .page-container {
-      max-width:     var(--page-max-width);
-      margin:        0 auto;
-      padding-left:  var(--page-padding-x);
-      padding-right: var(--page-padding-x);
+      width:          100%;
+      max-width:      var(--page-max-width);
+      margin:         0 auto;
+      padding-left:   var(--page-padding-x);
+      padding-right:  var(--page-padding-x);
+      flex:           1;
+      display:        flex;
+      flex-direction: column;
     }
 
     /* DS icon size rules â€” never override unless explicitly stated */
@@ -159,6 +172,7 @@
     .main-content {
       display:        flex;
       flex-direction: column;
+      flex:           1;
       gap:            var(--section-gap);    /* 16px between every section */
       padding-top:    var(--section-gap);    /* 16px space at top of page */
       padding-bottom: var(--section-gap);    /* 16px space above footer */
@@ -1960,7 +1974,8 @@
       flex-direction:  column;
       align-items:     center;
       justify-content: center;
-      min-height:      320px;
+      flex:            1;
+      min-height:      0;
       background:      var(--surface-general-default);
       box-shadow:      inset 0 0 0 1px var(--border-general-default);
       border-radius:   var(--corner-radius-corner-4xl);
