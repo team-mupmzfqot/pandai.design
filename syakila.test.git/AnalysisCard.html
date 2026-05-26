@@ -1164,72 +1164,27 @@
       .an-legend__rows  { gap: var(--space-xs); }
       .an-legend__row   { width: auto; min-width: 110px; margin: 0; }
 
-      /* ── Table: 2-column grid card layout per row ── */
-      .an-table-outer { overflow-x: visible; }
+      /* ── Table: tablet-style layout scaled for mobile ── */
+      .an-table-outer { overflow-x: auto; }
       .an-table       { min-width: unset; }
 
-      /* Hide thead — context comes from position */
-      .an-table thead { display: none; }
+      .an-col--chapter { width: 40px; }
+      .an-col--score   { width: 48px; }
+      .an-col--status  { width: 100px; }
 
-      /* Reset table/tbody to block so rows can be grid containers */
-      .an-table,
-      .an-table tbody { display: block; }
-
-      /* Each row: 2-col × 2-row grid
-         Col 1 (32px): Chapter badge | Score value
-         Col 2 (1fr):  Topic name   | Status dot+label   */
-      .an-table tbody tr {
-        display: grid;
-        grid-template-columns: 32px 1fr;
-        grid-template-rows: auto auto;
-        column-gap: 10px;
-        row-gap: 6px;
-        padding: 12px var(--space-m);
-        border-bottom: 1px solid var(--border-general-default);
+      .an-th {
+        padding: 8px;
+        font-size: 12px; line-height: 16px;
+        height: auto; min-height: 40px;
       }
-      .an-table tbody tr:last-child { border-bottom: none; }
-
-      /* All cells: strip table chrome */
-      .an-td { border: none !important; padding: 0; height: auto; }
-
-      /* Chapter — col 1, row 1 — small circle badge */
-      .an-td--chapter {
-        grid-column: 1; grid-row: 1;
-        width: 28px; height: 28px;
-        background: var(--surface-general-default-secondary);
-        border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 11px; font-weight: 600;
-        color: var(--text-default-body);
-        justify-self: center;
+      .an-td {
+        padding: 8px;
+        font-size: 12px; line-height: 16px;
+        height: auto; min-height: 40px;
+        word-break: break-word;
       }
-
-      /* Topic — col 2, row 1 */
-      .an-table tbody tr .an-td:nth-child(2) {
-        grid-column: 2; grid-row: 1;
-        font-size: 13px; font-weight: 500;
-        color: var(--text-default-heading);
-        align-self: center;
-      }
-
-      /* Score — col 1, row 2 */
-      .an-table tbody tr .an-td:nth-child(3) {
-        grid-column: 1; grid-row: 2;
-        font-size: 12px; font-weight: 600;
-        color: var(--text-primary-focus);
-        text-align: center;
-        align-self: center;
-      }
-
-      /* Status — col 2, row 2 */
-      .an-table tbody tr .an-td:nth-child(4) {
-        grid-column: 2; grid-row: 2;
-        font-size: 13px;
-        align-self: center;
-      }
-
-      /* Topic pills: tighter gap */
-      .an-pills { gap: var(--space-xs); }
+      .an-status { flex-wrap: wrap; gap: 4px; }
+      .an-pills  { gap: var(--space-xs); }
 
       /* Footer: stack vertically, center both groups */
       body { padding-bottom: 102px; }
