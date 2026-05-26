@@ -1851,10 +1851,10 @@
         </button>
 
         <!-- Level 2: Report Card — Icon Left=false + text + Icon Right=true (chevron) -->
-        <a class="pd-link15" href="syakila.html">
+        <button class="pd-link15" id="bc-report-card" type="button">
           <span class="pd-link15__text pd-link15__text--parent">Report Card for Form 5</span>
           <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
-        </a>
+        </button>
 
         <!-- Level 3: Bahasa Melayu — State=Active, Icon Left=false, Icon Right=false -->
         <span class="pd-link15" style="cursor:default">
@@ -2609,6 +2609,9 @@
     var subjectEl = document.getElementById('an-breadcrumb-subject');
     if (titleEl)   titleEl.textContent = 'Analysis for ' + subject + ' Form 5';
     if (subjectEl) subjectEl.textContent = subject;
+
+    var bcReportCard = document.getElementById('bc-report-card');
+    if (bcReportCard) bcReportCard.addEventListener('click', function() { window.location.href = 'syakila.html'; });
 
     // Subject badge — update CSS vars + icon + label
     var badgeEl      = document.getElementById('an-badge');
