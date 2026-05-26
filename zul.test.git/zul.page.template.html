@@ -978,13 +978,14 @@
       color:       var(--text-primary-default);
       white-space: nowrap;
     }
-    /* Unread indicator — 8×8 dot, pt-4 from top, Surface/primary/default #00cc85 */
+    /* Unread indicator — Indicator Badge - 1.5: 8×8, #00cc85 bg, 1px white OUTSIDE stroke (DS strokeAlign:OUTSIDE) */
     .notif-item__indicator { display: flex; align-items: flex-start; padding-top: 4px; flex-shrink: 0; }
     .notif-item__dot {
       width:         8px;
       height:        8px;
       border-radius: var(--corner-radius-corner-rounded);
       background:    var(--surface-primary-default);
+      box-shadow:    0 0 0 1px var(--border-on-color);   /* strokeAlign:OUTSIDE → no inset; #ffffff */
       flex-shrink:   0;
     }
 
@@ -995,7 +996,7 @@
       align-items:     center;
       justify-content: center;
       width:           100%;
-      max-height:      48px;
+      height:          40px;
       padding:         8px var(--spacing-space-s);
       background:      var(--surface-primary-default);
       border:          1px solid var(--border-primary-focus);
