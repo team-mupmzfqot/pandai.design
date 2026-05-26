@@ -2013,6 +2013,281 @@
       color:  var(--text-disabled-default);
     }
 
+    /* ═══════════════════════════════════════════════════════════════
+       PAGE VIEWPORT CONTENT — replaces placeholder for content pages
+    ═══════════════════════════════════════════════════════════════ */
+    .page-viewport-content {
+      flex:           1;
+      min-height:     0;
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-m);
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       Breadcrumb 1.5 — DS node 3065:42735
+    ══════════════════════════════════════════════════════════════ */
+    .bc-row {
+      display:     flex;
+      align-items: center;
+      gap:         12px;
+      min-height:  36px;
+    }
+    .bc-left {
+      flex:        1;
+      width:       100%;
+      min-width:   0;
+      display:     flex;
+      align-items: center;
+      gap:         var(--sp-m);
+    }
+    .bc-title {
+      font-size:   24px;
+      font-weight: 500;
+      line-height: 36px;
+      color:       #00564c;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .bc-sep {
+      width:       1px;
+      height:      20px;
+      background:  #d9d9d9;
+      flex-shrink: 0;
+    }
+    .bc-trail {
+      display:     flex;
+      align-items: center;
+      gap:         var(--sp-xs);
+      flex-wrap:   wrap;
+    }
+    .bc-link {
+      display:         inline-flex;
+      align-items:     center;
+      gap:             var(--sp-xs);
+      font-size:       14px;
+      font-weight:     400;
+      line-height:     20px;
+      color:           var(--og-500);
+      text-decoration: none;
+      white-space:     nowrap;
+    }
+    .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .bc-chevron {
+      width:           16px;
+      height:          16px;
+      stroke:          #bfbfbf;
+      fill:            none;
+      stroke-width:    1.5;
+      stroke-linecap:  round;
+      stroke-linejoin: round;
+      flex-shrink:     0;
+    }
+    .bc-link--current { color: #666; }
+
+    /* ══════════════════════════════════════════════════════════════
+       Two-panel rewards layout — DS node 3065:42736
+       Left sidebar: 280px  |  gap: 12px  |  Right main: flex-1
+    ══════════════════════════════════════════════════════════════ */
+    .rewards-layout {
+      display:     flex;
+      gap:         12px;
+      align-items: stretch;
+      flex:        1;
+      min-height:  0;
+    }
+
+    /* Rewards Sidebar — DS node 3849:48401 */
+    .rewards-sidebar {
+      width:          280px;
+      min-width:      240px;
+      flex-shrink:    0;
+      background:     #fff;
+      border:         1px solid var(--og-500);
+      border-radius:  24px;
+      padding:        var(--sp-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--sp-xs);
+    }
+    .sidebar-balance {
+      background:      #fef1ce;
+      border:          1px solid #fabb0a;
+      border-radius:   16px;
+      padding:         var(--sp-xs) var(--sp-xs) var(--sp-xs) var(--sp-xxxs);
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      gap:             2px;
+      overflow:        hidden;
+      flex-shrink:     0;
+    }
+    .sidebar-balance__coin {
+      width:       24px;
+      height:      24px;
+      flex-shrink: 0;
+      display:     block;
+      object-fit:  contain;
+    }
+    .sidebar-balance__value {
+      font-size:           18px;
+      font-weight:         700;
+      line-height:         28px;
+      color:               #fff;
+      -webkit-text-stroke: 2px #c89608;
+      paint-order:         stroke fill;
+      white-space:         nowrap;
+    }
+    .sidebar-divider {
+      height:      1px;
+      background:  #d9d9d9;
+      width:       100%;
+      flex-shrink: 0;
+      margin:      4px 0;
+    }
+    .sidebar-btn {
+      width:         100%;
+      border-radius: 108px;
+      padding:       var(--sp-xs) var(--sp-m);
+      display:       flex;
+      align-items:   center;
+      gap:           10px;
+      cursor:        pointer;
+      background:    transparent;
+      border:        1px solid transparent;
+      flex-shrink:   0;
+      transition:    background 0.12s ease;
+      text-align:    left;
+    }
+    .sidebar-btn:not(.sidebar-btn--active):hover {
+      background:   #e8fbe8;
+      border-color: #00cc85;
+    }
+    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__icon-wrap { color: #00cc85; }
+    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__label     { color: #00cc85; }
+    .sidebar-btn--active { background: #b5f291; border-color: #00a36a; }
+    .sidebar-btn__icon-wrap {
+      width:       24px;
+      height:      24px;
+      padding:     2px;
+      box-sizing:  border-box;
+      overflow:    hidden;
+      flex-shrink: 0;
+      color:       var(--icon-primary-default);
+    }
+    .sidebar-btn--active .sidebar-btn__icon-wrap { color: #00a36a; }
+    .sidebar-btn__icon-wrap svg { display: block; width: 100%; height: 100%; }
+    .sidebar-btn__icon-wrap[data-icon="box"]           { padding: 1.24px 2px 1.23px; }
+    .sidebar-btn__icon-wrap[data-icon="shopping-bag"]  { padding: 2px 3px; }
+    .sidebar-btn__icon-wrap[data-icon="shopping-cart"] { padding: 1px 1px 2px; }
+    .sidebar-btn__label {
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       #666;
+      flex:        1 0 0;
+      min-width:   0;
+      white-space: nowrap;
+    }
+    .sidebar-btn--active .sidebar-btn__label { color: #00a36a; }
+
+    /* Right Main Panel */
+    .rewards-main {
+      flex:           1;
+      min-width:      0;
+      background:     #e8fbe8;
+      border:         1px solid var(--og-500);
+      border-radius:  var(--r-4xl);
+      padding:        var(--sp-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--sp-m);
+      overflow:       hidden;
+    }
+
+    /* Quest cards 2-col grid */
+    .quest-grid {
+      display:               grid;
+      grid-template-columns: 1fr 1fr;
+      gap:                   var(--sp-m) var(--sp-xs);
+    }
+
+    /* Coin Quest Card — DS node 3897:66037 */
+    .qc {
+      background:    #fff;
+      border:        1px solid var(--og-500);
+      border-radius: var(--r-4xl);
+      padding:       var(--sp-m);
+      display:       flex;
+      gap:           var(--sp-m);
+      align-items:   center;
+      height:        150px;
+      overflow:      hidden;
+    }
+    .qc__img {
+      background:      #e8fbe8;
+      border:          1px solid #baf3b9;
+      border-radius:   12px;
+      padding:         0 var(--sp-m);
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      align-self:      stretch;
+      flex-shrink:     0;
+    }
+    .qc__img img    { width: 80px; height: 80px; object-fit: contain; display: block; }
+    .qc__content    { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 15px; }
+    .qc__header     { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .qc__title      { font-size: 16px; font-weight: 600; line-height: 24px; color: var(--text-default-heading); white-space: nowrap; flex-shrink: 0; }
+    .qc__badges     { display: flex; gap: 8px; align-items: center; }
+    .lbadge         { display: inline-flex; align-items: center; justify-content: center; min-height: 24px; border-radius: 60px; padding: 2px 8px; font-size: 12px; font-weight: 500; line-height: 12px; white-space: nowrap; border: 1px solid; }
+    .lbadge--easy   { background: #d9f7ed; border-color: #66e0b6; color: #00cc85; }
+    .lbadge--medium { background: #fff6ed; border-color: #ffcea0; color: #ff9f43; font-size: 14px; line-height: 20px; }
+    .lbadge--hard   { background: #ffeeee; border-color: #ffa5a7; color: #ff4c51; font-size: 14px; line-height: 20px; }
+    .lbadge--daily  { background: #e6f6fd; border-color: #7fd0f3; color: #00a2e8; }
+    .lbadge--weekly { background: #e6f6fd; border-color: #7fd0f3; color: #00a2e8; }
+    .qc__progress   { display: flex; flex-direction: column; gap: 4px; }
+    .qc__coin-row   { display: flex; gap: 4px; align-items: center; }
+    .qc__coin-icon  { width: 24px; height: 24px; flex-shrink: 0; display: block; object-fit: contain; }
+    .qc__coin-value { font-size: 14px; font-weight: 400; line-height: 20px; color: #666; }
+    .qc__bar        { height: 4px; background: #f2f2f2; border-radius: 999px; overflow: hidden; width: 100%; }
+    .qc__bar-fill   { height: 100%; background: var(--og-500); border-radius: 999px; }
+    .qc__footer     { display: flex; gap: 8px; align-items: center; }
+    .qc__status     { flex: 1; min-width: 0; font-size: 14px; font-weight: 400; line-height: 20px; color: #666; }
+
+    /* Claim button — Button - 1.5 Primary/M (Rule 19) */
+    .btn-claim {
+      display: inline-flex; align-items: center;
+      border-radius: var(--r-rounded); padding: 2px 8px;
+      height: 32px; max-height: 32px;
+      background: var(--og-500); border: 1px solid var(--og-600);
+      cursor: pointer; text-decoration: none; flex-shrink: 0;
+      transition: background 0.12s ease, border-color 0.12s ease;
+    }
+    .btn-claim__label { font-size: 12px; font-weight: 600; line-height: 18px; color: #ffffff; padding: 0 4px; transition: color 0.12s ease; }
+    .btn-claim__arrow { width: 20px; height: 20px; border-radius: var(--r-rounded); background: #99ebce; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 2px; transition: background 0.12s ease; }
+    .btn-claim__arrow svg { display: block; width: 16px; height: 16px; }
+    .btn-claim:hover                    { background: #b5f291; border-color: #70bc6f; }
+    .btn-claim:hover .btn-claim__label  { color: #70bc6f; }
+    .btn-claim:hover .btn-claim__arrow  { background: #e8fbe8; }
+    .btn-claim:active                   { background: #00564c; border-color: #00453d; }
+    .btn-claim:active .btn-claim__label { color: #00cc85; }
+    .btn-claim:active .btn-claim__arrow { background: #00cc85; }
+    .btn-claim--disabled,
+    .btn-claim--disabled:hover,
+    .btn-claim--disabled:active {
+      background: #f2f2f2; border-color: #bfbfbf; cursor: not-allowed; pointer-events: none;
+    }
+    .btn-claim--disabled .btn-claim__label { color: #bfbfbf; }
+    .btn-claim--disabled .btn-claim__arrow { background: #f2f2f2; box-shadow: inset 0 0 0 1px #bfbfbf; color: #bfbfbf; }
+
+    /* Responsive — collapse sidebar at tablet */
+    @media (max-width: 1279px) {
+      .rewards-layout  { flex-direction: column; }
+      .rewards-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; height: auto; }
+      .quest-grid      { grid-template-columns: 1fr; }
+    }
+
   </style>
 </head>
 <body>
@@ -2198,6 +2473,17 @@
       <!-- Outline/shopping-cart (260:1137) --><symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6M10 21C10 21.5523 9.55228 22 9 22C8.44772 22 8 21.5523 8 21C8 20.4477 8.44772 20 9 20C9.55228 20 10 20.4477 10 21ZM21 21C21 21.5523 20.5523 22 20 22C19.4477 22 19 21.5523 19 21C19 20.4477 19.4477 20 20 20C20.5523 20 21 20.4477 21 21Z"/></symbol>
       <!-- Outline/smile (260:1181) --><symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14M9 9H9.01M15 9H15.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
 
+      <!-- CoinQuest / Rewards page icons -->
+      <symbol id="ic-award" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 12 15 C 15.866 15 19 11.866 19 8 C 19 4.134 15.866 1 12 1 C 8.134 1 5 4.134 5 8 C 5 11.866 8.134 15 12 15 Z"/><path d="M 8.21 13.89 L 7 23 L 12 20 L 17 23 L 15.79 13.88"/></symbol>
+      <symbol id="ic-corner-down-right" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></symbol>
+      <symbol id="ic-coin" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M9 8.5c0-.83.67-1.5 1.5-1.5h3a1.5 1.5 0 0 1 0 3H10a1.5 1.5 0 0 0 0 3h3.5a1.5 1.5 0 0 1 0 3H10"/></symbol>
+      <symbol id="ic-gem" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7 12 2"/><line x1="12" y1="22" x2="12" y2="2"/><line x1="2" y1="7" x2="22" y2="7"/></symbol>
+      <symbol id="ic-tag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
+      <symbol id="ic-stop-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><rect x="9" y="9" width="6" height="6"/></symbol>
+      <symbol id="ic-package" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/></symbol>
+      <symbol id="ic-shopping-bag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
+      <symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></symbol>
+      <symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></symbol>
     </defs>
   </svg>
 
@@ -2627,7 +2913,7 @@
       </div>
 
       <!-- Class (with chevron dropdown) -->
-      <div class="nav-menu-btn is-active" role="button" tabindex="0" aria-label="Class" aria-haspopup="true" aria-current="page">
+      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Class" aria-haspopup="true">
         <div class="nav-menu-btn__inner">
           <div class="nav-menu-btn__icon-wrap">
             <div class="nav-menu-btn__icon-clip" data-icon="class"><svg aria-hidden="true"><use href="#ic-users"/></svg></div>
@@ -2670,8 +2956,8 @@
         </div>
       </div>
 
-      <!-- Rewards (with chevron dropdown) -->
-      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Rewards" aria-haspopup="true">
+      <!-- Rewards (with chevron dropdown) — ACTIVE PAGE -->
+      <div class="nav-menu-btn is-active" role="button" tabindex="0" aria-label="Rewards" aria-haspopup="true" aria-current="page">
         <div class="nav-menu-btn__inner">
           <div class="nav-menu-btn__icon-wrap">
             <div class="nav-menu-btn__icon-clip" data-icon="rewards"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div>
@@ -2977,12 +3263,264 @@
     <div class="page-container">
       <div class="main-content">
 
-        <section id="PageViewport" class="page-viewport" aria-label="Page content area">
-          <div class="page-viewport__placeholder">
-            <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-plus"/></svg>
-            <span>Drop DS component instances here</span>
-          </div>
-        </section>
+        <section id="PageViewport" class="page-viewport-content" aria-label="Coin Quest">
+
+          <!-- Breadcrumb — Rewards > Coin Quest (DS node 3065:42735) -->
+          <section class="bc-row" aria-label="Breadcrumb">
+            <div class="bc-left">
+              <span class="bc-title">Rewards</span>
+              <span class="bc-sep" aria-hidden="true"></span>
+              <nav class="bc-trail" aria-label="Breadcrumb">
+                <a href="#" class="bc-link">
+                  <svg aria-hidden="true"><use href="#ic-gift"/></svg>
+                  Rewards
+                  <svg class="bc-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+                <span class="bc-link bc-link--current" aria-current="page">Coin Quest</span>
+              </nav>
+            </div>
+          </section>
+
+          <!-- Two-panel layout — DS node 3065:42736 -->
+          <div class="rewards-layout">
+
+            <!-- LEFT SIDEBAR — DS node 3849:48401 (Nav Side Menu Desktop 1.5) -->
+            <aside class="rewards-sidebar">
+
+              <!-- Score chip — Surface/gold/default-subtle #fef1ce, Border/gold/default #fabb0a -->
+              <div class="sidebar-balance">
+                <img class="sidebar-balance__coin" src="../image-repo/Rewards-CoinQuest/P.Coin.svg" alt="Pandai Coin">
+                <span class="sidebar-balance__value">10,000</span>
+              </div>
+
+              <!-- Divider — 1px #d9d9d9 -->
+              <div class="sidebar-divider" aria-hidden="true"></div>
+
+              <button class="sidebar-btn sidebar-btn--active" type="button">
+                <div class="sidebar-btn__icon-wrap"><svg aria-hidden="true"><use href="#ic-stop-circle"/></svg></div>
+                <span class="sidebar-btn__label">Coin Quest</span>
+              </button>
+              <button class="sidebar-btn" type="button">
+                <div class="sidebar-btn__icon-wrap" data-icon="box"><svg aria-hidden="true"><use href="#ic-package"/></svg></div>
+                <span class="sidebar-btn__label">My Rewards</span>
+              </button>
+              <button class="sidebar-btn" type="button">
+                <div class="sidebar-btn__icon-wrap" data-icon="shopping-bag"><svg aria-hidden="true"><use href="#ic-shopping-bag"/></svg></div>
+                <span class="sidebar-btn__label">Merchandise</span>
+              </button>
+              <button class="sidebar-btn" type="button">
+                <div class="sidebar-btn__icon-wrap" data-icon="shopping-cart"><svg aria-hidden="true"><use href="#ic-shopping-cart"/></svg></div>
+                <span class="sidebar-btn__label">eVoucher</span>
+              </button>
+              <button class="sidebar-btn" type="button">
+                <div class="sidebar-btn__icon-wrap"><svg aria-hidden="true"><use href="#ic-smile"/></svg></div>
+                <span class="sidebar-btn__label">Avatar</span>
+              </button>
+
+            </aside>
+
+            <!-- RIGHT MAIN — DS node 3065:42901 -->
+            <main class="rewards-main">
+              <div class="quest-grid">
+
+                <!-- ① Class instructions | Easy · Daily | 120 coins | 2/2 -->
+                <div class="qc">
+                  <div class="qc__img">
+                    <img src="../image-repo/Rewards-CoinQuest/Property%201=Enroll%20Course_Completed.svg" alt="Enroll Course">
+                  </div>
+                  <div class="qc__content">
+                    <div class="qc__header">
+                      <span class="qc__title">Class instructions</span>
+                      <div class="qc__badges"><span class="lbadge lbadge--easy">Easy</span><span class="lbadge lbadge--daily">Daily</span></div>
+                    </div>
+                    <div class="qc__progress">
+                      <div class="qc__coin-row">
+                        <img class="qc__coin-icon" src="../image-repo/Rewards-CoinQuest/P.Coin.svg" alt="Coin">
+                        <span class="qc__coin-value">120</span>
+                      </div>
+                      <div class="qc__bar"><div class="qc__bar-fill" style="width:100%"></div></div>
+                    </div>
+                    <div class="qc__footer">
+                      <span class="qc__status">2/2 Achieved</span>
+                      <a href="#" class="btn-claim"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ② Complete a Quiz | Easy · Daily | 80 coins | 0/2 — disabled -->
+                <div class="qc">
+                  <div class="qc__img">
+                    <img src="../image-repo/Rewards-CoinQuest/Property%201=Score%20Exam.svg" alt="Score Exam">
+                  </div>
+                  <div class="qc__content">
+                    <div class="qc__header">
+                      <span class="qc__title">Complete a Quiz</span>
+                      <div class="qc__badges"><span class="lbadge lbadge--easy">Easy</span><span class="lbadge lbadge--daily">Daily</span></div>
+                    </div>
+                    <div class="qc__progress">
+                      <div class="qc__coin-row">
+                        <img class="qc__coin-icon" src="../image-repo/Rewards-CoinQuest/P.Coin.svg" alt="Coin">
+                        <span class="qc__coin-value">80</span>
+                      </div>
+                      <div class="qc__bar"><div class="qc__bar-fill" style="width:0%"></div></div>
+                    </div>
+                    <div class="qc__footer">
+                      <span class="qc__status">0/2 Achieved</span>
+                      <a href="#" class="btn-claim btn-claim--disabled" aria-disabled="true" tabindex="-1"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ③ Win a Battle | Hard · Daily | 200 coins | 0/1 -->
+                <div class="qc">
+                  <div class="qc__img">
+                    <img src="../image-repo/Rewards-CoinQuest/Property%201=Goal%20%26%20Reward.svg" alt="Goal &amp; Reward">
+                  </div>
+                  <div class="qc__content">
+                    <div class="qc__header">
+                      <span class="qc__title">Win a Battle</span>
+                      <div class="qc__badges"><span class="lbadge lbadge--hard">Hard</span><span class="lbadge lbadge--daily">Daily</span></div>
+                    </div>
+                    <div class="qc__progress">
+                      <div class="qc__coin-row">
+                        <img class="qc__coin-icon" src="../image-repo/Rewards-CoinQuest/P.Coin.svg" alt="Coin">
+                        <span class="qc__coin-value">200</span>
+                      </div>
+                      <div class="qc__bar"><div class="qc__bar-fill" style="width:0%"></div></div>
+                    </div>
+                    <div class="qc__footer">
+                      <span class="qc__status">0/2 Achieved</span>
+                      <a href="#" class="btn-claim btn-claim--disabled" aria-disabled="true" tabindex="-1"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ④ Attend Live Class | Easy · Weekly | 150 coins | 1/1 -->
+                <div class="qc">
+                  <div class="qc__img">
+                    <img src="../image-repo/Rewards-CoinQuest/Property%201=Topical%20Test_Completed.svg" alt="Topical Test Completed">
+                  </div>
+                  <div class="qc__content">
+                    <div class="qc__header">
+                      <span class="qc__title">Attend Live Class</span>
+                      <div class="qc__badges"><span class="lbadge lbadge--easy">Easy</span><span class="lbadge lbadge--weekly">Weekly</span></div>
+                    </div>
+                    <div class="qc__progress">
+                      <div class="qc__coin-row">
+                        <img class="qc__coin-icon" src="../image-repo/Rewards-CoinQuest/P.Coin.svg" alt="Coin">
+                        <span class="qc__coin-value">150</span>
+                      </div>
+                      <div class="qc__bar"><div class="qc__bar-fill" style="width:100%"></div></div>
+                    </div>
+                    <div class="qc__footer">
+                      <span class="qc__status">1/1 Achieved</span>
+                      <a href="#" class="btn-claim"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ⑤ Practice Session | Hard · Weekly | 250 coins | 0/2 -->
+                <div class="qc">
+                  <div class="qc__img">
+                    <img src="../image-repo/Rewards-CoinQuest/Property%201=Personality%20Test.svg" alt="Personality Test">
+                  </div>
+                  <div class="qc__content">
+                    <div class="qc__header">
+                      <span class="qc__title">Practice Session</span>
+                      <div class="qc__badges"><span class="lbadge lbadge--hard">Hard</span><span class="lbadge lbadge--weekly">Weekly</span></div>
+                    </div>
+                    <div class="qc__progress">
+                      <div class="qc__coin-row">
+                        <img class="qc__coin-icon" src="../image-repo/Rewards-CoinQuest/P.Coin.svg" alt="Coin">
+                        <span class="qc__coin-value">250</span>
+                      </div>
+                      <div class="qc__bar"><div class="qc__bar-fill" style="width:0%"></div></div>
+                    </div>
+                    <div class="qc__footer">
+                      <span class="qc__status">0/2 Achieved</span>
+                      <a href="#" class="btn-claim btn-claim--disabled" aria-disabled="true" tabindex="-1"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ⑥ Read an Article | Easy · Daily | 60 coins | 0/2 -->
+                <div class="qc">
+                  <div class="qc__img">
+                    <img src="../image-repo/Rewards-CoinQuest/Property%201=Submit%20Task.svg" alt="Submit Task">
+                  </div>
+                  <div class="qc__content">
+                    <div class="qc__header">
+                      <span class="qc__title">Read an Article</span>
+                      <div class="qc__badges"><span class="lbadge lbadge--easy">Easy</span><span class="lbadge lbadge--daily">Daily</span></div>
+                    </div>
+                    <div class="qc__progress">
+                      <div class="qc__coin-row">
+                        <img class="qc__coin-icon" src="../image-repo/Rewards-CoinQuest/P.Coin.svg" alt="Coin">
+                        <span class="qc__coin-value">60</span>
+                      </div>
+                      <div class="qc__bar"><div class="qc__bar-fill" style="width:0%"></div></div>
+                    </div>
+                    <div class="qc__footer">
+                      <span class="qc__status">0/2 Achieved</span>
+                      <a href="#" class="btn-claim btn-claim--disabled" aria-disabled="true" tabindex="-1"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ⑦ Complete Notes | Easy · Daily | 100 coins | 3/3 -->
+                <div class="qc">
+                  <div class="qc__img">
+                    <img src="../image-repo/Rewards-CoinQuest/Property%201=Score%20Full%20Mark_Completed.svg" alt="Score Full Mark Completed">
+                  </div>
+                  <div class="qc__content">
+                    <div class="qc__header">
+                      <span class="qc__title">Complete Notes</span>
+                      <div class="qc__badges"><span class="lbadge lbadge--easy">Easy</span><span class="lbadge lbadge--daily">Daily</span></div>
+                    </div>
+                    <div class="qc__progress">
+                      <div class="qc__coin-row">
+                        <img class="qc__coin-icon" src="../image-repo/Rewards-CoinQuest/P.Coin.svg" alt="Coin">
+                        <span class="qc__coin-value">100</span>
+                      </div>
+                      <div class="qc__bar"><div class="qc__bar-fill" style="width:100%"></div></div>
+                    </div>
+                    <div class="qc__footer">
+                      <span class="qc__status">3/3 Achieved</span>
+                      <a href="#" class="btn-claim"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ⑧ Explore Library | Easy · Weekly | 120 coins | 0/2 -->
+                <div class="qc">
+                  <div class="qc__img">
+                    <img src="../image-repo/Rewards-CoinQuest/Property%201=Verify%20Phone%20Number.svg" alt="Verify Phone Number">
+                  </div>
+                  <div class="qc__content">
+                    <div class="qc__header">
+                      <span class="qc__title">Explore Library</span>
+                      <div class="qc__badges"><span class="lbadge lbadge--easy">Easy</span><span class="lbadge lbadge--weekly">Weekly</span></div>
+                    </div>
+                    <div class="qc__progress">
+                      <div class="qc__coin-row">
+                        <img class="qc__coin-icon" src="../image-repo/Rewards-CoinQuest/P.Coin.svg" alt="Coin">
+                        <span class="qc__coin-value">120</span>
+                      </div>
+                      <div class="qc__bar"><div class="qc__bar-fill" style="width:0%"></div></div>
+                    </div>
+                    <div class="qc__footer">
+                      <span class="qc__status">0/2 Achieved</span>
+                      <a href="#" class="btn-claim btn-claim--disabled" aria-disabled="true" tabindex="-1"><span class="btn-claim__label">Claim</span><div class="btn-claim__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></a>
+                    </div>
+                  </div>
+                </div>
+
+              </div><!-- /.quest-grid -->
+            </main>
+
+          </div><!-- /.rewards-layout -->
+
+        </section><!-- #PageViewport -->
 
       </div>
     </div>
@@ -3910,6 +4448,20 @@
 
       /* ESC is handled natively by the browser — fullscreenchange fires on exit */
     })();
+  </script>
+
+  <!-- Coin Quest page — sidebar active state (Rule 14: non-critical, wrapped in try/catch) -->
+  <script>
+    try {
+      document.querySelectorAll('.sidebar-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('.sidebar-btn').forEach(function (b) {
+            b.classList.remove('sidebar-btn--active');
+          });
+          btn.classList.add('sidebar-btn--active');
+        });
+      });
+    } catch (e) { console.warn('sidebar init:', e); }
   </script>
 
 </body>

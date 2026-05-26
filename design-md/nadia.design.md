@@ -2458,3 +2458,66 @@ Integrate the existing My Classes screen into `zul.page.template.html` as a base
 - No orphaned `<!--` before `<script>` (Rule 62 clear)
 
 *Last updated: 2026-05-26 | Session 11 — My Classes Integration | Branch: staging*
+
+---
+
+## Session 12 — Browse Classes Viewport Fix + Avatar Rule + Rewards Nav
+
+*2026-05-26 | Branch: staging | Files: `Nadia.test.git/Class/nadia_Class-BrowseClasses.html`, `Nadia.test.git/Rewards/nadia_Rewards-CoinQuest.html`*
+
+### Task 1 — Browse Classes: `#PageViewport` → `#viewport-browseclasses`
+
+**Problem:** After template integration (Session 10), the Browse Classes content was sitting inside `<section id="PageViewport" class="page-viewport">`. The `.page-viewport` CSS has `align-items: center; justify-content: center` — this centered the `bc-row` instead of left-aligning it.
+
+**Fix applied:**
+- Removed the `page-viewport` class wrapper entirely
+- Replaced with a single `<section id="viewport-browseclasses" class="viewport-browseclasses">` containing both sub-sections as divs:
+  - `bc-row` (breadcrumb + filter row) — left-aligned
+  - `cards-grid` (20 class cards)
+- New CSS added:
+  ```css
+  .viewport-browseclasses {
+    display: flex; flex-direction: column;
+    gap: var(--spacing-space-m);
+    width: 100%;
+  }
+  .viewport-browseclasses .bc-row {
+    align-items: flex-start;
+    width: 100%;
+  }
+  ```
+- Section balance confirmed: 7 opens = 7 closes
+- No orphaned `<!--` before `<script>` (Rule 62 clear)
+
+### Task 2 — Avatar Rule: always use `Avatar-Aidan.png` from template asset path
+
+**Problem:** After rebuild, the Browse Classes navbar avatar was broken — pointing to `../image-repo/icon-avatar-user.png` (Nadia custom path) instead of the template asset path.
+
+**Rule established:** All Nadia pages must use the same navbar avatar as `zul.page.template.html`:
+```
+../../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png
+```
+- Do NOT modify the avatar design, only the page state (active nav) changes between pages
+- Both avatar occurrences (navbar + profile dropdown) must use this path
+- This applies to all current and future Nadia pages
+
+**Confirmed correct on:**
+- `nadia_Class-BrowseClasses.html` — `../../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png` (×2) ✅
+- `nadia_Class-MyClasses.html` — already correct from Session 11 ✅
+- `nadia_Rewards-CoinQuest.html` — fixed from `../navbar/icon-avatar-user.png` to template path ✅
+
+### Task 3 — Rewards CoinQuest: Class set as active nav
+
+**File:** `Nadia.test.git/Rewards/nadia_Rewards-CoinQuest.html`
+
+**Nav active state swaps — all 3 contexts:**
+
+| Nav context | Element | Before | After |
+|---|---|---|---|
+| `#NavTopMenu-Desktop` | `.nav-menu-btn` | Home `is-active` + `aria-current="page"` | **Class `is-active`** + `aria-current="page"` |
+| `#NavMenu-Tablet` | `.nav-menu-item` | Home `is-active` + `aria-current="page"` | **Class `is-active`** + `aria-current="page"` |
+| `#NavMenu-Mobile` | `.nav-menu-item` | Home `is-active` + `aria-current="page"` | **Class `is-active`** + `aria-current="page"` |
+
+**Note:** `nadia_Rewards-CoinQuest.html` contains both the old custom Nadia navbar (lines ~1000–1149, `.nav-btn.is-active`) and the template navbar (lines ~2209–2956). Active state changes were applied to the **template navbar** only — the old navbar section remains as-is.
+
+*Last updated: 2026-05-26 | Session 12 — Viewport Fix + Avatar Rule + Rewards Nav | Branch: staging*
