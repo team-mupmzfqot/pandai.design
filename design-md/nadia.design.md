@@ -2402,3 +2402,59 @@ Row 4: Personality · University · Rewards
 **File:** `Nadia.test.git/Class/nadia_Class-BrowseClasses.html` — 4,714 lines, 414,260 chars
 
 *Last updated: 2026-05-26 | Session 10 — Template Integration | Branch: staging*
+
+---
+
+## Session 11 — My Classes: Template Integration + Structural Fix + Nav Active States
+
+*2026-05-26 | Branch: staging | File: `Nadia.test.git/Class/nadia_Class-MyClasses.html`*
+
+### Task
+Integrate the existing My Classes screen into `zul.page.template.html` as a base layout, then apply structural and nav fixes.
+
+### Integration approach (same Python build script pattern as Session 10)
+1. Read `zul.test.git/zul.page.template.html` as base (read-only)
+2. Adjust asset paths: `../src/` → `../../src/` (Nadia file is one directory deeper)
+3. Switch `NavTopMenu-Desktop` active state: Home → Class
+4. Inject My Classes CSS before `</style>` (DS Avatar, Breadcrumb, Cards, 20 subject palettes, responsive grid)
+5. Replace `<section id="PageViewport">` placeholder with My Class content (breadcrumb + 20 subject cards)
+6. Write to `Nadia.test.git/Class/nadia_Class-MyClasses.html`
+
+### Structural fix — `#PageViewport` → `#viewport-myclass`
+
+**Problem:** `.page-viewport` CSS had `align-items: center; justify-content: center` — was centering the bc-row and cards-grid inside the viewport instead of left-aligning from the top.
+
+**Fix applied:**
+- Replaced `<section id="PageViewport" class="page-viewport">` with `<section id="viewport-myclass">` (no `page-viewport` class)
+- Combined the two inner sections into divs inside one named section:
+  - `<section class="bc-row">` → `<div class="bc-row">`
+  - `<section class="cards-grid">` → `<div class="cards-grid">`
+- Added explicit `justify-content: flex-start` to `.bc-row` for left-alignment
+- CSS: replaced `#PageViewport { ... }` with `#viewport-myclass { display: flex; flex-direction: column; gap: var(--section-gap); }`
+
+**Final structure:**
+```html
+<section id="viewport-myclass" aria-label="My Classes">
+  <div class="bc-row">…breadcrumb…</div>
+  <div class="cards-grid">…20 class cards…</div>
+</section>
+```
+
+### Icon fix — Browse Classes button
+- `ic-website` was referenced but had no `<symbol>` definition → blank icon
+- Fixed: changed to `ic-globe` (already defined in the shared SVG sprite)
+
+### Nav active state fixes — Class active across all breakpoints
+
+| Nav location | Before | After |
+|---|---|---|
+| `#NavTopMenu-Desktop` (`nav-menu-btn`) | Class `is-active` ✅ | unchanged |
+| `#NavMenu-Tablet` (`nav-menu-item`) | Home `is-active` | **Class `is-active`** |
+| `#NavMenu-Mobile` (`nav-menu-item`) | Home `is-active` | **Class `is-active`** |
+
+### File state
+- `Nadia.test.git/Class/nadia_Class-MyClasses.html` — 4,710 lines
+- 20 class cards present, 3-col desktop / 2-col tablet / 1-col mobile grid
+- No orphaned `<!--` before `<script>` (Rule 62 clear)
+
+*Last updated: 2026-05-26 | Session 11 — My Classes Integration | Branch: staging*
