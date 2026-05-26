@@ -1184,26 +1184,23 @@
       .an-legend__row   { width: 100%; padding: 6px 8px; border-bottom: 1px solid var(--border-general-default); margin: 0; }
       .an-legend__row:last-child { border-bottom: none; }
 
-      /* ── Table: 2-column card grid for mobile ── */
-      .an-table-outer { overflow-x: unset; }
-      .an-table       { display: block; min-width: unset; }
-      .an-table thead { display: none; }
-      .an-table tbody { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xs); }
-      .an-table tbody tr {
-        display: flex; flex-direction: column;
-        border: 1px solid var(--border-general-default);
-        border-radius: var(--corner-m);
-        padding: var(--space-xs);
-        gap: var(--space-xxs);
-      }
-      .an-table colgroup { display: none; }
-      .an-col--chapter, .an-col--score, .an-col--status { width: auto; }
-      .an-td {
-        display: block;
-        border: none !important;
-        padding: 0;
+      /* ── Table: tablet-style layout scaled for mobile ── */
+      .an-table-outer { overflow-x: auto; }
+      .an-table       { min-width: unset; }
+
+      .an-col--chapter { width: 40px; }
+      .an-col--score   { width: 48px; }
+      .an-col--status  { width: 100px; }
+
+      .an-th {
+        padding: 8px;
         font-size: 10px; line-height: 14px;
-        height: auto; min-height: unset;
+        height: auto; min-height: 40px;
+      }
+      .an-td {
+        padding: 8px;
+        font-size: 10px; line-height: 14px;
+        height: auto; min-height: 40px;
         word-break: break-word;
       }
       .an-status { flex-wrap: wrap; gap: 4px; }
