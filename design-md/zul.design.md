@@ -6716,4 +6716,116 @@ When a Figma auto-layout parent has `crossAlign: CENTER` (`align-items: center`)
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-26 (Rule 169 — Indicator Badge OUTSIDE stroke + CTA button height; Rule 108 updated) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 170. Notification item DS states: Default / Hover / Focus — not Pressed
+
+**Source:** Live DS audit of COMPONENT_SET `3908:13442` (`Navbar Notification Button - Parts`), 2026-05-27.
+
+The component set has exactly **3 states** — never assume more:
+
+| State | Node | Content bg | Border | Text |
+|---|---|---|---|---|
+| `State=Default` | `3908:13427` | `#ffffff` (white) | none | `#666666` |
+| `State=Hover` | `3908:13443` | `#f6fef6` (`Surface/secondary/default-hover`) | `#00cc85` INSIDE 1px | `#00564c` (`Text/tertiary/default`) |
+| `State=Focus` | `3908:13456` | `#e8fbe8` (`Surface/secondary/default-subtle`) | `#00cc85` INSIDE 1px | `#00cc85` (`Text/primary/default`) |
+
+**DS calls the click/touch state "Focus", not "Pressed".** Both `:active` (mouse press) and `:focus-visible` (keyboard tab) map to `State=Focus` in CSS.
+
+**Structural change between Default → Hover/Focus:**
+- Default: `Content` has `pt-12 px-12 pb-0`; inner row (`Frame 1707...`) has `pb-12; border-bottom: 1px solid #d9d9d9`
+- Hover/Focus: `Content` gains `p-12` all sides + `border-radius: 16px (Radius/2xl)` + INSIDE border; inner row's bottom border disappears (`border-bottom-color: transparent; pb: 0`)
+
+**Confirmed mistake (2026-05-27):** Template had `State=Focus` bg = `Surface/primary/focus (#00a36a)` — a dark green. DS is `Surface/secondary/default-subtle (#e8fbe8)` — a light green. The error came from old Rule 108 notes that said "Pressed = `Surface/primary/focus`" without re-verifying live from DS.
+
+**Rule:** Always inspect COMPONENT_SET via `use_figma` before implementing any state. State names like "Focus" and "Pressed" don't always map intuitively to CSS pseudo-classes — always match DS state → CSS pseudo-class based on the VISUAL behavior, not the name.
+
+---
+
+### Rule 171. Button - 1.5 Pressed palette differs by Variant — Primary ≠ Secondary/Tertiary
+
+**Source:** Live DS audit of `473:650` (Primary/L Pressed) and `538:1907` (Secondary/M Pressed), 2026-05-27.
+
+Rule 40 (CLAUDE.md) was wrong: it stated ALL variants share `Surface/tertiary/default (#00564c)` for Pressed. **Only Secondary and Tertiary use dark teal. Primary uses `Surface/primary/focus (#00a36a)`.**
+
+| Variant | Pressed BG | Pressed Border | Pressed Text |
+|---|---|---|---|
+| **Primary** (S/M/L) | `#00a36a` `Surface/primary/focus` | `#00cc85` `Border/primary/default` | `#00cc85` |
+| **Secondary** (S/M/L) | `#00564c` `Surface/tertiary/default` | `#00453d` `Border/tertiary/focus` | `#00cc85` |
+| **Tertiary** (S/M/L) | `#00564c` `Surface/tertiary/default` | `#00453d` `Border/tertiary/focus` | `#00cc85` |
+
+**Confirmed mistake (2026-05-27):** Notification CTA button (Primary/L) `:active` state used `Surface/tertiary/default` + `Border/tertiary/focus` (dark teal palette) — wrong. DS node `473:650` confirmed `Surface/primary/focus (#00a36a)`.
+
+**Rule:** Never assume cross-variant consistency for Pressed state. Always pull the exact DS node for the specific variant you are implementing.
+
+---
+
+### Rule 172. Notification item read/dismiss JS interaction — synchronous counter, not setTimeout
+
+**Source:** Notification dropdown interaction implementation (2026-05-27).
+
+**Interaction spec:**
+1. **Click 1** → `is-read` class → indicator dot fades out (`opacity: 0`, 0.2s ease)
+2. **Click 2** → item collapses (`max-height: 0 + opacity: 0`, 0.3s/0.2s ease)
+3. **All items dismissed** → `is-empty` on dropdown → footer `padding-top: 0` (0.3s ease)
+4. **Mouse leave dropdown** → all items reset instantly, counter resets, dropdown closes
+
+**CSS pattern:**
+```css
+/* Read state */
+.notif-item                                   { overflow: hidden; }
+.notif-item__indicator                        { transition: opacity 0.2s ease; }
+.notif-item.is-read .notif-item__indicator    { opacity: 0; pointer-events: none; }
+
+/* Footer gap — drops to 0 when all items gone (dropdown's own 16px padding is enough) */
+.notif-dropdown__footer                       { transition: padding-top 0.3s ease; }
+.notif-dropdown.is-empty .notif-dropdown__footer { padding-top: 0; }
+```
+
+**JS pattern — synchronous counter (never use setTimeout for this):**
+```js
+var notifItems     = dropdown.querySelectorAll('.notif-item');
+var dismissedCount = 0;
+
+notifItems.forEach(function (item) {
+  item.dataset.clicks = '0';
+  item.addEventListener('click', function () {
+    var n = (parseInt(item.dataset.clicks, 10) || 0) + 1;
+    item.dataset.clicks = String(n);
+    if (n === 1) {
+      item.classList.add('is-read');
+    } else if (n === 2) {
+      item.style.transition    = 'max-height 0.3s ease, opacity 0.2s ease';
+      item.style.maxHeight     = item.scrollHeight + 'px';
+      item.getBoundingClientRect(); // flush layout — REQUIRED for transition
+      item.style.maxHeight     = '0';
+      item.style.opacity       = '0';
+      item.style.pointerEvents = 'none';
+      dismissedCount++;
+      if (dismissedCount >= notifItems.length) dropdown.classList.add('is-empty');
+    }
+  });
+});
+
+// Reset on any close path (mouseleave AND outside-click)
+function resetNotifItems() {
+  dismissedCount = 0;
+  dropdown.classList.remove('is-empty');
+  notifItems.forEach(function (item) {
+    item.dataset.clicks   = '0';
+    item.classList.remove('is-read');
+    item.style.transition = 'none';
+    item.style.maxHeight  = item.style.opacity = item.style.pointerEvents = '';
+    requestAnimationFrame(function () { item.style.transition = ''; });
+  });
+}
+```
+
+**Confirmed mistakes (2026-05-27):**
+
+1. **`setTimeout` + `pointerEvents === 'none'` check** was unreliable — timing-dependent; if the user is fast, the check fires before all items are marked dismissed. Fix: synchronous counter.
+2. **`Array.prototype.every.call(NodeList, ...)`** can be unreliable across environments — avoid. Use a plain counter.
+3. **Gap after all items dismissed**: dropdown's `padding: 16px` + footer's `padding-top: 16px` = 32px gap above "See all notification" button. Fix: `is-empty` removes footer's extra padding-top so only dropdown's 16px padding remains.
+4. **Reset must happen on ALL close paths** — `mouseleave` AND outside-click handler. Missing either means state persists when dropdown is reopened.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-27 (Rules 170–172 — notification item DS states, Primary Pressed palette correction, read/dismiss JS pattern) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

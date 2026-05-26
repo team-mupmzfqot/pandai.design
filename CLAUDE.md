@@ -2039,4 +2039,53 @@ See `design-md/zul.design.md` Rule 165.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-26 (Rule 40 corrected — Primary Pressed ≠ dark teal; Rules 54/108 corrected — notif item Focus bg = #e8fbe8, CTA Pressed = Surface/primary/focus) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 69. DS state names don't always match CSS pseudo-classes — always verify visually
+
+The DS names states like "Focus", "Pressed", "Active" — but these don't map 1-to-1 to CSS `:focus`, `:active`, etc. Always inspect the COMPONENT_SET via `use_figma`, screenshot every state, then decide the CSS mapping based on **visual behaviour**, not the state name.
+
+**Confirmed — Navbar Notification Button - Parts (`3908:13442`):**
+- `State=Focus` is the click/touch feedback state — maps to CSS `:active` + `:focus-visible`
+- bg: `Surface/secondary/default-subtle` = `#e8fbe8` (light green, NOT dark)
+- Prior docs said "Pressed = `Surface/primary/focus (#00a36a)`" — wrong. Always re-verify live.
+
+**Rule:** Before implementing ANY interactive state, call `use_figma` on the COMPONENT_SET node, list all variants, screenshot each, then map DS state → CSS pseudo-class based on what it looks like. See `design-md/zul.design.md` Rules 170–171.
+
+---
+
+### 70. JS interaction counters — use synchronous integer, never setTimeout + property check
+
+For multi-step click interactions (e.g. read → dismiss), track state with a plain integer counter that increments synchronously in the click handler. Never use `setTimeout` + a DOM property check to detect when "all items" reach a state.
+
+```js
+var dismissedCount = 0;
+
+item.addEventListener('click', function () {
+  var n = (parseInt(item.dataset.clicks, 10) || 0) + 1;
+  item.dataset.clicks = String(n);
+  if (n === 1) { /* step 1 */ }
+  else if (n === 2) {
+    /* step 2 — collapse */
+    dismissedCount++;
+    if (dismissedCount >= items.length) container.classList.add('is-empty');
+  }
+});
+
+// Reset counter on EVERY close path
+function resetAll() {
+  dismissedCount = 0;
+  container.classList.remove('is-empty');
+  /* restore item styles */
+}
+```
+
+**Key rules:**
+- `getBoundingClientRect()` flush is REQUIRED between setting `maxHeight` to a px value and then to `0` — without it, the browser batches both and no transition fires
+- Reset must happen on ALL close paths — `mouseleave` AND outside-click handler. Missing one leaves state dirty on reopen
+- `Array.prototype.every.call(NodeList, ...)` can be unreliable — use a counter instead
+- When a panel has its own `padding` AND a child has `padding-top`, both stack. Use an `is-empty` class to zero the child padding when items collapse, so total gap = parent padding only
+
+See `design-md/zul.design.md` Rule 172.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-27 (Rules 69–70 — DS state name mapping, synchronous JS counter pattern; Rules 40/54/108 corrected) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
