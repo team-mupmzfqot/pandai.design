@@ -900,6 +900,7 @@
     .notif-item {
       cursor:      pointer;
       user-select: none;
+      overflow:    hidden;                                    /* needed for max-height collapse */
     }
     /* Content frame — Default: white, pt-12 px-12 pb-0, no border */
     .notif-item__content {
@@ -991,6 +992,10 @@
       box-shadow:    0 0 0 1px var(--border-on-color);   /* strokeAlign:OUTSIDE → no inset; #ffffff */
       flex-shrink:   0;
     }
+
+    /* Read state (click 1): fade out indicator dot */
+    .notif-item__indicator           { transition: opacity 0.2s ease; }
+    .notif-item.is-read .notif-item__indicator { opacity: 0; pointer-events: none; }
 
     /* "See all notification" — Primary/L Button - 1.5, no arrow, full-width */
     .notif-dropdown__footer { padding-top: var(--spacing-space-m); width: 100%; }
@@ -3327,7 +3332,39 @@
         notifBtn.classList.toggle('is-active', willOpen);
       });
 
+      // Notification item interaction — click 1: mark read (hide dot) · click 2: dismiss (collapse)
+      var notifItems = dropdown.querySelectorAll('.notif-item');
+      notifItems.forEach(function (item) {
+        item.dataset.clicks = '0';
+        item.addEventListener('click', function () {
+          var n = (parseInt(item.dataset.clicks, 10) || 0) + 1;
+          item.dataset.clicks = String(n);
+          if (n === 1) {
+            // First press — hide unread indicator dot
+            item.classList.add('is-read');
+          } else if (n >= 2) {
+            // Second press — collapse and hide the item
+            item.style.transition  = 'max-height 0.3s ease, opacity 0.2s ease';
+            item.style.maxHeight   = item.scrollHeight + 'px';
+            item.getBoundingClientRect(); // flush layout so transition fires
+            item.style.maxHeight   = '0';
+            item.style.opacity     = '0';
+            item.style.pointerEvents = 'none';
+          }
+        });
+      });
+
       dropdown.addEventListener('mouseleave', function () {
+        // Reset all items instantly (dropdown is closing, reset won't be seen)
+        notifItems.forEach(function (item) {
+          item.dataset.clicks      = '0';
+          item.classList.remove('is-read');
+          item.style.transition    = 'none';
+          item.style.maxHeight     = '';
+          item.style.opacity       = '';
+          item.style.pointerEvents = '';
+          requestAnimationFrame(function () { item.style.transition = ''; });
+        });
         dropdown.classList.remove('is-open');
         notifBtn.classList.remove('is-active');
       });
