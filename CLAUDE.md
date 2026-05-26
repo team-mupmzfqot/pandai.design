@@ -1924,4 +1924,59 @@ See `design-md/zul.design.md` Rule 159 for full line-number table and extraction
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-26 (Rules 62–63 / zul Rules 158–159 — sed assembly orphaned comment bug, page template assembly pattern) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### 64. Flex column fill chain — every ancestor needs `flex:1` + `display:flex; flex-direction:column`
+
+To make a target element fill all remaining viewport height, every container between `<html>` and the target must participate:
+
+```css
+html { height: 100%; }
+body { min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; display: flex; flex-direction: column; }
+.page-container { width: 100%; flex: 1; display: flex; flex-direction: column; }
+.main-content   { flex: 1; display: flex; flex-direction: column; }
+.page-viewport  { flex: 1; min-height: 0; }   /* min-height:0 prevents auto-size overflow */
+```
+
+**Checklist:** Every ancestor has `flex:1` + `display:flex; flex-direction:column`? Target has `min-height:0`? Container with `margin:0 auto` has `width:100%` (Rule 65)?
+
+**Mistake made (2026-05-26):** `main` and `.page-container` had no `flex` rule — chain broken at two levels. Target had `min-height:320px` hardcoded instead of `flex:1`. See `design-md/zul.design.md` Rule 161.
+
+---
+
+### 65. `margin:0 auto` inside flex-column collapses width — always add `width:100%`
+
+`margin: 0 auto` on a flex child absorbs all cross-axis space, collapsing the element to content width ("Fit"). To fill the container while still centering with a `max-width` cap:
+
+```css
+.page-container {
+  width:     100%;           /* ← required */
+  max-width: var(--page-max-width);
+  margin:    0 auto;
+}
+```
+
+Without `width:100%` the element appears narrow regardless of the parent width.
+
+**Mistake made (2026-05-26):** `.page-container` had `max-width` + `margin:0 auto` but no `width`. Viewport appeared as a centered strip. See `design-md/zul.design.md` Rule 162.
+
+---
+
+### 66. Fixed footer gap — `body.padding-bottom` = footer height only; content padding provides DS gap
+
+Visible gap above a `position:fixed` footer = `body.padding-bottom + content.padding-bottom − footer.height`. Having both non-zero causes double-counting.
+
+```css
+body          { padding-bottom: 60px; }                     /* = footer height */
+.main-content { padding-bottom: var(--spacing-space-m); }   /* = 16px DS gap */
+/* visible gap = 60 + 16 − 60 = 16px ✓ */
+```
+
+Never add the DS gap to `body.padding-bottom` — it already comes from `.main-content`.
+
+**Mistake made (2026-05-26):** `body.padding-bottom: 74px` + `.main-content { padding-bottom:16px }` = 30px gap. Corrected to 60px. See `design-md/zul.design.md` Rule 163.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-26 (Rules 64–66 / zul Rules 161–163 — flex fill chain, margin:0 auto width fix, fixed footer gap math) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

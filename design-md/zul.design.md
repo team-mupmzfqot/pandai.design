@@ -6354,4 +6354,131 @@ return { strokeAlign: node.strokeAlign, strokeWeight: node.strokeWeight, strokes
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-26 (Rule 160 — strokeAlign:OUTSIDE CSS pattern; Rule 118 updated; Rule 146 updated — Number Badge white border, text color, navbar-badge line-height fix) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 161. Flex column fill chain — complete pattern for height + width fill in nested layouts
+
+**Source:** zul.page.template.html build session (2026-05-26).
+
+To make a deeply nested element (`page-viewport`) fill all remaining viewport height AND full width inside a flex-column chain, every ancestor between `<html>` and the target must participate in the chain. A single missing link collapses the fill.
+
+**Complete chain (body → main → container → content → target):**
+
+```css
+html {
+  min-width: 390px;
+  height:    100%;    /* ← required for min-height:100vh to propagate in all browsers */
+}
+
+body {
+  min-height:     100vh;
+  display:        flex;
+  flex-direction: column;
+}
+
+main {
+  flex:           1;       /* grows to fill remaining body height */
+  display:        flex;
+  flex-direction: column;
+}
+
+.page-container {
+  width:          100%;    /* required — see Rule 162 */
+  flex:           1;
+  display:        flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex:           1;
+  display:        flex;
+  flex-direction: column;
+  /* gap / padding as usual */
+}
+
+.page-viewport {
+  flex:       1;
+  min-height: 0;   /* prevents flex children from overflowing their flex container */
+}
+```
+
+**`min-height: 0` is required on the target** — flex items default to `min-height: auto`, which lets their content define a minimum that can exceed `flex: 1`. Explicit `min-height: 0` lets the flex algorithm shrink the item below its content size when needed.
+
+**Checklist when a section refuses to fill height:**
+1. Does every ancestor have `display:flex; flex-direction:column`?
+2. Does every ancestor (except the root) have `flex:1`?
+3. Does the target have `min-height:0`?
+4. Is `width:100%` set on any container that uses `margin:0 auto`? (Rule 162)
+
+**Mistake made (2026-05-26):** `.page-viewport` had `min-height: 320px` (hardcoded) and no `flex:1`. `main` and `.page-container` had no `flex` or `display:flex` — the fill chain was broken at two levels. The viewport stayed at 320px regardless of viewport height.
+
+---
+
+### Rule 162. `margin:0 auto` on a flex child cancels `align-items:stretch` — always add `width:100%`
+
+**Source:** zul.page.template.html width-fill fix (2026-05-26).
+
+In a `flex-direction: column` container, children stretch to full cross-axis width by default (`align-items: stretch`). But `margin-left: auto` + `margin-right: auto` (shorthand: `margin: 0 auto`) on a flex child **absorbs all available cross-axis space** — the child collapses to its content width and the auto margins fill the remainder. The element appears horizontally centered but never fills the container.
+
+**Fix:** Add `width: 100%` to the child alongside `margin: 0 auto`. With an explicit width, auto margins have zero remaining space to absorb.
+
+```css
+/* Wrong — collapses to content width inside flex-column */
+.page-container {
+  max-width: var(--page-max-width);
+  margin:    0 auto;
+}
+
+/* Correct — fills parent width, max-width still caps it, margin centers it */
+.page-container {
+  width:     100%;
+  max-width: var(--page-max-width);
+  margin:    0 auto;
+}
+```
+
+**Rule:** Any element inside a flex container that uses `margin: 0 auto` for centering **must also declare `width: 100%`** (or an explicit width) or it will appear as "Fit" (content-sized) instead of "Fill".
+
+**Mistake made (2026-05-26):** `.page-container` had `max-width` + `margin:0 auto` but no `width`. The viewport section appeared as a narrow centered strip instead of edge-to-edge.
+
+---
+
+### Rule 163. Fixed footer gap math — `body.padding-bottom` = footer height only; content padding provides DS gap
+
+**Source:** zul.page.template.html 16px gap fix (2026-05-26). Builds on Rule 23.
+
+With `position: fixed; bottom: 0; height: 60px` on the footer, the visible gap between the last content section and the footer is:
+
+```
+visible gap = body.padding-bottom + last-section.padding-bottom − footer.height
+```
+
+**If both `body.padding-bottom` and `.main-content { padding-bottom }` are non-zero, they stack.** Setting `body.padding-bottom: 74px` (60 + 14) AND `.main-content { padding-bottom: 16px }` gives:
+
+```
+visible gap = 74 + 16 − 60 = 30px   ← wrong
+```
+
+**Correct approach:** Set `body.padding-bottom = footer.height` only (60px). Let `.main-content { padding-bottom: var(--spacing-space-m) }` (16px) provide the DS gap.
+
+```
+visible gap = 60 + 16 − 60 = 16px   ✓
+```
+
+```css
+body {
+  padding-bottom: 60px; /* reserve footer height; main-content padding-bottom adds DS gap */
+}
+
+.main-content {
+  padding-bottom: var(--spacing-space-m); /* = 16px — visible gap above footer */
+}
+```
+
+**Rule:** `body.padding-bottom` = exact footer height (never add DS gap here). DS gap lives in `.main-content { padding-bottom }`.
+
+**Mistake made (2026-05-26):** `body.padding-bottom: 74px` (60 + 14px approximation) + `.main-content { padding-bottom: 16px }` = 30px visible gap. Corrected to `body.padding-bottom: 60px`.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-26 (Rules 161–163 — flex fill chain, margin:0 auto width fix, fixed footer gap math) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
