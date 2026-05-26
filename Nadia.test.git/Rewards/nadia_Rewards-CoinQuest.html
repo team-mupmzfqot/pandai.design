@@ -2290,7 +2290,7 @@
 
   </style>
 </head>
-<body>
+<body data-active-nav="Rewards">
 
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        NAVBAR â€” Navbar 1.5  (DS node 2339:2617)
@@ -2388,8 +2388,6 @@
       <symbol id="ic-credit-card" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 10H23M3 4H21C22.1046 4 23 4.89543 23 6V18C23 19.1046 22.1046 20 21 20H3C1.89543 20 1 19.1046 1 18V6C1 4.89543 1.89543 4 3 4Z"/></symbol>
       <!-- Outline/progress-mobile (1524:3597) — Share My Progress -->
       <symbol id="ic-progress-mobile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12C7 12.9889 7.29325 13.9556 7.84265 14.7779C8.39206 15.6001 9.17295 16.241 10.0866 16.6194C11.0002 16.9978 12.0056 17.0969 12.9755 16.9039C13.9454 16.711 14.8363 16.2348 15.5355 15.5355C16.2348 14.8363 16.711 13.9454 16.904 12.9755C17.0969 12.0055 16.9979 11.0002 16.6195 10.0866C16.241 9.17295 15.6001 8.39206 14.7779 7.84265C13.9556 7.29325 12.9889 7 12 7M6.29 18.957C7.40519 19.8723 8.72407 20.506 10.1355 20.8048C11.5469 21.1036 13.0095 21.0588 14.3999 20.674C15.7904 20.2893 17.0679 19.5759 18.1249 18.594C19.182 17.6122 19.9874 16.3906 20.4735 15.0322C20.9596 13.6739 21.112 12.2186 20.9179 10.789C20.7237 9.35947 20.1888 7.99752 19.3581 6.81797C18.5275 5.63842 17.4254 4.67585 16.1448 4.01139C14.8643 3.34693 13.4427 3 12 3M11 12C11 12.2652 11.1054 12.5196 11.2929 12.7071C11.4804 12.8946 11.7348 13 12 13C12.2652 13 12.5196 12.8946 12.7071 12.7071C12.8946 12.5196 13 12.2652 13 12C13 11.7348 12.8946 11.4804 12.7071 11.2929C12.5196 11.1054 12.2652 11 12 11C11.7348 11 11.4804 11.1054 11.2929 11.2929C11.1054 11.4804 11 11.7348 11 12Z"/></symbol>
-      <!-- Outline/gift (260:765) — Learn and Earn -->
-      <symbol id="ic-gift" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V22H4V12M12 22V7M12 7H7.5C6.83696 7 6.20107 6.73661 5.73223 6.26777C5.26339 5.79893 5 5.16304 5 4.5C5 3.83696 5.26339 3.20107 5.73223 2.73223C6.20107 2.26339 6.83696 2 7.5 2C11 2 12 7 12 7ZM12 7H16.5C17.163 7 17.7989 6.73661 18.2678 6.26777C18.7366 5.79893 19 5.16304 19 4.5C19 3.83696 18.7366 3.20107 18.2678 2.73223C17.7989 2.26339 17.163 2 16.5 2C13 2 12 7 12 7ZM2 7H22V12H2V7Z"/></symbol>
       <!-- Outline/life-buoy (260:855) — Online Support -->
       <symbol id="ic-life-buoy" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.93 4.93L9.17 9.17M14.83 14.83L19.07 19.07M19.07 4.93L14.83 9.17M4.93 19.07L9.17 14.83M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z"/></symbol>
       <!-- Outline/power (260:1057) — Log Out -->
@@ -2473,17 +2471,11 @@
       <!-- Outline/shopping-cart (260:1137) --><symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6M10 21C10 21.5523 9.55228 22 9 22C8.44772 22 8 21.5523 8 21C8 20.4477 8.44772 20 9 20C9.55228 20 10 20.4477 10 21ZM21 21C21 21.5523 20.5523 22 20 22C19.4477 22 19 21.5523 19 21C19 20.4477 19.4477 20 20 20C20.5523 20 21 20.4477 21 21Z"/></symbol>
       <!-- Outline/smile (260:1181) --><symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14M9 9H9.01M15 9H15.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
 
-      <!-- CoinQuest / Rewards page icons -->
-      <symbol id="ic-award" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 12 15 C 15.866 15 19 11.866 19 8 C 19 4.134 15.866 1 12 1 C 8.134 1 5 4.134 5 8 C 5 11.866 8.134 15 12 15 Z"/><path d="M 8.21 13.89 L 7 23 L 12 20 L 17 23 L 15.79 13.88"/></symbol>
+      <!-- CoinQuest / Rewards page — additional icons not in template -->
       <symbol id="ic-corner-down-right" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></symbol>
       <symbol id="ic-coin" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M9 8.5c0-.83.67-1.5 1.5-1.5h3a1.5 1.5 0 0 1 0 3H10a1.5 1.5 0 0 0 0 3h3.5a1.5 1.5 0 0 1 0 3H10"/></symbol>
       <symbol id="ic-gem" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7 12 2"/><line x1="12" y1="22" x2="12" y2="2"/><line x1="2" y1="7" x2="22" y2="7"/></symbol>
       <symbol id="ic-tag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
-      <symbol id="ic-stop-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><rect x="9" y="9" width="6" height="6"/></symbol>
-      <symbol id="ic-package" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/></symbol>
-      <symbol id="ic-shopping-bag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
-      <symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></symbol>
-      <symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></symbol>
     </defs>
   </svg>
 
@@ -2510,8 +2502,8 @@
       <!-- Logo/Pandai/Logo Horizontal (node 1898:6965): 116×28px overflow-clip container -->
       <!-- mark: inset-[0_76.95%_0_0] · wordmark: inset-[15.07%_0_15.03%_26.66%] -->
       <a class="navbar-primary__logo" href="#" aria-label="Pandai">
-        <img src="../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-mark.svg" class="navbar-primary__logo-mark" alt="" aria-hidden="true">
-        <img src="../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-text.svg" class="navbar-primary__logo-text" alt="Pandai">
+        <img src="../../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-mark.svg" class="navbar-primary__logo-mark" alt="" aria-hidden="true">
+        <img src="../../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-text.svg" class="navbar-primary__logo-text" alt="Pandai">
       </a>
 
       <!-- Navbar Search Frame — Dropdown-Parts/Search (DS node 1342:4370, Type=Search, State=Focus)
@@ -2574,7 +2566,7 @@
 
         <!-- Avatar - 1.5 Size=L Type=Image (node 684:621): 48×48 circle · image fill 60×60 at x:-6 y:0 -->
         <div class="navbar-avatar" aria-label="Profile">
-          <img class="navbar-avatar__image" src="../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
+          <img class="navbar-avatar__image" src="../../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
         </div>
 
         <!-- Number Badge - 1.5 (node 1084:1826): absolute right:-0.48px top:0 of Avatar group -->
@@ -2594,7 +2586,7 @@
         <!-- Avatar 100×100 -->
         <div class="profile-dropdown__avatar-wrap">
           <div class="profile-dropdown__avatar">
-            <img src="../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
+            <img src="../../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
           </div>
         </div>
 
@@ -2677,62 +2669,62 @@
       <div class="learn-dropdown__grid">
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Live Tuition">
-          <img class="learn-dropdown__icon" src="../src/image-repo/page.template/assets/main/LearnMenu/feature-live-tuition.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-live-tuition.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Live Tuition</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Live Help">
-          <img class="learn-dropdown__icon" src="../src/image-repo/page.template/assets/main/LearnMenu/feature-live-help.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-live-help.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Live Help</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quiz">
-          <img class="learn-dropdown__icon" src="../src/image-repo/page.template/assets/main/LearnMenu/feature-quiz.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-quiz.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Quiz</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Practice">
-          <img class="learn-dropdown__icon" src="../src/image-repo/page.template/assets/main/LearnMenu/feature-practice.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-practice.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Practice</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Chapters">
-          <img class="learn-dropdown__icon" src="../src/image-repo/page.template/assets/main/LearnMenu/feature-chapters.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-chapters.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Chapters</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Textbooks">
-          <img class="learn-dropdown__icon" src="../src/image-repo/page.template/assets/main/LearnMenu/feature-textbooks.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-textbooks.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Textbooks</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quick Notes">
-          <img class="learn-dropdown__icon" src="../src/image-repo/page.template/assets/main/LearnMenu/feature-quick-notes.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-quick-notes.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Quick Notes</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Videos">
-          <img class="learn-dropdown__icon" src="../src/image-repo/page.template/assets/main/LearnMenu/feature-videos.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-videos.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Videos</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Experiments">
-          <img class="learn-dropdown__icon" src="../src/image-repo/page.template/assets/main/LearnMenu/feature-experiments.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-experiments.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Experiments</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Personality">
-          <img class="learn-dropdown__icon" src="../src/image-repo/page.template/assets/main/LearnMenu/feature-personality.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-personality.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Personality</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="University">
-          <img class="learn-dropdown__icon" src="../src/image-repo/page.template/assets/main/LearnMenu/feature-university.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-university.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">University</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Rewards">
-          <img class="learn-dropdown__icon" src="../src/image-repo/page.template/assets/main/LearnMenu/feature-rewards.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-rewards.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Rewards</span>
         </div>
 
@@ -3112,8 +3104,8 @@
   <section id="NavBar-Mobile">
     <div class="navbar-mobile">
       <a class="navbar-mobile__logo" href="#">
-        <img src="../src/image-repo/page.template/assets/main/NavBar-Mobile/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
-        <img src="../src/image-repo/page.template/assets/main/NavBar-Mobile/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
+        <img src="../../src/image-repo/page.template/assets/main/NavBar-Mobile/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
+        <img src="../../src/image-repo/page.template/assets/main/NavBar-Mobile/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
       </a>
       <button class="navbar-mobile__menu-btn" id="tablet-menu-btn" aria-label="Open menu" type="button">
         <svg class="ham-svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
@@ -3933,6 +3925,13 @@
         }
 
         function restoreHome() {
+          // If this page declares a persistent nav section (e.g. Rewards sub-pages),
+          // restore that button instead of Home so sub-page nav context is preserved.
+          var persistLabel = document.body.getAttribute('data-active-nav');
+          if (persistLabel) {
+            var persistBtn = navSection.querySelector('[aria-label="' + persistLabel + '"]');
+            if (persistBtn) { persistBtn.classList.add('is-active'); persistBtn.setAttribute('aria-current', 'page'); return; }
+          }
           var homeBtn = navSection.querySelector('[aria-label="Home"]');
           if (homeBtn) { homeBtn.classList.add('is-active'); homeBtn.setAttribute('aria-current', 'page'); }
         }
@@ -3983,7 +3982,8 @@
         dropdown.addEventListener('mouseleave', closeDropdown);
 
         document.addEventListener('click', function (e) {
-          if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
+          /* Guard: only close if the dropdown is actually open — prevents sidebar clicks from clearing nav active state */
+          if (dropdown.classList.contains('is-open') && !dropdown.contains(e.target) && !btn.contains(e.target)) {
             closeDropdown();
           }
         }, true);
@@ -4018,8 +4018,9 @@
           timer = setTimeout(function () {
             btn.classList.remove('is-active');
             btn.removeAttribute('aria-current');
-            var homeBtn = navSection.querySelector('[aria-label="Home"]');
-            if (homeBtn) { homeBtn.classList.add('is-active'); homeBtn.setAttribute('aria-current', 'page'); }
+            /* On the Rewards page, restore Rewards — not Home — as the persistent active button */
+            var rewardsBtn = navSection.querySelector('[aria-label="Rewards"]');
+            if (rewardsBtn) { rewardsBtn.classList.add('is-active'); rewardsBtn.setAttribute('aria-current', 'page'); }
           }, 3000);
         });
         btn.addEventListener('mouseenter', function () { clearTimeout(timer); });
@@ -4450,7 +4451,8 @@
     })();
   </script>
 
-  <!-- Coin Quest page — sidebar active state (Rule 14: non-critical, wrapped in try/catch) -->
+  <!-- Rewards pages — sidebar active state (Rule 14: non-critical, wrapped in try/catch) -->
+  <!-- Nav persistence handled by data-active-nav="Rewards" on <body> + restoreHome() in nav IIFE -->
   <script>
     try {
       document.querySelectorAll('.sidebar-btn').forEach(function (btn) {

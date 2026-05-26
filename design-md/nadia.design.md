@@ -2521,3 +2521,60 @@ Integrate the existing My Classes screen into `zul.page.template.html` as a base
 **Note:** `nadia_Rewards-CoinQuest.html` contains both the old custom Nadia navbar (lines ~1000–1149, `.nav-btn.is-active`) and the template navbar (lines ~2209–2956). Active state changes were applied to the **template navbar** only — the old navbar section remains as-is.
 
 *Last updated: 2026-05-26 | Session 12 — Viewport Fix + Avatar Rule + Rewards Nav | Branch: staging*
+
+---
+
+## Session 13 — Rewards CoinQuest: Template Integration + Nav Active State Fix
+
+*2026-05-26 | Branch: staging | File: `Nadia.test.git/Rewards/nadia_Rewards-CoinQuest.html`*
+
+### Task 1 — Template integration: `zul.page.template.html` as base layout
+
+**Approach:** Copied `zul.page.template.html` → `nadia_Rewards-CoinQuest.html`, then applied targeted edits. Template itself (`zul.test.git/zul.page.template.html`) was NOT modified.
+
+**Changes applied:**
+- Title: `Pandai — Page Template` → `Pandai — Rewards / Coin Quest`
+- Added CoinQuest shorthand token aliases to `:root` (`--og-*`, `--pk-*`, `--sp-*`, `--r-*`, `--coin-bg`, `--coin-border`, `--coin-text`, `--ruby-bg`, `--ruby-border`)
+- Added CoinQuest CSS: `.page-viewport-content`, `.bc-row`, `.rewards-layout`, `.rewards-sidebar`, `.sidebar-btn`, `.sidebar-btn--active`, `.quest-grid`, `.qc` (quest cards), `.lbadge`, `.btn-claim` with all states
+- Added 4 new SVG symbols (genuinely new, not in template): `ic-corner-down-right`, `ic-coin`, `ic-gem`, `ic-tag`
+- Asset paths corrected: `../src/image-repo/` → `../../src/image-repo/` for all template nav assets
+- CoinQuest quest card images kept at: `../image-repo/Rewards-CoinQuest/P.Coin.svg` + `Property%201=*.svg`
+- `#PageViewport` replaced with `<section id="PageViewport" class="page-viewport-content">` containing breadcrumb row + `.rewards-layout` (sidebar + quest grid)
+- Sidebar JS added (wrapped in `try/catch` per Rule 14)
+
+### Task 2 — SVG symbol deduplication
+
+**Problem:** The initial symbol block added for CoinQuest re-defined 6 symbols already present in the template's defs block: `ic-award`, `ic-stop-circle`, `ic-package`, `ic-shopping-bag`, `ic-shopping-cart`, `ic-smile`. A second duplicate `ic-gift` was also present (one at the nav-clip 20px viewBox, one generic 24px).
+
+**Fix:** Removed all duplicates. Final "CoinQuest / Rewards page" block contains only the 4 genuinely new symbols: `ic-corner-down-right`, `ic-coin`, `ic-gem`, `ic-tag`. The DS-accurate template versions of the shared icons are retained.
+
+**Rule confirmed:** The template's defs block is the canonical symbol registry. Before adding any `<symbol>`, grep for the ID — if it exists, use `<use href="#ic-*">` against the existing definition.
+
+### Task 3 — Correct nav active state: Class → Rewards
+
+**Changed in `#NavTopMenu-Desktop`:**
+- Removed `is-active` + `aria-current="page"` from `Class` button
+- Added `is-active` + `aria-current="page"` to `Rewards` button
+
+**Note (Session 12 correction):** Session 12 logged this as "Class set as active nav" — that was wrong. The correct active button for `nadia_Rewards-CoinQuest.html` is **Rewards**, not Class. The task was completed in this session.
+
+### Task 4 — Nav Rewards button stays active when switching sidebar items
+
+**Problem:** Clicking any `.sidebar-btn` removed `is-active` from the Rewards nav button and restored Home as active instead. Reported by user.
+
+**Root cause — two separate code paths in the nav dropdown IIFE:**
+
+1. **`document.addEventListener('click', ..., true)` (capture phase)** — fired on every click regardless of dropdown open state, calling `closeDropdown()` which stripped `is-active` from all nav buttons
+2. **`restoreHome()`** — called by every `closeDropdown()`, always adding `is-active` back to Home, even on non-Home pages
+
+**Fixes applied (3 changes in `nadia_Rewards-CoinQuest.html` only — template unchanged):**
+
+| Location | Change |
+|---|---|
+| `restoreHome()` in nav dropdown IIFE | Changed selector from `[aria-label="Home"]` → `[aria-label="Rewards"]` |
+| `document.addEventListener('click', ..., true)` in nav dropdown IIFE | Added guard: `dropdown.classList.contains('is-open') &&` before the condition — prevents sidebar clicks from triggering `closeDropdown()` when no dropdown is open |
+| Quiz/Battle/Practice mouseleave restore (separate IIFE) | Same Home → Rewards fix for the 3s hover-restore timer |
+
+**Rule:** For every non-Home page built from `zul.page.template.html`, `restoreHome()` must be changed to restore the correct active page button. The `document.addEventListener` guard (`is-open` check) must also be added — it is always the correct behaviour and should be considered a template bug fix when applied per-page.
+
+*Last updated: 2026-05-26 | Session 13 — Template Integration + Nav Fix | Branch: staging*
