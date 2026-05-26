@@ -932,18 +932,21 @@
       padding-bottom:      0;
     }
     .notif-item:hover .notif-item__text { color: var(--text-tertiary-default); }
-    /* Pressed — Surface/primary/focus #00a36a · 1px #00cc85 inset · 16px radius */
-    .notif-item:active .notif-item__content {
-      background:    var(--surface-primary-focus);
+    /* Focus — Surface/secondary/default-subtle #e8fbe8 · 1px #00cc85 inset · 16px radius */
+    .notif-item:active .notif-item__content,
+    .notif-item:focus-visible .notif-item__content {
+      background:    var(--surface-secondary-default-subtle);
       box-shadow:    inset 0 0 0 1px var(--border-primary-default);
       border-radius: var(--corner-radius-corner-xl);
       padding:       12px;
     }
-    .notif-item:active .notif-item__body {
+    .notif-item:active .notif-item__body,
+    .notif-item:focus-visible .notif-item__body {
       border-bottom-color: transparent;
       padding-bottom:      0;
     }
-    .notif-item:active .notif-item__text { color: var(--text-primary-default); }
+    .notif-item:active .notif-item__text,
+    .notif-item:focus-visible .notif-item__text { color: var(--text-primary-default); }
 
     /* Avatar — 60×60 clip, user-circle at 50px (DS inset 8.33% = 5px each side) */
     .notif-item__avatar {
@@ -1010,8 +1013,8 @@
       color:           var(--text-primary-on-color);
       transition:      background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
     }
-    .notif-see-all:hover  { background: var(--surface-secondary-default);  border-color: var(--border-secondary-focus); color: var(--text-secondary-focus); }
-    .notif-see-all:active { background: var(--surface-tertiary-default);   border-color: var(--border-tertiary-focus);  color: var(--text-primary-default); }
+    .notif-see-all:hover  { background: var(--surface-secondary-default); border-color: var(--border-secondary-focus); color: var(--text-secondary-focus); }
+    .notif-see-all:active { background: var(--surface-primary-focus);    border-color: var(--border-primary-default); color: var(--text-primary-default); }
 
     /* ─── Download Apps dropdown (DS node 3909:3405, Navbar Download Apps - 1.5)
        238px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
