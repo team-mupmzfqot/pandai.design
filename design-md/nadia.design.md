@@ -2760,4 +2760,61 @@ function restoreHome() {
 
 **Rule for all Rewards sub-pages:** Add `data-active-nav="Rewards"` to `<body>` and update `restoreHome()` to the generic version above. No MutationObserver or `is-open` guard needed.
 
+---
+
+## Session 14 — Image path migration + legacy folder cleanup (2026-05-26)
+
+### What was done
+
+#### 1. Image path migration — all 5 HTML files
+
+All `<img src="../image-repo/…">` paths pointing to `Nadia.test.git/image-repo/` were updated to the canonical `src/image-repo/` location. 130 lines changed across 5 files.
+
+**Mapping applied:**
+
+| Old path (local, broken after cleanup) | New canonical path |
+|---|---|
+| `../image-repo/Avatar-teacher/` | `../../src/image-repo/page.class/browse.class/assets/` |
+| `../image-repo/MyClassImage/` | `../../src/image-repo/page.class/my.class/assets/` |
+| `../image-repo/Rewards-CoinQuest/` | `../../src/image-repo/page.rewards/coin.quest/assets/` |
+| `../image-repo/Rewards-Merchandise/` | `../../src/image-repo/page.rewards/merchandize/assets/` |
+| `../image-repo/Rewards-MyRewards/` | `../../src/image-repo/page.rewards/my.rewards/assets/` |
+
+Navbar images (`NavbarPrimary-Desktop/`, `NavBar-Mobile/`) already pointed to `../../src/image-repo/page.template/` — no change needed.
+
+**Files updated:**
+- `Nadia.test.git/Class/nadia_Class-BrowseClasses.html` — 42 paths updated
+- `Nadia.test.git/Class/nadia_Class-MyClasses.html` — 42 paths updated
+- `Nadia.test.git/Rewards/nadia_Rewards-CoinQuest.html` — 18 paths updated
+- `Nadia.test.git/Rewards/nadia_Rewards-Merchandise.html` — 10 paths updated
+- `Nadia.test.git/Rewards/nadia_Rewards-Myrewards.html` — 18 paths updated
+
+#### 2. Legacy folder deletion
+
+**`Nadia.test.git/image-repo/`** — 57 files removed (Avatar-teacher × 7, MyClassImage × 18, Rewards-CoinQuest × 17, Rewards-Merchandise × 5, Rewards-MyRewards × 10). All files had exact copies in `src/image-repo/`. Safe to remove after path migration above.
+
+**`Nadia.test.git/navbar/`** — 20 legacy PNG icon files removed. These were early-session raster icons superseded by inline SVG `<symbol>` definitions. Zero references in any HTML file.
+
+**Empty placeholder folders deleted (no files, no references):**
+- `Nadia.test.git/Class/nadia_Class-BrowseClasses/`
+- `Nadia.test.git/Rewards/nadia_Rewards-Merchandise/`
+- `Nadia.test.git/Rewards/nadia_Rewards-MyRewards/`
+- `Nadia.test.git/Profile/`
+
+### Source of truth for images
+All page-specific images now resolve from a single location tree:
+```
+pandai.design/src/image-repo/
+├── page.class/
+│   ├── browse.class/assets/   tutor-1…7.png
+│   └── my.class/assets/       18 subject images + dlp.svg
+├── page.rewards/
+│   ├── coin.quest/assets/     P.Coin.svg + 16 quest SVGs
+│   ├── merchandize/assets/    P.Coin.svg + 4 merchandise SVGs
+│   └── my.rewards/assets/     P.Coin.svg + 8 reward SVGs
+└── page.template/assets/main/
+    ├── NavbarPrimary-Desktop/ logo-mark.svg, logo-text.svg, Avatar-Aidan.png
+    └── NavBar-Mobile/         logo-mark.svg, logo-text.svg
+```
+
 *Last updated: 2026-05-26 | Session 14 — Merchandise rebuild + data-active-nav nav fix | Branch: staging*
