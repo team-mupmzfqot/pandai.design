@@ -2367,3 +2367,38 @@ Row 4: Personality · University · Rewards
 **CLAUDE.md correction needed:** Rules 38, 40, and previous session notes documenting Pressed = `#00564c` are now outdated. DS node `3029:20022` is the authoritative source: Tertiary/L/Student Pressed = `#00a36a` bg + `#00cc85` border.
 
 *Last updated: 2026-05-21 | File: Nadia.test.git/Class/nadia_Class-MyClasses.html | Branch: staging*
+
+---
+
+## Session 10 — Template Integration (2026-05-26)
+
+**Task:** Rebuild `Nadia.test.git/Class/nadia_Class-BrowseClasses.html` using `zul.test.git/zul.page.template.html` as the layout foundation.
+
+**Approach:** Python string-replacement build script — never modifying the template file (read-only).
+
+**Changes applied:**
+1. Title: `Pandai — Page Template` → `Pandai — Browse Classes`
+2. Asset paths: `../src/image-repo/` → `../../src/image-repo/` (18 occurrences, all contexts: `src=`, `url()`, any attribute)
+3. Avatar: `Avatar-Aidan.png` → `../image-repo/icon-avatar-user.png` (Nadia user avatar)
+4. NavTopMenu-Desktop: removed `is-active`/`aria-current` from Home, added to Class
+5. NavMenu-Tablet: removed `is-active` from Home, added to Class  
+6. NavMenu-Mobile: removed `is-active` from Home, added to Class
+7. PageViewport placeholder → Browse Classes content (breadcrumb + 20 class cards)
+8. Added Nadia page CSS `<style>` block before `</head>` — page-specific tokens, layout overrides, component styles
+
+**Key integration decisions:**
+- `#PageViewport` overridden to `align-items: stretch; justify-content: flex-start; padding/gap: 16px` — removes the centered placeholder behavior, enables full-width card grid
+- Template navbar fully replaces old Nadia custom navbar — richer (profile menu, dropdowns, learn menu, locale, notifications)
+- All icon symbols already in template's 97-symbol SVG sprite — no new symbols needed
+- Nadia image paths (`../image-repo/MyClassImage/`, `../image-repo/Avatar-teacher/`) remain intact — same file location
+- Template CSS handles: reset, tokens, layout, all navbar styles, footer, mobile menu
+- Nadia CSS adds: subject palette tokens (bm/en/mt/sc/bi/hs), avatar component, breadcrumb, buttons, class card grid, subject color overrides
+
+**Verification (all 10 checks passed):**
+- Title, asset paths, avatar, Class active in NavTopMenu/Tablet/Mobile, breadcrumb section, cards section, cards content, PageViewport CSS override
+- Section balance: 7 `<section>` opens = 7 closes (1 in HTML comment excluded from count)
+- No orphaned `<!--` before `<script>` (Rule 62)
+
+**File:** `Nadia.test.git/Class/nadia_Class-BrowseClasses.html` — 4,714 lines, 414,260 chars
+
+*Last updated: 2026-05-26 | Session 10 — Template Integration | Branch: staging*
