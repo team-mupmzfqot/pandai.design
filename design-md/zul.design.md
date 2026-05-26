@@ -3818,10 +3818,20 @@ The DS `Navbar Notification Button - Parts` (node `3908:13427`) has a **structur
 - Icon inside: `50×50px` (DS `inset: 8.33%` on 60px = 5px each side = 50px content area)
 - Use existing `ic-user-circle` symbol: `<svg style="width:50px;height:50px"><use href="#ic-user-circle"/></svg>`
 
-**"See all notification" button — Primary/L, 288px wide, no arrow:**
-- `max-height: 48px; padding: 8px 12px; border-radius: 60px`
+**Unread indicator dot — Indicator Badge - 1.5 (DS confirmed 2026-05-26):**
+- `width: 8px; height: 8px; border-radius: 60px` (pill)
+- Fill: `Surface/primary/default` = `#00cc85`
+- Stroke: `strokeAlign: OUTSIDE, strokeWeight: 1, #ffffff` (Border/on-color)
+- CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — **no inset** (Rule 60 / Rule 160 OUTSIDE pattern)
+- Never use `border: 1px solid` — it pushes the dot to 10px and shifts the indicator row
+
+**"See all notification" button — Button - 1.5 (DS node `3908:13010`, confirmed 2026-05-26):**
+- `height: 40px` (paddingTop:8 + content:24 + paddingBottom:8) — NOT `max-height: 48px`
+- `padding: 8px var(--spacing-space-s); border-radius: 60px; width: 100%`
 - bg: `var(--surface-primary-default)`; border: `var(--border-primary-focus)`; text: `var(--text-primary-on-color)`
 - Hover/Pressed: same Primary button palette from Rule 19
+
+**Confirmed mistake (2026-05-26):** Template had `max-height: 48px` on `.notif-see-all`. DS button h=40px (pad 8+8). Fixed to `height: 40px`.
 
 ---
 
@@ -6668,4 +6678,27 @@ When a Figma auto-layout parent has `crossAlign: CENTER` (`align-items: center`)
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-26 (Rules 164–165 — component-scoped asset folder convention, local-first asset setup workflow) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 169. Indicator Badge - 1.5 — confirmed `strokeAlign: OUTSIDE` = `box-shadow: 0 0 0 1px` (no inset)
+
+**Source:** Notification dropdown audit (2026-05-26). DS node inside `#notif-dropdown`.
+
+**Indicator Badge - 1.5 spec (dot variant, confirmed DS inspection 2026-05-26):**
+- Size: `8×8px`, `border-radius: 60px` (pill)
+- Fill: `Surface/primary/default` = `#00cc85`
+- Stroke: `strokeAlign: OUTSIDE`, `strokeWeight: 1`, `Border/on-color` = `#ffffff`
+- CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — **no `inset`**
+
+**Rule (from Rule 60):** `strokeAlign: OUTSIDE` → `box-shadow: 0 0 0 Npx` (outer shadow, no `inset`). `strokeAlign: INSIDE` → `box-shadow: inset 0 0 0 Npx`. Never use `border:` or `outline:` for DS strokes — both affect box model or ignore border-radius.
+
+**CTA button height audit (2026-05-26):**
+- DS Button - 1.5 node `3908:13010` inside notification dropdown: `height: 40px` (paddingTop:8 + content:24 + paddingBottom:8)
+- Template had `max-height: 48px` — wrong. Corrected to `height: 40px`.
+- Use `height:` not `max-height:` for buttons with a fixed DS height. `max-height` allows shrinkage below the DS-intended value.
+
+**Confirmed mistake (2026-05-26):** Two discrepancies found vs DS during live audit:
+1. Indicator dot had no white outer border — DS `Indicator Badge - 1.5` has `strokeAlign: OUTSIDE` white stroke. Fix: add `box-shadow: 0 0 0 1px var(--border-on-color)`.
+2. CTA button `max-height: 48px` → `height: 40px` (DS-confirmed).
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-26 (Rule 169 — Indicator Badge OUTSIDE stroke + CTA button height; Rule 108 updated) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

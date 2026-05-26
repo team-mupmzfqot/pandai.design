@@ -1675,6 +1675,13 @@ The DS component changes LAYOUT between Default and Hover/Pressed, not just colo
 
 Avatar: 60×60 clip, `ic-user-circle` at 50px (DS `inset: 8.33%` = 5px each side). See `design-md/zul.design.md` Rule 108 for the full CSS pattern.
 
+**Indicator dot (Indicator Badge - 1.5) — confirmed 2026-05-26:**
+- `8×8px`, `#00cc85` fill, `strokeAlign: OUTSIDE`, 1px white stroke
+- CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — no `inset` (Rule 60)
+
+**CTA button — confirmed 2026-05-26:**
+- DS Button - 1.5: `height: 40px` — use `height:` not `max-height:` for DS fixed-height buttons.
+
 ---
 
 ### 55. ~~Coloured brand/store icons → 2× PNG~~ — SUPERSEDED by Rule 57
@@ -1833,6 +1840,11 @@ All 5 states: `w:20 h:20`, `padding:2px`, `strokeAlign: INSIDE`. State changes =
 **Confirmed OUTSIDE — Number Badge - 1.5 Primary/M (`618:418`, 2026-05-26):**
 `strokeAlign: OUTSIDE`, `strokeWeight: 1`, stroke = white (`Border/on-color` = `--border-on-color: #ffffff`).
 CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — no `inset`.
+
+**Confirmed OUTSIDE — Indicator Badge - 1.5 dot (Notification dropdown, 2026-05-26):**
+`8×8` dot, `strokeAlign: OUTSIDE`, `strokeWeight: 1`, stroke = white (`Border/on-color`).
+CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — same pattern, no `inset`.
+Template previously had no border — fixed by adding the `box-shadow` rule.
 
 **`get_design_context` generated code can misreport padding.** Always verify via raw `use_figma` (`paddingTop/Right/Bottom/Left`, `strokeAlign`, `strokeWeight`, `width`, `height`).
 
@@ -2025,4 +2037,4 @@ See `design-md/zul.design.md` Rule 165.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-26 (Rules 67–68 / zul Rules 164–165 — component-scoped asset folders, local-first asset workflow) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+*Generated: May 2026 | Last updated: 2026-05-26 (Rules 54/60 updated, zul Rule 169 — Indicator Badge OUTSIDE stroke + CTA button height confirmed from Notification dropdown audit) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
