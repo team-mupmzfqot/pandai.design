@@ -1849,14 +1849,14 @@
       color:       var(--text-tertiary-default);
       white-space: nowrap;
     }
-    /* Icon Badge - 1.5: 12×12, blue, 1px white INSIDE stroke, 2px padding
-       border-box: 12px total − 4px padding = 8px icon area.
-       box-shadow:inset keeps stroke inside without consuming space (Rule 60). */
+    /* Icon Badge - 1.5: 12×12, blue, 1px white OUTSIDE stroke, 2px padding
+       strokeAlign:OUTSIDE → box-shadow NO inset (Rule 60).
+       border-box: 12px − 4px padding = 8px icon area. Stroke renders outside bounds. */
     .profile-dropdown__verified {
       width:           12px;
       height:          12px;
       background:      var(--surface-informative-default);
-      box-shadow:      inset 0 0 0 1px var(--border-on-color);
+      box-shadow:      0 0 0 1px var(--border-on-color);
       border-radius:   var(--corner-radius-corner-rounded);
       display:         inline-flex;
       align-items:     center;
