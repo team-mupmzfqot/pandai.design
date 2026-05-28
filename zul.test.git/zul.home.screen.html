@@ -678,6 +678,17 @@
       width:          100%;
     }
 
+    /* CTA wrapper — DS node 5347:6418/6452/6456, new in DS 2026-05-28 */
+    .static-card__cta {
+      display:         flex;
+      flex-direction:  column;
+      align-items:     flex-end;
+      justify-content: flex-end;
+      width:           100%;
+      flex-shrink:     0;
+    }
+    .static-card--secondary .static-card__cta { height: 32px; }   /* DS node 5347:6452: h-[32px] */
+
     .static-card__title {
       font-size:   18px;
       font-weight: 700;
@@ -4429,10 +4440,12 @@
                   <h2 class="static-card__title">Start Learning Today</h2>
                   <p class="static-card__desc">Continue where you left off</p>
                 </div>
-                <button class="static-card__btn">
-                  <span class="static-card__btn-label">Continue</span>
-                  <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
-                </button>
+                <div class="static-card__cta">
+                  <button class="static-card__btn">
+                    <span class="static-card__btn-label">Continue</span>
+                    <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -4454,10 +4467,12 @@
                   <h2 class="static-card__title">This Week's Challenge</h2>
                   <p class="static-card__desc">Complete 5 exercises to earn coins</p>
                 </div>
-                <button class="static-card__btn">
-                  <span class="static-card__btn-label">Continue</span>
-                  <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
-                </button>
+                <div class="static-card__cta">
+                  <button class="static-card__btn">
+                    <span class="static-card__btn-label">Continue</span>
+                    <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -4479,10 +4494,12 @@
                   <h2 class="static-card__title">SPM live Revision</h2>
                   <p class="static-card__desc">Join tonight's free class with top teachers</p>
                 </div>
-                <button class="static-card__btn">
-                  <span class="static-card__btn-label">Join Now</span>
-                  <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
-                </button>
+                <div class="static-card__cta">
+                  <button class="static-card__btn">
+                    <span class="static-card__btn-label">Join Now</span>
+                    <span class="static-card__btn-arrow"><span class="static-card__btn-arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span></span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
