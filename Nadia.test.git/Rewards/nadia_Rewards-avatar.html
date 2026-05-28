@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pandai — Merchandise</title>
+  <title>Pandai — Avatar</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2074,16 +2074,10 @@
     }
     .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
     .bc-chevron {
-      width:           16px;
-      height:          16px;
-      stroke:          #bfbfbf;
-      fill:            none;
-      stroke-width:    1.5;
-      stroke-linecap:  round;
-      stroke-linejoin: round;
-      flex-shrink:     0;
+      color:       #bfbfbf;
+      flex-shrink: 0;
     }
-    .bc-link--current { color: #666; }
+    .bc-link--current { color: #666; font-weight: 500; }
 
     /* Mobile coin balance — shows in page header, hidden on desktop */
     .bc-coin-mobile {
@@ -2220,50 +2214,47 @@
       gap:            var(--sp-xs);
       overflow:       hidden;
     }
-    .rewards-main--merch {
+    .rewards-main--avatar {
       background: #e8fbe8;
       border:     1px solid #00cc85;
     }
 
-    /* Merchandise header row */
-    .merch-header {
+    /* Avatar header row */
+    .avatar-header {
       display: flex; align-items: center; justify-content: space-between;
       gap: 16px; flex-shrink: 0; flex-wrap: wrap;
     }
-    .merch-header__text { font-size: 14px; font-weight: 400; line-height: 20px; color: #00564c; flex: 1; min-width: 0; }
-    .merch-header__stat { display: flex; align-items: center; gap: var(--sp-xs); flex-shrink: 0; }
-    .merch-header__stat-label { font-size: 14px; font-weight: 400; line-height: 20px; color: #00564c; white-space: nowrap; }
-    .merch-header__coin { width: 18px; height: 21px; display: block; object-fit: contain; flex-shrink: 0; }
-    .merch-header__count { font-size: 14px; font-weight: 400; line-height: 20px; color: #00564c; white-space: nowrap; }
+    .avatar-header__text { font-size: 14px; font-weight: 400; line-height: 20px; color: #00564c; flex: 1; min-width: 0; }
+    .avatar-header__stat { display: flex; align-items: center; gap: var(--sp-xs); flex-shrink: 0; }
+    .avatar-header__stat-label { font-size: 14px; font-weight: 400; line-height: 20px; color: #00564c; white-space: nowrap; }
+    .avatar-header__coin { width: 18px; height: 21px; display: block; object-fit: contain; flex-shrink: 0; }
+    .avatar-header__count { font-size: 14px; font-weight: 400; line-height: 20px; color: #00564c; white-space: nowrap; }
 
-    /* Merchandise reward cards — 4-col grid */
-    .merch-grid {
+    /* Avatar reward cards — 4-col grid */
+    .avatar-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
     }
 
-    /* Reward Card - 1.5 (DS node 3065:43481) */
+    /* Reward Card - 1.5 (DS node 4661:51439) */
     .rc {
       border: 1px solid #d9d9d9; border-radius: 24px;
       overflow: hidden; display: flex; flex-direction: column; background: #fff;
     }
-    .rc__img { width: 100%; height: auto; display: block; flex-shrink: 0; }
+    .rc__img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; flex-shrink: 0; }
     .rc__body {
       padding: 16px; display: flex; flex-direction: column;
       gap: 8px; flex: 1; min-height: 0;
     }
-    .rc__badges { display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
 
-    /* Label Badge 1.5 — Premium / Premium Lite */
-    .lbadge-prem {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 2px 8px; border-radius: 60px;
-      background: #d9f7ed; border: 1px solid #00cc85;
-      font-size: 10px; font-weight: 500; line-height: 12px;
-      color: #00cc85; white-space: nowrap; flex-shrink: 0;
+    /* Like row — heart icon + count (DS node 2339:5298) */
+    .rc__like {
+      display: flex; align-items: center; gap: 4px; flex-shrink: 0;
     }
-    .lbadge-prem svg { width: 10px; height: 10px; flex-shrink: 0; }
+    .rc__like-icon { width: 16px; height: 16px; flex-shrink: 0; color: #404040; display: block; }
+    .rc__like-icon svg { width: 16px; height: 16px; display: block; }
+    .rc__like-count { font-size: 14px; font-weight: 400; line-height: 20px; color: #404040; }
 
     .rc__title {
       font-size: 14px; font-weight: 600; line-height: 20px; color: #404040;
@@ -2276,7 +2267,7 @@
     .rc__coin-icon  { width: 24px; height: 24px; flex-shrink: 0; display: block; object-fit: contain; }
     .rc__coin-value { font-size: 14px; font-weight: 400; line-height: 20px; color: #666; }
 
-    /* Show Voucher — Button - 1.5 Primary/S (DS node 1437:8154) */
+    /* Redeem — Button - 1.5 Primary/S (DS node 1437:8154, confirmed Rule 19) */
     .btn-show {
       display: inline-flex; align-items: center; border-radius: 60px;
       padding: 2px 8px; height: 24px;
@@ -2313,10 +2304,10 @@
     @media (max-width: 1279px) {
       .rewards-layout  { flex-direction: column; }
       .rewards-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; height: auto; }
-      .merch-grid      { grid-template-columns: repeat(2, 1fr); }
+      .avatar-grid        { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 767px) {
-      .merch-grid { grid-template-columns: 1fr; }
+      .avatar-grid { grid-template-columns: 1fr; }
       .rc         { height: auto; }
 
       /* Coin balance moves into page header — hide from sidebar */
@@ -3320,25 +3311,25 @@
     <div class="page-container">
       <div class="main-content">
 
-        <section id="PageViewport" class="page-viewport-content" aria-label="Merchandise">
+        <section id="PageViewport" class="page-viewport-content" aria-label="Avatar">
 
-          <!-- Breadcrumb — Merchandise (DS node 3284:219024) -->
+          <!-- Breadcrumb — Avatar (DS node 4661:51384) -->
           <section class="bc-row" aria-label="Breadcrumb">
             <div class="bc-left">
-              <span class="bc-title">Merchandise</span>
+              <span class="bc-title">Avatar</span>
               <span class="bc-sep" aria-hidden="true"></span>
               <nav class="bc-trail" aria-label="Breadcrumb">
                 <a href="#" class="bc-link">
                   <svg aria-hidden="true"><use href="#ic-gift"/></svg>
                   Rewards
-                  <svg class="bc-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                  <svg class="bc-chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
                 </a>
-                <span class="bc-link bc-link--current" aria-current="page">Merchandise</span>
+                <span class="bc-link bc-link--current" aria-current="page">Avatar</span>
               </nav>
             </div>
             <!-- Coin balance — mobile only, hidden on desktop -->
             <div class="bc-coin-mobile" aria-hidden="true">
-              <img class="bc-coin-mobile__icon" src="../../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg" alt="">
+              <img class="bc-coin-mobile__icon" src="../../src/image-repo/page.rewards/avatar/assets/P.Coin.svg" alt="">
               <span class="bc-coin-mobile__value">10,000</span>
             </div>
           </section>
@@ -3346,12 +3337,12 @@
           <!-- Two-panel layout (DS node 3065:43313) -->
           <div class="rewards-layout">
 
-            <!-- LEFT SIDEBAR — DS node 3849:48401 (Nav Side Menu Desktop 1.5) -->
+            <!-- LEFT SIDEBAR — DS node 4661:51386 (Nav Side Menu Desktop 1.5) -->
             <aside class="rewards-sidebar">
 
               <!-- Score chip — Surface/gold/default-subtle #fef1ce, Border/gold/default #fabb0a -->
               <div class="sidebar-balance">
-                <img class="sidebar-balance__coin" src="../../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg" alt="Pandai Coin">
+                <img class="sidebar-balance__coin" src="../../src/image-repo/page.rewards/avatar/assets/P.Coin.svg" alt="Pandai Coin">
                 <span class="sidebar-balance__value">10,000</span>
               </div>
 
@@ -3366,7 +3357,7 @@
                 <div class="sidebar-btn__icon-wrap" data-icon="box"><svg aria-hidden="true"><use href="#ic-package"/></svg></div>
                 <span class="sidebar-btn__label">My Reward</span>
               </button>
-              <button class="sidebar-btn sidebar-btn--active" type="button">
+              <button class="sidebar-btn" type="button">
                 <div class="sidebar-btn__icon-wrap" data-icon="shopping-bag"><svg aria-hidden="true"><use href="#ic-shopping-bag"/></svg></div>
                 <span class="sidebar-btn__label">Merchandise</span>
               </button>
@@ -3374,174 +3365,199 @@
                 <div class="sidebar-btn__icon-wrap" data-icon="shopping-cart"><svg aria-hidden="true"><use href="#ic-shopping-cart"/></svg></div>
                 <span class="sidebar-btn__label">eVoucher</span>
               </button>
-              <button class="sidebar-btn" type="button">
+              <!-- Avatar — active (DS node I4661:51386;3468:101066, State=Selected) -->
+              <button class="sidebar-btn sidebar-btn--active" type="button">
                 <div class="sidebar-btn__icon-wrap"><svg aria-hidden="true"><use href="#ic-smile"/></svg></div>
                 <span class="sidebar-btn__label">Avatar</span>
               </button>
 
             </aside>
 
-            <!-- RIGHT MAIN — Merchandise panel
-                 bg: Surface/secondary/default-subtle #e8fbe8 · border: 1px #00cc85 (DS node 3065:43478) -->
-            <main class="rewards-main rewards-main--merch">
+            <!-- RIGHT MAIN — Avatar panel
+                 bg: Surface/secondary/default-subtle #e8fbe8 · border: 1px #00cc85 (DS node 4661:51387) -->
+            <main class="rewards-main rewards-main--avatar">
 
-              <!-- Header row — DS node I3897:68441;2881:36281;3902:49607+49609 -->
-              <div class="merch-header">
-                <p class="merch-header__text">Collect coins, redeem and enjoy these great rewards!</p>
-                <div class="merch-header__stat">
-                  <span class="merch-header__stat-label">Total redeem this month :</span>
-                  <img class="merch-header__coin"
-                       src="../../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg"
+              <!-- Header row — DS node I4661:51387;2881:36281;4661:51432 -->
+              <div class="avatar-header">
+                <p class="avatar-header__text">Collect coins, redeem and enjoy these great rewards!</p>
+                <div class="avatar-header__stat">
+                  <span class="avatar-header__stat-label">Total redeem this month :</span>
+                  <img class="avatar-header__coin"
+                       src="../../src/image-repo/page.rewards/avatar/assets/P.Coin.svg"
                        alt="Coin">
-                  <span class="merch-header__count">120</span>
+                  <span class="avatar-header__count">120</span>
                 </div>
               </div>
 
-              <!-- Reward Cards grid — 4 columns desktop -->
-              <div class="merch-grid">
+              <!-- Avatar reward cards grid — 4 columns, 2 rows (DS node 4661:51387)
+                   Row 1 (cards 1–3): active "Redeem" · (card 4): disabled "Redeem"
+                   Row 2 (cards 5–7): all disabled "Redeem" -->
+              <div class="avatar-grid">
 
-                <!-- Card 1 — active "Show Voucher" (DS node 3065:43481) -->
+                <!-- Card 1 — active "Redeem" (DS node I4661:51387;2881:36281;4661:51439) -->
                 <article class="rc">
-                  <img class="rc__img"
-                       src="../../src/image-repo/page.rewards/merchandize/assets/Merchandise.svg"
-                       alt="Reward merchandise item">
+                  <img class="rc__img" src="../../src/image-repo/page.rewards/avatar/assets/Avatar-1.png" alt="Avatar reward card 1">
                   <div class="rc__body">
-                    <div class="rc__badges">
-                      <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
-                        Premium
-                      </span>
-                      <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
-                        Premium Lite
-                      </span>
+                    <div class="rc__like">
+                      <span class="rc__like-icon"><svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+                      <span class="rc__like-count">12</span>
                     </div>
                     <p class="rc__title">This is the title for the reward voucher</p>
                   </div>
                   <div class="rc__divider"></div>
                   <div class="rc__cta">
                     <div class="rc__coin">
-                      <img class="rc__coin-icon"
-                           src="../../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg"
-                           alt="Pandai Coin">
+                      <img class="rc__coin-icon" src="../../src/image-repo/page.rewards/avatar/assets/P.Coin.svg" alt="Pandai Coin">
                       <span class="rc__coin-value">120</span>
                     </div>
                     <a href="#" class="btn-show">
-                      <span class="btn-show__label">Show Voucher</span>
-                      <div class="btn-show__arrow">
-                        <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
-                      </div>
+                      <span class="btn-show__label">Redeem</span>
+                      <div class="btn-show__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
                     </a>
                   </div>
                 </article>
 
-                <!-- Card 2 — active "Show Voucher" (DS node 3065:43482) -->
+                <!-- Card 2 — active "Redeem" (DS node I4661:51387;2881:36281;4661:51440) -->
                 <article class="rc">
-                  <img class="rc__img"
-                       src="../../src/image-repo/page.rewards/merchandize/assets/Merchandise-1.svg"
-                       alt="Reward merchandise item">
+                  <img class="rc__img" src="../../src/image-repo/page.rewards/avatar/assets/Avatar-2.png" alt="Avatar reward card 2">
                   <div class="rc__body">
-                    <div class="rc__badges">
-                      <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
-                        Premium
-                      </span>
-                      <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
-                        Premium Lite
-                      </span>
+                    <div class="rc__like">
+                      <span class="rc__like-icon"><svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+                      <span class="rc__like-count">12</span>
                     </div>
                     <p class="rc__title">This is the title for the reward voucher</p>
                   </div>
                   <div class="rc__divider"></div>
                   <div class="rc__cta">
                     <div class="rc__coin">
-                      <img class="rc__coin-icon"
-                           src="../../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg"
-                           alt="Pandai Coin">
+                      <img class="rc__coin-icon" src="../../src/image-repo/page.rewards/avatar/assets/P.Coin.svg" alt="Pandai Coin">
                       <span class="rc__coin-value">120</span>
                     </div>
                     <a href="#" class="btn-show">
-                      <span class="btn-show__label">Show Voucher</span>
-                      <div class="btn-show__arrow">
-                        <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
-                      </div>
+                      <span class="btn-show__label">Redeem</span>
+                      <div class="btn-show__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
                     </a>
                   </div>
                 </article>
 
-                <!-- Card 3 — disabled "Show Voucher" (DS node 3065:43483) -->
+                <!-- Card 3 — active "Redeem" (DS node I4661:51387;2881:36281;4661:51441) -->
                 <article class="rc">
-                  <img class="rc__img"
-                       src="../../src/image-repo/page.rewards/merchandize/assets/Merchandise-2.svg"
-                       alt="Reward merchandise item">
+                  <img class="rc__img" src="../../src/image-repo/page.rewards/avatar/assets/Avatar-3.png" alt="Avatar reward card 3">
                   <div class="rc__body">
-                    <div class="rc__badges">
-                      <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
-                        Premium
-                      </span>
-                      <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
-                        Premium Lite
-                      </span>
+                    <div class="rc__like">
+                      <span class="rc__like-icon"><svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+                      <span class="rc__like-count">12</span>
                     </div>
                     <p class="rc__title">This is the title for the reward voucher</p>
                   </div>
                   <div class="rc__divider"></div>
                   <div class="rc__cta">
                     <div class="rc__coin">
-                      <img class="rc__coin-icon"
-                           src="../../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg"
-                           alt="Pandai Coin">
+                      <img class="rc__coin-icon" src="../../src/image-repo/page.rewards/avatar/assets/P.Coin.svg" alt="Pandai Coin">
                       <span class="rc__coin-value">120</span>
                     </div>
-                    <span class="btn-show btn-show--disabled" aria-disabled="true">
-                      <span class="btn-show__label">Show Voucher</span>
-                      <div class="btn-show__arrow">
-                        <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
-                      </div>
-                    </span>
+                    <a href="#" class="btn-show">
+                      <span class="btn-show__label">Redeem</span>
+                      <div class="btn-show__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
+                    </a>
                   </div>
                 </article>
 
-                <!-- Card 4 — disabled "Show Voucher" (DS node 3065:43484) -->
+                <!-- Card 4 — disabled "Redeem" (DS node I4661:51387;2881:36281;4661:51442) -->
                 <article class="rc">
-                  <img class="rc__img"
-                       src="../../src/image-repo/page.rewards/merchandize/assets/Merchandise-3.svg"
-                       alt="Reward merchandise item">
+                  <img class="rc__img" src="../../src/image-repo/page.rewards/avatar/assets/Avatar-4.png" alt="Avatar reward card 4">
                   <div class="rc__body">
-                    <div class="rc__badges">
-                      <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
-                        Premium
-                      </span>
-                      <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
-                        Premium Lite
-                      </span>
+                    <div class="rc__like">
+                      <span class="rc__like-icon"><svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+                      <span class="rc__like-count">12</span>
                     </div>
                     <p class="rc__title">This is the title for the reward voucher</p>
                   </div>
                   <div class="rc__divider"></div>
                   <div class="rc__cta">
                     <div class="rc__coin">
-                      <img class="rc__coin-icon"
-                           src="../../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg"
-                           alt="Pandai Coin">
+                      <img class="rc__coin-icon" src="../../src/image-repo/page.rewards/avatar/assets/P.Coin.svg" alt="Pandai Coin">
                       <span class="rc__coin-value">120</span>
                     </div>
                     <span class="btn-show btn-show--disabled" aria-disabled="true">
-                      <span class="btn-show__label">Show Voucher</span>
-                      <div class="btn-show__arrow">
-                        <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
-                      </div>
+                      <span class="btn-show__label">Redeem</span>
+                      <div class="btn-show__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
                     </span>
                   </div>
                 </article>
 
-              </div><!-- /.merch-grid -->
+                <!-- Card 5 — disabled "Redeem" (DS node I4661:51387;2881:36281;4661:51444) -->
+                <article class="rc">
+                  <img class="rc__img" src="../../src/image-repo/page.rewards/avatar/assets/Avatar-5.png" alt="Avatar reward card 5">
+                  <div class="rc__body">
+                    <div class="rc__like">
+                      <span class="rc__like-icon"><svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+                      <span class="rc__like-count">12</span>
+                    </div>
+                    <p class="rc__title">This is the title for the reward voucher</p>
+                  </div>
+                  <div class="rc__divider"></div>
+                  <div class="rc__cta">
+                    <div class="rc__coin">
+                      <img class="rc__coin-icon" src="../../src/image-repo/page.rewards/avatar/assets/P.Coin.svg" alt="Pandai Coin">
+                      <span class="rc__coin-value">120</span>
+                    </div>
+                    <span class="btn-show btn-show--disabled" aria-disabled="true">
+                      <span class="btn-show__label">Redeem</span>
+                      <div class="btn-show__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
+                    </span>
+                  </div>
+                </article>
+
+                <!-- Card 6 — disabled "Redeem" (DS node I4661:51387;2881:36281;4661:51445) -->
+                <article class="rc">
+                  <img class="rc__img" src="../../src/image-repo/page.rewards/avatar/assets/Avatar-6.png" alt="Avatar reward card 6">
+                  <div class="rc__body">
+                    <div class="rc__like">
+                      <span class="rc__like-icon"><svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+                      <span class="rc__like-count">12</span>
+                    </div>
+                    <p class="rc__title">This is the title for the reward voucher</p>
+                  </div>
+                  <div class="rc__divider"></div>
+                  <div class="rc__cta">
+                    <div class="rc__coin">
+                      <img class="rc__coin-icon" src="../../src/image-repo/page.rewards/avatar/assets/P.Coin.svg" alt="Pandai Coin">
+                      <span class="rc__coin-value">120</span>
+                    </div>
+                    <span class="btn-show btn-show--disabled" aria-disabled="true">
+                      <span class="btn-show__label">Redeem</span>
+                      <div class="btn-show__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
+                    </span>
+                  </div>
+                </article>
+
+                <!-- Card 7 — disabled "Redeem" (DS node I4661:51387;2881:36281;4661:51446) -->
+                <article class="rc">
+                  <img class="rc__img" src="../../src/image-repo/page.rewards/avatar/assets/Avatar-7.png" alt="Avatar reward card 7">
+                  <div class="rc__body">
+                    <div class="rc__like">
+                      <span class="rc__like-icon"><svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+                      <span class="rc__like-count">12</span>
+                    </div>
+                    <p class="rc__title">This is the title for the reward voucher</p>
+                  </div>
+                  <div class="rc__divider"></div>
+                  <div class="rc__cta">
+                    <div class="rc__coin">
+                      <img class="rc__coin-icon" src="../../src/image-repo/page.rewards/avatar/assets/P.Coin.svg" alt="Pandai Coin">
+                      <span class="rc__coin-value">120</span>
+                    </div>
+                    <span class="btn-show btn-show--disabled" aria-disabled="true">
+                      <span class="btn-show__label">Redeem</span>
+                      <div class="btn-show__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
+                    </span>
+                  </div>
+                </article>
+
+              </div><!-- /.avatar-grid -->
             </main>
+
 
           </div><!-- /.rewards-layout -->
 

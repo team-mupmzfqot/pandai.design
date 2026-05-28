@@ -2818,3 +2818,132 @@ pandai.design/src/image-repo/
 ```
 
 *Last updated: 2026-05-26 | Session 14 — Merchandise rebuild + data-active-nav nav fix | Branch: staging*
+
+---
+
+## Session 15 — eVoucher page + image resolution investigation (2026-05-28)
+
+### What was done
+
+#### 1. Created `nadia_Rewards-evoucher.html`
+
+New Rewards sub-page for eVoucher, built from `nadia_Rewards-Merchandise.html` as the base template (closest structural match). All class/ID names scoped to evoucher context.
+
+**Key changes from Merchandise base:**
+- Title → `Pandai — eVoucher`
+- `aria-label="eVoucher"` on `#PageViewport`
+- Breadcrumb: "eVoucher", trail "Rewards > eVoucher"
+- Sidebar: `sidebar-btn--active` moved to eVoucher (shopping-cart icon); Merchandise button inactive
+- Right panel class: `rewards-main--evoucher` with `#e8fbe8` bg + `1px solid #00cc85` border
+- CSS renamed: `merch-header` → `evoucher-header`, `merch-grid` → `evoucher-grid`
+- 8 reward cards in a 4-column grid:
+  - Cards 1–4: active "Redeem" button (Primary/S, green)
+  - Cards 5–6: disabled "Coming Soon"
+  - Cards 7–8: disabled "Out Of Stock"
+- Card image tag: `<img class="rc__img">` with `src` + `srcset` (1x only — see rule below)
+
+#### 2. Card images — new asset folder
+
+**Location:** `src/image-repo/page.rewards/evoucher/assets/`
+
+**Files:**
+- `P.Coin.svg` — copied from merchandize/assets/
+- `eVoucher-1.png` through `eVoucher-8.png` — exported from Figma DS (node 4661:51358 card instances)
+
+**Image dimensions:** 251×148px — this is the native source resolution from Figma (see investigation below).
+
+#### 3. Image resolution investigation
+
+**Finding:** The card images in the Figma DS are stored at 251×148px. This is the maximum quality available — no hidden 2x detail exists in the file. PNG header confirmed: IHDR width=0x00FB=251, height=0x0094=148.
+
+**Why they look blurry on retina:** CSS displays the image at ~240–260px wide (4-col grid). On a 2× screen the browser needs 500px of pixel data but only 251px exist — hardware upscaling blurs.
+
+**Production fix:** Replace the Figma placeholders with real high-res brand assets (≥500×295px) named `eVoucher-N@2x.png` in the same folder.
+
+**Why 2x export from Figma didn't help:** Source images were uploaded to Figma at 1x. 2x export just upscales the same 251×148 data — no quality gain.
+
+#### 4. `srcset` — @2x entry causes broken images on retina (new rule)
+
+**Mistake made this session:** Added `srcset="... 1x, ...@2x.png 2x"` to all 8 `<img>` tags. The `@2x.png` files don't exist. On retina screens the browser selects the `2x` candidate, GETs a 404, and shows a broken image — it does NOT fall back to `src`. All 8 images broke immediately on retina display.
+
+**Rule:** Never add a `Nx` descriptor to `srcset` unless the corresponding file physically exists in the asset folder. When @2x files are not yet available, use `srcset="path/file.png 1x"` (1x only) or omit `srcset` entirely.
+
+**Fix applied:** Removed all `@2x.png` entries. Each card now uses `srcset="eVoucher-N.png 1x"` which is safe on all screens.
+
+**To enable 2x later:** drop `eVoucher-N@2x.png` files in the assets folder, then change `srcset` to:
+```html
+srcset="../../src/image-repo/page.rewards/evoucher/assets/eVoucher-N.png 1x,
+        ../../src/image-repo/page.rewards/evoucher/assets/eVoucher-N@2x.png 2x"
+```
+
+#### 5. Card image height — `height: auto` not `height: 148px`
+
+**Fix:** Changed `.rc__img` from `height: 148px; object-fit: cover` to `height: auto`. Fixed height was cropping images (cutting off content). `height: auto` lets each image render at its natural 251×148 aspect ratio, scaling proportionally to card width.
+
+### Updated image tree
+
+```
+pandai.design/src/image-repo/
+└── page.rewards/
+    ├── coin.quest/assets/     P.Coin.svg + 16 quest SVGs
+    ├── merchandize/assets/    P.Coin.svg + 4 merchandise SVGs
+    ├── my.rewards/assets/     P.Coin.svg + 8 reward SVGs
+    └── evoucher/assets/       P.Coin.svg + eVoucher-1…8.png (251×148, 1x)
+```
+
+*Last updated: 2026-05-28 | Session 15 — eVoucher page + image resolution investigation | Branch: staging*
+
+---
+
+## Session 15 — Rewards mobile sidebar → pill tab bar (2026-05-28)
+
+### What was done
+
+Converted the left sidebar navigation on all three Rewards sub-pages into a horizontally scrollable pill tab bar at the mobile breakpoint (`≤767px`). Desktop layout is unchanged. Changes are CSS-only (plus one HTML element per file).
+
+**Files changed:**
+- `Nadia.test.git/Rewards/nadia_Rewards-CoinQuest.html`
+- `Nadia.test.git/Rewards/nadia_Rewards-Merchandise.html`
+- `Nadia.test.git/Rewards/nadia_Rewards-Myrewards.html`
+
+### Mobile breakpoint behaviour (`≤767px`)
+
+#### Sidebar → pill tab bar
+`.rewards-sidebar` overrides on mobile:
+```css
+flex-direction: row; flex-wrap: nowrap;
+overflow-x: auto; scrollbar-width: none;
+background: transparent; border: none; border-radius: 0; padding: 0;
+gap: var(--sp-xs);  /* 8px */
+```
+Each `.sidebar-btn` gets `width: auto; flex: 0 0 auto` so pills size to their label.
+
+#### Coin balance → page header
+A `.bc-coin-mobile` chip is added inside `.bc-row` (after `.bc-left`) in all three files. It is `display: none` on desktop and `display: flex` on mobile. The original `.sidebar-balance` is hidden with `display: none` on mobile.
+
+```html
+<!-- inside .bc-row, after .bc-left -->
+<div class="bc-coin-mobile" aria-hidden="true">
+  <img class="bc-coin-mobile__icon" src="...P.Coin.svg" alt="">
+  <span class="bc-coin-mobile__value">10,000</span>
+</div>
+```
+
+Coin image paths per page:
+- CoinQuest → `../../src/image-repo/page.rewards/coin.quest/assets/P.Coin.svg`
+- Merchandise → `../../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg`
+- MyRewards → `../../src/image-repo/page.rewards/my.rewards/assets/P.Coin.svg`
+
+#### Main content
+`.rewards-main { width: 100% }` ensures main content fills full width below the pill bar.
+
+### Active pill per page
+Each page already had `sidebar-btn--active` on the correct button — unchanged:
+- CoinQuest.html → **Coin Quest** active
+- Merchandise.html → **Merchandise** active
+- MyRewards.html → **My Rewards** active
+
+### Tokens used
+All color and spacing values use existing DS tokens — no hardcoded values introduced in the new CSS (coin chip colors `#fef1ce`, `#fabb0a`, `#c89608` were already hardcoded in `.sidebar-balance` and are re-used as-is).
+
+*Last updated: 2026-05-28 | Session 15 — Rewards mobile pill tab bar | Branch: staging*
