@@ -1861,9 +1861,14 @@ CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — no `inset`.
 CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — same pattern, no `inset`.
 Template previously had no border — fixed by adding the `box-shadow` rule.
 
+**Confirmed OUTSIDE — Icon Badge - 1.5 (`3908:1491`, 2026-05-28):**
+`strokeAlign: OUTSIDE`, `strokeWeight: 1`, stroke = white (`Border/on-color`). 12×12px, fill `#00a2e8` (`--surface-informative-default`), padding 2px, icon = `Outline/check` at 8×8.
+CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — no `inset`. Content area = 12 − 4 = 8px. See Rule 182.
+**Mistakes made:** (1) Used `border: 1px solid white` → `border-box` shrank content to 6px, icon clipped. (2) Assumed INSIDE without checking DS → had to correct to OUTSIDE after `use_figma`. Always verify strokeAlign. See Rule 183.
+
 **`get_design_context` generated code can misreport padding.** Always verify via raw `use_figma` (`paddingTop/Right/Bottom/Left`, `strokeAlign`, `strokeWeight`, `width`, `height`).
 
-**See also:** zul.design.md Rule 118 (INSIDE full reference), Rule 160 (OUTSIDE confirmed pattern).
+**See also:** zul.design.md Rule 118 (INSIDE full reference), Rule 160 (OUTSIDE confirmed pattern), Rules 182–183 (Icon Badge + strokeAlign must-verify rule).
 
 ---
 
@@ -1883,7 +1888,11 @@ Template previously had no border — fixed by adding the `box-shadow` rule.
 0i. For carousel/slider JS: capture pre-clone anchor BEFORE the loop (Rule 130)
 0j. Re-audit tokens if last audit > 3 days ago (Rule 153) — resolve every variable ID
     to current hex BEFORE writing any CSS. Token values change without notice.
+0k. After any fix to a shared component — grep zul.page.template.html for the same
+    component class. If found, apply the identical fix before committing (Rule 184).
 ```
+
+**Shared components (always sync both files):** navbar, profile dropdown, notification dropdown, learn/locale/download dropdowns, footer, `:root` tokens, `<svg><defs>` icon symbols.
 
 ---
 

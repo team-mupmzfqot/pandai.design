@@ -7161,4 +7161,105 @@ The illustration inside `.static-card__illustration` uses `flex: 1 0 0` which ca
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-28 (Rules 180–181 — Static Card mobile min-height 160px, illustration stretch fix max-height:100px flex:none) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 182. Icon Badge - 1.5 — confirmed DS specs (node 3908:1491)
+
+**Source:** DS `use_figma` inspection of node `3908:1491`, confirmed 2026-05-28.
+
+| Property | Value | CSS |
+|---|---|---|
+| Width / Height | 12×12px | `width: 12px; height: 12px` |
+| Fill | `Surface/informative/default` = `#00a2e8` | `background: var(--surface-informative-default)` |
+| Stroke color | `Border/on-color` = `#ffffff` | `var(--border-on-color)` |
+| `strokeAlign` | **OUTSIDE** | `box-shadow: 0 0 0 1px var(--border-on-color)` — NO `inset` |
+| `strokeWeight` | 1px | — |
+| Padding | 2px all sides | `padding: 2px` |
+| Corner radius | 60px (pill) | `var(--corner-radius-corner-rounded)` |
+| Icon | `Outline/check` at 8×8 | `<svg width="8" height="8"><use href="#ic-check"/></svg>` |
+
+**Content area math:** `12px − 4px padding = 8px` — exactly fits the 8×8 `ic-check` icon. ✓
+
+**`strokeAlign: OUTSIDE`** → `box-shadow: 0 0 0 1px` (no `inset`). The 1px ring renders outside the 12×12 bounds without consuming layout space or shrinking the content area.
+
+```css
+/* Icon Badge - 1.5 (DS node 3908:1491) */
+.profile-dropdown__verified {
+  width:           12px;
+  height:          12px;
+  background:      var(--surface-informative-default);   /* #00a2e8 */
+  box-shadow:      0 0 0 1px var(--border-on-color);     /* OUTSIDE stroke */
+  border-radius:   var(--corner-radius-corner-rounded);  /* 60px */
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  flex-shrink:     0;
+  overflow:        hidden;
+  padding:         2px;
+  color:           white;
+}
+```
+
+```html
+<span class="profile-dropdown__verified" aria-label="Verified">
+  <svg width="8" height="8" aria-hidden="true"><use href="#ic-check"/></svg>
+</span>
+```
+
+**Mistakes made (2026-05-28):**
+1. Used `border: 1px solid white` — with `border-box` sizing: content area = 12 − 2 − 4 = **6px** (too small for 8px icon → icon clipped, badge looked like a plain blue dot). Must use `box-shadow` so stroke doesn't consume layout space.
+2. Assumed `strokeAlign: INSIDE` — DS is `OUTSIDE`. Always verify via `use_figma` before writing any ring/border CSS (Rule 60).
+3. Inline SVG `viewBox="0 0 24 24"` at `width="8" height="8"` → stroke-width scaled to **0.5px** (invisible). Use `<use href="#ic-check">` (viewBox 0 0 12 12, renders at 0.667× → 1px stroke, visible).
+
+---
+
+### Rule 183. Always verify `strokeAlign` via `use_figma` — never assume INSIDE or OUTSIDE
+
+`strokeAlign` cannot be inferred from visual inspection or component names. It must be read directly from the DS node. Getting it wrong causes two distinct failure modes:
+
+| Wrong assumption | Result |
+|---|---|
+| Assumed INSIDE, actually OUTSIDE | `box-shadow: inset` → stroke renders inside bounds → visual ring is correct but positioned wrong; OR `border:` used → content area shrinks |
+| Assumed OUTSIDE, actually INSIDE | `box-shadow: 0 0 0 1px` (no inset) → ring appears further outside than DS intends |
+
+**Rule:** Before writing ANY `box-shadow` ring or `border` for a DS stroke, call `use_figma` → `node.strokeAlign`. Three values, three CSS patterns (Rule 60):
+
+```
+INSIDE  → box-shadow: inset 0 0 0 Npx var(--token)
+OUTSIDE → box-shadow: 0 0 0 Npx var(--token)          ← NO inset
+CENTER  → border: Npx solid var(--token)
+```
+
+**Confirmed values (as of 2026-05-28):**
+| Component | Node | `strokeAlign` | CSS |
+|---|---|---|---|
+| Icon Badge - 1.5 | `3908:1491` | OUTSIDE | `box-shadow: 0 0 0 1px` |
+| Number Badge - 1.5 Primary/M | `618:418` | OUTSIDE | `box-shadow: 0 0 0 1px` |
+| Indicator Badge dot | notification dropdown | OUTSIDE | `box-shadow: 0 0 0 1px` |
+| Secondary/M button arrow circle | `538:1929` | INSIDE | `box-shadow: inset 0 0 0 1px` |
+
+**Mistake made (2026-05-28):** Implemented Icon Badge - 1.5 with `box-shadow: inset` (INSIDE) without checking DS. User had to correct it. DS node inspection immediately confirmed OUTSIDE. One `use_figma` call would have prevented the error.
+
+---
+
+### Rule 184. Shared components — always update BOTH `zul.home.screen.html` AND `zul.page.template.html`
+
+`zul.page.template.html` is a copy of the navigation shell + CSS foundation from `zul.home.screen.html`. Any fix to a shared component (navbar, dropdowns, profile menu, footer, any shared CSS rule) must be applied to **both files in the same session**.
+
+**Checklist before committing any shared-component fix:**
+1. Is the component present in `zul.page.template.html`? → `grep -n "component-class" zul.page.template.html`
+2. If yes → apply the identical fix (CSS + HTML + `:root` tokens)
+3. Commit both files together in one commit
+
+**Confirmed shared components (as of 2026-05-28):**
+- Entire navbar (Desktop + Mobile + menus)
+- Profile dropdown (incl. Icon Badge)
+- Notification dropdown
+- Learn/locale/download dropdowns
+- Footer
+- All `:root` CSS tokens
+- All `<svg><defs>` icon symbols
+
+**Mistake made (2026-05-28):** Fixed Icon Badge in `zul.home.screen.html` but did not update `zul.page.template.html`. Required a separate follow-up commit. Always grep the template file before closing a fix.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-28 (Rules 182–184 — Icon Badge DS specs, always verify strokeAlign, sync both HTML files) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
