@@ -31,6 +31,7 @@
       --surface-disabled-on-color:       #e5e5e5;   /* Surface/disabled/on color — disabled button arrow bg (DS confirmed 2026-05-24) */
       --surface-general-default-secondary: #f2f2f2;  /* Surface/general/default-secondary — carousel indicator inactive dot */
       --surface-tertiary-default:        #00564c;   /* Surface/tertiary/default — pressed state bg */
+      --surface-informative-default:     #00a2e8;   /* Surface/informative/default — Icon Badge - 1.5 (DS node 3908:1491) */
       --butter-400:                      #ffffd4;   /* Butter/400 — Static Card - 1.5 bg (DS confirmed 2616:2946) */
       --accents-butter:                  #ffffc9;   /* Accents/Butter — Static Card right-col gradient end */
 
@@ -1848,14 +1849,16 @@
       color:       var(--text-tertiary-default);
       white-space: nowrap;
     }
-    /* Icon Badge - 1.5: 12×12, blue, 1px white border, 2px padding */
+    /* Icon Badge - 1.5: 12×12, blue, 1px white INSIDE stroke, 2px padding
+       border-box: 12px total − 4px padding = 8px icon area.
+       box-shadow:inset keeps stroke inside without consuming space (Rule 60). */
     .profile-dropdown__verified {
       width:           12px;
       height:          12px;
-      background:      #00a2e8;
-      border:          1px solid white;
+      background:      var(--surface-informative-default);
+      box-shadow:      inset 0 0 0 1px var(--border-on-color);
       border-radius:   var(--corner-radius-corner-rounded);
-      display:         flex;
+      display:         inline-flex;
       align-items:     center;
       justify-content: center;
       flex-shrink:     0;
@@ -3470,7 +3473,7 @@
             <span class="profile-dropdown__name">Diana Adam</span>
             <!-- Icon Badge - 1.5: blue #00a2e8 · 1px white border · check icon 8×8 -->
             <span class="profile-dropdown__verified" aria-label="Verified">
-              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17L4 12"/></svg>
+              <svg width="8" height="8" aria-hidden="true"><use href="#ic-check"/></svg>
             </span>
           </div>
           <span class="profile-dropdown__username">@dianaadam26</span>
