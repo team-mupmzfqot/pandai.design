@@ -575,7 +575,7 @@
       flex-direction:  row;
       align-items:     center;
       justify-content: flex-end;
-      gap:             12px;
+      gap:             var(--spacing-space-m);   /* 16px — DS Spacing/component/md */
     }
 
     /* Variant backgrounds (DS node 5176:77365 — Primary/Secondary=butter/400, Tertiary=no fill) */
@@ -616,7 +616,7 @@
       flex-shrink:     0;
       overflow:        hidden;
       align-self:      stretch;
-      padding:         60px 0 60px 28px;
+      padding:         28px;   /* DS: Spacing/component/2xl = 28px all sides */
       position:        relative;
       z-index:         1;
     }
@@ -645,21 +645,17 @@
       align-items:     flex-end;
       justify-content: center;
       gap:             var(--spacing-space-s);   /* 12px */
+      padding:         28px;   /* DS: Spacing/component/2xl = 28px all sides */
       position:        relative;
       z-index:         1;
     }
 
-    /* Per-variant right column gradient + padding (DS update) */
+    /* Per-variant right column gradient (DS confirmed) */
     .static-card--primary .static-card__right {
-      background:    linear-gradient(to right, rgba(255,255,201,0) 0%, var(--accents-butter) 40%);
-      padding-right: 28px;
+      background: linear-gradient(to right, rgba(255,255,201,0) 0%, var(--accents-butter) 40%);
     }
     .static-card--secondary .static-card__right {
       background: linear-gradient(to right, rgba(246,254,246,0) 0%, var(--surface-secondary-default-hover) 39.9%);
-      padding:    0 28px;
-    }
-    .static-card--tertiary .static-card__right {
-      padding-right: 28px;
     }
 
     /* Background image placeholder — absolute, covers full content area (DS: inset-0 object-cover) */
@@ -3080,6 +3076,13 @@
       .status-pill-flipper     { flex: 1; min-width: 0; }
       .status-pill-flipper__inner { width: 100%; }
       .status-pill-face--front { width: 100%; }
+
+      /* Static Card — height fits content, compact padding for 3-col narrow cards */
+      .static-card               { height: auto; }
+      .static-card__content      { height: auto; }
+      .static-card__img-col      { padding: 20px; }
+      .static-card__illustration { height: 80px; width: 80px; flex: none; }
+      .static-card__right        { padding: 20px; }
     }
 
     /* Mobile */
@@ -3111,11 +3114,9 @@
       .static-cards-row { flex-wrap: wrap; }
       .static-cards-row .static-card { flex-basis: 100%; height: auto; min-height: 160px; }
       .static-cards-row .static-card .static-card__content { height: auto; }
-      .static-card__img-col { padding: 16px 0 16px 16px; }
+      .static-card__img-col      { padding: 14px; }
+      .static-card__right        { padding: 14px; }
       .static-card__illustration { max-height: 100px; flex: none; }
-      .static-card--primary .static-card__right   { padding-right: 16px; }
-      .static-card--secondary .static-card__right { padding: 0 16px; }
-      .static-card--tertiary .static-card__right  { padding-right: 16px; }
 
       /* Carousel — Mobile variant (DS Type=Mobile, node 3060:869)
          Full-width bleed (no page padding), no nav buttons, no rounded frame, 152px height */
