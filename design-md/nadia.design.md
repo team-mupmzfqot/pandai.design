@@ -2946,4 +2946,60 @@ Each page already had `sidebar-btn--active` on the correct button — unchanged:
 ### Tokens used
 All color and spacing values use existing DS tokens — no hardcoded values introduced in the new CSS (coin chip colors `#fef1ce`, `#fabb0a`, `#c89608` were already hardcoded in `.sidebar-balance` and are re-used as-is).
 
-*Last updated: 2026-05-28 | Session 15 — Rewards mobile pill tab bar | Branch: staging*
+---
+
+## Session 15 — Avatar Rewards page + sidebar fixes (2026-05-28)
+
+### What was done
+
+1. **Created `nadia_Rewards-avatar.html`** — new Rewards sub-page for Avatar, copied from `nadia_Rewards-evoucher.html` and modified.
+2. **Sidebar: divider margin fix** — applied to all 5 Rewards files.
+3. **Sidebar: label fix** — "My Rewards" → "My Reward" in all 5 Rewards files.
+4. **Avatar breadcrumb** — updated icon and chevron to match DS node `4661-51384`.
+5. **Avatar sidebar** — removed 4 placeholder filter items below Avatar (not in DS).
+
+---
+
+### nadia_Rewards-avatar.html
+
+**Files changed:**
+- `Nadia.test.git/Rewards/nadia_Rewards-avatar.html` (new)
+- `src/image-repo/page.rewards/avatar/assets/` (new folder — P.Coin.svg + Avatar-1.png → Avatar-7.png)
+
+#### Breadcrumb (DS node 4661:51384)
+- Title: "Avatar" — 24px Medium Poppins, `#00564c` (`Text/tertiary/default`)
+- Vertical divider: 1px `#d9d9d9`, 20px tall
+- Trail: `ic-gift` icon (20×20) + "Rewards" (14px Regular `#00cc85`) + `ic-chevron-right` (grey `#bfbfbf`) + "Avatar" (14px Medium `#666`)
+- **Fixes applied this session:**
+  - Icon was `ic-stop-circle` → corrected to `ic-gift` (DS `Outline/gift`)
+  - Chevron was an inline `<polyline>` SVG → corrected to `<svg class="bc-chevron"><use href="#ic-chevron-right"/></svg>` with `color: #bfbfbf`
+  - `.bc-link--current` was `font-weight: 400` → corrected to `font-weight: 500` (DS Body/B2 = Poppins Medium)
+
+#### Sidebar (DS node 4661:51386)
+- 5 items only: Coin Quest, My Reward, Merchandise, eVoucher, **Avatar** (active — `bg #b5f291`, `border #00a36a`, `border-radius 108px`)
+- Removed 4 placeholder `.sidebar-filter` items that were added below Avatar in error
+
+#### Main panel (DS node 4661:51385 / 4661:51387)
+- Background: `#e8fbe8` (`Surface/secondary/default-subtle`) · border: `1px solid #00cc85`
+- Header row: descriptive text + coin balance stat
+- Grid: 4-col (`.avatar-grid`) → 2-col at ≤1279px → 1-col at ≤767px
+- Card structure: `aspect-ratio: 1/1` image + body (like-count row + title) + divider + CTA (coin + Primary/S Redeem button)
+
+#### Assets
+- Images downloaded from Figma MCP as 2× PNG (Figma URLs expire after 7 days):
+  `Avatar-1.png` through `Avatar-7.png` → `src/image-repo/page.rewards/avatar/assets/`
+- `P.Coin.svg` copied from `page.rewards/evoucher/assets/`
+
+---
+
+### Sidebar fixes — all 5 Rewards files
+
+**Files changed:** nadia_Rewards-evoucher.html, nadia_Rewards-avatar.html, nadia_Rewards-Merchandise.html, nadia_Rewards-Myrewards.html, nadia_Rewards-CoinQuest.html
+
+#### Divider margin: `4px 0` → `8px 0`
+DS `Divider - 1.5` uses `py-[8px]` (8px top and bottom padding around the 1px line).
+
+#### Sidebar label: "My Rewards" → "My Reward"
+DS node `4661-51386` confirms the nav item label is singular: "My Reward".
+
+*Last updated: 2026-05-28 | Session 15 — Rewards mobile pill tab bar + Avatar page + sidebar fixes | Branch: staging*
