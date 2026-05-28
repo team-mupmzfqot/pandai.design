@@ -241,7 +241,7 @@
       display:        flex;
       flex-direction: column;
       flex:           1;
-      padding-bottom: 4px;
+      padding-bottom: var(--spacing-space-xxs);
     }
 
     .status-pill__label {
@@ -263,7 +263,7 @@
     .status-pill__icon {
       width:           32px;
       height:          32px;
-      padding:         4px;
+      padding:         var(--spacing-space-xxs);
       background:      var(--surface-general-default);
       border-radius:   var(--corner-radius-corner-pill);
       display:         flex;
@@ -519,7 +519,7 @@
       flex-shrink: 0;
       align-items: center;
       gap:         10px;
-      padding:     4px;
+      padding:     var(--spacing-space-xxs);
     }
     .carousel__dot {
       width:         12px;
@@ -1023,7 +1023,7 @@
     .link-view-activity {
       display:     inline-flex;
       align-items: flex-end;
-      gap:         var(--scale-200);   /* 8px */
+      gap:         var(--spacing-space-xs);   /* 8px */
       cursor:      pointer;
       flex-shrink: 0;
       color:       var(--text-default-body);  /* #666 — SVG currentColor inherits this */
@@ -1125,7 +1125,7 @@
       display:         flex;
       align-items:     center;
       justify-content: center;
-      padding:         4px 8px 4px 12px;  /* pl-12 pr-8 py-4 → total width: 12+16+8=36px */
+      padding:         var(--spacing-space-xxs) var(--spacing-space-xs) var(--spacing-space-xxs) var(--spacing-space-s);  /* pl-12 pr-8 py-4 → total width: 12+16+8=36px */
       flex-shrink:     0;
     }
     /* DS Size=L (Desktop/Tablet): icon height 24px, width auto (proportional from viewBox).
@@ -1141,7 +1141,7 @@
       background:  var(--badge-bg);
       display:     flex;
       align-items: center;
-      padding:     0 16px 0 12px;
+      padding:     0 var(--spacing-space-m) 0 var(--spacing-space-s);
       position:    relative;
     }
     .subject-badge__pointer {
@@ -1185,7 +1185,7 @@
       height:     24px;
       max-height: 24px;
     }
-    .quiz-card__header .subject-badge__icon  { padding: 4px 8px 4px 12px; }
+    .quiz-card__header .subject-badge__icon  { padding: var(--spacing-space-xxs) var(--spacing-space-xs) var(--spacing-space-xxs) var(--spacing-space-s); }
     .quiz-card__header .subject-badge__icon svg,
     .quiz-card__header .subject-badge__icon img { height: 16px; width: auto; }
     .quiz-card__header .subject-badge__text  { font-size: 12px; line-height: 12px; }
@@ -2072,7 +2072,7 @@
     .notif-item__content {
       display:       flex;
       background:    var(--surface-general-default);
-      padding:       12px 12px 0;
+      padding:       var(--spacing-space-s) var(--spacing-space-s) 0;
       border-radius: 0;
       transition:    background 0.12s ease, box-shadow 0.12s ease, border-radius 0.12s ease, padding 0.12s ease;
     }
@@ -2081,9 +2081,9 @@
       display:        flex;
       flex:           1 0 0;
       min-width:      0;
-      gap:            8px;
+      gap:            var(--spacing-space-xs);
       align-items:    flex-start;
-      padding-bottom: 12px;
+      padding-bottom: var(--spacing-space-s);
       border-bottom:  1px solid var(--border-general-default);
       transition:     border-color 0.12s ease, padding-bottom 0.12s ease;
     }
@@ -2092,7 +2092,7 @@
       background:    var(--surface-secondary-default-hover);
       box-shadow:    inset 0 0 0 1px var(--border-primary-default);
       border-radius: var(--corner-radius-corner-xl);
-      padding:       12px;
+      padding:       var(--spacing-space-s);
     }
     .notif-item:hover .notif-item__body {
       border-bottom-color: transparent;
@@ -2105,7 +2105,7 @@
       background:    var(--surface-secondary-default-subtle);
       box-shadow:    inset 0 0 0 1px var(--border-primary-default);
       border-radius: var(--corner-radius-corner-xl);
-      padding:       12px;
+      padding:       var(--spacing-space-s);
     }
     .notif-item:active .notif-item__body,
     .notif-item:focus-visible .notif-item__body {
@@ -2575,7 +2575,7 @@
       border-right:   1px solid var(--border-primary-default);
       border-radius:  0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl);
       overflow:       hidden;
-      padding:        16px;
+      padding:        var(--spacing-space-m);
       box-sizing:     border-box;
       display:        flex;
       flex-direction: column;
@@ -2598,7 +2598,7 @@
       align-items:     center;
       justify-content: space-between;
       gap:             10px;
-      padding:         0 16px 16px;
+      padding:         0 var(--spacing-space-m) var(--spacing-space-m);
       background:      var(--surface-general-default);
     }
     .nav-menu-tablet__logo { display: flex; align-items: center; }
@@ -2611,7 +2611,7 @@
     }
     .nav-menu-tablet__close:hover { color: var(--icon-primary-default); }
 
-    .nav-menu-tablet__search { padding: 0 16px; }
+    .nav-menu-tablet__search { padding: 0 var(--spacing-space-m); }
     .nav-menu-tablet__search-btn {
       display:       flex;
       align-items:   center;
@@ -2640,8 +2640,8 @@
 
     .nav-menu-tablet__menu {
       display:    flex;
-      gap:        8px;
-      padding:    16px;
+      gap:        var(--spacing-space-xs);
+      padding:    var(--spacing-space-m);
       background: var(--surface-general-default);
     }
     .nav-menu-tablet__col { display: flex; flex-direction: column; gap: 8px; flex: 1 0 0; min-width: 0; }
@@ -2736,9 +2736,9 @@
     .nav-menu-tablet__footer { padding: 0; display: flex; flex-direction: column; }
     .nav-menu-cta {
       display:       flex;
-      gap:           8px;
+      gap:           var(--spacing-space-xs);
       align-items:   center;
-      padding:       8px;
+      padding:       var(--spacing-space-xs);
       background:    var(--surface-secondary-default-subtle);
       box-shadow:    inset 0 0 0 1px #d1f7d1;
       border-radius: 28px;
@@ -2768,7 +2768,7 @@
       flex:           1 0 0;
       min-width:      0;
       height:         40px;
-      padding:        8px 12px;
+      padding:        var(--spacing-space-xs) var(--spacing-space-s);
       background:     var(--surface-primary-default);
       border:         none;
       box-shadow:     inset 0 0 0 1px var(--border-primary-focus);
@@ -2787,7 +2787,7 @@
     .nav-menu-cta__btn-icon     { display: flex; flex-shrink: 0; width: 24px; height: 24px; align-items: center; justify-content: center; }
     .nav-menu-cta__btn-icon svg { width: 20px; height: 20px; display: block; }
     /* Label: DS pad l:8 r:8 — no flex:1, no growing */
-    .nav-menu-cta__btn-text     { padding: 0 8px; white-space: nowrap; }
+    .nav-menu-cta__btn-text     { padding: 0 var(--spacing-space-xs); white-space: nowrap; }
     /* R Arrow: 24×24 pill, #99ebce bg, 4px pad → 16px clip, chevron #00a36a */
     .nav-menu-cta__btn-arrow    {
       display: flex; align-items: center; justify-content: center;
@@ -2795,7 +2795,7 @@
       background:    #99ebce;
       border-radius: var(--corner-radius-corner-rounded);
       flex-shrink:   0;
-      padding:       4px;
+      padding:       var(--spacing-space-xxs);
       color:         var(--border-primary-focus);  /* chevron stroke #00a36a */
     }
     .nav-menu-cta__btn:hover  .nav-menu-cta__btn-arrow { background: var(--surface-secondary-default-subtle); }
@@ -2807,14 +2807,14 @@
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      gap:             8px;
-      padding:         16px 60px 0;
+      gap:             var(--spacing-space-xs);
+      padding:         var(--spacing-space-m) var(--page-padding-x) 0;
     }
     .nav-menu-locale__btn {
       display: flex; align-items: center;
       cursor: pointer;
       color:      var(--text-primary-default);  /* #00cc85 — BM and Mandarin */
-      background: none; border: none; padding: 4px;
+      background: none; border: none; padding: var(--spacing-space-xxs);
     }
     /* EN is the active locale — DS uses #00564C (Surface/tertiary/default) for selected locale stroke */
     .nav-menu-locale__btn:first-child { color: var(--surface-tertiary-default, #00564c); }
@@ -2883,7 +2883,7 @@
       align-items:     center;
       justify-content: space-between;
       gap:             10px;
-      padding:         16px;
+      padding:         var(--spacing-space-m);
       flex-shrink:     0;
       background:      var(--surface-general-default);
     }
@@ -2900,8 +2900,8 @@
     .nav-menu-mobile__content {
       display:     flex;
       flex-direction: column;
-      gap:         8px;
-      padding:     0 16px 16px;
+      gap:         var(--spacing-space-xs);
+      padding:     0 var(--spacing-space-m) var(--spacing-space-m);
       flex-shrink: 0;
     }
 
@@ -2916,8 +2916,8 @@
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      gap:             8px;
-      padding:         0 60px;
+      gap:             var(--spacing-space-xs);
+      padding:         0 var(--page-padding-x);
       flex-shrink:     0;
     }
 
@@ -2996,7 +2996,7 @@
       font-weight: 600;
       line-height: 18px;
       color:       var(--text-default-body);        /* Default: Text/default/body #666666 */
-      padding:     0 4px;
+      padding:     0 var(--spacing-space-xxs);
       transition:  color 0.12s ease;
     }
     .navbar-bottom__btn:hover  .navbar-bottom__label { color: var(--text-secondary-focus); }  /* #70bc6f */
@@ -3095,9 +3095,9 @@
       /* Static Card — height fits content, compact padding for 3-col narrow cards */
       .static-card               { height: auto; }
       .static-card__content      { height: auto; }
-      .static-card__img-col      { padding: 20px; }
+      .static-card__img-col      { padding: var(--spacing-space-l); }
       .static-card__illustration { width: 80px; height: 80px; }
-      .static-card__right        { padding: 20px; }
+      .static-card__right        { padding: var(--spacing-space-l); }
     }
 
     /* Mobile */
@@ -3188,7 +3188,7 @@
 
       /* Mobile: hide top hamburger navbar → replaced by bottom Navbar Mobile - 1.5 */
       #NavBar-Mobile { display: none; }
-      body { padding-top: 16px; }
+      body { padding-top: var(--spacing-space-m); }
 
       /* Mobile bottom navbar visible; desktop footer hidden */
       .navbar-bottom { display: flex; }
