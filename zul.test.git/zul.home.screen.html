@@ -3106,9 +3106,10 @@
 
       /* Wrap static cards downward — each card full width, wraps to next row, height hugs content */
       .static-cards-row { flex-wrap: wrap; }
-      .static-cards-row .static-card { flex-basis: 100%; height: auto; }
+      .static-cards-row .static-card { flex-basis: 100%; height: auto; min-height: 160px; }
       .static-cards-row .static-card .static-card__content { height: auto; }
-      .static-card__img-col { padding: 16px 0 16px 16px; }   /* reduced padding at mobile */
+      .static-card__img-col { padding: 16px 0 16px 16px; }
+      .static-card__illustration { max-height: 100px; flex: none; }
       .static-card--primary .static-card__right   { padding-right: 16px; }
       .static-card--secondary .static-card__right { padding: 0 16px; }
       .static-card--tertiary .static-card__right  { padding-right: 16px; }

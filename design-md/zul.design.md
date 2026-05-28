@@ -7120,4 +7120,45 @@ Inner menu gap between sub-items = `Spacing/space-xs` = 8px (both tablet and mob
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-28 (Rules 178–179 — flat accordion layout, margin-top -8px/0 trick, flex gap unreliable in overflow:hidden, DS sub-topic padding specs confirmed) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 180. Static Card - 1.5 mobile `min-height` — 160px, paired with `height: auto`
+
+The DS has no separate mobile variant for Static Card - 1.5 (single component, node `2616:2959`). On mobile the card uses `height: auto` to hug content, but without a floor the cards can shrink to very short heights depending on text length.
+
+**Confirmed mobile override:**
+```css
+@media (max-width: 767px) {
+  .static-cards-row .static-card { flex-basis: 100%; height: auto; min-height: 160px; }
+  .static-cards-row .static-card .static-card__content { height: auto; }
+}
+```
+
+- `flex-basis: 100%` — each card fills full row width and stacks vertically
+- `height: auto` — card grows if content exceeds min-height
+- `min-height: 160px` — confirmed floor value (2026-05-28)
+
+**Rule:** Always pair `height: auto` with `min-height` on mobile cards. Pure `height: auto` with no floor causes inconsistent card heights across the row.
+
+---
+
+### Rule 181. Static Card illustration stretching on mobile — `max-height: 100px; flex: none`
+
+The illustration inside `.static-card__illustration` uses `flex: 1 0 0` which causes it to grow vertically to fill the img-col height. On desktop at 220px card height with 60px top+bottom padding, the illustration is ~100×100px (roughly square). On mobile with `min-height: 160px` and `padding: 16px 0 16px 16px` on the img-col, the illustration container becomes 100×128px (portrait) — causing the image to appear stretched/elongated.
+
+**Fix (confirmed 2026-05-28):**
+```css
+@media (max-width: 767px) {
+  .static-card__illustration { max-height: 100px; flex: none; }
+}
+```
+
+- `max-height: 100px` — caps the illustration at its DS-intended ~square proportions
+- `flex: none` — removes the grow behaviour so the cap is respected
+- Extra card height (160 − 32px padding − 100px illustration = 28px) becomes breathing room in the img-col, not forced onto the image
+
+**Rule:** Any time a `flex: 1 0 0` illustration container gets a taller card on mobile, always add `max-height` + `flex: none` to prevent the image from growing beyond its DS-intended aspect ratio.
+
+**Mistake made (2026-05-28):** Mobile static cards with `min-height: 160px` caused the illustration to stretch to 128px tall × 100px wide. `object-fit: contain` on the `<img>` prevents pixel distortion but the container itself was too tall. Fixed with `max-height: 100px; flex: none`.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-28 (Rules 180–181 — Static Card mobile min-height 160px, illustration stretch fix max-height:100px flex:none) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

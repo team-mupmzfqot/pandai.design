@@ -1524,11 +1524,24 @@ try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 - Button height: `32px; max-height: 32px`
 - **Arrow clip symbol:** `ic-chevron-btn-m` — `viewBox="0 0 16 16"`, path `M6 12L10 8L6 4`, DS node `479:352`. No CSS padding on clip — path position encoded in viewBox. Stroke = 1.5px at 1:1 scale.
 
+**Mobile overrides (confirmed 2026-05-28, Rules 180–181):**
+```css
+@media (max-width: 767px) {
+  .static-cards-row .static-card                        { flex-basis: 100%; height: auto; min-height: 160px; }
+  .static-cards-row .static-card .static-card__content { height: auto; }
+  .static-card__img-col                                 { padding: 16px 0 16px 16px; }
+  .static-card__illustration                            { max-height: 100px; flex: none; }
+}
+```
+- `min-height: 160px` — floor so cards never shrink too short (Rule 180)
+- `max-height: 100px; flex: none` on illustration — prevents stretch when card is taller than desktop 220px (Rule 181). `object-fit: contain` on the `<img>` prevents pixel distortion but the container itself grows too tall — cap the container.
+
 **Mistake made (static card):**
 - Content was `position: absolute; inset: 0` — should be `flex: 1 0 0; height: 100%; position: relative`
 - Used `<img src="...">` for bg placeholder — showed broken icon. Use `<div>` + CSS `background-image`
 - Content padding was `20px 24px` — actual DS is `20px 60px`
 - Arrow chevron color was inferred from parent button node (wrong: `#f6fdfb`) — must get from arrow sub-node (`#00a36a`)
+- Illustration stretched on mobile — missing `max-height: 100px; flex: none` override (2026-05-28)
 
 ---
 
