@@ -34,6 +34,7 @@
       --surface-informative-default:     #00a2e8;   /* Surface/informative/default — Icon Badge - 1.5 (DS node 3908:1491) */
       --butter-400:                      #ffffd4;   /* Butter/400 — Static Card - 1.5 bg (DS confirmed 2616:2946) */
       --accents-butter:                  #ffffc9;   /* Accents/Butter — Static Card right-col gradient end */
+      --azure-100:                       #d5edfb;   /* Azure/100 — Static Card Fortiary bg (DS confirmed 5351:6457) */
 
       /* Border */
 
@@ -582,6 +583,7 @@
     .static-card--primary .static-card__content   { background: var(--butter-400); }
     .static-card--secondary .static-card__content { background: var(--surface-secondary-default-hover); }   /* Surface/secondary/default-hover #f6fef6 — DS node 5176:77367 */
     .static-card--tertiary .static-card__content   { background: var(--surface-subtle); }
+    .static-card--fortiary .static-card__content   { background: var(--azure-100); }     /* Azure/100 #d5edfb — DS node 5351:6457, no gradient on right-col */
 
     /* Full-card background image — Tertiary only (DS: absolute inset-0 object-cover) */
     .static-card__content-bg {
@@ -4480,11 +4482,11 @@
           </div>
 
           <!-- Static Card 3 — Tertiary variant — SPM Live Revision -->
-          <div class="static-card static-card--tertiary">
+          <div class="static-card static-card--fortiary">
             <div class="static-card__content">
-              <!-- Decorative circles: white/neutral palette (DS node 5176:77410) -->
+              <!-- Decorative circles: azure/blue palette (DS node 5351:6457) -->
               <div class="static-card__deco">
-                <img src="assets/static-card/deco-tertiary.svg" alt="">
+                <img src="assets/static-card/deco-fortiary.svg" alt="">
               </div>
               <div class="static-card__img-col">
                 <div class="static-card__illustration">
