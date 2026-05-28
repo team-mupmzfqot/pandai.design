@@ -1891,8 +1891,11 @@ CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — no `inset`. Content area
 0k. After any fix to a shared component — grep zul.page.template.html for the same
     component class. If found, apply the identical fix before committing (Rule 184).
 0l. For ANY element dimension (width, height, padding, gap): re-fetch get_design_context
-    on the exact node. Never carry forward numbers from prior session notes — DS values
-    change. size-[Npx] = fixed square; flex-[1_0_0] = FILL; p-[Npx] = ALL sides (Rule 185–187).
+    on the exact node. Never carry forward numbers from prior session notes — DS values change.
+    size-[Npx] = verify with use_figma on INSTANCE; flex-[1_0_0] = FILL; p-[Npx] = ALL sides (Rules 185–189).
+0m. For illustrations/images inside a component frame: use_figma → read parent.children[0]
+    to get the INSTANCE node's width/height/maxWidth/maxHeight. Never use the master
+    component dimensions or the get_design_context size class directly (Rule 188–189).
 ```
 
 **Shared components (always sync both files):** navbar, profile dropdown, notification dropdown, learn/locale/download dropdowns, footer, `:root` tokens, `<svg><defs>` icon symbols.
@@ -2197,9 +2200,9 @@ When `get_design_context` output shows a sizing class on an element, map it exac
 
 | DS context class | CSS |
 |---|---|
-| `size-[164px]` or `shrink-0 size-[164px]` | `width: 164px; height: 164px; flex: none` |
+| `size-[Npx]` or `shrink-0 size-[Npx]` | Verify via `use_figma` on the **instance node** — `get_design_context` size classes are available-space calculations, not actual instance sizes (Rule 188) |
 | `flex-[1_0_0]` | `flex: 1 0 0` |
-| `w-[100px] flex-[1_0_0]` | `width: 100px; flex: 1 0 0` |
+| `w-[Npx] flex-[1_0_0]` | `width: Npx; flex: 1 0 0` |
 
 **Never use `flex: 1 0 0` for an element that DS shows as `size-[Npx]`.** A `flex: 1 0 0` in a column with a narrow fixed width (e.g. `width: 100px`) makes a portrait rectangle — visually stretched.
 
@@ -2221,7 +2224,8 @@ Only use directional padding (`padding-right`, `padding-top`, etc.) when the DS 
 
 | Property | Value |
 |---|---|
-| Illustration | `width: 164px; height: 164px; flex: none` (DS: `size-[164px]`) |
+| Illustration | `width: 130px; height: 130px; max-width: 130px; max-height: 130px; flex: none` (DS instance `5183:105282`) |
+| img-col total | `186×186px` (28+130+28) |
 | img-col padding | `padding: 28px` all sides |
 | Content frame gap | `gap: 16px` (Spacing/component/md) |
 | Right-col padding | `padding: 28px` all sides |
@@ -2230,7 +2234,42 @@ Responsive: tablet `80×80`, mobile `100×100` illustration.
 
 **Mistakes (this component):** (1) `flex: 1 0 0; width: 100px` → 100×164 portrait / stretched. (2) `gap: 12px` instead of 16px. (3) `padding-right` only instead of all sides. All caused by carrying forward prior-session estimates rather than re-fetching DS.
 
-*Generated: May 2026 | Last updated: 2026-05-28 (Rules 72–73 revised + Rules 74–75 added — DS size class mapping, padding all-sides rule, Static Card illustration fixed 164×164px) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### 76. `get_design_context` size classes are available-space estimates — always verify with `use_figma` on the instance
+
+`size-[164px]` in `get_design_context` output = available space after parent padding is subtracted, NOT the actual DS instance dimensions. The actual instance may be smaller and have explicit `maxWidth`/`maxHeight` set.
+
+**Confirmed mismatch (Static Card, 2026-05-28):**
+- `get_design_context`: `size-[164px]` (220px card − 28px top − 28px bottom = 164px)
+- Actual instance `5183:105282`: `width: 130, height: 130, maxWidth: 130, maxHeight: 130`
+
+**Rule:** After reading `get_design_context`, always follow up with `use_figma` to read the instance node's actual dimensions before writing any CSS. The `size-[Npx]` class is a starting hint, not a confirmed value.
+
+**See zul.design.md Rule 188.**
+
+---
+
+### 77. Always query the instance node inside the parent frame — not the master component
+
+The master component node has its own intrinsic dimensions. The instance placed inside another frame can have different FIXED overrides and explicit `maxWidth`/`maxHeight`. Only the instance node reflects the actual used dimensions.
+
+```js
+// Correct — get instance dimensions from parent's children
+const imgCol = figma.getNodeById('parentFrameId');
+const instance = imgCol.children[0];
+return { width: instance.width, height: instance.height,
+         maxWidth: instance.maxWidth, maxHeight: instance.maxHeight };
+
+// Wrong — gives master component dimensions, not instance
+const master = figma.getNodeById('masterComponentId');
+```
+
+**See zul.design.md Rule 189.**
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-28 (Rules 74–77 — DS size class = available space, instance vs master component, Static Card illustration corrected 130×130px with maxWidth/maxHeight) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
 
 ---
 

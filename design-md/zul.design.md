@@ -7287,21 +7287,23 @@ It is a **fixed square**. It does NOT map to `flex: 1 0 0` (FILL/grow). The `fle
 
 **All 3 variants (Primary `2616:2959`, Secondary `5344:9081`, Tertiary `5176:77408`) share identical illustration sizing.**
 
-| Property | Value | DS class |
+| Property | Value | Source |
 |---|---|---|
-| Illustration size | `164×164px` fixed square | `shrink-0 size-[164px]` |
+| Illustration instance | `width: 130px; height: 130px; max-width: 130px; max-height: 130px; flex: none` | `use_figma` on instance `5183:105282` |
 | img-col padding | `28px` ALL sides | `p-[var(--spacing/component/2xl,28px)]` |
+| img-col total size | `186×186px` (28+130+28) | `use_figma` raw: `width:186, height:186` |
 | Content frame gap | `16px` | `gap-[var(--spacing/component/md,16px)]` |
 | Right-col padding | `28px` ALL sides | `p-[var(--spacing/component/2xl,28px)]` |
-
-**img-col total dimensions at 220px card:** `28 + 164 + 28 = 220px` (fills card height exactly, auto-sized width).
 
 **CSS (base/desktop):**
 ```css
 .static-card__illustration {
-  width:  164px;
-  height: 164px;
-  flex:   none;
+  width:      130px;
+  height:     130px;
+  max-width:  130px;
+  max-height: 130px;
+  flex:       none;
+  overflow:   hidden;
 }
 ```
 
@@ -7310,12 +7312,11 @@ It is a **fixed square**. It does NOT map to `flex: 1 0 0` (FILL/grow). The `fle
 - Mobile (`max-width: 767px`): `width: 100px; height: 100px`
 
 **Mistakes made (this component across sessions):**
-1. `flex: 1 0 0; width: 100px` — 100×164 portrait → stretched (2026-05-28). Fix: `164×164; flex: none`.
-2. `gap: 12px` on content frame — was 12px, DS confirmed 16px (2026-05-28).
-3. `padding-right: 28px` only on right-col — DS confirms `p-[28px]` ALL sides (2026-05-28).
-4. `padding: 60px 0 60px 28px` on img-col — DS confirms `p-[28px]` ALL sides (2026-05-28).
-
-**Rule:** Before implementing ANY component dimension (width, height, padding, gap), call `get_design_context` on the exact DS node and read the Tailwind class output directly. Do not carry forward measurements from prior session notes — DS values change.
+1. `flex: 1 0 0; width: 100px` — 100×164 portrait → stretched. Fix: fixed square (2026-05-28).
+2. `width: 164px` — taken from `get_design_context` `size-[164px]` which was the *available-space calculation*, not the instance size. Actual DS instance = **130px**. Fix: query instance node via `use_figma` (2026-05-28, Rule 188).
+3. `gap: 12px` on content frame — DS is 16px.
+4. `padding-right: 28px` only on right-col — DS is all sides 28px.
+5. `padding: 60px 0 60px 28px` on img-col — DS is all sides 28px.
 
 ---
 
@@ -7329,4 +7330,63 @@ It is a **fixed square**. It does NOT map to `flex: 1 0 0` (FILL/grow). The `fle
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-28 (Rules 185–187 — DS size-[Npx] = fixed square, Static Card illustration 164×164 confirmed, p-[Npx] = all sides) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 188. `get_design_context` size classes = available-space calculation — always verify with `use_figma` on the instance node
+
+`get_design_context` generates React/Tailwind code by calculating what fits in the *available space* of the parent frame. The size class it emits (e.g. `size-[164px]`) is not necessarily the actual DS instance dimensions — it is the available space after the parent's padding is subtracted.
+
+**Confirmed mismatch (Static Card illustration, 2026-05-28):**
+- `get_design_context` emitted `size-[164px]` — calculated from card height (220px) minus img-col padding (28+28 = 56px) = 164px
+- Actual DS instance (`5183:105282`) inspected via `use_figma`: `width: 130, height: 130, maxWidth: 130, maxHeight: 130`
+- Difference: 34px — entire session implemented the wrong size
+
+**Rule:** After getting `get_design_context` output for any component that contains an illustration, icon, or image instance, always follow up with `use_figma` to read the **instance node's** actual `width`, `height`, `maxWidth`, and `maxHeight`. Never use the `size-[Npx]` class value directly for CSS dimensions without verifying.
+
+**Workflow:**
+```
+1. get_design_context → note the size class (e.g. size-[164px]) as a rough guide only
+2. use_figma → inspect parent frame children → get the INSTANCE node ID (not master component)
+3. Read instance: width, height, maxWidth, maxHeight
+4. Use those values in CSS
+```
+
+---
+
+### Rule 189. Always query the INSTANCE node inside the parent — not the master component
+
+When inspecting a component placed inside another frame (e.g. an illustration inside a card's img-col), there are two nodes:
+- **Master component** — the source component's natural/design-time dimensions
+- **Instance node** — the copy placed inside the parent frame, which may have FIXED overrides, `maxWidth`, or `maxHeight` set independently
+
+`use_figma` → `figma.getNodeById(masterComponentId)` gives the **master** dimensions. Only `imgCol.children[0]` (the instance) gives the actual used dimensions.
+
+**Why they differ:** An instance placed in an auto-layout frame can have its own FIXED sizing set differently from the master. The DS designer may have constrained the instance to fit the card without changing the master component. This difference is only visible on the instance node.
+
+**Confirmed (Static Card, 2026-05-28):**
+| Node | ID | width | height | maxWidth | maxHeight |
+|---|---|---|---|---|---|
+| Master `Graphic/P.Progress` | `5183:105074` | 189.63 | 189.63 | null | null |
+| Instance inside img-col | `5183:105282` | 130 | 130 | **130** | **130** |
+
+**Workflow to get actual instance size:**
+```js
+// Step 1 — get the parent frame (img-col)
+const imgCol = figma.getNodeById('5176:75316');
+
+// Step 2 — read children to get the INSTANCE node
+const instance = imgCol.children[0];
+return {
+  id:        instance.id,
+  width:     instance.width,
+  height:    instance.height,
+  maxWidth:  instance.maxWidth,
+  maxHeight: instance.maxHeight,
+};
+```
+
+**Rule:** For ANY illustration, badge, icon, or image placed inside a DS component, always read the instance dimensions from the **parent frame's children**, not from a separately-queried component ID. The instance is the ground truth.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-28 (Rules 185–189 — DS size class vs instance size, get_design_context available-space limitation, instance vs master component, Static Card illustration corrected to 130×130px) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
