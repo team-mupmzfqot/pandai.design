@@ -8,24 +8,33 @@
 >
 > **Companion files** — [CLAUDE.md](CLAUDE.md) (full implementation rules, 1–76+), [design-md/zul.design.md](design-md/zul.design.md), [design-md/nadia.design.md](design-md/nadia.design.md), [design-md/syakila.design.md](design-md/syakila.design.md).
 
-> ### Sync status (2026-05-15)
+> ### Sync status (2026-05-28)
 >
-> **Live-verified against DS this session:**
+> **Live-verified against DS this session (2026-05-28):**
+> - §3.1 — `Surface/disabled/on color` (#e5e5e5), `Surface/informative/default` (#00a2e8), `Surface/secondary/default-hover` (#f6fef6) — all new tokens added
+> - §3.2 — `Text/primary/on-color` confirmed `#ffffff` (changed from `#f6fdfb`, DS updated 2026-05-24)
+> - §3.3 — `Icon/primary/on-color` confirmed `#ffffff` (changed from `#f6fdfb`, DS updated 2026-05-24)
+> - §3.4 — `Border/on-color` (#ffffff) added; `Border/tertiary/focus` (#00453d) re-confirmed
+> - §6.1 — Button Pressed now split by variant: Primary≠Secondary/Tertiary; disabled arrow bg corrected to `#e5e5e5`
+> - §6.7 — Nav Button - 1.5 action button (44×44) states added
+> - §6.8 — Notification item states added
+>
+> **Previous session (2026-05-15):**
 > - §3.1/§3.3/§3.4 — all tokens referenced by §6.1 Button states + §6.3 Nav-btn pill
 > - §4.1 / §4.2 / §4.3 — full 19-subject palette (default + 5 states × 2 modes), extracted from DS node `3372:5766`
 > - §6.1 — Button - 1.5 Default, Hover, Pressed, Disabled (Primary/S + Tertiary/L)
 > - §6.3 — Nav-btn / Tertiary button Pressed
 >
-> **Known stale / not yet re-verified this session:**
+> **Known stale / not yet re-verified:**
 > - §3.1 `--surface-subtle` (`#F8FAFC`) · §3.2 `--text-default-secondary`, `--text-default-placeholder` · §3.5 `--overlay-default` · §5 Status Badge hexes · §6.2 / §6.4 / §6.5 / §6.6 component recipes
 >
 > **Coverage gaps (DS has these, this doc doesn't yet):**
 > - `Surface/gold/*`, `Surface/silver/*`, `Surface/bronze/*` (medal/tier surfaces)
 > - `Surface/success/*`, `Surface/warning/*`, `Surface/alert/*` (state surfaces — alerts, toasts, banners)
 > - `Surface/primary/default-hover` (distinct from `default-focus`)
-> - `Icon/primary/default-hover`, `Text/primary/default-hover`, `Border/primary/default-subtle` (latter just added)
+> - `Icon/primary/default-hover`, `Text/primary/default-hover`
 >
-> **CLAUDE.md drift:** Rules 19, 38, 40 document a pre-2026-05 DS where Button/Nav Pressed = dark teal `#00564c`. The live DS now uses intensified-green `#00a36a` for Pressed (no `State=Active` variant). When CLAUDE.md and this file conflict on state colors, **this file is authoritative.**
+> **CLAUDE.md drift:** Rules 19, 38, 40 document a pre-2026-05 DS where Button/Nav Pressed = dark teal `#00564c`. The live DS now uses `#00a36a` for **Primary** Pressed (no `State=Active`); Secondary/Tertiary Pressed DOES use dark teal `#00564c`. When CLAUDE.md and this file conflict on state colors, **this file is authoritative.**
 
 ---
 
@@ -109,6 +118,9 @@ Figma:  Corner Radius/corner-rounded       → CSS: --corner-radius-corner-round
 | `--surface-secondary-default-subtle` | `#e8fbe8` | `Surface/secondary/default-subtle` | Primary button arrow circle bg (Hover state). |
 | `--surface-tertiary-default` | `#00564c` | `Surface/tertiary/default` | Dark teal — still defined in the DS but no longer used for Button/Nav Pressed states post-2026-05 refactor. Available for any future dark-teal surface (e.g. dark mode component fills); confirm against the DS before applying. |
 | `--surface-disabled-primary` | `#f2f2f2` | `Surface/disabled/primary` | Disabled button bg, disabled input bg, disabled badge bg. |
+| `--surface-disabled-on-color` | `#e5e5e5` | `Surface/disabled/on color` | Disabled button **arrow circle** bg. Distinct from `--surface-disabled-primary` — slightly darker. Confirmed DS 2026-05-24. |
+| `--surface-informative-default` | `#00a2e8` | `Surface/informative/default` | Icon Badge fill (blue verified-check dot in profile dropdown). Confirmed DS 2026-05-28. |
+| `--surface-secondary-default-hover` | `#f6fef6` | `Surface/secondary/default-hover` | Notification item Hover bg; Static Card Secondary right-col fill. Confirmed DS 2026-05-28. |
 
 ### 3.2 Text — character fills
 
@@ -119,7 +131,7 @@ Figma:  Corner Radius/corner-rounded       → CSS: --corner-radius-corner-round
 | `--text-default-secondary` | `#6B7280` | `Text/default/secondary` | Secondary captions, helper text. |
 | `--text-default-placeholder` | `#f2f2f2` | `Text/default/placeholder` | Input placeholder text. |
 | `--text-primary-default` | `#00cc85` | `Text/primary/default` | Primary-colored text (e.g. "Pandai.org" link in footer, button label on **Pressed** state, nav-btn pressed label). |
-| `--text-primary-on-color` | `#f6fdfb` | `Text/primary/on-color` | Button label on primary fill (Default state). **Not pure white** — a green-tinted off-white. |
+| `--text-primary-on-color` | `#ffffff` | `Text/primary/on-color` | Button label on primary fill (Default/Active state). **Pure white** — DS updated 2026-05-24 from previous value `#f6fdfb` (green-tinted off-white). |
 | `--text-secondary-focus` | `#70bc6f` | `Text/secondary/focus` | Button label on **Hover** state (primary→secondary palette). |
 | `--text-tertiary-default` | `#00564c` | `Text/tertiary/default` | Dark teal text on light backgrounds. |
 | `--text-on-color-heading` | `#FFFFFF` | `Text/on-color/heading` | Heading text rendered on dark/colored backgrounds. |
@@ -133,7 +145,7 @@ Icons are colored via `stroke="currentColor"` in the `<symbol>` and the parent C
 |---|---|---|---|
 | `--icon-default-default` | `#808080` | `Icon/default/default` | Default-state outline icons (e.g. nav-btn icons in resting state). |
 | `--icon-primary-default` | `#00cc85` | `Icon/primary/default` | Primary-colored outline icons (footer heart, primary-bg button chevrons, mobile hamburger). |
-| `--icon-primary-on-color` | `#f6fdfb` | `Icon/primary/on-color` | Icons rendered on primary fills. |
+| `--icon-primary-on-color` | `#ffffff` | `Icon/primary/on-color` | Icons rendered on primary fills — nav action button Active state icon, button label icon on primary bg. **Pure white** — DS updated 2026-05-24 from previous value `#f6fdfb`. |
 | `--icon-secondary-on-color` | `#70bc6f` | `Icon/secondary/on-color` | Icon color on button **Hover** state (DS uses the `on-color` suffix, not `hover`). |
 | `--icon-primary-focus` | `#00a36a` | `Icon/primary/focus` | Chevron stroke on button **Pressed** state and similar intensified-green accents. |
 | `--icon-tertiary-default` | `#00564c` | `Icon/tertiary/default` | Dark teal icon stroke — still defined but no longer used for Button Pressed chevrons after 2026-05 refactor (those now use `--icon-primary-focus` `#00a36a`). |
@@ -153,6 +165,7 @@ Icons are colored via `stroke="currentColor"` in the `<symbol>` and the parent C
 | `--border-tertiary-focus` | `#00453d` | `Border/tertiary/focus` | Dark teal border — still defined but no longer used for Button Pressed borders after 2026-05 refactor (those now use `--border-primary-default` `#00cc85`). |
 | `--border-general-default` | `#d9d9d9` | `Border/general/default` | Neutral dividers and outlines on non-primary surfaces (e.g. placeholder image frames). |
 | `--border-disabled-disabled` | `#bfbfbf` | `Border/disabled/disabled` | Disabled button border, disabled input border. |
+| `--border-on-color` | `#ffffff` | `Border/on-color` | OUTSIDE stroke (white ring) on overlapping badges — Number Badge, Icon Badge, Indicator Badge. Apply as `box-shadow: 0 0 0 1px var(--border-on-color)` (**no `inset`** — OUTSIDE `strokeAlign`). Never use `border:` or `outline:` here. Confirmed DS 2026-05-26. |
 
 **`--border-default` vs `--border-primary-default`** — both `#00cc85`. Use `--border-default` for the generic DS green frame (carousels, footers, cards). Use `--border-primary-default` for borders that semantically belong to a primary-themed component.
 
@@ -387,26 +400,39 @@ The 5 status badge variants use **flat hex values** (not semantic tokens — the
 
 ## 6. Component color recipes (read these before re-implementing)
 
-### 6.1 Button - 1.5 — all 4 states across all sizes (Student, Type=Student)
+### 6.1 Button - 1.5 — all states across all sizes (Student, Type=Student)
 
-> **Live-verified 2026-05-15** against DS nodes `1437:8154` (Default), `1437:8146` (Hover), `1437:8138` (Pressed), `1437:8130` (Disabled), `3029:20022` (Tertiary/L Pressed). The DS component variants are **`State=Default | Hover | Pressed | Disabled`** — there is no `State=Active` variant. (The "Active = dark teal" state documented in CLAUDE.md Rules 19/38/40 reflects a pre-2026-05 DS that has since been refactored. Treat those rules as obsolete for state colors.)
+> **Live-verified 2026-05-28** (updated from 2026-05-15). DS nodes: `1437:8154` (Default), `1437:8146` (Hover), `1437:8130` (Disabled), `473:650` (Primary/L Pressed), `538:1907` (Secondary/M Pressed), `3029:20022` (Tertiary/L Pressed). The DS component variants are **`State=Default | Hover | Pressed | Disabled`** — there is no `State=Active` variant.
 
-**The same 4 states apply to Primary/S, Primary/M, Primary/L, Secondary/M, Tertiary/M, Tertiary/L.** Sizes change height and arrow geometry, not color palette. Variants change only the Default and Hover appearance — **Pressed/Disabled palettes are shared across all variants.**
+**Default / Hover / Disabled are the same across all Variants.** Pressed differs — see separate table below.
+
+#### Default / Hover / Disabled (all variants)
 
 | State | btn bg | border | label | arrow circle bg | arrow chevron |
 |---|---|---|---|---|---|
-| **Default** | `--surface-primary-default` `#00cc85` | `--border-primary-focus` `#00a36a` | `--text-primary-on-color` `#f6fdfb` | `--surface-primary-default-subtle-hover` `#99ebce` | `--surface-primary-focus` `#00a36a` |
+| **Default** | `--surface-primary-default` `#00cc85` | `--border-primary-focus` `#00a36a` | `--text-primary-on-color` `#ffffff` | `--surface-primary-default-subtle-hover` `#99ebce` | `--surface-primary-focus` `#00a36a` |
 | **Hover** | `--surface-secondary-default` `#b5f291` | `--border-secondary-focus` `#70bc6f` | `--text-secondary-focus` `#70bc6f` | `--surface-secondary-default-subtle` `#e8fbe8` | `--icon-secondary-on-color` `#70bc6f` |
-| **Pressed** | `--surface-primary-focus` `#00a36a` | `--border-primary-default` `#00cc85` | `--text-primary-default` `#00cc85` | `--surface-primary-default` `#00cc85` | `--icon-primary-focus` `#00a36a` |
-| **Disabled** | `--surface-disabled-primary` `#f2f2f2` | `--border-disabled-disabled` `#bfbfbf` | `--text-disabled-default` `#bfbfbf` | `--surface-disabled-primary` `#f2f2f2` | `--icon-disabled-default` `#bfbfbf` |
+| **Disabled** | `--surface-disabled-primary` `#f2f2f2` | `--border-disabled-disabled` `#bfbfbf` | `--text-disabled-default` `#bfbfbf` | `--surface-disabled-on-color` `#e5e5e5` | `--icon-disabled-default` `#bfbfbf` |
 
-**Pressed variant note (Tertiary/L specifically — DS node `3029:20022`):** the arrow circle has no fill (transparent on the green button), and uses a light-mint border `--border-primary-default-subtle` `#d9f7ed` instead of an arrow-bg color. The chevron remains `--icon-primary-focus` `#00a36a`. This is the only Pressed-state cell that differs by variant.
+> **Disabled arrow bg** is `--surface-disabled-on-color` (`#e5e5e5`), **not** `--surface-disabled-primary` (`#f2f2f2`). Two different tokens. Confirmed DS 2026-05-24 via `VariableID:1260:1895`.
+
+#### Pressed state — differs by Variant (confirmed 2026-05-27)
+
+| Variant | btn bg | border | label | arrow circle | arrow chevron |
+|---|---|---|---|---|---|
+| **Primary** (S/M/L) | `--surface-primary-focus` `#00a36a` | `--border-primary-default` `#00cc85` | `--text-primary-default` `#00cc85` | `--surface-primary-default` `#00cc85` | `--icon-primary-focus` `#00a36a` |
+| **Secondary** (S/M/L) | `--surface-tertiary-default` `#00564c` | `--border-tertiary-focus` `#00453d` | `--text-primary-default` `#00cc85` | `--surface-primary-default` `#00cc85` | `--icon-primary-focus` `#00a36a` |
+| **Tertiary** (S/M/L) | `--surface-tertiary-default` `#00564c` | `--border-tertiary-focus` `#00453d` | `--text-primary-default` `#00cc85` | transparent, border `--border-primary-default-subtle` `#d9f7ed` | `--icon-primary-focus` `#00a36a` |
+
+> **DS nodes confirmed:** Primary/L Pressed = `473:650`; Secondary/M Pressed = `538:1907`; Tertiary/L Pressed = `3029:20022`.
 
 **Critical pitfalls:**
-- Pressed bg is **`Surface/primary/focus`** (`#00a36a`) — an *intensified* green, not the dark teal documented in older notes. The dark-teal token (`Surface/tertiary/default` `#00564c`) still exists in the DS but is no longer used for any Button - 1.5 state.
-- Pressed label is **`Text/primary/default`** (`#00cc85`), **NOT** `Text/primary/on-color` (`#f6fdfb`).
+- **Default label is now `#ffffff`** — DS updated `Text/primary/on-color` from `#f6fdfb` to `#ffffff` on 2026-05-24. Any prototype using `#f6fdfb` or `#e1f9ea` for button labels is stale.
+- **Primary Pressed ≠ Secondary/Tertiary Pressed.** Primary uses intensified-green (`#00a36a`). Secondary/Tertiary use dark teal (`#00564c`). Never share these across variants.
+- **Disabled arrow circle bg is `#e5e5e5`**, not `#f2f2f2`. Only the outer button bg uses `--surface-disabled-primary`.
+- Pressed label is **`Text/primary/default`** (`#00cc85`) for ALL variants, NOT `Text/primary/on-color`.
 - Hover transitions from primary palette to **secondary palette** — never a darker green.
-- Arrow chevron color must be read from the **arrow sub-node**, not the parent button node. The parent reports `Icon/primary/on-color` which is wrong.
+- Arrow chevron color must be read from the **arrow sub-node**, not the parent button node.
 
 ### 6.2 Secondary/M button (white-fill outlined) — Default state
 
@@ -454,6 +480,63 @@ The visible green frame is **composed from child elements**, not a single border
 | All grey text | `#666666` | `--text-default-body` |
 | "Pandai.org" link | `#00cc85` | `--text-primary-default` |
 | Heart icon | `#00cc85` | `--icon-primary-default` (not `--surface-primary-default` — the heart is an icon stroke) |
+
+### 6.7 Nav Button - 1.5 — action icon buttons (44×44 square, COMPONENT_SET 3908:6148)
+
+> **Live-verified 2026-05-28** — DS COMPONENT_SET `3908:6148`. These are the action buttons in the top-right navbar row (bell, EN/locale, smartphone/download, waffle/learn-menu, maximize). Size: **44×44px**, `border-radius: 8px` (Radius/xl).
+
+| State | bg | bg hex | border | border hex | icon | icon hex |
+|---|---|---|---|---|---|---|
+| **Default** | `Surface/general/default` | `#ffffff` | none | — | `Icon/default/default` | `#808080` |
+| **Hover** | `Surface/secondary/default-subtle` | `#e8fbe8` | `Border/primary/default` | `#00cc85` | `Icon/primary/default` | `#00cc85` |
+| **Pressed** | `Surface/primary/focus` | `#00a36a` | `Border/primary/default` | `#00cc85` | `Icon/primary/default` | `#00cc85` |
+| **Active** | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` | `#00a36a` | `Icon/primary/on-color` | `#ffffff` |
+
+**Active state = plain rounded square. No speech-bubble tail.** `is-active` class applied via JS on dropdown open.
+
+**CSS variables:**
+```css
+.navbar-action-btn               { background: var(--surface-general-default); }
+.navbar-action-btn:hover         { background: var(--surface-secondary-default-subtle); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+.navbar-action-btn:active        { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+.navbar-action-btn.is-active     { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+/* Icon color */
+.navbar-action-btn svg           { color: var(--icon-default-default); }       /* #808080 */
+.navbar-action-btn:hover svg     { color: var(--icon-primary-default); }       /* #00cc85 */
+.navbar-action-btn:active svg    { color: var(--icon-primary-default); }       /* #00cc85 */
+.navbar-action-btn.is-active svg { color: var(--icon-primary-on-color); }      /* #ffffff */
+```
+
+### 6.8 Notification item states (COMPONENT_SET 3908:13442)
+
+> **Live-verified 2026-05-27** — DS `Navbar Notification Button - Parts`, 3 states only.
+
+| State | Content bg | Border | Text |
+|---|---|---|---|
+| **Default** | `#ffffff` (white) | none | `#666666` (`--text-default-body`) |
+| **Hover** | `--surface-secondary-default-hover` `#f6fef6` | `1px INSIDE #00cc85` | `#00564c` (`--text-tertiary-default`) |
+| **Focus** (click/touch) | `--surface-secondary-default-subtle` `#e8fbe8` | `1px INSIDE #00cc85` | `#00cc85` (`--text-primary-default`) |
+
+> DS names the click/touch state **"Focus"**, not "Pressed". Map to CSS `:active` + `:focus-visible`.
+
+**Structural change on Hover/Focus:** the inner row's `border-bottom: 1px solid #d9d9d9` disappears and the content frame gains `border-radius: 16px` + INSIDE border. Apply border as `box-shadow: inset 0 0 0 1px var(--border-primary-default)`.
+
+### 6.9 Badge OUTSIDE stroke — Number Badge, Icon Badge, Indicator Badge
+
+All three DS badge variants use `strokeAlign: OUTSIDE` with `Border/on-color` (#ffffff) as the stroke color. Always apply as `box-shadow` with no `inset` — never `border:` or `outline:`.
+
+```css
+/* OUTSIDE strokeAlign — ring outside element bounds, follows border-radius */
+.num-badge     { box-shadow: 0 0 0 1px var(--border-on-color); }   /* #ffffff */
+.icon-badge    { box-shadow: 0 0 0 1px var(--border-on-color); }   /* #ffffff */
+.indicator-dot { box-shadow: 0 0 0 1px var(--border-on-color); }   /* #ffffff */
+```
+
+| Badge | Node | Size | Fill | Stroke align | CSS |
+|---|---|---|---|---|---|
+| Number Badge - 1.5 Primary/M | `618:418` | 20×20 | `--surface-primary-default` `#00cc85` | OUTSIDE | `box-shadow: 0 0 0 1px var(--border-on-color)` |
+| Icon Badge - 1.5 | `3908:1491` | 12×12, padding 2px | `--surface-informative-default` `#00a2e8` | OUTSIDE | `box-shadow: 0 0 0 1px var(--border-on-color)` |
+| Indicator Badge dot | notification dropdown | 8×8 | `--surface-primary-default` `#00cc85` | OUTSIDE | `box-shadow: 0 0 0 1px var(--border-on-color)` |
 
 ### 6.6 Card containers (Quiz Card, Static Card, Primary Card)
 
@@ -517,6 +600,11 @@ When implementing a new DS-derived component:
 | `--surface-success-subtle`, `--pd-color-*` (invented tokens) | Only use names listed in §3 of this file |
 | Queried Teacher variant for student button states | Always verify `Type=Student` before trusting `get_variable_defs` ([CLAUDE.md Rule 18](CLAUDE.md)) |
 | Mistook WIP Backup file results as authoritative | Only `TLVKe3bgJTdVvuPAzgDq2f` is the source — ignore everything else |
+| Button Default label = `#f6fdfb` or `#e1f9ea` | `--text-primary-on-color` is now `#ffffff` — DS changed 2026-05-24. Check `:root` and update any prototype using old values. |
+| Nav action button Active icon = `#e1f9ea` or `#f6fdfb` | `--icon-primary-on-color` is now `#ffffff` — DS changed 2026-05-24. |
+| All Button variants share the same Pressed palette | **Wrong** — Primary Pressed = `#00a36a` (intensified green). Secondary/Tertiary Pressed = `#00564c` (dark teal). Never cross-apply. |
+| Disabled button arrow circle bg = `#f2f2f2` (same as outer) | Correct is `--surface-disabled-on-color` = `#e5e5e5`. Two different tokens. |
+| Badge white ring = `border: 1px solid white` | Badges use `strokeAlign: OUTSIDE` → must use `box-shadow: 0 0 0 1px var(--border-on-color)`. `border:` shrinks content area; `outline:` ignores border-radius. |
 
 ---
 
@@ -547,4 +635,4 @@ Drop these directly into Claude Code / Codex / Cursor when working in this repo:
 
 ---
 
-*Last updated: 2026-05-15 — §4.3 populated from live DS (19 subjects × 5 states × 2 modes); §3.1/§3.3/§3.4 hex + token-name corrections; §6.1 Button Pressed row + §6.3 Nav-btn Pressed row rewritten with live DS intensified-green palette; sync-status header added | DS source: `TLVKe3bgJTdVvuPAzgDq2f` (Pandai Design System 1.5) | Confirmed Student context (OG-Green palette)*
+*Last updated: 2026-05-28 by Zulfadhli — DS re-audit: `Text/primary/on-color` + `Icon/primary/on-color` updated to `#ffffff` (DS changed 2026-05-24); `--surface-disabled-on-color` (#e5e5e5), `--surface-informative-default` (#00a2e8), `--surface-secondary-default-hover` (#f6fef6), `--border-on-color` (#ffffff) added to §3; §6.1 Pressed split by variant (Primary≠Secondary/Tertiary) + disabled arrow bg corrected; §6.7/6.8/6.9 new component recipes added; §9 five new mistake rows added | DS source: `TLVKe3bgJTdVvuPAzgDq2f` (Pandai Design System 1.5) | Confirmed Student context (OG-Green palette)*
