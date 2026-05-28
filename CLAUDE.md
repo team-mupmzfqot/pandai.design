@@ -2102,4 +2102,68 @@ See `design-md/zul.design.md` Rules 173–174.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-27 (Rule 71 — Number Badge DS position on Avatar; CSS-only badge hide on active; Rules 69–70 — DS state name mapping, synchronous JS counter) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 72. NavMenu accordion — flat layout, `margin-top` −8px/0 trick, DS padding specs
+
+#### DS structure is flat — NO wrapper divs (⛔ old wrapper approach removed)
+Triggers and sub-topic containers are **direct siblings** in the flex column. Never add `.nav-menu-accordion` wrappers — they don't match DS and cause rendering inconsistencies.
+
+#### `margin-top` trick — closed: −8px, open: 0
+A 0-height submenu in a flex column still consumes two gap slots (phantom 16px instead of 8px between trigger pairs). Fix: `margin-top: calc(-1 * var(--spacing-space-xs))` on the submenu cancels the phantom gap when closed. When open, `margin-top: 0` restores the 8px column gap — giving 8px visible separation between trigger and first sub-item.
+
+**Both tablet AND mobile must reset to `margin-top: 0` when open.** Never keep tablet at −8px — `padding-top` is inside the element box and invisible. The visible gap must come from the restored column gap.
+
+#### `flex gap` unreliable inside `overflow:hidden` + `max-height` — use sibling `margin-top`
+`gap: 8px` on a flex container with `overflow: hidden` and animating `max-height` can silently produce 0px between items. Set `gap: 0` and use the adjacent sibling combinator scoped to the submenu:
+
+```css
+.nav-menu-submenu {
+  display:        flex; flex-direction: column;
+  gap:            0;
+  padding-top:    0;                                      /* DS tablet/mobile pt:0 */
+  padding-left:   var(--spacing-space-m);
+  padding-right:  var(--spacing-space-m);
+  box-sizing:     border-box;
+  max-height:     0; overflow: hidden;
+  margin-top:     calc(-1 * var(--spacing-space-xs));     /* cancel phantom gap closed */
+  transition:     max-height 0.2s ease, margin-top 0.2s ease;
+}
+.nav-menu-submenu.is-open { max-height: 500px; margin-top: 0; }
+
+/* 8px between sub-items — scoped so column-level items are unaffected */
+.nav-menu-submenu .nav-menu-item + .nav-menu-item { margin-top: var(--spacing-space-xs); }
+
+/* Mobile only */
+#NavMenu-Mobile .nav-menu-submenu { border-radius: 24px; margin-top: calc(-1 * var(--spacing-space-xs)); transition: max-height 0.2s ease, margin-top 0.2s ease; }
+#NavMenu-Mobile .nav-menu-submenu.is-open { max-height: 800px; margin-top: 0; padding-bottom: var(--spacing-space-m); }
+```
+
+#### DS sub-topic padding specs (confirmed 2026-05-28)
+- Tablet (`5283:118410`): `pt:0, pb:0, pl:16, pr:16` | sub-items inner gap: 8px
+- Mobile (`5283:122098`): `pt:0, pb:16, pl:16, pr:16, border-radius:24px` | sub-items inner gap: 8px
+
+#### DS item spacing (node `3427:4590`)
+- Container padding: 16px | Column gap: 8px | Item padding: `8px 16px` | Item icon→label gap: 10px
+
+**See zul.design.md Rules 175–179.**
+
+---
+
+### 73. Auto-collapse timeout — `startAutoCollapse` / `cancelAutoCollapse` pattern
+
+Any accordion or dropdown that opens on click should auto-collapse after idle time (5s default).
+
+```js
+var autoCollapseTimer = null;
+function cancelAutoCollapse() { clearTimeout(autoCollapseTimer); autoCollapseTimer = null; }
+function closeAll()           { cancelAutoCollapse(); /* close logic */ }
+function startAutoCollapse()  { cancelAutoCollapse(); autoCollapseTimer = setTimeout(closeAll, 5000); }
+
+// On click: closeAll() (cancels timer) → open new → startAutoCollapse()
+// On external close: closeAll() via MutationObserver on aria-hidden
+```
+
+`closeAll()` must call `cancelAutoCollapse()` first — prevents orphaned timers firing on already-closed panels. **See zul.design.md Rule 177.**
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-28 (Rules 72–73 revised — flat accordion layout, margin-top -8px/0 trick, flex gap unreliable in overflow:hidden, DS sub-topic padding specs confirmed) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

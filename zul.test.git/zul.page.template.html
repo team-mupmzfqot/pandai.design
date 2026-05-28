@@ -1476,11 +1476,11 @@
 
     .nav-menu-tablet__menu {
       display:    flex;
-      gap:        8px;
-      padding:    16px;
+      gap:        var(--spacing-space-xs);
+      padding:    var(--spacing-space-m);
       background: var(--surface-general-default);
     }
-    .nav-menu-tablet__col { display: flex; flex-direction: column; gap: 8px; flex: 1 0 0; min-width: 0; }
+    .nav-menu-tablet__col { display: flex; flex-direction: column; gap: var(--spacing-space-xs); flex: 1 0 0; min-width: 0; }
     /* 32px-wide spacer with a centred 1px divider line */
     .nav-menu-tablet__divider { width: 32px; flex-shrink: 0; position: relative; align-self: stretch; }
     .nav-menu-tablet__divider::after {
@@ -1526,6 +1526,51 @@
 
     /* DS nav menu items have no checkbox indicator — active state uses pill background only */
     .nav-menu-check { display: none; }
+
+.nav-menu-item.has-submenu.is-open {
+      background:    var(--surface-secondary-default);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-focus);
+      border-radius: 108px;
+    }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__label { color: var(--text-primary-default-hover); }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__icon  { color: var(--icon-primary-default); }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__arrow { color: var(--icon-primary-default); }
+    .nav-menu-item.has-submenu .nav-menu-item__arrow svg { transition: transform 0.15s ease; }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__arrow svg { transform: rotate(90deg); }
+
+    /* DS Sub-topic: gap=8px, pl=16px, pr=16px, pt=0, pb=0 (tablet) / pb=16px (mobile).
+       DS nodes: tablet 5283:118410 (pt:0 pb:0), mobile 5283:122098 (pt:0 pb:16).
+       margin-top:-8px cancels the flex column's phantom gap when height=0 (flat layout).
+       Tablet open: margin stays -8px; sub-item py:8px provides the trigger→sub-item gap.
+       Mobile open: margin restores to 0; flex gap provides the trigger→sub-item gap. */
+    .nav-menu-submenu {
+      display:         flex;
+      flex-direction:  column;
+      gap:             0;
+      padding-top:     0;
+      padding-right:   var(--spacing-space-m);
+      padding-left:    var(--spacing-space-m);
+      box-sizing:      border-box;
+      max-height:      0;
+      overflow:        hidden;
+      /* Flat layout: negative margin cancels the flex column's phantom 8px gap when height is 0. */
+      margin-top:      calc(-1 * var(--spacing-space-xs));
+      transition:      max-height 0.2s ease, margin-top 0.2s ease;
+    }
+    /* Both tablet and mobile: restore margin-top to 0 when open so the 8px column gap
+       reappears between the trigger and the first sub-item. */
+    .nav-menu-submenu.is-open { max-height: 500px; margin-top: 0; }
+    /* Use margin instead of gap — flex gap can be unreliable inside overflow:hidden max-height containers. */
+    .nav-menu-submenu .nav-menu-item + .nav-menu-item {
+      margin-top: var(--spacing-space-xs);
+    }
+    /* Mobile: DS node 5283:122098 — pt:0, pb:16, pl:16, pr:16, border-radius:24px. */
+    #NavMenu-Mobile .nav-menu-submenu {
+      border-radius: 24px;
+      margin-top:    calc(-1 * var(--spacing-space-xs));
+      transition:    max-height 0.2s ease, margin-top 0.2s ease;
+    }
+    #NavMenu-Mobile .nav-menu-submenu.is-open { max-height: 800px; margin-top: 0; padding-bottom: var(--spacing-space-m); }
 
     /* CTA row: Notification + Download App button */
     .nav-menu-tablet__footer { padding: 0; display: flex; flex-direction: column; }
@@ -2894,11 +2939,29 @@
           <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
           <span class="nav-menu-item__label">Practice</span>
         </div>
-        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Class">
+        <div class="nav-menu-item has-submenu" role="button" tabindex="0" aria-label="Class" aria-expanded="false" data-submenu="submenu-class">
           <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-users"/></svg></span>
           <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
           <span class="nav-menu-item__label">Class</span>
           <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+        </div>
+        <div class="nav-menu-submenu" id="submenu-class" aria-hidden="true">
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="My Classes">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-airplay"/></svg></span>
+            <span class="nav-menu-item__label">My Classes</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Browse Classes">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-globe"/></svg></span>
+            <span class="nav-menu-item__label">Browse Classes</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Timetable">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-layout"/></svg></span>
+            <span class="nav-menu-item__label">Timetable</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Assignments">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-edit"/></svg></span>
+            <span class="nav-menu-item__label">Assignments</span>
+          </div>
         </div>
       </div>
 
@@ -2907,29 +2970,125 @@
 
       <!-- Right column: Learn, Achievement, Potential, Rewards, My Account -->
       <div class="nav-menu-tablet__col">
-        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Learn">
+        <div class="nav-menu-item has-submenu" role="button" tabindex="0" aria-label="Learn" aria-expanded="false" data-submenu="submenu-learn">
           <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-book"/></svg></span>
           <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
           <span class="nav-menu-item__label">Learn</span>
           <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
         </div>
-        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Achievement">
+        <div class="nav-menu-submenu" id="submenu-learn" aria-hidden="true">
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Learning Hub">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-folder"/></svg></span>
+            <span class="nav-menu-item__label">Learning Hub</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Quick Notes">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
+            <span class="nav-menu-item__label">Quick Notes</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Videos">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-film"/></svg></span>
+            <span class="nav-menu-item__label">Videos</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Experiments">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-experiment"/></svg></span>
+            <span class="nav-menu-item__label">Experiments</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Textbooks">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-book"/></svg></span>
+            <span class="nav-menu-item__label">Textbooks</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Bookmarks">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-bookmark"/></svg></span>
+            <span class="nav-menu-item__label">Bookmarks</span>
+          </div>
+        </div>
+        <div class="nav-menu-item has-submenu" role="button" tabindex="0" aria-label="Achievement" aria-expanded="false" data-submenu="submenu-achievement">
           <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></span>
           <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
           <span class="nav-menu-item__label">Achievement</span>
           <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
         </div>
-        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Potential">
+        <div class="nav-menu-submenu" id="submenu-achievement" aria-hidden="true">
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Score Card">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-pie-chart"/></svg></span>
+            <span class="nav-menu-item__label">Score Card</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Report Card">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></span>
+            <span class="nav-menu-item__label">Report Card</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="History">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-calendar"/></svg></span>
+            <span class="nav-menu-item__label">History</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Badges">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-shield"/></svg></span>
+            <span class="nav-menu-item__label">Badges</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Leaderboard">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-award"/></svg></span>
+            <span class="nav-menu-item__label">Leaderboard</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="School Leaderboard">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-flag"/></svg></span>
+            <span class="nav-menu-item__label">School Leaderboard</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Certificates">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-certificate"/></svg></span>
+            <span class="nav-menu-item__label">Certificates</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Goals &amp; Rewards">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-progress-mobile"/></svg></span>
+            <span class="nav-menu-item__label">Goals &amp; Rewards</span>
+          </div>
+        </div>
+        <div class="nav-menu-item has-submenu" role="button" tabindex="0" aria-label="Potential" aria-expanded="false" data-submenu="submenu-potential">
           <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-star"/></svg></span>
           <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
           <span class="nav-menu-item__label">Potential</span>
           <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
         </div>
-        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Rewards">
+        <div class="nav-menu-submenu" id="submenu-potential" aria-hidden="true">
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Personality Test">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-sun"/></svg></span>
+            <span class="nav-menu-item__label">Personality Test</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Competition">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-bar-chart-3"/></svg></span>
+            <span class="nav-menu-item__label">Competition</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="University Matching">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-mortar-board"/></svg></span>
+            <span class="nav-menu-item__label">University Matching</span>
+          </div>
+        </div>
+        <div class="nav-menu-item has-submenu" role="button" tabindex="0" aria-label="Rewards" aria-expanded="false" data-submenu="submenu-rewards">
           <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-gift"/></svg></span>
           <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
           <span class="nav-menu-item__label">Rewards</span>
           <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+        </div>
+        <div class="nav-menu-submenu" id="submenu-rewards" aria-hidden="true">
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Coin Quests">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-stop-circle"/></svg></span>
+            <span class="nav-menu-item__label">Coin Quests</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="My Rewards">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-package"/></svg></span>
+            <span class="nav-menu-item__label">My Rewards</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Merchandise">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-shopping-bag"/></svg></span>
+            <span class="nav-menu-item__label">Merchandise</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="eVoucher">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-shopping-cart"/></svg></span>
+            <span class="nav-menu-item__label">eVoucher</span>
+          </div>
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Avatar">
+            <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-smile"/></svg></span>
+            <span class="nav-menu-item__label">Avatar</span>
+          </div>
         </div>
         <div class="nav-menu-item" role="button" tabindex="0" aria-label="My Account">
           <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-settings"/></svg></span>
@@ -3576,6 +3735,67 @@
 
     // Carousel — wrapped in try/catch so any error never blocks other JS
 
+    // ─── Nav Menu Tablet — accordion sub-menus (Rule 14: critical handlers first)
+    (function () {
+      var toggleBtns       = document.querySelectorAll('#NavMenu-Tablet .nav-menu-item.has-submenu');
+      var autoCollapseTimer = null;
+
+      function cancelAutoCollapse() {
+        clearTimeout(autoCollapseTimer);
+        autoCollapseTimer = null;
+      }
+
+      function closeAllSubmenus() {
+        cancelAutoCollapse();
+        toggleBtns.forEach(function (btn) {
+          btn.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+          var submenuId = btn.getAttribute('data-submenu');
+          var submenu   = submenuId ? document.getElementById(submenuId) : null;
+          if (submenu) {
+            submenu.classList.remove('is-open');
+            submenu.setAttribute('aria-hidden', 'true');
+          }
+        });
+      }
+
+      function startAutoCollapse() {
+        cancelAutoCollapse();
+        autoCollapseTimer = setTimeout(closeAllSubmenus, 5000);
+      }
+
+      toggleBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var isOpen    = btn.classList.contains('is-open');
+          var submenuId = btn.getAttribute('data-submenu');
+          var submenu   = submenuId ? document.getElementById(submenuId) : null;
+
+          closeAllSubmenus();
+
+          if (!isOpen && submenu) {
+            btn.classList.add('is-open');
+            btn.setAttribute('aria-expanded', 'true');
+            submenu.classList.add('is-open');
+            submenu.setAttribute('aria-hidden', 'false');
+            startAutoCollapse();
+          }
+        });
+      });
+
+      // Reset accordion state when the tablet menu closes
+      var menuPanel = document.getElementById('NavMenu-Tablet');
+      if (menuPanel) {
+        var observer = new MutationObserver(function (mutations) {
+          mutations.forEach(function (m) {
+            if (m.type === 'attributes' && m.attributeName === 'aria-hidden' && menuPanel.getAttribute('aria-hidden') === 'true') {
+              closeAllSubmenus();
+            }
+          });
+        });
+        observer.observe(menuPanel, { attributes: true });
+      }
+    })();
+
     // ─── Nav Menu Tablet — hamburger toggle + X close (Rule 14: registered first)
     (function () {
       var menuBtn     = document.getElementById('tablet-menu-btn');
@@ -3823,30 +4043,149 @@
         <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-clipboard"/></svg></span>
         <span class="nav-menu-item__label">Practice</span>
       </div>
-      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Class">
+      <div class="nav-menu-item has-submenu" role="button" tabindex="0" aria-label="Class" aria-expanded="false" data-submenu="submenu-m-class">
         <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-users"/></svg></span>
+        <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
         <span class="nav-menu-item__label">Class</span>
         <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
       </div>
-      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Learn">
+      <div class="nav-menu-submenu" id="submenu-m-class" aria-hidden="true">
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="My Classes">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-airplay"/></svg></span>
+          <span class="nav-menu-item__label">My Classes</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Browse Classes">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-globe"/></svg></span>
+          <span class="nav-menu-item__label">Browse Classes</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Timetable">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-layout"/></svg></span>
+          <span class="nav-menu-item__label">Timetable</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Assignments">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-edit"/></svg></span>
+          <span class="nav-menu-item__label">Assignments</span>
+        </div>
+      </div>
+      <div class="nav-menu-item has-submenu" role="button" tabindex="0" aria-label="Learn" aria-expanded="false" data-submenu="submenu-m-learn">
         <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-book"/></svg></span>
+        <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
         <span class="nav-menu-item__label">Learn</span>
         <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
       </div>
-      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Achievement">
+      <div class="nav-menu-submenu" id="submenu-m-learn" aria-hidden="true">
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Learning Hub">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-folder"/></svg></span>
+          <span class="nav-menu-item__label">Learning Hub</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Quick Notes">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
+          <span class="nav-menu-item__label">Quick Notes</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Videos">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-film"/></svg></span>
+          <span class="nav-menu-item__label">Videos</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Experiments">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-experiment"/></svg></span>
+          <span class="nav-menu-item__label">Experiments</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Textbooks">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-book"/></svg></span>
+          <span class="nav-menu-item__label">Textbooks</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Bookmarks">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-bookmark"/></svg></span>
+          <span class="nav-menu-item__label">Bookmarks</span>
+        </div>
+      </div>
+      <div class="nav-menu-item has-submenu" role="button" tabindex="0" aria-label="Achievement" aria-expanded="false" data-submenu="submenu-m-achievement">
         <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></span>
+        <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
         <span class="nav-menu-item__label">Achievement</span>
         <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
       </div>
-      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Potential">
+      <div class="nav-menu-submenu" id="submenu-m-achievement" aria-hidden="true">
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Score Card">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-pie-chart"/></svg></span>
+          <span class="nav-menu-item__label">Score Card</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Report Card">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></span>
+          <span class="nav-menu-item__label">Report Card</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="History">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-calendar"/></svg></span>
+          <span class="nav-menu-item__label">History</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Badges">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-shield"/></svg></span>
+          <span class="nav-menu-item__label">Badges</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Leaderboard">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-award"/></svg></span>
+          <span class="nav-menu-item__label">Leaderboard</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="School Leaderboard">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-flag"/></svg></span>
+          <span class="nav-menu-item__label">School Leaderboard</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Certificates">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-certificate"/></svg></span>
+          <span class="nav-menu-item__label">Certificates</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Goals &amp; Rewards">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-progress-mobile"/></svg></span>
+          <span class="nav-menu-item__label">Goals &amp; Rewards</span>
+        </div>
+      </div>
+      <div class="nav-menu-item has-submenu" role="button" tabindex="0" aria-label="Potential" aria-expanded="false" data-submenu="submenu-m-potential">
         <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-star"/></svg></span>
+        <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
         <span class="nav-menu-item__label">Potential</span>
         <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
       </div>
-      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Rewards">
+      <div class="nav-menu-submenu" id="submenu-m-potential" aria-hidden="true">
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Personality Test">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-sun"/></svg></span>
+          <span class="nav-menu-item__label">Personality Test</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Competition">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-bar-chart-3"/></svg></span>
+          <span class="nav-menu-item__label">Competition</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="University Matching">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-mortar-board"/></svg></span>
+          <span class="nav-menu-item__label">University Matching</span>
+        </div>
+      </div>
+      <div class="nav-menu-item has-submenu" role="button" tabindex="0" aria-label="Rewards" aria-expanded="false" data-submenu="submenu-m-rewards">
         <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-gift"/></svg></span>
+        <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
         <span class="nav-menu-item__label">Rewards</span>
         <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
+      </div>
+      <div class="nav-menu-submenu" id="submenu-m-rewards" aria-hidden="true">
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Coin Quests">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-stop-circle"/></svg></span>
+          <span class="nav-menu-item__label">Coin Quests</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="My Rewards">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-package"/></svg></span>
+          <span class="nav-menu-item__label">My Rewards</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Merchandise">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-shopping-bag"/></svg></span>
+          <span class="nav-menu-item__label">Merchandise</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="eVoucher">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-shopping-cart"/></svg></span>
+          <span class="nav-menu-item__label">eVoucher</span>
+        </div>
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Avatar">
+          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-smile"/></svg></span>
+          <span class="nav-menu-item__label">Avatar</span>
+        </div>
       </div>
       <div class="nav-menu-item" role="button" tabindex="0" aria-label="My Account">
         <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-settings"/></svg></span>
@@ -3919,6 +4258,99 @@
       window.addEventListener('resize', function () {
         if (mobilePanel.classList.contains('is-open') && window.innerWidth > 767) closeMobileMenu();
       });
+    })();
+
+    (function () {
+      var panel         = document.getElementById('NavMenu-Mobile');
+      var content       = panel ? panel.querySelector('.nav-menu-mobile__content') : null;
+      var toggleBtns    = document.querySelectorAll('#NavMenu-Mobile .nav-menu-item.has-submenu');
+      var autoCollapseTimer = null;
+      var HEIGHT_LIMIT  = 800;
+
+      // Hideable items = direct .nav-menu-item children BEFORE the first .has-submenu trigger
+      // (i.e. Home, Quiz, Battle, Practice — in top-to-bottom order)
+      var hideableItems = [];
+      if (content) {
+        var children = Array.prototype.slice.call(content.children);
+        var firstAccIdx = -1;
+        for (var i = 0; i < children.length; i++) {
+          if (children[i].classList.contains('has-submenu')) { firstAccIdx = i; break; }
+        }
+        if (firstAccIdx > -1) {
+          hideableItems = children.slice(0, firstAccIdx).filter(function (el) {
+            return el.classList.contains('nav-menu-item');
+          });
+        }
+      }
+
+      function restoreHiddenItems() {
+        hideableItems.forEach(function (el) { el.style.display = ''; });
+      }
+
+      // After transition completes, hide topmost items one-by-one until content fits HEIGHT_LIMIT
+      function adjustVisibleItems() {
+        if (!content) return;
+        restoreHiddenItems();
+        for (var i = 0; i < hideableItems.length; i++) {
+          if (content.scrollHeight <= HEIGHT_LIMIT) break;
+          hideableItems[i].style.display = 'none';
+        }
+      }
+
+      function cancelAutoCollapse() {
+        clearTimeout(autoCollapseTimer);
+        autoCollapseTimer = null;
+      }
+
+      function closeAllSubmenus() {
+        cancelAutoCollapse();
+        restoreHiddenItems();
+        toggleBtns.forEach(function (btn) {
+          btn.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+          var submenuId = btn.getAttribute('data-submenu');
+          var submenu   = submenuId ? document.getElementById(submenuId) : null;
+          if (submenu) {
+            submenu.classList.remove('is-open');
+            submenu.setAttribute('aria-hidden', 'true');
+          }
+        });
+      }
+
+      function startAutoCollapse() {
+        cancelAutoCollapse();
+        autoCollapseTimer = setTimeout(closeAllSubmenus, 5000);
+      }
+
+      toggleBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var isOpen    = btn.classList.contains('is-open');
+          var submenuId = btn.getAttribute('data-submenu');
+          var submenu   = submenuId ? document.getElementById(submenuId) : null;
+          closeAllSubmenus();
+          if (!isOpen && submenu) {
+            btn.classList.add('is-open');
+            btn.setAttribute('aria-expanded', 'true');
+            submenu.classList.add('is-open');
+            submenu.setAttribute('aria-hidden', 'false');
+            startAutoCollapse();
+            // Measure after CSS transition finishes (transition: max-height 0.2s)
+            setTimeout(adjustVisibleItems, 220);
+          }
+        });
+      });
+
+      if (panel) {
+        var observer = new MutationObserver(function (mutations) {
+          mutations.forEach(function (m) {
+            if (m.type === 'attributes' && m.attributeName === 'aria-hidden' &&
+                panel.getAttribute('aria-hidden') === 'true') {
+              closeAllSubmenus();
+            }
+          });
+        });
+        observer.observe(panel, { attributes: true });
+      }
     })();
   </script>
 

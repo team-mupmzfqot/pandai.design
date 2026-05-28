@@ -6877,4 +6877,247 @@ When a badge should disappear while a button's dropdown is open (active), use pu
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-27 (Rules 173–174 — Number Badge DS position on Avatar, CSS-only badge hide on active button) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 175. NavMenu-Tablet accordion — DS-confirmed specs and `.nav-menu-accordion` wrapper pattern
+
+**Source:** DS live inspection of Nav Menu Tablet - 1.5 (`3427:4590`), 2026-05-28.
+
+#### DS-confirmed spacing values
+
+| Property | DS variable | Resolved value | CSS custom property |
+|---|---|---|---|
+| Menu container padding (all sides) | `Spacing/component/md` → aliases `Spacing/space-m` | 16px | `var(--spacing-space-m)` |
+| Column gap between items | `Spacing/space-xs` | 8px | `var(--spacing-space-xs)` |
+| Menu container column gap (between left/right cols) | `Spacing/space-xs` | 8px | `var(--spacing-space-xs)` |
+| Item padding top/bottom | `Spacing/space-xs` | 8px | `var(--spacing-space-xs)` |
+| Item padding left/right | `Spacing/space-m` | 16px | `var(--spacing-space-m)` |
+| Item internal gap (icon → label → arrow) | *(unbound raw value)* | 10px | `10px` — no DS semantic variable |
+| Sub-topic container gap (between sub-items) | `Spacing/space-xs` | 8px | `var(--spacing-space-xs)` |
+| Sub-topic container left indent | `Spacing/space-m` | 16px | `var(--spacing-space-m)` |
+| Sub-topic container top gap from parent | `Spacing/space-xs` | 8px | `var(--spacing-space-xs)` via `padding-top` |
+
+**Sub-item list — DS confirmed (node `3427:4590`):**
+
+| Parent | Sub-items |
+|---|---|
+| Class | My Classes (`#ic-airplay`), Browse Classes (`#ic-globe`), Timetable (`#ic-layout`), Assignments (`#ic-edit`) |
+| Learn | Learning Hub (`#ic-folder`), Quick Notes (`#ic-file-text`), Videos (`#ic-film`), Experiments (`#ic-experiment`), Textbooks (`#ic-book`), Bookmarks (`#ic-bookmark`) |
+| Achievement | Score Card (`#ic-pie-chart`), Report Card (`#ic-check-circle`), History (`#ic-calendar`), Badges (`#ic-shield`), Leaderboard (`#ic-award`), School Leaderboard (`#ic-flag`), Certificates (`#ic-certificate`), Goals & Rewards (`#ic-progress-mobile`) |
+| Potential | Personality Test (`#ic-sun`), Competition (`#ic-bar-chart-3`), University Matching (`#ic-mortar-board`) |
+| Rewards | Coin Quests (`#ic-stop-circle`), My Rewards (`#ic-package`), Merchandise (`#ic-shopping-bag`), eVoucher (`#ic-shopping-cart`), Avatar (`#ic-smile`) |
+
+#### `.nav-menu-accordion` wrapper pattern — prevents double gap
+
+**The problem:** In a flex column with `gap: var(--spacing-space-xs)` (8px), every direct flex child gets a 8px gap on each side. A collapsed submenu (`max-height: 0; overflow: hidden`) has 0 visible height but still occupies two gap slots — one gap *above* it (between parent item and submenu) and one gap *below* it (between submenu and next item). This makes the spacing between consecutive expandable items appear as **16px instead of 8px**.
+
+**The fix:** Wrap each parent item + its submenu in a `.nav-menu-accordion` div. The column gap then fires between *wrappers*, never between an item and its own submenu.
+
+```html
+<div class="nav-menu-accordion">
+  <div class="nav-menu-item has-submenu" data-submenu="submenu-learn">...</div>
+  <div class="nav-menu-submenu" id="submenu-learn">...</div>
+</div>
+```
+
+```css
+.nav-menu-accordion { display: flex; flex-direction: column; }
+/* No gap inside — item and submenu are adjacent with 0px between them when collapsed */
+```
+
+**Rule:** Any time a collapsed/hidden element sits as a flex child between other items, it can silently consume gap space. Always wrap toggled content + its trigger in a zero-gap container so the column gap only fires between logical groups.
+
+**⛔ SUPERSEDED (2026-05-28) by Rules 178–179:** The wrapper approach was tried and then removed. The DS structure is flat — triggers and sub-topics are direct siblings in the column. The wrapper introduced subtle flex item inconsistencies and doesn't match the DS layout. Use the flat layout + `margin-top` trick from Rule 178 instead. Never add `.nav-menu-accordion` wrappers.
+
+---
+
+### Rule 176. `padding-top` on max-height:0 accordion — use `box-sizing: border-box` to clip when collapsed
+
+When a collapsible element needs a visual top gap (spacing between parent item and first sub-item) that is:
+- **Visible** when open
+- **Zero** when collapsed (no extra height, no layout shift)
+
+Add `padding-top` to the element AND set `box-sizing: border-box`. With `border-box` sizing, `max-height: 0` constrains the entire border-box (including padding) to 0px. `overflow: hidden` clips everything. When `max-height` is relaxed (open state), the full `padding-top` becomes visible.
+
+**CSS pattern:**
+```css
+.nav-menu-submenu {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--spacing-space-xs);     /* 8px gap between sub-items */
+  padding-top:    var(--spacing-space-xs);     /* 8px gap from parent item — visible when open, 0 when collapsed */
+  padding-left:   var(--spacing-space-m);      /* 16px indent (DS sub-topic container left pad) */
+  box-sizing:     border-box;                  /* REQUIRED: makes max-height:0 clip padding-top */
+  max-height:     0;
+  overflow:       hidden;
+  transition:     max-height 0.2s ease;
+}
+.nav-menu-submenu.is-open { max-height: 500px; }
+```
+
+**Why `box-sizing: border-box` is mandatory here:**
+- `content-box` (default): `max-height` constrains content area only. `padding-top: 8px` lives *outside* the content area and is NOT clipped by `max-height: 0`. The element renders with 8px visible height even when collapsed — causes a gap artefact.
+- `border-box`: `max-height` constrains the full border-box (content + padding + border). `padding-top: 8px` is inside the 0px box and gets clipped to 0. No visible height when collapsed. ✓
+
+**`padding-left` is safe without `border-box`** — horizontal padding never contributes to height, so it never causes layout artefacts when `max-height: 0`. Only vertical padding (top/bottom) needs `border-box` + `max-height` together.
+
+**Mistake made (2026-05-28):** Initially used `padding-left` only on the submenu. No gap appeared between the parent item pill and the first sub-item when the submenu opened. Fix: added `padding-top: var(--spacing-space-xs)` + `box-sizing: border-box`.
+
+**⛔ PARTIALLY SUPERSEDED (2026-05-28) by Rule 178:** The `padding-top: var(--spacing-space-xs)` approach was wrong — DS tablet sub-topic container (`5283:118410`) confirms `pt: 0, pb: 0`. The visual 8px gap between trigger pill and first sub-item comes from the **column gap being restored** (via `margin-top: 0` when open in Rule 178), not from sub-item `padding-top`. Correct base rule: `padding-top: 0`. The `box-sizing: border-box` and `gap: 0` remain in the base rule. `padding-bottom` is mobile-only (applied in `.is-open` state via a mobile-scoped selector).
+
+---
+
+### Rule 177. Auto-collapse timeout on accordion/dropdown — `startAutoCollapse` / `cancelAutoCollapse` pattern
+
+Any panel, dropdown, or accordion that opens on click should auto-collapse after a fixed idle period (e.g. 5 seconds) so it doesn't stay open indefinitely when the user navigates away.
+
+**Pattern:**
+```js
+var autoCollapseTimer = null;
+
+function cancelAutoCollapse() {
+  clearTimeout(autoCollapseTimer);
+  autoCollapseTimer = null;
+}
+
+function closeAllSubmenus() {
+  cancelAutoCollapse();   // always cancel first — avoids orphaned timers
+  // ... close logic ...
+}
+
+function startAutoCollapse() {
+  cancelAutoCollapse();   // reset if already running
+  autoCollapseTimer = setTimeout(closeAllSubmenus, 5000);
+}
+
+// In click handler:
+btn.addEventListener('click', function () {
+  var isOpen = btn.classList.contains('is-open');
+  closeAllSubmenus();                     // cancels timer + closes all
+  if (!isOpen) {
+    // open new submenu ...
+    startAutoCollapse();                  // start 5s timer
+  }
+  // if closing: no new timer (nothing open)
+});
+```
+
+**Key rules:**
+- `closeAllSubmenus()` must call `cancelAutoCollapse()` first — prevents an orphaned timer from firing after a manual close.
+- Clicking a different submenu: `closeAllSubmenus()` cancels old timer → new submenu opens → `startAutoCollapse()` starts fresh 5s timer.
+- Clicking the same open submenu: `closeAllSubmenus()` cancels timer → panel closes → no new timer (nothing open).
+- Panel closed externally (overlay, X button, resize): also call `closeAllSubmenus()` to guarantee timer cleanup. The MutationObserver on `aria-hidden` is a reliable hook for this.
+
+**Timeout length:** 5000ms (5s) is the default for menus. Use shorter timers (1500–2000ms) for tooltips/toasts. Use longer (10000ms+) for search or input panels where the user may be thinking.
+
+**Mistake to avoid:** Calling `clearTimeout` only inside `startAutoCollapse` but not in `closeAllSubmenus`. If the panel is closed manually while a timer is pending, the timer still fires after 5s and calls `closeAllSubmenus` on an already-closed panel — harmless but wasteful and potentially triggering unnecessary DOM mutations.
+
+---
+
+### Rule 178. Flat accordion layout — direct siblings + `margin-top` -8px closed / 0 open
+
+**Source:** DS live inspection of `5283:116691` (Class Menu Tablet open) and `5283:122070` (Mobile accordion), confirmed 2026-05-28.
+
+#### DS structure is flat — no wrapper divs
+
+Triggers (`.has-submenu`) and their sub-topic containers (`.nav-menu-submenu`) are **direct siblings** in the same flex column. There is no outer "accordion wrapper" div. The `.nav-menu-accordion` wrapper approach (Rule 175) was incorrect and has been removed.
+
+```html
+<!-- CORRECT — flat structure -->
+<div class="nav-menu-tablet__col">
+  <div class="nav-menu-item">Home</div>
+  <div class="nav-menu-item has-submenu" data-submenu="submenu-class">Class</div>
+  <div class="nav-menu-submenu" id="submenu-class">
+    <div class="nav-menu-item">My Classes</div>
+    <div class="nav-menu-item">Browse Classes</div>
+  </div>
+  <div class="nav-menu-item has-submenu" data-submenu="submenu-learn">Learn</div>
+  <div class="nav-menu-submenu" id="submenu-learn">...</div>
+</div>
+```
+
+#### The `margin-top` trick — closed: -8px, open: 0
+
+In a flex column with `gap: 8px`, a **collapsed** submenu (`max-height: 0; height ≈ 0`) still occupies two gap slots: one before it (between trigger and submenu) and one after it (between submenu and next trigger). This makes consecutive trigger items appear 16px apart instead of 8px.
+
+**Fix:** Set `margin-top: calc(-1 * var(--spacing-space-xs))` (-8px) on the submenu. This shifts the submenu up by 8px, cancelling the phantom gap before it. The gap after it is absorbed by the shift, leaving 8px between trigger → next trigger. ✓
+
+**When open:** `margin-top: 0` restores the column's 8px gap so there is 8px visible space between the trigger pill bottom and the first sub-item pill top.
+
+**This applies to BOTH tablet AND mobile.** The previous implementation kept tablet at `-8px` when open, reasoning that `padding-top: 8px` on the sub-items would provide the gap. That was wrong — `padding-top` is inside the element box (inside the pill), so it is invisible. The visible gap must come from the restored column gap.
+
+```css
+.nav-menu-submenu {
+  display:        flex;
+  flex-direction: column;
+  gap:            0;                                          /* see Rule 179 */
+  padding-top:    0;                                          /* DS tablet pt:0 */
+  padding-right:  var(--spacing-space-m);
+  padding-left:   var(--spacing-space-m);
+  box-sizing:     border-box;
+  max-height:     0;
+  overflow:       hidden;
+  margin-top:     calc(-1 * var(--spacing-space-xs));         /* cancels phantom gap when closed */
+  transition:     max-height 0.2s ease, margin-top 0.2s ease;
+}
+/* Both tablet and mobile: restore margin-top to 0 so 8px column gap reappears */
+.nav-menu-submenu.is-open { max-height: 500px; margin-top: 0; }
+
+/* Mobile only: border-radius + bottom padding (DS pb:16) */
+#NavMenu-Mobile .nav-menu-submenu {
+  border-radius: 24px;
+  margin-top:    calc(-1 * var(--spacing-space-xs));
+  transition:    max-height 0.2s ease, margin-top 0.2s ease;
+}
+#NavMenu-Mobile .nav-menu-submenu.is-open {
+  max-height:     800px;
+  margin-top:     0;
+  padding-bottom: var(--spacing-space-m);   /* DS mobile pb:16 */
+}
+```
+
+#### DS sub-topic padding specs (confirmed 2026-05-28)
+
+| Menu | DS node | `pt` | `pb` | `pl` | `pr` | `border-radius` |
+|---|---|---|---|---|---|---|
+| Tablet outer container | `5283:118410` | 0 | 0 | 16px | 16px | none |
+| Tablet inner menu | `5283:118411` | 0 | 0 | 0 | 0 | none |
+| Mobile sub-topic | `5283:122098` | 0 | 16px | 16px | 16px | 24px |
+
+Inner menu gap between sub-items = `Spacing/space-xs` = 8px (both tablet and mobile).
+
+**Mistakes made:**
+- Rule 175: Used `.nav-menu-accordion` wrapper divs — DS uses flat structure. Removed.
+- Rule 176: Used `padding-top: 8px` for trigger→sub-item gap — DS has `pt:0`. The gap is from the column gap (restored by `margin-top: 0` on open).
+- Kept tablet `margin-top: -8px` when open, thinking `padding-top: 8px` provides the gap — wrong. `padding-top` is inside the element box (invisible to the gap observer). `margin-top: 0` is mandatory when open on all breakpoints.
+
+---
+
+### Rule 179. `flex gap` is unreliable inside `overflow:hidden` + `max-height` accordions — use adjacent-sibling `margin-top`
+
+**The problem:** `gap: 8px` on a `flex-direction: column` container with `overflow: hidden` and `max-height: 0 → 500px` can fail to render the gap between items in certain browsers / Electron-based webviews (VS Code Simple Browser). The items appear with 0px spacing even though `gap: 8px` is set.
+
+**Root cause:** In some rendering engines, `gap` inside an `overflow: hidden` flex container with an animating `max-height` is not reliably applied. The gap is a layout property, not content — but some engines collapse it when the container height is transitioning.
+
+**Fix:** Set `gap: 0` on the container and use the CSS adjacent sibling combinator to add `margin-top` to every sub-item after the first:
+
+```css
+.nav-menu-submenu { gap: 0; }   /* do NOT use gap for inter-item spacing */
+
+/* 8px between each sub-item — scoped to submenu so it doesn't affect column-level items */
+.nav-menu-submenu .nav-menu-item + .nav-menu-item {
+  margin-top: var(--spacing-space-xs);   /* 8px */
+}
+```
+
+**Why `+ .nav-menu-item` not `:not(:first-child)`:** Both selectors target the same elements. The adjacent sibling combinator is semantically clearer (space between pairs of siblings) and avoids the need for `:not()`. Either works — pick one and be consistent.
+
+**Scoping is mandatory:** The selector must be prefixed with `.nav-menu-submenu` so it only applies to sub-items inside the accordion. Without the scope, it would match any `.nav-menu-item` that immediately follows another `.nav-menu-item` anywhere in the DOM — including column-level items that already get their spacing from the column's `gap: 8px`, resulting in double spacing.
+
+**This applies to all accordions** (tablet + mobile, all 5 categories). Since the rule is scoped to `.nav-menu-submenu`, one CSS rule covers all instances.
+
+**Do not use this pattern pre-emptively for all flex containers.** `gap` works correctly in most flex contexts. Only apply the `margin-top` sibling pattern when the container uses both `overflow: hidden` AND `max-height` for accordion/collapse behaviour.
+
+**Mistake made (2026-05-28):** Initially set `gap: var(--spacing-space-xs)` on `.nav-menu-submenu`. Prototype showed 0px between sub-items (Learning Hub / Quick Notes directly adjacent, no visible space). Fixed by switching to `gap: 0` + `.nav-menu-submenu .nav-menu-item + .nav-menu-item { margin-top: 8px }`.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-28 (Rules 178–179 — flat accordion layout, margin-top -8px/0 trick, flex gap unreliable in overflow:hidden, DS sub-topic padding specs confirmed) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
