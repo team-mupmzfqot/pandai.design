@@ -7262,4 +7262,71 @@ CENTER  → border: Npx solid var(--token)
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-28 (Rules 182–184 — Icon Badge DS specs, always verify strokeAlign, sync both HTML files) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 185. `size-[Npx]` in DS context output = fixed square — never infer `flex: 1 0 0`
+
+When `get_design_context` returns `size-[164px]` (or `shrink-0 size-[164px]`), this means:
+```css
+width:      164px;
+height:     164px;
+flex-shrink: 0;   /* shrink-0 */
+```
+It is a **fixed square**. It does NOT map to `flex: 1 0 0` (FILL/grow). The `flex: 1 0 0` pattern is only correct when `get_design_context` shows `flex-[1_0_0]` on that element.
+
+**Decision table:**
+| DS context output | CSS |
+|---|---|
+| `size-[164px]` or `shrink-0 size-[164px]` | `width: 164px; height: 164px; flex: none` |
+| `flex-[1_0_0]` | `flex: 1 0 0` (FILL) |
+| `w-[100px] flex-[1_0_0]` | `width: 100px; flex: 1 0 0` (FIXED width, FILL in main axis) |
+
+**Mistake made (2026-05-28 — Static Card illustration):** Prior session notes documented the illustration as `szV: FILL` → `flex: 1 0 0; width: 100px`. The actual DS node has `size-[164px]` → `width: 164px; height: 164px; flex: none`. With `flex: 1 0 0` in a 164px-tall column but only 100px wide, the illustration became a 100×164 portrait box — visually stretched. Always re-fetch `get_design_context` on the exact node before implementing; never trust prior session notes for dimensions.
+
+---
+
+### Rule 186. Static Card - 1.5 illustration — confirmed DS spec (2026-05-28)
+
+**All 3 variants (Primary `2616:2959`, Secondary `5344:9081`, Tertiary `5176:77408`) share identical illustration sizing.**
+
+| Property | Value | DS class |
+|---|---|---|
+| Illustration size | `164×164px` fixed square | `shrink-0 size-[164px]` |
+| img-col padding | `28px` ALL sides | `p-[var(--spacing/component/2xl,28px)]` |
+| Content frame gap | `16px` | `gap-[var(--spacing/component/md,16px)]` |
+| Right-col padding | `28px` ALL sides | `p-[var(--spacing/component/2xl,28px)]` |
+
+**img-col total dimensions at 220px card:** `28 + 164 + 28 = 220px` (fills card height exactly, auto-sized width).
+
+**CSS (base/desktop):**
+```css
+.static-card__illustration {
+  width:  164px;
+  height: 164px;
+  flex:   none;
+}
+```
+
+**Responsive overrides:**
+- Tablet (`max-width: 1279px`): `width: 80px; height: 80px`
+- Mobile (`max-width: 767px`): `width: 100px; height: 100px`
+
+**Mistakes made (this component across sessions):**
+1. `flex: 1 0 0; width: 100px` — 100×164 portrait → stretched (2026-05-28). Fix: `164×164; flex: none`.
+2. `gap: 12px` on content frame — was 12px, DS confirmed 16px (2026-05-28).
+3. `padding-right: 28px` only on right-col — DS confirms `p-[28px]` ALL sides (2026-05-28).
+4. `padding: 60px 0 60px 28px` on img-col — DS confirms `p-[28px]` ALL sides (2026-05-28).
+
+**Rule:** Before implementing ANY component dimension (width, height, padding, gap), call `get_design_context` on the exact DS node and read the Tailwind class output directly. Do not carry forward measurements from prior session notes — DS values change.
+
+---
+
+### Rule 187. DS `p-[Npx]` = padding ALL sides — never apply to only one side unless DS shows `pt-`, `pr-`, `pb-`, `pl-`
+
+`p-[28px]` in `get_design_context` output = `padding: 28px` on ALL four sides. If the DS intended padding on only one or two sides, it uses directional classes: `pt-[28px]`, `pr-[28px]`, `pb-[28px]`, `pl-[28px]`, or combined like `px-[28px]` (left+right) / `py-[28px]` (top+bottom).
+
+**Never apply `p-[Npx]` as `padding-right: Npx` only** — that discards the top and bottom padding and makes the card content hug the top/bottom edges.
+
+**Mistake made (2026-05-28 — Static Card right-col):** DS shows `p-[var(--spacing/component/2xl,28px)]` on the right column (all sides). Implementation had `padding-right: 28px` (right only) and `padding: 0 28px` (Secondary). Top/bottom padding was 0, leaving content cramped against top/bottom card edges. Fix: `padding: 28px` on the base rule for all variants.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-28 (Rules 185–187 — DS size-[Npx] = fixed square, Static Card illustration 164×164 confirmed, p-[Npx] = all sides) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

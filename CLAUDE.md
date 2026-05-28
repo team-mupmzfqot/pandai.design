@@ -1877,8 +1877,8 @@ CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — no `inset`. Content area
 **Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision. No exceptions.
 
 ```
-0a. Read design-md/zul.design.md       → ALL rules 1–160, confirmed specs, known mistakes
-0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs
+0a. Read design-md/zul.design.md       → ALL rules 1–187, confirmed specs, known mistakes
+0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs, NOT prior session notes
 0c. get_design_context on COMPONENT SET → list ALL variant names
 0d. get_design_context on EACH state   → extract every token BEFORE writing CSS
 0e. get_variable_defs on sub-nodes     → confirm Semantic tokens
@@ -1890,6 +1890,9 @@ CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — no `inset`. Content area
     to current hex BEFORE writing any CSS. Token values change without notice.
 0k. After any fix to a shared component — grep zul.page.template.html for the same
     component class. If found, apply the identical fix before committing (Rule 184).
+0l. For ANY element dimension (width, height, padding, gap): re-fetch get_design_context
+    on the exact node. Never carry forward numbers from prior session notes — DS values
+    change. size-[Npx] = fixed square; flex-[1_0_0] = FILL; p-[Npx] = ALL sides (Rule 185–187).
 ```
 
 **Shared components (always sync both files):** navbar, profile dropdown, notification dropdown, learn/locale/download dropdowns, footer, `:root` tokens, `<svg><defs>` icon symbols.
@@ -2188,4 +2191,47 @@ function startAutoCollapse()  { cancelAutoCollapse(); autoCollapseTimer = setTim
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-28 (Rules 72–73 revised — flat accordion layout, margin-top -8px/0 trick, flex gap unreliable in overflow:hidden, DS sub-topic padding specs confirmed) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 74. DS `size-[Npx]` = fixed square, `flex-[1_0_0]` = FILL — never infer one from the other
+
+When `get_design_context` output shows a sizing class on an element, map it exactly:
+
+| DS context class | CSS |
+|---|---|
+| `size-[164px]` or `shrink-0 size-[164px]` | `width: 164px; height: 164px; flex: none` |
+| `flex-[1_0_0]` | `flex: 1 0 0` |
+| `w-[100px] flex-[1_0_0]` | `width: 100px; flex: 1 0 0` |
+
+**Never use `flex: 1 0 0` for an element that DS shows as `size-[Npx]`.** A `flex: 1 0 0` in a column with a narrow fixed width (e.g. `width: 100px`) makes a portrait rectangle — visually stretched.
+
+**See zul.design.md Rule 185.**
+
+---
+
+### 75. DS `p-[Npx]` = padding ALL sides — directional only if DS shows `pt-`, `pr-`, `pb-`, `pl-`
+
+`p-[28px]` in `get_design_context` = `padding: 28px` all four sides. Applying it as `padding-right: 28px` only discards top and bottom padding — content hugs the card's top/bottom edges.
+
+Only use directional padding (`padding-right`, `padding-top`, etc.) when the DS class explicitly uses a directional variant (`pr-[28px]`, `pt-[28px]`, `px-[28px]`, etc.).
+
+**See zul.design.md Rule 187.**
+
+---
+
+### Static Card - 1.5 — confirmed DS spec (2026-05-28, Rules 185–187)
+
+| Property | Value |
+|---|---|
+| Illustration | `width: 164px; height: 164px; flex: none` (DS: `size-[164px]`) |
+| img-col padding | `padding: 28px` all sides |
+| Content frame gap | `gap: 16px` (Spacing/component/md) |
+| Right-col padding | `padding: 28px` all sides |
+
+Responsive: tablet `80×80`, mobile `100×100` illustration.
+
+**Mistakes (this component):** (1) `flex: 1 0 0; width: 100px` → 100×164 portrait / stretched. (2) `gap: 12px` instead of 16px. (3) `padding-right` only instead of all sides. All caused by carrying forward prior-session estimates rather than re-fetching DS.
+
+*Generated: May 2026 | Last updated: 2026-05-28 (Rules 72–73 revised + Rules 74–75 added — DS size class mapping, padding all-sides rule, Static Card illustration fixed 164×164px) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-28 (Rules 72–73 revised — accordion flat layout, margin-top trick) | See end of file for Rules 74–75 and confirmed specs.*
