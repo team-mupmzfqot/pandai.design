@@ -2284,8 +2284,56 @@ const master = figma.getNodeById('masterComponentId');
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-28 (Rules 74–77 — DS size class = available space, instance vs master component, Static Card illustration corrected 130×130px with maxWidth/maxHeight) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 78. `exportAsync` for PNG assets — NEVER use `node.screenshot()` or `get_screenshot`
+
+`node.screenshot()` and `get_screenshot` composite onto the Figma canvas background (`#1e1e1e`). Transparent areas become opaque near-black (R=30, G=30, B=30, A=255) — transparency destroyed.
+
+**Always use `exportAsync`:**
+```js
+const bytes = await node.exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 2 } });
+```
+
+`exportAsync` preserves true alpha. `node.screenshot()` is QA-only (after code is written), never for asset export.
+
+**Confirmed (2026-05-29):** `Graphic/P.LiveTuition` (node `5436:35577`) via `get_screenshot` → black-background PNG. Via `exportAsync` → clean transparent PNG, A=0 corners confirmed.
+
+**See zul.design.md Rule 194.**
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-28 (Rules 72–73 revised — accordion flat layout, margin-top trick) | See end of file for Rules 74–75 and confirmed specs.*
+### 79. Large PNG base64 — split into halves, write to temp files, decode in PowerShell
+
+Write tool limit ~9,000 chars. A 1× PNG export produces ~18,000+ base64 chars. Split and rejoin:
+
+```js
+// use_figma
+const b64 = btoa(bin);
+const mid = Math.floor(b64.length / 2);
+return { total: b64.length, h1: b64.slice(0, mid), h2: b64.slice(mid) };
+```
+Write `h1` → `asset_h1.txt`, `h2` → `asset_h2.txt`. Then:
+```powershell
+$b64 = (Get-Content "...\asset_h1.txt" -Raw).Trim() + (Get-Content "...\asset_h2.txt" -Raw).Trim()
+$bytes = [Convert]::FromBase64String($b64)
+[System.IO.File]::WriteAllBytes("C:\path\output.png", $bytes)
+```
+Write EXACT values only — never pad or extend. Verify byte count matches expected.
+
+**See zul.design.md Rule 195.**
+
+---
+
+### 80. Simple task = direct action — no unnecessary exploration
+
+When a task is a direct export/save (e.g. "fetch this graphic as alpha PNG"), execute it directly:
+`use_figma exportAsync` → write halves → PowerShell decode → verify.
+
+Do NOT read HTML, check CSS, audit component anatomy, or fetch design context unless explicitly required by the task. Match scope to what was requested.
+
+**Confirmed mistake (2026-05-29):** "Export node as alpha PNG" triggered unnecessary HTML/CSS audit. User flagged as over-complication.
+
+**See zul.design.md Rule 196.**
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-29 (Rules 78–80 — exportAsync for transparent PNG, base64 split-write, simple task = direct action) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

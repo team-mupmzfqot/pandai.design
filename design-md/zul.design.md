@@ -7487,6 +7487,10 @@ This is a hard rule without exceptions. Every mistake documented in Rules 1–19
 □ 8. For icons: confirm viewBox + path scale + CSS dimensions all consistent (Rule 87)
 □ 9. Post-implementation QA only — see Rule 193: get_screenshot is FORBIDDEN for spec extraction.
       If anything looks wrong, go back to steps 3–8 (node data), not the screenshot.
+□ 10. For asset exports (illustrations, graphics): use exportAsync ONLY — never node.screenshot() or
+       get_screenshot. Both composite onto canvas background (#1e1e1e), destroying transparency (Rule 194).
+□ 11. Scope check — does the task require exploration steps? If task is a direct export/save, skip steps 3–8
+       and go straight to the action. Match scope to what was requested (Rule 196).
 ```
 
 **What to NEVER do:**
@@ -7496,6 +7500,8 @@ This is a hard rule without exceptions. Every mistake documented in Rules 1–19
 - Guess token px value from suffix alone — Primitive `xl` ≠ Product `XL` in the corner radius scale (Rule 191)
 - Approximate any hover/pressed/active state — always pull via `get_design_context` on the COMPONENT_SET
 - **Use `get_screenshot` to determine any design value — this is now prohibited (Rule 193)**
+- **Use `node.screenshot()` or `get_screenshot` to export any asset — transparency is destroyed (Rule 194)**
+- **Add unnecessary exploration steps when the task is a simple direct action (Rule 196)**
 
 **When the user reports a value is wrong:**
 1. Immediately open DS (`TLVKe3bgJTdVvuPAzgDq2f`) and run `get_design_context` on the exact node
@@ -7581,6 +7587,87 @@ exportAsync SVG    → exact icon geometry          → REQUIRED for icon paths 
 ```
 
 **This rule supersedes any prior workflow step that implied using `get_screenshot` for design understanding.** Rule 192 pre-flight step 9 is retained only as post-implementation QA.
+
+---
+
+### Rule 194. `exportAsync` for PNG assets — NEVER use `node.screenshot()` or `get_screenshot`
+
+`node.screenshot()` and `get_screenshot` **composite onto the Figma canvas background** (`#1e1e1e` dark grey). Any transparent area in the asset becomes near-black pixels (R=30, G=30, B=30, A=255) — the transparency is destroyed. The resulting PNG has a black background regardless of what the original asset looks like.
+
+**Rule:** For any asset export — illustrations, graphics, icons with fills — always use `exportAsync`:
+
+```js
+const bytes = await node.exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 2 } });
+```
+
+`exportAsync` respects the node's actual fill/background — transparent nodes export with A=0 alpha.
+
+**Confirmed instance (2026-05-29):** `Graphic/P.LiveTuition` (node `5436:35577`) exported via `get_screenshot` produced a solid black-background PNG (14,505 bytes corrupted). Exported via `exportAsync` at 1× produced a clean transparent-background PNG (13,764 bytes, A=0 corners confirmed).
+
+**Verification after export:**
+- Corner pixels must have A=0 for transparent assets
+- PNG color type 6 = RGBA (has alpha) — confirm with hex editor if needed
+
+**`node.screenshot()` is permitted ONLY for post-implementation QA** (same restriction as `get_screenshot` — Rule 193). Never for asset export.
+
+**See also:** Rule 50 (complex illustrated icons → 2× PNG), Rule 193 (screenshots forbidden for spec extraction).
+
+---
+
+### Rule 195. Large PNG base64 export — split into halves, write to temp files, decode in PowerShell
+
+The Write tool truncates at ~9,000–10,000 characters. A 1× PNG export from a medium illustration produces ~18,000+ base64 characters — too large for a single Write call.
+
+**Pattern:**
+
+```js
+// use_figma — export and split
+const bytes = await node.exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 1 } });
+let bin = '';
+for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+const b64 = btoa(bin);
+const mid = Math.floor(b64.length / 2);
+return { total: b64.length, h1: b64.slice(0, mid), h2: b64.slice(mid) };
+```
+
+```
+1. Write h1 → C:\...\Temp\asset_h1.txt
+2. Write h2 → C:\...\Temp\asset_h2.txt
+```
+
+```powershell
+# PowerShell — concatenate + decode + save
+$b64 = (Get-Content "C:\...\asset_h1.txt" -Raw).Trim() +
+       (Get-Content "C:\...\asset_h2.txt" -Raw).Trim()
+$bytes = [Convert]::FromBase64String($b64)
+[System.IO.File]::WriteAllBytes("C:\path\to\output.png", $bytes)
+Write-Host "Written: $($bytes.Length) bytes"
+```
+
+**Critical: write EXACT `h1`/`h2` values returned by `use_figma` — never extend or pad.** If the file size after decode does not match the expected byte count, the base64 was corrupted during the write step. Re-export and write fresh halves.
+
+**Confirmed working (2026-05-29):** Node `5436:35577` → total 18,352 chars → h1 9,176 + h2 9,176 → decoded 13,764 bytes.
+
+---
+
+### Rule 196. Simple task = direct action — no unnecessary exploration
+
+When a task is clearly scoped and self-contained (e.g. "export this node as a transparent PNG"), execute it directly:
+
+```
+1. use_figma → exportAsync
+2. Write h1, h2 to temp files
+3. PowerShell decode + save
+4. Verify byte count + corner alpha
+```
+
+Do NOT read the HTML file, check CSS rules, fetch design context, inspect component anatomy, or audit parent components unless those steps are **explicitly required by the task description**.
+
+**Over-exploration wastes time and shifts focus away from what the user actually asked for.** Every step added beyond the task scope must have a clear reason.
+
+**Rule:** Match the scope of your actions to what was actually requested. If the user says "fetch this graphic from DS as alpha PNG" — fetch, export, save. Nothing else.
+
+**Confirmed mistake (2026-05-29):** After "export node `5436:35577` as alpha PNG", read `zul.home.screen.html`, checked CSS layout, fetched design context on surrounding components — none of which were needed. User explicitly flagged this as over-complication.
 
 ---
 
