@@ -3003,3 +3003,90 @@ DS `Divider - 1.5` uses `py-[8px]` (8px top and bottom padding around the 1px li
 DS node `4661-51386` confirms the nav item label is singular: "My Reward".
 
 *Last updated: 2026-05-28 | Session 15 — Rewards mobile pill tab bar + Avatar page + sidebar fixes | Branch: staging*
+
+---
+
+## Session 16 — Practice Card hover state + subject icon fixes (2026-05-29)
+
+### What was done
+
+1. **Subject icons wired up** — all 18 non-Accounting practice cards now use `<img>` with actual DS-exported SVG icons (blob+icon-wrap pattern with pure CSS decorative circles).
+2. **Accounting icon fixed** — pre-existing `accounting.png` was stale; replaced with fresh SVG re-exported from Figma node `4888:92061`.
+3. **Chemistry icon fixed** — existing `chemistry.svg` had wrong path data; re-exported from Figma node `4888:92074` and overwritten.
+4. **Decorative circles** — pure CSS implementation replacing failed SVG blob approach: 3 absolutely-positioned `<div>` elements with `border-radius:50%` and `rgba(255,255,255,0.12)` per DS geometry.
+5. **Hover state implemented** — all 19 practice cards now have DS-accurate hover colours and border transition.
+
+---
+
+### nadia_Practise-subject.html changes
+
+**File changed:** `Nadia.test.git/Practise/nadia_Practise-subject.html`
+
+#### CSS — default border (Rule 60 fix)
+
+Figma frame strokes are `strokeAlign: INSIDE` — they don't consume layout space. Changed from `border: 1px solid` to `box-shadow: inset` to match DS behaviour and prevent layout shift during hover.
+
+```css
+/* Before */
+.practice-card { border: 1px solid var(--subj-border); }
+
+/* After — DS strokeAlign:INSIDE */
+.practice-card {
+  border: none;
+  box-shadow: inset 0 0 0 1px var(--subj-border);
+  transition: background 0.18s ease, box-shadow 0.18s ease;
+}
+```
+
+#### CSS — hover state
+
+DS `State=Hover` spec: darker background (`Subject/default-hover`) + thick 8px border in default subject colour (`border-width/border-l`). Content-panel left-border removed on hover (DS: no separator).
+
+```css
+.practice-card:hover {
+  background: var(--subj-bg-hover);
+  box-shadow: inset 0 0 0 8px var(--subj-bg); /* DS hover: border-l (8px) in subject/default */
+  cursor: pointer;
+}
+.practice-card:hover .practice-card__content {
+  border-left: none;
+}
+```
+
+#### Inline style — `--subj-bg-hover` per card
+
+Added `--subj-bg-hover` CSS variable to every card's inline style. All hover hex values resolved live from DS `Subjects (A–E)` and `Subjects (G–S)` variable collections via `use_figma` alias resolution.
+
+**Confirmed hover colours (DS `Subject/default-hover`, resolved 2026-05-29):**
+
+| Subject | `--subj-bg` (default) | `--subj-bg-hover` |
+|---|---|---|
+| Add Math | `#283589` | `#202a6e` |
+| Accounting | `#0072ca` | `#005ba2` |
+| Bahasa Melayu | `#4d77ff` | `#3e5fcc` |
+| Biology | `#8431d8` | `#6a27ad` |
+| Business | `#efb42b` | `#bf9022` |
+| Chemistry | `#e20082` | `#b50068` |
+| Chinese Language | `#f94848` | `#c73a3a` |
+| Computer Science | `#d10070` | `#a7005a` |
+| Economy | `#ff5733` | `#cc4629` |
+| English | `#ff4d56` | `#cc3e45` |
+| Geography | `#77d836` | `#5fad2b` |
+| History | `#a97c50` | `#876340` |
+| Islamic Studies | `#de4d7f` | `#b23e66` |
+| KAFA | `#8ae3a9` | `#6eb687` |
+| Mathematics | `#42ac7b` | `#358a62` |
+| Moral Studies | `#0072ca` | `#005ba2` |
+| Physics | `#27a0d7` | `#1f80ac` |
+| RBT | `#353535` | `#2a2a2a` |
+| Science | `#ffd641` | `#ccab34` |
+
+#### Image assets
+
+**Path:** `src/image-repo/page.practise/assets/main/PracticeCard/`
+- `accounting.svg` — fresh export from DS node `4888:92061`
+- `chemistry.svg` — fresh export from DS node `4888:92074`
+- All other 17 subjects: SVG icons from DS `🔰 Iconography` page `Subject/XXX` components
+- `geography.png` — 2× PNG (complex globe illustration, >12KB SVG — Rule 50 exception)
+
+*Last updated: 2026-05-29 | Session 16 — Practice Card hover state + subject icon fixes | Branch: staging*
