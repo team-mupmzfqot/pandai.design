@@ -1827,24 +1827,157 @@ All 5 states: `w:20 h:20`, `padding:2px`, `strokeAlign: INSIDE`. State changes =
 
 ---
 
-### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-19)
+### 61. Always sync shared components FROM `zul.page.template.html` BEFORE starting any Syakila page work
 
-**Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision. No exceptions.
+`zul.page.template.html` is the **canonical source** for all shared navigation components (Navbar Primary, NavTopMenu, NavBar-Mobile, NavMenu-Tablet, NavMenu-Mobile, Footer, all dropdowns, all JS handlers). Zul's template receives updates first — Syakila pages must pull those updates before any session-specific work begins.
 
-```
-0a. Read design-md/zul.design.md       → ALL rules 1–118, confirmed specs, known mistakes
-0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs
-0c. get_design_context on COMPONENT SET → list ALL variant names
-0d. get_design_context on EACH state   → extract every token BEFORE writing CSS
-0e. get_variable_defs on sub-nodes     → confirm Semantic tokens
-0f. use_figma raw node inspection      → confirm exact padding, strokeAlign, width, height
-0g. exportAsync SVG_STRING for icons   → check size before PNG vs symbol decision
-0h. get_screenshot after implement     → compare against DS, fix before moving on
-```
+**Mandatory pre-session sync checklist:**
+1. `git log --oneline -- "zul.test.git/zul.page.template.html"` → check if any commits are newer than the last Syakila page sync
+2. `git diff <last-sync-sha>..HEAD -- "zul.test.git/zul.page.template.html"` → read the full diff
+3. For each changed shared section (CSS `:root`, shared classes, HTML components, JS handlers) — apply the equivalent change to EVERY Syakila `.html` file
+4. After syncing, verify with `grep` that key anchors match between template and Syakila pages
+
+**Shared sections that must always stay in sync (both files):**
+- `:root` CSS variables (tokens, layout vars)
+- `html`, `body`, `main`, `.page-container`, `.main-content` layout chain
+- `.num-badge` CSS (including `transition` + `#notif-btn.is-active` opacity rule)
+- Notification dropdown CSS (`.notif-item`, `.notif-item__content`, `.notif-item__body`, `.notif-dropdown__footer`, `.notif-see-all`, indicator dot)
+- Nav menu accordion CSS (`.nav-menu-submenu`, `.nav-menu-item.has-submenu.is-open`, `margin-top` trick)
+- NavMenu-Tablet HTML (all `has-submenu` items + submenu divs: Class, Learn, Achievement, Potential, Rewards)
+- NavMenu-Mobile HTML (same items with `submenu-m-*` IDs)
+- Notification dropdown JS IIFE (full read/dismiss interaction — see Rule 62)
+- Tablet accordion JS IIFE + Mobile accordion JS IIFE (see Rule 63)
+- Image paths (`../src/image-repo/page.template/assets/main/...`)
+
+**Mistake made (2026-05-29):** Applied 5 previous sessions of template updates to `learningHub.html` in one batch because the sync was never done incrementally. Cost: full audit + manual edit of every shared section. Prevention: sync after every template commit, not after many.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-19 (Rule 60 / zul Rule 118 — strokeAlign:INSIDE=box-shadow:inset, raw use_figma inspection required for exact dimensions, Secondary/M arrow confirmed 20×20 padding:2px all states) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 62. Notification dropdown — full read/dismiss JS interaction pattern
+
+The notification dropdown requires a **two-click dismiss pattern** per item, not a simple close-on-click. This is the canonical JS block — always use this exact pattern, never simplify it.
+
+**Click 1 → mark read (hide unread dot):**
+```js
+item.classList.add('is-read');  // CSS: .notif-item.is-read .notif-item__indicator { opacity: 0; pointer-events: none; }
+```
+
+**Click 2 → collapse and remove item:**
+```js
+item.style.transition    = 'max-height 0.3s ease, opacity 0.2s ease';
+item.style.maxHeight     = item.scrollHeight + 'px';
+item.getBoundingClientRect();   // MANDATORY — flushes layout so transition fires
+item.style.maxHeight     = '0';
+item.style.opacity       = '0';
+item.style.pointerEvents = 'none';
+dismissedCount++;
+if (dismissedCount >= notifItems.length) dropdown.classList.add('is-empty');
+```
+
+**`getBoundingClientRect()` flush is mandatory** — without it the browser batches both `maxHeight` assignments and no transition fires (the item disappears instantly).
+
+**Reset on ALL close paths (both `mouseleave` AND outside-click):**
+```js
+dismissedCount = 0;
+dropdown.classList.remove('is-empty');
+notifItems.forEach(function (item) {
+  item.dataset.clicks      = '0';
+  item.classList.remove('is-read');
+  item.style.transition    = 'none';
+  item.style.maxHeight     = '';
+  item.style.opacity       = '';
+  item.style.pointerEvents = '';
+  requestAnimationFrame(function () { item.style.transition = ''; });
+});
+```
+
+`requestAnimationFrame` after resetting `transition: none` ensures the `none` takes effect before the next paint, so the instant reset doesn't interfere with future transitions.
+
+**Required CSS for the two-click pattern to work:**
+- `.notif-item { overflow: hidden; }` — needed for `max-height` collapse to clip content
+- `.notif-dropdown__footer { transition: padding-top 0.3s ease; }` — smooth footer adjustment
+- `.notif-dropdown.is-empty .notif-dropdown__footer { padding-top: 0; }` — removes gap when all items gone
+- `#notif-btn.is-active .num-badge { opacity: 0; }` — hides counter badge while dropdown is open
+
+**Mistake made (2026-05-29):** `learningHub.html` had only the simple `mouseleave → close` and `outside-click → close` handlers. The full read/dismiss interaction block was never applied. The CSS rules for `is-read`, `is-empty`, and `overflow: hidden` were present but the JS to drive them was missing — so the CSS was dead code.
+
+---
+
+### 63. Nav menu accordion — expandable submenu pattern (tablet + mobile)
+
+Both `#NavMenu-Tablet` and `#NavMenu-Mobile` have expandable sub-menus for Class, Learn, Achievement, Potential, and Rewards. Each requires matching HTML, CSS, and a dedicated JS IIFE.
+
+**HTML pattern — flat siblings (no wrapper divs):**
+```html
+<!-- Trigger -->
+<div class="nav-menu-item has-submenu" role="button" tabindex="0"
+     aria-label="Learn" aria-expanded="false" data-submenu="submenu-learn">
+  <span class="nav-menu-item__icon">...</span>
+  <span class="nav-menu-check" aria-hidden="true">...</span>
+  <span class="nav-menu-item__label">Learn</span>
+  <span class="nav-menu-item__arrow">...</span>
+</div>
+<!-- Submenu — direct sibling, NOT wrapped -->
+<div class="nav-menu-submenu" id="submenu-learn" aria-hidden="true">
+  <div class="nav-menu-item" role="button" tabindex="-1" ...>...</div>
+  ...
+</div>
+```
+
+**ID convention:**
+- Tablet: `submenu-class`, `submenu-learn`, `submenu-achievement`, `submenu-potential`, `submenu-rewards`
+- Mobile: `submenu-m-class`, `submenu-m-learn`, `submenu-m-achievement`, `submenu-m-potential`, `submenu-m-rewards`
+
+**CSS — `margin-top: -8px` trick (phantom gap cancellation):**
+```css
+.nav-menu-submenu {
+  max-height: 0; overflow: hidden;
+  margin-top: calc(-1 * var(--spacing-space-xs));   /* -8px cancels phantom flex gap when closed */
+  transition: max-height 0.2s ease, margin-top 0.2s ease;
+}
+.nav-menu-submenu.is-open { max-height: 500px; margin-top: 0; }   /* restore gap when open */
+#NavMenu-Mobile .nav-menu-submenu.is-open { max-height: 800px; margin-top: 0; padding-bottom: var(--spacing-space-m); }
+```
+
+**JS — each menu (tablet / mobile) gets its own IIFE with:**
+- `closeAllSubmenus()` — runs `cancelAutoCollapse()` first, then closes all open submenus
+- `startAutoCollapse()` — 5s timer; cancelled on each new open
+- `MutationObserver` watching `aria-hidden` on the panel → calls `closeAllSubmenus()` when panel hides
+- Mobile only: `adjustVisibleItems()` called 220ms after open — hides top items (Home/Quiz/Battle/Practice) one-by-one until `content.scrollHeight ≤ 800px`
+
+**Tablet IIFE inserted BEFORE the hamburger toggle IIFE.**
+**Mobile IIFE inserted AFTER the mobile menu close IIFE, before the maximize IIFE.**
+
+**Mistake made (2026-05-29):** `learningHub.html` had the accordion CSS (`.nav-menu-submenu`, `.has-submenu.is-open`) and `#NavMenu-Mobile .nav-menu-submenu` overrides already applied, but the HTML items still lacked `has-submenu` class, `data-submenu` attributes, and the submenu divs — and both JS IIFEs were entirely missing. CSS without JS = no accordion behaviour.
+
+---
+
+### Mandatory workflow — BEFORE every session, every change, every decision (updated 2026-05-29)
+
+> **"Always before starting any design, making any changes, or making any decisions — refer to DS 1.5 and syakila.design.md first."**
+
+**Step 0 (mandatory, no exceptions):**
+
+```
+□ 0a. Read design-md/syakila.design.md   → ALL rules 1–63, confirmed specs, known mistakes
+□ 0b. Read design-md/zul.design.md       → Rules 1–192+, confirmed specs — syakila inherits ALL zul rules
+□ 0c. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT prior notes, NOT docs
+□ 0d. Sync check (Rule 61): git log --oneline -- zul.test.git/zul.page.template.html
+       → if any commit is newer than last Syakila sync → apply diff to ALL Syakila pages FIRST
+□ 0e. get_design_context on COMPONENT SET → list ALL variant names before writing any CSS
+□ 0f. get_design_context on EACH state   → extract every token BEFORE writing any CSS
+□ 0g. use_figma raw node inspection      → confirm exact padding, strokeAlign, width, height
+□ 0h. get_variable_defs on sub-nodes     → confirm Semantic token per fill/stroke/spacing
+□ 0i. Cross-check CSS var against :root  → never guess hex from token name
+□ 0j. get_screenshot after implement     → compare against DS, fix before moving on
+□ 0k. After any fix — grep for same class in ALL Syakila .html files and sync (Rule 184 / zul)
+```
+
+**Never carry forward a radius, color, spacing, or JS pattern from a prior session without re-verifying live in DS and both .md files.** Values change. Use memory as context, not ground truth.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-29 (Rules 61–63 — template sync protocol, notification read/dismiss JS pattern, nav menu accordion HTML+JS) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
 
 
 ---
@@ -1861,9 +1994,12 @@ All 5 states: `w:20 h:20`, `padding:2px`, `strokeAlign: INSIDE`. State changes =
 
 ## Canonical template rule
 
-`scoreCard.html` is the canonical navbar/menubar template for all Achievement pages.
+`zul.page.template.html` is the **master template** for all shared navigation shell components (Navbar, NavMenu, dropdowns, Footer, JS handlers). All Syakila pages sync FROM it — never the other way around. See Rule 61 for the sync protocol.
+
+`scoreCard.html` is the canonical navbar/menubar template for all Achievement pages within the Syakila scope.
 `syakila.html` is the home/welcome screen — it uses a different, simpler navbar.
 `AnalysisCard.html` must copy navbar/menubar CSS, HTML, and JS exactly from `scoreCard.html`.
+`learningHub.html` is the Learning Hub page — syncs shared components from `zul.page.template.html`, adds page-specific Learning Hub content (accordion filter panels, content grid).
 
 ---
 
