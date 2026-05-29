@@ -3172,3 +3172,35 @@ Moved all three symbols back inside the `<defs>` block, before its `</defs>` clo
 `ic-file-text` (Topical Test) and `ic-battle` (Practice Exam) were already correctly inside `<defs>`. Only the symbols added after the defs block was accidentally closed were broken: `ic-file` (Flashcard), `ic-video`, and `ic-corner-down-right`.
 
 *Last updated: 2026-05-29 | Session 18 — Fix missing flashcard icon | Branch: staging*
+
+---
+
+## Session 19 — Decorative circle scale animation on hover (2026-05-29)
+
+**File changed:** `Nadia.test.git/Practise/nadia_Practise-subject.html`
+
+### DS reference
+
+- Default state (node `2339:4824`): blob `mask-size: 160×160px` — contained within 160px image panel
+- Hover state (node `4945:75075`): blob `mask-size: 417×160px` — ~2.6× wider, extending beyond panel
+
+### Implementation
+
+Added smooth scale transition to `.practice-card__circles` triggered by card hover:
+
+```css
+.practice-card__circles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform-origin: left center;   /* grow from the left side of the image panel */
+  transition: transform 0.3s ease;
+}
+.practice-card:hover .practice-card__circles {
+  transform: scale(1.4);           /* approximates DS 160→417px blob expansion */
+}
+```
+
+`transform-origin: left center` ensures the circles expand outward from the left edge, matching the DS blob's left-anchored growth behaviour. Scale 1.4 gives a clearly visible expansion without over-exaggerating — the DS ratio (~2.6×) applies to the mask area, not the circles themselves.
+
+*Last updated: 2026-05-29 | Session 19 — Circle scale animation on hover | Branch: staging*

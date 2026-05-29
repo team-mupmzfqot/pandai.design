@@ -2076,6 +2076,11 @@
       position: absolute;
       inset: 0;
       pointer-events: none;
+      transform-origin: left center;
+      transition: transform 0.3s ease;
+    }
+    .practice-card:hover .practice-card__circles {
+      transform: scale(1.4);
     }
     .practice-card__circle {
       position: absolute;
