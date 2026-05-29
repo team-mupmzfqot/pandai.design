@@ -33,6 +33,8 @@
       --surface-general-default-secondary: #f2f2f2;  /* Surface/general/default-secondary — carousel indicator inactive dot */
       --surface-tertiary-default:        #00564c;   /* Surface/tertiary/default — pressed state bg */
       --surface-informative-default:     #00a2e8;   /* Surface/informative/default — Icon Badge - 1.5 (DS node 3908:1491) */
+      --secondary-50:                    #f6fef6;   /* Secondary/50 — empty state bg (DS node 3420:205916) */
+      --icon-success-default:            #18c964;   /* Icon/success/default — empty state icon stroke (DS node 3420:205916) */
 
       /* Border */
 
@@ -2343,30 +2345,32 @@
       flex-direction:  column;
       align-items:     center;
       justify-content: center;
-      gap:             var(--spacing-space-m);
-      background:      #f6fef6;
-      border:          1px solid var(--border-primary-default);
-      border-radius:   var(--corner-radius-corner-4xl);
+      gap:             var(--spacing-space-m);        /* Spacing/space-m = 16px */
+      background:      var(--secondary-50);           /* Secondary/50 = #f6fef6 */
+      box-shadow:      inset 0 0 0 1px var(--border-primary-default); /* Border/default #00cc85, strokeAlign INSIDE */
+      border-radius:   var(--corner-radius-corner-4xl); /* Corner-4XL = 24px */
       padding:         var(--spacing-space-m);
       flex:            1;
     }
     .practice-empty-state.is-visible { display: flex; }
 
+    /* Icon/image — 108×108 container, inner vector 81×81 (12.5% inset), stroke = Icon/success/default */
     .practice-empty-state__icon {
       width:       108px;
       height:      108px;
-      padding:     13.5px; /* 12.5% of 108px — DS inset */
+      padding:     13.5px; /* 12.5% of 108px = DS confirmed inset */
       box-sizing:  border-box;
       flex-shrink: 0;
-      color:       var(--surface-primary-default); /* green icon stroke */
+      color:       var(--icon-success-default); /* Icon/success/default = #18c964 */
     }
     .practice-empty-state__icon svg { width: 100%; height: 100%; display: block; }
 
     .practice-empty-state__label {
+      font-family: 'Poppins', sans-serif;  /* Header/H3 */
       font-size:   24px;
       font-weight: 500;
       line-height: 36px;
-      color:       var(--text-default-body); /* #666666 */
+      color:       var(--text-default-body); /* Text/default/body = #666666 */
       text-align:  center;
     }
 
