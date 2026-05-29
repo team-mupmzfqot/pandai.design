@@ -2158,6 +2158,8 @@
       align-items: center;
       flex-shrink: 0;
       color:       var(--icon-default-default);
+      cursor:      pointer;
+      user-select: none;
     }
     .sidebar-scrollbar__up svg,
     .sidebar-scrollbar__down svg { width: 6px; height: 6px; display: block; }
@@ -2177,7 +2179,10 @@
       background:    var(--surface-primary-default);
       border-radius: 999px;
       transition:    top 0.05s linear;
+      cursor:        grab;
+      user-select:   none;
     }
+    .sidebar-scrollbar__thumb:active { cursor: grabbing; }
 
     /* Search input — DS Input Field 1.5 style */
     .learn-search {
@@ -2274,14 +2279,13 @@
 
     /* Dropdown List - 1.5 box — DS node 5215:122545: white, r=20, pad=16, gap=8 */
     .dropdown-list {
-      background:      var(--surface-general-default);
-      border:          1px solid var(--border-general-default);
-      border-radius:   20px;
-      padding:         var(--spacing-space-m);
-      display:         flex;
-      flex-direction:  column;
-      gap:             8px;
-      overflow-y:      auto;
+      background:     var(--surface-general-default);
+      border:         1px solid var(--border-general-default);
+      border-radius:  20px;
+      padding:        var(--spacing-space-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            8px;
     }
 
     /* Filter item — DS Dropdown - Parts: gap=8px, py=8px px=16px, border:1px transparent, pill radius */
@@ -5299,6 +5303,60 @@
 
       if (sidebarContent) {
         sidebarContent.addEventListener('scroll', updateScrollThumb);
+      }
+
+      /* Custom scrollbar interactions */
+      var scrollUp   = document.querySelector('.sidebar-scrollbar__up');
+      var scrollDown = document.querySelector('.sidebar-scrollbar__down');
+
+      if (scrollUp && sidebarContent) {
+        scrollUp.addEventListener('click', function() {
+          sidebarContent.scrollBy({ top: -80, behavior: 'smooth' });
+        });
+      }
+      if (scrollDown && sidebarContent) {
+        scrollDown.addEventListener('click', function() {
+          sidebarContent.scrollBy({ top: 80, behavior: 'smooth' });
+        });
+      }
+
+      /* Track click — jump to position */
+      if (scrollTrack && sidebarContent && scrollThumb) {
+        scrollTrack.addEventListener('click', function(e) {
+          if (e.target === scrollThumb) return; /* ignore thumb clicks */
+          var trackRect  = scrollTrack.getBoundingClientRect();
+          var clickRatio = (e.clientY - trackRect.top - scrollThumb.offsetHeight / 2) /
+                           (scrollTrack.clientHeight - scrollThumb.offsetHeight);
+          clickRatio = Math.max(0, Math.min(1, clickRatio));
+          sidebarContent.scrollTop = clickRatio *
+            (sidebarContent.scrollHeight - sidebarContent.clientHeight);
+        });
+      }
+
+      /* Thumb drag */
+      if (scrollThumb && scrollTrack && sidebarContent) {
+        var isDragging    = false;
+        var dragStartY    = 0;
+        var dragStartTop  = 0;
+
+        scrollThumb.addEventListener('mousedown', function(e) {
+          isDragging   = true;
+          dragStartY   = e.clientY;
+          dragStartTop = parseFloat(scrollThumb.style.top) || 0;
+          e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', function(e) {
+          if (!isDragging) return;
+          var delta     = e.clientY - dragStartY;
+          var trackH    = scrollTrack.clientHeight - scrollThumb.offsetHeight;
+          var newTop    = Math.max(0, Math.min(trackH, dragStartTop + delta));
+          var ratio     = trackH > 0 ? newTop / trackH : 0;
+          sidebarContent.scrollTop = ratio *
+            (sidebarContent.scrollHeight - sidebarContent.clientHeight);
+        });
+
+        document.addEventListener('mouseup', function() { isDragging = false; });
       }
 
       /* Accordion toggle */
