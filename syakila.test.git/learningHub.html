@@ -2307,8 +2307,8 @@
     .practice-card-grid {
       flex:            1;
       min-width:       0;
-      background:      var(--surface-general-default);   /* white — DS Surface/general/default */
-      border:          1px solid var(--border-general-default);   /* #d9d9d9 — DS Border/general/default */
+      background:      var(--surface-secondary-default-subtle);   /* #e8fbe8 — DS Surface/secondary/default-subtle */
+      border:          1px solid var(--border-primary-default);   /* #00cc85 — DS Border/default */
       border-radius:   var(--corner-radius-corner-4xl);   /* 24px */
       padding:         var(--spacing-space-m);   /* 16px */
       display:         flex;
@@ -2413,12 +2413,13 @@
       gap:             0;
     }
 
-    /* Inner group: title + stats */
+    /* Inner group: title + label */
     .practice-card__inner {
       display:        flex;
       flex-direction: column;
       gap:            4px;
       width:          100%;
+      flex-shrink:    0;
     }
 
     /* Subject title — DS: Poppins Bold 24px, lh 36px */
@@ -2475,8 +2476,8 @@
       white-space: nowrap;
     }
 
-    /* Start button — DS: white bg, pill, h=32 */
-    .practice-card__cta { display: flex; align-items: flex-end; justify-content: flex-end; }
+    /* Start button — DS: white bg, pill, h=32; flex:1 pushes button to bottom-right */
+    .practice-card__cta { flex: 1 0 0; min-height: 0; display: flex; align-items: flex-end; justify-content: flex-end; }
     .practice-card__btn {
       display:       inline-flex;
       align-items:   center;
@@ -3778,16 +3779,8 @@
                         <h3 class="practice-card__title">English</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                            <span class="practice-card__stat-label">5 Flashcard</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                            <span class="practice-card__stat-label">5 Topical Test</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                            <span class="practice-card__stat-label">5 Practice Exam</span>
+                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-user"/></svg></span>
+                            <span class="practice-card__stat-label">Year 1</span>
                           </div>
                         </div>
                       </div>
@@ -3820,16 +3813,8 @@
                         <h3 class="practice-card__title">Bahasa Melayu</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                            <span class="practice-card__stat-label">5 Flashcard</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                            <span class="practice-card__stat-label">5 Topical Test</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                            <span class="practice-card__stat-label">5 Practice Exam</span>
+                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-user"/></svg></span>
+                            <span class="practice-card__stat-label">Year 1</span>
                           </div>
                         </div>
                       </div>
@@ -3865,16 +3850,8 @@
                         <h3 class="practice-card__title">Accounting</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                            <span class="practice-card__stat-label">5 Flashcard</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                            <span class="practice-card__stat-label">5 Topical Test</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                            <span class="practice-card__stat-label">5 Practice Exam</span>
+                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-user"/></svg></span>
+                            <span class="practice-card__stat-label">Form 4</span>
                           </div>
                         </div>
                       </div>
@@ -3907,16 +3884,8 @@
                         <h3 class="practice-card__title">Mathematics</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                            <span class="practice-card__stat-label">5 Flashcard</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                            <span class="practice-card__stat-label">5 Topical Test</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                            <span class="practice-card__stat-label">5 Practice Exam</span>
+                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-user"/></svg></span>
+                            <span class="practice-card__stat-label">Form 5</span>
                           </div>
                         </div>
                       </div>
@@ -3952,16 +3921,8 @@
                         <h3 class="practice-card__title">Biology</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                            <span class="practice-card__stat-label">5 Flashcard</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                            <span class="practice-card__stat-label">5 Topical Test</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                            <span class="practice-card__stat-label">5 Practice Exam</span>
+                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-user"/></svg></span>
+                            <span class="practice-card__stat-label">Form 4</span>
                           </div>
                         </div>
                       </div>
@@ -3994,16 +3955,8 @@
                         <h3 class="practice-card__title">Chemistry</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                            <span class="practice-card__stat-label">5 Flashcard</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                            <span class="practice-card__stat-label">5 Topical Test</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                            <span class="practice-card__stat-label">5 Practice Exam</span>
+                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-user"/></svg></span>
+                            <span class="practice-card__stat-label">Form 4</span>
                           </div>
                         </div>
                       </div>
@@ -4039,16 +3992,8 @@
                         <h3 class="practice-card__title">Physics</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                            <span class="practice-card__stat-label">5 Flashcard</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                            <span class="practice-card__stat-label">5 Topical Test</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                            <span class="practice-card__stat-label">5 Practice Exam</span>
+                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-user"/></svg></span>
+                            <span class="practice-card__stat-label">Form 4</span>
                           </div>
                         </div>
                       </div>
@@ -4081,16 +4026,8 @@
                         <h3 class="practice-card__title">Computer Science</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                            <span class="practice-card__stat-label">5 Flashcard</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                            <span class="practice-card__stat-label">5 Topical Test</span>
-                          </div>
-                          <div class="practice-card__stat">
-                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                            <span class="practice-card__stat-label">5 Practice Exam</span>
+                            <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-user"/></svg></span>
+                            <span class="practice-card__stat-label">Form 4</span>
                           </div>
                         </div>
                       </div>
