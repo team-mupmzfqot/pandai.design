@@ -2336,185 +2336,137 @@
     }
 
     /* Practice Card - 1.5 — DS node 2339:4823
-       Sourced from Nadia.test.git/Practise/nadia_Practise-subject.html */
+       Fetched from Nadia.test.git/Practise/nadia_Practise-subject.html */
     .practice-card {
-      flex:          1 1 0;
-      min-width:     0;
-      display:       flex;
-      align-items:   stretch;
-      border:        1px solid var(--subj-border);
-      border-radius: var(--corner-radius-corner-4xl);   /* 24px */
-      overflow:      hidden;
-      background:    var(--subj-bg);
-      height:        160px;
-      cursor:        default;
-      transition:    background 0.18s ease, border-color 0.15s ease;
+      display: flex;
+      align-items: stretch;
+      position: relative;
+      border: none;
+      box-shadow: inset 0 0 0 1px var(--subj-border);
+      border-radius: 24px;
+      overflow: hidden;
+      background: var(--subj-bg);
+      height: 160px;
+      cursor: default;
+      transition: background 0.18s ease, box-shadow 0.18s ease;
     }
     .practice-card:hover {
-      background:   var(--subj-bg-hover);
-      border:       8px solid var(--subj-bg);
-      cursor:       pointer;
+      background: var(--subj-bg-hover);
+      box-shadow: inset 0 0 0 8px var(--subj-bg);
+      cursor: pointer;
     }
     .practice-card:hover .practice-card__content { border-left: none; }
 
-    /* Left image panel — 160×160 */
-    .practice-card__image {
-      width:            160px;
-      min-width:        160px;
-      flex-shrink:      0;
-      display:          flex;
-      align-items:      center;
-      justify-content:  center;
-      position:         relative;
-      overflow:         hidden;
-    }
-
-    /* 3 decorative circles — sourced from DS Practice Card - 1.5 */
+    /* Decorative circles — direct child of card, covers full card width on hover */
     .practice-card__circles {
-      position:       absolute;
-      inset:          0;
+      position: absolute;
+      inset: 0;
       pointer-events: none;
+      transform-origin: left center;
+      transition: transform 0.3s ease;
     }
+    .practice-card:hover .practice-card__circles { transform: scale(1.4); }
     .practice-card__circle {
-      position:      absolute;
+      position: absolute;
       border-radius: 50%;
-      background:    rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.12);
     }
-    .practice-card__circle--1 { width:  50px; height:  50px; top: -17px; left: -11px; }
-    .practice-card__circle--2 { width:  85px; height:  85px; top:  14px; left:  64px; }
+    .practice-card__circle--1 { width: 50px;  height: 50px;  top: -17px; left: -11px; }
+    .practice-card__circle--2 { width: 85px;  height: 85px;  top:  14px; left:  64px; }
     .practice-card__circle--3 { width: 184px; height: 184px; top:  68px; left: -92px; }
 
-    /* Icon wrap — 100×100 clip */
+    /* Left image panel */
+    .practice-card__image {
+      width: 160px;
+      min-width: 160px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
     .practice-card__icon-wrap {
-      position:    relative;
-      width:       100px;
-      height:      100px;
-      overflow:    hidden;
-      z-index:     1;
+      position: relative;
+      width: 100px;
+      height: 100px;
+      overflow: hidden;
+      z-index: 1;
       flex-shrink: 0;
     }
     .practice-card__icon-img {
-      width:      100%;
-      height:     100%;
-      display:    block;
+      width: 100%;
+      height: 100%;
+      display: block;
       object-fit: contain;
     }
 
     /* Right content panel */
     .practice-card__content {
-      flex:            1 0 0;
-      min-width:       0;
-      border-left:     1px solid var(--subj-bg);
-      padding:         var(--spacing-space-m);   /* 16px */
-      display:         flex;
-      flex-direction:  column;
-      justify-content: center;
-      gap:             0;
-    }
-
-    /* Inner group: title + label */
-    .practice-card__inner {
-      display:        flex;
+      flex: 1;
+      min-width: 0;
+      border-left: 1px solid var(--subj-bg);
+      padding: 16px;
+      display: flex;
       flex-direction: column;
-      gap:            4px;
-      width:          100%;
-      flex-shrink:    0;
+      justify-content: center;
+      gap: 0;
     }
-    .practice-card__badge-slot { height: 24px; flex-shrink: 0; }
-
-    /* Subject title — DS: Poppins Bold 24px, lh 36px */
+    .practice-card__inner {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 100%;
+    }
     .practice-card__title {
-      font-size:     24px;
-      font-weight:   700;
-      line-height:   36px;
-      color:         var(--subj-title, white);
-      overflow:      hidden;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 36px;
+      color: var(--subj-title, white);
+      overflow: hidden;
       text-overflow: ellipsis;
-      white-space:   nowrap;
-      width:         100%;
-      margin:        0;
+      white-space: nowrap;
+      width: 100%;
+      margin: 0;
     }
-
-    /* Stats row — Flashcard / Topical Test / Practice Exam */
     .practice-card__stats {
-      display:        flex;
+      display: flex;
       flex-direction: row;
-      flex-wrap:      wrap;
-      gap:            0 8px;
-      align-items:    flex-start;
-      width:          100%;
+      flex-wrap: wrap;
+      gap: 0 8px;
+      align-items: flex-start;
+      width: 100%;
     }
     .practice-card__stat {
-      display:     inline-flex;
+      display: inline-flex;
       align-items: center;
-      gap:         2px;
-      min-height:  24px;
+      gap: 2px;
+      min-height: 24px;
       flex-shrink: 0;
     }
     .practice-card__stat-icon {
-      width:           24px;
-      height:          24px;
-      display:         flex;
-      align-items:     center;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
       justify-content: center;
-      flex-shrink:     0;
+      flex-shrink: 0;
     }
     .practice-card__stat-icon svg {
-      width:   20px;
-      height:  20px;
+      width: 20px;
+      height: 20px;
       display: block;
-      color:   var(--subj-text, white);
+      color: var(--subj-text, white);
     }
     .practice-card__stat-label {
-      height:      24px;
-      display:     flex;
+      height: 24px;
+      display: flex;
       align-items: center;
-      font-size:   14px;
+      font-size: 14px;
       font-weight: 400;
       line-height: 20px;
-      color:       var(--subj-text, white);
+      color: var(--subj-text, white);
       white-space: nowrap;
     }
-
-    /* Start button — DS: white bg, pill, h=32; flex:1 pushes button to bottom-right */
-    .practice-card__cta { flex: 1 0 0; min-height: 0; display: flex; align-items: flex-end; justify-content: flex-end; }
-    .practice-card__btn {
-      display:       inline-flex;
-      align-items:   center;
-      height:        32px;
-      padding:       2px var(--spacing-space-xs);
-      background:    var(--surface-general-default);
-      border:        none;
-      border-radius: var(--corner-radius-corner-rounded);
-      cursor:        pointer;
-      user-select:   none;
-      gap:           0;
-      transition:    background 0.12s ease;
-    }
-    .practice-card__btn:hover  { background: #b5f291; }
-    .practice-card__btn:hover  .practice-card__btn-label { color: var(--border-primary-focus); }
-    .practice-card__btn:hover  .practice-card__btn-arrow { color: var(--border-primary-focus); }
-    .practice-card__btn:active { background: var(--surface-tertiary-default); }
-    .practice-card__btn:active .practice-card__btn-label { color: var(--text-primary-default); }
-    .practice-card__btn:active .practice-card__btn-arrow { color: var(--text-primary-default); }
-    .practice-card__btn-label {
-      padding:     0 4px;
-      font-size:   12px;
-      font-weight: 600;
-      line-height: 20px;
-      color:       var(--text-default-body);
-      white-space: nowrap;
-    }
-    .practice-card__btn-arrow {
-      width:           16px;
-      height:          16px;
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      flex-shrink:     0;
-      color:           var(--icon-primary-default);
-    }
-    .practice-card__btn-arrow svg { width: 16px; height: 16px; display: block; }
 
     /* ── Responsive ── */
     @media (max-width: 1279px) {
@@ -3762,13 +3714,13 @@
                 <!-- Row 1: English / Bahasa Melayu -->
                 <div class="practice-cards-row">
                   <article class="practice-card" role="listitem"
-                    style="--subj-bg:#ff4d56;--subj-border:#cc3e45;--subj-title:#ffeaeb;--subj-bg-hover:#cc3e45">
-                    <div class="practice-card__image" aria-hidden="true">
-                      <div class="practice-card__circles">
-                        <div class="practice-card__circle practice-card__circle--1"></div>
-                        <div class="practice-card__circle practice-card__circle--2"></div>
-                        <div class="practice-card__circle practice-card__circle--3"></div>
-                      </div>
+                    style="--subj-bg:#ff4d56;--subj-border:#992e34;--subj-bg-hover:#cc3e45">
+                    <div class="practice-card__circles" aria-hidden="true">
+                      <div class="practice-card__circle practice-card__circle--1"></div>
+                      <div class="practice-card__circle practice-card__circle--2"></div>
+                      <div class="practice-card__circle practice-card__circle--3"></div>
+                    </div>
+                    <div class="practice-card__image">
                       <div class="practice-card__icon-wrap">
                         <img src="../src/image-repo/page.practise/assets/main/PracticeCard/english.svg"
                              alt="" width="100" height="100" class="practice-card__icon-img">
@@ -3776,7 +3728,6 @@
                     </div>
                     <div class="practice-card__content">
                       <div class="practice-card__inner">
-                        <div class="practice-card__badge-slot"></div>
                         <h3 class="practice-card__title">English</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
@@ -3785,25 +3736,17 @@
                           </div>
                         </div>
                       </div>
-                      <div class="practice-card__cta">
-                        <button class="practice-card__btn" type="button" aria-label="Start English">
-                          <span class="practice-card__btn-label">Start</span>
-                          <span class="practice-card__btn-arrow" aria-hidden="true">
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                          </span>
-                        </button>
-                      </div>
                     </div>
                   </article>
 
                   <article class="practice-card" role="listitem"
-                    style="--subj-bg:#4d77ff;--subj-border:#2e4799;--subj-title:#eef0ff;--subj-bg-hover:#2e4799">
-                    <div class="practice-card__image" aria-hidden="true">
-                      <div class="practice-card__circles">
-                        <div class="practice-card__circle practice-card__circle--1"></div>
-                        <div class="practice-card__circle practice-card__circle--2"></div>
-                        <div class="practice-card__circle practice-card__circle--3"></div>
-                      </div>
+                    style="--subj-bg:#4d77ff;--subj-border:#2e4799;--subj-bg-hover:#3e5fcc">
+                    <div class="practice-card__circles" aria-hidden="true">
+                      <div class="practice-card__circle practice-card__circle--1"></div>
+                      <div class="practice-card__circle practice-card__circle--2"></div>
+                      <div class="practice-card__circle practice-card__circle--3"></div>
+                    </div>
+                    <div class="practice-card__image">
                       <div class="practice-card__icon-wrap">
                         <img src="../src/image-repo/page.practise/assets/main/PracticeCard/bahasa-melayu.svg"
                              alt="" width="100" height="100" class="practice-card__icon-img">
@@ -3811,7 +3754,6 @@
                     </div>
                     <div class="practice-card__content">
                       <div class="practice-card__inner">
-                        <div class="practice-card__badge-slot"></div>
                         <h3 class="practice-card__title">Bahasa Melayu</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
@@ -3819,14 +3761,6 @@
                             <span class="practice-card__stat-label">Year 1</span>
                           </div>
                         </div>
-                      </div>
-                      <div class="practice-card__cta">
-                        <button class="practice-card__btn" type="button" aria-label="Start Bahasa Melayu">
-                          <span class="practice-card__btn-label">Start</span>
-                          <span class="practice-card__btn-arrow" aria-hidden="true">
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                          </span>
-                        </button>
                       </div>
                     </div>
                   </article>
@@ -3836,12 +3770,12 @@
                 <div class="practice-cards-row">
                   <article class="practice-card" role="listitem"
                     style="--subj-bg:#0072ca;--subj-border:#004479;--subj-title:#e6f1fa;--subj-bg-hover:#005ba2">
-                    <div class="practice-card__image" aria-hidden="true">
-                      <div class="practice-card__circles">
-                        <div class="practice-card__circle practice-card__circle--1"></div>
-                        <div class="practice-card__circle practice-card__circle--2"></div>
-                        <div class="practice-card__circle practice-card__circle--3"></div>
-                      </div>
+                    <div class="practice-card__circles" aria-hidden="true">
+                      <div class="practice-card__circle practice-card__circle--1"></div>
+                      <div class="practice-card__circle practice-card__circle--2"></div>
+                      <div class="practice-card__circle practice-card__circle--3"></div>
+                    </div>
+                    <div class="practice-card__image">
                       <div class="practice-card__icon-wrap">
                         <img src="../src/image-repo/page.practise/assets/main/PracticeCard/accounting.svg"
                              alt="" width="100" height="100" class="practice-card__icon-img">
@@ -3849,7 +3783,6 @@
                     </div>
                     <div class="practice-card__content">
                       <div class="practice-card__inner">
-                        <div class="practice-card__badge-slot"></div>
                         <h3 class="practice-card__title">Accounting</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
@@ -3858,25 +3791,17 @@
                           </div>
                         </div>
                       </div>
-                      <div class="practice-card__cta">
-                        <button class="practice-card__btn" type="button" aria-label="Start Accounting">
-                          <span class="practice-card__btn-label">Start</span>
-                          <span class="practice-card__btn-arrow" aria-hidden="true">
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                          </span>
-                        </button>
-                      </div>
                     </div>
                   </article>
 
                   <article class="practice-card" role="listitem"
-                    style="--subj-bg:#42ac7b;--subj-border:#358a62;--subj-title:#eaf6f0;--subj-bg-hover:#358a62">
-                    <div class="practice-card__image" aria-hidden="true">
-                      <div class="practice-card__circles">
-                        <div class="practice-card__circle practice-card__circle--1"></div>
-                        <div class="practice-card__circle practice-card__circle--2"></div>
-                        <div class="practice-card__circle practice-card__circle--3"></div>
-                      </div>
+                    style="--subj-bg:#42ac7b;--subj-border:#28674a;--subj-bg-hover:#358a62">
+                    <div class="practice-card__circles" aria-hidden="true">
+                      <div class="practice-card__circle practice-card__circle--1"></div>
+                      <div class="practice-card__circle practice-card__circle--2"></div>
+                      <div class="practice-card__circle practice-card__circle--3"></div>
+                    </div>
+                    <div class="practice-card__image">
                       <div class="practice-card__icon-wrap">
                         <img src="../src/image-repo/page.practise/assets/main/PracticeCard/mathematics.svg"
                              alt="" width="100" height="100" class="practice-card__icon-img">
@@ -3884,7 +3809,6 @@
                     </div>
                     <div class="practice-card__content">
                       <div class="practice-card__inner">
-                        <div class="practice-card__badge-slot"></div>
                         <h3 class="practice-card__title">Mathematics</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
@@ -3893,14 +3817,6 @@
                           </div>
                         </div>
                       </div>
-                      <div class="practice-card__cta">
-                        <button class="practice-card__btn" type="button" aria-label="Start Mathematics">
-                          <span class="practice-card__btn-label">Start</span>
-                          <span class="practice-card__btn-arrow" aria-hidden="true">
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                          </span>
-                        </button>
-                      </div>
                     </div>
                   </article>
                 </div><!-- end row 2 -->
@@ -3908,13 +3824,13 @@
                 <!-- Row 3: Biology / Chemistry -->
                 <div class="practice-cards-row">
                   <article class="practice-card" role="listitem"
-                    style="--subj-bg:#8431d8;--subj-border:#6a27ad;--subj-title:#f3e9fc;--subj-bg-hover:#6a27ad">
-                    <div class="practice-card__image" aria-hidden="true">
-                      <div class="practice-card__circles">
-                        <div class="practice-card__circle practice-card__circle--1"></div>
-                        <div class="practice-card__circle practice-card__circle--2"></div>
-                        <div class="practice-card__circle practice-card__circle--3"></div>
-                      </div>
+                    style="--subj-bg:#8431d8;--subj-border:#4f1d82;--subj-bg-hover:#6a27ad">
+                    <div class="practice-card__circles" aria-hidden="true">
+                      <div class="practice-card__circle practice-card__circle--1"></div>
+                      <div class="practice-card__circle practice-card__circle--2"></div>
+                      <div class="practice-card__circle practice-card__circle--3"></div>
+                    </div>
+                    <div class="practice-card__image">
                       <div class="practice-card__icon-wrap">
                         <img src="../src/image-repo/page.practise/assets/main/PracticeCard/biology.svg"
                              alt="" width="100" height="100" class="practice-card__icon-img">
@@ -3922,7 +3838,6 @@
                     </div>
                     <div class="practice-card__content">
                       <div class="practice-card__inner">
-                        <div class="practice-card__badge-slot"></div>
                         <h3 class="practice-card__title">Biology</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
@@ -3931,25 +3846,17 @@
                           </div>
                         </div>
                       </div>
-                      <div class="practice-card__cta">
-                        <button class="practice-card__btn" type="button" aria-label="Start Biology">
-                          <span class="practice-card__btn-label">Start</span>
-                          <span class="practice-card__btn-arrow" aria-hidden="true">
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                          </span>
-                        </button>
-                      </div>
                     </div>
                   </article>
 
                   <article class="practice-card" role="listitem"
-                    style="--subj-bg:#e20082;--subj-border:#b50068;--subj-title:#fce6f3;--subj-bg-hover:#b50068">
-                    <div class="practice-card__image" aria-hidden="true">
-                      <div class="practice-card__circles">
-                        <div class="practice-card__circle practice-card__circle--1"></div>
-                        <div class="practice-card__circle practice-card__circle--2"></div>
-                        <div class="practice-card__circle practice-card__circle--3"></div>
-                      </div>
+                    style="--subj-bg:#e20082;--subj-border:#88004e;--subj-bg-hover:#b50068">
+                    <div class="practice-card__circles" aria-hidden="true">
+                      <div class="practice-card__circle practice-card__circle--1"></div>
+                      <div class="practice-card__circle practice-card__circle--2"></div>
+                      <div class="practice-card__circle practice-card__circle--3"></div>
+                    </div>
+                    <div class="practice-card__image">
                       <div class="practice-card__icon-wrap">
                         <img src="../src/image-repo/page.practise/assets/main/PracticeCard/chemistry.svg"
                              alt="" width="100" height="100" class="practice-card__icon-img">
@@ -3957,7 +3864,6 @@
                     </div>
                     <div class="practice-card__content">
                       <div class="practice-card__inner">
-                        <div class="practice-card__badge-slot"></div>
                         <h3 class="practice-card__title">Chemistry</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
@@ -3966,14 +3872,6 @@
                           </div>
                         </div>
                       </div>
-                      <div class="practice-card__cta">
-                        <button class="practice-card__btn" type="button" aria-label="Start Chemistry">
-                          <span class="practice-card__btn-label">Start</span>
-                          <span class="practice-card__btn-arrow" aria-hidden="true">
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                          </span>
-                        </button>
-                      </div>
                     </div>
                   </article>
                 </div><!-- end row 3 -->
@@ -3981,13 +3879,13 @@
                 <!-- Row 4: Physics / Computer Science -->
                 <div class="practice-cards-row">
                   <article class="practice-card" role="listitem"
-                    style="--subj-bg:#27a0d7;--subj-border:#1f80ac;--subj-title:#e6f4fb;--subj-bg-hover:#1f80ac">
-                    <div class="practice-card__image" aria-hidden="true">
-                      <div class="practice-card__circles">
-                        <div class="practice-card__circle practice-card__circle--1"></div>
-                        <div class="practice-card__circle practice-card__circle--2"></div>
-                        <div class="practice-card__circle practice-card__circle--3"></div>
-                      </div>
+                    style="--subj-bg:#27a0d7;--subj-border:#176081;--subj-bg-hover:#1f80ac">
+                    <div class="practice-card__circles" aria-hidden="true">
+                      <div class="practice-card__circle practice-card__circle--1"></div>
+                      <div class="practice-card__circle practice-card__circle--2"></div>
+                      <div class="practice-card__circle practice-card__circle--3"></div>
+                    </div>
+                    <div class="practice-card__image">
                       <div class="practice-card__icon-wrap">
                         <img src="../src/image-repo/page.practise/assets/main/PracticeCard/physics.svg"
                              alt="" width="100" height="100" class="practice-card__icon-img">
@@ -3995,7 +3893,6 @@
                     </div>
                     <div class="practice-card__content">
                       <div class="practice-card__inner">
-                        <div class="practice-card__badge-slot"></div>
                         <h3 class="practice-card__title">Physics</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
@@ -4004,25 +3901,17 @@
                           </div>
                         </div>
                       </div>
-                      <div class="practice-card__cta">
-                        <button class="practice-card__btn" type="button" aria-label="Start Physics">
-                          <span class="practice-card__btn-label">Start</span>
-                          <span class="practice-card__btn-arrow" aria-hidden="true">
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                          </span>
-                        </button>
-                      </div>
                     </div>
                   </article>
 
                   <article class="practice-card" role="listitem"
-                    style="--subj-bg:#d10070;--subj-border:#a7005a;--subj-title:#fce6f3;--subj-bg-hover:#a7005a">
-                    <div class="practice-card__image" aria-hidden="true">
-                      <div class="practice-card__circles">
-                        <div class="practice-card__circle practice-card__circle--1"></div>
-                        <div class="practice-card__circle practice-card__circle--2"></div>
-                        <div class="practice-card__circle practice-card__circle--3"></div>
-                      </div>
+                    style="--subj-bg:#d10070;--subj-border:#7d0043;--subj-bg-hover:#a7005a">
+                    <div class="practice-card__circles" aria-hidden="true">
+                      <div class="practice-card__circle practice-card__circle--1"></div>
+                      <div class="practice-card__circle practice-card__circle--2"></div>
+                      <div class="practice-card__circle practice-card__circle--3"></div>
+                    </div>
+                    <div class="practice-card__image">
                       <div class="practice-card__icon-wrap">
                         <img src="../src/image-repo/page.practise/assets/main/PracticeCard/computer-science.svg"
                              alt="" width="100" height="100" class="practice-card__icon-img">
@@ -4030,7 +3919,6 @@
                     </div>
                     <div class="practice-card__content">
                       <div class="practice-card__inner">
-                        <div class="practice-card__badge-slot"></div>
                         <h3 class="practice-card__title">Computer Science</h3>
                         <div class="practice-card__stats">
                           <div class="practice-card__stat">
@@ -4038,14 +3926,6 @@
                             <span class="practice-card__stat-label">Form 4</span>
                           </div>
                         </div>
-                      </div>
-                      <div class="practice-card__cta">
-                        <button class="practice-card__btn" type="button" aria-label="Start Computer Science">
-                          <span class="practice-card__btn-label">Start</span>
-                          <span class="practice-card__btn-arrow" aria-hidden="true">
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                          </span>
-                        </button>
                       </div>
                     </div>
                   </article>
