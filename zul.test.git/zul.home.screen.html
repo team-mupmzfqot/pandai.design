@@ -576,13 +576,13 @@
       flex-direction:  row;
       align-items:     center;
       justify-content: flex-end;
-      gap:             var(--spacing-space-m);   /* 16px — DS Spacing/component/md */
+      gap:             0;   /* DS: 0 — visual separation comes from 28px column padding only */
     }
 
     /* Variant backgrounds (DS node 5176:77365 — Primary/Secondary=butter/400, Tertiary=no fill) */
     .static-card--primary .static-card__content   { background: var(--butter-400); }
     .static-card--secondary .static-card__content { background: var(--surface-secondary-default-hover); }   /* Surface/secondary/default-hover #f6fef6 — DS node 5176:77367 */
-    .static-card--tertiary .static-card__content   { background: var(--surface-subtle); }
+    .static-card--tertiary .static-card__content   { background: none; }   /* DS: IMAGE fill — set background-image when asset is ready */
     .static-card--fortiary .static-card__content   { background: var(--azure-100); }     /* Azure/100 #d5edfb — DS node 5351:6457, no gradient on right-col */
 
     /* Full-card background image — Tertiary only (DS: absolute inset-0 object-cover) */
@@ -609,15 +609,16 @@
     }
     .static-card__deco img { display: block; width: 100%; height: 100%; }
 
-    /* Left image/illustration column — DS: layoutMode VERTICAL, HUG width, FILL height, crossAlign:MIN */
+    /* Left image/illustration column — DS: layoutMode VERTICAL, szH FILL, szV HUG (186px), crossAlign:MIN */
+    /* szH FILL → flex:1 0 0 (equal split with right-col); szV HUG → align-self:center (centred in 220px card) */
     .static-card__img-col {
       display:         flex;
       flex-direction:  column;
       align-items:     flex-start;
       justify-content: center;
-      flex-shrink:     0;
+      flex:            1 0 0;   /* szH: FILL — equal 50% column split, confirmed DS audit 2026-05-29 */
       overflow:        hidden;
-      align-self:      stretch;
+      align-self:      center;  /* szV: HUG + parent crossAlign:CENTER → centred at 186px in 220px card */
       padding:         28px;   /* DS: Spacing/component/2xl = 28px all sides */
       position:        relative;
       z-index:         1;
@@ -639,7 +640,8 @@
       object-fit: contain;
     }
 
-    /* Right column — texts + button (DS: szV FILL → align-self:stretch, gradient per variant) */
+    /* Right column — texts + button (DS: szH FILL, szV FILL, mainAlign:MIN, crossAlign:MAX) */
+    /* justify-content:flex-start — CTA is szV:FILL so it fills remaining space, button bottom via CTA mA:MAX */
     .static-card__right {
       flex:            1 0 0;
       min-width:       0;
@@ -647,8 +649,8 @@
       display:         flex;
       flex-direction:  column;
       align-items:     flex-end;
-      justify-content: space-between;   /* Texts top, CTA always bottom-right */
-      gap:             var(--spacing-space-s);   /* 12px */
+      justify-content: flex-start;   /* DS: mA:MIN — CTA fills remaining height, pushes button to bottom */
+      gap:             var(--spacing-space-s);   /* 12px — Texts internal gap between title + desc */
       padding:         28px;   /* DS: Spacing/component/2xl = 28px all sides */
       position:        relative;
       z-index:         1;
@@ -682,16 +684,15 @@
       width:          100%;
     }
 
-    /* CTA wrapper — DS node 5347:6418/6452/6456, new in DS 2026-05-28 */
+    /* CTA wrapper — DS node 5347:6418/6452/6456: szV FILL inside right-col → flex:1 0 0, button bottom via mA:MAX */
     .static-card__cta {
       display:         flex;
       flex-direction:  column;
       align-items:     flex-end;
       justify-content: flex-end;
       width:           100%;
-      flex-shrink:     0;
+      flex:            1 0 0;   /* szV: FILL — fills remaining space in right-col so button anchors to bottom */
     }
-    .static-card--secondary .static-card__cta { height: 32px; }   /* DS node 5347:6452: h-[32px] */
 
     .static-card__title {
       font-size:   18px;
@@ -4491,7 +4492,7 @@
               </div>
               <div class="static-card__img-col">
                 <div class="static-card__illustration">
-                  <img src="assets/static-card/illustration.svg" alt="">
+                  <img src="assets/static-card/illustration-livetuition.png" alt="Graphic/P.LiveTuition">
                 </div>
               </div>
               <div class="static-card__right">

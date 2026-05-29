@@ -6630,14 +6630,14 @@ When a Figma auto-layout parent has `crossAlign: CENTER` (`align-items: center`)
 
 ---
 
-### Rule 168. Static Card - 1.5 — full confirmed DS specs (updated 2026-05-27)
+### Rule 168. Static Card - 1.5 — full confirmed DS specs (updated 2026-05-29)
 
 **DS file:** `TLVKe3bgJTdVvuPAzgDq2f`, `⚙️ Cards` page, component set `Static Card - 1.5`.
 
-**Card outer:** `height: 220px`, `border: 1px solid #00cc85`, `border-radius: 24px`, `overflow: hidden`, `display: flex`, `background: white`.
+**Card outer:** `height: 220px`, `border: 1px solid #00cc85` (strokeAlign INSIDE), `border-radius: 24px`, `overflow: hidden`, `display: flex`, `background: white`.
 
-**Content frame (outer, node `2616:2959`):**
-- `layoutMode: HORIZONTAL`, `gap: 12px`
+**Content frame (outer — same node as card outer):**
+- `layoutMode: HORIZONTAL`, **`gap: 0`** ← was 12px, corrected 2026-05-29
 - `align-items: center` (crossAlign: CENTER), `justify-content: flex-end` (mainAlign: MAX)
 - `padding: 0` — all padding lives in the child columns
 
@@ -6645,33 +6645,35 @@ When a Figma auto-layout parent has `crossAlign: CENTER` (`align-items: center`)
 
 **Image column (`Vector` frame):**
 - `layoutMode: VERTICAL` → CSS: `flex-direction: column`
-- `szH: HUG` → width determined by content + padding
-- `szV: FILL` → `align-self: stretch`
-- `padding: t:60 r:0 b:60 l:28` (user-adjusted left from DS 60px → 28px for 3-col prototype layout)
+- **`szH: FILL`** → `flex: 1 0 0` (equal 50% column split with right-col) ← was HUG, corrected 2026-05-29
+- **`szV: HUG`** → `align-self: center; height: auto` (hugs at 186px = 130px + 28+28 padding, centred in 220px card) ← was FILL, corrected 2026-05-29
+- `padding: 28px` all sides (DS: Spacing/component/2xl)
 - `align-items: flex-start` (crossAlign: MIN), `justify-content: center` (mainAlign: CENTER)
 
 **Illustration (inside img-col):**
-- `szH: FIXED` → `width: 100px`
-- `szV: FILL` → `flex: 1 0 0; min-height: 1px` (fills 220−60−60 = 100px)
+- `szH: FILL` with `maxWidth: 130` → `width: 130px; max-width: 130px; flex: none` (see Rule 186 for full spec)
+- `szV: FIXED` → `height: 130px; max-height: 130px`
 - `overflow: hidden`; image inside: `width: 100%; height: 100%; object-fit: contain`
 
 **Right column (`Content` frame, inner):**
 - `szH: FILL` → `flex: 1 0 0; min-width: 0`
 - `szV: FILL` → `align-self: stretch`
-- `layoutMode: VERTICAL`, `align-items: flex-end` (crossAlign: MAX), `justify-content: center` (mainAlign: CENTER)
-- `gap: 12px`
-- Padding (user-adjusted from DS 60px → 28px for prototype):
-  - Primary / Tertiary: `padding-right: 28px`
-  - Secondary: `padding: 0 28px`
-- Per-variant gradient (DS update applied by user 2026-05-27):
+- `layoutMode: VERTICAL`, `align-items: flex-end` (crossAlign: MAX)
+- **`justify-content: flex-start`** (mainAlign: MIN) ← was CENTER, corrected 2026-05-29
+- `gap: 16px` (Spacing/component/md)
+- `padding: 28px` all sides (DS: Spacing/component/2xl)
+- Per-variant gradient (DS confirmed):
   - Primary: `linear-gradient(to right, rgba(255,255,201,0) 0%, var(--accents-butter) 40%)`
   - Secondary: `linear-gradient(to right, rgba(246,254,246,0) 0%, var(--surface-secondary-default-hover) 39.9%)`
   - Tertiary: no gradient
 
+**CTA frame (inside right-col):**
+- `szV: FILL` → `flex: 1 0 0` — fills remaining height so button anchors to bottom via own `justify-content: flex-end`
+
 **Variant backgrounds (on content frame):**
 - Primary: `background: var(--butter-400)` = `#ffffd4`
 - Secondary: `background: var(--surface-secondary-default-hover)` = `#f6fef6`
-- Tertiary: `background: var(--surface-subtle)` = `#F8FAFC`
+- **Tertiary: `fills: IMAGE`** ← was `#F8FAFC` solid, changed to IMAGE fill in DS, corrected 2026-05-29. CSS: `background: none` + `background-image` when asset is ready.
 
 **New CSS variable:**
 ```css
@@ -6680,16 +6682,18 @@ When a Figma auto-layout parent has `crossAlign: CENTER` (`align-items: center`)
 
 **Mobile overrides (`@media (max-width: 767px)`):**
 ```css
-.static-card__img-col                       { padding: 16px 0 16px 16px; }
-.static-card--primary   .static-card__right { padding-right: 16px; }
-.static-card--secondary .static-card__right { padding: 0 16px; }
-.static-card--tertiary  .static-card__right { padding-right: 16px; }
+.static-card__img-col  { padding: 14px; }
+.static-card__right    { padding: 14px; }
 ```
 
-**Mistakes made (2026-05-27):**
-1. Set `flex-direction: row` (default) on img-col — DS is VERTICAL. `flex: 1 0 0` on illustration grew horizontally without bound. Fix: `flex-direction: column` on img-col.
+**Mistakes made (2026-05-27 → 2026-05-29):**
+1. Set `flex-direction: row` (default) on img-col — DS is VERTICAL. Fix: `flex-direction: column`.
 2. Did not add `align-self: stretch` on right-col — parent `align-items: center` prevented gradient from filling full card height.
-3. Used 60px padding throughout — prototype uses 28px left/right for better proportions in 3-column grid.
+3. `gap: 12px` on content frame — DS is `0`. Visual separation comes entirely from 28px column padding.
+4. `szH: HUG` on img-col — DS is FILL. Both columns split width equally (`flex: 1 0 0`).
+5. `szV: FILL` on img-col — DS is HUG. img-col centres vertically at 186px; use `align-self: center`.
+6. `justify-content: center` on right-col — DS is MIN (flex-start). CTA fills remaining space via `flex: 1 0 0`.
+7. `background: var(--surface-subtle)` on Tertiary — DS now uses IMAGE fill, not a solid colour.
 
 ---
 
@@ -7481,7 +7485,8 @@ This is a hard rule without exceptions. Every mistake documented in Rules 1–19
 □ 6. get_variable_defs on sub-nodes → confirm Semantic token per fill/stroke/spacing
 □ 7. Cross-check CSS var against :root hex → never guess token from name alone (Rules 83, 191)
 □ 8. For icons: confirm viewBox + path scale + CSS dimensions all consistent (Rule 87)
-□ 9. get_screenshot after implementing → compare against DS, fix before moving on
+□ 9. Post-implementation QA only — see Rule 193: get_screenshot is FORBIDDEN for spec extraction.
+      If anything looks wrong, go back to steps 3–8 (node data), not the screenshot.
 ```
 
 **What to NEVER do:**
@@ -7490,6 +7495,7 @@ This is a hard rule without exceptions. Every mistake documented in Rules 1–19
 - Use `--radius-xl` (8px) for Primary Card inner — it is the Nav Button radius (Rule 190)
 - Guess token px value from suffix alone — Primitive `xl` ≠ Product `XL` in the corner radius scale (Rule 191)
 - Approximate any hover/pressed/active state — always pull via `get_design_context` on the COMPONENT_SET
+- **Use `get_screenshot` to determine any design value — this is now prohibited (Rule 193)**
 
 **When the user reports a value is wrong:**
 1. Immediately open DS (`TLVKe3bgJTdVvuPAzgDq2f`) and run `get_design_context` on the exact node
@@ -7499,4 +7505,83 @@ This is a hard rule without exceptions. Every mistake documented in Rules 1–19
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-28 (Rules 185–189 — DS size class vs instance size, get_design_context available-space limitation, instance vs master component, Static Card illustration corrected to 130×130px) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 193. Screenshots are PROHIBITED for spec extraction — use DS node inspection only (Dev Mode equivalent)
+
+> **"Stop using screenshots and instead pull component design nodes from Figma DS, fetch 1:1 from there. Understand Component Instances, Variants, and properties accurately. Always capture nodes in Dev Mode."**
+> — Explicit user instruction, 2026-05-29
+
+`get_screenshot` returns a rasterised image — pixel colours on a screen. It does **not** contain:
+- Semantic variable names (`Surface/primary/default`, `Border/tertiary/focus`, …)
+- Exact padding, gap, or `strokeAlign` values
+- Corner radius token paths
+- Font weight, line-height, or letter-spacing details
+- Whether a value is variable-bound or hardcoded
+
+**Using a screenshot to determine any design value is identical to guessing.** Every mistake documented in Rules 1–192 that came from "approximating" a value ultimately traces back to reading a visual instead of reading node data.
+
+---
+
+#### Mandatory node inspection sequence — what to use instead of screenshots
+
+| Information needed | Tool + call |
+|---|---|
+| Component variants and layout | `get_design_context(nodeId)` on the **COMPONENT_SET** node |
+| State tokens (hover, pressed, active, disabled) | `get_design_context(nodeId)` on each **STATE VARIANT** node |
+| Semantic variable name per fill/stroke/spacing | `get_variable_defs(nodeId)` on the **exact sub-node** |
+| Raw dimensions, padding, strokeAlign, radius px | `use_figma` → `findOne(n => n.id === 'nodeId')` → read `.paddingTop/Right/Bottom/Left`, `.strokeAlign`, `.strokeWeight`, `.cornerRadius`, `.width`, `.height` |
+| Layout direction and sizing mode | `use_figma` → `.layoutMode` (`VERTICAL`/`HORIZONTAL`/`NONE`), `.primaryAxisSizingMode`, `.counterAxisSizingMode` |
+| Children order, nesting, visibility | `use_figma` → `.children` array → read `.name`, `.type`, `.visible` per child |
+| Instance vs master dimensions | `use_figma` → query `parent.children[index]` for the INSTANCE node — never the master component (Rule 77) |
+| Variable value → CSS hex | `get_variable_defs` → read `resolvedValue` in the Semantic collection (Light mode) |
+| Icon paths and viewBox | `use_figma` → `exportAsync({ format: 'SVG_STRING' })` on the exact icon node |
+
+**Dev Mode equivalence:** In Figma Dev Mode, you click a node and read all properties from the right panel — padding, fills with variable names, effects, radius. The tools above are the programmatic 1:1 equivalent of Dev Mode. They are exact and authoritative. A screenshot is neither.
+
+---
+
+#### The ONLY permitted use of `get_screenshot`
+
+After implementation is fully coded, call `get_screenshot` on the DS component node as a **final visual sanity check** — confirming overall shape, proportion, and visible structure. This is QA, not spec extraction.
+
+If anything looks wrong at this stage, go back to `get_design_context` / `use_figma` / `get_variable_defs` to diagnose from data — never fix from the screenshot by eyeballing pixel colours or estimating spacing.
+
+---
+
+#### Mistake patterns this rule eliminates
+
+```
+❌ "The screenshot shows the button as dark green so I used #1a6e4a"
+   → Run get_variable_defs on the button node. Read Surface/primary/focus = #00a36a.
+
+❌ "The padding looks like 12px from the screenshot"
+   → Run use_figma → read .paddingLeft. Read the exact px value.
+
+❌ "Hover state appears slightly lighter"
+   → Run get_design_context on the Hover variant node. Read the exact token.
+
+❌ "The border seems thin so I used 1px"
+   → Run use_figma → read .strokeWeight and .strokeAlign. Implement from data.
+
+❌ "I can see the border-radius looks rounded so approximately 16px"
+   → Run use_figma → read .cornerRadius or the bound variable. Read the exact value.
+```
+
+---
+
+#### Summary
+
+```
+get_screenshot     → rasterised visual → FORBIDDEN for spec extraction
+                   → permitted ONLY for post-implementation visual QA
+
+get_design_context → structured component data   → REQUIRED for variants / layout / tokens
+use_figma          → raw node properties (1:1)   → REQUIRED for dimensions / strokeAlign / children
+get_variable_defs  → Semantic variable names      → REQUIRED for token-to-CSS mapping
+exportAsync SVG    → exact icon geometry          → REQUIRED for icon paths / viewBox
+```
+
+**This rule supersedes any prior workflow step that implied using `get_screenshot` for design understanding.** Rule 192 pre-flight step 9 is retained only as post-implementation QA.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-29 (Rule 168 — Static Card DS audit: gap 12→0, img-col szH HUG→FILL, szV FILL→HUG, right-col mA CENTER→MIN, Tertiary bg solid→IMAGE fill) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
