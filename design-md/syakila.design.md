@@ -2695,3 +2695,184 @@ Geography uses **dark text `#478220`** on its light green `#77d836` background. 
 | Science | `#ffd641` | `#998027` |
 
 *Last updated: May 2026 (Session 6)*
+
+---
+
+## Session 8 — Practice Card hover state + Learning Hub grid (2026-05-29)
+
+### Mandatory pre-session rule (reinforced this session)
+
+**Always refer to `design-md/syakila.design.md` AND the live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any changes, or making any decisions — including seemingly small fixes.**
+
+Also always check the canonical reference implementation file (e.g. `Nadia.test.git/Practise/nadia_Practise-subject.html`) before touching any component that was originally ported from it.
+
+---
+
+### 64. Practice Card hover — the visual effect is the circles expanding, not a color change alone
+
+The Practice Card - 1.5 hover state (DS node `2339:4823`) has TWO parts:
+1. **Color change** — `background` shifts to `--subj-bg-hover`, `box-shadow: inset 0 0 0 8px var(--subj-bg)` creates a thick colored inner ring
+2. **Circle animation** — `.practice-card__circles` scales up via `transform: scale(1.4)` from `transform-origin: left center`
+
+Without the circle animation, the hover appears static and dull even if the color is technically correct. The circles ARE the primary visual feedback.
+
+**CSS that must exist:**
+```css
+.practice-card__circles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform-origin: left center;
+  transition: transform 0.3s ease;
+}
+.practice-card:hover .practice-card__circles { transform: scale(1.4); }
+```
+
+**Mistake made:** Hover color changes were applied but `transform: scale(1.4)` was completely missing. User reported "no update" — nothing visible changed.
+
+---
+
+### 65. Practice Card circles — direct child of `<article>`, never inside `__image`
+
+`.practice-card__circles` must be a **direct child of `<article class="practice-card">`**, positioned with `position: absolute; inset: 0` relative to the card.
+
+If placed inside `.practice-card__image` (which is `160px` wide), the circles are clipped to that 160px column — the `scale(1.4)` expansion only covers the image area and the effect is invisible on the content side.
+
+```html
+<!-- CORRECT -->
+<article class="practice-card">
+  <div class="practice-card__circles" aria-hidden="true">...</div>
+  <div class="practice-card__image">...</div>
+  <div class="practice-card__content">...</div>
+</article>
+
+<!-- WRONG — circles scoped to 160px image column -->
+<article class="practice-card">
+  <div class="practice-card__image">
+    <div class="practice-card__circles" aria-hidden="true">...</div>  ← WRONG
+    ...
+  </div>
+  ...
+</article>
+```
+
+**Also required:** `position: relative` on `.practice-card` and **NO** `overflow: hidden` on `.practice-card__image` — circles must escape the image column bounds.
+
+**Mistake made:** Circles were inside `__image`. Moving them to be a direct `<article>` child (with `position: relative` on the card and `position: absolute; inset: 0` on circles) fixed the full-card coverage.
+
+---
+
+### 66. `box-shadow: inset` on a card works when children have no explicit background
+
+When a card uses `box-shadow: inset 0 0 0 Npx var(--color)` for its border/ring, it ONLY shows through if the child elements (`.practice-card__image`, `.practice-card__content`) have no explicit `background` set. The card's own background color shows through transparent children, making the ring visible.
+
+**Rule:** Never set a background on child sections of a practice card — they must remain `background: transparent` (or unset) so the inset box-shadow at the card edges is never obscured.
+
+This is why `box-shadow: inset` works correctly in Nadia's implementation even without `border`.
+
+---
+
+### 67. Always read the canonical reference file before touching a ported component
+
+For any component ported from a Nadia or Zul source file, always re-read the source before making changes:
+
+| Component | Canonical source |
+|---|---|
+| Practice Card - 1.5 | `Nadia.test.git/Practise/nadia_Practise-subject.html` |
+| Quiz Card, Primary Card | `zul.test.git/zul.page.template.html` |
+| Shared nav (Navbar, Footer) | `zul.test.git/zul.page.template.html` |
+
+**Why:** DS `get_design_context` output shows the component schema but not the exact implementation choices (inline-style variables, color values, hover mechanisms). The reference file reflects confirmed, working implementation decisions. Copying from it avoids re-discovering the same specs.
+
+**Mistake made:** Attempted to implement hover from DS `get_design_context` alone — missed `transform: scale(1.4)` and circles placement. Fetching Nadia's file gave the complete working structure in one read.
+
+---
+
+### 68. Practice Card — flex: 1 required so cards fill row width equally
+
+`.practice-card` must have `flex: 1` so two cards in a `.practice-cards-row` share the available width equally.
+
+Without `flex: 1`, cards shrink to content width and leave empty space in the row.
+
+```css
+.practice-card {
+  flex:   1;          /* ← required */
+  height: 160px;
+  ...
+}
+```
+
+---
+
+### 69. Primary Card inner content wrapper — remove white bg + border when cards fill the space
+
+The DS Primary Card - 1.5 (Secondary variant, node `2881:36281`) specifies a white inner content placeholder with `border: 1px solid #00a36a`. This is appropriate when the content area contains mixed elements.
+
+**For the Learning Hub practice card grid:** remove the white background and inner border from `.practice-cards-content` so the practice cards sit directly on the green outer card surface. The white layer adds visual noise and makes the layout feel heavier than necessary.
+
+```css
+/* Remove these two lines from .practice-cards-content: */
+background:  var(--surface-general-default);             /* ← remove */
+box-shadow:  inset 0 0 0 1px var(--border-primary-focus); /* ← remove */
+```
+
+**Confirmed preference:** User requested removal after seeing the rendered output.
+
+---
+
+### Practice Card — confirmed final CSS (2026-05-29)
+
+```css
+.practice-card {
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  border: none;
+  box-shadow: inset 0 0 0 1px var(--subj-border);
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--subj-bg);
+  flex: 1;
+  height: 160px;
+  cursor: default;
+  transition: background 0.18s ease, box-shadow 0.18s ease;
+}
+.practice-card:hover {
+  background: var(--subj-bg-hover);
+  box-shadow: inset 0 0 0 8px var(--subj-bg);
+  cursor: pointer;
+}
+.practice-card:hover .practice-card__content { border-left: none; }
+
+.practice-card__circles {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  transform-origin: left center;
+  transition: transform 0.3s ease;
+}
+.practice-card:hover .practice-card__circles { transform: scale(1.4); }
+
+.practice-card__image {
+  width: 160px; min-width: 160px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  /* NO overflow: hidden — circles are direct card children */
+}
+```
+
+**All 8 card inline style values (confirmed from Nadia source):**
+
+| Subject | `--subj-bg` | `--subj-border` | `--subj-bg-hover` | `--subj-title` |
+|---|---|---|---|---|
+| English | `#ff4d56` | `#992e34` | `#cc3e45` | — |
+| Bahasa Melayu | `#4d77ff` | `#2e4799` | `#3e5fcc` | — |
+| Accounting | `#0072ca` | `#004479` | `#005ba2` | `#e6f1fa` |
+| Mathematics | `#42ac7b` | `#28674a` | `#358a62` | — |
+| Biology | `#8431d8` | `#4f1d82` | `#6a27ad` | — |
+| Chemistry | `#e20082` | `#88004e` | `#b50068` | — |
+| Physics | `#27a0d7` | `#176081` | `#1f80ac` | — |
+| Computer Science | `#d10070` | `#7d0043` | `#a7005a` | — |
+
+`--subj-title` is only set for Accounting (light text on medium-blue bg). All other subjects default to `white`.
+
+*Last updated: 2026-05-29 (Session 8)*
