@@ -1172,7 +1172,7 @@ Implemented profile menu items from the Profile Menu `get_design_context` output
 3.  get_design_context   → pull token bindings, dimensions, structure per variant
 4.  get_variable_defs    → confirm Semantic token names on exact sub-nodes
 5.  Implement            → use only DS-confirmed values, zero assumptions
-6.  Validate             → compare against get_screenshot, fix before moving on
+6.  Validate             → re-run get_design_context / use_figma on the node; get_screenshot for QA only (Rule 193)
 ```
 
 > **Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes — all traceable to not reading zul.design.md and not auditing DS first. A 2-minute inspection always saves more time than the bug it prevents. See Rules 73, 83, 86, 93.
@@ -1310,12 +1310,14 @@ claude mcp add --transport http figma-desktop http://127.0.0.1:3845/mcp
 
 ### Required Claude Code prompt flow for any Figma-driven component
 ```
-1. get_design_context   → structured React + Tailwind representation
-2. get_variable_defs    → extract token names used on the node
-3. get_screenshot       → visual reference
-4. Implement using local token system
-5. Validate against screenshot
+1. get_design_context   → structured component data: variants, layout, token bindings (REQUIRED)
+2. get_variable_defs    → extract exact Semantic variable names per fill/stroke/spacing (REQUIRED)
+3. use_figma            → raw node inspection: padding, strokeAlign, width, height, children (REQUIRED)
+4. Implement using local token system — zero hardcoded values, zero approximations
+5. get_screenshot       → post-implementation QA ONLY — NEVER for spec extraction (Rule 193)
 ```
+
+> **Rule 193 — screenshots are PROHIBITED for spec extraction.** Never use get_screenshot to determine colors, spacing, radius, or any design value. Use get_design_context + use_figma + get_variable_defs for all spec data (1:1 Dev Mode equivalent).
 
 ---
 
@@ -1730,7 +1732,7 @@ This rule was wrong. Multi-color brand icons CAN be SVG symbols using hardcoded 
 3.  get_design_context   → pull token bindings, dimensions, structure per variant
 4.  get_variable_defs    → confirm Semantic token names on exact sub-nodes
 5.  Implement            → use only DS-confirmed values, zero assumptions
-6.  Validate             → compare against get_screenshot, fix before moving on
+6.  Validate             → re-run get_design_context / use_figma on the node; get_screenshot for QA only (Rule 193)
 ```
 
 ---
@@ -1804,7 +1806,8 @@ See `design-md/zul.design.md` Rule 112.
 □ 0f. get_variable_defs on sub-nodes     → confirm Semantic token per fill/stroke/spacing
 □ 0g. Cross-check CSS var against :root  → never guess px from token name (see Rule 191 corner radius trap)
 □ 0h. exportAsync SVG_STRING for icons   → check size before PNG vs symbol decision
-□ 0i. get_screenshot after implement     → compare against DS, fix before moving on
+□ 0i. Post-implementation QA — get_screenshot ONLY after coding is done; NEVER for spec extraction (Rule 193)
+      Any discrepancy found → go back to steps 0c–0g (node data), not the screenshot
 □ 0j. After any fix — grep for same class in BOTH html files and sync (Rule 184)
 ```
 
@@ -1895,7 +1898,8 @@ CSS: `box-shadow: 0 0 0 1px var(--border-on-color)` — no `inset`. Content area
 0e. get_variable_defs on sub-nodes     → confirm Semantic tokens
 0f. use_figma raw node inspection      → confirm exact padding, strokeAlign, width, height
 0g. exportAsync SVG_STRING for icons   → check size before PNG vs symbol decision
-0h. get_screenshot after implement     → compare against DS, fix before moving on
+0h. Post-implementation QA — get_screenshot ONLY after coding is done; NEVER for spec extraction (Rule 193)
+    Any discrepancy found → go back to get_design_context / use_figma / get_variable_defs
 0i. For carousel/slider JS: capture pre-clone anchor BEFORE the loop (Rule 130)
 0j. Re-audit tokens if last audit > 3 days ago (Rule 153) — resolve every variable ID
     to current hex BEFORE writing any CSS. Token values change without notice.
