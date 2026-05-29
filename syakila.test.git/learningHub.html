@@ -2333,6 +2333,9 @@
       flex:            1;
     }
 
+    .practice-card.is-hidden   { display: none; }
+    .practice-cards-row.is-hidden { display: none; }
+
     .practice-cards-row {
       display: flex;
       gap:     var(--spacing-space-m);
@@ -3625,25 +3628,29 @@
                         <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
                         <span class="filter-item__label">Primary School</span>
                       </div>
-                      <div class="filter-item is-selected" role="listitem" tabindex="0" aria-selected="true">
+                      <div class="filter-item is-selected" role="listitem" tabindex="0" aria-selected="true" data-filter="grade" data-value="year-1">
                         <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
                         <span class="filter-item__label">Year 1</span>
                       </div>
-                      <div class="filter-item" role="listitem" tabindex="0">
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="year-2">
                         <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
                         <span class="filter-item__label">Year 2</span>
                       </div>
-                      <div class="filter-item" role="listitem" tabindex="0">
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="year-3">
                         <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
                         <span class="filter-item__label">Year 3</span>
                       </div>
-                      <div class="filter-item" role="listitem" tabindex="0">
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="year-4">
                         <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
                         <span class="filter-item__label">Year 4</span>
                       </div>
-                      <div class="filter-item" role="listitem" tabindex="0">
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="year-5">
                         <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
                         <span class="filter-item__label">Year 5</span>
+                      </div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="year-6">
+                        <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
+                        <span class="filter-item__label">Year 6</span>
                       </div>
                     </div><!-- end Primary School box -->
 
@@ -3653,23 +3660,23 @@
                         <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
                         <span class="filter-item__label">Secondary School</span>
                       </div>
-                      <div class="filter-item" role="listitem" tabindex="0">
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="form-1">
                         <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
                         <span class="filter-item__label">Form 1</span>
                       </div>
-                      <div class="filter-item" role="listitem" tabindex="0">
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="form-2">
                         <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
                         <span class="filter-item__label">Form 2</span>
                       </div>
-                      <div class="filter-item" role="listitem" tabindex="0">
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="form-3">
                         <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
                         <span class="filter-item__label">Form 3</span>
                       </div>
-                      <div class="filter-item is-selected" role="listitem" tabindex="0" aria-selected="true">
+                      <div class="filter-item is-selected" role="listitem" tabindex="0" aria-selected="true" data-filter="grade" data-value="form-4">
                         <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
                         <span class="filter-item__label">Form 4</span>
                       </div>
-                      <div class="filter-item" role="listitem" tabindex="0">
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="form-5">
                         <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
                         <span class="filter-item__label">Form 5</span>
                       </div>
@@ -3691,24 +3698,24 @@
                     <!-- Box: All subjects -->
                     <div class="dropdown-list" role="list" aria-label="Subject options">
                       <div class="filter-item filter-item--main" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">All Subject</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Add Math</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Asas Sains Komputer</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Bahasa Melayu</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Biology</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Chemistry</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Ekonomi</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">English</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Geography</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Mathematics</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Pendidikan Islam</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Pendidikan Moral</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Perniagaan</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Physics</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Prinsip Perakaunan</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Reka Bentuk dan Teknologi</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Sains Komputer</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Science</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Sejarah</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="add-math"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Add Math</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="asas-sains-komputer"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Asas Sains Komputer</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="bahasa-melayu"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Bahasa Melayu</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="biology"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Biology</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="chemistry"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Chemistry</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="ekonomi"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Ekonomi</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="english"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">English</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="geography"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Geography</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="mathematics"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Mathematics</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="pendidikan-islam"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Pendidikan Islam</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="pendidikan-moral"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Pendidikan Moral</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="perniagaan"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Perniagaan</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="physics"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Physics</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="prinsip-perakaunan"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Prinsip Perakaunan</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="rbt"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Reka Bentuk dan Teknologi</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="sains-komputer"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Sains Komputer</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="science"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Science</span></div>
+                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="sejarah"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Sejarah</span></div>
                     </div><!-- end subjects box -->
 
                   </div><!-- end accordion body -->
@@ -3727,6 +3734,7 @@
                 <!-- Row 1: English / Bahasa Melayu -->
                 <div class="practice-cards-row">
                   <article class="practice-card" role="listitem"
+                    data-grade="year-1" data-subject="english"
                     style="--subj-bg:#ff4d56;--subj-border:#992e34;--subj-bg-hover:#cc3e45">
                     <div class="practice-card__circles" aria-hidden="true">
                       <div class="practice-card__circle practice-card__circle--1"></div>
@@ -3753,6 +3761,7 @@
                   </article>
 
                   <article class="practice-card" role="listitem"
+                    data-grade="year-1" data-subject="bahasa-melayu"
                     style="--subj-bg:#4d77ff;--subj-border:#2e4799;--subj-bg-hover:#3e5fcc">
                     <div class="practice-card__circles" aria-hidden="true">
                       <div class="practice-card__circle practice-card__circle--1"></div>
@@ -3782,6 +3791,7 @@
                 <!-- Row 2: Accounting / Mathematics -->
                 <div class="practice-cards-row">
                   <article class="practice-card" role="listitem"
+                    data-grade="form-4" data-subject="prinsip-perakaunan"
                     style="--subj-bg:#0072ca;--subj-border:#004479;--subj-title:#e6f1fa;--subj-bg-hover:#005ba2">
                     <div class="practice-card__circles" aria-hidden="true">
                       <div class="practice-card__circle practice-card__circle--1"></div>
@@ -3808,6 +3818,7 @@
                   </article>
 
                   <article class="practice-card" role="listitem"
+                    data-grade="form-5" data-subject="mathematics"
                     style="--subj-bg:#42ac7b;--subj-border:#28674a;--subj-bg-hover:#358a62">
                     <div class="practice-card__circles" aria-hidden="true">
                       <div class="practice-card__circle practice-card__circle--1"></div>
@@ -3837,6 +3848,7 @@
                 <!-- Row 3: Biology / Chemistry -->
                 <div class="practice-cards-row">
                   <article class="practice-card" role="listitem"
+                    data-grade="form-4" data-subject="biology"
                     style="--subj-bg:#8431d8;--subj-border:#4f1d82;--subj-bg-hover:#6a27ad">
                     <div class="practice-card__circles" aria-hidden="true">
                       <div class="practice-card__circle practice-card__circle--1"></div>
@@ -3863,6 +3875,7 @@
                   </article>
 
                   <article class="practice-card" role="listitem"
+                    data-grade="form-4" data-subject="chemistry"
                     style="--subj-bg:#e20082;--subj-border:#88004e;--subj-bg-hover:#b50068">
                     <div class="practice-card__circles" aria-hidden="true">
                       <div class="practice-card__circle practice-card__circle--1"></div>
@@ -3892,6 +3905,7 @@
                 <!-- Row 4: Physics / Computer Science -->
                 <div class="practice-cards-row">
                   <article class="practice-card" role="listitem"
+                    data-grade="form-4" data-subject="physics"
                     style="--subj-bg:#27a0d7;--subj-border:#176081;--subj-bg-hover:#1f80ac">
                     <div class="practice-card__circles" aria-hidden="true">
                       <div class="practice-card__circle practice-card__circle--1"></div>
@@ -3918,6 +3932,7 @@
                   </article>
 
                   <article class="practice-card" role="listitem"
+                    data-grade="form-4" data-subject="sains-komputer"
                     style="--subj-bg:#d10070;--subj-border:#7d0043;--subj-bg-hover:#a7005a">
                     <div class="practice-card__circles" aria-hidden="true">
                       <div class="practice-card__circle practice-card__circle--1"></div>
@@ -5203,6 +5218,38 @@
   <script>
     /* ── Learning Hub — accordion + filter interactivity ── */
     try {
+      /* ── Filter logic ── */
+      function applyFilters() {
+        /* Collect selected grade values (sub-items only, not main headers) */
+        var grades   = [];
+        var subjects = [];
+        document.querySelectorAll('.filter-item[data-filter="grade"].is-selected').forEach(function(el) {
+          grades.push(el.dataset.value);
+        });
+        document.querySelectorAll('.filter-item[data-filter="subject"].is-selected').forEach(function(el) {
+          subjects.push(el.dataset.value);
+        });
+
+        var noGradeFilter   = grades.length === 0;
+        var noSubjectFilter = subjects.length === 0;
+
+        /* Show/hide each practice card */
+        document.querySelectorAll('.practice-card[data-grade]').forEach(function(card) {
+          var gradeMatch   = noGradeFilter   || grades.indexOf(card.dataset.grade)   !== -1;
+          var subjectMatch = noSubjectFilter || subjects.indexOf(card.dataset.subject) !== -1;
+          card.classList.toggle('is-hidden', !(gradeMatch && subjectMatch));
+        });
+
+        /* Hide rows where every card is hidden */
+        document.querySelectorAll('.practice-cards-row').forEach(function(row) {
+          var visible = row.querySelectorAll('.practice-card:not(.is-hidden)').length > 0;
+          row.classList.toggle('is-hidden', !visible);
+        });
+      }
+
+      /* Run once on load to reflect pre-selected filters (Form 4 + Year 1) */
+      applyFilters();
+
       /* Accordion toggle */
       document.querySelectorAll('.learn-accordion__toggle').forEach(function(btn) {
         btn.addEventListener('click', function() {
@@ -5267,9 +5314,9 @@
           }
         }
 
-        item.addEventListener('click', toggle);
+        item.addEventListener('click', function() { toggle(); applyFilters(); });
         item.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); applyFilters(); }
         });
       });
     } catch(e) { console.warn('Learning Hub init error:', e); }
