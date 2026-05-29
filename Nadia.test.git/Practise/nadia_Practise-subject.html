@@ -2041,6 +2041,7 @@
     .practice-card {
       display: flex;
       align-items: stretch;
+      position: relative;           /* anchor for absolutely-positioned circles */
       border: none;
       box-shadow: inset 0 0 0 1px var(--subj-border); /* DS strokeAlign:INSIDE → box-shadow:inset */
       border-radius: 24px;          /* corner-4xl */
@@ -2068,7 +2069,6 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      overflow: hidden;
     }
 
     /* Decorative circles — pure CSS, positioned to match DS blob geometry */
@@ -2128,6 +2128,7 @@
     .practice-card__content {
       flex: 1;
       min-width: 0;
+      /* no background — card's own background shows through; circles render freely behind */
       /* same-color left border = subtle separator against image panel */
       border-left: 1px solid var(--subj-bg);
       padding: 16px;
@@ -3200,12 +3201,12 @@
 
           <!-- 1 · Add Mathematics (DS 5072:104629) — bg #283589 / border #182052 / text white -->
           <article class="practice-card" style="--subj-bg:#283589;--subj-border:#182052;--subj-bg-hover:#202a6e">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/add-math.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3233,12 +3234,12 @@
 
           <!-- 2 · Accounting (DS 5072:104628) — bg #0072ca / border #004479 / title #e6f1fa / stats white -->
           <article class="practice-card" style="--subj-bg:#0072ca;--subj-border:#004479;--subj-title:#e6f1fa;--subj-bg-hover:#005ba2">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/accounting.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3266,12 +3267,12 @@
 
           <!-- 3 · Bahasa Melayu (DS 5072:104630) — bg #4d77ff / border #2e4799 / text white -->
           <article class="practice-card" style="--subj-bg:#4d77ff;--subj-border:#2e4799;--subj-bg-hover:#3e5fcc">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/bahasa-melayu.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3299,12 +3300,12 @@
 
           <!-- 4 · Biology (DS 5072:104631) — bg #8431d8 / border #4f1d82 / text white -->
           <article class="practice-card" style="--subj-bg:#8431d8;--subj-border:#4f1d82;--subj-bg-hover:#6a27ad">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/biology.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3332,12 +3333,12 @@
 
           <!-- 5 · Business (DS 5072:104632) — bg #efb42b / border #8f6c1a / title+stats #604811 -->
           <article class="practice-card" style="--subj-bg:#efb42b;--subj-border:#8f6c1a;--subj-title:#604811;--subj-text:#604811;--subj-bg-hover:#bf9022">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/business.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3365,12 +3366,12 @@
 
           <!-- 6 · Chemistry (DS 5072:104633) — bg #e20082 / border #88004e / text white -->
           <article class="practice-card" style="--subj-bg:#e20082;--subj-border:#88004e;--subj-bg-hover:#b50068">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/chemistry.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3398,12 +3399,12 @@
 
           <!-- 7 · Chinese Language (DS 5072:104634) — bg #f94848 / border #952b2b / text white -->
           <article class="practice-card" style="--subj-bg:#f94848;--subj-border:#952b2b;--subj-bg-hover:#c73a3a">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/chinese-language.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3431,12 +3432,12 @@
 
           <!-- 8 · Computer Science (DS 5072:104635) — bg #d10070 / border #7d0043 / text white -->
           <article class="practice-card" style="--subj-bg:#d10070;--subj-border:#7d0043;--subj-bg-hover:#a7005a">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/computer-science.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3464,12 +3465,12 @@
 
           <!-- 9 · Economy (DS 5072:104636) — bg #ff5733 / border #99341f / text white -->
           <article class="practice-card" style="--subj-bg:#ff5733;--subj-border:#99341f;--subj-bg-hover:#cc4629">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/economy.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3497,12 +3498,12 @@
 
           <!-- 10 · English (DS 5072:104637) — bg #ff4d56 / border #992e34 / text white -->
           <article class="practice-card" style="--subj-bg:#ff4d56;--subj-border:#992e34;--subj-bg-hover:#cc3e45">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/english.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3530,12 +3531,12 @@
 
           <!-- 11 · Geography (DS 5072:104638) — bg #77d836 / border #478220 / text white -->
           <article class="practice-card" style="--subj-bg:#77d836;--subj-border:#478220;--subj-bg-hover:#5fad2b">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/geography.png" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3563,12 +3564,12 @@
 
           <!-- 12 · History (DS 5072:104639) — bg #a97c50 / border #654a30 / text white -->
           <article class="practice-card" style="--subj-bg:#a97c50;--subj-border:#654a30;--subj-bg-hover:#876340">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/history.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3596,12 +3597,12 @@
 
           <!-- 13 · Islamic Studies (DS 5072:104640) — bg #de4d7f / border #852e4c / text white -->
           <article class="practice-card" style="--subj-bg:#de4d7f;--subj-border:#852e4c;--subj-bg-hover:#b23e66">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/islamic-studies.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3629,12 +3630,12 @@
 
           <!-- 14 · KAFA (DS 5072:104641) — bg #8ae3a9 / border #538865 / title+stats #375b44 -->
           <article class="practice-card" style="--subj-bg:#8ae3a9;--subj-border:#538865;--subj-title:#375b44;--subj-text:#375b44;--subj-bg-hover:#6eb687">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/kafa.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3662,12 +3663,12 @@
 
           <!-- 15 · Mathematics (DS 5072:104642) — bg #42ac7b / border #28674a / text white -->
           <article class="practice-card" style="--subj-bg:#42ac7b;--subj-border:#28674a;--subj-bg-hover:#358a62">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/mathematics.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3695,12 +3696,12 @@
 
           <!-- 16 · Moral Studies (DS 5072:104643) — bg #0072ca / border #004479 / text white -->
           <article class="practice-card" style="--subj-bg:#0072ca;--subj-border:#004479;--subj-bg-hover:#005ba2">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/moral-studies.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3728,12 +3729,12 @@
 
           <!-- 17 · Physics (DS 5072:104644) — bg #27a0d7 / border #176081 / text white -->
           <article class="practice-card" style="--subj-bg:#27a0d7;--subj-border:#176081;--subj-bg-hover:#1f80ac">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/physics.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3761,12 +3762,12 @@
 
           <!-- 18 · RBT (DS 5072:104645) — bg #353535 / border #202020 / text white -->
           <article class="practice-card" style="--subj-bg:#353535;--subj-border:#202020;--subj-bg-hover:#2a2a2a">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/rbt.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
@@ -3794,12 +3795,12 @@
 
           <!-- 19 · Science (DS 5072:104646) — bg #ffd641 / border #998027 / title+stats #66561a -->
           <article class="practice-card" style="--subj-bg:#ffd641;--subj-border:#998027;--subj-title:#66561a;--subj-text:#66561a;--subj-bg-hover:#ccab34">
+            <div class="practice-card__circles" aria-hidden="true">
+              <div class="practice-card__circle practice-card__circle--1"></div>
+              <div class="practice-card__circle practice-card__circle--2"></div>
+              <div class="practice-card__circle practice-card__circle--3"></div>
+            </div>
             <div class="practice-card__image">
-              <div class="practice-card__circles" aria-hidden="true">
-                <div class="practice-card__circle practice-card__circle--1"></div>
-                <div class="practice-card__circle practice-card__circle--2"></div>
-                <div class="practice-card__circle practice-card__circle--3"></div>
-              </div>
               <div class="practice-card__icon-wrap">
                 <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/science.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>

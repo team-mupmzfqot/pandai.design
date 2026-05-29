@@ -3090,3 +3090,54 @@ Added `--subj-bg-hover` CSS variable to every card's inline style. All hover hex
 - `geography.png` — 2× PNG (complex globe illustration, >12KB SVG — Rule 50 exception)
 
 *Last updated: 2026-05-29 | Session 16 — Practice Card hover state + subject icon fixes | Branch: staging*
+
+---
+
+## Session 17 — Practice Card decorative circles layout fix (2026-05-29)
+
+### What was done
+
+Moved the decorative circle divs from inside `.practice-card__image` to the outermost `<article class="practice-card">` container so they are only clipped by the card's own `overflow: hidden` + `border-radius`, not by the responsive image panel.
+
+**File changed:** `Nadia.test.git/Practise/nadia_Practise-subject.html`
+
+---
+
+### Root cause + fix chain
+
+**Original problem:** `.practice-card__circles` was inside `.practice-card__image`. At tablet/mobile breakpoints, `__image` shrinks (160px → 120px → 100px) and its `overflow: hidden` clipped the circles at the panel boundary.
+
+**First fix attempt:** Moved circles to card root, added `position: relative` to `.practice-card`, removed `overflow: hidden` from `__image`. Also added `background: var(--subj-bg)` to `.practice-card__content` to "cover" circles in the text area.
+
+**Why first fix still showed cropping:** The content panel's solid background created the same hard visual edge — now at the image/content boundary instead of the image panel edge.
+
+**Final fix:** Removed `background: var(--subj-bg)` from `.practice-card__content`. The card's own `background: var(--subj-bg)` fills both panels. Circles (`rgba(255,255,255,0.12)`) span the full card freely, clipped only by the card's `overflow: hidden; border-radius: 24px`.
+
+---
+
+### Final CSS state
+
+```css
+.practice-card        { position: relative; overflow: hidden; background: var(--subj-bg); }
+.practice-card__circles  { position: absolute; inset: 0; pointer-events: none; }
+.practice-card__image    { position: relative; /* no overflow:hidden */ }
+.practice-card__content  { /* no background, no position:relative */ border-left: 1px solid var(--subj-bg); }
+```
+
+### HTML structure (all 19 cards)
+
+```html
+<article class="practice-card" style="--subj-bg:…;--subj-border:…;--subj-bg-hover:…">
+  <div class="practice-card__circles" aria-hidden="true">  ← first child of card root
+    <div class="practice-card__circle practice-card__circle--1"></div>
+    <div class="practice-card__circle practice-card__circle--2"></div>
+    <div class="practice-card__circle practice-card__circle--3"></div>
+  </div>
+  <div class="practice-card__image">
+    <div class="practice-card__icon-wrap">…</div>
+  </div>
+  <div class="practice-card__content">…</div>
+</article>
+```
+
+*Last updated: 2026-05-29 | Session 17 — Practice Card decorative circles layout fix | Branch: staging*
