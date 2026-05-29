@@ -1574,10 +1574,13 @@ Badge icon CSS: `width: 16px; height: auto; max-height: 20px` constrains all sub
 
 ---
 
-**Primary Card - 1.5 / Secondary Card variant (node 2881:36272) — confirmed May 2026:**
-- Outer card: `border: 1px solid Border/general/default`, `border-radius: corner-xl`, `background: Surface/general/default`
+**Primary Card - 1.5 / Secondary Card variant (node 2881:36272) — confirmed 2026-05-29:**
+- Outer card: `border: 1px solid Border/default (#00cc85)`, `border-radius: Corner-4XL (24px)` (`Corner Radius/Corner-4XL`, Product → `Radius/4xl`, Semantic), `background: Surface/secondary/default-subtle (#e8fbe8)`, padding `16px`, gap `8px` (flex col)
+- Content Placeholder (node 2881:36281): `background: Surface/general/default (white)`, `border: 1px solid Border/primary/focus (#00a36a)` (`strokeAlign: INSIDE` → use `box-shadow: inset`), **`border-radius: Radius/3xl = 18px`** (`Corner-2XL`, Product → `var(--corner-radius-corner-2xl)`)
 - Content area (`.primary-card__content`): `display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-space-m)`
-- Section header: bookmark icon + title (`H2`) + Button - 1.5 (Secondary/M) with `ic-chevron-btn-m`
+- Section header: bookmark icon + title (Title/T2, 18px SemiBold, `Text/tertiary/default #00564c`) + Button - 1.5 (Secondary/M) with `ic-chevron-btn-m`
+
+**Mistake made:** Inner card radius was `--radius-xl` (8px = `Radius/xl`). DS `get_design_context` on node `2881:36281` confirms `Radius/3xl = 18px`. `--radius-xl = 8px` is the Nav Button - 1.5 radius, not the Primary Card content area.
 
 ---
 
@@ -1786,20 +1789,28 @@ See `design-md/zul.design.md` Rule 112.
 
 ---
 
-### Mandatory workflow — BEFORE every session and every change
+### Mandatory workflow — BEFORE every session, every change, every decision (updated 2026-05-29)
 
-**Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision. No exceptions.
+> **"Always before starting any design, making any changes, or making any decisions — refer to DS and zul.design.md first."**
+
+**Step 0 (mandatory, no exceptions):** Read `design-md/zul.design.md` AND open live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision — including seemingly trivial fixes. Every mistake in this project is traceable to skipping this step.
 
 ```
-0a. Read design-md/zul.design.md       → ALL rules 1–160, confirmed specs, known mistakes
-0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs
-0c. get_design_context on COMPONENT SET → list ALL variant names
-0d. get_design_context on EACH state   → extract every token BEFORE writing CSS
-0e. get_variable_defs on sub-nodes     → confirm Semantic tokens
-0f. Cross-check CSS var against :root  → never guess from token name
-0g. exportAsync SVG_STRING for icons   → check size before PNG vs symbol decision
-0h. get_screenshot after implement     → compare against DS, fix before moving on
+□ 0a. Read design-md/zul.design.md       → ALL rules 1–192+, confirmed specs, known mistakes
+□ 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs, NOT prior notes
+□ 0c. get_design_context on COMPONENT SET → list ALL variant names before touching any CSS
+□ 0d. get_design_context on EACH state   → extract every token BEFORE writing any CSS
+□ 0e. use_figma raw inspection           → confirm exact: padding, strokeAlign, width, height, radius
+□ 0f. get_variable_defs on sub-nodes     → confirm Semantic token per fill/stroke/spacing
+□ 0g. Cross-check CSS var against :root  → never guess px from token name (see Rule 191 corner radius trap)
+□ 0h. exportAsync SVG_STRING for icons   → check size before PNG vs symbol decision
+□ 0i. get_screenshot after implement     → compare against DS, fix before moving on
+□ 0j. After any fix — grep for same class in BOTH html files and sync (Rule 184)
 ```
+
+**Never carry forward a radius, color, or spacing value from a prior session without re-verifying live in DS.** Values change. Use memory as context, not as ground truth.
+
+**See zul.design.md Rule 192 for the full pre-flight checklist.**
 
 ---
 

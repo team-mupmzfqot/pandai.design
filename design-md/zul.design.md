@@ -7389,4 +7389,114 @@ return {
 
 ---
 
+### Rule 190. Primary Card - 1.5 — confirmed full spec (2026-05-29)
+
+All values confirmed via `get_design_context` on node `2881:36272` and `use_figma` variable resolution.
+
+**Component set node:** `2339:5393`. Variants: `Type=Primary Card` (`2339:5394`), `Type=Secondary Card` (`2881:36272`). Prototype uses Secondary Card variant.
+
+**Outer card (node 2881:36272):**
+
+| Property | DS Token | Resolved value | CSS |
+|---|---|---|---|
+| Background | `Surface/secondary/default-subtle` | `#e8fbe8` | `var(--surface-secondary-default-subtle)` |
+| Border | `Border/default`, 1px, `strokeAlign: INSIDE` | `#00cc85` | `box-shadow: inset 0 0 0 1px var(--border-default)` |
+| Border-radius | `Corner Radius/Corner-4XL` (Product) = `Radius/4xl` (Semantic) | **24px** | `var(--corner-radius-corner-4xl)` |
+| Padding | `Spacing/space-m` | 16px all sides | `var(--spacing-space-m)` |
+| Gap | `Spacing/space-xs` | 8px | `var(--spacing-space-xs)` |
+| Layout | flex, column | — | `display:flex; flex-direction:column; align-items:stretch` |
+
+**Section header (node 2881:36273):**
+- Height: 32px, `justify-content: space-between`, `align-items: center`
+- Icon + title left group gap: `Spacing/space-xxs` = 4px
+- Title: Title/T2 — Poppins SemiBold 18px / 28px lh, `Text/tertiary/default` = `#00564c`
+- Top button: Button - 1.5 Secondary/M (node `2881:36280`)
+
+**Content Placeholder — inner white card (node 2881:36281):**
+
+| Property | DS Token | Resolved value | CSS |
+|---|---|---|---|
+| Background | `Surface/general/default` | `white` | `var(--surface-general-default)` |
+| Border | `Border/primary/focus`, 1px, `strokeAlign: INSIDE` | `#00a36a` | `box-shadow: inset 0 0 0 1px var(--border-primary-focus)` |
+| **Border-radius** | `Radius/3xl` (Semantic) = `Corner-2XL` (Product) | **18px** | `var(--corner-radius-corner-2xl)` |
+| Padding | `Spacing/space-m` | 16px all sides | `var(--spacing-space-m)` |
+
+**Mistake made (2026-05-29):** Inner card `border-radius` was coded as `var(--radius-xl)` = **8px** (`Radius/xl`). This is the Nav Button - 1.5 corner radius, not the Primary Card inner card. DS `get_design_context` on node `2881:36281` clearly shows `rounded-[var(--radius/3xl,18px)]`. The `--radius-xl = 8px` comment in `:root` was also incorrectly labelled as "Primary Card content placeholder" — corrected to "Nav Button - 1.5 (44×44 square)".
+
+**Rule:** Never infer inner container radius from memory or prior notes. Always run `get_design_context` on the exact inner node and read the `rounded-[...]` class value.
+
+---
+
+### Rule 191. Full DS corner radius scale — confirmed 2026-05-29
+
+Confirmed via live variable resolution from all three collections (`Primitives`, `Product`, `Semantic`).
+
+| Semantic token | Product token | Primitives token | Resolved px | Used for |
+|---|---|---|---|---|
+| `Radius/xs` | — | `Corner Radius/xs` | 0px | — |
+| — | `Corner-XS` | `Corner Radius/sm` | 2px | — |
+| — | `Corner-S` | `Corner Radius/lg` | 4px | — |
+| `Radius/xl` | `Corner-M` | `Corner Radius/xl` | **8px** | Nav Button - 1.5 (44×44) |
+| — | `Corner-L` | — | 12px | — |
+| `Radius/2xl` | `Corner-XL` | `Corner Radius/xxl` | **16px** | Carousel cards |
+| `Radius/3xl` | `Corner-2XL` | `Corner Radius/xxxl` | **18px** | Primary Card inner (Content Placeholder) |
+| — | `Corner-3XL` | — | 20px | — |
+| `Radius/4xl` | `Corner-4XL` | `Corner Radius/xxxxl` | **24px** | Primary Card outer, Static Card, dropdowns |
+| — | `Corner-5XL` | — | 28px | — |
+| `Radius/full` | `Corner-Rounded` | `Corner Radius/circle` | 60px | Buttons, badges (pill) |
+| `Radius/pill` | `Corner-Pill` | `Corner Radius/pill` | 108px / 999px | Dropdown items, nav items |
+
+**CSS variables in prototype `:root`:**
+```css
+--corner-radius-corner-pill:    999px;   /* Corner-Pill */
+--corner-radius-corner-rounded: 60px;    /* Corner-Rounded / buttons */
+--corner-radius-corner-4xl:     24px;    /* Corner-4XL / Primary Card outer, dropdowns */
+--corner-radius-corner-2xl:     18px;    /* Corner-2XL / Primary Card inner, Carousel */
+--corner-radius-corner-xl:      16px;    /* Corner-XL / Carousel cards */
+--corner-radius-corner-lg:      12px;    /* Corner-L */
+--corner-radius-corner-md:      8px;     /* Corner-M */
+--radius-xl:                    8px;     /* Radius/xl (Semantic) — Nav Button - 1.5 */
+```
+
+**Critical naming trap:** In the Primitives collection, `Corner Radius/xl` = **8px** — NOT 16px. In the Product collection, `Corner-XL` = **16px**. The two scales use the same size suffix for different values. Always state which collection you're referencing. When in doubt, state the resolved px value explicitly.
+
+**Rule:** Before using any radius token, look it up in this table or re-verify live via `use_figma`. Never guess the px value from the token name suffix alone.
+
+---
+
+### Rule 192. Mandatory DS + zul.design.md pre-flight — no exceptions, no shortcuts
+
+> "Always before starting any design, making any changes, or making any decisions — refer to DS and zul.design.md first."
+
+This is a hard rule without exceptions. Every mistake documented in Rules 1–191 happened because this step was skipped or abbreviated.
+
+**Pre-flight checklist (mandatory before ANY design action):**
+
+```
+□ 1. Read zul.design.md — ALL rules 1–192+, confirmed specs, known mistakes
+□ 2. Open DS: TLVKe3bgJTdVvuPAzgDq2f — single source of truth, re-verify every value LIVE
+□ 3. get_design_context on the COMPONENT SET node → list ALL variant names
+□ 4. get_design_context on EACH relevant state → extract every token BEFORE writing CSS
+□ 5. use_figma raw inspection → confirm exact: padding, strokeAlign, width, height, radius
+□ 6. get_variable_defs on sub-nodes → confirm Semantic token per fill/stroke/spacing
+□ 7. Cross-check CSS var against :root hex → never guess token from name alone (Rules 83, 191)
+□ 8. For icons: confirm viewBox + path scale + CSS dimensions all consistent (Rule 87)
+□ 9. get_screenshot after implementing → compare against DS, fix before moving on
+```
+
+**What to NEVER do:**
+- Start implementing from memory or prior session notes without re-verifying live in DS
+- Carry forward a radius, color, or spacing value from a previous session without checking `get_design_context` or `use_figma` on the exact node
+- Use `--radius-xl` (8px) for Primary Card inner — it is the Nav Button radius (Rule 190)
+- Guess token px value from suffix alone — Primitive `xl` ≠ Product `XL` in the corner radius scale (Rule 191)
+- Approximate any hover/pressed/active state — always pull via `get_design_context` on the COMPONENT_SET
+
+**When the user reports a value is wrong:**
+1. Immediately open DS (`TLVKe3bgJTdVvuPAzgDq2f`) and run `get_design_context` on the exact node
+2. Cross-check against every related file: prototype HTML, CLAUDE.md, zul.design.md, design.color.md
+3. Fix all occurrences before reporting done
+4. Document the correction in zul.design.md and update CLAUDE.md
+
+---
+
 *Generated: May 2026 | Last updated: 2026-05-28 (Rules 185–189 — DS size class vs instance size, get_design_context available-space limitation, instance vs master component, Static Card illustration corrected to 130×130px) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
