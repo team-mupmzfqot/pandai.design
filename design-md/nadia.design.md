@@ -3141,3 +3141,34 @@ Moved the decorative circle divs from inside `.practice-card__image` to the oute
 ```
 
 *Last updated: 2026-05-29 | Session 17 — Practice Card decorative circles layout fix | Branch: staging*
+
+---
+
+## Session 18 — Fix missing flashcard icon (`ic-file`) (2026-05-29)
+
+**File changed:** `Nadia.test.git/Practise/nadia_Practise-subject.html`
+
+### Root cause
+
+Three `<symbol>` definitions — `ic-video`, `ic-corner-down-right`, and `ic-file` — were placed **after** the `</defs></svg>` closing tags of the main icon defs block, leaving them outside any SVG element. Browsers cannot resolve `<use href="#ic-file"/>` to a symbol that exists outside an SVG — the element renders as empty. A stray orphaned `</svg>` was also left at the end of those definitions.
+
+### Fix
+
+Moved all three symbols back inside the `<defs>` block, before its `</defs>` close tag, and removed the orphaned `</svg>`. Final structure:
+
+```
+<svg style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    … all other symbols …
+    <symbol id="ic-video"> … </symbol>
+    <symbol id="ic-corner-down-right"> … </symbol>
+    <symbol id="ic-file"> … </symbol>   ← Flashcard stat icon
+  </defs>
+</svg>
+```
+
+### Why only flashcard appeared missing
+
+`ic-file-text` (Topical Test) and `ic-battle` (Practice Exam) were already correctly inside `<defs>`. Only the symbols added after the defs block was accidentally closed were broken: `ic-file` (Flashcard), `ic-video`, and `ic-corner-down-right`.
+
+*Last updated: 2026-05-29 | Session 18 — Fix missing flashcard icon | Branch: staging*
