@@ -2106,14 +2106,77 @@
       min-width:      318px;
       flex-shrink:    0;
       display:        flex;
-      flex-direction: column;
-      gap:            var(--spacing-space-xs);
+      flex-direction: row;
+      gap:            10px;
+      align-items:    stretch;
       background:     var(--surface-general-default);
       border:         1px solid var(--border-general-default);
       border-radius:  var(--corner-radius-corner-4xl);
       padding:        var(--spacing-space-m);
       overflow:       hidden;
       box-sizing:     border-box;
+    }
+
+    /* Scrollable content column — hides native scrollbar */
+    .learn-sidebar__content {
+      flex:            1;
+      min-width:       0;
+      display:         flex;
+      flex-direction:  column;
+      gap:             var(--spacing-space-xs);
+      overflow-y:      auto;
+      scrollbar-width: none;
+    }
+    .learn-sidebar__content::-webkit-scrollbar { display: none; }
+
+    /* Scroll Bar - 1.5 (DS node 5550:91488) — shown only when both accordions are open */
+    .learn-sidebar__scrollbar {
+      display:       none;
+      flex-direction: column;
+      width:          14px;
+      min-width:      14px;
+      background:     var(--surface-general-default);
+      border:         1px solid var(--border-general-default);
+      border-radius:  999px;
+      padding:        4px;
+      box-sizing:     border-box;
+      flex-shrink:    0;
+    }
+    .sidebar--both-open .learn-sidebar__scrollbar { display: flex; }
+
+    .sidebar-scrollbar__content {
+      flex:            1;
+      display:         flex;
+      flex-direction:  column;
+      align-items:     center;
+      justify-content: space-between;
+      min-height:      0;
+    }
+    .sidebar-scrollbar__up,
+    .sidebar-scrollbar__down {
+      display:     flex;
+      align-items: center;
+      flex-shrink: 0;
+      color:       var(--icon-default-default);
+    }
+    .sidebar-scrollbar__up svg,
+    .sidebar-scrollbar__down svg { width: 6px; height: 6px; display: block; }
+
+    .sidebar-scrollbar__track {
+      flex:       1;
+      position:   relative;
+      width:      6px;
+      min-height: 0;
+    }
+    .sidebar-scrollbar__thumb {
+      position:      absolute;
+      left:          0;
+      top:           0;
+      width:         6px;
+      height:        78px;
+      background:    var(--surface-primary-default);
+      border-radius: 999px;
+      transition:    top 0.05s linear;
     }
 
     /* Search input — DS Input Field 1.5 style */
@@ -3591,6 +3654,9 @@
               <!-- Left sidebar: Primary Card - 1.5 filter panel (DS node 5215:122499) -->
               <aside class="learn-sidebar" aria-label="Filters">
 
+                <!-- Scrollable content column -->
+                <div class="learn-sidebar__content">
+
                 <!-- Search input — Input Field 1.5 -->
                 <div class="learn-search">
                   <span class="learn-search__icon" aria-hidden="true">
@@ -3703,6 +3769,23 @@
 
                   </div><!-- end accordion body -->
                 </div><!-- end subjects accordion -->
+
+                </div><!-- end learn-sidebar__content -->
+
+                <!-- Scroll Bar - 1.5 (DS node 5550:91488) — shown when both accordions open -->
+                <div class="learn-sidebar__scrollbar" aria-hidden="true">
+                  <div class="sidebar-scrollbar__content">
+                    <div class="sidebar-scrollbar__up">
+                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10L8 6L12 10"/></svg>
+                    </div>
+                    <div class="sidebar-scrollbar__track">
+                      <div class="sidebar-scrollbar__thumb"></div>
+                    </div>
+                    <div class="sidebar-scrollbar__down">
+                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6L8 10L12 6"/></svg>
+                    </div>
+                  </div>
+                </div>
 
               </aside><!-- end learn-sidebar -->
 
@@ -5191,6 +5274,33 @@
   <script>
     /* ── Learning Hub — accordion + filter interactivity ── */
     try {
+      /* Scroll Bar - 1.5 — sync thumb position + show/hide based on accordion state */
+      var sidebarEl      = document.querySelector('.learn-sidebar');
+      var sidebarContent = document.querySelector('.learn-sidebar__content');
+      var scrollThumb    = document.querySelector('.sidebar-scrollbar__thumb');
+      var scrollTrack    = document.querySelector('.sidebar-scrollbar__track');
+
+      function updateScrollThumb() {
+        if (!sidebarContent || !scrollThumb || !scrollTrack) return;
+        var scrollable = sidebarContent.scrollHeight - sidebarContent.clientHeight;
+        if (scrollable <= 0) { scrollThumb.style.top = '0px'; return; }
+        var ratio  = sidebarContent.scrollTop / scrollable;
+        var trackH = scrollTrack.clientHeight - scrollThumb.offsetHeight;
+        scrollThumb.style.top = Math.max(0, ratio * trackH) + 'px';
+      }
+
+      function updateScrollbarVisibility() {
+        if (!sidebarEl) return;
+        var gradesOpen   = !document.getElementById('accordion-grades').classList.contains('is-collapsed');
+        var subjectsOpen = !document.getElementById('accordion-subjects').classList.contains('is-collapsed');
+        sidebarEl.classList.toggle('sidebar--both-open', gradesOpen && subjectsOpen);
+        updateScrollThumb();
+      }
+
+      if (sidebarContent) {
+        sidebarContent.addEventListener('scroll', updateScrollThumb);
+      }
+
       /* Accordion toggle */
       document.querySelectorAll('.learn-accordion__toggle').forEach(function(btn) {
         btn.addEventListener('click', function() {
@@ -5198,8 +5308,11 @@
           var willCollapse = !acc.classList.contains('is-collapsed');
           acc.classList.toggle('is-collapsed', willCollapse);
           btn.setAttribute('aria-expanded', willCollapse ? 'false' : 'true');
+          updateScrollbarVisibility();
         });
       });
+
+      updateScrollbarVisibility();
 
       /* Filter item selection helpers */
 
