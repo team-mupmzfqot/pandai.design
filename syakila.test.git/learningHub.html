@@ -2106,9 +2106,7 @@
       min-width:      318px;
       flex-shrink:    0;
       display:        flex;
-      flex-direction: row;
-      gap:            10px;
-      align-items:    stretch;
+      flex-direction: column;
       background:     var(--surface-general-default);
       border:         1px solid var(--border-general-default);
       border-radius:  var(--corner-radius-corner-4xl);
@@ -2117,72 +2115,14 @@
       box-sizing:     border-box;
     }
 
-    /* Scrollable content column — hides native scrollbar */
     .learn-sidebar__content {
-      flex:            1;
-      min-width:       0;
-      display:         flex;
-      flex-direction:  column;
-      gap:             var(--spacing-space-xs);
-      overflow-y:      auto;
-      scrollbar-width: none;
-    }
-    .learn-sidebar__content::-webkit-scrollbar { display: none; }
-
-    /* Scroll Bar - 1.5 (DS node 5550:91488) — shown only when both accordions are open */
-    .learn-sidebar__scrollbar {
-      display:       none;
+      flex:           1;
+      min-width:      0;
+      display:        flex;
       flex-direction: column;
-      width:          14px;
-      min-width:      14px;
-      background:     var(--surface-general-default);
-      border:         1px solid var(--border-general-default);
-      border-radius:  999px;
-      padding:        4px;
-      box-sizing:     border-box;
-      flex-shrink:    0;
+      gap:            var(--spacing-space-xs);
+      overflow-y:     auto;
     }
-    .sidebar--both-open .learn-sidebar__scrollbar { display: flex; }
-
-    .sidebar-scrollbar__content {
-      flex:            1;
-      display:         flex;
-      flex-direction:  column;
-      align-items:     center;
-      justify-content: space-between;
-      min-height:      0;
-    }
-    .sidebar-scrollbar__up,
-    .sidebar-scrollbar__down {
-      display:     flex;
-      align-items: center;
-      flex-shrink: 0;
-      color:       var(--icon-default-default);
-      cursor:      pointer;
-      user-select: none;
-    }
-    .sidebar-scrollbar__up svg,
-    .sidebar-scrollbar__down svg { width: 6px; height: 6px; display: block; }
-
-    .sidebar-scrollbar__track {
-      flex:       1;
-      position:   relative;
-      width:      6px;
-      min-height: 0;
-    }
-    .sidebar-scrollbar__thumb {
-      position:      absolute;
-      left:          0;
-      top:           0;
-      width:         6px;
-      height:        78px;
-      background:    var(--surface-primary-default);
-      border-radius: 999px;
-      transition:    top 0.05s linear;
-      cursor:        grab;
-      user-select:   none;
-    }
-    .sidebar-scrollbar__thumb:active { cursor: grabbing; }
 
     /* Search input — DS Input Field 1.5 style */
     .learn-search {
@@ -3776,21 +3716,6 @@
 
                 </div><!-- end learn-sidebar__content -->
 
-                <!-- Scroll Bar - 1.5 (DS node 5550:91488) — shown when both accordions open -->
-                <div class="learn-sidebar__scrollbar" aria-hidden="true">
-                  <div class="sidebar-scrollbar__content">
-                    <div class="sidebar-scrollbar__up">
-                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10L8 6L12 10"/></svg>
-                    </div>
-                    <div class="sidebar-scrollbar__track">
-                      <div class="sidebar-scrollbar__thumb"></div>
-                    </div>
-                    <div class="sidebar-scrollbar__down">
-                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6L8 10L12 6"/></svg>
-                    </div>
-                  </div>
-                </div>
-
               </aside><!-- end learn-sidebar -->
 
               <!-- Right: Practice Card grid (DS Primary Card - 1.5, Secondary variant, node 2881:36272) -->
@@ -5278,87 +5203,6 @@
   <script>
     /* ── Learning Hub — accordion + filter interactivity ── */
     try {
-      /* Scroll Bar - 1.5 — sync thumb position + show/hide based on accordion state */
-      var sidebarEl      = document.querySelector('.learn-sidebar');
-      var sidebarContent = document.querySelector('.learn-sidebar__content');
-      var scrollThumb    = document.querySelector('.sidebar-scrollbar__thumb');
-      var scrollTrack    = document.querySelector('.sidebar-scrollbar__track');
-
-      function updateScrollThumb() {
-        if (!sidebarContent || !scrollThumb || !scrollTrack) return;
-        var scrollable = sidebarContent.scrollHeight - sidebarContent.clientHeight;
-        if (scrollable <= 0) { scrollThumb.style.top = '0px'; return; }
-        var ratio  = sidebarContent.scrollTop / scrollable;
-        var trackH = scrollTrack.clientHeight - scrollThumb.offsetHeight;
-        scrollThumb.style.top = Math.max(0, ratio * trackH) + 'px';
-      }
-
-      function updateScrollbarVisibility() {
-        if (!sidebarEl) return;
-        var gradesOpen   = !document.getElementById('accordion-grades').classList.contains('is-collapsed');
-        var subjectsOpen = !document.getElementById('accordion-subjects').classList.contains('is-collapsed');
-        sidebarEl.classList.toggle('sidebar--both-open', gradesOpen && subjectsOpen);
-        updateScrollThumb();
-      }
-
-      if (sidebarContent) {
-        sidebarContent.addEventListener('scroll', updateScrollThumb);
-      }
-
-      /* Custom scrollbar interactions */
-      var scrollUp   = document.querySelector('.sidebar-scrollbar__up');
-      var scrollDown = document.querySelector('.sidebar-scrollbar__down');
-
-      if (scrollUp && sidebarContent) {
-        scrollUp.addEventListener('click', function() {
-          sidebarContent.scrollBy({ top: -80, behavior: 'smooth' });
-        });
-      }
-      if (scrollDown && sidebarContent) {
-        scrollDown.addEventListener('click', function() {
-          sidebarContent.scrollBy({ top: 80, behavior: 'smooth' });
-        });
-      }
-
-      /* Track click — jump to position */
-      if (scrollTrack && sidebarContent && scrollThumb) {
-        scrollTrack.addEventListener('click', function(e) {
-          if (e.target === scrollThumb) return; /* ignore thumb clicks */
-          var trackRect  = scrollTrack.getBoundingClientRect();
-          var clickRatio = (e.clientY - trackRect.top - scrollThumb.offsetHeight / 2) /
-                           (scrollTrack.clientHeight - scrollThumb.offsetHeight);
-          clickRatio = Math.max(0, Math.min(1, clickRatio));
-          sidebarContent.scrollTop = clickRatio *
-            (sidebarContent.scrollHeight - sidebarContent.clientHeight);
-        });
-      }
-
-      /* Thumb drag */
-      if (scrollThumb && scrollTrack && sidebarContent) {
-        var isDragging    = false;
-        var dragStartY    = 0;
-        var dragStartTop  = 0;
-
-        scrollThumb.addEventListener('mousedown', function(e) {
-          isDragging   = true;
-          dragStartY   = e.clientY;
-          dragStartTop = parseFloat(scrollThumb.style.top) || 0;
-          e.preventDefault();
-        });
-
-        document.addEventListener('mousemove', function(e) {
-          if (!isDragging) return;
-          var delta     = e.clientY - dragStartY;
-          var trackH    = scrollTrack.clientHeight - scrollThumb.offsetHeight;
-          var newTop    = Math.max(0, Math.min(trackH, dragStartTop + delta));
-          var ratio     = trackH > 0 ? newTop / trackH : 0;
-          sidebarContent.scrollTop = ratio *
-            (sidebarContent.scrollHeight - sidebarContent.clientHeight);
-        });
-
-        document.addEventListener('mouseup', function() { isDragging = false; });
-      }
-
       /* Accordion toggle */
       document.querySelectorAll('.learn-accordion__toggle').forEach(function(btn) {
         btn.addEventListener('click', function() {
@@ -5366,11 +5210,8 @@
           var willCollapse = !acc.classList.contains('is-collapsed');
           acc.classList.toggle('is-collapsed', willCollapse);
           btn.setAttribute('aria-expanded', willCollapse ? 'false' : 'true');
-          updateScrollbarVisibility();
         });
       });
-
-      updateScrollbarVisibility();
 
       /* Filter item selection helpers */
 
