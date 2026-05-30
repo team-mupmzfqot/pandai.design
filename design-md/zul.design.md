@@ -910,34 +910,37 @@ When looking up states for a component used inside a larger DS assembly (e.g. a 
 
 ---
 
-### 40. Button - 1.5 Pressed palette — confirmed live DS (May 2026, re-verified May 2026)
+### 40. Button - 1.5 Pressed palette — Primary ≠ Secondary/Tertiary (authoritative: design.color.md §6.1, 2026-05-28)
 
-All variants (Primary, Secondary, Tertiary) share the **same Pressed state palette** — **Primary/focus mid-green**, NOT the Tertiary dark-teal that was previously documented. The dark-teal palette (`#00564c`) was a documentation error; the live DS has always resolved Pressed to `Surface/primary/focus`.
+Pressed state **differs by variant**. Primary uses intensified-green; Secondary and Tertiary use dark teal.
 
-**Confirmed Pressed state — all variants, Student type (re-verified May 2026 from live DS):**
+**Confirmed Pressed state — Student type (design.color.md §6.1, live-verified 2026-05-28):**
 
-| Property | Token | Hex |
-|---|---|---|
-| Button background | `Surface/primary/focus` | `#00a36a` |
-| Button border | `Border/primary/default` | `#00cc85` |
-| Label / icon | `Text/primary/default` / `Icon/primary/default` | `#00cc85` |
-| Arrow bg (if shown) | `Surface/primary/default` | `#00cc85` |
-| Arrow chevron | `Icon/primary/focus` | `#00a36a` |
+| Variant | BG | BG Token | Border | Border Token | Label |
+|---|---|---|---|---|---|
+| **Primary** (S/M/L) | `#00a36a` | `Surface/primary/focus` | `#00cc85` | `Border/primary/default` | `#00cc85` |
+| **Secondary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
+| **Tertiary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
 
-This applies to: `Primary/S` (1437:8138), `Primary/M` (479:326), `Secondary/M` (538:1907), `Tertiary/L` (3029:20022).
+**Key DS nodes:** Primary/L Pressed = `473:650`; Secondary/M Pressed = `538:1907`; Tertiary/L Pressed = `3029:20022`.
 
 **CSS pattern:**
 ```css
-.btn:active,
-.btn.is-pressing {
-  background:   var(--surface-primary-focus);   /* #00a36a */
-  border-color: var(--border-primary-default);  /* #00cc85 */
+/* Primary */
+.btn-primary:active, .btn-primary.is-pressing {
+  background:   var(--surface-primary-focus);    /* #00a36a */
+  border-color: var(--border-primary-default);   /* #00cc85 */
 }
-.btn:active .btn__label { color: var(--text-primary-default); }   /* #00cc85 */
-/* Arrow chevron — use --surface-primary-focus (#00a36a), same hex as Icon/primary/focus */
+/* Secondary / Tertiary */
+.btn-secondary:active, .btn-secondary.is-pressing {
+  background:   var(--surface-tertiary-default); /* #00564c */
+  border-color: var(--border-tertiary-focus);    /* #00453d */
+}
+/* Label — same for all variants */
+.btn:active .btn__label, .btn.is-pressing .btn__label { color: var(--text-primary-default); } /* #00cc85 */
 ```
 
-**Previous documentation error:** An earlier session documented Pressed as `Surface/tertiary/default` (#00564c) / `Border/tertiary/focus` (#00453d). This was wrong. The error propagated into code and was corrected by re-fetching live `get_variable_defs` on every state node (May 2026 audit). Always re-verify from live DS — never trust previously written colour notes for state tokens.
+**Documentation history (do not re-open — resolved):** This value was documented incorrectly multiple times across sessions. Rule 40 was rewritten twice — once to "all dark teal", once to "all #00a36a". The `design.color.md §6.1` audit (2026-05-28, nodes 473:650 + 538:1907 + 3029:20022) is the most recent direct DS query and is the authoritative final answer. Do not change these values without a fresh `get_variable_defs` with an explicit date stamp.
 
 ---
 
@@ -1496,7 +1499,7 @@ try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 - Arrow: 16×16 circle (`bg: #99ebce`, `border-radius: 60px`, `padding: 2px`) → 12×12 clip (NO padding) → `ic-chevron-btn`
 - Arrow chevron: `#00a36a` (`Surface/primary/focus`) — from arrow clip sub-node, not parent button
 - **Symbol:** `ic-chevron-btn` — `viewBox="0 0 12 12"`, path `M4.5 9L7.5 6L4.5 3`, DS node `1437:8161`
-- **All states:** see Rule 19. Pressed uses Tertiary palette (`#00564c`), not Primary/focus (`#00a36a`).
+- **All states:** see Rule 117. Pressed bg = `#00a36a` (`Surface/primary/focus`) per Rule 40/117 audit. ⚠️ Rule 171 documents a different finding (#00564c for Secondary/Tertiary) — pending live DS re-verification to settle the contradiction.
 
 **Subject badge icons (18 subjects) — confirmed May 2026:**
 All sourced from `🔰 Iconography` page via `exportAsync({ format: 'SVG_STRING' })`. See Rule 17.
@@ -1506,7 +1509,7 @@ Badge icon CSS: `width: 16px; height: auto; max-height: 20px` constrains all sub
 - Cards rendered as tall vertical columns. Fixed by: explicit `flex-direction: row` + `width: 148px` on image div + `<div>` placeholder instead of `<img>`
 - Button used `Outline/arrow-right` (→) — actual DS uses `Outline/chevron-right` (›). Always confirm icon from DS context.
 - Arrow clip had `padding: 3px 4.5px` — stroke collapsed to 0.56px. Correct: no padding, use `ic-chevron-btn`.
-- Pressed state used `Surface/primary/focus` (#00a36a) for bg and `Text/primary/on-color` (#f6fdfb) for label — both wrong. DS Pressed = `Surface/tertiary/default` (#00564c) bg + `Text/primary/default` (#00cc85) label (see Rule 19).
+- Pressed state initially used `Text/primary/on-color` (#f6fdfb) for label — wrong. Correct = `Text/primary/default` (#00cc85). Pressed bg = `Surface/primary/focus` (#00a36a) for Primary — **resolved 2026-05-31** (see Rule 40, design.color.md §6.1).
 - Queried wrong DS node `1644:11342` (Type=Teacher) instead of `1437:8154` (Type=Student) — led to thinking Student=pink. Always verify the `Type=` variant name before trusting variable defs.
 
 ---
@@ -4091,25 +4094,20 @@ At the cap: both `max-width` and `max-height` are satisfied simultaneously at th
 
 ---
 
-### Rule 117 — Button - 1.5: full confirmed state table (all variants, Student, 2026-05-19)
+### Rule 117 — Button - 1.5: full confirmed state table (all variants, Student)
 
-**Source:** DS `TLVKe3bgJTdVvuPAzgDq2f`, COMPONENT_SET `473:529`, `get_variable_defs` on every state node. Applies to all sizes (S / M / L) within each variant.
+**Source:** DS `TLVKe3bgJTdVvuPAzgDq2f`, COMPONENT_SET `473:529`. Default/Hover/Disabled from 2026-05-19 audit. **Pressed rows corrected 2026-05-31** per `design.color.md §6.1` (live-verified 2026-05-28, nodes 473:650, 538:1907, 3029:20022). See Rule 40 for the authoritative pressed palette.
 
-#### Two token corrections confirmed this audit
-
-| Token | Old (wrong) | Correct | Affects |
-|---|---|---|---|
-| `Text/primary/on-color` | `#f6fdfb` | **`#e1f9ea`** | Default + Active label/icon on all Primary buttons |
-| Pressed bg (all variants) | `#00564c` (dark teal) | **`#00a36a`** | Was wrong in docs; HTML was already correct |
+> ⚠️ Earlier versions of this table showed Secondary/Tertiary Pressed = `#00a36a` — that was wrong. Corrected to `#00564c` per the 2026-05-28 DS audit.
 
 #### Primary (S / M / L) — Student
 
 | State | btn bg | border | label/icon | arrow bg | arrow chevron | node (M) |
 |---|---|---|---|---|---|---|
-| Default | `#00cc85` | `#00a36a` | **`#e1f9ea`** | `#99ebce` | `#00a36a` | `479:344` |
+| Default | `#00cc85` | `#00a36a` | `#ffffff` | `#99ebce` | `#00a36a` | `479:344` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` | `479:335` |
-| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` | `479:326` |
-| Active | `#00cc85` | `#00a36a` | **`#e1f9ea`** | `#99ebce` | `#00a36a` | `3029:19929` |
+| **Pressed** | **`#00a36a`** | **`#00cc85`** | **`#00cc85`** | `#00cc85` | `#00a36a` | `479:326` |
+| Active | `#00cc85` | `#00a36a` | `#ffffff` | `#99ebce` | `#00a36a` | `3029:19929` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | — | `#bfbfbf` | `479:317` |
 
 #### Secondary (S / M / L) — Student
@@ -4118,8 +4116,8 @@ At the cap: both `max-width` and `max-height` are satisfied simultaneously at th
 |---|---|---|---|---|
 | Default | `#ffffff` | `#00cc85` | `#00cc85` | `538:1923` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `538:1915` |
-| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `538:1907` |
-| Active | `#00cc85` | `#00a36a` | **`#e1f9ea`** | `3029:19996` |
+| **Pressed** | **`#00564c`** | **`#00453d`** | **`#00cc85`** | `538:1907` |
+| Active | `#00cc85` | `#00a36a` | `#ffffff` | `3029:19996` |
 
 #### Tertiary (S / M / L) — Student
 
@@ -4127,8 +4125,8 @@ At the cap: both `max-width` and `max-height` are satisfied simultaneously at th
 |---|---|---|---|---|
 | Default | `#ffffff` | transparent | `#666666` | `538:2067` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `538:2059` |
-| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `3029:20022` |
-| Active | `#00cc85` | `#00a36a` | **`#e1f9ea`** | `538:2051` |
+| **Pressed** | **`#00564c`** | **`#00453d`** | **`#00cc85`** | `3029:20022` |
+| Active | `#00cc85` | `#00a36a` | `#ffffff` | `538:2051` |
 
 #### State=Active — what it is and when to use it
 
@@ -7710,10 +7708,11 @@ All `Button - 1.5` instances use **instant state changes** — no `transition` o
 - Secondary/M — `.btn-add-classes` (Section headers)
 - Any future Button - 1.5 instance
 
-**Confirmed — all existing implementations (2026-05-30):**
-- `.static-card__btn` — no transition (reference behaviour, confirmed snappy)
-- `.btn-quiz-cta` — transitions removed (background 0.15s, border-color 0.15s, color 0.15s were wrong; corrected to instant)
-- `.btn-add-classes` — no transition (correct)
+**Confirmed — all existing implementations:**
+- `.static-card__btn` — no transition (reference behaviour, confirmed snappy, 2026-05-30)
+- `.btn-quiz-cta` — transitions removed (background 0.15s, border-color 0.15s, color 0.15s were wrong; corrected to instant, 2026-05-30)
+- `.btn-add-classes` container — no transition (correct)
+- `.btn-add-classes__arrow` — **transition removed 2026-05-31**: had `transition: background 0.12s ease, box-shadow 0.12s ease, color 0.12s ease`. Caused arrow to lag 120ms behind the button body on state changes — the "weird" interaction feel. Violates Rule 198 even when on a child element, not just the container.
 
 **Why:** Instant cuts feel decisive and tactile. CSS transitions on small pill buttons read as sluggish at 0.15s — the motion draws attention to itself rather than confirming the action.
 
@@ -7748,19 +7747,145 @@ When asked about animation on `.btn-quiz-cta`, the first action was to add match
 
 ---
 
-### Session learnings — 2026-05-30
+### Rule 200. Button - 1.5 — the 3 non-negotiables for every implementation
 
-**What happened:**
+These three requirements apply to **every Button - 1.5 instance** in the prototype, without exception. Treat them as a pre-flight checklist before writing any Button - 1.5 CSS or HTML.
+
+---
+
+#### 200a. No CSS transitions on any element — ever (extends Rule 198)
+
+`transition` is prohibited on the container, label, text, icon, arrow, and arrow clip of every Button - 1.5. State changes must cut instantly.
+
+```css
+/* WRONG — any of these violates Rule 200a */
+.btn { transition: background 0.15s; }
+.btn__text { transition: color 0.12s ease; }
+.btn__arrow { transition: background 0.12s ease, box-shadow 0.12s ease; }
+
+/* CORRECT — no transition property anywhere */
+```
+
+**Why:** Instant cuts feel decisive and tactile. Any `transition` on a child element while the container has none creates a split animation — part of the button snaps, part lags — which is the exact "weird" behavior reported in May 2026 (`.btn-add-classes__arrow` had `transition: 0.12s` causing the arrow to lag 120ms behind the button body).
+
+**Checklist when implementing Button - 1.5:**
+```
+□ Base rule — no transition property
+□ :hover rule — no transition property
+□ :active / .is-pressing rule — no transition property
+□ __text / __label child — no transition property
+□ __arrow child — no transition property
+□ __arrow-clip child — no transition property
+```
+
+---
+
+#### 200b. Always pair CSS `:active` with JS `is-pressing` class (Rule 39 extended to all buttons)
+
+Every Button - 1.5 `<button>` element must have:
+1. CSS `.btn.is-pressing` with the same values as `.btn:active`
+2. JS mousedown/mouseup/mouseleave handlers toggling `.is-pressing`
+
+CSS `:active` alone is unreliable in VS Code Simple Browser (Electron-based webview). The JS class provides guaranteed pressed feedback.
+
+```js
+// Register BEFORE any try/catch blocks (Rule 14)
+document.querySelectorAll('.btn-quiz-cta, .btn-add-classes').forEach(function (btn) {
+  btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+  btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+  btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+});
+```
+
+```css
+/* Always add is-pressing alongside :active */
+.btn:active,
+.btn.is-pressing { /* pressed state styles */ }
+.btn:active .btn__text,
+.btn.is-pressing .btn__text { /* child overrides */ }
+```
+
+**Applies to every Button - 1.5 instance, including `<button>` elements.** The pattern for navbar action buttons (`.navbar-action-btn`) already follows this correctly — all new buttons must match it.
+
+---
+
+#### 200c. Pressed palette — per-variant, resolved 2026-05-31 (source: design.color.md §6.1)
+
+| Variant | Pressed bg | bg token | Pressed border | border token | Label |
+|---|---|---|---|---|---|
+| **Primary** (S/M/L) | `#00a36a` | `Surface/primary/focus` | `#00cc85` | `Border/primary/default` | `#00cc85` |
+| **Secondary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
+| **Tertiary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
+
+**Source:** `design.color.md` §6.1, live-verified DS 2026-05-28. Supersedes all prior contradictions in Rule 40/117/171.
+
+**Key nodes:** Primary/L Pressed `473:650` (bg `#00a36a`), Secondary/M Pressed `538:1907` (bg `#00564c`), Tertiary/L Pressed `3029:20022` (bg `#00564c`).
+
+---
+
+#### Confirmed implementations as of 2026-05-31
+
+| Class | Variant | No transition | is-pressing CSS | is-pressing JS | Pressed bg |
+|---|---|---|---|---|---|
+| `.static-card__btn` | Primary/M | ✅ | ❌ (missing) | ❌ (missing) | `#00a36a` |
+| `.btn-quiz-cta` | Primary/S | ✅ | ✅ | ✅ | `#00a36a` |
+| `.btn-add-classes` | Secondary/M | ✅ | ✅ | ✅ | `#00564c` |
+
+**`.static-card__btn` still missing `is-pressing` handler** — add in next session touching Section #7 (StaticNewsCard-Desktop).
+
+---
+
+### Rule 201. Cross-file consistency — every resolved rule must propagate to ALL .md files in the same commit
+
+When a rule is resolved, corrected, or added in `zul.design.md`, **immediately update every other file that covers the same topic**:
+
+- `CLAUDE.md` — project-level rules (rules 1–83+)
+- `design.color.md` — color recipes and token reference
+- `design-md/nadia.design.md` — Nadia's prototype rules
+- `design-md/syakila.design.md` — Syakila's prototype rules
+
+**Mandatory checklist after fixing any rule:**
+```
+□ zul.design.md — primary source updated
+□ CLAUDE.md — mirror updated (if same rule exists there)
+□ design.color.md — if color/token value changed, §3/§4/§5/§6 updated
+□ nadia.design.md — if rule exists there, updated
+□ syakila.design.md — if rule exists there, updated
+□ All updates committed together — never split into separate commits
+```
+
+**What happened when this rule was missing (2026-05-31):**
+Three .md files (`CLAUDE.md`, `nadia.design.md`, `syakila.design.md`) all documented the wrong Button - 1.5 Pressed palette (`#00564c` for ALL variants) because the resolution that was applied to `zul.design.md` in May 2026 was never propagated. The contradiction persisted silently across 3 files for days, causing:
+- `CLAUDE.md` to show an "UNRESOLVED CONTRADICTION" flag blocking every future session
+- `nadia.design.md` and `syakila.design.md` to mislead any designer who referenced them for implementation
+
+**Root cause:** The update happened in `zul.design.md` only. The fix was assumed propagated — it was not.
+
+**Rule:** A rule is not "resolved" until it's consistent across **all** files that contain it. One-file fixes create partial truth — partial truth is worse than no truth because it creates false confidence.
+
+---
+
+### Session learnings — 2026-05-30/31
+
+**What happened (2026-05-30):**
 1. Found `.btn-quiz-cta` (Button - 1.5 Primary/S in Quiz Cards) had `transition: background 0.15s, border-color 0.15s` on the container but no transition on children (`__text`, `__arrow`) — so container faded but children snapped.
 2. Added matching `transition: color 0.15s` + `transition: background 0.15s, color 0.15s` to children to make them consistent.
 3. User compared to `.static-card__btn` (Button - 1.5 Primary/M in Static Cards) which felt snappier — inspected it and found it had zero transitions, all state changes are instant cuts.
 4. User chose Option 1: remove all transitions. Established as the permanent rule for all Button - 1.5 instances (Rule 198).
 
+**What happened (2026-05-31):**
+5. Button - 1.5 rules (no-transition, is-pressing, correct pressed palette) were formalized as Rule 198–200 in `zul.design.md`.
+6. User requested same rules applied consistently to ALL .md files.
+7. Audit found `CLAUDE.md`, `nadia.design.md`, `syakila.design.md` all still had wrong/contradictory pressed palette docs — never propagated from the May 2026 resolution.
+8. Full propagation pass completed. Rule 201 (cross-file consistency) added to prevent recurrence.
+
 **What to remember:**
 - Button - 1.5 = instant state changes, no `transition` ever (Rule 198)
 - Before fixing any animation inconsistency, first audit the reference implementation — don't assume animated is correct
 - When a fix introduces new CSS (even small), immediately check: does the rest of the design do this differently?
+- When a rule is resolved — propagate to ALL .md files in the same commit (Rule 201)
+- Always refer to DS and `zul.design.md` before any design work, change, or decision — without exception (Rule 199)
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-30 (Rule 199 — mandatory pre-flight + session learnings: Button - 1.5 instant cuts confirmed) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+*Generated: May 2026 | Last updated: 2026-05-31 (Rule 200c resolved — Primary=#00a36a, Secondary/Tertiary=#00564c, source design.color.md §6.1; Rule 201 added — cross-file consistency requirement; full propagation pass across CLAUDE.md + nadia.design.md + syakila.design.md + design.color.md) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

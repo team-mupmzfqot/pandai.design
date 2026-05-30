@@ -894,7 +894,6 @@
       justify-content: center;
       flex-shrink:     0;
       color:           var(--text-primary-default);
-      transition:      background 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
     }
     .btn-add-classes__arrow-clip {
       width:    16px;
@@ -917,17 +916,21 @@
       color:       var(--text-secondary-focus);
     }
 
-    /* Pressed — DS 538:1907 */
-    .btn-add-classes:active {
-      background:   var(--surface-primary-focus);
-      border-color: var(--border-primary-default);
+    /* Pressed — DS 538:1907 — Secondary/M uses tertiary palette (design.color.md §6.1, live-verified 2026-05-28) */
+    .btn-add-classes:active,
+    .btn-add-classes.is-pressing {
+      background:   var(--surface-tertiary-default);  /* #00564c */
+      border-color: var(--border-tertiary-focus);     /* #00453d */
     }
     .btn-add-classes:active .btn-add-classes__text,
-    .btn-add-classes:active .btn-add-classes__icon { color: var(--text-primary-default); }
-    .btn-add-classes:active .btn-add-classes__arrow {
-      background:  var(--surface-primary-default);
+    .btn-add-classes.is-pressing .btn-add-classes__text,
+    .btn-add-classes:active .btn-add-classes__icon,
+    .btn-add-classes.is-pressing .btn-add-classes__icon { color: var(--text-primary-default); }  /* #00cc85 */
+    .btn-add-classes:active .btn-add-classes__arrow,
+    .btn-add-classes.is-pressing .btn-add-classes__arrow {
+      background:  var(--surface-primary-default);  /* #00cc85 */
       box-shadow:  none;
-      color:       var(--surface-primary-focus);
+      color:       var(--surface-primary-focus);    /* #00a36a */
     }
 
     /* Button - 1.5 Secondary/M + R Arrow — "View Activity History" (DS node 538:1923)
@@ -1265,13 +1268,16 @@
     .btn-quiz-cta:hover .btn-quiz-cta__text  { color: var(--text-secondary-focus); }         /* #70bc6f */
     .btn-quiz-cta:hover .btn-quiz-cta__arrow { background: var(--surface-secondary-default-subtle); color: var(--border-secondary-focus); }  /* #e8fbe8 / #70bc6f */
 
-    /* Pressed — DS 1437:8138 — Surface/primary/focus #00a36a, Border/primary/default #00cc85 */
-    .btn-quiz-cta:active {
+    /* Pressed — DS 1437:8138 — Primary/S: Surface/primary/focus #00a36a, Border/primary/default #00cc85 (Rule 40) */
+    .btn-quiz-cta:active,
+    .btn-quiz-cta.is-pressing {
       background:   var(--surface-primary-focus);    /* #00a36a */
       border-color: var(--border-primary-default);   /* #00cc85 */
     }
-    .btn-quiz-cta:active .btn-quiz-cta__text  { color: var(--text-primary-default); }        /* #00cc85 */
-    .btn-quiz-cta:active .btn-quiz-cta__arrow { background: var(--surface-primary-default); color: var(--surface-primary-focus); }  /* #00cc85 / #00a36a */
+    .btn-quiz-cta:active .btn-quiz-cta__text,
+    .btn-quiz-cta.is-pressing .btn-quiz-cta__text  { color: var(--text-primary-default); }        /* #00cc85 */
+    .btn-quiz-cta:active .btn-quiz-cta__arrow,
+    .btn-quiz-cta.is-pressing .btn-quiz-cta__arrow { background: var(--surface-primary-default); color: var(--surface-primary-focus); }  /* #00cc85 / #00a36a */
 
     /* Disabled (node 1437:8130) */
     .btn-quiz-cta:disabled,
@@ -5520,6 +5526,13 @@
 
     // Navbar action buttons — pressed feedback via JS (Rule 39: CSS :active unreliable in Electron webview)
     document.querySelectorAll('.navbar-action-btn').forEach(function (btn) {
+      btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+      btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+      btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+    });
+
+    // Quiz CTA + Add-Classes buttons — pressed feedback via JS (Rule 39: CSS :active unreliable in Electron webview)
+    document.querySelectorAll('.btn-quiz-cta, .btn-add-classes').forEach(function (btn) {
       btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
       btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
       btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });

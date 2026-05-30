@@ -906,23 +906,26 @@ When looking up states for a component used inside a larger DS assembly (e.g. a 
 
 ---
 
-### 40. Button - 1.5 Pressed palette — PRIMARY and SECONDARY use primary-focus; TERTIARY uses dark teal
+### 40. Button - 1.5 Pressed palette — PRIMARY and SECONDARY use different palettes (RESOLVED 2026-05-31)
 
-~~Rule was wrong: "all variants share dark teal for Pressed".~~ Primary and Secondary Pressed uses `Surface/primary/focus` (#00a36a). Only Tertiary Pressed uses `Surface/tertiary/default` (#00564c).
+**Source of truth: `design.color.md` §6.1, live-verified 2026-05-28. This supersedes all prior contradictions in earlier Rule 40/117 versions.**
 
-**Confirmed Pressed state — Student type (from DS node inspection 2026-05-26):**
-
-| Variant | BG | BG Token | Border | Border Token | Label |
+| Variant | Pressed bg | bg token | Pressed border | border token | Label |
 |---|---|---|---|---|---|
 | **Primary** (S/M/L) | `#00a36a` | `Surface/primary/focus` | `#00cc85` | `Border/primary/default` | `#00cc85` |
 | **Secondary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
 | **Tertiary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
 
-**Note:** Secondary and Tertiary Pressed share dark teal. Primary Pressed is lighter (`#00a36a`).
+**Label token all variants:** `Text/primary/default` = `#00cc85`
 
-**Confirmed nodes:** Primary/L/Student Pressed = `473:650` (bg `#00a36a`, border `#00cc85`). Secondary/M Pressed = `538:1907` (bg `#00564c`). Tertiary/L Pressed = `3029:20022`.
+**Key DS nodes:**
+- Primary/L Pressed: `473:650` (bg `#00a36a`, border `#00cc85`) — confirms Primary ≠ Tertiary
+- Secondary/M Pressed: `538:1907` (bg `#00564c`, border `#00453d`)
+- Tertiary/L Pressed: `3029:20022` (bg `#00564c`, border `#00453d`)
 
-**Mistake made (2026-05-26):** Rule 40 previously stated ALL variants use `Surface/tertiary/default` (#00564c) — this was wrong for Primary. DS inspection of `473:650` (Primary/L Pressed) confirmed `Surface/primary/focus` (#00a36a). Always pull from DS per variant, never assume consistency.
+**Mistake made:** Prior rules documented ALL variants as either `#00a36a` OR `#00564c` — both wrong. The correct split is Primary=lighter teal, Secondary/Tertiary=darker teal. Always verify per-variant from DS before implementing.
+
+**See also:** Rule 82 (no transitions), Rule 83 (is-pressing JS), zul.design.md Rule 200 (three non-negotiables).
 
 ---
 
@@ -2356,4 +2359,49 @@ body { background: var(--surface-general-default); }
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-30 (Rule 81 — page background = Surface/general/default, --surface-subtle is invalid) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 81b. Cross-file consistency — every resolved rule must propagate to ALL .md files in the same commit (= Rule 201 in zul.design.md)
+
+When a rule is resolved, corrected, or added in `zul.design.md`, update **all** files that cover the same topic — `CLAUDE.md`, `design.color.md`, `design-md/nadia.design.md`, `design-md/syakila.design.md` — in the same commit. Never split into separate commits.
+
+**What happens without this rule:** Three .md files (`CLAUDE.md`, `nadia.design.md`, `syakila.design.md`) documented the wrong Button - 1.5 Pressed palette for days because the resolution applied to `zul.design.md` was never propagated. Partial truth is worse than no truth — it creates false confidence in incorrect values.
+
+**Rule:** A fix is not complete until it's consistent across all files containing it. After any rule update, always run the checklist: `zul.design.md` ✓ → `CLAUDE.md` ✓ → `design.color.md` ✓ → `nadia.design.md` ✓ → `syakila.design.md` ✓ → commit all together.
+
+---
+
+### 82. Button - 1.5 action animations — no CSS transitions on any state (= Rule 198 in zul.design.md)
+
+All `Button - 1.5` instances use **instant state changes** — no `transition` on any property, on any element (container, label, arrow, arrow-clip).
+
+**Rule:** Never add `transition` to `.btn-*`, `.btn-*__text`, `.btn-*__label`, `.btn-*__arrow`, or any child of a Button - 1.5 implementation.
+
+**Confirmed violations found and removed:**
+- `.btn-quiz-cta` container — `transition: background 0.15s, border-color 0.15s` (removed 2026-05-30)
+- `.btn-add-classes__arrow` — `transition: background 0.12s ease, box-shadow 0.12s ease, color 0.12s ease` (removed 2026-05-31). Arrow lag caused by this was the reported "weird" button behavior.
+
+---
+
+### 83. Button - 1.5 — always pair CSS `:active` with JS `is-pressing` (= Rule 200b in zul.design.md)
+
+Every Button - 1.5 `<button>` must have both CSS `.is-pressing` declarations AND JS mousedown/mouseup/mouseleave handlers. CSS `:active` alone is unreliable in VS Code Simple Browser (Electron webview).
+
+```css
+.btn:active,
+.btn.is-pressing { /* pressed bg + border */ }
+.btn:active .btn__child,
+.btn.is-pressing .btn__child { /* child color overrides */ }
+```
+
+```js
+document.querySelectorAll('.btn-quiz-cta, .btn-add-classes').forEach(function (btn) {
+  btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+  btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+  btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+});
+```
+
+**Confirmed implementations (2026-05-31):** `.btn-quiz-cta` ✅, `.btn-add-classes` ✅. Still missing: `.static-card__btn` (add in next session touching StaticNewsCard-Desktop).
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-31 (Rule 81b — cross-file consistency requirement; Rules 82–83 — Button-1.5 no transitions + is-pressing JS; Rule 40 resolved — Primary=#00a36a, Secondary/Tertiary=#00564c, source design.color.md §6.1) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

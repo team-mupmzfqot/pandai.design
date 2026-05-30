@@ -388,14 +388,14 @@ These are the confirmed state values for the Pandai student home screen. All fro
 | Active | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` | `3029:19941` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` | `1437:8130` |
 
-**Pressed state tokens (confirmed from node `1437:8138`):**
-- Btn bg: `Surface/tertiary/default` (#00564c) — NOT `Surface/primary/focus` (#00a36a)
-- Border: `Border/tertiary/focus` (#00453d)
+**Pressed state tokens — Primary/S (confirmed design.color.md §6.1, live-verified 2026-05-28):**
+- Btn bg: `Surface/primary/focus` (#00a36a) — Primary variant uses PRIMARY focus palette, NOT dark teal
+- Border: `Border/primary/default` (#00cc85)
 - Label: `Text/primary/default` (#00cc85) — NOT `Text/primary/on-color` (#f6fdfb)
 - Arrow bg: `Surface/primary/default` (#00cc85)
-- Chevron: `Icon/tertiary/default` (#00564c)
+- Chevron: `Surface/primary/focus` (#00a36a)
 
-**Mistake made:** Pressed state used `Surface/primary/focus` (#00a36a) for bg and `Text/primary/on-color` (#f6fdfb) for label. DS uses Tertiary palette for Pressed — darker bg (`#00564c`) with the primary green as the label color — the inverse of Default.
+**Correction (2026-05-31):** Prior version of this rule stated Pressed = `Surface/tertiary/default` (#00564c). That dark teal palette applies to **Secondary and Tertiary variants only**. Primary uses the lighter `Surface/primary/focus` (#00a36a). See Rule 40 for the full variant split table.
 
 ---
 
@@ -906,21 +906,24 @@ When looking up states for a component used inside a larger DS assembly (e.g. a 
 
 ---
 
-### 40. Button - 1.5 Pressed palette is consistent across all variants
+### 40. Button - 1.5 Pressed palette — PRIMARY and SECONDARY use different palettes (RESOLVED 2026-05-31)
 
-All three variants (Primary, Secondary, Tertiary) share the **same Pressed state colour palette** — dark teal. The variant only changes the Default/Hover appearance, not the Pressed.
+**Source of truth: `design.color.md` §6.1, live-verified 2026-05-28. Prior documentation (all-variants-same-teal) was wrong.**
 
-**Confirmed Pressed state — all variants, Student type (May 2026):**
+| Variant | Pressed bg | bg token | Pressed border | border token | Label |
+|---|---|---|---|---|---|
+| **Primary** (S/M/L) | `#00a36a` | `Surface/primary/focus` | `#00cc85` | `Border/primary/default` | `#00cc85` |
+| **Secondary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
+| **Tertiary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
 
-| Property | Value | Token |
-|---|---|---|
-| Background | `#00564c` | `Surface/tertiary/default` |
-| Border | `#00453d` | `Border/tertiary/focus` |
-| Label/icon | `#00cc85` | `Text/primary/default` / `Icon/primary/default` |
+**Label token all variants:** `Text/primary/default` = `#00cc85`
 
-This applies to: `Primary/S`, `Primary/M`, `Primary/L`, `Secondary/M`, `Tertiary/M`, `Tertiary/L`.
+**Key DS nodes:**
+- Primary/L Pressed: `473:650` (bg `#00a36a`, border `#00cc85`) — confirms Primary ≠ Tertiary
+- Secondary/M Pressed: `538:1907` (bg `#00564c`, border `#00453d`)
+- Tertiary/L Pressed: `3029:20022` (bg `#00564c`, border `#00453d`)
 
-**Mistake corrected (May 2026):** CLAUDE.md Rule 2 previously stated Secondary/M Pressed = "fills solid with `Surface/primary/default` (#00cc85)". This was wrong — actual DS node `538:1907` shows dark teal (#00564c), not primary green. Never rely on old notes for pressed state colours — always pull from DS.
+**Correction (2026-05-31):** This rule previously stated "all three variants share the same dark teal (#00564c)" — that was wrong for Primary. Primary Pressed is lighter (`#00a36a`). Secondary and Tertiary Pressed are darker teal (`#00564c`). Always verify per-variant from DS before implementing.
 
 ---
 
@@ -1514,7 +1517,7 @@ try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 |---|---|---|---|---|---|
 | Default | `#00cc85` | `#00a36a` | `#f6fdfb` | `#99ebce` | `#00a36a` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` |
-| Pressed | `#00564c` | `#00453d` | `#00cc85` | `#00cc85` | `#00564c` |
+| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` |
 
 - Arrow chevron color comes from arrow sub-node (`479:351`) variable defs — NOT the parent button node
@@ -1544,7 +1547,7 @@ try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 - Arrow: 16×16 circle (`bg: #99ebce`, `border-radius: 60px`, `padding: 2px`) → 12×12 clip (NO padding) → `ic-chevron-btn`
 - Arrow chevron: `#00a36a` (`Surface/primary/focus`) — from arrow clip sub-node, not parent button
 - **Symbol:** `ic-chevron-btn` — `viewBox="0 0 12 12"`, path `M4.5 9L7.5 6L4.5 3`, DS node `1437:8161`
-- **All states:** see Rule 19. Pressed uses Tertiary palette (`#00564c`), not Primary/focus (`#00a36a`).
+- **All states:** see Rule 19. Primary/S Pressed uses `Surface/primary/focus` (`#00a36a`) bg + `#00cc85` border + `#00cc85` label (design.color.md §6.1).
 
 **Subject badge icons (18 subjects) — confirmed May 2026:**
 All sourced from `🔰 Iconography` page via `exportAsync({ format: 'SVG_STRING' })`. See Rule 17.
@@ -1554,7 +1557,7 @@ Badge icon CSS: `width: 16px; height: auto; max-height: 20px` constrains all sub
 - Cards rendered as tall vertical columns. Fixed by: explicit `flex-direction: row` + `width: 148px` on image div + `<div>` placeholder instead of `<img>`
 - Button used `Outline/arrow-right` (→) — actual DS uses `Outline/chevron-right` (›). Always confirm icon from DS context.
 - Arrow clip had `padding: 3px 4.5px` — stroke collapsed to 0.56px. Correct: no padding, use `ic-chevron-btn`.
-- Pressed state used `Surface/primary/focus` (#00a36a) for bg and `Text/primary/on-color` (#f6fdfb) for label — both wrong. DS Pressed = `Surface/tertiary/default` (#00564c) bg + `Text/primary/default` (#00cc85) label (see Rule 19).
+- Pressed state label used `Text/primary/on-color` (#f6fdfb) — wrong. Correct label = `Text/primary/default` (#00cc85). The bg `Surface/primary/focus` (#00a36a) was actually correct for Primary/S (confirmed design.color.md §6.1). See Rule 40.
 - Queried wrong DS node `1644:11342` (Type=Teacher) instead of `1437:8154` (Type=Student) — led to thinking Student=pink. Always verify the `Type=` variant name before trusting variable defs.
 
 ---
@@ -2875,4 +2878,39 @@ box-shadow:  inset 0 0 0 1px var(--border-primary-focus); /* ← remove */
 
 `--subj-title` is only set for Accounting (light text on medium-blue bg). All other subjects default to `white`.
 
-*Last updated: 2026-05-29 (Session 8)*
+---
+
+### 198. Button - 1.5 — no CSS transitions on any state (instant cuts only)
+
+All `Button - 1.5` instances use **instant state changes** — no `transition` on any property, on any element (container, label, arrow, arrow-clip).
+
+**Rule:** Never add `transition` to any Button - 1.5 CSS class — `.btn-*`, `.btn-*__text`, `.btn-*__label`, `.btn-*__arrow`, or any child element.
+
+**Why:** The DS does not define easing or duration for button state changes. Adding transitions causes the button body and arrow to animate at different speeds, producing a "laggy arrow" or "staggered" feel. State changes must be instant cuts to match the DS.
+
+Note: Transitions on **cards** (e.g. `.practice-card { transition: background }`) are separate DS-defined hover animations and are NOT affected by this rule. This rule applies to Button - 1.5 elements only.
+
+---
+
+### 199. Button - 1.5 — always pair CSS `:active` with JS `is-pressing` handler
+
+Every Button - 1.5 `<button>` must have **both** CSS `.is-pressing` declarations AND JS mousedown/mouseup/mouseleave handlers toggling that class. CSS `:active` alone is unreliable in VS Code Simple Browser (Electron webview).
+
+```css
+.btn:active,
+.btn.is-pressing { /* pressed bg + border — no transition */ }
+.btn:active .btn__child,
+.btn.is-pressing .btn__child { /* child color overrides */ }
+```
+
+```js
+document.querySelectorAll('.btn-class').forEach(function (btn) {
+  btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+  btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+  btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+});
+```
+
+**`mouseleave` is mandatory** — without it the button stays in pressed state if the cursor moves away while the mouse is held.
+
+*Last updated: 2026-05-31 | Rules 198–199 added — Button-1.5 no transitions + is-pressing JS; Rules 19/40 corrected for Primary Pressed palette (Primary=#00a36a, Secondary/Tertiary=#00564c) | Session 9*

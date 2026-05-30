@@ -8,9 +8,13 @@
 >
 > **Companion files** — [CLAUDE.md](CLAUDE.md) (full implementation rules, 1–76+), [design-md/zul.design.md](design-md/zul.design.md), [design-md/nadia.design.md](design-md/nadia.design.md), [design-md/syakila.design.md](design-md/syakila.design.md).
 
-> ### Sync status (2026-05-28)
+> ### Sync status (2026-05-31)
 >
-> **Live-verified against DS this session (2026-05-28):**
+> **Updated 2026-05-31 (documentation consistency pass):**
+> - §6.1 — Added critical pitfalls: no-transition rule + is-pressing JS requirement for all Button - 1.5
+> - §6.2 — Corrected "Hover/Pressed/Disabled share palettes" — Pressed does NOT share (Secondary≠Primary for Pressed)
+>
+> **Live-verified against DS (2026-05-28):**
 > - §3.1 — `Surface/disabled/on color` (#e5e5e5), `Surface/informative/default` (#00a2e8), `Surface/secondary/default-hover` (#f6fef6) — all new tokens added
 > - §3.2 — `Text/primary/on-color` confirmed `#ffffff` (changed from `#f6fdfb`, DS updated 2026-05-24)
 > - §3.3 — `Icon/primary/on-color` confirmed `#ffffff` (changed from `#f6fdfb`, DS updated 2026-05-24)
@@ -436,6 +440,8 @@ The 5 status badge variants use **flat hex values** (not semantic tokens — the
 - Pressed label is **`Text/primary/default`** (`#00cc85`) for ALL variants, NOT `Text/primary/on-color`.
 - Hover transitions from primary palette to **secondary palette** — never a darker green.
 - Arrow chevron color must be read from the **arrow sub-node**, not the parent button node.
+- **No CSS transitions on any Button - 1.5 element.** All state changes are instant cuts — no `transition` on container, label, arrow, or clip. (CLAUDE.md Rule 82, zul.design.md Rule 198)
+- **Always pair CSS `:active` with JS `is-pressing`.** CSS `:active` alone is unreliable in Electron webviews. Every Button - 1.5 `<button>` must have matching `mousedown`/`mouseup`/`mouseleave` handlers. (CLAUDE.md Rule 83, zul.design.md Rule 199)
 
 ### 6.2 Secondary/M button (white-fill outlined) — Default state
 
@@ -448,7 +454,9 @@ The 5 status badge variants use **flat hex values** (not semantic tokens — the
 | Arrow circle stroke | `#00cc85` | `--border-primary-default` (apply as `box-shadow: inset 0 0 0 1px` — see [CLAUDE.md Rule 30](CLAUDE.md)) |
 | Arrow chevron | `#00cc85` | `--icon-primary-default` |
 
-**Hover/Pressed/Disabled** for Secondary/M share the same palettes as Primary/M — see §6.1.
+**Hover/Disabled** for Secondary/M share the same palettes as Primary/M — see §6.1 Default/Hover/Disabled table.
+
+> ⚠️ **Pressed does NOT share** — Secondary/M Pressed uses dark teal (`#00564c`) while Primary/M uses intensified-green (`#00a36a`). See §6.1 Pressed table for per-variant values.
 
 ### 6.3 Nav-btn / Nav menu pill
 
