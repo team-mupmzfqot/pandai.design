@@ -7698,4 +7698,69 @@ Extract every `id="..."` value and its line number. Present them in document ord
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-29 (Rule 168 — Static Card DS audit: gap 12→0, img-col szH HUG→FILL, szV FILL→HUG, right-col mA CENTER→MIN, Tertiary bg solid→IMAGE fill) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 198. Button - 1.5 action animations — no CSS transitions on any state
+
+All `Button - 1.5` instances use **instant state changes** — no `transition` on any property, on any element (container, label, arrow).
+
+**Rule:** Never add `transition` to `.btn-*`, `.btn-*__text`, `.btn-*__label`, `.btn-*__arrow`, or any child of a Button - 1.5 implementation. State changes (hover, pressed, active, disabled) must cut immediately.
+
+**Applies to every Button - 1.5 variant and size:**
+- Primary/S — `.btn-quiz-cta` (Quiz Cards)
+- Primary/M — `.static-card__btn` (Static Cards)
+- Secondary/M — `.btn-add-classes` (Section headers)
+- Any future Button - 1.5 instance
+
+**Confirmed — all existing implementations (2026-05-30):**
+- `.static-card__btn` — no transition (reference behaviour, confirmed snappy)
+- `.btn-quiz-cta` — transitions removed (background 0.15s, border-color 0.15s, color 0.15s were wrong; corrected to instant)
+- `.btn-add-classes` — no transition (correct)
+
+**Why:** Instant cuts feel decisive and tactile. CSS transitions on small pill buttons read as sluggish at 0.15s — the motion draws attention to itself rather than confirming the action.
+
+**Mistake made (2026-05-30):** Added `transition: background 0.15s, border-color 0.15s` to `.btn-quiz-cta` to fix an incomplete animation, then added `transition: color 0.15s` to label and `transition: background 0.15s, color 0.15s` to arrow. All removed — Button - 1.5 must always be instant.
+
+---
+
+### Rule 199. Mandatory pre-flight — ALWAYS refer to DS & zul.design.md before any design work, change, or decision
+
+> **"Always before starting any design, making any changes, or making any decisions — refer to DS and zul.design.md first."**
+> — Zul, 2026-05-30
+
+This is a standing instruction that overrides convenience, habit, or apparent obviousness. Every single action — including a one-line CSS change — must be preceded by reading the relevant rules in `zul.design.md` and verifying the value live in the DS (`TLVKe3bgJTdVvuPAzgDq2f`).
+
+**Pre-flight checklist (mandatory, no exceptions):**
+```
+□ Read zul.design.md — find every rule that applies to the component or change
+□ Open DS: TLVKe3bgJTdVvuPAzgDq2f — re-verify every value live, never from memory
+□ Check existing implementations — grep the HTML file for the component class before writing new CSS
+□ Cross-check sibling components — if changing one Button - 1.5 instance, check ALL instances for consistency
+□ Only then write code
+```
+
+**Why this failed in this session (2026-05-30):**
+When asked about animation on `.btn-quiz-cta`, the first action was to add matching transitions to child elements — without first checking whether the reference component (`.static-card__btn`) had any transitions at all. The correct pre-flight would have been: read Rule 198 (didn't exist yet, but checking the static card first would have revealed the instant-cut pattern). Adding transitions before auditing the existing behaviour created extra work.
+
+**The correct order is always:**
+1. Read zul.design.md for applicable rules
+2. Check the DS for the authoritative spec
+3. Grep existing implementations for the current pattern
+4. Then act — never before
+
+---
+
+### Session learnings — 2026-05-30
+
+**What happened:**
+1. Found `.btn-quiz-cta` (Button - 1.5 Primary/S in Quiz Cards) had `transition: background 0.15s, border-color 0.15s` on the container but no transition on children (`__text`, `__arrow`) — so container faded but children snapped.
+2. Added matching `transition: color 0.15s` + `transition: background 0.15s, color 0.15s` to children to make them consistent.
+3. User compared to `.static-card__btn` (Button - 1.5 Primary/M in Static Cards) which felt snappier — inspected it and found it had zero transitions, all state changes are instant cuts.
+4. User chose Option 1: remove all transitions. Established as the permanent rule for all Button - 1.5 instances (Rule 198).
+
+**What to remember:**
+- Button - 1.5 = instant state changes, no `transition` ever (Rule 198)
+- Before fixing any animation inconsistency, first audit the reference implementation — don't assume animated is correct
+- When a fix introduces new CSS (even small), immediately check: does the rest of the design do this differently?
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-30 (Rule 199 — mandatory pre-flight + session learnings: Button - 1.5 instant cuts confirmed) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
