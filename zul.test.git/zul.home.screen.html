@@ -934,21 +934,21 @@
     }
 
     /* Button - 1.5 Secondary/M + R Arrow — "View Activity History" (DS node 538:1923)
-       All 5 states confirmed from DS 2026-05-19. */
+       All 5 states re-verified 2026-05-31. Outer frame strokeAlign:INSIDE → box-shadow:inset (Rule 60). */
     .btn-secondary-arrow {
       display:       inline-flex;
       align-items:   center;
       height:        32px;
       max-height:    32px;
       background:    var(--surface-general-default);
-      border:        1px solid var(--border-primary-default);
+      border:        none;
+      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
       border-radius: var(--corner-radius-corner-rounded);
       padding:       2px var(--spacing-space-xs);
       gap:           0;
       cursor:        pointer;
       font-family:   var(--font-family);
       flex-shrink:   0;
-      transition:    background 0.12s ease, border-color 0.12s ease;
     }
     .btn-secondary-arrow__text {
       font-size:   12px;
@@ -957,11 +957,9 @@
       color:       var(--text-primary-default);
       padding:     0 var(--spacing-space-xxs);
       white-space: nowrap;
-      transition:  color 0.12s ease;
     }
-    /* Arrow circle — DS confirmed all 5 states: w:20 h:20, padding:2 all sides, strokeAlign:INSIDE
-       INSIDE stroke = box-shadow:inset (no layout effect). Explicit 20×20 matches DS fixed size.
-       Content area = 20 - 2×2px padding = 16px (matches 16×16 clip). */
+    /* Arrow circle — DS 538:1929: w:20 h:20, padding:2 all sides, strokeAlign:INSIDE.
+       INSIDE stroke = box-shadow:inset (no layout effect). Content area = 20 - 2×2px = 16px. */
     .btn-secondary-arrow__circle {
       width:           20px;
       height:          20px;
@@ -973,8 +971,7 @@
       align-items:     center;
       justify-content: center;
       flex-shrink:     0;
-      color:           var(--text-primary-default);
-      transition:      background 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
+      color:           var(--icon-primary-default);
     }
     .btn-secondary-arrow__clip {
       width:       16px;
@@ -985,7 +982,7 @@
     .btn-secondary-arrow__clip svg { display: block; width: 100%; height: 100%; }
 
     /* Hover — DS 538:1915 */
-    .btn-secondary-arrow:hover { background: var(--surface-secondary-default); border-color: var(--border-secondary-focus); }
+    .btn-secondary-arrow:hover { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
     .btn-secondary-arrow:hover .btn-secondary-arrow__text { color: var(--text-secondary-focus); }
     .btn-secondary-arrow:hover .btn-secondary-arrow__circle {
       background:  var(--surface-secondary-default);
@@ -993,17 +990,17 @@
       color:       var(--text-secondary-focus);
     }
 
-    /* Pressed — DS 538:1907 */
-    .btn-secondary-arrow:active { background: var(--surface-primary-focus); border-color: var(--border-primary-default); }
+    /* Pressed — DS 538:1907: outer bg=Surface/primary/focus, arrow fill=Surface/primary/focus, stroke=Border/primary/default, chevron=Icon/primary/default */
+    .btn-secondary-arrow:active { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
     .btn-secondary-arrow:active .btn-secondary-arrow__text { color: var(--text-primary-default); }
     .btn-secondary-arrow:active .btn-secondary-arrow__circle {
-      background:  var(--surface-primary-default);
-      box-shadow:  none;
-      color:       var(--surface-primary-focus);
+      background:  var(--surface-primary-focus);
+      box-shadow:  inset 0 0 0 1px var(--border-primary-default);
+      color:       var(--icon-primary-default);
     }
 
     /* Active — DS 3029:19996 */
-    .btn-secondary-arrow.is-active { background: var(--surface-primary-default); border-color: var(--border-primary-focus); }
+    .btn-secondary-arrow.is-active { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
     .btn-secondary-arrow.is-active .btn-secondary-arrow__text { color: var(--text-primary-on-color); }
     .btn-secondary-arrow.is-active .btn-secondary-arrow__circle {
       background:  transparent;
@@ -1013,7 +1010,7 @@
 
     /* Disabled — DS 538:1899 */
     .btn-secondary-arrow:disabled,
-    .btn-secondary-arrow.is-disabled { background: var(--surface-disabled-primary); border-color: var(--border-disabled-disabled); cursor: not-allowed; }
+    .btn-secondary-arrow.is-disabled { background: var(--surface-disabled-primary); box-shadow: inset 0 0 0 1px var(--border-disabled-disabled); cursor: not-allowed; }
     .btn-secondary-arrow:disabled .btn-secondary-arrow__text,
     .btn-secondary-arrow.is-disabled .btn-secondary-arrow__text { color: var(--text-disabled-default); }
     .btn-secondary-arrow:disabled .btn-secondary-arrow__circle,

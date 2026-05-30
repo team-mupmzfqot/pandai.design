@@ -600,18 +600,22 @@ CSS `border` consumes box-model space. With `box-sizing: border-box; width: 18px
 
 **Rule:** Replicate Figma stroke with `box-shadow: inset 0 0 0 <weight>px <color>` — this renders a visible ring inside the element without affecting layout. Then size with content-box math.
 
-**CSS pattern for Secondary/M button arrow (DS node `538:1929` — 18×18, 1px stroke, 1px padding):**
+**CSS pattern for Secondary/M R Arrow (DS node `538:1929` — 20×20, 1px stroke, 2px padding):**
+
+> ⚠️ Updated 2026-05-31 via `get_design_context` live audit: the **R Arrow** (default, `showRArrow: true`) uses `p: 2px` → **20×20 total**. The L Arrow (`showLArrow: false`, hidden by default) uses `p: 1px` → 18×18. Prior docs used the L Arrow spec for both — incorrect.
+
 ```css
+/* R Arrow (default visible arrow) — Secondary/M */
 .arrow {
   width:      16px;          /* content width */
   height:     16px;          /* content height */
-  padding:    1px;           /* +1 each side = 18px total */
-  box-shadow: inset 0 0 0 1px var(--border-primary-default);  /* Figma stroke */
-  /* NO border — border would consume space and shrink content to 14px */
+  padding:    2px;           /* +2 each side = 20px total */
+  box-shadow: inset 0 0 0 1px var(--border-primary-default);  /* Figma stroke, INSIDE */
+  /* NO border — border consumes box-model space and shrinks content */
 }
 ```
 
-**Confirmed mistake:** Secondary/M button arrow used `border: 1px solid; padding: 1px; box-sizing: border-box; width: 18px` → 14px content area. The 16px clip overflowed. Corrected to `box-shadow: inset`, `width: 16px; padding: 1px` → 18px total, 16px content.
+**Confirmed mistake:** Secondary/M button arrow used `border: 1px solid; padding: 1px; box-sizing: border-box; width: 18px` → 14px content area. The 16px clip overflowed. Corrected to `box-shadow: inset`, `width: 16px; padding: 2px` → 20px total, 16px content.
 
 **Applies whenever:** a DS node has both a stroke AND padding, and you need the content area to be exactly `frame_size − 2×padding`.
 
@@ -619,25 +623,54 @@ CSS `border` consumes box-model space. With `box-sizing: border-box; width: 18px
 
 ### 31. Button - 1.5 confirmed DS specs (Student Type)
 
-All specs from `use_figma` inspection of component nodes. Arrow circle fills/strokes from `node.fills`/`node.strokes`.
+All specs from `get_design_context` live audit (2026-05-31, COMPONENT_SET `473:529`). Arrow circle data from `node.fills`/`node.strokes` + `get_design_context` padding classes.
 
-| Property | Primary/S | Primary/M | Secondary/M |
+#### Sizing, padding, and text — all variants follow size, not variant
+
+| Property | Size S | Size M | Size L |
 |---|---|---|---|
-| Height | 24px | 32px | 32px |
-| Outer padding | `2px 4px` (`space-xxs`) | `2px 8px` (`space-xs`) | `2px 8px` (`space-xs`) |
-| Border-radius | 60px (pill) | 60px | 60px |
-| Text | 12px SemiBold | 12px SemiBold | 12px SemiBold |
-| Text slot padding | `0 4px` | `0 4px` | `0 4px` |
-| Arrow circle size | 16×16 | 20×20 | 18×18 |
-| Arrow padding | 2px (content-box) | 2px (content-box) | 1px (content-box) |
-| Arrow clip | 12×12 | 16×16 | 16×16 |
-| Arrow fill | `#99ebce` | `#99ebce` | white |
-| Arrow stroke | none | none | 1px `#00cc85` → use `box-shadow:inset` |
-| DS node (Default) | `1437:8154` | `479:344` | `538:1923` |
+| Height | 24px | 32px | 40px |
+| Outer padding | `2px 4px` (py:2 px:4) | `2px 8px` (py:2 px:8) | `8px 12px` (py:8 px:12) |
+| Border-radius | 60px pill | 60px pill | 60px pill |
+| **Text** | **12px SemiBold** lh:18 | **12px SemiBold** lh:18 | **14px SemiBold** lh:20 |
+| Text slot px | 4px | 4px | 8px |
+| Leading icon clip | 16×16 | 16×16 | 24×24 |
 
-**Primary/S uses `Spacing/space-xxs` (4px) for outer horizontal padding — NOT 8px.** Primary/M and Secondary/M use `Spacing/space-xs` (8px). Text size `12px SemiBold` is the same across all sizes.
+> Size S and M share 12px/lh:18. Size L uses 14px/lh:20 — do NOT assume 12px for L.
 
-**Mistake corrected (May 2026):** Rule 31 previously stated all sizes share `2px 8px` outer padding. Live DS audit via `get_design_context` confirmed Primary/S is `px-[Spacing/space-xxs, 4px]` = `2px 4px`. The quiz CTA buttons on the home screen were rendering 8px wider than DS because of this error.
+#### Arrow — structure differs by Variant, size within Variant follows the same pattern
+
+| Property | Primary (S/M/L) | Secondary (S/M/L) | Tertiary (S/M/L) |
+|---|---|---|---|
+| Arrow structure | **filled circle** | **outlined circle** | **bare chevron — no circle** |
+| Arrow fill | `#99ebce` | white | N/A |
+| Arrow stroke | none | 1px `#00cc85` → `box-shadow:inset` | N/A |
+| Arrow circle (S) | 16px (p:2px → 12×12 clip) | 16px (p:2px → 12×12 clip) | — |
+| Arrow circle (M) | 20px (p:2px → 16×16 clip) | 20px (p:2px → 16×16 clip) | — |
+| Arrow circle (L) | 24px (p:4px → 16×16 clip) | 24px (p:4px → 16×16 clip) | — |
+| Arrow clip (S) | 12×12 | 12×12 | 12×12 (bare) |
+| Arrow clip (M/L) | 16×16 | 16×16 | 16×16 (bare) |
+
+**Tertiary has NO arrow circle at all.** The chevron clip sits directly in the content row — no background, no border ring, no padding wrapper. Never add a `.btn__arrow` container div to Tertiary buttons.
+
+#### DS reference nodes (Student, Default state)
+
+| Variant / Size | DS node |
+|---|---|
+| Primary/S | `1437:8154` |
+| Primary/M | `479:344` |
+| Primary/L | `473:528` |
+| Secondary/S | `1452:8292` |
+| Secondary/M | `538:1923` |
+| Secondary/L | `538:1891` |
+| Tertiary/S | `1452:8381` |
+| Tertiary/M | `538:2099` |
+| Tertiary/L | `538:2067` |
+
+**Mistake corrected (2026-05-31 audit):**
+1. **Secondary/M arrow was 18×18/1px** — this was the L Arrow spec (`showLArrow: false`, hidden by default). The R Arrow (`showRArrow: true`) is **20×20/2px**, identical in size to Primary/M.
+2. **"All sizes share 12px SemiBold"** — wrong. Size L uses **14px SemiBold** (Body/B1 lh:20). S/M use 12px (Body/B5 lh:18).
+3. **Leading icon clip is size-sensitive** — L=24×24, M/S=16×16. Previously only arrow clip size was documented as varying.
 
 ---
 
@@ -4127,6 +4160,8 @@ At the cap: both `max-width` and `max-height` are satisfied simultaneously at th
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `538:2059` |
 | **Pressed** | **`#00564c`** | **`#00453d`** | **`#00cc85`** | `3029:20022` |
 | Active | `#00cc85` | `#00a36a` | `#ffffff` | `538:2051` |
+
+> **Tertiary arrow anatomy (confirmed 2026-05-31):** Tertiary has **no arrow circle**. The `showRArrow` chevron is a bare `overflow-clip` div placed directly in the content row — no bg fill, no border ring, no padding wrapper. `border: transparent` in Default state means the button body also has no border. Tertiary is structurally the simplest variant. See Rule 202.
 
 #### State=Active — what it is and when to use it
 
@@ -7888,4 +7923,132 @@ Three .md files (`CLAUDE.md`, `nadia.design.md`, `syakila.design.md`) all docume
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-31 (Rule 200c resolved — Primary=#00a36a, Secondary/Tertiary=#00564c, source design.color.md §6.1; Rule 201 added — cross-file consistency requirement; full propagation pass across CLAUDE.md + nadia.design.md + syakila.design.md + design.color.md) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 202. Tertiary button — no arrow circle, bare chevron only
+
+**Source:** DS `TLVKe3bgJTdVvuPAzgDq2f`, `get_design_context` on nodes `538:2067` (L), `538:2099` (M), `1452:8381` (S). Audited 2026-05-31.
+
+Tertiary is structurally distinct from Primary and Secondary:
+
+| Element | Primary | Secondary | Tertiary |
+|---|---|---|---|
+| Button border | `1px #00a36a` solid | `1px #00cc85` solid | **none** |
+| R Arrow container | filled circle (bg `#99ebce`) | outlined circle (white + 1px green border) | **no container** |
+| R Arrow | circle → clip | circle → clip | **bare clip only** |
+
+The Tertiary `showRArrow` renders as a bare `overflow-clip` div placed directly inside the content row — no wrapper div, no background, no `box-shadow`, no padding. The clip is 12×12 (S) or 16×16 (M/L), same as Primary/Secondary clip sizes.
+
+**CSS pattern:**
+```css
+/* Primary / Secondary — circle wraps the clip */
+.btn-primary__arrow  { background: #99ebce; padding: 2px; border-radius: 60px; }
+.btn-secondary__arrow { box-shadow: inset 0 0 0 1px var(--border-primary-default); padding: 2px; border-radius: 60px; }
+
+/* Tertiary — no wrapper at all, just the clip */
+.btn-tertiary .btn__arrow-clip { overflow: hidden; width: 16px; height: 16px; flex-shrink: 0; }
+```
+
+**Mistake to avoid:** Do not add a circle div (`<div class="btn__arrow">`) inside a Tertiary button. Any background, padding, or box-shadow on that div creates a visual circle that does not exist in the DS.
+
+**What "no border" means at button level:** `border: transparent` or omitting `border` entirely. Never `border: none` if the button already has a `border` class in the base reset — use `border-color: transparent` to keep layout stable across state changes.
+
+---
+
+### Rule 203. Secondary button outer frame — `strokeAlign: INSIDE` → `box-shadow: inset`, never `border`
+
+**Source:** DS `TLVKe3bgJTdVvuPAzgDq2f`, `use_figma` on node `538:1923` (Secondary/M Default). Confirmed 2026-05-31.
+
+The outer Secondary button frame has `strokeAlign: INSIDE`, `strokeWeight: 1`. Rule 60 is non-negotiable: INSIDE strokes always render as `box-shadow: inset 0 0 0 1px`, never as `border: 1px solid`.
+
+**Why `border` is wrong:** CSS `border: 1px solid` uses CENTER behavior. With `box-sizing: border-box` and `height: 32px`, a 1px border shrinks the inner content to 30px. The DS INSIDE stroke does not consume layout — the element stays 32px and the stroke overlays inside it. Using `border` violates the layout spec.
+
+**Critical cascade consequence:** when `box-shadow: inset` is the border mechanism, state-level `border-color` overrides (`:hover`, `:active`, `.is-active`, `:disabled`) have **zero visual effect** — there is no `border` to color. Every state override must replace the full `box-shadow` property, not `border-color`.
+
+```css
+/* Base */
+.btn-secondary-arrow {
+  border:     none;
+  box-shadow: inset 0 0 0 1px var(--border-primary-default);
+}
+/* Hover — must override box-shadow, NOT border-color */
+.btn-secondary-arrow:hover {
+  background:  var(--surface-secondary-default);
+  box-shadow:  inset 0 0 0 1px var(--border-secondary-focus);
+}
+/* Pressed */
+.btn-secondary-arrow:active {
+  background:  var(--surface-primary-focus);
+  box-shadow:  inset 0 0 0 1px var(--border-primary-default);
+}
+/* Active */
+.btn-secondary-arrow.is-active {
+  background:  var(--surface-primary-default);
+  box-shadow:  inset 0 0 0 1px var(--border-primary-focus);
+}
+/* Disabled */
+.btn-secondary-arrow:disabled,
+.btn-secondary-arrow.is-disabled {
+  background:  var(--surface-disabled-primary);
+  box-shadow:  inset 0 0 0 1px var(--border-disabled-disabled);
+}
+```
+
+**Mistake made (2026-05-31):** `.btn-secondary-arrow` used `border: 1px solid var(--border-primary-default)`. Hover/pressed/disabled overrides used `border-color:` — all silent no-ops because `box-shadow: inset` on the arrow circle coexisted with a `border` on the outer frame, making it appear the border was working. When corrected to `box-shadow`, all `border-color` lines had to be rewritten.
+
+**Rule:** Before writing ANY border on a DS component, call `use_figma` and read `strokeAlign`. Never assume — even for a simple outlined button. `INSIDE` = `box-shadow: inset`. Always.
+
+---
+
+### Rule 204. Secondary/M Pressed arrow circle — confirmed DS values (2026-05-31)
+
+**Source:** DS `use_figma` on node `538:1913` (Secondary/M Pressed R Arrow). Chevron variable resolved via `VariableID:119:10` = `Icon/primary/default`.
+
+| Property | DS value | token | hex |
+|---|---|---|---|
+| bg | `Surface/primary/focus` | `--surface-primary-focus` | `#00a36a` |
+| stroke | `Border/primary/default` (INSIDE) | `box-shadow: inset 0 0 0 1px var(--border-primary-default)` | `#00cc85` |
+| chevron `color` | `Icon/primary/default` | `--icon-primary-default` | `#00cc85` |
+
+The pressed arrow bg (`#00a36a`) matches the outer button bg — the arrow circle "blends in" visually, made visible only by its green ring stroke. The chevron (`#00cc85`) contrasts against the dark teal bg.
+
+**Corrected CSS:**
+```css
+.btn-secondary-arrow:active .btn-secondary-arrow__circle {
+  background:  var(--surface-primary-focus);              /* #00a36a */
+  box-shadow:  inset 0 0 0 1px var(--border-primary-default); /* #00cc85 ring */
+  color:       var(--icon-primary-default);               /* #00cc85 chevron */
+}
+```
+
+**Mistake made (2026-05-31):** All 3 properties were inverted:
+- bg: `var(--surface-primary-default)` = `#00cc85` ← wrong (should be `#00a36a`)
+- box-shadow: `none` ← wrong (should have green ring)
+- color: `var(--surface-primary-focus)` = `#00a36a` ← same as correct bg, making chevron invisible
+
+The chevron was effectively invisible — its stroke color matched the background exactly. The visible effect was a solid green pill with no chevron.
+
+**Also corrected:** Base `.btn-secondary-arrow__circle` `color` changed from `var(--text-primary-default)` to `var(--icon-primary-default)`. Both resolve to `#00cc85`, but Rule 36 mandates the semantically correct token for icon strokes. Confirmed via DS: chevron path variable = `Icon/primary/default`.
+
+---
+
+### Session learnings — 2026-05-31 (Button secondary audit)
+
+**What happened:**
+1. User flagged "View Activity History" button doesn't follow DS.
+2. Live DS audit (`use_figma` on nodes `538:1923`, `538:1929`, `538:1907`, `538:1913`) revealed two violations:
+   - Outer frame used `border: 1px solid` despite `strokeAlign: INSIDE` (Rule 60)
+   - Pressed arrow circle had all 3 properties wrong (bg, stroke, chevron color all inverted)
+3. All state `border-color` overrides (hover/pressed/active/disabled) were silent no-ops — `border-color` does nothing when the "border" is a `box-shadow`.
+4. The chevron in Pressed state was invisible: its `color: var(--surface-primary-focus)` = `#00a36a` matched the also-wrong `background: var(--surface-primary-default)` = `#00cc85` almost exactly (swapped values — neither was DS-correct, and the colors almost cancelled each other visually).
+
+**What to remember:**
+- Rule 60 (`strokeAlign` → CSS mapping) applies to the **outer button frame too** — not just the arrow circle. Every stroke on every element must be verified.
+- When `box-shadow: inset` replaces `border`, every state `border-color` line becomes a silent no-op. Always update the full `box-shadow` in each state.
+- Pressed state arrow is particularly prone to color inversion errors. Always cross-check bg vs chevron contrast — if they're the same hex, the chevron will be invisible.
+- DS variable lookup via `VariableID` is the only reliable way to confirm which Semantic token a fill/stroke is bound to. `Icon/primary/default` ≠ `Text/primary/default` even when they share the same hex.
+- **Refer to DS and `zul.design.md` before any design work, change, or decision — without exception. Not after starting. Not partway through. Before.**
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-31 (Rules 203–204 added — Secondary outer frame box-shadow:inset correction; Pressed arrow circle all-3-properties fix; session learnings) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

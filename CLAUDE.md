@@ -601,18 +601,22 @@ CSS `border` consumes box-model space. With `box-sizing: border-box; width: 18px
 
 **Rule:** Replicate Figma stroke with `box-shadow: inset 0 0 0 <weight>px <color>` — this renders a visible ring inside the element without affecting layout. Then size with content-box math.
 
-**CSS pattern for Secondary/M button arrow (DS node `538:1929` — 18×18, 1px stroke, 1px padding):**
+**CSS pattern for Secondary/M R Arrow (DS node `538:1929` — 20×20, 1px stroke, 2px padding):**
+
+> ⚠️ Updated 2026-05-31: the **R Arrow** (default, `showRArrow: true`) is 20×20 with 2px padding. The L Arrow (`showLArrow: false`, hidden by default) is 18×18 with 1px padding. Prior docs used the L Arrow spec — incorrect for the visible arrow.
+
 ```css
+/* R Arrow (default visible arrow) — Secondary/M */
 .arrow {
   width:      16px;          /* content width */
   height:     16px;          /* content height */
-  padding:    1px;           /* +1 each side = 18px total */
-  box-shadow: inset 0 0 0 1px var(--border-primary-default);  /* Figma stroke */
-  /* NO border — border would consume space and shrink content to 14px */
+  padding:    2px;           /* +2 each side = 20px total */
+  box-shadow: inset 0 0 0 1px var(--border-primary-default);  /* Figma stroke, INSIDE */
+  /* NO border — border consumes box-model space and shrinks content */
 }
 ```
 
-**Confirmed mistake:** Secondary/M button arrow used `border: 1px solid; padding: 1px; box-sizing: border-box; width: 18px` → 14px content area. The 16px clip overflowed. Corrected to `box-shadow: inset`, `width: 16px; padding: 1px` → 18px total, 16px content.
+**Confirmed mistake:** Secondary/M button arrow used `border: 1px solid; padding: 1px; box-sizing: border-box; width: 18px` → 14px content area. The 16px clip overflowed. Corrected to `box-shadow: inset`, `width: 16px; padding: 2px` → 20px total, 16px content.
 
 **Applies whenever:** a DS node has both a stroke AND padding, and you need the content area to be exactly `frame_size − 2×padding`.
 
@@ -620,23 +624,53 @@ CSS `border` consumes box-model space. With `box-sizing: border-box; width: 18px
 
 ### 31. Button - 1.5 confirmed DS specs (Student Type)
 
-All specs from `use_figma` inspection of component nodes. Arrow circle fills/strokes from `node.fills`/`node.strokes`.
+All specs from `get_design_context` live audit (2026-05-31, COMPONENT_SET `473:529`).
 
-| Property | Primary/S | Primary/M | Secondary/M |
+#### Sizing, padding, and text — all variants follow size, not variant
+
+| Property | Size S | Size M | Size L |
 |---|---|---|---|
-| Height | 24px | 32px | 32px |
-| Outer padding | `2px 8px` | `2px 8px` | `2px 8px` |
-| Border-radius | 60px (pill) | 60px | 60px |
-| Text | 12px SemiBold | 12px SemiBold | 12px SemiBold |
-| Text slot padding | `0 4px` | `0 4px` | `0 4px` |
-| Arrow circle size | 16×16 | 20×20 | 18×18 |
-| Arrow padding | 2px (content-box) | 2px (content-box) | 1px (content-box) |
-| Arrow clip | 12×12 | 16×16 | 16×16 |
-| Arrow fill | `#99ebce` | `#99ebce` | white |
-| Arrow stroke | none | none | 1px `#00cc85` → use `box-shadow:inset` |
-| DS node (Default) | `1437:8154` | `479:344` | `538:1923` |
+| Height | 24px | 32px | 40px |
+| Outer padding | `2px 4px` (py:2 px:4) | `2px 8px` (py:2 px:8) | `8px 12px` (py:8 px:12) |
+| Border-radius | 60px pill | 60px pill | 60px pill |
+| **Text** | **12px SemiBold** lh:18 | **12px SemiBold** lh:18 | **14px SemiBold** lh:20 |
+| Text slot px | 4px | 4px | 8px |
+| Leading icon clip | 16×16 | 16×16 | 24×24 |
 
-**All button sizes share the same outer padding `2px 8px` and text size `12px SemiBold`.** Height and arrow size are the only things that change between S/M/L.
+> Size S and M share 12px/lh:18. **Size L uses 14px/lh:20** — do NOT assume 12px for L.
+
+#### Arrow — structure differs by Variant, size within Variant follows the same pattern
+
+| Property | Primary (S/M/L) | Secondary (S/M/L) | Tertiary (S/M/L) |
+|---|---|---|---|
+| Arrow structure | **filled circle** | **outlined circle** | **bare chevron — no circle** |
+| Arrow fill | `#99ebce` | white | N/A |
+| Arrow stroke | none | 1px `#00cc85` → `box-shadow:inset` | N/A |
+| Arrow circle (S) | 16px (p:2px → 12×12 clip) | 16px (p:2px → 12×12 clip) | — |
+| Arrow circle (M) | 20px (p:2px → 16×16 clip) | 20px (p:2px → 16×16 clip) | — |
+| Arrow circle (L) | 24px (p:4px → 16×16 clip) | 24px (p:4px → 16×16 clip) | — |
+| Arrow clip (S) | 12×12 | 12×12 | 12×12 (bare) |
+| Arrow clip (M/L) | 16×16 | 16×16 | 16×16 (bare) |
+
+**Tertiary has NO arrow circle.** The chevron sits bare in the content row — no bg, no border, no padding wrapper. See Rule 82 (no-transition), Rule 83 (is-pressing JS), and Rule 202 (Tertiary bare chevron, in zul.design.md).
+
+#### DS reference nodes (Student, Default state)
+
+| Variant / Size | DS node |
+|---|---|
+| Primary/S | `1437:8154` |
+| Primary/M | `479:344` |
+| Primary/L | `473:528` |
+| Secondary/M | `538:1923` |
+| Secondary/L | `538:1891` |
+| Tertiary/M | `538:2099` |
+| Tertiary/L | `538:2067` |
+
+**Corrections applied (2026-05-31 live audit):**
+1. **Secondary/M arrow was 18×18/1px** — that was the L Arrow (`showLArrow: false`, hidden). R Arrow (`showRArrow: true`) = **20×20/2px**, same as Primary/M.
+2. **"All sizes share 12px SemiBold"** — wrong. **Size L = 14px SemiBold** (Body/B1 lh:20). S/M = 12px (Body/B5 lh:18).
+3. **Primary/S outer padding was `2px 8px`** — wrong. Correct: **`2px 4px`** (`Spacing/space-xxs`).
+4. **Leading icon clip size changes with size** — L=24×24, M/S=16×16.
 
 ---
 
@@ -2404,4 +2438,71 @@ document.querySelectorAll('.btn-quiz-cta, .btn-add-classes').forEach(function (b
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-31 (Rule 81b — cross-file consistency requirement; Rules 82–83 — Button-1.5 no transitions + is-pressing JS; Rule 40 resolved — Primary=#00a36a, Secondary/Tertiary=#00564c, source design.color.md §6.1) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### 84. Tertiary button — no arrow circle, bare chevron only (= Rule 202 in zul.design.md)
+
+**Source:** DS `TLVKe3bgJTdVvuPAzgDq2f`, `get_design_context` on nodes `538:2067` (L), `538:2099` (M), `1452:8381` (S). Audited 2026-05-31.
+
+Tertiary is structurally different from Primary and Secondary:
+
+| Element | Primary | Secondary | Tertiary |
+|---|---|---|---|
+| Button border | `1px #00a36a` | `1px #00cc85` | **none** |
+| R Arrow container | filled circle (`#99ebce`) | outlined circle (white + 1px green) | **no container** |
+| R Arrow | circle → clip | circle → clip | **bare clip only** |
+
+The `showRArrow` chevron in Tertiary is a bare `overflow-clip` div placed directly in the content row — no wrapper div, no background, no `box-shadow`, no padding.
+
+**CSS:**
+```css
+/* Primary */
+.btn-primary__arrow { background: #99ebce; padding: 2px; border-radius: 60px; }
+/* Secondary */
+.btn-secondary__arrow { box-shadow: inset 0 0 0 1px var(--border-primary-default); padding: 2px; border-radius: 60px; }
+/* Tertiary — NO wrapper */
+.btn-tertiary .btn__chevron { overflow: hidden; flex-shrink: 0; width: 16px; height: 16px; }
+```
+
+**Never add** a circle wrapper div to a Tertiary button's arrow. Any `background`, `padding`, or `box-shadow` on a `.btn__arrow` inside Tertiary creates a circle that does not exist in the DS.
+
+---
+
+### 85. Secondary button outer frame — `strokeAlign: INSIDE` → `box-shadow: inset`, never `border` (= Rule 203 in zul.design.md)
+
+**Source:** DS `use_figma` on node `538:1923`. Confirmed 2026-05-31.
+
+The Secondary button outer frame has `strokeAlign: INSIDE`. Rule 60 applies: always `box-shadow: inset 0 0 0 1px`, never `border: 1px solid`.
+
+**Critical cascade rule:** when `box-shadow: inset` is the border mechanism, state overrides (`:hover`, `:active`, `.is-active`, `:disabled`) must override the full `box-shadow` property. `border-color:` overrides have **zero effect** when there is no `border`.
+
+```css
+.btn-secondary-arrow { border: none; box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+.btn-secondary-arrow:hover   { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+.btn-secondary-arrow:active  { background: var(--surface-primary-focus);     box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+.btn-secondary-arrow.is-active { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+.btn-secondary-arrow:disabled,
+.btn-secondary-arrow.is-disabled { background: var(--surface-disabled-primary); box-shadow: inset 0 0 0 1px var(--border-disabled-disabled); }
+```
+
+**Mistake made (2026-05-31):** Used `border: 1px solid` on the outer frame — all state `border-color` lines were silent no-ops.
+
+---
+
+### 86. Secondary/M Pressed arrow circle — confirmed DS values (= Rule 204 in zul.design.md)
+
+**Source:** DS `use_figma` on node `538:1913`. Chevron variable `VariableID:119:10` = `Icon/primary/default`. Confirmed 2026-05-31.
+
+| Property | Correct | Wrong (was) |
+|---|---|---|
+| bg | `Surface/primary/focus` `#00a36a` | `Surface/primary/default` `#00cc85` |
+| box-shadow | `inset 0 0 0 1px var(--border-primary-default)` | `none` |
+| chevron `color` | `Icon/primary/default` `#00cc85` | `Surface/primary/focus` `#00a36a` |
+
+Bg and chevron color were swapped — chevron was invisible (same hex as bg). Arrow circle base `color` must also use `--icon-primary-default`, not `--text-primary-default` (same hex, but Rule 36: icon strokes → icon token).
+
+**Mandatory pre-flight:** Always refer to DS and `zul.design.md` before any design work, change, or decision — including seemingly small fixes. These violations were present because the Pressed state was never verified live from DS. A 2-minute `use_figma` call on `538:1913` would have caught all three errors before they were committed.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-31 (Rules 85–86 added — Secondary outer frame box-shadow:inset; Pressed arrow all-3-properties correction; mandatory pre-flight reinforced) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
