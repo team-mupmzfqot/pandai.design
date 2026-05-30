@@ -25,8 +25,11 @@
 > - §6.1 — Button - 1.5 Default, Hover, Pressed, Disabled (Primary/S + Tertiary/L)
 > - §6.3 — Nav-btn / Tertiary button Pressed
 >
+> **Confirmed invalid (2026-05-30):**
+> - §3.1 `--surface-subtle` (`#F8FAFC`) — **not a DS token**. DS Screen page uses `Surface/general/default` (#ffffff). See CLAUDE.md Rule 81.
+>
 > **Known stale / not yet re-verified:**
-> - §3.1 `--surface-subtle` (`#F8FAFC`) · §3.2 `--text-default-secondary`, `--text-default-placeholder` · §3.5 `--overlay-default` · §5 Status Badge hexes · §6.2 / §6.4 / §6.5 / §6.6 component recipes
+> - §3.2 `--text-default-secondary`, `--text-default-placeholder` · §3.5 `--overlay-default` · §5 Status Badge hexes · §6.2 / §6.4 / §6.5 / §6.6 component recipes
 >
 > **Coverage gaps (DS has these, this doc doesn't yet):**
 > - `Surface/gold/*`, `Surface/silver/*`, `Surface/bronze/*` (medal/tier surfaces)
@@ -108,8 +111,8 @@ Figma:  Corner Radius/corner-rounded       → CSS: --corner-radius-corner-round
 
 | CSS variable | Hex | Figma path | Where it's used |
 |---|---|---|---|
-| `--surface-general-default` | `#FFFFFF` | `Surface/general/default` | Page background, card backgrounds, modal containers, nav-menu button bg, footer bg. **The canonical white.** |
-| `--surface-subtle` | `#F8FAFC` | `Surface/subtle` | Sectional alt background (rarely used; prefer white). |
+| `--surface-general-default` | `#FFFFFF` | `Surface/general/default` | Page background (`body`), card backgrounds, modal containers, nav-menu button bg, footer bg. **The canonical white. Confirmed as DS Screen page background (2026-05-30).** |
+| ~~`--surface-subtle`~~ | ~~`#F8FAFC`~~ | ~~`Surface/subtle`~~ | ~~Sectional alt background.~~ **INVALID — not a DS token. Was fabricated. Use `--surface-general-default` instead.** |
 | `--surface-primary-default` | `#00cc85` | `Surface/primary/default` | Primary button fill (Default state), badge fills that say "active", carousel button container fill, Score status pill fill. The "Pandai green." |
 | `--surface-primary-focus` | `#00a36a` | `Surface/primary/focus` | Primary button border (Default), focus rings on primary inputs. **Do not use for button labels** — that's `--text-primary-on-color`. |
 | `--surface-primary-default-subtle` | `#d9f7ed` | `Surface/primary/default-subtle` | Tint backgrounds for primary-themed cards or alerts (light mint). |

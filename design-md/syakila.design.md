@@ -2215,9 +2215,9 @@ Mobile: `body { padding-bottom: 102px }` when footer stacks vertically.
 
 ## Page background
 
-`body { background: var(--surface-subtle); }` = `#f8fafc`
+`body { background: var(--surface-general-default); }` = `#ffffff`
 
-This makes the 12px gap between the two navbar rows visible (light grey showing between white elements).
+DS Screen page confirmed: `Surface/general/default` is the correct page background token (2026-05-30). `--surface-subtle` (`#f8fafc`) was a fabricated token — not in DS. Use `--surface-general-default` everywhere.
 
 ---
 

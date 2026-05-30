@@ -6693,7 +6693,7 @@ When a Figma auto-layout parent has `crossAlign: CENTER` (`align-items: center`)
 4. `szH: HUG` on img-col — DS is FILL. Both columns split width equally (`flex: 1 0 0`).
 5. `szV: FILL` on img-col — DS is HUG. img-col centres vertically at 186px; use `align-self: center`.
 6. `justify-content: center` on right-col — DS is MIN (flex-start). CTA fills remaining space via `flex: 1 0 0`.
-7. `background: var(--surface-subtle)` on Tertiary — DS now uses IMAGE fill, not a solid colour.
+7. `background: var(--surface-subtle)` on Tertiary — DS now uses IMAGE fill, not a solid colour. Note: `--surface-subtle` is also not a DS token (confirmed 2026-05-30) — never use it for any surface, including page background.
 
 ---
 

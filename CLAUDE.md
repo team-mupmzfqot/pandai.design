@@ -2336,4 +2336,24 @@ Do NOT read HTML, check CSS, audit component anatomy, or fetch design context un
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-29 (Rules 78–80 — exportAsync for transparent PNG, base64 split-write, simple task = direct action) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 81. Page background = `Surface/general/default` (#ffffff) — `--surface-subtle` does not exist in DS
+
+The DS Screen page uses **`Surface/general/default`** (`#ffffff`) as the page background fill — confirmed via `use_figma` on the "Pandai - Screen" frame (all instances use `VariableID:.../2375:1335` which resolves to `Surface/general/default`).
+
+**`Surface/subtle` is not a DS token.** It was invented during prototype implementation and never existed in `TLVKe3bgJTdVvuPAzgDq2f`.
+
+```css
+/* Wrong — fabricated token, not in DS */
+body { background: var(--surface-subtle); }
+
+/* Correct — DS confirmed, Screen page standard */
+body { background: var(--surface-general-default); }
+```
+
+**Rule:** Every HTML prototype's `body` background must use `var(--surface-general-default)`. Remove `--surface-subtle` from any `:root` block it appears in. Do not create a `--page-bg` alias — reference `--surface-general-default` directly.
+
+**Confirmed mistake (2026-05-30):** All HTML prototypes (`zul.home.screen.html`, `zul.page.template.html`, `syakila.html`, `scoreCard.html`, `AnalysisCard.html`, `nadia_*.html`, `azrai.html`) had `body { background: var(--surface-subtle) }` using a fabricated `#F8FAFC` value. Verified DS Screen page uses `Surface/general/default` = `#ffffff`.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-30 (Rule 81 — page background = Surface/general/default, --surface-subtle is invalid) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
