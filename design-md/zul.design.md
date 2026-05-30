@@ -7671,4 +7671,31 @@ Do NOT read the HTML file, check CSS rules, fetch design context, inspect compon
 
 ---
 
+### Rule 197. `start` prompt — always show sections listing for the active HTML file
+
+When the user sends the single word **`start`** (case-insensitive, with or without punctuation), immediately respond with a sections listing for the HTML file currently being worked on — before doing anything else.
+
+**Format:**
+
+```
+Sections in [filename]:
+
+| # | Section ID | Line |
+|---|---|---|
+| 1 | SectionId | NNNN |
+...
+```
+
+**How to produce it:**
+```
+grep -n "<section" <active-html-file>
+```
+Extract every `id="..."` value and its line number. Present them in document order.
+
+**Active HTML file = the file most recently discussed or edited in the session.** If ambiguous, ask the user to confirm which file before listing.
+
+**Rule:** This listing must appear at the top of the response — before any other content. Never skip it, never defer it. It is the mandatory session orientation step.
+
+---
+
 *Generated: May 2026 | Last updated: 2026-05-29 (Rule 168 — Static Card DS audit: gap 12→0, img-col szH HUG→FILL, szV FILL→HUG, right-col mA CENTER→MIN, Tertiary bg solid→IMAGE fill) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
