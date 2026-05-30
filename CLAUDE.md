@@ -55,7 +55,7 @@
 
 **Mistake made:**
 - Primary button hover was assumed to be a darker green. Actual DS: Primary hover transitions to the **Secondary palette** — `Surface/secondary/default` (`#b5f291`) bg, `Border/secondary/focus` (`#70bc6f`) border, `Text/secondary/focus` (`#70bc6f`) text.
-- Secondary button Pressed state was incorrectly noted as "fills solid with Surface/primary/default". Actual DS node `538:1907` (Secondary/M/Student/Pressed): bg `#00564c` (`Surface/tertiary/default`), border `#00453d` (`Border/tertiary/focus`), text `#00cc85` (`Text/primary/default`) — same dark teal palette as Tertiary Pressed.
+- Secondary button Pressed state was incorrectly noted as "fills solid with Surface/primary/default", then mis-corrected to dark teal `#00564c`. **Re-verified live DS 2026-05-31 via `get_design_context` on node `538:1907`:** bg `#00a36a` (`Surface/primary/focus`), border `#00cc85` (`Border/primary/default`), text `#00cc85` (`Text/primary/default`) — same palette as Primary Pressed.
 - Disabled state was invented. Actual DS: `Surface/disabled/primary` (`#f2f2f2`) bg, `Border/disabled/disabled` (`#bfbfbf`) border, `Icon/disabled/default` (`#bfbfbf`) text.
 
 ---
@@ -906,24 +906,24 @@ When looking up states for a component used inside a larger DS assembly (e.g. a 
 
 ---
 
-### 40. Button - 1.5 Pressed palette — PRIMARY and SECONDARY use different palettes (RESOLVED 2026-05-31)
+### 40. Button - 1.5 Pressed palette — PRIMARY and SECONDARY share the same Pressed palette (UPDATED 2026-05-31)
 
-**Source of truth: `design.color.md` §6.1, live-verified 2026-05-28. This supersedes all prior contradictions in earlier Rule 40/117 versions.**
+**Source of truth: live DS `get_design_context` 2026-05-31 on node `538:1907`. Supersedes all prior contradictions.**
 
 | Variant | Pressed bg | bg token | Pressed border | border token | Label |
 |---|---|---|---|---|---|
 | **Primary** (S/M/L) | `#00a36a` | `Surface/primary/focus` | `#00cc85` | `Border/primary/default` | `#00cc85` |
-| **Secondary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
+| **Secondary** (S/M/L) | `#00a36a` | `Surface/primary/focus` | `#00cc85` | `Border/primary/default` | `#00cc85` |
 | **Tertiary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
 
 **Label token all variants:** `Text/primary/default` = `#00cc85`
 
 **Key DS nodes:**
-- Primary/L Pressed: `473:650` (bg `#00a36a`, border `#00cc85`) — confirms Primary ≠ Tertiary
-- Secondary/M Pressed: `538:1907` (bg `#00564c`, border `#00453d`)
+- Primary/L Pressed: `473:650` (bg `#00a36a`, border `#00cc85`)
+- Secondary/M Pressed: `538:1907` (bg `#00a36a`, border `#00cc85`) — re-verified 2026-05-31 via `get_design_context`
 - Tertiary/L Pressed: `3029:20022` (bg `#00564c`, border `#00453d`)
 
-**Mistake made:** Prior rules documented ALL variants as either `#00a36a` OR `#00564c` — both wrong. The correct split is Primary=lighter teal, Secondary/Tertiary=darker teal. Always verify per-variant from DS before implementing.
+**Mistake made:** Prior rules documented Secondary Pressed as `#00564c` (tertiary) — wrong. Live DS 2026-05-31 confirms Secondary uses the same `#00a36a` (primary/focus) palette as Primary. Only Tertiary uses the darker teal. Always re-verify live DS before implementing — DS token values change between sessions (Rule 61).
 
 **See also:** Rule 82 (no transitions), Rule 83 (is-pressing JS), zul.design.md Rule 200 (three non-negotiables).
 

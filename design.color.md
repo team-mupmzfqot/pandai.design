@@ -41,7 +41,7 @@
 > - `Surface/primary/default-hover` (distinct from `default-focus`)
 > - `Icon/primary/default-hover`, `Text/primary/default-hover`
 >
-> **CLAUDE.md drift:** Rules 19, 38, 40 document a pre-2026-05 DS where Button/Nav Pressed = dark teal `#00564c`. The live DS now uses `#00a36a` for **Primary** Pressed (no `State=Active`); Secondary/Tertiary Pressed DOES use dark teal `#00564c`. When CLAUDE.md and this file conflict on state colors, **this file is authoritative.**
+> **CLAUDE.md drift:** Rules 19, 38, 40 have had multiple conflicting values. **Current confirmed (2026-05-31, `get_design_context`):** Primary + Secondary Pressed = `#00a36a` (`Surface/primary/focus`); Tertiary Pressed = `#00564c` (`Surface/tertiary/default`). When CLAUDE.md and this file conflict on state colors, **this file is authoritative.**
 
 ---
 
@@ -428,14 +428,14 @@ The 5 status badge variants use **flat hex values** (not semantic tokens — the
 | Variant | btn bg | border | label | arrow circle | arrow chevron |
 |---|---|---|---|---|---|
 | **Primary** (S/M/L) | `--surface-primary-focus` `#00a36a` | `--border-primary-default` `#00cc85` | `--text-primary-default` `#00cc85` | `--surface-primary-default` `#00cc85` | `--icon-primary-focus` `#00a36a` |
-| **Secondary** (S/M/L) | `--surface-tertiary-default` `#00564c` | `--border-tertiary-focus` `#00453d` | `--text-primary-default` `#00cc85` | `--surface-primary-default` `#00cc85` | `--icon-primary-focus` `#00a36a` |
+| **Secondary** (S/M/L) | `--surface-primary-focus` `#00a36a` | `--border-primary-default` `#00cc85` | `--text-primary-default` `#00cc85` | `--surface-primary-focus` `#00a36a` | `--text-primary-default` `#00cc85` |
 | **Tertiary** (S/M/L) | `--surface-tertiary-default` `#00564c` | `--border-tertiary-focus` `#00453d` | `--text-primary-default` `#00cc85` | transparent, border `--border-primary-default-subtle` `#d9f7ed` | `--icon-primary-focus` `#00a36a` |
 
-> **DS nodes confirmed:** Primary/L Pressed = `473:650`; Secondary/M Pressed = `538:1907`; Tertiary/L Pressed = `3029:20022`.
+> **DS nodes confirmed:** Primary/L Pressed = `473:650` (bg `#00a36a`); Secondary/M Pressed = `538:1907` (bg `#00a36a`, re-verified 2026-05-31 via `get_design_context`); Tertiary/L Pressed = `3029:20022` (bg `#00564c`).
 
 **Critical pitfalls:**
 - **Default label is now `#ffffff`** — DS updated `Text/primary/on-color` from `#f6fdfb` to `#ffffff` on 2026-05-24. Any prototype using `#f6fdfb` or `#e1f9ea` for button labels is stale.
-- **Primary Pressed ≠ Secondary/Tertiary Pressed.** Primary uses intensified-green (`#00a36a`). Secondary/Tertiary use dark teal (`#00564c`). Never share these across variants.
+- **Secondary Pressed = Primary Pressed.** Both use `#00a36a` (`Surface/primary/focus`). Only Tertiary uses dark teal (`#00564c`). Re-verified 2026-05-31 via `get_design_context` on `538:1907`.
 - **Disabled arrow circle bg is `#e5e5e5`**, not `#f2f2f2`. Only the outer button bg uses `--surface-disabled-primary`.
 - Pressed label is **`Text/primary/default`** (`#00cc85`) for ALL variants, NOT `Text/primary/on-color`.
 - Hover transitions from primary palette to **secondary palette** — never a darker green.
@@ -456,7 +456,7 @@ The 5 status badge variants use **flat hex values** (not semantic tokens — the
 
 **Hover/Disabled** for Secondary/M share the same palettes as Primary/M — see §6.1 Default/Hover/Disabled table.
 
-> ⚠️ **Pressed does NOT share** — Secondary/M Pressed uses dark teal (`#00564c`) while Primary/M uses intensified-green (`#00a36a`). See §6.1 Pressed table for per-variant values.
+> ℹ️ **Secondary Pressed = Primary Pressed** — both use `#00a36a` (`Surface/primary/focus`). Only Tertiary uses dark teal (`#00564c`). See §6.1 Pressed table. (Re-verified 2026-05-31, `538:1907`)
 
 ### 6.3 Nav-btn / Nav menu pill
 
@@ -613,7 +613,7 @@ When implementing a new DS-derived component:
 | Mistook WIP Backup file results as authoritative | Only `TLVKe3bgJTdVvuPAzgDq2f` is the source — ignore everything else |
 | Button Default label = `#f6fdfb` or `#e1f9ea` | `--text-primary-on-color` is now `#ffffff` — DS changed 2026-05-24. Check `:root` and update any prototype using old values. |
 | Nav action button Active icon = `#e1f9ea` or `#f6fdfb` | `--icon-primary-on-color` is now `#ffffff` — DS changed 2026-05-24. |
-| All Button variants share the same Pressed palette | **Wrong** — Primary Pressed = `#00a36a` (intensified green). Secondary/Tertiary Pressed = `#00564c` (dark teal). Never cross-apply. |
+| All Button variants share the same Pressed palette | **Partially wrong** — Primary + Secondary Pressed = `#00a36a`. Only Tertiary = `#00564c`. Never assume without checking live DS (`get_design_context`). |
 | Disabled button arrow circle bg = `#f2f2f2` (same as outer) | Correct is `--surface-disabled-on-color` = `#e5e5e5`. Two different tokens. |
 | Badge white ring = `border: 1px solid white` | Badges use `strokeAlign: OUTSIDE` → must use `box-shadow: 0 0 0 1px var(--border-on-color)`. `border:` shrinks content area; `outline:` ignores border-radius. |
 

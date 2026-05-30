@@ -4098,7 +4098,7 @@ At the cap: both `max-width` and `max-height` are satisfied simultaneously at th
 
 **Source:** DS `TLVKe3bgJTdVvuPAzgDq2f`, COMPONENT_SET `473:529`. Default/Hover/Disabled from 2026-05-19 audit. **Pressed rows corrected 2026-05-31** per `design.color.md §6.1` (live-verified 2026-05-28, nodes 473:650, 538:1907, 3029:20022). See Rule 40 for the authoritative pressed palette.
 
-> ⚠️ Earlier versions of this table showed Secondary/Tertiary Pressed = `#00a36a` — that was wrong. Corrected to `#00564c` per the 2026-05-28 DS audit.
+> ✅ **Re-verified 2026-05-31 via `get_design_context` on `538:1907`:** Secondary Pressed = `#00a36a` (`Surface/primary/focus`), same as Primary. The 2026-05-28 audit that changed it to `#00564c` was wrong. Only Tertiary uses `#00564c`.
 
 #### Primary (S / M / L) — Student
 
@@ -7814,12 +7814,12 @@ document.querySelectorAll('.btn-quiz-cta, .btn-add-classes').forEach(function (b
 | Variant | Pressed bg | bg token | Pressed border | border token | Label |
 |---|---|---|---|---|---|
 | **Primary** (S/M/L) | `#00a36a` | `Surface/primary/focus` | `#00cc85` | `Border/primary/default` | `#00cc85` |
-| **Secondary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
+| **Secondary** (S/M/L) | `#00a36a` | `Surface/primary/focus` | `#00cc85` | `Border/primary/default` | `#00cc85` |
 | **Tertiary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
 
-**Source:** `design.color.md` §6.1, live-verified DS 2026-05-28. Supersedes all prior contradictions in Rule 40/117/171.
+**Source:** `get_design_context` on `538:1907`, re-verified 2026-05-31. Secondary row corrected from `#00564c` → `#00a36a`.
 
-**Key nodes:** Primary/L Pressed `473:650` (bg `#00a36a`), Secondary/M Pressed `538:1907` (bg `#00564c`), Tertiary/L Pressed `3029:20022` (bg `#00564c`).
+**Key nodes:** Primary/L Pressed `473:650` (bg `#00a36a`), Secondary/M Pressed `538:1907` (bg `#00a36a`, re-verified 2026-05-31), Tertiary/L Pressed `3029:20022` (bg `#00564c`).
 
 ---
 

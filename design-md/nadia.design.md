@@ -55,7 +55,7 @@
 
 **Mistake made:**
 - Primary button hover was assumed to be a darker green. Actual DS: Primary hover transitions to the **Secondary palette** — `Surface/secondary/default` (`#b5f291`) bg, `Border/secondary/focus` (`#70bc6f`) border, `Text/secondary/focus` (`#70bc6f`) text.
-- Secondary button Pressed state was incorrectly noted as "fills solid with Surface/primary/default". Actual DS node `538:1907` (Secondary/M/Student/Pressed): bg `#00564c` (`Surface/tertiary/default`), border `#00453d` (`Border/tertiary/focus`), text `#00cc85` (`Text/primary/default`) — same dark teal palette as Tertiary Pressed.
+- Secondary button Pressed state was incorrectly noted as "fills solid with Surface/primary/default", then mis-corrected to dark teal `#00564c`. **Re-verified live DS 2026-05-31 via `get_design_context` on node `538:1907`:** bg `#00a36a` (`Surface/primary/focus`), border `#00cc85` (`Border/primary/default`), text `#00cc85` — same palette as Primary Pressed.
 - Disabled state was invented. Actual DS: `Surface/disabled/primary` (`#f2f2f2`) bg, `Border/disabled/disabled` (`#bfbfbf`) border, `Icon/disabled/default` (`#bfbfbf`) text.
 
 ---
@@ -913,10 +913,10 @@ When looking up states for a component used inside a larger DS assembly (e.g. a 
 
 **Key DS nodes:**
 - Primary/L Pressed: `473:650` (bg `#00a36a`, border `#00cc85`) — confirms Primary ≠ Tertiary
-- Secondary/M Pressed: `538:1907` (bg `#00564c`, border `#00453d`)
+- Secondary/M Pressed: `538:1907` (bg `#00a36a`, border `#00cc85`) — re-verified 2026-05-31 via `get_design_context`
 - Tertiary/L Pressed: `3029:20022` (bg `#00564c`, border `#00453d`)
 
-**Correction (2026-05-31):** This rule previously stated "all three variants share the same dark teal (#00564c)" — that was wrong for Primary. Primary Pressed is lighter (`#00a36a`). Secondary and Tertiary Pressed are darker teal (`#00564c`). Always verify per-variant from DS before implementing.
+**Correction (2026-05-31):** Secondary Pressed = Primary Pressed = `#00a36a` (`Surface/primary/focus`). Only Tertiary Pressed uses the darker teal `#00564c`. Always re-verify live DS before implementing (DS token values change between sessions).
 
 ---
 
