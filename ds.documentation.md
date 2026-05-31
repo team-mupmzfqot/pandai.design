@@ -284,6 +284,223 @@ inst.layoutSizingVertical = 'FIXED';  // apply FIXED immediately after append
 
 ---
 
+## Mandatory Pre-Work — Updated Rule (June 2026)
+
+**Before starting ANY documentation design work, making any changes, or making any decisions:**
+
+```
+□ 1. Read ds.documentation.md (this file)            → all anatomy, patterns, and critical bugs
+□ 2. Read design-md/zul.design.md                    → all active rules (1–204+)
+□ 3. Open live DS: TLVKe3bgJTdVvuPAzgDq2f            → single source of truth — NOT memory
+□ 4. get_design_context on reference doc frame        → confirm current visual language
+□ 5. get_design_context on target COMPONENT_SET       → list ALL variants before writing any code
+□ 6. Check DS Component Asset Index (memory)          → get node IDs — never guess
+□ 7. For grids/showcases: plan column-first grouping  → see "Grid Layout Rules" section below
+□ 8. Build incrementally — verify after each section  → never build entire frame in one call
+□ 9. After adding all grid content: re-apply HUG      → see "Critical Bug 2" below
+```
+
+---
+
+## Grid Layout Rules (HORIZONTAL WRAP showcase frames)
+
+When building a multi-variant, multi-state showcase grid (e.g. Button Group States):
+
+### Column-first grouping — ALWAYS
+
+**Never group by size row.** Always group by scenario column.
+
+| Wrong (row-based) | Correct (column-based) |
+|---|---|
+| L-row (all 7 scenario instances) | scenario-1-col (L + M + S stacked) |
+| M-row (all 7 scenario instances) | scenario-2-col (L + M + S stacked) |
+| S-row (all 7 scenario instances) | scenario-3-col … |
+
+**Why:** When `layoutWrap: 'WRAP'` is enabled, row-based grouping wraps each size row independently — L-row wraps at col 4, M-row wraps at col 3, S-row wraps at col 5 — producing misaligned, disorganized output. Column-based grouping wraps entire scenario units together.
+
+### Correct grid structure
+
+```
+scenarios-grid (HORIZONTAL, WRAP, FIXED width, counterAxisAlignItems: 'MIN')
+└── scenario-col × N  (VERTICAL, HUG, gap 20)
+    ├── "Scenario N" label
+    └── size-cell × 3  (VERTICAL, HUG, gap 6)
+        ├── component instance
+        └── "L  D·D·D" size+state label
+```
+
+### Grid frame settings
+
+```js
+const grid = figma.createAutoLayout('HORIZONTAL', {
+  name: 'scenarios-grid',
+  fills: [],
+  itemSpacing: 24,                         // gap between scenario columns
+  layoutSizingHorizontal: 'FIXED',         // constrain wrap boundary
+  layoutSizingVertical: 'HUG',             // must be re-applied after content (see Bug 2)
+  counterAxisAlignItems: 'MIN',            // align wrapped rows to top — always MIN for grids
+});
+grid.layoutWrap = 'WRAP';
+try { grid.counterAxisSpacing = 32; } catch(e) {}  // gap between wrapped rows
+grid.resize(targetWidth, 10);             // set width; height locked here — re-apply HUG after
+
+// ← Add ALL children here ←
+
+// MANDATORY: re-apply HUG after all children are added
+grid.layoutSizingVertical = 'HUG';
+parentSection.layoutSizingVertical = 'HUG';
+```
+
+### State abbreviation convention
+
+| State | Abbreviation |
+|---|---|
+| Default | D |
+| Hover | H |
+| Pressed | P |
+| Active | A |
+| Disabled | X |
+
+---
+
+## Critical Bug 2 — `resize()` locks height, overriding `layoutSizingVertical: 'HUG'`
+
+**This is distinct from the y:0 HUG bug above. Both must be guarded against.**
+
+Calling `resize(w, h)` on any auto-layout frame locks BOTH dimensions to FIXED pixel values, overriding any `layoutSizingVertical: 'HUG'` setting — even if HUG was set in the `createAutoLayout` props. The frame height is then frozen at the explicit `h` value (e.g. 10px), regardless of content added afterward.
+
+**Symptom:** Grid or section card shows only a sliver (e.g. h=10) even though children have correct non-zero heights (e.g. 237px tall scenario columns).
+
+**Detection:** After creating and populating a grid, `console.log` or `return` the grid height. If it equals the value passed to `resize()`, the bug has triggered.
+
+**Rule: Always re-apply `layoutSizingVertical = 'HUG'` AFTER adding all children — never rely on the creation-time prop.**
+
+```js
+// WRONG — HUG set at creation time but resize() overrides it
+const grid = figma.createAutoLayout('HORIZONTAL', { layoutSizingVertical: 'HUG', ... });
+grid.resize(1312, 10);   // ← this locks height at 10px!
+// ... add children ...
+// grid.height is still 10px — children are clipped
+
+// CORRECT — re-apply HUG after all content is added
+const grid = figma.createAutoLayout('HORIZONTAL', { ... });
+grid.resize(1312, 10);
+// ... add ALL children ...
+grid.layoutSizingVertical = 'HUG';   // ← re-apply after content
+parentSection.layoutSizingVertical = 'HUG';  // ← also fix the parent
+```
+
+---
+
+## Figma Plugin API — Documentation-Specific Gotchas
+
+### `importComponentByKeyAsync` vs `getNodeByIdAsync`
+
+| Use | When |
+|---|---|
+| `importComponentByKeyAsync(key)` | Component IS published to team library |
+| `getNodeByIdAsync(id)` | Component is NOT published (e.g. Parts variants on same page) |
+
+`importComponentByKeyAsync` throws `"Component with key '...' not found"` for unpublished components. Button Group - Parts (`646:673`) is NOT published — always use `getNodeByIdAsync`.
+
+### `insertBefore` does not exist — use `insertChild(indexOf)`
+
+```js
+// WRONG
+parent.insertBefore(newNode, referenceNode);  // TypeError: no such property 'insertBefore'
+
+// CORRECT
+parent.insertChild(parent.children.indexOf(referenceNode), newNode);
+```
+
+### Node `findOne` is case-sensitive
+
+`findOne(n => n.name === 'content')` fails if the actual frame name is `'Content'`. Always inspect with `use_figma` first:
+```js
+return docFrame.children.map(c => ({ id: c.id, name: c.name }));
+```
+
+### Part state overrides — always wrap in try/catch
+
+`setProperties({ State: '...' })` throws for Part sub-instances where `mainComponent.variantProperties === null` (inaccessible component branches). Use try/catch for every Part iteration:
+
+```js
+parts.forEach((p, i) => {
+  try { p.setProperties({ State: combo[i] }); } catch(e) {}
+});
+```
+
+**Known inaccessible Part slots (Button Group - 1.5, confirmed June 2026):**
+- Navigate Group — **left arrow** Part: `variantProps: null`, State override silently fails
+- Calendar Option — **right arrow** Part: `variantProps: null`, State override silently fails
+
+Only override the slots you know are accessible. For Navigate Group, the right-arrow state is the only independently controllable slot.
+
+### MCP tool registration — session startup only
+
+Figma MCP tools (`use_figma`, `get_design_context`, etc.) register only when the session starts. If they appear in `<system-reminder>` as deferred tools, load schemas with:
+
+```
+ToolSearch query="select:mcp__claude_ai_Figma__use_figma,mcp__claude_ai_Figma__get_design_context"
+```
+
+---
+
+## Button Group — States Frame (June 2026)
+
+| Item | Value |
+|---|---|
+| Frame name | "Pandai - Components: Button Group — States" |
+| Node ID | `5596:404` |
+| Page | ⚙️ Button Group (`1986:23828`) |
+| Position | x=5624, y=-2191 (beside reference frame `4210:4726` at x=4036) |
+| Width | 1488px |
+| Content node | `5596:412` (name: "Content", capital C) |
+
+**Sections and their nodes:**
+
+| Section | Node | Description |
+|---|---|---|
+| Header | `5596:413` | Green pill + description text |
+| Button Group (Section 1) | `5610:1133` | 7 scenarios × L/M/S, randomized state combos |
+| Navigate Group (Section 2) | `5614:857` | 5 scenarios × L/M/S, right arrow state varies |
+| Calendar Option (Section 3) | `5614:1200` | 5 scenarios × L only, [Prev/Monthly/Yearly] combos |
+| Parts Matrix (Section 4) | `5602:1012` | All states × all sizes reference matrix |
+
+**Button Group - Parts node IDs (NOT published — use `getNodeByIdAsync`):**
+
+| Size | State | Node ID |
+|---|---|---|
+| L | Default | `5591:2069` |
+| L | Hover | `646:754` |
+| L | Pressed | `5591:2081` |
+| L | Active | `665:592` |
+| L | Disabled | `646:738` |
+| M | Default | `1510:7832` |
+| M | Hover | `1510:7826` |
+| M | Pressed | `1510:7814` |
+| M | Active | `1510:7820` |
+| M | Disabled | `1510:7808` |
+| S | Default | `1510:7902` |
+| S | Hover | `1510:7896` |
+| S | Pressed | `1510:7884` |
+| S | Active | `1510:7890` |
+| S | Disabled | `1510:7878` |
+
+**Button Group - 1.5 assembled component node IDs:**
+
+| Type | Size | Node ID |
+|---|---|---|
+| Button Group | L | `646:975` |
+| Button Group | M | `1510:7913` |
+| Button Group | S | `1510:7953` |
+| Navigate Group | L | `646:1012` |
+| Navigate Group | M | `1510:7993` |
+| Navigate Group | S | `1510:8006` |
+| Calendar Option | L | `4590:95334` |
+
+---
+
 ## What Was Built — May 2026
 
 **Frame: "Calendar Option, L" variant properties documentation**
