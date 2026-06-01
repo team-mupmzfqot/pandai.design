@@ -330,15 +330,25 @@
 
     /* ── Status Badge Modals (node 5628:52018) ──────────────────────────── */
     .modal-overlay {
-      display:          none;
       position:         fixed;
       inset:            0;
       background:       var(--overlay-dark);
       z-index:          500;
+      display:          flex;
       align-items:      center;
       justify-content:  center;
+      opacity:          0;
+      pointer-events:   none;
+      transition:       opacity 0.22s ease;
     }
-    .modal-overlay.is-open { display: flex; }
+    .modal-overlay.is-open {
+      opacity:        1;
+      pointer-events: auto;
+    }
+    .modal-overlay.is-closing {
+      opacity:        0;
+      pointer-events: none;
+    }
 
     .modal-panel {
       display:    none;
@@ -346,7 +356,24 @@
       width:      430px;
       max-width:  calc(100vw - 32px);
     }
-    .modal-panel.is-open { display: block; }
+    .modal-panel.is-open  { display: block; }
+
+    /* Card entrance */
+    .modal-panel.is-open .modal-card {
+      animation: modalIn 0.28s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+    }
+    /* Card exit */
+    .modal-panel.is-closing .modal-card {
+      animation: modalOut 0.18s ease-in both;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    }
+    @keyframes modalOut {
+      from { opacity: 1; transform: translateY(0)    scale(1);    }
+      to   { opacity: 0; transform: translateY(12px) scale(0.97); }
+    }
 
     .modal-card {
       background:    var(--surface-general-default);
@@ -4020,8 +4047,8 @@
       <!-- Logo/Pandai/Logo Horizontal (node 1898:6965): 116×28px overflow-clip container -->
       <!-- mark: inset-[0_76.95%_0_0] · wordmark: inset-[15.07%_0_15.03%_26.66%] -->
       <a class="navbar-primary__logo" href="#" aria-label="Pandai">
-        <img src="icons/logo-mark.svg" class="navbar-primary__logo-mark" alt="" aria-hidden="true">
-        <img src="icons/logo-text.svg" class="navbar-primary__logo-text" alt="Pandai">
+        <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/logo-mark.svg" class="navbar-primary__logo-mark" alt="" aria-hidden="true">
+        <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/logo-text.svg" class="navbar-primary__logo-text" alt="Pandai">
       </a>
 
       <!-- Navbar Search Frame — Dropdown-Parts/Search (DS node 1342:4370, Type=Search, State=Focus)
@@ -4084,7 +4111,7 @@
 
         <!-- Avatar - 1.5 Size=L Type=Image (node 684:621): 48×48 circle · image fill 60×60 at x:-6 y:0 -->
         <div class="navbar-avatar" aria-label="Profile">
-          <img class="navbar-avatar__image" src="../src/image-repo/Home/Avatar-Aidan.png" alt="User avatar">
+          <img class="navbar-avatar__image" src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
         </div>
 
         <!-- Number Badge - 1.5 (node 1084:1826): absolute right:-0.48px top:0 of Avatar group -->
@@ -4104,7 +4131,7 @@
         <!-- Avatar 100×100 -->
         <div class="profile-dropdown__avatar-wrap">
           <div class="profile-dropdown__avatar">
-            <img src="../src/image-repo/Home/Avatar-Aidan.png" alt="User avatar">
+            <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
           </div>
         </div>
 
@@ -4187,62 +4214,62 @@
       <div class="learn-dropdown__grid">
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Live Tuition">
-          <img class="learn-dropdown__icon" src="icons/feature-live-tuition.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-live-tuition.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Live Tuition</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Live Help">
-          <img class="learn-dropdown__icon" src="icons/feature-live-help.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-live-help.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Live Help</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quiz">
-          <img class="learn-dropdown__icon" src="icons/feature-quiz.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-quiz.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Quiz</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Practice">
-          <img class="learn-dropdown__icon" src="icons/feature-practice.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-practice.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Practice</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Chapters">
-          <img class="learn-dropdown__icon" src="icons/feature-chapters.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-chapters.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Chapters</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Textbooks">
-          <img class="learn-dropdown__icon" src="icons/feature-textbooks.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-textbooks.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Textbooks</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quick Notes">
-          <img class="learn-dropdown__icon" src="icons/feature-quick-notes.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-quick-notes.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Quick Notes</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Videos">
-          <img class="learn-dropdown__icon" src="icons/feature-videos.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-videos.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Videos</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Experiments">
-          <img class="learn-dropdown__icon" src="icons/feature-experiments.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-experiments.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Experiments</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Personality">
-          <img class="learn-dropdown__icon" src="icons/feature-personality.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-personality.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Personality</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="University">
-          <img class="learn-dropdown__icon" src="icons/feature-university.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-university.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">University</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Rewards">
-          <img class="learn-dropdown__icon" src="icons/feature-rewards.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-rewards.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Rewards</span>
         </div>
 
@@ -4622,8 +4649,8 @@
   <section id="NavBar-Mobile">
     <div class="navbar-mobile">
       <a class="navbar-mobile__logo" href="#">
-        <img src="icons/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
-        <img src="icons/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
+        <img src="../src/image-repo/page.home/assets/main/NavBar-Mobile/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
+        <img src="../src/image-repo/page.home/assets/main/NavBar-Mobile/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
       </a>
       <button class="navbar-mobile__menu-btn" id="tablet-menu-btn" aria-label="Open menu" type="button">
         <svg class="ham-svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
@@ -4979,7 +5006,7 @@
                Mobile-only: visible at ≤767px, sits right of #Welcome-Desktop -->
           <section id="Avatar-Mobile" aria-label="User profile">
             <div class="welcome-avatar">
-              <img class="welcome-avatar__image" src="../src/image-repo/Home/Avatar-Aidan.png" alt="User avatar">
+              <img class="welcome-avatar__image" src="../src/image-repo/page.home/assets/main/Welcome-Desktop/Avatar-Aidan.png" alt="User avatar">
             </div>
           </section>
 
@@ -5002,20 +5029,20 @@
               <!-- Carousel Parts (node 1376:2259): 428×186, corner-xl, border general/default -->
               <div class="carousel__card">
 
-                <img src="../src/image-repo/Static-Card/jdp.jpg" alt="Pandai Score is Ready!">
+                <img src="../src/image-repo/page.home/assets/main/StaticNewsCard-Desktop/jdp.jpg" alt="Pandai Score is Ready!">
               </div>
               <div class="carousel__card">
 
-                <img src="../src/image-repo/Static-Card/2 (3).png" alt="SPM English Paper Bank">
+                <img src="../src/image-repo/page.home/assets/main/StaticNewsCard-Desktop/2 (3).png" alt="SPM English Paper Bank">
               </div>
 
               <div class="carousel__card">
 
-                <img src="../src/image-repo/Static-Card/3.jpg" alt="SPM Mathematics Marathon">
+                <img src="../src/image-repo/page.home/assets/main/StaticNewsCard-Desktop/3.jpg" alt="SPM Mathematics Marathon">
               </div>
               <div class="carousel__card">
 
-                <img src="../src/image-repo/Static-Card/2 (3).png" alt="This Week's Challenge">
+                <img src="../src/image-repo/page.home/assets/main/StaticNewsCard-Desktop/2 (3).png" alt="This Week's Challenge">
               </div>
             </div>
 
@@ -5170,7 +5197,7 @@
 
             <!-- 1 — Additional Mathematics -->
             <article class="quiz-card subject-add-math">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/916-image-918.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/916-image-918.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5185,7 +5212,7 @@
 
             <!-- 2 — Biology -->
             <article class="quiz-card subject-biology">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/BG-10-05-02-09-Q01-01.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/BG-10-05-02-09-Q01-01.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5200,7 +5227,7 @@
 
             <!-- 3 — Economy -->
             <article class="quiz-card subject-economy">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/CH-11-02-02-02-ALKA-W03-Q2002-A.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/CH-11-02-02-02-ALKA-W03-Q2002-A.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5215,7 +5242,7 @@
 
             <!-- 4 — Chemistry -->
             <article class="quiz-card subject-chemistry">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/GF-09-04-01-01-R04-Q238.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/GF-09-04-01-01-R04-Q238.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5230,7 +5257,7 @@
 
             <!-- 5 — English -->
             <article class="quiz-card subject-english">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/Kafa.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/Kafa.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5245,7 +5272,7 @@
 
             <!-- 6 — Moral Studies -->
             <article class="quiz-card subject-moral">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/PI-04-04-03-01-S24-Q006-01.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/PI-04-04-03-01-S24-Q006-01.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5260,7 +5287,7 @@
 
             <!-- 7 — Islamic Studies -->
             <article class="quiz-card subject-islamic">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/PSR-SC-06-03-02-H04-Q466.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/PSR-SC-06-03-02-H04-Q466.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5275,7 +5302,7 @@
 
             <!-- 8 — Mathematics -->
             <article class="quiz-card subject-math">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/SC-06-2022-03-01-B06-Q77.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/SC-06-2022-03-01-B06-Q77.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5290,7 +5317,7 @@
 
             <!-- 9 — Account -->
             <article class="quiz-card subject-account">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/SJ-04-03-01-S16-Q653-01.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/SJ-04-03-01-S16-Q653-01.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5305,7 +5332,7 @@
 
             <!-- 10 — Physics -->
             <article class="quiz-card subject-physics">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/account.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/account.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5320,7 +5347,7 @@
 
             <!-- 11 — Business -->
             <article class="quiz-card subject-business">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/business.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/business.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5335,7 +5362,7 @@
 
             <!-- 12 — Computer Science -->
             <article class="quiz-card subject-cs">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/comp.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/comp.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5350,7 +5377,7 @@
 
             <!-- 13 — Science -->
             <article class="quiz-card subject-science">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/english.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/english.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5365,7 +5392,7 @@
 
             <!-- 14 — History -->
             <article class="quiz-card subject-history">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/math.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/math.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5380,7 +5407,7 @@
 
             <!-- 15 — KAFA -->
             <article class="quiz-card subject-kafa">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/moral.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/moral.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5395,7 +5422,7 @@
 
             <!-- 16 — Geography -->
             <article class="quiz-card subject-geo">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/physics.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/physics.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5410,7 +5437,7 @@
 
             <!-- 17 — RBT -->
             <article class="quiz-card subject-rbt">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/rbt.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/rbt.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5425,7 +5452,7 @@
 
             <!-- 18 — Bahasa Melayu -->
             <article class="quiz-card subject-bm">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/BG-10-05-02-09-Q01-01.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/BG-10-05-02-09-Q01-01.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5485,7 +5512,7 @@
 
               <!-- 1 — Additional Mathematics -->
               <article class="quiz-card subject-add-math">
-                <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
+                <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/bm.png');"></div>
                 <div class="quiz-card__content">
                   <div class="quiz-card__main">
                     <div class="quiz-card__header">
@@ -5500,7 +5527,7 @@
 
               <!-- 2 — Biology -->
               <article class="quiz-card subject-biology">
-                <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
+                <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/bm.png');"></div>
                 <div class="quiz-card__content">
                   <div class="quiz-card__main">
                     <div class="quiz-card__header">
@@ -5515,7 +5542,7 @@
 
               <!-- 3 — Economy -->
               <article class="quiz-card subject-economy">
-                <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
+                <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/bm.png');"></div>
                 <div class="quiz-card__content">
                   <div class="quiz-card__main">
                     <div class="quiz-card__header">
@@ -5530,7 +5557,7 @@
 
               <!-- 4 — Physics (new) -->
               <article class="quiz-card subject-physics">
-                <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
+                <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/bm.png');"></div>
                 <div class="quiz-card__content">
                   <div class="quiz-card__main">
                     <div class="quiz-card__header">
@@ -6418,7 +6445,7 @@
     <div id="modal-score" class="modal-panel modal-panel--score">
       <div class="modal-card">
         <!-- decorative corner -->
-        <div class="modal-card__corner"><img src="../src/image-repo/home.screen/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <div class="modal-card__corner"><img src="../src/image-repo/page.home/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
         <!-- close button -->
         <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
 
@@ -6516,7 +6543,7 @@
     <!-- Coins Modal -->
     <div id="modal-coins" class="modal-panel modal-panel--coins">
       <div class="modal-card">
-        <div class="modal-card__corner"><img src="../src/image-repo/home.screen/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <div class="modal-card__corner"><img src="../src/image-repo/page.home/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
         <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
 
         <!-- Header: yellow pill -->
@@ -6568,7 +6595,7 @@
     <!-- Streak Modal -->
     <div id="modal-streak" class="modal-panel modal-panel--streak">
       <div class="modal-card">
-        <div class="modal-card__corner"><img src="../src/image-repo/home.screen/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <div class="modal-card__corner"><img src="../src/image-repo/page.home/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
         <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
 
         <!-- Header + content: grouped with 8px gap (DS inner Content frame) -->
@@ -6619,7 +6646,7 @@
     <!-- Lives Modal -->
     <div id="modal-lives" class="modal-panel modal-panel--lives">
       <div class="modal-card">
-        <div class="modal-card__corner"><img src="../src/image-repo/home.screen/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <div class="modal-card__corner"><img src="../src/image-repo/page.home/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
         <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
 
         <!-- Header: pink pill -->
@@ -6648,11 +6675,16 @@
   <!-- Modal JS placed AFTER modal DOM so getElementById resolves correctly (Rule 62) -->
   <script>
     (function () {
-      var overlay = document.getElementById('modal-overlay');
-      var panels  = document.querySelectorAll('.modal-panel');
+      var overlay   = document.getElementById('modal-overlay');
+      var panels    = document.querySelectorAll('.modal-panel');
+      var closeTimer = null;
 
       function openModal(id) {
-        panels.forEach(function (p) { p.classList.remove('is-open'); });
+        // Cancel any in-progress close
+        if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+        panels.forEach(function (p) { p.classList.remove('is-open', 'is-closing'); });
+        overlay.classList.remove('is-closing');
+
         var target = document.getElementById(id);
         if (target) target.classList.add('is-open');
         overlay.classList.add('is-open');
@@ -6660,9 +6692,17 @@
       }
 
       function closeAll() {
-        panels.forEach(function (p) { p.classList.remove('is-open'); });
-        overlay.classList.remove('is-open');
-        document.body.style.overflow = '';
+        if (closeTimer) return; // already closing
+        var openPanel = document.querySelector('.modal-panel.is-open');
+        overlay.classList.add('is-closing');
+        if (openPanel) openPanel.classList.add('is-closing');
+
+        closeTimer = setTimeout(function () {
+          closeTimer = null;
+          panels.forEach(function (p) { p.classList.remove('is-open', 'is-closing'); });
+          overlay.classList.remove('is-open', 'is-closing');
+          document.body.style.overflow = '';
+        }, 220);
       }
 
       // Pill → modal mapping
