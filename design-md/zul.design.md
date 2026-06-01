@@ -373,14 +373,14 @@ This means:
 
 ### 19. Button - 1.5 Primary/S — all confirmed Student states (node 1437:8154)
 
-These are the confirmed state values for the Pandai student home screen. All from DS `get_variable_defs` on each state node. **Last re-confirmed: 2026-05-19.**
+These are the confirmed state values for the Pandai student home screen. All from DS `get_variable_defs` on each state node. **Last re-confirmed: 2026-05-19. Label updated 2026-05-24 (Rule 154) — `Text/primary/on-color` changed from `#e1f9ea` → `#ffffff`.**
 
 | State | Btn bg | Border | Label | Arrow bg | Chevron | DS node |
 |---|---|---|---|---|---|---|
-| Default | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` | `1437:8154` |
+| Default | `#00cc85` | `#00a36a` | `#ffffff` | `#99ebce` | `#00a36a` | `1437:8154` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` | `1437:8146` |
 | Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` | `1437:8138` |
-| Active | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` | `3029:19941` |
+| Active | `#00cc85` | `#00a36a` | `#ffffff` | `#99ebce` | `#00a36a` | `3029:19941` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` | `1437:8130` |
 
 **Pressed state tokens (confirmed from node `1437:8138`, re-verified 2026-05-19):**
@@ -390,7 +390,7 @@ These are the confirmed state values for the Pandai student home screen. All fro
 - Arrow bg: `Surface/primary/default` (#00cc85)
 - Chevron: `Icon/primary/focus` (#00a36a)
 
-**Default/Active label = `Text/primary/on-color` = `#e1f9ea`** — DS updated this token (previously documented as `#f6fdfb`, corrected 2026-05-19). Both Default and Active share identical tokens.
+**Default/Active label = `Text/primary/on-color` = `#ffffff`** — Token changed 2026-05-24: `#e1f9ea` (mint) → `Foundation/white` (`#ffffff`). See Rule 154. Previously corrected from `#f6fdfb` on 2026-05-19. Both Default and Active share identical tokens.
 
 **`State=Active`** is a new persistent-selected state (added to COMPONENT_SET 2026-05-19). Visually identical to Default. Use for "currently selected" scenarios — distinct from the momentary Pressed feedback.
 
@@ -1173,29 +1173,48 @@ Step 6:  Validate                 → compare against get_screenshot
 ## Variable collections — actual state after Fix 1 + Fix 2
 
 > **Note:** Actual collection names differ from earlier audit estimates. Counts below are from live file read.
+> **Last full audit: 2026-06-02** — See Rule 217 for the complete change log.
 
-#### Primitives (429 vars, 1 mode: Value) — formerly called "Atomic"
-- Colors: Grey (50–950), Orange, Red, OG-Green, Blue, Pink, Yellow, Purple, Lime, Teal, Sky, Neon, Green, Slate, Foundation, Vanilla, Minion, Azure, Mustard, Subject/* palettes
+#### Primitives (478 vars, 1 mode: Value) — formerly called "Atomic"
+- Colors: Grey (50–950), Orange, Red, OG-Green, Blue, Pink, Pink-Secondary, Pink-Tertiary, Yellow, Purple, Lime, Teal, Sky, Neon, Green, Slate, Foundation, Butter, Minion, Azure, Pumpkin, Gold, Silver, Bronze, Subject/* palettes
+- **⚠️ "Vanilla" renamed → Butter | "Mustard" renamed → Pumpkin** — any `--vanilla-*` / `--mustard-*` CSS vars are invalid
+- **New palettes (2026-06-02):** Gold/100–900, Silver/100–900, Bronze/100–900 (medals); Pink-Secondary/50–900, Pink-Tertiary/50–900 (Teacher role states); Butter/100–900, Pumpkin/100–900 (renamed from Vanilla/Mustard)
+- **New Foundation vars:** `Foundation/white 50`, `Foundation/black 50`, `Foundation/slate` (#444a56)
 - Scale/0–1k: spacing raw values (0, 1, 2, 4, 8, 12, 16, 18, 20, 24, 28, 60, 108, 999)
 - Corner Radius/xs–circle, pill, pill, lg, xxl, xxxl
 - Typeface: Font Family, Font Weight, Font Size (50–900), Line Height (50–800)
 - Border Width: xs, sm, md, lg
 - Scopes fixed: colors → `FRAME_FILL SHAPE_FILL TEXT_FILL STROKE_COLOR EFFECT_COLOR`, Scale → `GAP WIDTH_HEIGHT PARAGRAPH_SPACING`, Radius → `CORNER_RADIUS`, Font Size → `FONT_SIZE`, Line Height → `LINE_HEIGHT`, Font Family → `FONT_FAMILY`, Font Weight → `FONT_STYLE`
 
-#### Semantic (255 vars + 22 new = 277 vars, 2 modes: Light / Dark)
+#### Semantic (329 vars, 2 modes: Light / Dark) — was 277; +52 added 2026-06-02
 - Color groups: Text/*, Icon/*, Surface/*, Border/*, Overlay/* — scopes set per group
-- **New float aliases added (Fix 2):**
+- **New `Subjects/*` namespace (2026-06-02):** Semantic wrappers for all 18 subject badge colors. 5 states each: `default`, `default-hover`, `default-subtle`, `default-subtle-hover`, `focus`. Can replace raw hex values in subject badge CSS.
+- **New state variants:** Additional `-hover` and `-subtle-hover` sub-tokens added across Text, Icon, Surface, Border groups.
+- **Float aliases added (Fix 2):**
   - `Spacing/component/none–2xl` → aliases into Primitives Scale/*
   - `Spacing/layout/sm–xl` → aliases into Primitives Scale/*
   - `Radius/none–full` → aliases into Primitives Corner Radius/*
 
-#### Product (174 vars, 3 modes: Student / Teacher / Parent)
+#### Product (174 vars, 3 modes: Student / Teacher / Parent) — unchanged
 - Primary, Secondary, Tertiary (50–900), Success, Alert, Warning, Informative, Neutral
 - Spacing/space-none → space-3xl, Border Width, Corner Radius, Overlay, Font/* tokens
 - ALL_SCOPES removed — correct scopes assigned per type
 
-#### Responsives (if present)
-- Check file directly — not loaded during this session
+#### Responsives (64 vars, 3 modes: Desktop / Tablet / Mobile) — confirmed 2026-06-02
+- **Frame widths:** Desktop=1440px, Tablet=687px, Mobile=390px
+- **Grid:**
+  | | Desktop | Tablet | Mobile |
+  |---|---|---|---|
+  | Columns | 12 | 8 | 4 |
+  | Content width | 1320px | 623px | 358px |
+  | Column width | 95.33px | 64px | 83.5px |
+- **Typography vars:** 3 tokens per style (Size, LineHeight, Weight). `Heading/*` and `Title/*` change across breakpoints. `Body/*` and `Caption/*` are identical across all 3 modes (no breakpoint change) — confirms Rule 33.
+- **Heading breakpoints confirmed:**
+  - H1: Desktop=28px → Tablet=24px → Mobile=20px
+  - H2: Desktop=24px → Tablet=24px → Mobile=20px
+  - H3: Desktop=24px → Tablet=20px → Mobile=20px
+  - H4: Desktop=20px → Tablet=20px → Mobile=18px
+  - T4/T5: Desktop=16px → Mobile=14px
 
 ### Text styles — 21 (Poppins)
 ```
@@ -1496,11 +1515,11 @@ try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 - Description: `Body/B1` — Poppins SemiBold 14px, `line-height: 20px`, `Text/default/heading #404040`
 - Two cards side by side: `display: flex; gap: var(--spacing-space-m)` (16px)
 
-**Button inside Static Card — Primary/M states (node 473:529) — re-confirmed 2026-05-19:**
+**Button inside Static Card — Primary/M states (node 473:529) — re-confirmed 2026-05-19. Label updated 2026-05-24 (Rule 154):**
 
 | State | btn bg | border | label | arrow bg | arrow chevron |
 |---|---|---|---|---|---|
-| Default | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` |
+| Default | `#00cc85` | `#00a36a` | `#ffffff` | `#99ebce` | `#00a36a` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` |
 | Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` |
@@ -1528,7 +1547,7 @@ try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 
 **Button - 1.5 (Primary/S, Type=Student) inside Quiz Card — confirmed May 2026:**
 - Button: `max-height: 24px`, `px: 8px`, `py: 2px`, `border-radius: 60px` (pill)
-- Text slot: `px: 4px`, font `Body/B5` (Poppins SemiBold 12px, line-height 18px), color `Text/primary/on-color #e1f9ea`
+- Text slot: `px: 4px`, font `Body/B5` (Poppins SemiBold 12px, line-height 18px), color `Text/primary/on-color #ffffff` (updated 2026-05-24, was `#e1f9ea` — Rule 154)
 - Arrow: 16×16 circle (`bg: #99ebce`, `border-radius: 60px`, `padding: 2px`) → 12×12 clip (NO padding) → `ic-chevron-btn`
 - Arrow chevron: `#00a36a` (`Surface/primary/focus`) — from arrow clip sub-node, not parent button
 - **Symbol:** `ic-chevron-btn` — `viewBox="0 0 12 12"`, path `M4.5 9L7.5 6L4.5 3`, DS node `1437:8161`
@@ -3324,7 +3343,7 @@ Any `<button>` used as the outer wrapper for a DS action icon component (e.g. `N
 
 This rule stated that the Nav Button - 1.5 Active icon color = `Text/primary/on-color` (`#f6fdfb`). **This was wrong.** It was derived from the standalone `Nav Button - 1.5/Active` VECTOR node (`3908:6163`), which is not a variant of the COMPONENT_SET (`3908:6148`). The COMPONENT_SET is the canonical reference.
 
-**Correct value:** `Icon/primary/on-color` = `#e1f9ea` (confirmed from the COMPONENT_SET Active variant via `get_variable_defs` on `4389:165880`, May 2026).
+**Correct value:** `Icon/primary/on-color` = `#ffffff` (token changed 2026-05-24 from `#e1f9ea` → `Foundation/white`, confirmed live 2026-06-02. Rule 154 documents the update).
 
 **Root cause of error:** Inspecting a standalone `/Active` component instead of the proper COMPONENT_SET variant. The standalone node had different (incorrect) values. Always use the COMPONENT_SET as the source — never standalone named components.
 
@@ -4170,7 +4189,7 @@ At the cap: both `max-width` and `max-height` are satisfied simultaneously at th
 **CSS mapping:**
 ```css
 .btn.is-active { background: var(--surface-primary-default); border-color: var(--border-primary-focus); }
-.btn.is-active .btn__label { color: var(--text-primary-on-color); }  /* #e1f9ea */
+.btn.is-active .btn__label { color: var(--text-primary-on-color); }  /* #ffffff — Rule 154 */
 ```
 
 Not all buttons on the home screen need `.is-active` — only those that represent the user's current selection.
@@ -4190,7 +4209,7 @@ Not all buttons on the home screen need `.is-active` — only those that represe
 | Default | `Surface/general/default` | `#ffffff` | none | — | `Icon/default/default` | `#808080` |
 | Hover | `Surface/secondary/default-subtle` | `#e8fbe8` | `Border/primary/default` | `#00cc85` | `Icon/primary/default` | `#00cc85` |
 | Pressed | `Surface/primary/focus` | `#00a36a` | `Border/primary/default` | `#00cc85` | `Icon/primary/default` | `#00cc85` |
-| Active | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` | `#00a36a` | `Icon/primary/on-color` | `#e1f9ea` |
+| Active | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` | `#00a36a` | `Icon/primary/on-color` | `#ffffff` |
 
 #### CSS implementation
 
@@ -4218,7 +4237,7 @@ Not all buttons on the home screen need `.is-active` — only those that represe
 .nav-btn-icon-clip svg                       { color: var(--icon-default-default); }   /* #808080 */
 .navbar-action-btn:hover  .nav-btn-icon-clip svg { color: var(--icon-primary-default); }  /* #00cc85 */
 .navbar-action-btn:active .nav-btn-icon-clip svg { color: var(--icon-primary-default); }  /* #00cc85 */
-.navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--icon-primary-on-color); } /* #e1f9ea */
+.navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--icon-primary-on-color); } /* #ffffff */
 ```
 
 **`box-shadow: inset` rule:** Use `inset 0 0 0 1px` instead of `border` — prevents 2px layout shift when border appears on hover/active. Never use `border:` on the rect.
@@ -4233,7 +4252,7 @@ The DS COMPONENT_SET `State=Active` variant is a **plain rounded square** — no
 
 | What was wrong | Correct value |
 |---|---|
-| `--icon-primary-on-color: #f6fdfb` | `#e1f9ea` (`Icon/primary/on-color`) |
+| `--icon-primary-on-color: #f6fdfb` or `#e1f9ea` | `#ffffff` (`Icon/primary/on-color`, `Foundation/white` — Rule 154) |
 | Active rect `background: transparent; box-shadow: none` | `Surface/primary/default` + `Border/primary/focus` inset shadow |
 | Active icon `color: var(--text-primary-on-color)` | `color: var(--icon-primary-on-color)` |
 | Speech-bubble `nav-btn-union-bg` shown on Active | Removed — not in COMPONENT_SET Active variant |
@@ -4485,7 +4504,7 @@ This is the "Download App" button in the Nav Menu Tablet CTA. It is a **larger v
 | Gap | 0 | No gap between Content and R Arrow |
 | Fill | `#00cc85` | `var(--surface-primary-default)` |
 | Stroke | `#00a36a` INSIDE | `box-shadow: inset 0 0 0 1px var(--border-primary-focus)` (Rule 60) — NEVER `border:` |
-| Text+icon color | **`#e1f9ea`** | `var(--icon-primary-on-color)` — NOT `--text-primary-on-color` (#f6fdfb) |
+| Text+icon color | **`#ffffff`** | `var(--icon-primary-on-color)` — NOT `--text-primary-on-color`. Token updated 2026-05-24 (Rule 154) from `#e1f9ea` → `#ffffff`. |
 | Icon | 24×24 frame, 20×20 smartphone (2px inset) | Icon container: `width:24px; height:24px; align-items:center; justify-content:center` |
 | Label padding | `0 8px` | DS Label frame: `pad l:8 r:8` |
 | R Arrow | 24×24, fill `#99ebce`, pad 4px | chevron `#00a36a` (`var(--border-primary-focus)`) |
@@ -4499,7 +4518,7 @@ This is the "Download App" button in the Nav Menu Tablet CTA. It is a **larger v
   background: var(--surface-primary-default);
   border: none; box-shadow: inset 0 0 0 1px var(--border-primary-focus);
   border-radius: var(--corner-radius-corner-rounded);
-  color: var(--icon-primary-on-color); /* #e1f9ea */
+  color: var(--icon-primary-on-color); /* #ffffff — Rule 154 */
   font-size: 14px; font-weight: 600; gap: 0;
 }
 .nav-menu-cta__btn-icon     { width:24px; height:24px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
@@ -4511,7 +4530,7 @@ This is the "Download App" button in the Nav Menu Tablet CTA. It is a **larger v
 **Mistakes made (2026-05-21):**
 - `max-height: 48px` instead of `height: 40px`
 - `border: 1px solid` instead of `box-shadow: inset` (Rule 60)
-- `color: var(--text-primary-on-color)` (#f6fdfb) instead of `var(--icon-primary-on-color)` (#e1f9ea) — different tokens, different values
+- `color: var(--text-primary-on-color)` instead of `var(--icon-primary-on-color)` — wrong semantic token; current correct value is `#ffffff` for both (Rule 154), but always use the icon-specific token for icon-colored text
 - `gap: 8px` between items — DS gap:0; spacing comes from label's internal `padding: 0 8px`
 - `flex:1 0 0` on text pushing icon left and arrow right — DS uses CENTER grouping, no growing text
 - `justify-content: flex-end` on arrow — DS uses center
@@ -8586,4 +8605,85 @@ Fix: `border: none; box-shadow: inset 0 0 0 1px var(--border-primary-focus)` as 
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-02 (Rules 215–216 added — Secondary hover palette #b5f291; border-color silent on box-shadow components; session learnings modal button full audit) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 217. Full DS Variable Audit — 2026-06-02
+
+**Audit method:** `use_figma` → `getLocalVariableCollectionsAsync()` + full alias chain resolution on all 4 collections.
+
+#### Collection count changes
+
+| Collection | Was documented | Current | Delta |
+|---|---|---|---|
+| Primitives | 429 | **478** | +49 |
+| Semantic | 277 | **329** | +52 |
+| Product | 174 | **174** | 0 |
+| Responsives | Not audited | **64** | First full audit |
+
+#### New Primitives palettes (+49)
+
+7 new 9-step color ramps added:
+
+| Palette | Base/500 hex | Purpose |
+|---|---|---|
+| `Gold/100–900` | `#fabb0a` | Medals / achievement system |
+| `Silver/100–900` | `#878dbb` | Medals / achievement system |
+| `Bronze/100–900` | `#d47d62` | Medals / achievement system |
+| `Pink-Secondary/50–900` | `#ff9dc1` | Teacher role secondary states |
+| `Pink-Tertiary/50–900` | `#99375b` | Teacher role tertiary states |
+| `Butter/100–900` | `#ffffc9` | Warm cream — replaces "Vanilla" |
+| `Pumpkin/100–900` | `#f2b839` | Warm amber — replaces "Mustard" |
+
+3 new Foundation vars: `Foundation/white 50`, `Foundation/black 50`, `Foundation/slate` (`#444a56`).
+
+**⚠️ Palette renames:** "Vanilla" → `Butter` | "Mustard" → `Pumpkin`. Any `--vanilla-*` or `--mustard-*` CSS variables are invalid and must be replaced.
+
+#### New Semantic variables (+52) — `Subjects/*` namespace
+
+All 18 subject badge palettes now have Semantic aliases. 5 states each:
+```
+Subjects/[subject]/default              → Subject badge primary color
+Subjects/[subject]/default-hover        → Hover darken
+Subjects/[subject]/default-subtle       → Subtle tint background
+Subjects/[subject]/default-subtle-hover → Subtle hover
+Subjects/[subject]/focus                → Focus/pressed darken
+```
+
+Subjects confirmed: `account`, `add-math`, `biology`, `b-melayu`, `business`, `chemistry`, `chi-lang`, and more. These mirror the hex values in Rule 17 — subject badge CSS can now reference `var(--subjects-[name]-default)` instead of hardcoded hex.
+
+#### All critical token values — CONFIRMED CORRECT (2026-06-02)
+
+| Token | Confirmed hex | Status |
+|---|---|---|
+| `Text/primary/on-color` | `#ffffff` | ✓ matches Rule 154 |
+| `Icon/primary/on-color` | `#ffffff` | ✓ matches Rule 154 |
+| `Surface/primary/default` | `#00cc85` | ✓ |
+| `Surface/primary/focus` | `#00a36a` | ✓ |
+| `Surface/secondary/default` | `#b5f291` | ✓ |
+| `Surface/secondary/default-subtle` | `#e8fbe8` | ✓ |
+| `Border/primary/default` | `#00cc85` | ✓ |
+| `Border/primary/focus` | `#00a36a` | ✓ |
+| `Text/default/heading` | `#404040` | ✓ |
+| `Text/default/caption` | `#bfbfbf` | ✓ |
+| `Surface/disabled/primary` | `#f2f2f2` | ✓ |
+| `Surface/disabled/on color` | `#e5e5e5` | ✓ matches Rule 155 |
+| `Surface/general/default` | `#ffffff` | ✓ |
+| `Border/general/default` | `#d9d9d9` | ✓ |
+| `Icon/default/default` | `#808080` | ✓ |
+| `Surface/tertiary/default` | `#00564c` | ✓ |
+
+#### Fixes applied to this file in this audit
+
+1. Variable Collections section — counts, palette list, Responsives spec all updated above.
+2. Rule 19 — Default/Active label `#e1f9ea` → `#ffffff` (Rule 154).
+3. Rule ~~99~~ — Correct value `#e1f9ea` → `#ffffff`.
+4. Rule 116 — Nav Button Active icon hex `#e1f9ea` → `#ffffff`, CSS comment updated, corrected mistakes table updated.
+5. Static card button table — Default label `#e1f9ea` → `#ffffff`.
+6. Quiz card button note — `Text/primary/on-color` hex updated to `#ffffff`.
+7. Nav Menu CTA spec table and CSS comment updated.
+
+**Next audit:** Re-run this audit if any component implementation uses `Text/primary/on-color`, `Icon/primary/on-color`, or any new `Gold/Silver/Bronze/Butter/Pumpkin/Pink-Secondary/Pink-Tertiary` primitive. Token values can change without notice (Rule 153).
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-02 (Rule 217 added — full DS variable audit; +49 Primitives, +52 Semantic vars; Icon/primary/on-color confirmed #ffffff; Vanilla→Butter / Mustard→Pumpkin rename; Responsives grid spec documented) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

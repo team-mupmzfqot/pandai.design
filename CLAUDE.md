@@ -382,10 +382,10 @@ These are the confirmed state values for the Pandai student home screen. All fro
 
 | State | Btn bg | Border | Label | Arrow bg | Chevron | DS node |
 |---|---|---|---|---|---|---|
-| Default | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` | `1437:8154` |
+| Default | `#00cc85` | `#00a36a` | `#ffffff` | `#99ebce` | `#00a36a` | `1437:8154` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` | `1437:8146` |
 | Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` | `1437:8138` |
-| Active | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` | `3029:19941` |
+| Active | `#00cc85` | `#00a36a` | `#ffffff` | `#99ebce` | `#00a36a` | `3029:19941` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` | `1437:8130` |
 
 **Pressed state tokens (confirmed from node `1437:8138`):**
@@ -1863,11 +1863,11 @@ See `design-md/zul.design.md` Rule 112.
 | Default | `Surface/general/default` | `#ffffff` | none | — | `Icon/default/default` | `#808080` |
 | Hover | `Surface/secondary/default-subtle` | `#e8fbe8` | `Border/primary/default` | `#00cc85` | `Icon/primary/default` | `#00cc85` |
 | Pressed | `Surface/primary/focus` | `#00a36a` | `Border/primary/default` | `#00cc85` | `Icon/primary/default` | `#00cc85` |
-| Active | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` | `#00a36a` | `Icon/primary/on-color` | `#e1f9ea` |
+| Active | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` | `#00a36a` | `Icon/primary/on-color` | `#ffffff` |
 
 **Active state = plain rounded square. No speech-bubble tail. No `nav-btn-union-bg`.**
 
-**`--icon-primary-on-color` = `#e1f9ea`** — NOT `#f6fdfb` (that is `Text/primary/on-color`, a different token).
+**`--icon-primary-on-color` = `#ffffff`** — DS updated 2026-05-24 from previous value `#e1f9ea`. See Rule 61.
 
 **Supersedes Rule 52 item 1 and Rule 99.** Both were based on standalone node `3908:6163` (a VECTOR artifact), not the COMPONENT_SET.
 

@@ -8,6 +8,16 @@
 >
 > **Companion files** — [CLAUDE.md](CLAUDE.md) (full implementation rules, 1–76+), [design-md/zul.design.md](design-md/zul.design.md), [design-md/nadia.design.md](design-md/nadia.design.md), [design-md/syakila.design.md](design-md/syakila.design.md).
 
+> ### Sync status (2026-06-02)
+>
+> **Live audit against DS (2026-06-02) — full variable audit via `use_figma`:**
+> - **Primitives: 429 → 478 (+49)** — New palettes: Gold (`#fabb0a`), Silver (`#878dbb`), Bronze (`#d47d62`) for medals/achievement; Pink-Secondary (`#ff9dc1`) + Pink-Tertiary (`#99375b`) for Teacher role states; Butter (`#ffffc9`, replaces Vanilla), Pumpkin (`#f2b839`, replaces Mustard). New Foundation vars: `white 50`, `black 50`, `slate` (`#444a56`).
+> - ⚠️ **Palette renames**: "Vanilla" → `Butter` · "Mustard" → `Pumpkin`. Any `--vanilla-*` / `--mustard-*` CSS variables are **invalid** — replace immediately.
+> - **Semantic: 277 → 329 (+52)** — New `Subjects/*` namespace: 18 subjects × 5 states as Semantic aliases. CSS can now use `var(--subjects-[name]-default)` instead of hardcoded hex. Hex values mirror §4.3 exactly.
+> - **Responsives: 64 vars** (first full audit) — 3 modes: Desktop/Tablet/Mobile. Grid: 12/8/4 columns, content widths 1320/623/358px. Per-breakpoint H1–H4, T1–T5 scale. Confirmed DS frame widths: Desktop=1440, Tablet=687, Mobile=390.
+> - All 16 critical tokens in §6.1/§6.7 re-confirmed ✓ — see zul.design.md Rule 217 for full table.
+> - **CLAUDE.md Rule 59 + syakila.design.md fixed** — stale `#e1f9ea` removed from Nav Button Active icon column in both files. Correct value `#ffffff` (`Icon/primary/on-color`, changed 2026-05-24) is now consistent across all 5 doc files.
+>
 > ### Sync status (2026-05-31)
 >
 > **Updated 2026-05-31 (documentation consistency pass):**
@@ -36,10 +46,11 @@
 > - §3.2 `--text-default-secondary`, `--text-default-placeholder` · §3.5 `--overlay-default` · §5 Status Badge hexes · §6.2 / §6.4 / §6.5 / §6.6 component recipes
 >
 > **Coverage gaps (DS has these, this doc doesn't yet):**
-> - `Surface/gold/*`, `Surface/silver/*`, `Surface/bronze/*` (medal/tier surfaces)
+> - `Gold/*`, `Silver/*`, `Bronze/*` Primitive ramps now documented in §1 + zul.design.md Rule 217 (base hex: Gold `#fabb0a`, Silver `#878dbb`, Bronze `#d47d62`). Semantic `Surface/gold/*` aliases still unverified — do not use until confirmed via `get_variable_defs`.
 > - `Surface/success/*`, `Surface/warning/*`, `Surface/alert/*` (state surfaces — alerts, toasts, banners)
 > - `Surface/primary/default-hover` (distinct from `default-focus`)
 > - `Icon/primary/default-hover`, `Text/primary/default-hover`
+> - `Foundation/slate` (`#444a56`) — new Primitive, no confirmed Semantic alias yet
 >
 > **CLAUDE.md drift:** Rules 19, 38, 40 have had multiple conflicting values. **Current confirmed (2026-05-31, `get_design_context`):** Primary + Secondary Pressed = `#00a36a` (`Surface/primary/focus`); Tertiary Pressed = `#00564c` (`Surface/tertiary/default`). When CLAUDE.md and this file conflict on state colors, **this file is authoritative.**
 
@@ -71,9 +82,10 @@ Primitives  ──┐
 
 | Collection | Modes | Contains | When to read |
 |---|---|---|---|
-| **Primitives** | 1 (Value) | Raw hex values: `Grey/50–950`, `OG-Green/*`, `Pink/*`, `Foundation/*`, etc. | Never reference directly in CSS — only via aliases. |
+| **Primitives** | 1 (Value) | Raw hex values: `Grey/50–950`, `OG-Green/*`, `Pink/*`, `Foundation/*`, `Gold/*`, `Silver/*`, `Bronze/*`, `Butter/*`, `Pumpkin/*`, etc. 478 vars as of 2026-06-02. | Never reference directly in CSS — only via aliases. |
 | **Product** | 3 (Student / Teacher / Parent) | Role-specific aliases: `Primary/Base`, `Secondary/Base`, `Tertiary/*`. Resolves to a different Primitive per role. | Only when a component needs to differ per user role (e.g. Button - 1.5). |
-| **Semantic** | 2 (Light / Dark) | Use-case aliases: `Surface/*`, `Text/*`, `Icon/*`, `Border/*`, `Overlay/*`. | **Default for all CSS.** This is what 95% of code should reference. |
+| **Semantic** | 2 (Light / Dark) | Use-case aliases: `Surface/*`, `Text/*`, `Icon/*`, `Border/*`, `Overlay/*`, `Subjects/*`. 329 vars as of 2026-06-02. | **Default for all CSS.** This is what 95% of code should reference. |
+| **Responsives** | 3 (Desktop / Tablet / Mobile) | Grid spec (12/8/4 columns, content widths 1320/623/358px) + per-breakpoint H1–H4/T1–T5 type scale. Frame widths: Desktop 1440px, Tablet 687px, Mobile 390px. 64 vars. | When building responsive layouts — pull the breakpoint spec from here. CSS breakpoints: Tablet `≤1279px`, Mobile `≤767px`. |
 
 **Critical implication — Student is OG-Green, not pink** ([CLAUDE.md Rule 18](CLAUDE.md)):
 
@@ -598,7 +610,7 @@ When implementing a new DS-derived component:
 |---|---|
 | `color: #2FAC51` ("Pandai green" guess) | `color: var(--text-primary-default)` → `#00cc85` |
 | `color: #0F172A` (dark navy heading) | `color: var(--text-default-heading)` → `#404040` |
-| `color: #FFFFFF` for on-primary text | `color: var(--text-primary-on-color)` → `#f6fdfb` |
+| `color: #f6fdfb` or `#e1f9ea` for on-primary text (stale — both are old values) | `color: var(--text-primary-on-color)` → `#ffffff` (DS updated 2026-05-24; `#f6fdfb` was the pre-May-24 value, `#e1f9ea` was an even earlier mistake) |
 | Pressed button = `Surface/tertiary/default` `#00564c` (dark teal — from older notes / CLAUDE.md Rule 19) | Pressed button = `Surface/primary/focus` `#00a36a` (intensified green — see §6.1, live-verified 2026-05-15) |
 | Pressed label = `Text/primary/on-color` `#f6fdfb` | Pressed label = `Text/primary/default` `#00cc85` |
 | Pressed chevron = `Icon/tertiary/default` `#00564c` | Pressed chevron = `Icon/primary/focus` `#00a36a` |
@@ -646,4 +658,4 @@ Drop these directly into Claude Code / Codex / Cursor when working in this repo:
 
 ---
 
-*Last updated: 2026-05-28 by Zulfadhli — DS re-audit: `Text/primary/on-color` + `Icon/primary/on-color` updated to `#ffffff` (DS changed 2026-05-24); `--surface-disabled-on-color` (#e5e5e5), `--surface-informative-default` (#00a2e8), `--surface-secondary-default-hover` (#f6fef6), `--border-on-color` (#ffffff) added to §3; §6.1 Pressed split by variant (Primary≠Secondary/Tertiary) + disabled arrow bg corrected; §6.7/6.8/6.9 new component recipes added; §9 five new mistake rows added | DS source: `TLVKe3bgJTdVvuPAzgDq2f` (Pandai Design System 1.5) | Confirmed Student context (OG-Green palette)*
+*Last updated: 2026-06-02 by Zulfadhli — Full DS variable audit: Primitives 429→478 (+49: Gold/Silver/Bronze/Butter/Pumpkin/Pink-Secondary/Pink-Tertiary + 3 Foundation vars); Semantic 277→329 (+52: Subjects/* namespace); Responsives 64 vars added to architecture table; all 16 critical tokens re-confirmed ✓; §9 `#f6fdfb` stale mistake row corrected to `#ffffff`; Coverage gaps updated (Gold/Silver/Bronze Primitives now documented; Semantic Surface/gold/* still unverified); palette rename warning added (Vanilla→Butter, Mustard→Pumpkin) | DS source: `TLVKe3bgJTdVvuPAzgDq2f` (Pandai Design System 1.5) | Confirmed Student context (OG-Green palette)*
