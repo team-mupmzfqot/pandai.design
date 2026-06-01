@@ -2505,4 +2505,60 @@ Bg and chevron color were swapped — chevron was invisible (same hex as bg). Ar
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-31 (Rules 85–86 added — Secondary outer frame box-shadow:inset; Pressed arrow all-3-properties correction; mandatory pre-flight reinforced) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 87. Post-build DS audit — mandatory 1:1 property verification after every component (= Rule 214 in zul.design.md)
+
+**Source:** User instruction 2026-06-02. Applies to every component built from DS node data.
+
+Reading DS node values correctly and implementing them completely are two separate problems. A DS read confirms the right values — it does not verify that every property has been declared on the correct CSS element. The gap happens during implementation: variant/sibling classes carry over structural properties (flex, gap, font-size) but silently drop "obvious" ones like `color`.
+
+**If building from DS node data (not screenshots), the output must be 1:1. There is no excuse for a discrepancy when exact values are available from the source.**
+
+**Mandatory post-build audit — run after completing ANY component:**
+
+```
+For every node in the DS component tree:
+
+□ TEXT nodes:
+  → color           — explicit CSS `color:` on that element (never rely on inheritance)
+  → font-size       — matches DS fontSize
+  → font-weight     — matches DS fontWeight
+  → line-height     — matches DS lineHeight
+  → font-family     — Poppins unless DS specifies otherwise
+  → text stroke     — check for DS stroke on TEXT node (Rule 206); if present → -webkit-text-stroke + paint-order
+
+□ FRAME/GROUP nodes:
+  → background      — explicit CSS `background:` matches DS fill token
+  → border/stroke   — check strokeAlign first (Rule 60), then apply inset/outset/border correctly
+  → border-radius   — matches DS cornerRadius via correct token
+  → padding         — all 4 sides, not just directional (Rule 75)
+  → gap             — matches DS itemSpacing / counterAxisSpacing
+  → width / height  — fixed if DS specifies both (Rule 209)
+  → flex-direction  — matches DS layoutMode (HORIZONTAL/VERTICAL)
+  → align-items     — matches DS counterAxisAlignItems
+  → justify-content — matches DS primaryAxisAlignItems
+
+□ Visibility:
+  → DS visible: false → NO HTML element, NO CSS rule
+
+□ For every CSS class created:
+  → Does it declare ALL properties from its DS node?
+  → Not just the "different" ones — ALL of them, including color, font-size, line-height
+```
+
+**Workflow:**
+```
+1. Build the component (HTML + CSS) from DS node reads
+2. Re-fetch the DS component node via use_figma
+3. Walk every TEXT and FRAME child node
+4. For each node: compare DS properties vs CSS declarations one by one
+5. Fix every gap before committing
+```
+
+**Why this rule exists:**
+`.modal-stat-caption--inline` (Score Modal) was implemented with `font-size`, `line-height`, `gap`, `flex-wrap` — all correctly read from DS — but `color: var(--text-default-caption)` was missing. DS node `5575:1112` clearly showed `Text/default/caption = #bfbfbf` on those spans. The property was read correctly; it was never written to CSS because `color` felt inherited. It wasn't — spans got `#404040` from body.
+
+**Key rule:** Every text element needs an explicit `color:` declaration. Never assume correct inheritance. When writing a variant or sibling CSS class, carry over the full property set — not just what is structurally different.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-02 (Rule 87 added — mandatory post-build DS audit, 1:1 property verification after every component) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
