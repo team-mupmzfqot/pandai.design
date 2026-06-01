@@ -5942,7 +5942,7 @@ Standard pattern for an element that opens on button click and auto-closes after
 > This is the most important rule in this file. Skip it and you will reproduce a mistake that has already been made.
 
 ```
-Step 0a → Read design-md/zul.design.md          ← ALL rules 1–151 + confirmed specs
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–211 + confirmed specs
 Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH. Not memory. Not docs.
 Step 0c → Audit component anatomy (Rules 49, 93):
            - use_figma: find the COMPONENT SET → list ALL variants by name
@@ -5953,7 +5953,10 @@ Step 0d → For spacing/positioning: read DS screen frame y-coords (Rules 94–9
 Step 0e → get_variable_defs on exact sub-nodes for every fill/stroke/spacing (Rule 12)
 Step 0f → Cross-check CSS variable value against :root before using it (Rule 83)
 Step 0g → For icons: confirm viewBox, path scale, AND CSS dimensions (Rule 87)
-Step 0h → get_screenshot after implementation → compare against DS side-by-side
+Step 0h → For assets: check src/image-repo/[page]/assets/main/[ComponentName]/ first (Rule 211)
+           - grep HTML for existing src= paths before assuming any asset is missing
+           - inline SVG <symbol> defs stay in HTML; external <img src> go in image-repo
+Step 0i → get_screenshot after implementation → compare against DS side-by-side
 ```
 
 ---
@@ -8223,6 +8226,64 @@ Every Status Modal header pill variant (Score, Coins, Streak, Lives) has `stroke
 
 ---
 
+### Rule 211. Asset organisation — all page assets live in `src/image-repo/[page]/assets/main/[ComponentName]/` (2026-06-01)
+
+Every external file asset (`<img src>`, `background-image: url()`) for a page must live under a single organised path:
+
+```
+src/image-repo/[page-name]/assets/main/[ComponentName]/filename
+```
+
+The `[ComponentName]` folder is named after the HTML `<section id>` that uses the asset. This is the same convention already established for `page.template` (`src/image-repo/page.template/assets/main/...`).
+
+**Confirmed structure for `zul.home.screen.html` (2026-06-01):**
+
+```
+src/image-repo/page.home/assets/main/
+├── NavbarPrimary-Desktop/   logo-mark.svg, logo-text.svg, Avatar-Aidan.png
+├── NavBar-Mobile/           logo-mark.svg, logo-text.svg   ← separate copies, per Rule 67
+├── LearnMenu/               feature-*.png × 12
+├── Welcome-Desktop/         Avatar-Aidan.png               ← separate copy, per Rule 67
+├── StaticNewsCard-Desktop/  jdp.jpg, 2 (3).png, 3.jpg
+├── YourSelectedSubjects-Desktop/  quiz card images + bm.png
+└── StatusBadgeModal/        modal-corner.svg
+```
+
+**Three rules that always apply together:**
+
+1. **Check before moving.** Before moving any asset, grep all HTML files in the repo for that path. If another page references the same physical file, **copy** (keep the original in place). If the file is exclusive to this page, **move** (copy to new location, delete original).
+
+   ```bash
+   grep -rl "path/to/asset" --include="*.html" . | grep -v "target-page.html"
+   ```
+
+2. **Per-component copies — never cross-reference.** When the same image is needed in two different HTML sections (e.g., Avatar in both `NavbarPrimary-Desktop` and `Welcome-Desktop`), copy it into **each** component folder separately. Never use one file path shared across two component folders (Rule 67).
+
+3. **Inline symbols vs external files.** SVG `<symbol>` definitions embedded in the HTML `<svg><defs>` block are NOT assets — they have no file path and belong in no folder. Only external file references (`<img src="...">`, `url('...')`) need to go in `image-repo`. When auditing for missing assets, grep for `src=` and `url(` — not for `<symbol>` or `<use href=`.
+
+**Pre-implementation asset audit (mandatory, runs as Step 0h in the session workflow):**
+```
+1. grep HTML for existing src= and background-image: url() paths
+2. Verify each file exists at its referenced path
+3. If any asset is missing → check image-repo/[page]/assets/main/[ComponentName]/ first
+4. Only export from Figma if the file genuinely doesn't exist anywhere in the repo
+```
+
+**What NOT to do:**
+- Never put external `<img src>` files in `zul.test.git/icons/` — that folder is for legacy SVG files only, not organised page assets
+- Never reference an asset from another page's component folder (e.g., `page.template/assets/main/...` from the home screen HTML)
+- Never leave assets scattered across flat folders like `src/image-repo/Quiz-Card/` or `src/image-repo/Home/` once the page structure is established
+
+**Mistakes that prompted this rule (2026-06-01):**
+- Avatar was at `src/image-repo/Home/Avatar-Aidan.png` (flat, no component scope)
+- Quiz card images were at `src/image-repo/Quiz-Card/` (flat, no page scope)
+- Static card images were at `src/image-repo/Static-Card/` (flat, no page scope)
+- Logo and feature icons were at `zul.test.git/icons/` (wrong repo location for page assets)
+- Modal corner was in a differently-named path `home.screen/` instead of `page.home/`
+- All these were consolidated into `src/image-repo/page.home/assets/main/[ComponentName]/` in the 2026-06-01 cleanup
+
+---
+
 ### Session learnings — 2026-06-01 (Status Badge Modal — Streak modal fixes)
 
 **What happened:**
@@ -8237,4 +8298,17 @@ Every Status Modal header pill variant (Score, Coins, Streak, Lives) has `stroke
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-01 (Rules 208–210 added — DS nested frame hierarchy → HTML wrappers; image container both dimensions; modal header pill border Rule 60 violations; session learnings Streak modal) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Session learnings — 2026-06-01 (Asset organisation cleanup)
+
+**What happened:**
+Assets for `zul.home.screen.html` were scattered across 6 different locations: `zul.test.git/icons/` (logos, feature PNGs), `src/image-repo/Home/` (avatar), `src/image-repo/Quiz-Card/` (18 quiz images), `src/image-repo/Static-Card/` (3 images), `src/image-repo/bm.png` (loose root file), and `src/image-repo/home.screen/` (modal SVG). All 41 files were consolidated into `src/image-repo/page.home/assets/main/[ComponentName]/` matching the existing `page.template` convention.
+
+**What to remember:**
+- **Check other pages before moving.** Grep all HTML files for the asset path first. If another page uses it, copy; otherwise move. In this case `syakila.test.git/*.html` referenced `icons/logo-mark.svg` — but that's relative to its own `syakila.test.git/icons/` folder, a completely different physical path. Always verify the actual resolved path, not just the string match.
+- **Inline `<symbol>` defs ≠ external file assets.** Store icons and brand icons live as `<symbol>` in the HTML — they have no file path. Only `<img src>` and `background-image: url()` references need a file in `image-repo`. Grepping for `src=` and `url(` is the correct audit method.
+- **Same asset, two sections = two copies.** Avatar-Aidan.png was used in both `NavbarPrimary-Desktop` and `Welcome-Desktop`. Per Rule 67, it was copied into both component folders separately. Never share one path across two component boundaries.
+- **`icons/` folder is not a page asset store.** `zul.test.git/icons/` holds legacy/miscellaneous SVG files. Page-specific external image assets (logos, feature PNGs, quiz images) belong in `src/image-repo/page.home/assets/main/`, not in `icons/`.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-01 (Rules 208–211 added — DS nested frame hierarchy → HTML wrappers; image container both dimensions; modal header pill border Rule 60 violations; asset organisation Rule 211; session learnings Streak modal + asset cleanup) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
