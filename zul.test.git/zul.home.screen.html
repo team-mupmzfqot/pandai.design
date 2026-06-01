@@ -796,7 +796,7 @@
       font-family:   var(--font-family);
     }
     .modal-btn-sec:hover {
-      background: var(--surface-secondary-default-subtle);
+      background: var(--surface-secondary-default);
       box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
     }
     .modal-btn-sec:active,
@@ -813,18 +813,22 @@
       white-space:  nowrap;
       padding:      0 4px;
     }
+    .modal-btn-sec:hover .modal-btn-sec__label { color: var(--text-secondary-focus); }
     .modal-btn-sec:active .modal-btn-sec__label,
-    .modal-btn-sec.is-pressing .modal-btn-sec__label { color: var(--text-primary-on-color); }
+    .modal-btn-sec.is-pressing .modal-btn-sec__label { color: var(--text-primary-default); }
     .modal-btn-sec__arrow {
       display:         flex;
       align-items:     center;
       justify-content: flex-end;
+      width:           16px;
+      height:          16px;
       padding:         2px;
       border-radius:   60px;
       background:      var(--surface-general-default);
       box-shadow:      inset 0 0 0 1px var(--border-primary-default);
     }
     .modal-btn-sec:hover .modal-btn-sec__arrow {
+      background: var(--surface-secondary-default);
       box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
     }
     .modal-btn-sec:active .modal-btn-sec__arrow,
@@ -833,8 +837,9 @@
       box-shadow:  inset 0 0 0 1px var(--border-primary-default);
     }
     .modal-btn-sec__arrow svg { display: block; width: 12px; height: 12px; color: var(--icon-primary-default); }
+    .modal-btn-sec:hover .modal-btn-sec__arrow svg { color: var(--text-secondary-focus); }
     .modal-btn-sec:active .modal-btn-sec__arrow svg,
-    .modal-btn-sec.is-pressing .modal-btn-sec__arrow svg { color: var(--text-primary-on-color); }
+    .modal-btn-sec.is-pressing .modal-btn-sec__arrow svg { color: var(--icon-primary-default); }
 
     /* ── Footer Button Group (Score + Streak modals) ─────────────────── */
     .modal-btn-group {
@@ -860,7 +865,7 @@
       gap:           0;
     }
     .modal-btn-sec-l:hover {
-      background: var(--surface-secondary-default-subtle);
+      background: var(--surface-secondary-default);
       box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
     }
     .modal-btn-sec-l:active,
@@ -877,36 +882,44 @@
       white-space:  nowrap;
       padding:      0 8px;
     }
+    .modal-btn-sec-l:hover .modal-btn-sec-l__label { color: var(--text-secondary-focus); }
     .modal-btn-sec-l:active .modal-btn-sec-l__label,
-    .modal-btn-sec-l.is-pressing .modal-btn-sec-l__label { color: var(--text-primary-on-color); }
+    .modal-btn-sec-l.is-pressing .modal-btn-sec-l__label { color: var(--text-primary-default); }
     .modal-btn-sec-l__arrow {
       display:         flex;
       align-items:     center;
       justify-content: flex-end;
+      width:           24px;
+      height:          24px;
       padding:         4px;
       border-radius:   60px;
       background:      var(--surface-general-default);
       box-shadow:      inset 0 0 0 1px var(--border-primary-default);
     }
-    .modal-btn-sec-l:hover .modal-btn-sec-l__arrow { box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+    .modal-btn-sec-l:hover .modal-btn-sec-l__arrow {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
     .modal-btn-sec-l:active .modal-btn-sec-l__arrow,
     .modal-btn-sec-l.is-pressing .modal-btn-sec-l__arrow {
       background: var(--surface-primary-focus);
       box-shadow: inset 0 0 0 1px var(--border-primary-default);
     }
     .modal-btn-sec-l__arrow svg { display: block; width: 16px; height: 16px; color: var(--icon-primary-default); }
+    .modal-btn-sec-l:hover .modal-btn-sec-l__arrow svg { color: var(--text-secondary-focus); }
     .modal-btn-sec-l:active .modal-btn-sec-l__arrow svg,
-    .modal-btn-sec-l.is-pressing .modal-btn-sec-l__arrow svg { color: var(--text-primary-on-color); }
+    .modal-btn-sec-l.is-pressing .modal-btn-sec-l__arrow svg { color: var(--icon-primary-default); }
 
-    /* Primary/L "Score" / "Aanswer Quiz" */
+    /* Primary/L "Score" / "Answer Quiz" */
     .modal-btn-pri-l {
       display:       inline-flex;
       align-items:   center;
       justify-content: center;
-      max-height:    48px;
+      height:        40px;
       padding:       8px 12px;
       background:    var(--surface-primary-default);
-      border:        1px solid var(--border-primary-focus);
+      border:        none;
+      box-shadow:    inset 0 0 0 1px var(--border-primary-focus);
       border-radius: var(--corner-radius-corner-rounded);
       cursor:        pointer;
       flex-shrink:   0;
@@ -915,12 +928,12 @@
     }
     .modal-btn-pri-l:hover {
       background: var(--surface-secondary-default);
-      border-color: var(--border-secondary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
     }
     .modal-btn-pri-l:active,
     .modal-btn-pri-l.is-pressing {
-      background:   var(--surface-primary-focus);
-      border-color: var(--border-primary-default);
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
     }
     .modal-btn-pri-l__label {
       font-family:  var(--font-family);
@@ -938,18 +951,19 @@
       display:         flex;
       align-items:     center;
       justify-content: flex-end;
+      width:           24px;
+      height:          24px;
       padding:         4px;
       border-radius:   60px;
       background:      var(--surface-primary-default-subtle-hover);
-      max-height:      24px;
     }
     .modal-btn-pri-l:hover .modal-btn-pri-l__arrow { background: var(--surface-secondary-default-subtle); }
     .modal-btn-pri-l:active .modal-btn-pri-l__arrow,
     .modal-btn-pri-l.is-pressing .modal-btn-pri-l__arrow { background: var(--surface-primary-default); }
-    .modal-btn-pri-l__arrow svg { display: block; width: 16px; height: 16px; color: var(--icon-tertiary-default); }
+    .modal-btn-pri-l__arrow svg { display: block; width: 16px; height: 16px; color: var(--border-primary-focus); }
     .modal-btn-pri-l:hover .modal-btn-pri-l__arrow svg { color: var(--text-secondary-focus); }
     .modal-btn-pri-l:active .modal-btn-pri-l__arrow svg,
-    .modal-btn-pri-l.is-pressing .modal-btn-pri-l__arrow svg { color: var(--surface-primary-focus); }
+    .modal-btn-pri-l.is-pressing .modal-btn-pri-l__arrow svg { color: var(--border-primary-focus); }
 
     /* ── Ruby P.Ruby image ───────────────────────────────────────────── */
     .modal-ruby-img {
@@ -6637,7 +6651,7 @@
             <span class="modal-btn-sec-l__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
           </button>
           <button class="modal-btn-pri-l" type="button">
-            <span class="modal-btn-pri-l__label">Aanswer Quiz</span>
+            <span class="modal-btn-pri-l__label">Answer Quiz</span>
             <span class="modal-btn-pri-l__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
           </button>
         </div>
