@@ -8416,4 +8416,74 @@ function closeAll() {
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-01 (Rules 212–213 added — display:none blocks transitions; modal animation full pattern with JS timer; session learnings smooth animations) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 214. Post-build DS audit — mandatory 1:1 property verification after every component (2026-06-02)
+
+**Source:** User instruction 2026-06-02. Applies to every component built from DS node data.
+
+**The principle:** Reading DS node values correctly and implementing them completely are two different problems. A DS read confirms the right values. It does not verify that every property has been declared on the right CSS element. The gap happens during implementation — variant classes, sibling elements, and "obvious" inherited properties get skipped.
+
+If building from DS node data (not screenshots), the output must be 1:1. There is no excuse for a discrepancy when the exact values are available from the source.
+
+**Mandatory post-build audit — run after completing ANY component:**
+
+```
+For every node in the DS component tree:
+□ TEXT nodes:
+  → color           — explicit CSS `color:` on that element (never rely on inheritance)
+  → font-size       — matches DS fontSize
+  → font-weight     — matches DS fontWeight
+  → line-height     — matches DS lineHeight
+  → font-family     — Poppins unless DS specifies otherwise
+  → text stroke     — check for DS stroke on TEXT node (Rule 206); if present → -webkit-text-stroke + paint-order
+
+□ FRAME/GROUP nodes:
+  → background      — explicit CSS `background:` matches DS fill token
+  → border/stroke   — check strokeAlign first (Rule 60), then apply inset/outset/border correctly
+  → border-radius   — matches DS cornerRadius via correct token
+  → padding         — all 4 sides, not just directional (Rule 75)
+  → gap             — matches DS itemSpacing / counterAxisSpacing
+  → width / height  — fixed if DS specifies both (Rule 209)
+  → flex-direction  — matches DS layoutMode (HORIZONTAL/VERTICAL)
+  → align-items     — matches DS counterAxisAlignItems
+  → justify-content — matches DS primaryAxisAlignItems
+
+□ Visibility:
+  → DS visible: false → NO HTML element, NO CSS rule
+
+□ For every CSS class created:
+  → Does it have ALL properties from the corresponding DS node?
+  → Not just the "different" ones — ALL of them, including color, font-size, line-height
+```
+
+**Workflow:**
+```
+1. Build the component (HTML + CSS) from DS node reads
+2. Re-fetch the DS component node via use_figma
+3. Walk every TEXT and FRAME child node
+4. For each node: compare DS properties vs CSS declarations one by one
+5. Fix every gap before committing
+```
+
+**Why this rule exists:**
+`.modal-stat-caption--inline` was implemented with `font-size`, `line-height`, `gap`, `flex-wrap` — all correctly read from DS — but `color: var(--text-default-caption)` was missing. The DS clearly showed `Text/default/caption = #bfbfbf` on those spans. The property was read correctly; it was never written to CSS because `color` felt "shared" or "inherited." It wasn't — it inherited `#404040` from `body` instead.
+
+**Key insight:** When creating a variant or sibling class, always carry over the full property set — not just what is visually or structurally *different*. `color` on a text element is never optional, regardless of what parent elements declare.
+
+---
+
+### Session learnings — 2026-06-02 (Score Modal caption color + post-build audit rule)
+
+**What was found:**
+- Score Modal `.modal-stat-caption--inline` missing `color: var(--text-default-caption)`.
+- DS node `5575:1112` confirms "It will only take about" and "to complete your goal" → `Text/default/caption` = `#bfbfbf`.
+- Plain spans were inheriting `body` color `#404040` — appeared as dark text instead of light grey caption.
+- Fix: one line — `color: var(--text-default-caption)` added to `.modal-stat-caption--inline`.
+
+**What to remember:**
+- DS reads give correct values; they do not write CSS for you. Coverage audit is a separate, mandatory step.
+- Every text element needs an explicit `color:` declaration — never assume correct inheritance.
+- After every component build, re-walk the DS node tree and cross-check every property.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-02 (Rule 214 added — mandatory post-build DS audit, 1:1 property verification; session learnings Score Modal caption fix) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
