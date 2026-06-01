@@ -1901,6 +1901,8 @@
 
     /* Tablet */
     @media (max-width: 1279px) {
+      #Breadcrumb-Desktop { display: none; }
+
       :root {
         --page-padding-x:          32px;
         --check-in-card-max-width: none;
@@ -1936,6 +1938,8 @@
 
     /* Mobile */
     @media (max-width: 767px) {
+      #Breadcrumb-Desktop { display: none; }
+
       :root {
         --page-padding-x: var(--spacing-space-m);   /* 16px */
       }
@@ -2025,6 +2029,53 @@
       .navbar-bottom { display: flex; }
       .footer        { display: none; }
       body           { padding-bottom: 56px; }   /* bottom navbar height */
+
+      /* ── Quick Notes card — mobile ─────────────────────────────── */
+      .qn-card { padding: var(--spacing-space-s); gap: var(--spacing-space-s); }
+
+      /* Header: compact height, smaller icon */
+      .qn-card__header         { height: 80px; max-height: 80px; }
+      .qn-card__fano           { height: 80px; }
+      .qn-card__icon-col       { width: 72px; max-width: 72px; }
+      .qn-card__subject-icon   { width: 44px; height: 44px; }
+      .qn-card__header-content { padding: var(--spacing-space-s) var(--spacing-space-m); }
+      .qn-card__topics         { font-size: 16px; line-height: 24px; overflow: hidden; text-overflow: ellipsis; }
+      .qn-card__topic-desc     { font-size: 12px; line-height: 18px; }
+
+      /* Content rows: grid — chapter label stacks above topic, button spans both */
+      .qn-card__row {
+        display:               grid;
+        grid-template-columns: 1fr auto;
+        height:                auto;
+        min-height:            unset;
+        overflow:              visible;
+        border-bottom:         1px solid var(--border-general-default);
+      }
+      .qn-card__row:last-child          { border-bottom: none; }
+      .qn-card__cell                    { border-right: none; border-bottom: none; }
+      .qn-card__cell--thumb             { display: none; }
+      .qn-card__cell--chapter {
+        grid-column: 1; grid-row: 1;
+        width: auto; min-width: unset; max-width: none;
+        padding:     10px var(--spacing-space-xs) 2px var(--spacing-space-m);
+        font-size:   11px;
+        line-height: 16px;
+        color:       var(--icon-default-default);   /* grey label */
+      }
+      .qn-card__cell--topic {
+        grid-column: 1; grid-row: 2;
+        padding:       2px var(--spacing-space-xs) 10px var(--spacing-space-m);
+        font-size:     13px;
+        line-height:   20px;
+        white-space:   normal;   /* wrap long topic names instead of truncating */
+        overflow:      visible;
+        text-overflow: unset;
+      }
+      .qn-card__cell--btn {
+        grid-column: 2; grid-row: 1 / span 2;
+        align-self:  center;
+        padding:     var(--spacing-space-xs) var(--spacing-space-m);
+      }
     }
 
     /* ═══════════════════════════════════════════════════════════════
@@ -2703,7 +2754,7 @@
           <span class="learn-dropdown__label">Textbooks</span>
         </div>
 
-        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quick Notes">
+        <div class="learn-dropdown__item is-selected" role="menuitem" tabindex="0" aria-label="Quick Notes">
           <img class="learn-dropdown__icon" src="../src/image-repo/page.template/assets/main/LearnMenu/feature-quick-notes.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Quick Notes</span>
         </div>
@@ -2991,11 +3042,11 @@
     <!-- Learn dropdown — Sub-topic Learn - 1.5 (DS node 4753:69817) -->
     <div class="nav-menu-dropdown" id="learn-menu-dropdown" aria-label="Learn menu">
       <div class="nav-menu-dropdown__list">
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
+        <div class="nav-menu-dropdown__item" role="button" tabindex="0" onclick="window.location.href='learningHub.html'">
           <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-folder"/></svg></div>
           <span class="nav-menu-dropdown__label">Learning Hub</span>
         </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
+        <div class="nav-menu-dropdown__item is-selected" role="button" tabindex="0">
           <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></div>
           <span class="nav-menu-dropdown__label">Quick Notes</span>
         </div>
@@ -3209,11 +3260,11 @@
           <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
         </div>
         <div class="nav-menu-submenu" id="submenu-learn" aria-hidden="true">
-          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Learning Hub">
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Learning Hub" onclick="window.location.href='learningHub.html'">
             <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-folder"/></svg></span>
             <span class="nav-menu-item__label">Learning Hub</span>
           </div>
-          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Quick Notes">
+          <div class="nav-menu-item is-active" role="button" tabindex="-1" aria-label="Quick Notes">
             <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
             <span class="nav-menu-item__label">Quick Notes</span>
           </div>
@@ -4918,11 +4969,11 @@
         <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
       </div>
       <div class="nav-menu-submenu" id="submenu-m-learn" aria-hidden="true">
-        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Learning Hub">
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Learning Hub" onclick="window.location.href='learningHub.html'">
           <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-folder"/></svg></span>
           <span class="nav-menu-item__label">Learning Hub</span>
         </div>
-        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Quick Notes">
+        <div class="nav-menu-item is-active" role="button" tabindex="-1" aria-label="Quick Notes">
           <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
           <span class="nav-menu-item__label">Quick Notes</span>
         </div>
