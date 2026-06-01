@@ -2561,4 +2561,59 @@ For every node in the DS component tree:
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-02 (Rule 87 added — mandatory post-build DS audit, 1:1 property verification after every component) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 88. Secondary button hover — full palette `#b5f291`, NOT subtle `#e8fbe8` (= Rule 215 in zul.design.md)
+
+**Source:** DS nodes `538:1883` (Secondary/L Hover), `1452:8284` (Secondary/S Hover). Confirmed 2026-06-02.
+
+`Button - 1.5 Secondary` hover uses **`Surface/secondary/default` = `#b5f291`** — not `Surface/secondary/default-subtle` = `#e8fbe8`.
+
+- `#e8fbe8` = subtle — for dropdown items, modal close buttons, nav menu items (low-prominence hover contexts)
+- `#b5f291` = full secondary — for all Button - 1.5 Secondary hover states (all sizes S/M/L)
+
+**Hover must override ALL children** — outer bg+border, label, arrow bg+border, chevron. They do not inherit from the outer container hover:
+
+```css
+.btn-secondary:hover {
+  background: var(--surface-secondary-default);             /* #b5f291 */
+  box-shadow: inset 0 0 0 1px var(--border-secondary-focus);/* #70bc6f */
+}
+.btn-secondary:hover .btn__label     { color: var(--text-secondary-focus); }
+.btn-secondary:hover .btn__arrow     { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+.btn-secondary:hover .btn__arrow svg { color: var(--text-secondary-focus); }
+```
+
+**Mistake made (2026-06-02):** All modal secondary buttons used `--surface-secondary-default-subtle` (#e8fbe8) and were missing child overrides entirely. Fixed to `#b5f291` with complete child override set.
+
+---
+
+### 89. `border-color` override is silent on `box-shadow:inset` components (= Rule 216 in zul.design.md)
+
+**Source:** Primary/L modal button audit 2026-06-02.
+
+When a base rule uses `box-shadow: inset 0 0 0 1px`, ALL state overrides (hover, pressed, active, disabled) **must also use `box-shadow`**. `border-color` overrides are completely silent when no `border:` is declared — no error, no warning.
+
+**Checklist before writing any state CSS:**
+```
+□ What is the base border mechanism? (border: OR box-shadow: inset)
+□ Do ALL state overrides use the same mechanism?
+□ If state uses border-color but base uses box-shadow → convert to box-shadow
+```
+
+```css
+/* WRONG — state uses border-color but base has no border (silent) */
+.btn { box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+.btn:hover  { border-color: var(--border-secondary-focus); }  /* does nothing */
+
+/* CORRECT — all states use the same mechanism */
+.btn { border: none; box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+.btn:hover  { box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+.btn:active { box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+```
+
+**Confirmed mistake:** Primary/L modal button had `border: 1px solid` as base (itself wrong — strokeAlign INSIDE requires `box-shadow:inset`, Rule 60). State overrides used `border-color` — all were completely invisible.
+
+**See also:** Rule 60 (strokeAlign → CSS mapping), Rule 85 (Secondary outer frame box-shadow:inset).
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-02 (Rules 88–89 added — Secondary hover #b5f291 not subtle; border-color silent on box-shadow:inset; modal button full audit session learnings) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

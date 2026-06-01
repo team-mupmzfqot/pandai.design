@@ -8486,4 +8486,104 @@ For every node in the DS component tree:
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-02 (Rule 214 added — mandatory post-build DS audit, 1:1 property verification; session learnings Score Modal caption fix) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 215. Secondary button hover — full palette `#b5f291`, NOT subtle `#e8fbe8` (2026-06-02)
+
+**Source:** DS `use_figma` on nodes `538:1883` (SecL-Hover), `1452:8284` (SecS-Hover). Confirmed 2026-06-02.
+
+The Secondary button hover state uses **`Surface/secondary/default` = `#b5f291`** as the background — not `Surface/secondary/default-subtle` = `#e8fbe8`. These are two distinct tokens and hover maps to the full (non-subtle) one.
+
+`#e8fbe8` (`--surface-secondary-default-subtle`) is correct for: dropdown item hover, modal close button hover, nav menu item hover — all contexts where the interaction is low-prominence.
+
+`#b5f291` (`--surface-secondary-default`) is correct for: Button - 1.5 Secondary hover (all sizes), nav menu CTA hover, any button-level interaction.
+
+**DS-confirmed Secondary hover state (all sizes — S, M, L share the same palette):**
+
+| Property | DS value | CSS token |
+|---|---|---|
+| Outer bg | `#b5f291` | `var(--surface-secondary-default)` |
+| Outer border | `#70bc6f` | `inset 0 0 0 1px var(--border-secondary-focus)` |
+| Label | `#70bc6f` | `var(--text-secondary-focus)` |
+| Arrow bg | `#b5f291` | `var(--surface-secondary-default)` |
+| Arrow border | `#70bc6f` | `inset 0 0 0 1px var(--border-secondary-focus)` |
+| Chevron | `#70bc6f` | `var(--text-secondary-focus)` |
+
+**Critical: hover overrides ALL children — outer, label, arrow bg+border, chevron.** Never only override the outer container and assume children inherit. Each child element has its own `background` and `box-shadow` — they do not inherit from the parent hover change.
+
+```css
+.btn-secondary:hover {
+  background: var(--surface-secondary-default);
+  box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+}
+.btn-secondary:hover .btn__label   { color: var(--text-secondary-focus); }
+.btn-secondary:hover .btn__arrow   { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+.btn-secondary:hover .btn__arrow svg { color: var(--text-secondary-focus); }
+```
+
+**Mistake made (2026-06-02):** All three modal secondary button classes (`.modal-btn-sec`, `.modal-btn-sec-l`, and previously `.btn-secondary-arrow`) used `--surface-secondary-default-subtle` (#e8fbe8) for hover. All also missing hover overrides on label, arrow bg, and chevron. Re-confirmed on DS nodes — fixed to `--surface-secondary-default` (#b5f291) with full child overrides.
+
+---
+
+### Rule 216. `border-color` override is silent on `box-shadow:inset` components — ALL state overrides must match the base border mechanism (2026-06-02)
+
+**Source:** Primary/L modal button audit 2026-06-02.
+
+When a component's base border uses `box-shadow: inset 0 0 0 1px`, state overrides (hover, pressed, disabled) **must also use `box-shadow`** — never `border-color`. `border-color` only affects a `border:` property. If no `border:` is declared, `border-color` overrides are completely silent — no error, no warning, just no visual change.
+
+```css
+/* WRONG — base uses box-shadow, but overrides use border-color (silent) */
+.btn { box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+.btn:hover   { border-color: var(--border-secondary-focus); }  /* ← does nothing */
+.btn:active  { border-color: var(--border-primary-default); }  /* ← does nothing */
+
+/* CORRECT — all states use the same mechanism */
+.btn { border: none; box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+.btn:hover   { box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+.btn:active  { box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+```
+
+**Rule:** Before writing ANY state override for a border/stroke: look at the base rule. If base uses `box-shadow: inset` → all overrides use `box-shadow`. If base uses `border:` → all overrides use `border-color`. Never mix mechanisms.
+
+**Checklist when adding state CSS:**
+```
+□ What is the base border mechanism? (border: OR box-shadow: inset)
+□ Do ALL state overrides (hover/pressed/active/disabled) use the same mechanism?
+□ If a state override uses border-color but base uses box-shadow → fix to box-shadow
+```
+
+**Confirmed mistake (Primary/L modal button, 2026-06-02):**
+- Base: `border: 1px solid var(--border-primary-focus)` ← also wrong (strokeAlign INSIDE → must be box-shadow, Rule 60)
+- Hover: `border-color: var(--border-secondary-focus)` ← silent even if base were correct box-shadow
+- Pressed: `border-color: var(--border-primary-default)` ← same
+- Result: hover and pressed had no visible border change at all.
+
+Fix: `border: none; box-shadow: inset 0 0 0 1px var(--border-primary-focus)` as base + `box-shadow` overrides on all states.
+
+**See also:** Rule 60 (strokeAlign → CSS mapping), Rule 85 (Secondary outer frame box-shadow:inset).
+
+---
+
+### Session learnings — 2026-06-02 (Modal Button - 1.5 full audit)
+
+**What was found (3 button classes: Secondary/S, Secondary/L, Primary/L):**
+
+1. **All Secondary hover bg were `#e8fbe8` (subtle)** — DS = `#b5f291`. The subtle variant is for low-prominence hover contexts (dropdowns, nav items), not for button-level interactions.
+2. **All Secondary hover states missing child overrides** — label, arrow bg, arrow border, chevron all need explicit hover declarations. They don't inherit from the outer container hover.
+3. **All Secondary pressed label + chevron = `#ffffff`** — DS = `#00cc85`. Tokens `Text/primary/on-color` (#fff) vs `Text/primary/default` (#00cc85) were swapped.
+4. **Primary/L outer border was `border: 1px solid`** — DS strokeAlign INSIDE → must be `box-shadow: inset`. All state `border-color` overrides were completely silent as a result.
+5. **Primary/L `max-height: 48px`** — DS height = 40px exactly. `max-height` is imprecise; use `height:` for fixed-height DS components.
+6. **Primary/L default arrow chevron was `--icon-tertiary-default` (#00564c)** — DS = `#00a36a`. Different palette entirely.
+7. **Arrow containers missing explicit `width`/`height`** — Added `width: 16px; height: 16px` (S) and `width: 24px; height: 24px` (L/M). Explicit is always safer than relying on padding alone.
+8. **Typo in Streak modal CTA label**: "Aanswer Quiz" → "Answer Quiz".
+
+**Root cause of all errors:** No post-build DS audit was done after implementing the buttons. Each state was built from partial memory rather than a full per-state node inspection. Rule 214 (post-build audit) + Rule 215 (Secondary hover palette) + Rule 216 (border mechanism consistency) are the preventive measures.
+
+**What to remember:**
+- Secondary hover = `#b5f291` (`--surface-secondary-default`). Subtle (`#e8fbe8`) is for dropdowns/nav, not buttons.
+- Hover overrides ALL children. Never only override the outer wrapper.
+- Base border mechanism (box-shadow vs border) must match ALL state overrides. Mixed mechanisms = silent failures.
+- Primary/L outer frame: `strokeAlign INSIDE` → `box-shadow: inset`. Rule 60. Always verify before writing `border:`.
+- Before any design work, change, or decision — read `zul.design.md` + open live DS.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-02 (Rules 215–216 added — Secondary hover palette #b5f291; border-color silent on box-shadow components; session learnings modal button full audit) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
