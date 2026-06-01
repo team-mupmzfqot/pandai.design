@@ -8311,4 +8311,109 @@ Assets for `zul.home.screen.html` were scattered across 6 different locations: `
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-01 (Rules 208–211 added — DS nested frame hierarchy → HTML wrappers; image container both dimensions; modal header pill border Rule 60 violations; asset organisation Rule 211; session learnings Streak modal + asset cleanup) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 212. `display: none` blocks CSS transitions — use `opacity` + `pointer-events` for animatable overlays (2026-06-01)
+
+`display: none` cannot be transitioned — the browser removes the element from layout instantly with no interpolation. Toggling `display` between `none` and `flex/block` always produces an instant cut, regardless of any `transition` rules on the element.
+
+**Pattern for animatable overlay/backdrop:**
+```css
+/* Wrong — display toggle prevents any animation */
+.modal-overlay            { display: none; }
+.modal-overlay.is-open    { display: flex; }
+
+/* Correct — always display:flex, animate opacity + pointer-events */
+.modal-overlay {
+  display:        flex;           /* always rendered, never removed */
+  opacity:        0;
+  pointer-events: none;           /* invisible + non-interactive when closed */
+  transition:     opacity 0.22s ease;
+}
+.modal-overlay.is-open    { opacity: 1; pointer-events: auto; }
+.modal-overlay.is-closing { opacity: 0; pointer-events: none; }
+```
+
+**`pointer-events: none`** is mandatory when `opacity: 0` — without it, the invisible overlay still intercepts all clicks.
+
+**Child panels still use `display: none`** — only one panel is active at a time and they need to be fully removed from layout when inactive. The overlay is the only element that needs the opacity approach.
+
+---
+
+### Rule 213. Modal card animation — `@keyframes` entrance + `is-closing` class exit with JS timer (2026-06-01)
+
+**Full confirmed pattern (Status Badge Modals, 2026-06-01):**
+
+```css
+/* Entrance — triggered when .is-open is added */
+.modal-panel.is-open .modal-card {
+  animation: modalIn 0.28s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+/* Exit — triggered when .is-closing is added */
+.modal-panel.is-closing .modal-card {
+  animation: modalOut 0.18s ease-in both;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+@keyframes modalOut {
+  from { opacity: 1; transform: translateY(0)    scale(1);    }
+  to   { opacity: 0; transform: translateY(12px) scale(0.97); }
+}
+```
+
+**`both` fill-mode** — card stays at `from` state before animation starts (prevents flash of final state).
+
+**Spring easing `cubic-bezier(0.34, 1.4, 0.64, 1)`** for entrance — slight overshoot makes the modal feel alive. Exit uses `ease-in` (no spring — closing should feel clean, not bouncy).
+
+**JS closeAll() pattern with timer:**
+```js
+var closeTimer = null;
+
+function openModal(id) {
+  if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }   // cancel in-progress close
+  panels.forEach(function(p) { p.classList.remove('is-open', 'is-closing'); });
+  overlay.classList.remove('is-closing');
+  document.getElementById(id).classList.add('is-open');
+  overlay.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAll() {
+  if (closeTimer) return;   // guard: prevent double-close
+  var openPanel = document.querySelector('.modal-panel.is-open');
+  overlay.classList.add('is-closing');
+  if (openPanel) openPanel.classList.add('is-closing');
+  closeTimer = setTimeout(function() {
+    closeTimer = null;
+    panels.forEach(function(p) { p.classList.remove('is-open', 'is-closing'); });
+    overlay.classList.remove('is-open', 'is-closing');
+    document.body.style.overflow = '';
+  }, 220);   // matches overlay transition duration
+}
+```
+
+**Timer duration = overlay transition duration (220ms).** The card exit (180ms) finishes first, then the overlay fade completes, then DOM cleanup runs. Never set the timer shorter than the longest animation in the close sequence.
+
+**`if (closeTimer) return` guard** — prevents `closeAll()` being called twice (e.g. ESC + overlay click simultaneously) from queuing double cleanup.
+
+---
+
+### Session learnings — 2026-06-01 (Status Badge Modal — smooth animations)
+
+**What was done:**
+1. All 4 Status Badge Modals had instant `display` toggling — no animation.
+2. Replaced with: overlay opacity fade (CSS transition), card spring entrance + exit (`@keyframes`).
+3. JS `closeAll()` updated to add `is-closing` class, defer DOM cleanup 220ms via `setTimeout`.
+4. `openModal()` cancels any in-progress close timer before re-opening.
+
+**What to remember:**
+- **`display: none` cannot be animated.** Always `opacity` + `pointer-events` for overlays/backdrops.
+- **Entrance spring** (`cubic-bezier(0.34, 1.4, 0.64, 1)`) feels alive. **Exit ease-in** (no spring) feels clean. Never use spring easing on exit.
+- **Close needs a timer.** Add `is-closing`, wait for animations to finish (220ms = overlay transition), then remove all classes. Never remove `is-open` immediately — the exit animation won't play.
+- **Guard `closeTimer`** in both directions: `openModal` cancels it on re-open, `closeAll` returns early if already closing.
+- **Before any implementation** — read `zul.design.md` + open live DS. This animation pattern is now documented here so it can be applied consistently to any future overlay/modal component without re-deriving it.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-01 (Rules 212–213 added — display:none blocks transitions; modal animation full pattern with JS timer; session learnings smooth animations) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
