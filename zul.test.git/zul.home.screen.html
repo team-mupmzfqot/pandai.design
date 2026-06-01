@@ -123,6 +123,17 @@
       --section-gap:             var(--spacing-space-m);   /* Spacing/space-m = 16px */
       --overlay-dark:            rgba(26, 26, 26, 0.5);    /* Overlay/Overlay-Dark → Foundation/black 50 (DS confirmed) */
       --check-in-card-max-width: 390px;
+
+      /* Modal palette additions */
+      --purple-500-base: #7367f0;   /* Purple/500-(Base) — Streak modal header */
+      --purple-600:      #5c52c0;   /* Purple/600 — Streak header border */
+      --yellow-500-base: #fece00;   /* Yellow/500-(Base) — Coins modal header */
+      --yellow-600:      #cba500;   /* Yellow/600 — Coins header border */
+      --pink-500-base:   #ff5c98;   /* Pink/500-(Base) — Lives modal header */
+      --pink-600:        #cc4a7a;   /* Pink/600 — Lives header border */
+      --red-500-base:    #ff4c51;   /* Red/500-(Base) — "Unlimited Lives" text */
+      --border-secondary-default-hover:        #baf3b9;   /* Border/secondary/default-hover — Streak pill outer border */
+      --border-secondary-default-subtle-hover: #d1f7d1;   /* Border/secondary/default-subtle-hover — inactive streak day border */
     }
 
     /* â”€â”€ Reset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -283,6 +294,7 @@
       align-items: center;
       flex-shrink: 0;
     }
+    .status-pill, .status-pill-flipper { cursor: pointer; user-select: none; }
     .status-pill--score  { background: var(--surface-primary-default); border-color: var(--border-primary-focus); }  /* OG-Green/600 #00a36a */
     .status-pill--coins  { background: #fece00; border-color: #cba500; }
     /* DS node 2312:10654 — Coins label + value TEXT nodes: stroke #cba500, weight:1, align:OUTSIDE
@@ -314,6 +326,616 @@
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       transform: rotateY(180deg);
+    }
+
+    /* ── Status Badge Modals (node 5628:52018) ──────────────────────────── */
+    .modal-overlay {
+      display:          none;
+      position:         fixed;
+      inset:            0;
+      background:       var(--overlay-dark);
+      z-index:          500;
+      align-items:      center;
+      justify-content:  center;
+    }
+    .modal-overlay.is-open { display: flex; }
+
+    .modal-panel {
+      display:    none;
+      position:   relative;
+      width:      430px;
+      max-width:  calc(100vw - 32px);
+    }
+    .modal-panel.is-open { display: block; }
+
+    .modal-card {
+      background:    var(--surface-general-default);
+      border:              1px solid var(--border-primary-default);
+      border-radius:       var(--corner-radius-corner-rounded) var(--corner-radius-corner-4xl) var(--corner-radius-corner-rounded) var(--corner-radius-corner-rounded);
+      padding:             24px 16px;
+      position:            relative;
+      display:       flex;
+      flex-direction: column;
+      gap:           24px;
+    }
+    /* Lives modal uses 28px gap */
+    .modal-panel--lives .modal-card { gap: 28px; }
+
+    /* Decorative corner — absolute, top-right, overflows border */
+    .modal-card__corner {
+      position: absolute;
+      width:    75px;
+      height:   75.5px;
+      top:      -1px;
+      right:    -1px;
+      pointer-events: none;
+    }
+    .modal-card__corner img { width: 100%; height: 100%; display: block; }
+
+    /* Close button — Button Icon - 1.5/S/Secondary */
+    .modal-close {
+      position:       absolute;
+      top:            9.5px;
+      right:          9px;
+      background:     var(--surface-general-default);
+      border:         none;
+      padding:        2px;
+      border-radius:  108px;
+      box-shadow:     inset 0 0 0 1px var(--icon-primary-default);
+      display:        flex;
+      align-items:    center;
+      justify-content: center;
+      cursor:         pointer;
+      z-index:        2;
+    }
+    .modal-close svg { display: block; width: 24px; height: 24px; color: var(--icon-primary-default); }
+    .modal-close:hover { background: var(--surface-secondary-default-subtle); }
+
+    /* ── Modal Header Pill ───────────────────────────────────────────── */
+    .modal-header {
+      display:         flex;
+      justify-content: center;
+    }
+    .modal-header__pill {
+      display:         flex;
+      flex-direction:  column;
+      align-items:     center;
+      gap:             0;
+      padding:         8px 24px;
+      border-radius:   108px;
+      border:          1px solid transparent;
+    }
+    .modal-header__title {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    24px;
+      line-height:  36px;
+      color:        var(--text-on-color-heading);
+      white-space:  nowrap;
+    }
+    .modal-header__sub {
+      font-family:  var(--font-family);
+      font-weight:  600;
+      font-size:    14px;
+      line-height:  20px;
+      color:        var(--text-on-color-heading);
+    }
+    /* Score header: green pill with right-side score value pill */
+    .modal-header--score {
+      display:      flex;
+      align-items:  center;
+      gap:          0;
+    }
+    .modal-header__pill--score {
+      flex-direction:  row;
+      align-items:     center;
+      gap:             10px;
+      background:      var(--surface-primary-default);
+      padding:         8px 8px 8px 24px;
+      border:          none;
+      box-shadow:      inset 0 0 0 1px var(--border-primary-focus);
+    }
+    .modal-header__score-texts { display: flex; flex-direction: column; align-items: flex-start; }
+    .modal-header__score-value {
+      background:    var(--surface-general-default);
+      border:        none;
+      box-shadow:    inset 0 0 0 1px var(--border-primary-focus);
+      border-radius: 108px;
+      padding:       8px 16px;
+      font-family:   var(--font-family);
+      font-weight:   700;
+      font-size:     24px;
+      line-height:   36px;
+      color:         var(--text-primary-default);
+      white-space:   nowrap;
+    }
+    /* Streak header: purple — strokeAlign INSIDE → box-shadow:inset (Rule 60) */
+    .modal-header__pill--streak {
+      background:  var(--purple-500-base);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--purple-600);
+    }
+    /* Lives header: pink — strokeAlign INSIDE → box-shadow:inset (Rule 60) */
+    .modal-header__pill--lives {
+      background:  var(--pink-500-base);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--pink-600);
+    }
+    /* Coins header: yellow — strokeAlign INSIDE → box-shadow:inset (Rule 60) */
+    .modal-header__pill--coins {
+      background:  var(--yellow-500-base);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--yellow-600);
+    }
+    /* Coins title: strokeAlign OUTSIDE weight:1 → 2px CSS stroke (Rule 26) */
+    .modal-panel--coins .modal-header__title {
+      -webkit-text-stroke: 2px var(--yellow-600);
+      paint-order:         stroke fill;
+    }
+    /* Coins modal: DS gap between header pill and rows = 8px */
+    .modal-panel--coins .modal-card {
+      gap: 8px;
+    }
+
+    /* ── Score modal content slot (inner gap:16) ──────────────────────── */
+    .modal-content-slot {
+      display:        flex;
+      flex-direction: column;
+      gap:            16px;
+      align-items:    center;
+      width:          100%;
+    }
+
+    /* ── Score modal content ─────────────────────────────────────────── */
+    .modal-score-content {
+      display:         flex;
+      gap:             8px;
+      align-items:     center;
+      justify-content: center;
+      padding:         0 8px;
+      width:           100%;
+    }
+    .modal-trophy-wrap {
+      flex:     1 0 0;
+      min-width: 0;
+      padding:  10px;
+    }
+    .modal-trophy {
+      aspect-ratio: 20 / 30;
+      position:     relative;
+      overflow:     hidden;
+    }
+    .modal-trophy div[data-layer] {
+      position: absolute;
+    }
+    .modal-trophy div[data-layer] img {
+      position: absolute;
+      inset:    0;
+      width:    100%;
+      height:   100%;
+      max-width: none;
+      display:  block;
+    }
+    .modal-stats {
+      width:          274px;
+      min-width:      274px;
+      display:        flex;
+      flex-direction: column;
+      gap:            4px;
+    }
+    .modal-stat-row {
+      display:     flex;
+      gap:         12px;
+      align-items: flex-start;
+      padding:     12px;
+    }
+    .modal-stat-ribbon {
+      position:   relative;
+      width:      37px;
+      min-width:  28px;
+      align-self: stretch;
+      display:    flex;
+      flex-direction: column;
+      align-items:    center;
+      gap:            10px;
+      padding:        2px 4px 4px;
+    }
+    .modal-stat-ribbon__bg {
+      position: absolute;
+      top:      0;
+      left:     0;
+      width:    37px;
+      height:   40px;
+    }
+    .modal-stat-ribbon__bg > div { position: relative; height: 100%; }
+    .modal-stat-ribbon__bg img { display: block; width: 100%; height: 100%; }
+    .modal-stat-ribbon__num {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    16px;
+      line-height:  24px;
+      color:        var(--text-primary-on-color);
+      text-align:   center;
+      white-space:  nowrap;
+      position:     relative;
+      z-index:      1;
+    }
+    .modal-stat-texts {
+      flex:           1 0 0;
+      min-width:      0;
+      display:        flex;
+      flex-direction: column;
+      gap:            4px;
+    }
+    .modal-stat-title {
+      font-family: var(--font-family);
+      font-weight: 700;
+      font-size:   16px;
+      line-height: 24px;
+      color:       var(--text-default-heading);
+      width:       100%;
+    }
+    .modal-stat-caption {
+      font-family: var(--font-family);
+      font-size:   10px;
+      line-height: 12px;
+      color:       var(--text-default-caption);
+      width:       100%;
+    }
+    .modal-stat-caption--inline {
+      display:   flex;
+      flex-wrap: wrap;
+      gap:       0 4px;
+      font-size: 10px;
+      line-height: 12px;
+      white-space: nowrap;
+    }
+    .modal-stat-caption--inline .highlight {
+      font-weight: 600;
+      color:       var(--text-primary-default);
+    }
+    .modal-divider {
+      background:    var(--surface-general-default-secondary);
+      height:        1px;
+      border-radius: 60px;
+      width:         100%;
+      flex-shrink:   0;
+    }
+
+    /* ── Streak / Lives image + text block ─────────────────────────── */
+    .modal-image-block {
+      display:        flex;
+      flex-direction: column;
+      align-items:    center;
+      gap:            8px;
+      width:          100%;
+    }
+    .modal-image-wrap {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      padding:         8px;
+      width:           95px;
+      height:          114px;
+      box-sizing:      border-box;
+      flex-shrink:     0;
+    }
+    .modal-text-center {
+      display:        flex;
+      flex-direction: column;
+      align-items:    center;
+      text-align:     center;
+    }
+    .modal-big-text {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    24px;
+      line-height:  36px;
+      color:        var(--text-default-heading);
+      white-space:  nowrap;
+    }
+    .modal-lives-sub {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    24px;
+      line-height:  36px;
+      color:        var(--red-500-base);
+      white-space:  nowrap;
+    }
+    .modal-lives-label {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    16px;
+      line-height:  24px;
+      color:        var(--text-default-heading);
+    }
+
+    /* ── Streak day pill ─────────────────────────────────────────────── */
+    .modal-streak-pill {
+      background:    var(--surface-secondary-default-subtle);
+      border:        none;
+      box-shadow:    inset 0 0 0 1px var(--border-secondary-default-hover);
+      border-radius: 60px;
+      display:       flex;
+      gap:           8px;
+      align-items:   center;
+      padding:       8px;
+      flex-shrink:   0;
+    }
+    .modal-day {
+      width:           38px;
+      height:          38px;
+      border-radius:   60px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+      font-family:     var(--font-family);
+      font-weight:     600;
+      font-size:       12px;
+      line-height:     18px;
+    }
+    .modal-day--active {
+      background:  var(--surface-primary-default);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--border-primary-focus);
+      color:       var(--text-on-color-heading);
+    }
+    .modal-day--inactive {
+      background:  var(--surface-secondary-default-hover);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--border-secondary-default-subtle-hover);
+      color:       var(--text-secondary-focus);
+    }
+
+    /* Streak: header pill + image block grouped with 8px gap (DS inner Content frame) */
+    .modal-streak-body {
+      display:        flex;
+      flex-direction: column;
+      gap:            8px;
+      width:          100%;
+      align-items:    center;
+    }
+
+    /* ── Coins modal content ─────────────────────────────────────────── */
+    .modal-coins-content {
+      display:        flex;
+      flex-direction: column;
+      width:          100%;
+    }
+    .modal-coins-row {
+      display:         flex;
+      gap:             8px;
+      align-items:     flex-start;
+      justify-content: center;
+      padding:         16px 16px 16px 0;
+    }
+    .modal-coins-img {
+      width:        92px;
+      height:       92px;
+      padding:      8px;
+      display:      flex;
+      align-items:  center;
+      justify-content: center;
+      flex-shrink:  0;
+      box-sizing:   border-box;
+    }
+    .modal-coins-texts {
+      display:        flex;
+      flex-direction: column;
+      align-items:    flex-start;
+      min-width:      170px;
+    }
+    .modal-coins-label {
+      font-family: var(--font-family);
+      font-weight: 700;
+      font-size:   16px;
+      line-height: 24px;
+      color:       var(--text-default-heading);
+      width:       100%;
+    }
+    .modal-coins-value {
+      display:      flex;
+      gap:          4px;
+      align-items:  flex-start;
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    24px;
+      line-height:  36px;
+      color:        var(--text-default-heading);
+      white-space:  nowrap;
+      width:        100%;
+    }
+    .modal-coins-cta {
+      padding-top: 8px;
+      width:       100%;
+    }
+
+    /* ── Secondary/S CTA button (Button - 1.5, Sec, Size=S) ─────────── */
+    .modal-btn-sec {
+      display:       inline-flex;
+      align-items:   center;
+      justify-content: center;
+      height:        24px;
+      max-height:    24px;
+      padding:       2px 4px 2px 4px;
+      background:    var(--surface-general-default);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+      border:        none;
+      border-radius: var(--corner-radius-corner-rounded);
+      cursor:        pointer;
+      gap:           0;
+      font-family:   var(--font-family);
+    }
+    .modal-btn-sec:hover {
+      background: var(--surface-secondary-default-subtle);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .modal-btn-sec:active,
+    .modal-btn-sec.is-pressing {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec__label {
+      font-family:  var(--font-family);
+      font-weight:  600;
+      font-size:    12px;
+      line-height:  18px;
+      color:        var(--text-primary-default);
+      white-space:  nowrap;
+      padding:      0 4px;
+    }
+    .modal-btn-sec:active .modal-btn-sec__label,
+    .modal-btn-sec.is-pressing .modal-btn-sec__label { color: var(--text-primary-on-color); }
+    .modal-btn-sec__arrow {
+      display:         flex;
+      align-items:     center;
+      justify-content: flex-end;
+      padding:         2px;
+      border-radius:   60px;
+      background:      var(--surface-general-default);
+      box-shadow:      inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec:hover .modal-btn-sec__arrow {
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .modal-btn-sec:active .modal-btn-sec__arrow,
+    .modal-btn-sec.is-pressing .modal-btn-sec__arrow {
+      background:  var(--surface-primary-focus);
+      box-shadow:  inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec__arrow svg { display: block; width: 12px; height: 12px; color: var(--icon-primary-default); }
+    .modal-btn-sec:active .modal-btn-sec__arrow svg,
+    .modal-btn-sec.is-pressing .modal-btn-sec__arrow svg { color: var(--text-primary-on-color); }
+
+    /* ── Footer Button Group (Score + Streak modals) ─────────────────── */
+    .modal-btn-group {
+      display:         flex;
+      gap:             8px;
+      align-items:     flex-end;
+      justify-content: center;
+      width:           100%;
+    }
+    /* Secondary/L "View More" / "Change Goal" */
+    .modal-btn-sec-l {
+      display:       inline-flex;
+      align-items:   center;
+      justify-content: center;
+      padding:       8px 12px;
+      background:    var(--surface-general-default);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+      border:        none;
+      border-radius: var(--corner-radius-corner-rounded);
+      cursor:        pointer;
+      flex-shrink:   0;
+      font-family:   var(--font-family);
+      gap:           0;
+    }
+    .modal-btn-sec-l:hover {
+      background: var(--surface-secondary-default-subtle);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .modal-btn-sec-l:active,
+    .modal-btn-sec-l.is-pressing {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec-l__label {
+      font-family:  var(--font-family);
+      font-weight:  600;
+      font-size:    14px;
+      line-height:  20px;
+      color:        var(--text-primary-default);
+      white-space:  nowrap;
+      padding:      0 8px;
+    }
+    .modal-btn-sec-l:active .modal-btn-sec-l__label,
+    .modal-btn-sec-l.is-pressing .modal-btn-sec-l__label { color: var(--text-primary-on-color); }
+    .modal-btn-sec-l__arrow {
+      display:         flex;
+      align-items:     center;
+      justify-content: flex-end;
+      padding:         4px;
+      border-radius:   60px;
+      background:      var(--surface-general-default);
+      box-shadow:      inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec-l:hover .modal-btn-sec-l__arrow { box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+    .modal-btn-sec-l:active .modal-btn-sec-l__arrow,
+    .modal-btn-sec-l.is-pressing .modal-btn-sec-l__arrow {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec-l__arrow svg { display: block; width: 16px; height: 16px; color: var(--icon-primary-default); }
+    .modal-btn-sec-l:active .modal-btn-sec-l__arrow svg,
+    .modal-btn-sec-l.is-pressing .modal-btn-sec-l__arrow svg { color: var(--text-primary-on-color); }
+
+    /* Primary/L "Score" / "Aanswer Quiz" */
+    .modal-btn-pri-l {
+      display:       inline-flex;
+      align-items:   center;
+      justify-content: center;
+      max-height:    48px;
+      padding:       8px 12px;
+      background:    var(--surface-primary-default);
+      border:        1px solid var(--border-primary-focus);
+      border-radius: var(--corner-radius-corner-rounded);
+      cursor:        pointer;
+      flex-shrink:   0;
+      font-family:   var(--font-family);
+      gap:           0;
+    }
+    .modal-btn-pri-l:hover {
+      background: var(--surface-secondary-default);
+      border-color: var(--border-secondary-focus);
+    }
+    .modal-btn-pri-l:active,
+    .modal-btn-pri-l.is-pressing {
+      background:   var(--surface-primary-focus);
+      border-color: var(--border-primary-default);
+    }
+    .modal-btn-pri-l__label {
+      font-family:  var(--font-family);
+      font-weight:  600;
+      font-size:    14px;
+      line-height:  20px;
+      color:        var(--text-primary-on-color);
+      white-space:  nowrap;
+      padding:      0 8px;
+    }
+    .modal-btn-pri-l:hover .modal-btn-pri-l__label { color: var(--text-secondary-focus); }
+    .modal-btn-pri-l:active .modal-btn-pri-l__label,
+    .modal-btn-pri-l.is-pressing .modal-btn-pri-l__label { color: var(--text-primary-default); }
+    .modal-btn-pri-l__arrow {
+      display:         flex;
+      align-items:     center;
+      justify-content: flex-end;
+      padding:         4px;
+      border-radius:   60px;
+      background:      var(--surface-primary-default-subtle-hover);
+      max-height:      24px;
+    }
+    .modal-btn-pri-l:hover .modal-btn-pri-l__arrow { background: var(--surface-secondary-default-subtle); }
+    .modal-btn-pri-l:active .modal-btn-pri-l__arrow,
+    .modal-btn-pri-l.is-pressing .modal-btn-pri-l__arrow { background: var(--surface-primary-default); }
+    .modal-btn-pri-l__arrow svg { display: block; width: 16px; height: 16px; color: var(--icon-tertiary-default); }
+    .modal-btn-pri-l:hover .modal-btn-pri-l__arrow svg { color: var(--text-secondary-focus); }
+    .modal-btn-pri-l:active .modal-btn-pri-l__arrow svg,
+    .modal-btn-pri-l.is-pressing .modal-btn-pri-l__arrow svg { color: var(--surface-primary-focus); }
+
+    /* ── Ruby P.Ruby image ───────────────────────────────────────────── */
+    .modal-ruby-img {
+      aspect-ratio: 1;
+      height:       100%;
+      position:     relative;
+    }
+    .modal-ruby-img img {
+      position: absolute;
+      inset:    0;
+      width:    100%;
+      height:   100%;
+      max-width: none;
+      display:  block;
     }
 
     /* Check-In Card - 1.5 (node 2600:82) */
@@ -4272,7 +4894,7 @@
           <div class="status-badges">
 
             <!-- Type=Score -->
-            <div class="status-pill status-pill--score">
+            <div id="pill-score" class="status-pill status-pill--score">
               <div class="status-pill__content">
                 <div class="status-pill__texts">
                   <span class="status-pill__label">Score</span>
@@ -4283,7 +4905,7 @@
             </div>
 
             <!-- Type=Coins -->
-            <div class="status-pill status-pill--coins">
+            <div id="pill-coins" class="status-pill status-pill--coins">
               <div class="status-pill__content">
                 <div class="status-pill__texts">
                   <span class="status-pill__label">Coins</span>
@@ -4293,8 +4915,8 @@
               </div>
             </div>
 
-            <!-- Type=Straek -->
-            <div class="status-pill status-pill--streak">
+            <!-- Type=Streak -->
+            <div id="pill-streak" class="status-pill status-pill--streak">
               <div class="status-pill__content">
                 <div class="status-pill__texts">
                   <span class="status-pill__label">Streak</span>
@@ -4305,7 +4927,7 @@
             </div>
 
             <!-- Lives / Ruby — flip every 4s -->
-            <div class="status-pill-flipper">
+            <div id="pill-lives" class="status-pill-flipper">
               <div class="status-pill-flipper__inner">
                 <!-- Front: Lives -->
                 <div class="status-pill status-pill--lives status-pill-face status-pill-face--front">
@@ -5787,6 +6409,299 @@
     } catch (e) {
       console.warn('Recent activities carousel error:', e);
     }
+  </script>
+
+  <!-- ── Status Badge Modals (DS node 5628:52018) ─────────────────────── -->
+  <div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true">
+
+    <!-- Score Modal -->
+    <div id="modal-score" class="modal-panel modal-panel--score">
+      <div class="modal-card">
+        <!-- decorative corner -->
+        <div class="modal-card__corner"><img src="../src/image-repo/home.screen/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <!-- close button -->
+        <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
+
+        <!-- Content Slot: gap 16px between header / trophy+stats / streak -->
+        <div class="modal-content-slot">
+
+          <!-- Header: green pill with score value -->
+          <div class="modal-header">
+            <div class="modal-header__pill modal-header__pill--score">
+              <div class="modal-header__score-texts">
+                <span class="modal-header__title">Goal &amp; Score</span>
+                <span class="modal-header__sub">This Year Score</span>
+              </div>
+              <div class="modal-header__score-value">100,000</div>
+            </div>
+          </div>
+
+          <!-- Content: trophy + stats -->
+          <div class="modal-score-content">
+            <div class="modal-trophy-wrap">
+              <div class="modal-trophy">
+                <div data-layer="1" style="inset:57.39% 15.1% 0 11.77%"><img src="https://www.figma.com/api/mcp/asset/88efe6b6-1bdb-45dc-996d-458f639b3e80" alt=""></div>
+                <div data-layer="2" style="inset:57.39% 17.35% 16.11% 14.02%"><img src="https://www.figma.com/api/mcp/asset/3640cf87-68c3-4d0d-bba7-47ca92a1c0e0" alt=""></div>
+                <div data-layer="3" style="inset:70.64% 15.1% 0 48.22%"><img src="https://www.figma.com/api/mcp/asset/08bd097a-31f6-4446-b1ad-273bb7bd0343" alt=""></div>
+                <div data-layer="4" style="inset:70.64% 51.78% 0 11.77%"><img src="https://www.figma.com/api/mcp/asset/7ba587e1-5bb9-4c09-b04c-fb9551e3f81e" alt=""></div>
+                <div data-layer="5" style="inset:59.95% 33.21% 21.89% 31.48%"><img src="https://www.figma.com/api/mcp/asset/cbc2c31a-f72a-4136-be2c-270c007c43e0" alt=""></div>
+                <div data-layer="6" style="inset:58.65% 42.12% 30.4% 40.3%"><img src="https://www.figma.com/api/mcp/asset/3bfb6ee5-1008-44c9-b152-721b63351e9a" alt=""></div>
+                <div data-layer="7" style="inset:0.06% 0.62% 62.96% 66.81%"><img src="https://www.figma.com/api/mcp/asset/b37b6e79-66e3-4722-824d-b1c3696bd0c4" alt=""></div>
+                <div data-layer="8" style="inset:14.83% 14.64% 39.51% 9.21%"><img src="https://www.figma.com/api/mcp/asset/ef3b80aa-896b-4b05-a81c-1dbb34ff3557" alt=""></div>
+                <div data-layer="9" style="inset:14.83% 14.63% 40.58% 15.89%"><img src="https://www.figma.com/api/mcp/asset/0520dce3-30a1-4459-aaee-f74f1a347115" alt=""></div>
+                <div data-layer="10" style="inset:0 14.63% 70.6% 9.21%"><img src="https://www.figma.com/api/mcp/asset/309ee4cc-9760-46f8-89bc-13f99bd74ce1" alt=""></div>
+                <div data-layer="11" style="inset:1.71% 42.92% 72.3% 12.4%"><img src="https://www.figma.com/api/mcp/asset/6ecbb2e9-8f71-4cca-afb4-16c64b2a7f9a" alt=""></div>
+                <div data-layer="12" style="inset:2.06% 17.82% 72.42% 52.1%"><img src="https://www.figma.com/api/mcp/asset/3691746a-13b7-4b05-8784-ecf9aaa8e085" alt=""></div>
+                <div data-layer="13" style="inset:27.48% 66.62% 46.59% 0.61%"><img src="https://www.figma.com/api/mcp/asset/137d0cb5-b721-468b-855a-2fb6e9d25785" alt=""></div>
+              </div>
+            </div>
+            <div class="modal-stats">
+              <!-- Today's Score -->
+              <div class="modal-stat-row">
+                <div class="modal-stat-ribbon">
+                  <div class="modal-stat-ribbon__bg"><img src="https://www.figma.com/api/mcp/asset/ea22eaf0-6ce5-484a-8bb5-5666a4292501" alt=""></div>
+                  <span class="modal-stat-ribbon__num">100</span>
+                </div>
+                <div class="modal-stat-texts">
+                  <p class="modal-stat-title">Today's Score</p>
+                  <p class="modal-stat-caption">Your score is just 5 less than previous day</p>
+                </div>
+              </div>
+              <div class="modal-divider"></div>
+              <!-- Today's Quiz Goal -->
+              <div class="modal-stat-row">
+                <div class="modal-stat-ribbon">
+                  <div class="modal-stat-ribbon__bg"><img src="https://www.figma.com/api/mcp/asset/ea22eaf0-6ce5-484a-8bb5-5666a4292501" alt=""></div>
+                  <span class="modal-stat-ribbon__num">1/9</span>
+                </div>
+                <div class="modal-stat-texts">
+                  <p class="modal-stat-title">Today's Quiz Goal</p>
+                  <div class="modal-stat-caption--inline">
+                    <span>It will only take about </span>
+                    <span class="highlight">4 more minutes</span>
+                    <span>to complete your goal </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7-day streak pill -->
+          <div class="modal-streak-pill">
+            <div class="modal-day modal-day--active">M</div>
+            <div class="modal-day modal-day--active">T</div>
+            <div class="modal-day modal-day--inactive">W</div>
+            <div class="modal-day modal-day--inactive">T</div>
+            <div class="modal-day modal-day--inactive">F</div>
+            <div class="modal-day modal-day--inactive">S</div>
+            <div class="modal-day modal-day--inactive">S</div>
+          </div>
+
+        </div><!-- /modal-content-slot -->
+
+        <!-- Footer button group -->
+        <div class="modal-btn-group">
+          <button class="modal-btn-sec-l" type="button">
+            <span class="modal-btn-sec-l__label">Change Goal</span>
+            <span class="modal-btn-sec-l__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+          </button>
+          <button class="modal-btn-pri-l" type="button">
+            <span class="modal-btn-pri-l__label">Score</span>
+            <span class="modal-btn-pri-l__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coins Modal -->
+    <div id="modal-coins" class="modal-panel modal-panel--coins">
+      <div class="modal-card">
+        <div class="modal-card__corner"><img src="../src/image-repo/home.screen/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
+
+        <!-- Header: yellow pill -->
+        <div class="modal-header">
+          <div class="modal-header__pill modal-header__pill--coins">
+            <span class="modal-header__title">Coins &amp; Ruby</span>
+          </div>
+        </div>
+
+        <!-- Content: Coin row + divider + Ruby row -->
+        <div class="modal-coins-content">
+          <!-- Coin row -->
+          <div class="modal-coins-row">
+            <div class="modal-coins-img">
+              <svg width="76" height="76" aria-hidden="true"><use href="#ic-status-coin"/></svg>
+            </div>
+            <div class="modal-coins-texts">
+              <p class="modal-coins-label">You have</p>
+              <div class="modal-coins-value"><span>100,000</span><span>Coins</span></div>
+              <div class="modal-coins-cta">
+                <button class="modal-btn-sec" type="button">
+                  <span class="modal-btn-sec__label">Claim more coins</span>
+                  <span class="modal-btn-sec__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-divider"></div>
+          <!-- Ruby row -->
+          <div class="modal-coins-row">
+            <div class="modal-coins-img">
+              <svg width="76" height="76" aria-hidden="true"><use href="#ic-status-ruby"/></svg>
+            </div>
+            <div class="modal-coins-texts">
+              <p class="modal-coins-label">Ruby This Month</p>
+              <div class="modal-coins-value"><span>9,000</span><span>Ruby</span></div>
+              <div class="modal-coins-cta">
+                <button class="modal-btn-sec" type="button">
+                  <span class="modal-btn-sec__label">Collect more Ruby</span>
+                  <span class="modal-btn-sec__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Streak Modal -->
+    <div id="modal-streak" class="modal-panel modal-panel--streak">
+      <div class="modal-card">
+        <div class="modal-card__corner"><img src="../src/image-repo/home.screen/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
+
+        <!-- Header + content: grouped with 8px gap (DS inner Content frame) -->
+        <div class="modal-streak-body">
+
+          <!-- Header: purple pill -->
+          <div class="modal-header">
+            <div class="modal-header__pill modal-header__pill--streak">
+              <span class="modal-header__title">Streak</span>
+            </div>
+          </div>
+
+          <!-- Image + text + day pill -->
+          <div class="modal-image-block">
+            <div class="modal-image-wrap">
+              <svg width="69.417" height="98" aria-hidden="true"><use href="#ic-status-streak"/></svg>
+            </div>
+            <p class="modal-big-text">2 Day Streak</p>
+
+            <!-- 7-day streak pill -->
+            <div class="modal-streak-pill">
+              <div class="modal-day modal-day--active">M</div>
+              <div class="modal-day modal-day--active">T</div>
+              <div class="modal-day modal-day--inactive">W</div>
+              <div class="modal-day modal-day--inactive">T</div>
+              <div class="modal-day modal-day--inactive">F</div>
+              <div class="modal-day modal-day--inactive">S</div>
+              <div class="modal-day modal-day--inactive">S</div>
+            </div>
+          </div>
+
+        </div><!-- /modal-streak-body -->
+
+        <!-- Footer button group -->
+        <div class="modal-btn-group">
+          <button class="modal-btn-sec-l" type="button">
+            <span class="modal-btn-sec-l__label">View More</span>
+            <span class="modal-btn-sec-l__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+          </button>
+          <button class="modal-btn-pri-l" type="button">
+            <span class="modal-btn-pri-l__label">Aanswer Quiz</span>
+            <span class="modal-btn-pri-l__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lives Modal -->
+    <div id="modal-lives" class="modal-panel modal-panel--lives">
+      <div class="modal-card">
+        <div class="modal-card__corner"><img src="../src/image-repo/home.screen/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
+
+        <!-- Header: pink pill -->
+        <div class="modal-header">
+          <div class="modal-header__pill modal-header__pill--lives">
+            <span class="modal-header__title">Lives</span>
+          </div>
+        </div>
+
+        <!-- Image + text -->
+        <div class="modal-image-block">
+          <div class="modal-image-wrap">
+            <img src="https://www.figma.com/api/mcp/asset/fb347bc3-fb04-4471-be9e-2a17111b3772" alt="Heart" style="width:88px;height:98px;display:block;flex-shrink:0;">
+          </div>
+          <div class="modal-text-center">
+            <p class="modal-lives-label">You have</p>
+            <p class="modal-lives-sub">Unlimited Lives</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- /Status Badge Modals -->
+
+  <!-- Modal JS placed AFTER modal DOM so getElementById resolves correctly (Rule 62) -->
+  <script>
+    (function () {
+      var overlay = document.getElementById('modal-overlay');
+      var panels  = document.querySelectorAll('.modal-panel');
+
+      function openModal(id) {
+        panels.forEach(function (p) { p.classList.remove('is-open'); });
+        var target = document.getElementById(id);
+        if (target) target.classList.add('is-open');
+        overlay.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeAll() {
+        panels.forEach(function (p) { p.classList.remove('is-open'); });
+        overlay.classList.remove('is-open');
+        document.body.style.overflow = '';
+      }
+
+      // Pill → modal mapping
+      var pillMap = {
+        'pill-score':  'modal-score',
+        'pill-coins':  'modal-coins',
+        'pill-streak': 'modal-streak',
+        'pill-lives':  'modal-lives'
+      };
+      Object.keys(pillMap).forEach(function (pillId) {
+        var el = document.getElementById(pillId);
+        if (el) el.addEventListener('click', function () { openModal(pillMap[pillId]); });
+      });
+
+      // Close button (× icon)
+      document.querySelectorAll('.modal-close').forEach(function (btn) {
+        btn.addEventListener('click', function (e) { e.stopPropagation(); closeAll(); });
+      });
+
+      // Card click stops bubble so overlay click doesn't fire
+      document.querySelectorAll('.modal-card').forEach(function (card) {
+        card.addEventListener('click', function (e) { e.stopPropagation(); });
+      });
+
+      // Overlay click → close
+      overlay.addEventListener('click', closeAll);
+
+      // ESC key → close
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeAll();
+      });
+
+      // is-pressing on modal CTA buttons (Rule 83)
+      document.querySelectorAll('.modal-btn-sec, .modal-btn-sec-l, .modal-btn-pri-l').forEach(function (btn) {
+        btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+        btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+        btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+      });
+    })();
   </script>
 
   <!-- Navbar Mobile - 1.5 (DS node 3406:735)

@@ -8051,4 +8051,190 @@ The chevron was effectively invisible — its stroke color matched the backgroun
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-31 (Rules 203–204 added — Secondary outer frame box-shadow:inset correction; Pressed arrow circle all-3-properties fix; session learnings) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 205. Check existing SVG symbols before any asset export (2026-06-01)
+
+Before exporting any icon or graphic from Figma, always check whether it already exists locally as:
+1. An SVG `<symbol id="ic-*">` in the HTML defs block — grep `symbol id=` in the file
+2. An SVG file in `src/image-repo/**/*.svg`
+3. A PNG in the relevant component asset folder
+
+**Never re-export or re-download what is already present.** The `ic-status-coin`, `ic-status-ruby`, `ic-status-streak`, `ic-status-lives`, `ic-status-trophy` symbols are all embedded in `zul.home.screen.html` and `zul.page.template.html` as SVG symbols. Reference them via `<svg><use href="#ic-status-*"/>` — no PNG, no re-export needed.
+
+**If a symbol already exists**, use `<svg width="Npx" height="Npx"><use href="#ic-*"/></svg>` directly at whatever display size the DS specifies.
+
+**Workflow (mandatory before any export):**
+```
+1. grep "symbol id=" in the HTML file → is it already a symbol?
+2. Glob src/image-repo/**/ → does an SVG or PNG file exist?
+3. Only if absent → exportAsync PNG (Rule 78) or embed new symbol
+```
+
+**Mistake made (2026-06-01):** Proceeded with P.Coin + P.Ruby `exportAsync` PNG workflow across two sessions — writing temp files, PowerShell decoding — before checking that `ic-status-coin` and `ic-status-ruby` SVG symbols were already in the defs block. The entire PNG workflow was unnecessary.
+
+---
+
+### Rule 206. Modal header pill text stroke — always verify per modal variant (2026-06-01)
+
+**Source:** DS `use_figma` on node `I5627:50151;3735:32557;5627:50155` (Coins modal "Coins & Ruby" TEXT node).
+
+The Coins modal header pill title text has a TEXT stroke:
+- `strokeAlign: OUTSIDE`, `strokeWeight: 1`
+- Stroke color: `Yellow/600` = `var(--yellow-600)` = `#CBA500`
+- Fill: `Foundation/white` = `#ffffff`
+
+**CSS (Rule 26 — OUTSIDE weight 1 → 2× CSS stroke weight):**
+```css
+.modal-panel--coins .modal-header__title {
+  -webkit-text-stroke: 2px var(--yellow-600);
+  paint-order:         stroke fill;
+}
+```
+
+`paint-order: stroke fill` is **mandatory** — without it the stroke renders over the fill, making the text interior dark. With it, fill is painted on top of stroke, leaving only the outer 1px of the 2px stroke visible — exactly matching DS `strokeAlign: OUTSIDE` weight 1.
+
+**Rule:** Always inspect TEXT nodes inside header pills for stroke properties. Each modal variant (`--score`, `--coins`, `--streak`, `--lives`) may have different stroke color or none at all. Never assume the base `.modal-header__title` handles all stroke cases — scope per variant.
+
+**Also applicable:** Rule 22 (Figma text strokes → CSS `-webkit-text-stroke` + `paint-order`) and Rule 26 (OUTSIDE stroke → CSS doubling rule).
+
+**Mistake made (2026-06-01):** Header pill title text had no stroke CSS. User reported stroke missing. Root cause: did not inspect the TEXT node's `strokes` array via `use_figma` before implementing. Always check TEXT node strokes during anatomy audit (Rule 49 / Step 0c).
+
+---
+
+### Rule 207. Always check all 4 auto-layout alignment properties — primaryAxisAlignItems, counterAxisAlignItems, primaryAxisSizingMode, counterAxisSizingMode (2026-06-01)
+
+When inspecting a frame via `use_figma`, always read ALL FOUR alignment/sizing properties. Missing any one causes layout drift that looks correct but isn't.
+
+| Figma property | CSS equivalent (HORIZONTAL frame) | CSS equivalent (VERTICAL frame) |
+|---|---|---|
+| `primaryAxisAlignItems: CENTER` | `justify-content: center` | `align-items: center` |
+| `primaryAxisAlignItems: MIN` | `justify-content: flex-start` | `align-items: flex-start` |
+| `primaryAxisAlignItems: MAX` | `justify-content: flex-end` | `align-items: flex-end` |
+| `primaryAxisAlignItems: SPACE_BETWEEN` | `justify-content: space-between` | — |
+| `counterAxisAlignItems: CENTER` | `align-items: center` | `justify-content: center` |
+| `counterAxisAlignItems: MIN` | `align-items: flex-start` | `justify-content: flex-start` |
+| `primaryAxisSizingMode: FIXED` | explicit `width:` | explicit `height:` |
+| `primaryAxisSizingMode: AUTO` | `width: fit-content` (HUG) or `flex:1` (FILL) | `height: fit-content` |
+
+**Confirmed — Coins modal rows (DS 2026-06-01):**
+- `primaryAxisAlignItems: CENTER` on HORIZONTAL row → `justify-content: center`
+- `counterAxisAlignItems: MIN` → `align-items: flex-start` (top-aligned)
+- `primaryAxisSizingMode: FIXED` → fixed `width: 398px` (fills parent)
+
+**Mistake made:** Implemented `.modal-coins-row` with gap/padding but omitted `justify-content: center`. The row rendered left-aligned because `justify-content` defaults to `flex-start` in CSS, not `center`. User correctly flagged "should have been centered."
+
+**Rule:** Never implement a frame's CSS without reading all 4 alignment properties. Add them to your implementation checklist alongside padding, gap, border-radius, and fill.
+
+---
+
+### Session learnings — 2026-06-01 (Status Badge Modal — Coins modal fixes)
+
+**What happened:**
+1. Session resumed after context compaction. Proceeded directly to re-export P.Coin + P.Ruby as PNGs from Figma — went through temp file write + PowerShell decode workflow.
+2. User interrupted: "Why rerender coins & ruby icons? Use the one available in local folder."
+3. Checked local repo — `ic-status-coin` and `ic-status-ruby` SVG symbols were already embedded in the HTML defs block. The entire PNG export workflow was unnecessary.
+4. Replaced expired Figma API image URLs with `<svg><use href="#ic-status-coin/ruby">`. Fixed container sizing to `92×92, p:8` (DS-confirmed). Fixed row padding to `pt:16`.
+5. User confirmed layout looked better but flagged: (a) "Coins & Ruby text should have stroke" and (b) "alignment looks left aligned, should be centered."
+6. Pulled DS node specs via `use_figma` — confirmed TEXT stroke (`OUTSIDE, 1px, Yellow/600`) and row `primaryAxisAlignItems: CENTER`.
+7. Applied both fixes: `-webkit-text-stroke: 2px var(--yellow-600)` + `paint-order: stroke fill`, and `justify-content: center` on the row.
+
+**What to remember:**
+- **Check local assets FIRST** — SVG symbols in defs block, SVG files in `src/image-repo/` — before any Figma export workflow. A grep takes 5 seconds; an unnecessary export-decode cycle takes several minutes.
+- **TEXT nodes can have strokes** — always inspect `.strokes`, `.strokeWeight`, `.strokeAlign` on TEXT nodes during anatomy audit, not just on FRAME/INSTANCE nodes.
+- **`primaryAxisAlignItems`** is easy to overlook when focused on padding/gap. It directly controls `justify-content` and must be read for every frame.
+- **Mandatory pre-flight (Step 0) is not optional.** Every mistake in this session — the unnecessary PNG export, the missing text stroke, the missing `justify-content` — was caused by implementing without first running the full DS inspection workflow. Read `zul.design.md` + open live DS + audit component anatomy before ANY change.
+
+---
+
+### Rule 208. DS nested Content frame hierarchy → nested wrapper `<div>` hierarchy in HTML (2026-06-01)
+
+Each DS auto-layout frame with its own `itemSpacing`/`gap` value represents one level of layout hierarchy. When a component has multiple nesting levels, each level must be a separate `<div>` wrapper in HTML — **not flattened into a single parent**.
+
+**Confirmed — Streak Modal (DS node 5628:52014, 2026-06-01):**
+
+DS nesting:
+```
+Modal card         (gap: 24px)   ← outer: separates [header+content] from [button group]
+└── Content        (gap: 8px)    ← middle: separates [header pill] from [image+text+day-pill]
+    └── Content    (gap: 8px)    ← inner: separates [image container], [text], [streak pill]
+```
+
+HTML must mirror:
+```html
+<div class="modal-card">                    <!-- gap: 24px -->
+  <div class="modal-streak-body">           <!-- gap: 8px (middle level) -->
+    <div class="modal-header">…</div>       <!-- header pill -->
+    <div class="modal-image-block">…</div>  <!-- image + text + streak pill (gap: 8px inner) -->
+  </div>
+  <div class="modal-btn-group">…</div>      <!-- buttons -->
+</div>
+```
+
+**What went wrong without the wrapper:** The flat HTML had `modal-header` and `modal-image-block` as direct children of `modal-card` (gap: 24px). This produced 24px between the header pill and the image — DS specifies 8px. The button group was also 24px from the image block — but since the DS outer content frame carries this 24px gap between content and buttons, that is correct.
+
+**Rule:** Before writing any HTML for a multi-frame DS component, read ALL frame `gap` values at every nesting level. If an intermediate frame has a gap different from its parent, add a wrapper `<div>` for that level.
+
+---
+
+### Rule 209. Image container — always set BOTH width AND height when DS node specifies both (2026-06-01)
+
+When `use_figma` returns both `width` and `height` on an image container node, both must be set as explicit CSS properties. Omitting `height` leaves it `auto`, which changes the container's aspect ratio and makes vertically-centered icons appear misaligned.
+
+**Confirmed — Streak modal image container (DS node `I5628:51434;3735:32557;5628:51443`, 2026-06-01):**
+- DS dimensions: `width: 95, height: 114, paddingTop: 8, paddingRight: 8, paddingBottom: 8, paddingLeft: 8`
+- Content area inside: 79×98px (95−16 × 114−16)
+- P.Streak instance: 69.417×98px — fits exactly in the 98px content height
+
+**CSS pattern:**
+```css
+.modal-image-wrap {
+  width:       95px;
+  height:      114px;       /* ← must be explicit, not auto */
+  padding:     8px;
+  box-sizing:  border-box;  /* padding included in 95×114 */
+  flex-shrink: 0;
+  display:     flex;
+  align-items: center;
+  justify-content: center;
+}
+```
+
+**Rule:** In every `use_figma` inspection, read `.width` AND `.height` on image container nodes. If both are non-null/non-zero, both go into CSS. Use `box-sizing: border-box` whenever the container has padding.
+
+---
+
+### Rule 210. All modal header pills use `strokeAlign: INSIDE` — always `box-shadow: inset`, never `border-color` (2026-06-01)
+
+Every Status Modal header pill variant (Score, Coins, Streak, Lives) has `strokeAlign: INSIDE`. The CSS must use `box-shadow: inset 0 0 0 1px var(--token)` + `border: none` — never a `border-color` override.
+
+**What broke:** The base `.modal-header__pill` rule used `border: 1px solid transparent`. Streak and Lives variant rules only overrode `border-color`, activating a real layout-consuming CSS border. This is a Rule 60 violation — an INSIDE stroke must be `box-shadow: inset`, not `border`.
+
+**Confirmed violations corrected (2026-06-01):**
+
+| Variant | Was (wrong) | Correct |
+|---|---|---|
+| `--streak` | `border-color: var(--purple-600)` | `border: none; box-shadow: inset 0 0 0 1px var(--purple-600)` |
+| `--lives` | `border-color: var(--pink-600)` | `border: none; box-shadow: inset 0 0 0 1px var(--pink-600)` |
+| `--coins` | already `box-shadow: inset` ✓ | — |
+| `--score` | already `box-shadow: inset` ✓ | — |
+
+**Rule:** When adding any new modal header pill variant, never inherit or override `border-color` from a base rule that uses `border: 1px solid transparent`. Always set `border: none` and `box-shadow: inset 0 0 0 1px var(--token)` explicitly on the variant class. Verify `strokeAlign` via `use_figma` first (Rule 60).
+
+---
+
+### Session learnings — 2026-06-01 (Status Badge Modal — Streak modal fixes)
+
+**What happened:**
+1. Streak modal had 4 issues: (a) header pill border was `border-color` override on base `border: 1px solid transparent` — Rule 60 violation; (b) P.Streak image used expiring Figma asset URL; (c) image container had no explicit height; (d) no structural wrapper for 8px inner gap between header pill and image block.
+2. All 4 fixed in the same session without user needing to flag errors first — because Step 0 mandatory pre-flight (read `zul.design.md` + audit DS live) was followed before touching any code.
+
+**What to remember:**
+- **DS frame nesting = HTML wrapper nesting.** Count the nesting levels and gap values before writing any HTML. Each distinct gap value = one wrapper `<div>`.
+- **Both dimensions, always.** If DS node has both `width` and `height`, both go in CSS.  Never assume the missing dimension can be `auto`.
+- **`border-color` on a `border: 1px solid transparent` base is a Rule 60 violation.** Every modal header pill with an INSIDE stroke must be `border: none; box-shadow: inset`.
+- **SVG symbols render at any `width`/`height`.** `ic-status-streak` renders correctly at 69.417×98px via `<svg width="69.417" height="98"><use href="#ic-status-streak"/></svg>` — no re-export needed.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-01 (Rules 208–210 added — DS nested frame hierarchy → HTML wrappers; image container both dimensions; modal header pill border Rule 60 violations; session learnings Streak modal) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
