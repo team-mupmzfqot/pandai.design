@@ -2913,4 +2913,204 @@ document.querySelectorAll('.btn-class').forEach(function (btn) {
 
 **`mouseleave` is mandatory** — without it the button stays in pressed state if the cursor moves away while the mouse is held.
 
-*Last updated: 2026-05-31 | Rules 198–199 added — Button-1.5 no transitions + is-pressing JS; Rules 19/40 corrected for Primary Pressed palette (Primary=#00a36a, Secondary/Tertiary=#00564c) | Session 9*
+*Last updated: 2026-05-31 | Rules 198–199 added — Button-1.5 no transitions + is-pressing JS; Rules 19/40 corrected for Primary Pressed palette (Primary=#00a36a, Secondary/Tertiary=#00564c)*
+
+---
+
+## Session 9 — Learning Hub layout fixes + search (2026-06-01)
+
+### Mandatory pre-session rule (reinforced every session)
+
+**Always refer to `design-md/syakila.design.md` AND the live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any changes, or making any decisions — no exceptions.**
+
+---
+
+### 70. Flex container hug-content — `align-self: flex-start` + remove `flex: 1` from inner content
+
+To make a flex child stop stretching to fill its parent's cross-axis height ("hug content"), two things are required:
+
+1. `align-self: flex-start` on the container itself — stops it stretching to match siblings
+2. Remove `flex: 1` from any inner content div — `flex: 1` on a child prevents the parent from computing its natural height, keeping it tall
+
+`overflow: hidden` must stay on the container to clip children to the rounded `border-radius`. Removing it causes content to visually flow outside the rounded border.
+
+**Confirmed — `.learn-sidebar` (2026-06-01):**
+```css
+.learn-sidebar {
+  align-self:     flex-start;   /* stops height matching the right panel */
+  overflow:       hidden;       /* keeps children clipped to border-radius */
+}
+.learn-sidebar__content {
+  /* flex: 1 REMOVED — was preventing sidebar from computing natural height */
+}
+```
+
+**Mistake made:** Removing `overflow: hidden` from the sidebar (thinking it caused clipping) just moved the clipping problem — content then visually overflowed the rounded border. Root cause was accordion `max-height` too small, not the overflow property.
+
+---
+
+### 71. Filter item height — lock all states to `height: 38px; overflow: hidden`
+
+Filter items change padding/border between states (Default = transparent border, Selected = coloured border). Without a fixed height, selected items become taller than unselected, causing layout shift.
+
+**Calculation (DS confirmed):**
+```
+1px border-top + 8px padding-top + 20px line-height + 8px padding-bottom + 1px border-bottom = 38px
+```
+
+`height: 36px` is wrong — it leaves only 18px for content, clipping 1px from top and bottom of 20px text (descenders cut off).
+
+```css
+.filter-item {
+  height:   38px;
+  overflow: hidden;   /* prevents any child from pushing height above 38px */
+}
+```
+
+---
+
+### 72. Accordion `max-height` animation — `overflow: hidden` must be always-active, not just on collapsed state
+
+**Wrong pattern:**
+```css
+.accordion__body { max-height: 900px; }
+.accordion.is-collapsed .accordion__body { max-height: 0; overflow: hidden; }
+```
+Moving `overflow: hidden` to the collapsed rule only means the open state has no overflow control — long content overflows the parent border.
+
+**Correct pattern:**
+```css
+.accordion__body {
+  overflow:   hidden;     /* ALWAYS — never conditional */
+  max-height: 2000px;     /* open state — must exceed actual content height */
+  transition: max-height 0.25s ease, opacity 0.2s ease;
+}
+.accordion.is-collapsed .accordion__body {
+  max-height: 0;
+  opacity:    0;
+  /* overflow NOT here — already always active above */
+}
+```
+
+**Max-height calculation:** Always measure the actual expanded content. For a subjects list of 21 items:
+`21 × 38px items + 20 × 8px gaps + 32px padding = 798 + 160 + 32 = 990px` → use 2000px for safety.
+
+**Mistake made:** `max-height: 900px` was below the actual 990px subjects list — sidebar's `overflow: hidden` clipped the bottom items silently (no error, no overflow visible, just content cut off).
+
+---
+
+### 73. Practice card grid — always `align-self: flex-start` so border hugs cards, not the page
+
+`.practice-card-grid` must have `align-self: flex-start` unconditionally. Without it, the green border stretches to match the sidebar height even when only a few cards are shown — the border fills the full column height rather than wrapping the cards.
+
+```css
+.practice-card-grid {
+  flex:       1;            /* fills row width */
+  align-self: flex-start;   /* hugs card content height — never stretches to match sidebar */
+}
+```
+
+**Do NOT use `flex: 1` on inner content divs if the grid height should hug its content** — same principle as Rule 70.
+
+---
+
+### 74. Empty state — DS node `3420:205916` confirmed spec
+
+| Property | Value |
+|---|---|
+| Height | **437px fixed** — never follows sidebar/sibling height |
+| Background | `#f6fef6` (`--secondary-50`, Secondary/50) |
+| Border | `1px solid #00cc85` — `strokeAlign: INSIDE` → `box-shadow: inset 0 0 0 1px var(--border-primary-default)` |
+| Border radius | 24px (`corner-4xl`) |
+| Overflow | hidden |
+| Icon | 108×108px clip container, inset 12.5% (13.5px), `Outline/image` icon, `color: var(--icon-success-default)` = `#18c964` |
+| Text | "There is no subjects to show", 24px Poppins Medium (`Header/H3`), `#666666` (`--text-default-body`) |
+| Gap | 16px (`Spacing/space-m`) |
+
+**CSS:**
+```css
+.practice-empty-state {
+  height:      437px;
+  flex-shrink: 0;
+  background:  var(--secondary-50);
+  box-shadow:  inset 0 0 0 1px var(--border-primary-default);
+  border-radius: var(--corner-radius-corner-4xl);
+  /* ... flex col, center, gap 16px */
+}
+```
+
+Show/hide via `.is-visible` class toggled by JS. Show empty state when: no filters selected AND no search query.
+
+---
+
+### 75. Search on filtered cards — combined filter + search pattern
+
+The search input (`.learn-search__input`) filters practice cards by their visible text content. It works on top of the existing grade/subject filters.
+
+**Rules:**
+- Show empty state when: `grades.length === 0 && subjects.length === 0 && query === ''`
+- If query exists with no filters: show cards that match the search across all subjects/grades
+- If query + filters yield zero visible cards: show empty state
+- Wire to `input` event (not `change`) for live-as-you-type filtering
+
+**JS pattern:**
+```js
+function applyFilters() {
+  var query = searchEl.value.trim().toLowerCase();
+  var noFilters = grades.length === 0 && subjects.length === 0;
+
+  if (noFilters && !query) { /* show empty state */ return; }
+
+  var anyVisible = false;
+  cards.forEach(function(card) {
+    var filterMatch  = /* grade + subject checks */;
+    var searchMatch  = !query ||
+      title.toLowerCase().indexOf(query) !== -1 ||
+      stat.toLowerCase().indexOf(query)  !== -1;
+    var show = filterMatch && searchMatch;
+    card.classList.toggle('is-hidden', !show);
+    if (show) anyVisible = true;
+  });
+
+  if (!anyVisible) { /* show empty state */ }
+}
+
+searchInput.addEventListener('input', applyFilters);
+```
+
+---
+
+### 76. SVG polyline overflow — last point must not exceed container bounds
+
+If a `<polyline>` has its last point at a y-coordinate that exceeds the container rect's bottom edge (even by 0.5px), the stroke renders visibly outside the rect — creating a small bump or "tail" that looks like a speech bubble.
+
+**Confirmed — `#ic-image` (Outline/image):**
+```
+rect: y=1 to y=19 (18px height)
+polyline: points="19 13.5 14 8.5 3 19.5"  ← y=19.5 is 0.5px below rect bottom
+```
+At 81px rendered size: 0.5px exceeds the rect by ~1.9px visually → bump visible at bottom-left.
+
+**Fix:** Clip the last point to the rect boundary:
+```
+points="19 13.5 14 8.5 3 19"   ← y=19 exactly matches rect bottom
+```
+
+**Rule:** Always check that all polyline/path endpoints stay within the surrounding rect when implementing outline-style icons. Any point outside the rect will produce a visible stroke artifact.
+
+---
+
+### 77. Learning Hub corner radius confirmed (DS nodes 2881:36272, 2881:36281, 3420:205916)
+
+| Element | Border radius | DS token | DS node |
+|---|---|---|---|
+| Outer card (`.practice-card-grid`) | **24px** | `corner-4xl` | `2881:36272` |
+| Inner white cards area (`.practice-cards-content`) | **18px** | `Corner-2XL` / `Radius/3xl` | `2881:36281` |
+| Empty state (`.practice-empty-state`) | **24px** | `corner-4xl` | `3420:205916` |
+| Left sidebar (`.learn-sidebar`) | **24px** | `corner-4xl` | — |
+
+The inner `.practice-cards-content` white container requires `border-radius: var(--corner-radius-corner-2xl)` (18px) — this was missing and must be added.
+
+---
+
+*Last updated: 2026-06-01 (Session 9)*
