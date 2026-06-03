@@ -3113,4 +3113,200 @@ The inner `.practice-cards-content` white container requires `border-radius: var
 
 ---
 
-*Last updated: 2026-06-01 (Session 9)*
+---
+
+### 78. NEVER create Syakila files in `zul.test.git/` — all Syakila work goes in `syakila.test.git/`
+
+Every file created for Syakila's prototype must live in `syakila.test.git/`. Never place Syakila work in `zul.test.git/`, even accidentally.
+
+| Correct location | Wrong location |
+|---|---|
+| `syakila.test.git/quickNotes.view.html` | `zul.test.git/quickNotes.view.html` |
+| `syakila.test.git/reportCard.html` | `zul.test.git/reportCard.html` |
+
+**Mistake made (2026-06-03):** `quickNotes.view.html` was initially created in `zul.test.git/`. Had to be moved to `syakila.test.git/`. Check the file path before creating any new prototype file.
+
+---
+
+### 79. Quick Notes — button arrow clips use DS clip symbols, never standalone 24×24 icons (confirmed 2026-06-03)
+
+Both the "Back to List" (Secondary/M, left arrow) and "View all notes" (Primary/M, right arrow) buttons use `ic-chevron-btn-m` — the DS-exported 16×16 clip symbol — not the standalone 24×24 `Outline/chevron-right` icon.
+
+**Symbol:** `ic-chevron-btn-m` — `viewBox="0 0 16 16"`, path `M6 12L10 8L6 4`, DS node `479:352`
+
+```html
+<!-- Right arrow (View all notes) -->
+<span class="qn-btn-view__arrow-clip">
+  <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor"
+       stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <use href="#ic-chevron-btn-m"/>
+  </svg>
+</span>
+
+<!-- Left arrow (Back to List) — mirror with scaleX(-1) -->
+<span class="qn-btn-back__arrow-clip">
+  <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor"
+       stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+       style="transform:scaleX(-1)">
+    <use href="#ic-chevron-btn-m"/>
+  </svg>
+</span>
+```
+
+CSS on the clip SVGs:
+```css
+.qn-btn-back__arrow-clip svg { width: 16px; height: 16px; color: var(--icon-primary-default); }
+.qn-btn-view__arrow-clip svg { width: 16px; height: 16px; color: var(--border-primary-focus); }
+```
+
+**Mistake made:** Used the standalone 24×24 `Outline/chevron-right` icon inside a 16×16 clip — only a corner of the path was visible. Fixed by switching to the DS clip symbol (`ic-chevron-btn-m`) with explicit `width:16 height:16` on the SVG. See CLAUDE.md Rule 16.
+
+---
+
+### 80. P.Fano-Wireframe decorative element — confirmed specs (2026-06-03)
+
+The card header includes a `P.Fano-Wireframe` decorative SVG overlay. Exported from DS node `5165:82853` area, saved as `src/image-repo/Learn/quick.notes/view/fano-wireframe.svg`.
+
+**Specs:**
+- Width: 488px, Height: 110px, `viewBox="0 0 488 110"`
+- Position: `absolute; right: 0; top: 0; height: 110px; width: auto`
+- Visual: `mix-blend-mode: overlay; opacity: 0.5` — white stroke circles on the BM header bg
+- Pointer events: none (decorative only)
+
+```css
+.qn-card__header-fano {
+  position:       absolute;
+  right:          0;
+  top:            0;
+  height:         110px;
+  width:          auto;
+  pointer-events: none;
+  display:        block;
+  mix-blend-mode: overlay;
+  opacity:        0.5;
+}
+```
+
+```html
+<img class="qn-card__header-fano"
+     src="../src/image-repo/Learn/quick.notes/view/fano-wireframe.svg"
+     alt="" aria-hidden="true">
+```
+
+**Note:** The SVG source already contains `mix-blend-mode:overlay` and `opacity:0.5` on its internal groups, but these only apply when the SVG is rendered inline. Through an `<img>` tag, CSS `mix-blend-mode` on the `<img>` element itself applies against the page/parent background — use CSS, not inline SVG attributes.
+
+---
+
+### 81. Quick Notes body — DS bullet list structure: one `<ul>` per bullet + `<p>` spacers (confirmed 2026-06-03)
+
+The DS Quick Notes card body does NOT use a single `<ul>` with multiple `<li>` items. Each bullet is in its own `<ul>` element, separated by `<p>` spacer elements containing a zero-width space (`&#8203;`).
+
+**Correct DS structure:**
+```html
+<div class="qn-body-textblock">
+  <ul class="qn-body-text"><li>Bullet one text...</li></ul>
+  <p class="qn-body-spacer">&#8203;</p>
+  <ul class="qn-body-text"><li>Bullet two text...</li></ul>
+  <p class="qn-body-spacer">&#8203;</p>
+  <ul class="qn-body-text"><li>Bullet three text...</li></ul>
+</div>
+```
+
+**CSS:**
+```css
+.qn-body-textblock {
+  width:          100%;
+  display:        flex;
+  flex-direction: column;
+}
+
+.qn-body-text {
+  font-family:  var(--font-family);
+  font-weight:  400;
+  font-size:    14px;
+  line-height:  20px;
+  color:        var(--text-default-body);
+  width:        100%;
+  margin:       0;
+  padding-left: 20px;
+}
+
+.qn-body-spacer {
+  margin:      0;
+  padding:     0;
+  font-size:   14px;
+  line-height: 20px;
+  white-space: pre-wrap;
+}
+```
+
+**Why `.qn-body-textblock` wrapper is required:** The parent `.qn-topic-body` has `gap: 16px` between its flex children. Without a wrapper, every `<ul>` and `<p>` spacer would be a direct child and receive the full 16px gap — creating 52px between bullets (16 + 20px spacer + 16). The wrapper groups all bullets as a single flex child so `gap: 16px` only fires once between the text block and the table.
+
+**Mistake made:** Initial implementation used a single `<ul>` with all bullets as `<li>` items — no visual spacing between bullets, and `li + li { margin-top: 0 }` rule was doing nothing.
+
+---
+
+### 82. Quick Notes info table — tags row bottom padding is 16px (confirmed 2026-06-03)
+
+The pills/tags row (Form 4, Bahasa Melayu) at the bottom of the info table must have `padding-bottom: 16px`, not 8px.
+
+**DS source:** Outer info table frame `5165:82860` has `paddingBottom: 16`.
+
+```css
+.qn-info-row--pills .qn-info-cell--value {
+  padding: 8px 16px 16px 8px;   /* top right bottom left — bottom MUST be 16px */
+}
+```
+
+With `overflow: hidden` + `border-radius: 18px` on `.qn-info-table`, 8px bottom padding looks visually clipped against the rounded bottom edge. 16px gives proper clearance.
+
+**Mistake made:** Pills row cell had `padding: 8px 16px 8px 8px` — user reported "no padding bottom". DS outer frame confirms `paddingBottom: 16`.
+
+---
+
+### 83. Quick Notes view — responsive breakpoints (confirmed 2026-06-03)
+
+Simple two-breakpoint rule. Desktop unchanged. Tablet + mobile both stack.
+
+```css
+/* Tablet + mobile (≤1279px): stacked — sidebar fills at bottom */
+@media (max-width: 1279px) {
+  .qn-view-layout { flex-direction: column; }
+  .qn-card        { width: 100%; }
+  .qn-sidebar     { width: 100%; min-width: 0; }
+}
+
+/* Mobile typography */
+@media (max-width: 767px) {
+  .qn-card__header-title { font-size: 20px; line-height: 32px; }
+}
+```
+
+**Behaviour:**
+- Desktop (>1279px): side-by-side, card `875px`, sidebar fills remaining space
+- Tablet + Mobile (≤1279px): stacked column, card full width, sidebar full width below
+- The sidebar (Chapter/Topic info card, navigation buttons, Related Notes) appears below the main notes card — this is intentional, not a bug
+
+**What NOT to do:** Do not attempt complex proportional flex splits (`flex: 3 1 0 / 1 1 0`) for the tablet range — at 1024px the sidebar becomes too narrow for the navigation buttons to fit on one line. Stacked layout is cleaner and matches mobile intent.
+
+---
+
+### Mandatory pre-flight — ALWAYS before starting any design, making any changes, or any decisions (updated 2026-06-03)
+
+> **"Always before starting any design, making any changes, or making any decisions — refer to DS and syakila.design.md first. No exceptions."**
+
+```
+□ 0a. Read design-md/syakila.design.md   → ALL rules 1–83+, confirmed specs, known mistakes
+□ 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT prior notes
+□ 0c. Verify file location               → Syakila files ONLY in syakila.test.git/ (Rule 78)
+□ 0d. get_design_context on COMPONENT SET → list ALL variant names
+□ 0e. get_design_context on EACH state   → extract every token BEFORE writing CSS
+□ 0f. use_figma raw node inspection      → confirm exact padding, strokeAlign, width, height
+□ 0g. get_variable_defs on sub-nodes     → confirm Semantic tokens
+□ 0h. For icons: confirm clip symbol viewBox + DS node ID before writing HTML (Rule 79)
+□ 0i. After any fix — check both HTML files for same class and sync
+```
+
+---
+
+*Last updated: 2026-06-03 (Session 10 — quickNotes.view.html: file location, button chevrons, Fano wireframe, bullet list DS structure, tags padding, tablet responsive)*
