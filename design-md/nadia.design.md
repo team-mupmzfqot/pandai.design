@@ -3204,3 +3204,38 @@ Added smooth scale transition to `.practice-card__circles` triggered by card hov
 `transform-origin: left center` ensures the circles expand outward from the left edge, matching the DS blob's left-anchored growth behaviour. Scale 1.4 gives a clearly visible expansion without over-exaggerating — the DS ratio (~2.6×) applies to the mask area, not the circles themselves.
 
 *Last updated: 2026-05-29 | Session 19 — Circle scale animation on hover | Branch: staging*
+
+---
+
+## Session 20 — Rewards Avatar: 80 avatar images + randomizeContent() (2026-06-03)
+
+**Files changed:**
+- `Nadia.test.git/Rewards/nadia_Rewards-avatar.html`
+- `src/image-repo/page.rewards/avatar/assets/` — removed `Avatar-1.png` → `Avatar-7.png`, added `1.png` → `80.png`
+
+### Changes
+
+#### 1. Avatar image set replaced (7 → 80)
+Old placeholder images (`Avatar-1.png` – `Avatar-7.png`) replaced with the full production set (`1.png` – `80.png`). The avatar grid was expanded from 7 cards to 80 cards, all referencing the new numbered filenames.
+
+Image path pattern: `../../src/image-repo/page.rewards/avatar/assets/{n}.png`
+
+#### 2. Dynamic content randomisation — `randomizeContent()`
+
+Added a `randomizeContent()` function (called on `DOMContentLoaded`) that sets realistic random values on every page load. No HTML structure or CSS classes were changed.
+
+| Element | Selector | Range / Value |
+|---|---|---|
+| User coin balance | `.sidebar-balance__value`, `.bc-coin-mobile__value` | 50 – 500 |
+| Total redeem this month | `.avatar-header__count` | 20 – 200 |
+| Likes per card | `.rc__like-count` (×80) | 1 – 20 |
+| Coin cost per card | `.rc__coin-value` (×80) | Fixed 200 |
+| Redeem button state | `a.btn-show` / `span.btn-show` | Enabled if userCoins ≥ 200, disabled if < 200 |
+
+**Button enable/disable logic:** The HTML uses `<a class="btn-show">` for active and `<span class="btn-show btn-show--disabled">` for disabled. The JS:
+- If `userCoins >= 200`: removes `btn-show--disabled` + `aria-disabled` from span buttons
+- If `userCoins < 200`: adds `btn-show--disabled` + `aria-disabled` to anchor buttons
+
+**Note:** Filter sidebar counts ("Background (1020)", "Head", "Screen" etc.) were not present in the HTML — no filter panel exists in this file. If added later, include those selectors in `randomizeContent()`.
+
+*Last updated: 2026-06-03 | Session 20 — Rewards Avatar: 80 images + randomizeContent | Branch: staging*
