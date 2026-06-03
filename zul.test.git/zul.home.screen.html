@@ -18,7 +18,6 @@
     :root {
       /* Surface */
       --surface-general-default:         #FFFFFF;
-      --surface-subtle:                  #F8FAFC;
       --surface-primary-default:         #00cc85;
       --surface-primary-focus:           #00a36a;   /* Surface/primary/focus — pressed state bg */
       --surface-primary-default-subtle:        #d9f7ed;
@@ -124,6 +123,17 @@
       --section-gap:             var(--spacing-space-m);   /* Spacing/space-m = 16px */
       --overlay-dark:            rgba(26, 26, 26, 0.5);    /* Overlay/Overlay-Dark → Foundation/black 50 (DS confirmed) */
       --check-in-card-max-width: 390px;
+
+      /* Modal palette additions */
+      --purple-500-base: #7367f0;   /* Purple/500-(Base) — Streak modal header */
+      --purple-600:      #5c52c0;   /* Purple/600 — Streak header border */
+      --yellow-500-base: #fece00;   /* Yellow/500-(Base) — Coins modal header */
+      --yellow-600:      #cba500;   /* Yellow/600 — Coins header border */
+      --pink-500-base:   #ff5c98;   /* Pink/500-(Base) — Lives modal header */
+      --pink-600:        #cc4a7a;   /* Pink/600 — Lives header border */
+      --red-500-base:    #ff4c51;   /* Red/500-(Base) — "Unlimited Lives" text */
+      --border-secondary-default-hover:        #baf3b9;   /* Border/secondary/default-hover — Streak pill outer border */
+      --border-secondary-default-subtle-hover: #d1f7d1;   /* Border/secondary/default-subtle-hover — inactive streak day border */
     }
 
     /* â”€â”€ Reset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -135,7 +145,7 @@
 
     body {
       font-family:    var(--font-family);
-      background:     var(--surface-subtle);
+      background:     var(--surface-general-default);
       color:          var(--text-default-heading);
       width:          100%;
       min-width:      390px;
@@ -284,6 +294,7 @@
       align-items: center;
       flex-shrink: 0;
     }
+    .status-pill, .status-pill-flipper { cursor: pointer; user-select: none; }
     .status-pill--score  { background: var(--surface-primary-default); border-color: var(--border-primary-focus); }  /* OG-Green/600 #00a36a */
     .status-pill--coins  { background: #fece00; border-color: #cba500; }
     /* DS node 2312:10654 — Coins label + value TEXT nodes: stroke #cba500, weight:1, align:OUTSIDE
@@ -315,6 +326,658 @@
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       transform: rotateY(180deg);
+    }
+
+    /* ── Status Badge Modals (node 5628:52018) ──────────────────────────── */
+    .modal-overlay {
+      position:         fixed;
+      inset:            0;
+      background:       var(--overlay-dark);
+      z-index:          500;
+      display:          flex;
+      align-items:      center;
+      justify-content:  center;
+      opacity:          0;
+      pointer-events:   none;
+      transition:       opacity 0.22s ease;
+    }
+    .modal-overlay.is-open {
+      opacity:        1;
+      pointer-events: auto;
+    }
+    .modal-overlay.is-closing {
+      opacity:        0;
+      pointer-events: none;
+    }
+
+    .modal-panel {
+      display:    none;
+      position:   relative;
+      width:      430px;
+      max-width:  calc(100vw - 32px);
+    }
+    .modal-panel.is-open  { display: block; }
+
+    /* Card entrance */
+    .modal-panel.is-open .modal-card {
+      animation: modalIn 0.28s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+    }
+    /* Card exit */
+    .modal-panel.is-closing .modal-card {
+      animation: modalOut 0.18s ease-in both;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    }
+    @keyframes modalOut {
+      from { opacity: 1; transform: translateY(0)    scale(1);    }
+      to   { opacity: 0; transform: translateY(12px) scale(0.97); }
+    }
+
+    .modal-card {
+      background:    var(--surface-general-default);
+      border:              1px solid var(--border-primary-default);
+      border-radius:       var(--corner-radius-corner-rounded) var(--corner-radius-corner-4xl) var(--corner-radius-corner-rounded) var(--corner-radius-corner-rounded);
+      padding:             24px 16px;
+      position:            relative;
+      display:       flex;
+      flex-direction: column;
+      gap:           24px;
+    }
+    /* Lives modal uses 28px gap */
+    .modal-panel--lives .modal-card { gap: 28px; }
+
+    /* Decorative corner — absolute, top-right, overflows border */
+    .modal-card__corner {
+      position: absolute;
+      width:    75px;
+      height:   75.5px;
+      top:      -1px;
+      right:    -1px;
+      pointer-events: none;
+    }
+    .modal-card__corner img { width: 100%; height: 100%; display: block; }
+
+    /* Close button — Button Icon - 1.5/S/Secondary */
+    .modal-close {
+      position:       absolute;
+      top:            9.5px;
+      right:          9px;
+      background:     var(--surface-general-default);
+      border:         none;
+      padding:        2px;
+      border-radius:  108px;
+      box-shadow:     inset 0 0 0 1px var(--icon-primary-default);
+      display:        flex;
+      align-items:    center;
+      justify-content: center;
+      cursor:         pointer;
+      z-index:        2;
+    }
+    .modal-close svg { display: block; width: 24px; height: 24px; color: var(--icon-primary-default); }
+    .modal-close:hover { background: var(--surface-secondary-default-subtle); }
+
+    /* ── Modal Header Pill ───────────────────────────────────────────── */
+    .modal-header {
+      display:         flex;
+      justify-content: center;
+    }
+    .modal-header__pill {
+      display:         flex;
+      flex-direction:  column;
+      align-items:     center;
+      gap:             0;
+      padding:         8px 24px;
+      border-radius:   108px;
+      border:          1px solid transparent;
+    }
+    .modal-header__title {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    24px;
+      line-height:  36px;
+      color:        var(--text-on-color-heading);
+      white-space:  nowrap;
+    }
+    .modal-header__sub {
+      font-family:  var(--font-family);
+      font-weight:  600;
+      font-size:    14px;
+      line-height:  20px;
+      color:        var(--text-on-color-heading);
+    }
+    /* Score header: green pill with right-side score value pill */
+    .modal-header--score {
+      display:      flex;
+      align-items:  center;
+      gap:          0;
+    }
+    .modal-header__pill--score {
+      flex-direction:  row;
+      align-items:     center;
+      gap:             10px;
+      background:      var(--surface-primary-default);
+      padding:         8px 8px 8px 24px;
+      border:          none;
+      box-shadow:      inset 0 0 0 1px var(--border-primary-focus);
+    }
+    .modal-header__score-texts { display: flex; flex-direction: column; align-items: flex-start; }
+    .modal-header__score-value {
+      background:    var(--surface-general-default);
+      border:        none;
+      box-shadow:    inset 0 0 0 1px var(--border-primary-focus);
+      border-radius: 108px;
+      padding:       8px 16px;
+      font-family:   var(--font-family);
+      font-weight:   700;
+      font-size:     24px;
+      line-height:   36px;
+      color:         var(--text-primary-default);
+      white-space:   nowrap;
+    }
+    /* Streak header: purple — strokeAlign INSIDE → box-shadow:inset (Rule 60) */
+    .modal-header__pill--streak {
+      background:  var(--purple-500-base);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--purple-600);
+    }
+    /* Lives header: pink — strokeAlign INSIDE → box-shadow:inset (Rule 60) */
+    .modal-header__pill--lives {
+      background:  var(--pink-500-base);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--pink-600);
+    }
+    /* Coins header: yellow — strokeAlign INSIDE → box-shadow:inset (Rule 60) */
+    .modal-header__pill--coins {
+      background:  var(--yellow-500-base);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--yellow-600);
+    }
+    /* Coins title: strokeAlign OUTSIDE weight:1 → 2px CSS stroke (Rule 26) */
+    .modal-panel--coins .modal-header__title {
+      -webkit-text-stroke: 2px var(--yellow-600);
+      paint-order:         stroke fill;
+    }
+    /* Coins modal: DS gap between header pill and rows = 8px */
+    .modal-panel--coins .modal-card {
+      gap: 8px;
+    }
+
+    /* ── Score modal content slot (inner gap:16) ──────────────────────── */
+    .modal-content-slot {
+      display:        flex;
+      flex-direction: column;
+      gap:            16px;
+      align-items:    center;
+      width:          100%;
+    }
+
+    /* ── Score modal content ─────────────────────────────────────────── */
+    .modal-score-content {
+      display:         flex;
+      gap:             8px;
+      align-items:     center;
+      justify-content: center;
+      padding:         0 8px;
+      width:           100%;
+    }
+    .modal-trophy-wrap {
+      flex:     1 0 0;
+      min-width: 0;
+      padding:  10px;
+    }
+    .modal-trophy {
+      aspect-ratio: 20 / 30;
+      position:     relative;
+      overflow:     hidden;
+    }
+    .modal-trophy div[data-layer] {
+      position: absolute;
+    }
+    .modal-trophy div[data-layer] img {
+      position: absolute;
+      inset:    0;
+      width:    100%;
+      height:   100%;
+      max-width: none;
+      display:  block;
+    }
+    .modal-stats {
+      width:          274px;
+      min-width:      274px;
+      display:        flex;
+      flex-direction: column;
+      gap:            4px;
+    }
+    .modal-stat-row {
+      display:     flex;
+      gap:         12px;
+      align-items: flex-start;
+      padding:     12px;
+    }
+    .modal-stat-ribbon {
+      position:   relative;
+      width:      37px;
+      min-width:  28px;
+      align-self: stretch;
+      display:    flex;
+      flex-direction: column;
+      align-items:    center;
+      gap:            10px;
+      padding:        2px 4px 4px;
+    }
+    .modal-stat-ribbon__bg {
+      position: absolute;
+      top:      0;
+      left:     0;
+      width:    37px;
+      height:   40px;
+    }
+    .modal-stat-ribbon__bg > div { position: relative; height: 100%; }
+    .modal-stat-ribbon__bg img { display: block; width: 100%; height: 100%; }
+    .modal-stat-ribbon__num {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    16px;
+      line-height:  24px;
+      color:        var(--text-primary-on-color);
+      text-align:   center;
+      white-space:  nowrap;
+      position:     relative;
+      z-index:      1;
+    }
+    .modal-stat-texts {
+      flex:           1 0 0;
+      min-width:      0;
+      display:        flex;
+      flex-direction: column;
+      gap:            4px;
+    }
+    .modal-stat-title {
+      font-family: var(--font-family);
+      font-weight: 700;
+      font-size:   16px;
+      line-height: 24px;
+      color:       var(--text-default-heading);
+      width:       100%;
+    }
+    .modal-stat-caption {
+      font-family: var(--font-family);
+      font-size:   10px;
+      line-height: 12px;
+      color:       var(--text-default-caption);
+      width:       100%;
+    }
+    .modal-stat-caption--inline {
+      display:   flex;
+      flex-wrap: wrap;
+      gap:       0 4px;
+      font-size: 10px;
+      line-height: 12px;
+      color:     var(--text-default-caption);
+      white-space: nowrap;
+    }
+    .modal-stat-caption--inline .highlight {
+      font-weight: 600;
+      color:       var(--text-primary-default);
+    }
+    .modal-divider {
+      background:    var(--surface-general-default-secondary);
+      height:        1px;
+      border-radius: 60px;
+      width:         100%;
+      flex-shrink:   0;
+    }
+
+    /* ── Streak / Lives image + text block ─────────────────────────── */
+    .modal-image-block {
+      display:        flex;
+      flex-direction: column;
+      align-items:    center;
+      gap:            8px;
+      width:          100%;
+    }
+    .modal-image-wrap {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      padding:         8px;
+      width:           95px;
+      height:          114px;
+      box-sizing:      border-box;
+      flex-shrink:     0;
+    }
+    .modal-text-center {
+      display:        flex;
+      flex-direction: column;
+      align-items:    center;
+      text-align:     center;
+    }
+    .modal-big-text {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    24px;
+      line-height:  36px;
+      color:        var(--text-default-heading);
+      white-space:  nowrap;
+    }
+    .modal-lives-sub {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    24px;
+      line-height:  36px;
+      color:        var(--red-500-base);
+      white-space:  nowrap;
+    }
+    .modal-lives-label {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    16px;
+      line-height:  24px;
+      color:        var(--text-default-heading);
+    }
+
+    /* ── Streak day pill ─────────────────────────────────────────────── */
+    .modal-streak-pill {
+      background:    var(--surface-secondary-default-subtle);
+      border:        none;
+      box-shadow:    inset 0 0 0 1px var(--border-secondary-default-hover);
+      border-radius: 60px;
+      display:       flex;
+      gap:           8px;
+      align-items:   center;
+      padding:       8px;
+      flex-shrink:   0;
+    }
+    .modal-day {
+      width:           38px;
+      height:          38px;
+      border-radius:   60px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+      font-family:     var(--font-family);
+      font-weight:     600;
+      font-size:       12px;
+      line-height:     18px;
+    }
+    .modal-day--active {
+      background:  var(--surface-primary-default);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--border-primary-focus);
+      color:       var(--text-on-color-heading);
+    }
+    .modal-day--inactive {
+      background:  var(--surface-secondary-default-hover);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--border-secondary-default-subtle-hover);
+      color:       var(--text-secondary-focus);
+    }
+
+    /* Streak: header pill + image block grouped with 8px gap (DS inner Content frame) */
+    .modal-streak-body {
+      display:        flex;
+      flex-direction: column;
+      gap:            8px;
+      width:          100%;
+      align-items:    center;
+    }
+
+    /* ── Coins modal content ─────────────────────────────────────────── */
+    .modal-coins-content {
+      display:        flex;
+      flex-direction: column;
+      width:          100%;
+    }
+    .modal-coins-row {
+      display:         flex;
+      gap:             8px;
+      align-items:     flex-start;
+      justify-content: center;
+      padding:         16px 16px 16px 0;
+    }
+    .modal-coins-img {
+      width:        92px;
+      height:       92px;
+      padding:      8px;
+      display:      flex;
+      align-items:  center;
+      justify-content: center;
+      flex-shrink:  0;
+      box-sizing:   border-box;
+    }
+    .modal-coins-texts {
+      display:        flex;
+      flex-direction: column;
+      align-items:    flex-start;
+      min-width:      170px;
+    }
+    .modal-coins-label {
+      font-family: var(--font-family);
+      font-weight: 700;
+      font-size:   16px;
+      line-height: 24px;
+      color:       var(--text-default-heading);
+      width:       100%;
+    }
+    .modal-coins-value {
+      display:      flex;
+      gap:          4px;
+      align-items:  flex-start;
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    24px;
+      line-height:  36px;
+      color:        var(--text-default-heading);
+      white-space:  nowrap;
+      width:        100%;
+    }
+    .modal-coins-cta {
+      padding-top: 8px;
+      width:       100%;
+    }
+
+    /* ── Secondary/S CTA button (Button - 1.5, Sec, Size=S) ─────────── */
+    .modal-btn-sec {
+      display:       inline-flex;
+      align-items:   center;
+      justify-content: center;
+      height:        24px;
+      max-height:    24px;
+      padding:       2px 4px 2px 4px;
+      background:    var(--surface-general-default);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+      border:        none;
+      border-radius: var(--corner-radius-corner-rounded);
+      cursor:        pointer;
+      gap:           0;
+      font-family:   var(--font-family);
+    }
+    .modal-btn-sec:hover {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .modal-btn-sec:active,
+    .modal-btn-sec.is-pressing {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec__label {
+      font-family:  var(--font-family);
+      font-weight:  600;
+      font-size:    12px;
+      line-height:  18px;
+      color:        var(--text-primary-default);
+      white-space:  nowrap;
+      padding:      0 4px;
+    }
+    .modal-btn-sec:hover .modal-btn-sec__label { color: var(--text-secondary-focus); }
+    .modal-btn-sec:active .modal-btn-sec__label,
+    .modal-btn-sec.is-pressing .modal-btn-sec__label { color: var(--text-primary-default); }
+    .modal-btn-sec__arrow {
+      display:         flex;
+      align-items:     center;
+      justify-content: flex-end;
+      width:           16px;
+      height:          16px;
+      padding:         2px;
+      border-radius:   60px;
+      background:      var(--surface-general-default);
+      box-shadow:      inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec:hover .modal-btn-sec__arrow {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .modal-btn-sec:active .modal-btn-sec__arrow,
+    .modal-btn-sec.is-pressing .modal-btn-sec__arrow {
+      background:  var(--surface-primary-focus);
+      box-shadow:  inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec__arrow svg { display: block; width: 12px; height: 12px; color: var(--icon-primary-default); }
+    .modal-btn-sec:hover .modal-btn-sec__arrow svg { color: var(--text-secondary-focus); }
+    .modal-btn-sec:active .modal-btn-sec__arrow svg,
+    .modal-btn-sec.is-pressing .modal-btn-sec__arrow svg { color: var(--icon-primary-default); }
+
+    /* ── Footer Button Group (Score + Streak modals) ─────────────────── */
+    .modal-btn-group {
+      display:         flex;
+      gap:             8px;
+      align-items:     flex-end;
+      justify-content: center;
+      width:           100%;
+    }
+    /* Secondary/L "View More" / "Change Goal" */
+    .modal-btn-sec-l {
+      display:       inline-flex;
+      align-items:   center;
+      justify-content: center;
+      padding:       8px 12px;
+      background:    var(--surface-general-default);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+      border:        none;
+      border-radius: var(--corner-radius-corner-rounded);
+      cursor:        pointer;
+      flex-shrink:   0;
+      font-family:   var(--font-family);
+      gap:           0;
+    }
+    .modal-btn-sec-l:hover {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .modal-btn-sec-l:active,
+    .modal-btn-sec-l.is-pressing {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec-l__label {
+      font-family:  var(--font-family);
+      font-weight:  600;
+      font-size:    14px;
+      line-height:  20px;
+      color:        var(--text-primary-default);
+      white-space:  nowrap;
+      padding:      0 8px;
+    }
+    .modal-btn-sec-l:hover .modal-btn-sec-l__label { color: var(--text-secondary-focus); }
+    .modal-btn-sec-l:active .modal-btn-sec-l__label,
+    .modal-btn-sec-l.is-pressing .modal-btn-sec-l__label { color: var(--text-primary-default); }
+    .modal-btn-sec-l__arrow {
+      display:         flex;
+      align-items:     center;
+      justify-content: flex-end;
+      width:           24px;
+      height:          24px;
+      padding:         4px;
+      border-radius:   60px;
+      background:      var(--surface-general-default);
+      box-shadow:      inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec-l:hover .modal-btn-sec-l__arrow {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .modal-btn-sec-l:active .modal-btn-sec-l__arrow,
+    .modal-btn-sec-l.is-pressing .modal-btn-sec-l__arrow {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec-l__arrow svg { display: block; width: 16px; height: 16px; color: var(--icon-primary-default); }
+    .modal-btn-sec-l:hover .modal-btn-sec-l__arrow svg { color: var(--text-secondary-focus); }
+    .modal-btn-sec-l:active .modal-btn-sec-l__arrow svg,
+    .modal-btn-sec-l.is-pressing .modal-btn-sec-l__arrow svg { color: var(--icon-primary-default); }
+
+    /* Primary/L "Score" / "Answer Quiz" */
+    .modal-btn-pri-l {
+      display:       inline-flex;
+      align-items:   center;
+      justify-content: center;
+      height:        40px;
+      padding:       8px 12px;
+      background:    var(--surface-primary-default);
+      border:        none;
+      box-shadow:    inset 0 0 0 1px var(--border-primary-focus);
+      border-radius: var(--corner-radius-corner-rounded);
+      cursor:        pointer;
+      flex-shrink:   0;
+      font-family:   var(--font-family);
+      gap:           0;
+    }
+    .modal-btn-pri-l:hover {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .modal-btn-pri-l:active,
+    .modal-btn-pri-l.is-pressing {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-pri-l__label {
+      font-family:  var(--font-family);
+      font-weight:  600;
+      font-size:    14px;
+      line-height:  20px;
+      color:        var(--text-primary-on-color);
+      white-space:  nowrap;
+      padding:      0 8px;
+    }
+    .modal-btn-pri-l:hover .modal-btn-pri-l__label { color: var(--text-secondary-focus); }
+    .modal-btn-pri-l:active .modal-btn-pri-l__label,
+    .modal-btn-pri-l.is-pressing .modal-btn-pri-l__label { color: var(--text-primary-default); }
+    .modal-btn-pri-l__arrow {
+      display:         flex;
+      align-items:     center;
+      justify-content: flex-end;
+      width:           24px;
+      height:          24px;
+      padding:         4px;
+      border-radius:   60px;
+      background:      var(--surface-primary-default-subtle-hover);
+    }
+    .modal-btn-pri-l:hover .modal-btn-pri-l__arrow { background: var(--surface-secondary-default-subtle); }
+    .modal-btn-pri-l:active .modal-btn-pri-l__arrow,
+    .modal-btn-pri-l.is-pressing .modal-btn-pri-l__arrow { background: var(--surface-primary-default); }
+    .modal-btn-pri-l__arrow svg { display: block; width: 16px; height: 16px; color: var(--border-primary-focus); }
+    .modal-btn-pri-l:hover .modal-btn-pri-l__arrow svg { color: var(--text-secondary-focus); }
+    .modal-btn-pri-l:active .modal-btn-pri-l__arrow svg,
+    .modal-btn-pri-l.is-pressing .modal-btn-pri-l__arrow svg { color: var(--border-primary-focus); }
+
+    /* ── Ruby P.Ruby image ───────────────────────────────────────────── */
+    .modal-ruby-img {
+      aspect-ratio: 1;
+      height:       100%;
+      position:     relative;
+    }
+    .modal-ruby-img img {
+      position: absolute;
+      inset:    0;
+      width:    100%;
+      height:   100%;
+      max-width: none;
+      display:  block;
     }
 
     /* Check-In Card - 1.5 (node 2600:82) */
@@ -576,13 +1239,13 @@
       flex-direction:  row;
       align-items:     center;
       justify-content: flex-end;
-      gap:             var(--spacing-space-m);   /* 16px — DS Spacing/component/md */
+      gap:             0;   /* DS: 0 — visual separation comes from 28px column padding only */
     }
 
     /* Variant backgrounds (DS node 5176:77365 — Primary/Secondary=butter/400, Tertiary=no fill) */
     .static-card--primary .static-card__content   { background: var(--butter-400); }
     .static-card--secondary .static-card__content { background: var(--surface-secondary-default-hover); }   /* Surface/secondary/default-hover #f6fef6 — DS node 5176:77367 */
-    .static-card--tertiary .static-card__content   { background: var(--surface-subtle); }
+    .static-card--tertiary .static-card__content   { background: none; }   /* DS: IMAGE fill — set background-image when asset is ready */
     .static-card--fortiary .static-card__content   { background: var(--azure-100); }     /* Azure/100 #d5edfb — DS node 5351:6457, no gradient on right-col */
 
     /* Full-card background image — Tertiary only (DS: absolute inset-0 object-cover) */
@@ -609,15 +1272,16 @@
     }
     .static-card__deco img { display: block; width: 100%; height: 100%; }
 
-    /* Left image/illustration column — DS: layoutMode VERTICAL, HUG width, FILL height, crossAlign:MIN */
+    /* Left image/illustration column — DS: layoutMode VERTICAL, szH FILL, szV HUG (186px), crossAlign:MIN */
+    /* szH FILL → flex:1 0 0 (equal split with right-col); szV HUG → align-self:center (centred in 220px card) */
     .static-card__img-col {
       display:         flex;
       flex-direction:  column;
       align-items:     flex-start;
       justify-content: center;
-      flex-shrink:     0;
+      flex:            1 0 0;   /* szH: FILL — equal 50% column split, confirmed DS audit 2026-05-29 */
       overflow:        hidden;
-      align-self:      stretch;
+      align-self:      center;  /* szV: HUG + parent crossAlign:CENTER → centred at 186px in 220px card */
       padding:         28px;   /* DS: Spacing/component/2xl = 28px all sides */
       position:        relative;
       z-index:         1;
@@ -639,7 +1303,8 @@
       object-fit: contain;
     }
 
-    /* Right column — texts + button (DS: szV FILL → align-self:stretch, gradient per variant) */
+    /* Right column — texts + button (DS: szH FILL, szV FILL, mainAlign:MIN, crossAlign:MAX) */
+    /* justify-content:flex-start — CTA is szV:FILL so it fills remaining space, button bottom via CTA mA:MAX */
     .static-card__right {
       flex:            1 0 0;
       min-width:       0;
@@ -647,8 +1312,8 @@
       display:         flex;
       flex-direction:  column;
       align-items:     flex-end;
-      justify-content: space-between;   /* Texts top, CTA always bottom-right */
-      gap:             var(--spacing-space-s);   /* 12px */
+      justify-content: flex-start;   /* DS: mA:MIN — CTA fills remaining height, pushes button to bottom */
+      gap:             var(--spacing-space-s);   /* 12px — Texts internal gap between title + desc */
       padding:         28px;   /* DS: Spacing/component/2xl = 28px all sides */
       position:        relative;
       z-index:         1;
@@ -682,16 +1347,15 @@
       width:          100%;
     }
 
-    /* CTA wrapper — DS node 5347:6418/6452/6456, new in DS 2026-05-28 */
+    /* CTA wrapper — DS node 5347:6418/6452/6456: szV FILL inside right-col → flex:1 0 0, button bottom via mA:MAX */
     .static-card__cta {
       display:         flex;
       flex-direction:  column;
       align-items:     flex-end;
       justify-content: flex-end;
       width:           100%;
-      flex-shrink:     0;
+      flex:            1 0 0;   /* szV: FILL — fills remaining space in right-col so button anchors to bottom */
     }
-    .static-card--secondary .static-card__cta { height: 32px; }   /* DS node 5347:6452: h-[32px] */
 
     .static-card__title {
       font-size:   18px;
@@ -894,7 +1558,6 @@
       justify-content: center;
       flex-shrink:     0;
       color:           var(--text-primary-default);
-      transition:      background 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
     }
     .btn-add-classes__arrow-clip {
       width:    16px;
@@ -917,35 +1580,39 @@
       color:       var(--text-secondary-focus);
     }
 
-    /* Pressed — DS 538:1907 */
-    .btn-add-classes:active {
-      background:   var(--surface-primary-focus);
-      border-color: var(--border-primary-default);
+    /* Pressed — DS 538:1907 — Secondary/M uses primary/focus palette (live-verified 2026-05-31) */
+    .btn-add-classes:active,
+    .btn-add-classes.is-pressing {
+      background:   var(--surface-primary-focus);   /* #00a36a */
+      border-color: var(--border-primary-default);  /* #00cc85 */
     }
     .btn-add-classes:active .btn-add-classes__text,
-    .btn-add-classes:active .btn-add-classes__icon { color: var(--text-primary-default); }
-    .btn-add-classes:active .btn-add-classes__arrow {
-      background:  var(--surface-primary-default);
-      box-shadow:  none;
-      color:       var(--surface-primary-focus);
+    .btn-add-classes.is-pressing .btn-add-classes__text,
+    .btn-add-classes:active .btn-add-classes__icon,
+    .btn-add-classes.is-pressing .btn-add-classes__icon { color: var(--text-primary-default); }  /* #00cc85 */
+    .btn-add-classes:active .btn-add-classes__arrow,
+    .btn-add-classes.is-pressing .btn-add-classes__arrow {
+      background:  var(--surface-primary-focus);                      /* #00a36a */
+      box-shadow:  inset 0 0 0 1px var(--border-primary-default);     /* #00cc85, INSIDE stroke */
+      color:       var(--text-primary-default);                        /* #00cc85 */
     }
 
     /* Button - 1.5 Secondary/M + R Arrow — "View Activity History" (DS node 538:1923)
-       All 5 states confirmed from DS 2026-05-19. */
+       All 5 states re-verified 2026-05-31. Outer frame strokeAlign:INSIDE → box-shadow:inset (Rule 60). */
     .btn-secondary-arrow {
       display:       inline-flex;
       align-items:   center;
       height:        32px;
       max-height:    32px;
       background:    var(--surface-general-default);
-      border:        1px solid var(--border-primary-default);
+      border:        none;
+      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
       border-radius: var(--corner-radius-corner-rounded);
       padding:       2px var(--spacing-space-xs);
       gap:           0;
       cursor:        pointer;
       font-family:   var(--font-family);
       flex-shrink:   0;
-      transition:    background 0.12s ease, border-color 0.12s ease;
     }
     .btn-secondary-arrow__text {
       font-size:   12px;
@@ -954,11 +1621,9 @@
       color:       var(--text-primary-default);
       padding:     0 var(--spacing-space-xxs);
       white-space: nowrap;
-      transition:  color 0.12s ease;
     }
-    /* Arrow circle — DS confirmed all 5 states: w:20 h:20, padding:2 all sides, strokeAlign:INSIDE
-       INSIDE stroke = box-shadow:inset (no layout effect). Explicit 20×20 matches DS fixed size.
-       Content area = 20 - 2×2px padding = 16px (matches 16×16 clip). */
+    /* Arrow circle — DS 538:1929: w:20 h:20, padding:2 all sides, strokeAlign:INSIDE.
+       INSIDE stroke = box-shadow:inset (no layout effect). Content area = 20 - 2×2px = 16px. */
     .btn-secondary-arrow__circle {
       width:           20px;
       height:          20px;
@@ -970,8 +1635,7 @@
       align-items:     center;
       justify-content: center;
       flex-shrink:     0;
-      color:           var(--text-primary-default);
-      transition:      background 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
+      color:           var(--icon-primary-default);
     }
     .btn-secondary-arrow__clip {
       width:       16px;
@@ -982,7 +1646,7 @@
     .btn-secondary-arrow__clip svg { display: block; width: 100%; height: 100%; }
 
     /* Hover — DS 538:1915 */
-    .btn-secondary-arrow:hover { background: var(--surface-secondary-default); border-color: var(--border-secondary-focus); }
+    .btn-secondary-arrow:hover { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
     .btn-secondary-arrow:hover .btn-secondary-arrow__text { color: var(--text-secondary-focus); }
     .btn-secondary-arrow:hover .btn-secondary-arrow__circle {
       background:  var(--surface-secondary-default);
@@ -990,17 +1654,17 @@
       color:       var(--text-secondary-focus);
     }
 
-    /* Pressed — DS 538:1907 */
-    .btn-secondary-arrow:active { background: var(--surface-primary-focus); border-color: var(--border-primary-default); }
+    /* Pressed — DS 538:1907: outer bg=Surface/primary/focus, arrow fill=Surface/primary/focus, stroke=Border/primary/default, chevron=Icon/primary/default */
+    .btn-secondary-arrow:active { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
     .btn-secondary-arrow:active .btn-secondary-arrow__text { color: var(--text-primary-default); }
     .btn-secondary-arrow:active .btn-secondary-arrow__circle {
-      background:  var(--surface-primary-default);
-      box-shadow:  none;
-      color:       var(--surface-primary-focus);
+      background:  var(--surface-primary-focus);
+      box-shadow:  inset 0 0 0 1px var(--border-primary-default);
+      color:       var(--icon-primary-default);
     }
 
     /* Active — DS 3029:19996 */
-    .btn-secondary-arrow.is-active { background: var(--surface-primary-default); border-color: var(--border-primary-focus); }
+    .btn-secondary-arrow.is-active { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
     .btn-secondary-arrow.is-active .btn-secondary-arrow__text { color: var(--text-primary-on-color); }
     .btn-secondary-arrow.is-active .btn-secondary-arrow__circle {
       background:  transparent;
@@ -1010,7 +1674,7 @@
 
     /* Disabled — DS 538:1899 */
     .btn-secondary-arrow:disabled,
-    .btn-secondary-arrow.is-disabled { background: var(--surface-disabled-primary); border-color: var(--border-disabled-disabled); cursor: not-allowed; }
+    .btn-secondary-arrow.is-disabled { background: var(--surface-disabled-primary); box-shadow: inset 0 0 0 1px var(--border-disabled-disabled); cursor: not-allowed; }
     .btn-secondary-arrow:disabled .btn-secondary-arrow__text,
     .btn-secondary-arrow.is-disabled .btn-secondary-arrow__text { color: var(--text-disabled-default); }
     .btn-secondary-arrow:disabled .btn-secondary-arrow__circle,
@@ -1255,7 +1919,6 @@
       padding:         2px var(--spacing-space-xxs);  /* DS 1437:8154 px-[Spacing/space-xxs,4px] */
       max-height:      24px;
       cursor:          pointer;
-      transition:      background 0.15s, border-color 0.15s;
     }
 
     /* Hover — Secondary palette (node 1437:8146) */
@@ -1266,13 +1929,16 @@
     .btn-quiz-cta:hover .btn-quiz-cta__text  { color: var(--text-secondary-focus); }         /* #70bc6f */
     .btn-quiz-cta:hover .btn-quiz-cta__arrow { background: var(--surface-secondary-default-subtle); color: var(--border-secondary-focus); }  /* #e8fbe8 / #70bc6f */
 
-    /* Pressed — DS 1437:8138 — Surface/primary/focus #00a36a, Border/primary/default #00cc85 */
-    .btn-quiz-cta:active {
+    /* Pressed — DS 1437:8138 — Primary/S: Surface/primary/focus #00a36a, Border/primary/default #00cc85 (Rule 40) */
+    .btn-quiz-cta:active,
+    .btn-quiz-cta.is-pressing {
       background:   var(--surface-primary-focus);    /* #00a36a */
       border-color: var(--border-primary-default);   /* #00cc85 */
     }
-    .btn-quiz-cta:active .btn-quiz-cta__text  { color: var(--text-primary-default); }        /* #00cc85 */
-    .btn-quiz-cta:active .btn-quiz-cta__arrow { background: var(--surface-primary-default); color: var(--surface-primary-focus); }  /* #00cc85 / #00a36a */
+    .btn-quiz-cta:active .btn-quiz-cta__text,
+    .btn-quiz-cta.is-pressing .btn-quiz-cta__text  { color: var(--text-primary-default); }        /* #00cc85 */
+    .btn-quiz-cta:active .btn-quiz-cta__arrow,
+    .btn-quiz-cta.is-pressing .btn-quiz-cta__arrow { background: var(--surface-primary-default); color: var(--surface-primary-focus); }  /* #00cc85 / #00a36a */
 
     /* Disabled (node 1437:8130) */
     .btn-quiz-cta:disabled,
@@ -3396,8 +4062,8 @@
       <!-- Logo/Pandai/Logo Horizontal (node 1898:6965): 116×28px overflow-clip container -->
       <!-- mark: inset-[0_76.95%_0_0] · wordmark: inset-[15.07%_0_15.03%_26.66%] -->
       <a class="navbar-primary__logo" href="#" aria-label="Pandai">
-        <img src="icons/logo-mark.svg" class="navbar-primary__logo-mark" alt="" aria-hidden="true">
-        <img src="icons/logo-text.svg" class="navbar-primary__logo-text" alt="Pandai">
+        <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/logo-mark.svg" class="navbar-primary__logo-mark" alt="" aria-hidden="true">
+        <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/logo-text.svg" class="navbar-primary__logo-text" alt="Pandai">
       </a>
 
       <!-- Navbar Search Frame — Dropdown-Parts/Search (DS node 1342:4370, Type=Search, State=Focus)
@@ -3460,7 +4126,7 @@
 
         <!-- Avatar - 1.5 Size=L Type=Image (node 684:621): 48×48 circle · image fill 60×60 at x:-6 y:0 -->
         <div class="navbar-avatar" aria-label="Profile">
-          <img class="navbar-avatar__image" src="../src/image-repo/Home/Avatar-Aidan.png" alt="User avatar">
+          <img class="navbar-avatar__image" src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
         </div>
 
         <!-- Number Badge - 1.5 (node 1084:1826): absolute right:-0.48px top:0 of Avatar group -->
@@ -3480,7 +4146,7 @@
         <!-- Avatar 100×100 -->
         <div class="profile-dropdown__avatar-wrap">
           <div class="profile-dropdown__avatar">
-            <img src="../src/image-repo/Home/Avatar-Aidan.png" alt="User avatar">
+            <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
           </div>
         </div>
 
@@ -3563,62 +4229,62 @@
       <div class="learn-dropdown__grid">
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Live Tuition">
-          <img class="learn-dropdown__icon" src="icons/feature-live-tuition.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-live-tuition.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Live Tuition</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Live Help">
-          <img class="learn-dropdown__icon" src="icons/feature-live-help.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-live-help.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Live Help</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quiz">
-          <img class="learn-dropdown__icon" src="icons/feature-quiz.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-quiz.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Quiz</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Practice">
-          <img class="learn-dropdown__icon" src="icons/feature-practice.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-practice.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Practice</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Chapters">
-          <img class="learn-dropdown__icon" src="icons/feature-chapters.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-chapters.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Chapters</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Textbooks">
-          <img class="learn-dropdown__icon" src="icons/feature-textbooks.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-textbooks.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Textbooks</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quick Notes">
-          <img class="learn-dropdown__icon" src="icons/feature-quick-notes.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-quick-notes.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Quick Notes</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Videos">
-          <img class="learn-dropdown__icon" src="icons/feature-videos.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-videos.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Videos</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Experiments">
-          <img class="learn-dropdown__icon" src="icons/feature-experiments.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-experiments.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Experiments</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Personality">
-          <img class="learn-dropdown__icon" src="icons/feature-personality.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-personality.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Personality</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="University">
-          <img class="learn-dropdown__icon" src="icons/feature-university.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-university.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">University</span>
         </div>
 
         <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Rewards">
-          <img class="learn-dropdown__icon" src="icons/feature-rewards.png" alt="" width="70" height="70">
+          <img class="learn-dropdown__icon" src="../src/image-repo/page.home/assets/main/LearnMenu/feature-rewards.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Rewards</span>
         </div>
 
@@ -3998,8 +4664,8 @@
   <section id="NavBar-Mobile">
     <div class="navbar-mobile">
       <a class="navbar-mobile__logo" href="#">
-        <img src="icons/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
-        <img src="icons/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
+        <img src="../src/image-repo/page.home/assets/main/NavBar-Mobile/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
+        <img src="../src/image-repo/page.home/assets/main/NavBar-Mobile/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
       </a>
       <button class="navbar-mobile__menu-btn" id="tablet-menu-btn" aria-label="Open menu" type="button">
         <svg class="ham-svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
@@ -4270,7 +4936,7 @@
           <div class="status-badges">
 
             <!-- Type=Score -->
-            <div class="status-pill status-pill--score">
+            <div id="pill-score" class="status-pill status-pill--score">
               <div class="status-pill__content">
                 <div class="status-pill__texts">
                   <span class="status-pill__label">Score</span>
@@ -4281,7 +4947,7 @@
             </div>
 
             <!-- Type=Coins -->
-            <div class="status-pill status-pill--coins">
+            <div id="pill-coins" class="status-pill status-pill--coins">
               <div class="status-pill__content">
                 <div class="status-pill__texts">
                   <span class="status-pill__label">Coins</span>
@@ -4291,8 +4957,8 @@
               </div>
             </div>
 
-            <!-- Type=Straek -->
-            <div class="status-pill status-pill--streak">
+            <!-- Type=Streak -->
+            <div id="pill-streak" class="status-pill status-pill--streak">
               <div class="status-pill__content">
                 <div class="status-pill__texts">
                   <span class="status-pill__label">Streak</span>
@@ -4303,7 +4969,7 @@
             </div>
 
             <!-- Lives / Ruby — flip every 4s -->
-            <div class="status-pill-flipper">
+            <div id="pill-lives" class="status-pill-flipper">
               <div class="status-pill-flipper__inner">
                 <!-- Front: Lives -->
                 <div class="status-pill status-pill--lives status-pill-face status-pill-face--front">
@@ -4355,7 +5021,7 @@
                Mobile-only: visible at ≤767px, sits right of #Welcome-Desktop -->
           <section id="Avatar-Mobile" aria-label="User profile">
             <div class="welcome-avatar">
-              <img class="welcome-avatar__image" src="../src/image-repo/Home/Avatar-Aidan.png" alt="User avatar">
+              <img class="welcome-avatar__image" src="../src/image-repo/page.home/assets/main/Welcome-Desktop/Avatar-Aidan.png" alt="User avatar">
             </div>
           </section>
 
@@ -4378,20 +5044,20 @@
               <!-- Carousel Parts (node 1376:2259): 428×186, corner-xl, border general/default -->
               <div class="carousel__card">
 
-                <img src="../src/image-repo/Static-Card/jdp.jpg" alt="Pandai Score is Ready!">
+                <img src="../src/image-repo/page.home/assets/main/StaticNewsCard-Desktop/jdp.jpg" alt="Pandai Score is Ready!">
               </div>
               <div class="carousel__card">
 
-                <img src="../src/image-repo/Static-Card/2 (3).png" alt="SPM English Paper Bank">
+                <img src="../src/image-repo/page.home/assets/main/StaticNewsCard-Desktop/2 (3).png" alt="SPM English Paper Bank">
               </div>
 
               <div class="carousel__card">
 
-                <img src="../src/image-repo/Static-Card/3.jpg" alt="SPM Mathematics Marathon">
+                <img src="../src/image-repo/page.home/assets/main/StaticNewsCard-Desktop/3.jpg" alt="SPM Mathematics Marathon">
               </div>
               <div class="carousel__card">
 
-                <img src="../src/image-repo/Static-Card/2 (3).png" alt="This Week's Challenge">
+                <img src="../src/image-repo/page.home/assets/main/StaticNewsCard-Desktop/2 (3).png" alt="This Week's Challenge">
               </div>
             </div>
 
@@ -4491,7 +5157,7 @@
               </div>
               <div class="static-card__img-col">
                 <div class="static-card__illustration">
-                  <img src="assets/static-card/illustration.svg" alt="">
+                  <img src="assets/static-card/illustration-livetuition.png" alt="Graphic/P.LiveTuition">
                 </div>
               </div>
               <div class="static-card__right">
@@ -4546,7 +5212,7 @@
 
             <!-- 1 — Additional Mathematics -->
             <article class="quiz-card subject-add-math">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/916-image-918.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/916-image-918.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4561,7 +5227,7 @@
 
             <!-- 2 — Biology -->
             <article class="quiz-card subject-biology">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/BG-10-05-02-09-Q01-01.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/BG-10-05-02-09-Q01-01.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4576,7 +5242,7 @@
 
             <!-- 3 — Economy -->
             <article class="quiz-card subject-economy">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/CH-11-02-02-02-ALKA-W03-Q2002-A.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/CH-11-02-02-02-ALKA-W03-Q2002-A.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4591,7 +5257,7 @@
 
             <!-- 4 — Chemistry -->
             <article class="quiz-card subject-chemistry">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/GF-09-04-01-01-R04-Q238.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/GF-09-04-01-01-R04-Q238.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4606,7 +5272,7 @@
 
             <!-- 5 — English -->
             <article class="quiz-card subject-english">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/Kafa.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/Kafa.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4621,7 +5287,7 @@
 
             <!-- 6 — Moral Studies -->
             <article class="quiz-card subject-moral">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/PI-04-04-03-01-S24-Q006-01.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/PI-04-04-03-01-S24-Q006-01.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4636,7 +5302,7 @@
 
             <!-- 7 — Islamic Studies -->
             <article class="quiz-card subject-islamic">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/PSR-SC-06-03-02-H04-Q466.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/PSR-SC-06-03-02-H04-Q466.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4651,7 +5317,7 @@
 
             <!-- 8 — Mathematics -->
             <article class="quiz-card subject-math">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/SC-06-2022-03-01-B06-Q77.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/SC-06-2022-03-01-B06-Q77.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4666,7 +5332,7 @@
 
             <!-- 9 — Account -->
             <article class="quiz-card subject-account">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/SJ-04-03-01-S16-Q653-01.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/SJ-04-03-01-S16-Q653-01.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4681,7 +5347,7 @@
 
             <!-- 10 — Physics -->
             <article class="quiz-card subject-physics">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/account.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/account.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4696,7 +5362,7 @@
 
             <!-- 11 — Business -->
             <article class="quiz-card subject-business">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/business.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/business.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4711,7 +5377,7 @@
 
             <!-- 12 — Computer Science -->
             <article class="quiz-card subject-cs">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/comp.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/comp.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4726,7 +5392,7 @@
 
             <!-- 13 — Science -->
             <article class="quiz-card subject-science">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/english.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/english.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4741,7 +5407,7 @@
 
             <!-- 14 — History -->
             <article class="quiz-card subject-history">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/math.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/math.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4756,7 +5422,7 @@
 
             <!-- 15 — KAFA -->
             <article class="quiz-card subject-kafa">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/moral.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/moral.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4771,7 +5437,7 @@
 
             <!-- 16 — Geography -->
             <article class="quiz-card subject-geo">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/physics.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/physics.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4786,7 +5452,7 @@
 
             <!-- 17 — RBT -->
             <article class="quiz-card subject-rbt">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/rbt.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/rbt.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4801,7 +5467,7 @@
 
             <!-- 18 — Bahasa Melayu -->
             <article class="quiz-card subject-bm">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/Quiz-Card/BG-10-05-02-09-Q01-01.png');"></div>
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/BG-10-05-02-09-Q01-01.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -4861,7 +5527,7 @@
 
               <!-- 1 — Additional Mathematics -->
               <article class="quiz-card subject-add-math">
-                <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
+                <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/bm.png');"></div>
                 <div class="quiz-card__content">
                   <div class="quiz-card__main">
                     <div class="quiz-card__header">
@@ -4876,7 +5542,7 @@
 
               <!-- 2 — Biology -->
               <article class="quiz-card subject-biology">
-                <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
+                <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/bm.png');"></div>
                 <div class="quiz-card__content">
                   <div class="quiz-card__main">
                     <div class="quiz-card__header">
@@ -4891,7 +5557,7 @@
 
               <!-- 3 — Economy -->
               <article class="quiz-card subject-economy">
-                <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
+                <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/bm.png');"></div>
                 <div class="quiz-card__content">
                   <div class="quiz-card__main">
                     <div class="quiz-card__header">
@@ -4906,7 +5572,7 @@
 
               <!-- 4 — Physics (new) -->
               <article class="quiz-card subject-physics">
-                <div class="quiz-card__image" style="background-image: url('../src/image-repo/bm.png');"></div>
+                <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/bm.png');"></div>
                 <div class="quiz-card__content">
                   <div class="quiz-card__main">
                     <div class="quiz-card__header">
@@ -5526,6 +6192,13 @@
       btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
     });
 
+    // Quiz CTA + Add-Classes buttons — pressed feedback via JS (Rule 39: CSS :active unreliable in Electron webview)
+    document.querySelectorAll('.btn-quiz-cta, .btn-add-classes').forEach(function (btn) {
+      btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+      btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+      btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+    });
+
     // Lives/Ruby badge flip — every 4s
     const flipper = document.querySelector('.status-pill-flipper__inner');
     if (flipper) setInterval(() => flipper.classList.toggle('is-flipped'), 3000);
@@ -5778,6 +6451,312 @@
     } catch (e) {
       console.warn('Recent activities carousel error:', e);
     }
+  </script>
+
+  <!-- ── Status Badge Modals (DS node 5628:52018) ─────────────────────── -->
+  <div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true">
+
+    <!-- Score Modal -->
+    <div id="modal-score" class="modal-panel modal-panel--score">
+      <div class="modal-card">
+        <!-- decorative corner -->
+        <div class="modal-card__corner"><img src="../src/image-repo/page.home/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <!-- close button -->
+        <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
+
+        <!-- Content Slot: gap 16px between header / trophy+stats / streak -->
+        <div class="modal-content-slot">
+
+          <!-- Header: green pill with score value -->
+          <div class="modal-header">
+            <div class="modal-header__pill modal-header__pill--score">
+              <div class="modal-header__score-texts">
+                <span class="modal-header__title">Goal &amp; Score</span>
+                <span class="modal-header__sub">This Year Score</span>
+              </div>
+              <div class="modal-header__score-value">100,000</div>
+            </div>
+          </div>
+
+          <!-- Content: trophy + stats -->
+          <div class="modal-score-content">
+            <div class="modal-trophy-wrap">
+              <div class="modal-trophy">
+                <div data-layer="1" style="inset:57.39% 15.1% 0 11.77%"><img src="https://www.figma.com/api/mcp/asset/88efe6b6-1bdb-45dc-996d-458f639b3e80" alt=""></div>
+                <div data-layer="2" style="inset:57.39% 17.35% 16.11% 14.02%"><img src="https://www.figma.com/api/mcp/asset/3640cf87-68c3-4d0d-bba7-47ca92a1c0e0" alt=""></div>
+                <div data-layer="3" style="inset:70.64% 15.1% 0 48.22%"><img src="https://www.figma.com/api/mcp/asset/08bd097a-31f6-4446-b1ad-273bb7bd0343" alt=""></div>
+                <div data-layer="4" style="inset:70.64% 51.78% 0 11.77%"><img src="https://www.figma.com/api/mcp/asset/7ba587e1-5bb9-4c09-b04c-fb9551e3f81e" alt=""></div>
+                <div data-layer="5" style="inset:59.95% 33.21% 21.89% 31.48%"><img src="https://www.figma.com/api/mcp/asset/cbc2c31a-f72a-4136-be2c-270c007c43e0" alt=""></div>
+                <div data-layer="6" style="inset:58.65% 42.12% 30.4% 40.3%"><img src="https://www.figma.com/api/mcp/asset/3bfb6ee5-1008-44c9-b152-721b63351e9a" alt=""></div>
+                <div data-layer="7" style="inset:0.06% 0.62% 62.96% 66.81%"><img src="https://www.figma.com/api/mcp/asset/b37b6e79-66e3-4722-824d-b1c3696bd0c4" alt=""></div>
+                <div data-layer="8" style="inset:14.83% 14.64% 39.51% 9.21%"><img src="https://www.figma.com/api/mcp/asset/ef3b80aa-896b-4b05-a81c-1dbb34ff3557" alt=""></div>
+                <div data-layer="9" style="inset:14.83% 14.63% 40.58% 15.89%"><img src="https://www.figma.com/api/mcp/asset/0520dce3-30a1-4459-aaee-f74f1a347115" alt=""></div>
+                <div data-layer="10" style="inset:0 14.63% 70.6% 9.21%"><img src="https://www.figma.com/api/mcp/asset/309ee4cc-9760-46f8-89bc-13f99bd74ce1" alt=""></div>
+                <div data-layer="11" style="inset:1.71% 42.92% 72.3% 12.4%"><img src="https://www.figma.com/api/mcp/asset/6ecbb2e9-8f71-4cca-afb4-16c64b2a7f9a" alt=""></div>
+                <div data-layer="12" style="inset:2.06% 17.82% 72.42% 52.1%"><img src="https://www.figma.com/api/mcp/asset/3691746a-13b7-4b05-8784-ecf9aaa8e085" alt=""></div>
+                <div data-layer="13" style="inset:27.48% 66.62% 46.59% 0.61%"><img src="https://www.figma.com/api/mcp/asset/137d0cb5-b721-468b-855a-2fb6e9d25785" alt=""></div>
+              </div>
+            </div>
+            <div class="modal-stats">
+              <!-- Today's Score -->
+              <div class="modal-stat-row">
+                <div class="modal-stat-ribbon">
+                  <div class="modal-stat-ribbon__bg"><img src="https://www.figma.com/api/mcp/asset/ea22eaf0-6ce5-484a-8bb5-5666a4292501" alt=""></div>
+                  <span class="modal-stat-ribbon__num">100</span>
+                </div>
+                <div class="modal-stat-texts">
+                  <p class="modal-stat-title">Today's Score</p>
+                  <p class="modal-stat-caption">Your score is just 5 less than previous day</p>
+                </div>
+              </div>
+              <div class="modal-divider"></div>
+              <!-- Today's Quiz Goal -->
+              <div class="modal-stat-row">
+                <div class="modal-stat-ribbon">
+                  <div class="modal-stat-ribbon__bg"><img src="https://www.figma.com/api/mcp/asset/ea22eaf0-6ce5-484a-8bb5-5666a4292501" alt=""></div>
+                  <span class="modal-stat-ribbon__num">1/9</span>
+                </div>
+                <div class="modal-stat-texts">
+                  <p class="modal-stat-title">Today's Quiz Goal</p>
+                  <div class="modal-stat-caption--inline">
+                    <span>It will only take about </span>
+                    <span class="highlight">4 more minutes</span>
+                    <span>to complete your goal </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7-day streak pill -->
+          <div class="modal-streak-pill">
+            <div class="modal-day modal-day--active">M</div>
+            <div class="modal-day modal-day--active">T</div>
+            <div class="modal-day modal-day--inactive">W</div>
+            <div class="modal-day modal-day--inactive">T</div>
+            <div class="modal-day modal-day--inactive">F</div>
+            <div class="modal-day modal-day--inactive">S</div>
+            <div class="modal-day modal-day--inactive">S</div>
+          </div>
+
+        </div><!-- /modal-content-slot -->
+
+        <!-- Footer button group -->
+        <div class="modal-btn-group">
+          <button class="modal-btn-sec-l" type="button">
+            <span class="modal-btn-sec-l__label">Change Goal</span>
+            <span class="modal-btn-sec-l__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+          </button>
+          <button class="modal-btn-pri-l" type="button">
+            <span class="modal-btn-pri-l__label">Score</span>
+            <span class="modal-btn-pri-l__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coins Modal -->
+    <div id="modal-coins" class="modal-panel modal-panel--coins">
+      <div class="modal-card">
+        <div class="modal-card__corner"><img src="../src/image-repo/page.home/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
+
+        <!-- Header: yellow pill -->
+        <div class="modal-header">
+          <div class="modal-header__pill modal-header__pill--coins">
+            <span class="modal-header__title">Coins &amp; Ruby</span>
+          </div>
+        </div>
+
+        <!-- Content: Coin row + divider + Ruby row -->
+        <div class="modal-coins-content">
+          <!-- Coin row -->
+          <div class="modal-coins-row">
+            <div class="modal-coins-img">
+              <svg width="76" height="76" aria-hidden="true"><use href="#ic-status-coin"/></svg>
+            </div>
+            <div class="modal-coins-texts">
+              <p class="modal-coins-label">You have</p>
+              <div class="modal-coins-value"><span>100,000</span><span>Coins</span></div>
+              <div class="modal-coins-cta">
+                <button class="modal-btn-sec" type="button">
+                  <span class="modal-btn-sec__label">Claim more coins</span>
+                  <span class="modal-btn-sec__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-divider"></div>
+          <!-- Ruby row -->
+          <div class="modal-coins-row">
+            <div class="modal-coins-img">
+              <svg width="76" height="76" aria-hidden="true"><use href="#ic-status-ruby"/></svg>
+            </div>
+            <div class="modal-coins-texts">
+              <p class="modal-coins-label">Ruby This Month</p>
+              <div class="modal-coins-value"><span>9,000</span><span>Ruby</span></div>
+              <div class="modal-coins-cta">
+                <button class="modal-btn-sec" type="button">
+                  <span class="modal-btn-sec__label">Collect more Ruby</span>
+                  <span class="modal-btn-sec__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Streak Modal -->
+    <div id="modal-streak" class="modal-panel modal-panel--streak">
+      <div class="modal-card">
+        <div class="modal-card__corner"><img src="../src/image-repo/page.home/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
+
+        <!-- Header + content: grouped with 8px gap (DS inner Content frame) -->
+        <div class="modal-streak-body">
+
+          <!-- Header: purple pill -->
+          <div class="modal-header">
+            <div class="modal-header__pill modal-header__pill--streak">
+              <span class="modal-header__title">Streak</span>
+            </div>
+          </div>
+
+          <!-- Image + text + day pill -->
+          <div class="modal-image-block">
+            <div class="modal-image-wrap">
+              <svg width="69.417" height="98" aria-hidden="true"><use href="#ic-status-streak"/></svg>
+            </div>
+            <p class="modal-big-text">2 Day Streak</p>
+
+            <!-- 7-day streak pill -->
+            <div class="modal-streak-pill">
+              <div class="modal-day modal-day--active">M</div>
+              <div class="modal-day modal-day--active">T</div>
+              <div class="modal-day modal-day--inactive">W</div>
+              <div class="modal-day modal-day--inactive">T</div>
+              <div class="modal-day modal-day--inactive">F</div>
+              <div class="modal-day modal-day--inactive">S</div>
+              <div class="modal-day modal-day--inactive">S</div>
+            </div>
+          </div>
+
+        </div><!-- /modal-streak-body -->
+
+        <!-- Footer button group -->
+        <div class="modal-btn-group">
+          <button class="modal-btn-sec-l" type="button">
+            <span class="modal-btn-sec-l__label">View More</span>
+            <span class="modal-btn-sec-l__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+          </button>
+          <button class="modal-btn-pri-l" type="button">
+            <span class="modal-btn-pri-l__label">Answer Quiz</span>
+            <span class="modal-btn-pri-l__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lives Modal -->
+    <div id="modal-lives" class="modal-panel modal-panel--lives">
+      <div class="modal-card">
+        <div class="modal-card__corner"><img src="../src/image-repo/page.home/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
+
+        <!-- Header: pink pill -->
+        <div class="modal-header">
+          <div class="modal-header__pill modal-header__pill--lives">
+            <span class="modal-header__title">Lives</span>
+          </div>
+        </div>
+
+        <!-- Image + text -->
+        <div class="modal-image-block">
+          <div class="modal-image-wrap">
+            <img src="https://www.figma.com/api/mcp/asset/fb347bc3-fb04-4471-be9e-2a17111b3772" alt="Heart" style="width:88px;height:98px;display:block;flex-shrink:0;">
+          </div>
+          <div class="modal-text-center">
+            <p class="modal-lives-label">You have</p>
+            <p class="modal-lives-sub">Unlimited Lives</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- /Status Badge Modals -->
+
+  <!-- Modal JS placed AFTER modal DOM so getElementById resolves correctly (Rule 62) -->
+  <script>
+    (function () {
+      var overlay   = document.getElementById('modal-overlay');
+      var panels    = document.querySelectorAll('.modal-panel');
+      var closeTimer = null;
+
+      function openModal(id) {
+        // Cancel any in-progress close
+        if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+        panels.forEach(function (p) { p.classList.remove('is-open', 'is-closing'); });
+        overlay.classList.remove('is-closing');
+
+        var target = document.getElementById(id);
+        if (target) target.classList.add('is-open');
+        overlay.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeAll() {
+        if (closeTimer) return; // already closing
+        var openPanel = document.querySelector('.modal-panel.is-open');
+        overlay.classList.add('is-closing');
+        if (openPanel) openPanel.classList.add('is-closing');
+
+        closeTimer = setTimeout(function () {
+          closeTimer = null;
+          panels.forEach(function (p) { p.classList.remove('is-open', 'is-closing'); });
+          overlay.classList.remove('is-open', 'is-closing');
+          document.body.style.overflow = '';
+        }, 220);
+      }
+
+      // Pill → modal mapping
+      var pillMap = {
+        'pill-score':  'modal-score',
+        'pill-coins':  'modal-coins',
+        'pill-streak': 'modal-streak',
+        'pill-lives':  'modal-lives'
+      };
+      Object.keys(pillMap).forEach(function (pillId) {
+        var el = document.getElementById(pillId);
+        if (el) el.addEventListener('click', function () { openModal(pillMap[pillId]); });
+      });
+
+      // Close button (× icon)
+      document.querySelectorAll('.modal-close').forEach(function (btn) {
+        btn.addEventListener('click', function (e) { e.stopPropagation(); closeAll(); });
+      });
+
+      // Card click stops bubble so overlay click doesn't fire
+      document.querySelectorAll('.modal-card').forEach(function (card) {
+        card.addEventListener('click', function (e) { e.stopPropagation(); });
+      });
+
+      // Overlay click → close
+      overlay.addEventListener('click', closeAll);
+
+      // ESC key → close
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeAll();
+      });
+
+      // is-pressing on modal CTA buttons (Rule 83)
+      document.querySelectorAll('.modal-btn-sec, .modal-btn-sec-l, .modal-btn-pri-l').forEach(function (btn) {
+        btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+        btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+        btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+      });
+    })();
   </script>
 
   <!-- Navbar Mobile - 1.5 (DS node 3406:735)

@@ -8,9 +8,23 @@
 >
 > **Companion files** — [CLAUDE.md](CLAUDE.md) (full implementation rules, 1–76+), [design-md/zul.design.md](design-md/zul.design.md), [design-md/nadia.design.md](design-md/nadia.design.md), [design-md/syakila.design.md](design-md/syakila.design.md).
 
-> ### Sync status (2026-05-28)
+> ### Sync status (2026-06-02)
 >
-> **Live-verified against DS this session (2026-05-28):**
+> **Live audit against DS (2026-06-02) — full variable audit via `use_figma`:**
+> - **Primitives: 429 → 478 (+49)** — New palettes: Gold (`#fabb0a`), Silver (`#878dbb`), Bronze (`#d47d62`) for medals/achievement; Pink-Secondary (`#ff9dc1`) + Pink-Tertiary (`#99375b`) for Teacher role states; Butter (`#ffffc9`, replaces Vanilla), Pumpkin (`#f2b839`, replaces Mustard). New Foundation vars: `white 50`, `black 50`, `slate` (`#444a56`).
+> - ⚠️ **Palette renames**: "Vanilla" → `Butter` · "Mustard" → `Pumpkin`. Any `--vanilla-*` / `--mustard-*` CSS variables are **invalid** — replace immediately.
+> - **Semantic: 277 → 329 (+52)** — New `Subjects/*` namespace: 18 subjects × 5 states as Semantic aliases. CSS can now use `var(--subjects-[name]-default)` instead of hardcoded hex. Hex values mirror §4.3 exactly.
+> - **Responsives: 64 vars** (first full audit) — 3 modes: Desktop/Tablet/Mobile. Grid: 12/8/4 columns, content widths 1320/623/358px. Per-breakpoint H1–H4, T1–T5 scale. Confirmed DS frame widths: Desktop=1440, Tablet=687, Mobile=390.
+> - All 16 critical tokens in §6.1/§6.7 re-confirmed ✓ — see zul.design.md Rule 217 for full table.
+> - **CLAUDE.md Rule 59 + syakila.design.md fixed** — stale `#e1f9ea` removed from Nav Button Active icon column in both files. Correct value `#ffffff` (`Icon/primary/on-color`, changed 2026-05-24) is now consistent across all 5 doc files.
+>
+> ### Sync status (2026-05-31)
+>
+> **Updated 2026-05-31 (documentation consistency pass):**
+> - §6.1 — Added critical pitfalls: no-transition rule + is-pressing JS requirement for all Button - 1.5
+> - §6.2 — Corrected "Hover/Pressed/Disabled share palettes" — Pressed does NOT share (Secondary≠Primary for Pressed)
+>
+> **Live-verified against DS (2026-05-28):**
 > - §3.1 — `Surface/disabled/on color` (#e5e5e5), `Surface/informative/default` (#00a2e8), `Surface/secondary/default-hover` (#f6fef6) — all new tokens added
 > - §3.2 — `Text/primary/on-color` confirmed `#ffffff` (changed from `#f6fdfb`, DS updated 2026-05-24)
 > - §3.3 — `Icon/primary/on-color` confirmed `#ffffff` (changed from `#f6fdfb`, DS updated 2026-05-24)
@@ -25,16 +39,20 @@
 > - §6.1 — Button - 1.5 Default, Hover, Pressed, Disabled (Primary/S + Tertiary/L)
 > - §6.3 — Nav-btn / Tertiary button Pressed
 >
+> **Confirmed invalid (2026-05-30):**
+> - §3.1 `--surface-subtle` (`#F8FAFC`) — **not a DS token**. DS Screen page uses `Surface/general/default` (#ffffff). See CLAUDE.md Rule 81.
+>
 > **Known stale / not yet re-verified:**
-> - §3.1 `--surface-subtle` (`#F8FAFC`) · §3.2 `--text-default-secondary`, `--text-default-placeholder` · §3.5 `--overlay-default` · §5 Status Badge hexes · §6.2 / §6.4 / §6.5 / §6.6 component recipes
+> - §3.2 `--text-default-secondary`, `--text-default-placeholder` · §3.5 `--overlay-default` · §5 Status Badge hexes · §6.2 / §6.4 / §6.5 / §6.6 component recipes
 >
 > **Coverage gaps (DS has these, this doc doesn't yet):**
-> - `Surface/gold/*`, `Surface/silver/*`, `Surface/bronze/*` (medal/tier surfaces)
+> - `Gold/*`, `Silver/*`, `Bronze/*` Primitive ramps now documented in §1 + zul.design.md Rule 217 (base hex: Gold `#fabb0a`, Silver `#878dbb`, Bronze `#d47d62`). Semantic `Surface/gold/*` aliases still unverified — do not use until confirmed via `get_variable_defs`.
 > - `Surface/success/*`, `Surface/warning/*`, `Surface/alert/*` (state surfaces — alerts, toasts, banners)
 > - `Surface/primary/default-hover` (distinct from `default-focus`)
 > - `Icon/primary/default-hover`, `Text/primary/default-hover`
+> - `Foundation/slate` (`#444a56`) — new Primitive, no confirmed Semantic alias yet
 >
-> **CLAUDE.md drift:** Rules 19, 38, 40 document a pre-2026-05 DS where Button/Nav Pressed = dark teal `#00564c`. The live DS now uses `#00a36a` for **Primary** Pressed (no `State=Active`); Secondary/Tertiary Pressed DOES use dark teal `#00564c`. When CLAUDE.md and this file conflict on state colors, **this file is authoritative.**
+> **CLAUDE.md drift:** Rules 19, 38, 40 have had multiple conflicting values. **Current confirmed (2026-05-31, `get_design_context`):** Primary + Secondary Pressed = `#00a36a` (`Surface/primary/focus`); Tertiary Pressed = `#00564c` (`Surface/tertiary/default`). When CLAUDE.md and this file conflict on state colors, **this file is authoritative.**
 
 ---
 
@@ -64,9 +82,10 @@ Primitives  ──┐
 
 | Collection | Modes | Contains | When to read |
 |---|---|---|---|
-| **Primitives** | 1 (Value) | Raw hex values: `Grey/50–950`, `OG-Green/*`, `Pink/*`, `Foundation/*`, etc. | Never reference directly in CSS — only via aliases. |
+| **Primitives** | 1 (Value) | Raw hex values: `Grey/50–950`, `OG-Green/*`, `Pink/*`, `Foundation/*`, `Gold/*`, `Silver/*`, `Bronze/*`, `Butter/*`, `Pumpkin/*`, etc. 478 vars as of 2026-06-02. | Never reference directly in CSS — only via aliases. |
 | **Product** | 3 (Student / Teacher / Parent) | Role-specific aliases: `Primary/Base`, `Secondary/Base`, `Tertiary/*`. Resolves to a different Primitive per role. | Only when a component needs to differ per user role (e.g. Button - 1.5). |
-| **Semantic** | 2 (Light / Dark) | Use-case aliases: `Surface/*`, `Text/*`, `Icon/*`, `Border/*`, `Overlay/*`. | **Default for all CSS.** This is what 95% of code should reference. |
+| **Semantic** | 2 (Light / Dark) | Use-case aliases: `Surface/*`, `Text/*`, `Icon/*`, `Border/*`, `Overlay/*`, `Subjects/*`. 329 vars as of 2026-06-02. | **Default for all CSS.** This is what 95% of code should reference. |
+| **Responsives** | 3 (Desktop / Tablet / Mobile) | Grid spec (12/8/4 columns, content widths 1320/623/358px) + per-breakpoint H1–H4/T1–T5 type scale. Frame widths: Desktop 1440px, Tablet 687px, Mobile 390px. 64 vars. | When building responsive layouts — pull the breakpoint spec from here. CSS breakpoints: Tablet `≤1279px`, Mobile `≤767px`. |
 
 **Critical implication — Student is OG-Green, not pink** ([CLAUDE.md Rule 18](CLAUDE.md)):
 
@@ -108,8 +127,8 @@ Figma:  Corner Radius/corner-rounded       → CSS: --corner-radius-corner-round
 
 | CSS variable | Hex | Figma path | Where it's used |
 |---|---|---|---|
-| `--surface-general-default` | `#FFFFFF` | `Surface/general/default` | Page background, card backgrounds, modal containers, nav-menu button bg, footer bg. **The canonical white.** |
-| `--surface-subtle` | `#F8FAFC` | `Surface/subtle` | Sectional alt background (rarely used; prefer white). |
+| `--surface-general-default` | `#FFFFFF` | `Surface/general/default` | Page background (`body`), card backgrounds, modal containers, nav-menu button bg, footer bg. **The canonical white. Confirmed as DS Screen page background (2026-05-30).** |
+| ~~`--surface-subtle`~~ | ~~`#F8FAFC`~~ | ~~`Surface/subtle`~~ | ~~Sectional alt background.~~ **INVALID — not a DS token. Was fabricated. Use `--surface-general-default` instead.** |
 | `--surface-primary-default` | `#00cc85` | `Surface/primary/default` | Primary button fill (Default state), badge fills that say "active", carousel button container fill, Score status pill fill. The "Pandai green." |
 | `--surface-primary-focus` | `#00a36a` | `Surface/primary/focus` | Primary button border (Default), focus rings on primary inputs. **Do not use for button labels** — that's `--text-primary-on-color`. |
 | `--surface-primary-default-subtle` | `#d9f7ed` | `Surface/primary/default-subtle` | Tint backgrounds for primary-themed cards or alerts (light mint). |
@@ -421,18 +440,20 @@ The 5 status badge variants use **flat hex values** (not semantic tokens — the
 | Variant | btn bg | border | label | arrow circle | arrow chevron |
 |---|---|---|---|---|---|
 | **Primary** (S/M/L) | `--surface-primary-focus` `#00a36a` | `--border-primary-default` `#00cc85` | `--text-primary-default` `#00cc85` | `--surface-primary-default` `#00cc85` | `--icon-primary-focus` `#00a36a` |
-| **Secondary** (S/M/L) | `--surface-tertiary-default` `#00564c` | `--border-tertiary-focus` `#00453d` | `--text-primary-default` `#00cc85` | `--surface-primary-default` `#00cc85` | `--icon-primary-focus` `#00a36a` |
+| **Secondary** (S/M/L) | `--surface-primary-focus` `#00a36a` | `--border-primary-default` `#00cc85` | `--text-primary-default` `#00cc85` | `--surface-primary-focus` `#00a36a` | `--text-primary-default` `#00cc85` |
 | **Tertiary** (S/M/L) | `--surface-tertiary-default` `#00564c` | `--border-tertiary-focus` `#00453d` | `--text-primary-default` `#00cc85` | transparent, border `--border-primary-default-subtle` `#d9f7ed` | `--icon-primary-focus` `#00a36a` |
 
-> **DS nodes confirmed:** Primary/L Pressed = `473:650`; Secondary/M Pressed = `538:1907`; Tertiary/L Pressed = `3029:20022`.
+> **DS nodes confirmed:** Primary/L Pressed = `473:650` (bg `#00a36a`); Secondary/M Pressed = `538:1907` (bg `#00a36a`, re-verified 2026-05-31 via `get_design_context`); Tertiary/L Pressed = `3029:20022` (bg `#00564c`).
 
 **Critical pitfalls:**
 - **Default label is now `#ffffff`** — DS updated `Text/primary/on-color` from `#f6fdfb` to `#ffffff` on 2026-05-24. Any prototype using `#f6fdfb` or `#e1f9ea` for button labels is stale.
-- **Primary Pressed ≠ Secondary/Tertiary Pressed.** Primary uses intensified-green (`#00a36a`). Secondary/Tertiary use dark teal (`#00564c`). Never share these across variants.
+- **Secondary Pressed = Primary Pressed.** Both use `#00a36a` (`Surface/primary/focus`). Only Tertiary uses dark teal (`#00564c`). Re-verified 2026-05-31 via `get_design_context` on `538:1907`.
 - **Disabled arrow circle bg is `#e5e5e5`**, not `#f2f2f2`. Only the outer button bg uses `--surface-disabled-primary`.
 - Pressed label is **`Text/primary/default`** (`#00cc85`) for ALL variants, NOT `Text/primary/on-color`.
 - Hover transitions from primary palette to **secondary palette** — never a darker green.
 - Arrow chevron color must be read from the **arrow sub-node**, not the parent button node.
+- **No CSS transitions on any Button - 1.5 element.** All state changes are instant cuts — no `transition` on container, label, arrow, or clip. (CLAUDE.md Rule 82, zul.design.md Rule 198)
+- **Always pair CSS `:active` with JS `is-pressing`.** CSS `:active` alone is unreliable in Electron webviews. Every Button - 1.5 `<button>` must have matching `mousedown`/`mouseup`/`mouseleave` handlers. (CLAUDE.md Rule 83, zul.design.md Rule 199)
 
 ### 6.2 Secondary/M button (white-fill outlined) — Default state
 
@@ -445,7 +466,9 @@ The 5 status badge variants use **flat hex values** (not semantic tokens — the
 | Arrow circle stroke | `#00cc85` | `--border-primary-default` (apply as `box-shadow: inset 0 0 0 1px` — see [CLAUDE.md Rule 30](CLAUDE.md)) |
 | Arrow chevron | `#00cc85` | `--icon-primary-default` |
 
-**Hover/Pressed/Disabled** for Secondary/M share the same palettes as Primary/M — see §6.1.
+**Hover/Disabled** for Secondary/M share the same palettes as Primary/M — see §6.1 Default/Hover/Disabled table.
+
+> ℹ️ **Secondary Pressed = Primary Pressed** — both use `#00a36a` (`Surface/primary/focus`). Only Tertiary uses dark teal (`#00564c`). See §6.1 Pressed table. (Re-verified 2026-05-31, `538:1907`)
 
 ### 6.3 Nav-btn / Nav menu pill
 
@@ -587,7 +610,7 @@ When implementing a new DS-derived component:
 |---|---|
 | `color: #2FAC51` ("Pandai green" guess) | `color: var(--text-primary-default)` → `#00cc85` |
 | `color: #0F172A` (dark navy heading) | `color: var(--text-default-heading)` → `#404040` |
-| `color: #FFFFFF` for on-primary text | `color: var(--text-primary-on-color)` → `#f6fdfb` |
+| `color: #f6fdfb` or `#e1f9ea` for on-primary text (stale — both are old values) | `color: var(--text-primary-on-color)` → `#ffffff` (DS updated 2026-05-24; `#f6fdfb` was the pre-May-24 value, `#e1f9ea` was an even earlier mistake) |
 | Pressed button = `Surface/tertiary/default` `#00564c` (dark teal — from older notes / CLAUDE.md Rule 19) | Pressed button = `Surface/primary/focus` `#00a36a` (intensified green — see §6.1, live-verified 2026-05-15) |
 | Pressed label = `Text/primary/on-color` `#f6fdfb` | Pressed label = `Text/primary/default` `#00cc85` |
 | Pressed chevron = `Icon/tertiary/default` `#00564c` | Pressed chevron = `Icon/primary/focus` `#00a36a` |
@@ -602,7 +625,7 @@ When implementing a new DS-derived component:
 | Mistook WIP Backup file results as authoritative | Only `TLVKe3bgJTdVvuPAzgDq2f` is the source — ignore everything else |
 | Button Default label = `#f6fdfb` or `#e1f9ea` | `--text-primary-on-color` is now `#ffffff` — DS changed 2026-05-24. Check `:root` and update any prototype using old values. |
 | Nav action button Active icon = `#e1f9ea` or `#f6fdfb` | `--icon-primary-on-color` is now `#ffffff` — DS changed 2026-05-24. |
-| All Button variants share the same Pressed palette | **Wrong** — Primary Pressed = `#00a36a` (intensified green). Secondary/Tertiary Pressed = `#00564c` (dark teal). Never cross-apply. |
+| All Button variants share the same Pressed palette | **Partially wrong** — Primary + Secondary Pressed = `#00a36a`. Only Tertiary = `#00564c`. Never assume without checking live DS (`get_design_context`). |
 | Disabled button arrow circle bg = `#f2f2f2` (same as outer) | Correct is `--surface-disabled-on-color` = `#e5e5e5`. Two different tokens. |
 | Badge white ring = `border: 1px solid white` | Badges use `strokeAlign: OUTSIDE` → must use `box-shadow: 0 0 0 1px var(--border-on-color)`. `border:` shrinks content area; `outline:` ignores border-radius. |
 
@@ -635,4 +658,4 @@ Drop these directly into Claude Code / Codex / Cursor when working in this repo:
 
 ---
 
-*Last updated: 2026-05-28 by Zulfadhli — DS re-audit: `Text/primary/on-color` + `Icon/primary/on-color` updated to `#ffffff` (DS changed 2026-05-24); `--surface-disabled-on-color` (#e5e5e5), `--surface-informative-default` (#00a2e8), `--surface-secondary-default-hover` (#f6fef6), `--border-on-color` (#ffffff) added to §3; §6.1 Pressed split by variant (Primary≠Secondary/Tertiary) + disabled arrow bg corrected; §6.7/6.8/6.9 new component recipes added; §9 five new mistake rows added | DS source: `TLVKe3bgJTdVvuPAzgDq2f` (Pandai Design System 1.5) | Confirmed Student context (OG-Green palette)*
+*Last updated: 2026-06-02 by Zulfadhli — Full DS variable audit: Primitives 429→478 (+49: Gold/Silver/Bronze/Butter/Pumpkin/Pink-Secondary/Pink-Tertiary + 3 Foundation vars); Semantic 277→329 (+52: Subjects/* namespace); Responsives 64 vars added to architecture table; all 16 critical tokens re-confirmed ✓; §9 `#f6fdfb` stale mistake row corrected to `#ffffff`; Coverage gaps updated (Gold/Silver/Bronze Primitives now documented; Semantic Surface/gold/* still unverified); palette rename warning added (Vanilla→Butter, Mustard→Pumpkin) | DS source: `TLVKe3bgJTdVvuPAzgDq2f` (Pandai Design System 1.5) | Confirmed Student context (OG-Green palette)*

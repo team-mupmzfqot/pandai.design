@@ -373,14 +373,14 @@ This means:
 
 ### 19. Button - 1.5 Primary/S — all confirmed Student states (node 1437:8154)
 
-These are the confirmed state values for the Pandai student home screen. All from DS `get_variable_defs` on each state node. **Last re-confirmed: 2026-05-19.**
+These are the confirmed state values for the Pandai student home screen. All from DS `get_variable_defs` on each state node. **Last re-confirmed: 2026-05-19. Label updated 2026-05-24 (Rule 154) — `Text/primary/on-color` changed from `#e1f9ea` → `#ffffff`.**
 
 | State | Btn bg | Border | Label | Arrow bg | Chevron | DS node |
 |---|---|---|---|---|---|---|
-| Default | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` | `1437:8154` |
+| Default | `#00cc85` | `#00a36a` | `#ffffff` | `#99ebce` | `#00a36a` | `1437:8154` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` | `1437:8146` |
 | Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` | `1437:8138` |
-| Active | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` | `3029:19941` |
+| Active | `#00cc85` | `#00a36a` | `#ffffff` | `#99ebce` | `#00a36a` | `3029:19941` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` | `1437:8130` |
 
 **Pressed state tokens (confirmed from node `1437:8138`, re-verified 2026-05-19):**
@@ -390,7 +390,7 @@ These are the confirmed state values for the Pandai student home screen. All fro
 - Arrow bg: `Surface/primary/default` (#00cc85)
 - Chevron: `Icon/primary/focus` (#00a36a)
 
-**Default/Active label = `Text/primary/on-color` = `#e1f9ea`** — DS updated this token (previously documented as `#f6fdfb`, corrected 2026-05-19). Both Default and Active share identical tokens.
+**Default/Active label = `Text/primary/on-color` = `#ffffff`** — Token changed 2026-05-24: `#e1f9ea` (mint) → `Foundation/white` (`#ffffff`). See Rule 154. Previously corrected from `#f6fdfb` on 2026-05-19. Both Default and Active share identical tokens.
 
 **`State=Active`** is a new persistent-selected state (added to COMPONENT_SET 2026-05-19). Visually identical to Default. Use for "currently selected" scenarios — distinct from the momentary Pressed feedback.
 
@@ -600,18 +600,22 @@ CSS `border` consumes box-model space. With `box-sizing: border-box; width: 18px
 
 **Rule:** Replicate Figma stroke with `box-shadow: inset 0 0 0 <weight>px <color>` — this renders a visible ring inside the element without affecting layout. Then size with content-box math.
 
-**CSS pattern for Secondary/M button arrow (DS node `538:1929` — 18×18, 1px stroke, 1px padding):**
+**CSS pattern for Secondary/M R Arrow (DS node `538:1929` — 20×20, 1px stroke, 2px padding):**
+
+> ⚠️ Updated 2026-05-31 via `get_design_context` live audit: the **R Arrow** (default, `showRArrow: true`) uses `p: 2px` → **20×20 total**. The L Arrow (`showLArrow: false`, hidden by default) uses `p: 1px` → 18×18. Prior docs used the L Arrow spec for both — incorrect.
+
 ```css
+/* R Arrow (default visible arrow) — Secondary/M */
 .arrow {
   width:      16px;          /* content width */
   height:     16px;          /* content height */
-  padding:    1px;           /* +1 each side = 18px total */
-  box-shadow: inset 0 0 0 1px var(--border-primary-default);  /* Figma stroke */
-  /* NO border — border would consume space and shrink content to 14px */
+  padding:    2px;           /* +2 each side = 20px total */
+  box-shadow: inset 0 0 0 1px var(--border-primary-default);  /* Figma stroke, INSIDE */
+  /* NO border — border consumes box-model space and shrinks content */
 }
 ```
 
-**Confirmed mistake:** Secondary/M button arrow used `border: 1px solid; padding: 1px; box-sizing: border-box; width: 18px` → 14px content area. The 16px clip overflowed. Corrected to `box-shadow: inset`, `width: 16px; padding: 1px` → 18px total, 16px content.
+**Confirmed mistake:** Secondary/M button arrow used `border: 1px solid; padding: 1px; box-sizing: border-box; width: 18px` → 14px content area. The 16px clip overflowed. Corrected to `box-shadow: inset`, `width: 16px; padding: 2px` → 20px total, 16px content.
 
 **Applies whenever:** a DS node has both a stroke AND padding, and you need the content area to be exactly `frame_size − 2×padding`.
 
@@ -619,25 +623,54 @@ CSS `border` consumes box-model space. With `box-sizing: border-box; width: 18px
 
 ### 31. Button - 1.5 confirmed DS specs (Student Type)
 
-All specs from `use_figma` inspection of component nodes. Arrow circle fills/strokes from `node.fills`/`node.strokes`.
+All specs from `get_design_context` live audit (2026-05-31, COMPONENT_SET `473:529`). Arrow circle data from `node.fills`/`node.strokes` + `get_design_context` padding classes.
 
-| Property | Primary/S | Primary/M | Secondary/M |
+#### Sizing, padding, and text — all variants follow size, not variant
+
+| Property | Size S | Size M | Size L |
 |---|---|---|---|
-| Height | 24px | 32px | 32px |
-| Outer padding | `2px 4px` (`space-xxs`) | `2px 8px` (`space-xs`) | `2px 8px` (`space-xs`) |
-| Border-radius | 60px (pill) | 60px | 60px |
-| Text | 12px SemiBold | 12px SemiBold | 12px SemiBold |
-| Text slot padding | `0 4px` | `0 4px` | `0 4px` |
-| Arrow circle size | 16×16 | 20×20 | 18×18 |
-| Arrow padding | 2px (content-box) | 2px (content-box) | 1px (content-box) |
-| Arrow clip | 12×12 | 16×16 | 16×16 |
-| Arrow fill | `#99ebce` | `#99ebce` | white |
-| Arrow stroke | none | none | 1px `#00cc85` → use `box-shadow:inset` |
-| DS node (Default) | `1437:8154` | `479:344` | `538:1923` |
+| Height | 24px | 32px | 40px |
+| Outer padding | `2px 4px` (py:2 px:4) | `2px 8px` (py:2 px:8) | `8px 12px` (py:8 px:12) |
+| Border-radius | 60px pill | 60px pill | 60px pill |
+| **Text** | **12px SemiBold** lh:18 | **12px SemiBold** lh:18 | **14px SemiBold** lh:20 |
+| Text slot px | 4px | 4px | 8px |
+| Leading icon clip | 16×16 | 16×16 | 24×24 |
 
-**Primary/S uses `Spacing/space-xxs` (4px) for outer horizontal padding — NOT 8px.** Primary/M and Secondary/M use `Spacing/space-xs` (8px). Text size `12px SemiBold` is the same across all sizes.
+> Size S and M share 12px/lh:18. Size L uses 14px/lh:20 — do NOT assume 12px for L.
 
-**Mistake corrected (May 2026):** Rule 31 previously stated all sizes share `2px 8px` outer padding. Live DS audit via `get_design_context` confirmed Primary/S is `px-[Spacing/space-xxs, 4px]` = `2px 4px`. The quiz CTA buttons on the home screen were rendering 8px wider than DS because of this error.
+#### Arrow — structure differs by Variant, size within Variant follows the same pattern
+
+| Property | Primary (S/M/L) | Secondary (S/M/L) | Tertiary (S/M/L) |
+|---|---|---|---|
+| Arrow structure | **filled circle** | **outlined circle** | **bare chevron — no circle** |
+| Arrow fill | `#99ebce` | white | N/A |
+| Arrow stroke | none | 1px `#00cc85` → `box-shadow:inset` | N/A |
+| Arrow circle (S) | 16px (p:2px → 12×12 clip) | 16px (p:2px → 12×12 clip) | — |
+| Arrow circle (M) | 20px (p:2px → 16×16 clip) | 20px (p:2px → 16×16 clip) | — |
+| Arrow circle (L) | 24px (p:4px → 16×16 clip) | 24px (p:4px → 16×16 clip) | — |
+| Arrow clip (S) | 12×12 | 12×12 | 12×12 (bare) |
+| Arrow clip (M/L) | 16×16 | 16×16 | 16×16 (bare) |
+
+**Tertiary has NO arrow circle at all.** The chevron clip sits directly in the content row — no background, no border ring, no padding wrapper. Never add a `.btn__arrow` container div to Tertiary buttons.
+
+#### DS reference nodes (Student, Default state)
+
+| Variant / Size | DS node |
+|---|---|
+| Primary/S | `1437:8154` |
+| Primary/M | `479:344` |
+| Primary/L | `473:528` |
+| Secondary/S | `1452:8292` |
+| Secondary/M | `538:1923` |
+| Secondary/L | `538:1891` |
+| Tertiary/S | `1452:8381` |
+| Tertiary/M | `538:2099` |
+| Tertiary/L | `538:2067` |
+
+**Mistake corrected (2026-05-31 audit):**
+1. **Secondary/M arrow was 18×18/1px** — this was the L Arrow spec (`showLArrow: false`, hidden by default). The R Arrow (`showRArrow: true`) is **20×20/2px**, identical in size to Primary/M.
+2. **"All sizes share 12px SemiBold"** — wrong. Size L uses **14px SemiBold** (Body/B1 lh:20). S/M use 12px (Body/B5 lh:18).
+3. **Leading icon clip is size-sensitive** — L=24×24, M/S=16×16. Previously only arrow clip size was documented as varying.
 
 ---
 
@@ -910,34 +943,37 @@ When looking up states for a component used inside a larger DS assembly (e.g. a 
 
 ---
 
-### 40. Button - 1.5 Pressed palette — confirmed live DS (May 2026, re-verified May 2026)
+### 40. Button - 1.5 Pressed palette — Primary ≠ Secondary/Tertiary (authoritative: design.color.md §6.1, 2026-05-28)
 
-All variants (Primary, Secondary, Tertiary) share the **same Pressed state palette** — **Primary/focus mid-green**, NOT the Tertiary dark-teal that was previously documented. The dark-teal palette (`#00564c`) was a documentation error; the live DS has always resolved Pressed to `Surface/primary/focus`.
+Pressed state **differs by variant**. Primary uses intensified-green; Secondary and Tertiary use dark teal.
 
-**Confirmed Pressed state — all variants, Student type (re-verified May 2026 from live DS):**
+**Confirmed Pressed state — Student type (design.color.md §6.1, live-verified 2026-05-28):**
 
-| Property | Token | Hex |
-|---|---|---|
-| Button background | `Surface/primary/focus` | `#00a36a` |
-| Button border | `Border/primary/default` | `#00cc85` |
-| Label / icon | `Text/primary/default` / `Icon/primary/default` | `#00cc85` |
-| Arrow bg (if shown) | `Surface/primary/default` | `#00cc85` |
-| Arrow chevron | `Icon/primary/focus` | `#00a36a` |
+| Variant | BG | BG Token | Border | Border Token | Label |
+|---|---|---|---|---|---|
+| **Primary** (S/M/L) | `#00a36a` | `Surface/primary/focus` | `#00cc85` | `Border/primary/default` | `#00cc85` |
+| **Secondary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
+| **Tertiary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
 
-This applies to: `Primary/S` (1437:8138), `Primary/M` (479:326), `Secondary/M` (538:1907), `Tertiary/L` (3029:20022).
+**Key DS nodes:** Primary/L Pressed = `473:650`; Secondary/M Pressed = `538:1907`; Tertiary/L Pressed = `3029:20022`.
 
 **CSS pattern:**
 ```css
-.btn:active,
-.btn.is-pressing {
-  background:   var(--surface-primary-focus);   /* #00a36a */
-  border-color: var(--border-primary-default);  /* #00cc85 */
+/* Primary */
+.btn-primary:active, .btn-primary.is-pressing {
+  background:   var(--surface-primary-focus);    /* #00a36a */
+  border-color: var(--border-primary-default);   /* #00cc85 */
 }
-.btn:active .btn__label { color: var(--text-primary-default); }   /* #00cc85 */
-/* Arrow chevron — use --surface-primary-focus (#00a36a), same hex as Icon/primary/focus */
+/* Secondary / Tertiary */
+.btn-secondary:active, .btn-secondary.is-pressing {
+  background:   var(--surface-tertiary-default); /* #00564c */
+  border-color: var(--border-tertiary-focus);    /* #00453d */
+}
+/* Label — same for all variants */
+.btn:active .btn__label, .btn.is-pressing .btn__label { color: var(--text-primary-default); } /* #00cc85 */
 ```
 
-**Previous documentation error:** An earlier session documented Pressed as `Surface/tertiary/default` (#00564c) / `Border/tertiary/focus` (#00453d). This was wrong. The error propagated into code and was corrected by re-fetching live `get_variable_defs` on every state node (May 2026 audit). Always re-verify from live DS — never trust previously written colour notes for state tokens.
+**Documentation history (do not re-open — resolved):** This value was documented incorrectly multiple times across sessions. Rule 40 was rewritten twice — once to "all dark teal", once to "all #00a36a". The `design.color.md §6.1` audit (2026-05-28, nodes 473:650 + 538:1907 + 3029:20022) is the most recent direct DS query and is the authoritative final answer. Do not change these values without a fresh `get_variable_defs` with an explicit date stamp.
 
 ---
 
@@ -1137,29 +1173,48 @@ Step 6:  Validate                 → compare against get_screenshot
 ## Variable collections — actual state after Fix 1 + Fix 2
 
 > **Note:** Actual collection names differ from earlier audit estimates. Counts below are from live file read.
+> **Last full audit: 2026-06-02** — See Rule 217 for the complete change log.
 
-#### Primitives (429 vars, 1 mode: Value) — formerly called "Atomic"
-- Colors: Grey (50–950), Orange, Red, OG-Green, Blue, Pink, Yellow, Purple, Lime, Teal, Sky, Neon, Green, Slate, Foundation, Vanilla, Minion, Azure, Mustard, Subject/* palettes
+#### Primitives (478 vars, 1 mode: Value) — formerly called "Atomic"
+- Colors: Grey (50–950), Orange, Red, OG-Green, Blue, Pink, Pink-Secondary, Pink-Tertiary, Yellow, Purple, Lime, Teal, Sky, Neon, Green, Slate, Foundation, Butter, Minion, Azure, Pumpkin, Gold, Silver, Bronze, Subject/* palettes
+- **⚠️ "Vanilla" renamed → Butter | "Mustard" renamed → Pumpkin** — any `--vanilla-*` / `--mustard-*` CSS vars are invalid
+- **New palettes (2026-06-02):** Gold/100–900, Silver/100–900, Bronze/100–900 (medals); Pink-Secondary/50–900, Pink-Tertiary/50–900 (Teacher role states); Butter/100–900, Pumpkin/100–900 (renamed from Vanilla/Mustard)
+- **New Foundation vars:** `Foundation/white 50`, `Foundation/black 50`, `Foundation/slate` (#444a56)
 - Scale/0–1k: spacing raw values (0, 1, 2, 4, 8, 12, 16, 18, 20, 24, 28, 60, 108, 999)
 - Corner Radius/xs–circle, pill, pill, lg, xxl, xxxl
 - Typeface: Font Family, Font Weight, Font Size (50–900), Line Height (50–800)
 - Border Width: xs, sm, md, lg
 - Scopes fixed: colors → `FRAME_FILL SHAPE_FILL TEXT_FILL STROKE_COLOR EFFECT_COLOR`, Scale → `GAP WIDTH_HEIGHT PARAGRAPH_SPACING`, Radius → `CORNER_RADIUS`, Font Size → `FONT_SIZE`, Line Height → `LINE_HEIGHT`, Font Family → `FONT_FAMILY`, Font Weight → `FONT_STYLE`
 
-#### Semantic (255 vars + 22 new = 277 vars, 2 modes: Light / Dark)
+#### Semantic (329 vars, 2 modes: Light / Dark) — was 277; +52 added 2026-06-02
 - Color groups: Text/*, Icon/*, Surface/*, Border/*, Overlay/* — scopes set per group
-- **New float aliases added (Fix 2):**
+- **New `Subjects/*` namespace (2026-06-02):** Semantic wrappers for all 18 subject badge colors. 5 states each: `default`, `default-hover`, `default-subtle`, `default-subtle-hover`, `focus`. Can replace raw hex values in subject badge CSS.
+- **New state variants:** Additional `-hover` and `-subtle-hover` sub-tokens added across Text, Icon, Surface, Border groups.
+- **Float aliases added (Fix 2):**
   - `Spacing/component/none–2xl` → aliases into Primitives Scale/*
   - `Spacing/layout/sm–xl` → aliases into Primitives Scale/*
   - `Radius/none–full` → aliases into Primitives Corner Radius/*
 
-#### Product (174 vars, 3 modes: Student / Teacher / Parent)
+#### Product (174 vars, 3 modes: Student / Teacher / Parent) — unchanged
 - Primary, Secondary, Tertiary (50–900), Success, Alert, Warning, Informative, Neutral
 - Spacing/space-none → space-3xl, Border Width, Corner Radius, Overlay, Font/* tokens
 - ALL_SCOPES removed — correct scopes assigned per type
 
-#### Responsives (if present)
-- Check file directly — not loaded during this session
+#### Responsives (64 vars, 3 modes: Desktop / Tablet / Mobile) — confirmed 2026-06-02
+- **Frame widths:** Desktop=1440px, Tablet=687px, Mobile=390px
+- **Grid:**
+  | | Desktop | Tablet | Mobile |
+  |---|---|---|---|
+  | Columns | 12 | 8 | 4 |
+  | Content width | 1320px | 623px | 358px |
+  | Column width | 95.33px | 64px | 83.5px |
+- **Typography vars:** 3 tokens per style (Size, LineHeight, Weight). `Heading/*` and `Title/*` change across breakpoints. `Body/*` and `Caption/*` are identical across all 3 modes (no breakpoint change) — confirms Rule 33.
+- **Heading breakpoints confirmed:**
+  - H1: Desktop=28px → Tablet=24px → Mobile=20px
+  - H2: Desktop=24px → Tablet=24px → Mobile=20px
+  - H3: Desktop=24px → Tablet=20px → Mobile=20px
+  - H4: Desktop=20px → Tablet=20px → Mobile=18px
+  - T4/T5: Desktop=16px → Mobile=14px
 
 ### Text styles — 21 (Poppins)
 ```
@@ -1460,11 +1515,11 @@ try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 - Description: `Body/B1` — Poppins SemiBold 14px, `line-height: 20px`, `Text/default/heading #404040`
 - Two cards side by side: `display: flex; gap: var(--spacing-space-m)` (16px)
 
-**Button inside Static Card — Primary/M states (node 473:529) — re-confirmed 2026-05-19:**
+**Button inside Static Card — Primary/M states (node 473:529) — re-confirmed 2026-05-19. Label updated 2026-05-24 (Rule 154):**
 
 | State | btn bg | border | label | arrow bg | arrow chevron |
 |---|---|---|---|---|---|
-| Default | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` |
+| Default | `#00cc85` | `#00a36a` | `#ffffff` | `#99ebce` | `#00a36a` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` |
 | Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` |
@@ -1492,11 +1547,11 @@ try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 
 **Button - 1.5 (Primary/S, Type=Student) inside Quiz Card — confirmed May 2026:**
 - Button: `max-height: 24px`, `px: 8px`, `py: 2px`, `border-radius: 60px` (pill)
-- Text slot: `px: 4px`, font `Body/B5` (Poppins SemiBold 12px, line-height 18px), color `Text/primary/on-color #e1f9ea`
+- Text slot: `px: 4px`, font `Body/B5` (Poppins SemiBold 12px, line-height 18px), color `Text/primary/on-color #ffffff` (updated 2026-05-24, was `#e1f9ea` — Rule 154)
 - Arrow: 16×16 circle (`bg: #99ebce`, `border-radius: 60px`, `padding: 2px`) → 12×12 clip (NO padding) → `ic-chevron-btn`
 - Arrow chevron: `#00a36a` (`Surface/primary/focus`) — from arrow clip sub-node, not parent button
 - **Symbol:** `ic-chevron-btn` — `viewBox="0 0 12 12"`, path `M4.5 9L7.5 6L4.5 3`, DS node `1437:8161`
-- **All states:** see Rule 19. Pressed uses Tertiary palette (`#00564c`), not Primary/focus (`#00a36a`).
+- **All states:** see Rule 117. Pressed bg = `#00a36a` (`Surface/primary/focus`) per Rule 40/117 audit. ⚠️ Rule 171 documents a different finding (#00564c for Secondary/Tertiary) — pending live DS re-verification to settle the contradiction.
 
 **Subject badge icons (18 subjects) — confirmed May 2026:**
 All sourced from `🔰 Iconography` page via `exportAsync({ format: 'SVG_STRING' })`. See Rule 17.
@@ -1506,7 +1561,7 @@ Badge icon CSS: `width: 16px; height: auto; max-height: 20px` constrains all sub
 - Cards rendered as tall vertical columns. Fixed by: explicit `flex-direction: row` + `width: 148px` on image div + `<div>` placeholder instead of `<img>`
 - Button used `Outline/arrow-right` (→) — actual DS uses `Outline/chevron-right` (›). Always confirm icon from DS context.
 - Arrow clip had `padding: 3px 4.5px` — stroke collapsed to 0.56px. Correct: no padding, use `ic-chevron-btn`.
-- Pressed state used `Surface/primary/focus` (#00a36a) for bg and `Text/primary/on-color` (#f6fdfb) for label — both wrong. DS Pressed = `Surface/tertiary/default` (#00564c) bg + `Text/primary/default` (#00cc85) label (see Rule 19).
+- Pressed state initially used `Text/primary/on-color` (#f6fdfb) for label — wrong. Correct = `Text/primary/default` (#00cc85). Pressed bg = `Surface/primary/focus` (#00a36a) for Primary — **resolved 2026-05-31** (see Rule 40, design.color.md §6.1).
 - Queried wrong DS node `1644:11342` (Type=Teacher) instead of `1437:8154` (Type=Student) — led to thinking Student=pink. Always verify the `Type=` variant name before trusting variable defs.
 
 ---
@@ -3288,7 +3343,7 @@ Any `<button>` used as the outer wrapper for a DS action icon component (e.g. `N
 
 This rule stated that the Nav Button - 1.5 Active icon color = `Text/primary/on-color` (`#f6fdfb`). **This was wrong.** It was derived from the standalone `Nav Button - 1.5/Active` VECTOR node (`3908:6163`), which is not a variant of the COMPONENT_SET (`3908:6148`). The COMPONENT_SET is the canonical reference.
 
-**Correct value:** `Icon/primary/on-color` = `#e1f9ea` (confirmed from the COMPONENT_SET Active variant via `get_variable_defs` on `4389:165880`, May 2026).
+**Correct value:** `Icon/primary/on-color` = `#ffffff` (token changed 2026-05-24 from `#e1f9ea` → `Foundation/white`, confirmed live 2026-06-02. Rule 154 documents the update).
 
 **Root cause of error:** Inspecting a standalone `/Active` component instead of the proper COMPONENT_SET variant. The standalone node had different (incorrect) values. Always use the COMPONENT_SET as the source — never standalone named components.
 
@@ -4091,25 +4146,20 @@ At the cap: both `max-width` and `max-height` are satisfied simultaneously at th
 
 ---
 
-### Rule 117 — Button - 1.5: full confirmed state table (all variants, Student, 2026-05-19)
+### Rule 117 — Button - 1.5: full confirmed state table (all variants, Student)
 
-**Source:** DS `TLVKe3bgJTdVvuPAzgDq2f`, COMPONENT_SET `473:529`, `get_variable_defs` on every state node. Applies to all sizes (S / M / L) within each variant.
+**Source:** DS `TLVKe3bgJTdVvuPAzgDq2f`, COMPONENT_SET `473:529`. Default/Hover/Disabled from 2026-05-19 audit. **Pressed rows corrected 2026-05-31** per `design.color.md §6.1` (live-verified 2026-05-28, nodes 473:650, 538:1907, 3029:20022). See Rule 40 for the authoritative pressed palette.
 
-#### Two token corrections confirmed this audit
-
-| Token | Old (wrong) | Correct | Affects |
-|---|---|---|---|
-| `Text/primary/on-color` | `#f6fdfb` | **`#e1f9ea`** | Default + Active label/icon on all Primary buttons |
-| Pressed bg (all variants) | `#00564c` (dark teal) | **`#00a36a`** | Was wrong in docs; HTML was already correct |
+> ✅ **Re-verified 2026-05-31 via `get_design_context` on `538:1907`:** Secondary Pressed = `#00a36a` (`Surface/primary/focus`), same as Primary. The 2026-05-28 audit that changed it to `#00564c` was wrong. Only Tertiary uses `#00564c`.
 
 #### Primary (S / M / L) — Student
 
 | State | btn bg | border | label/icon | arrow bg | arrow chevron | node (M) |
 |---|---|---|---|---|---|---|
-| Default | `#00cc85` | `#00a36a` | **`#e1f9ea`** | `#99ebce` | `#00a36a` | `479:344` |
+| Default | `#00cc85` | `#00a36a` | `#ffffff` | `#99ebce` | `#00a36a` | `479:344` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` | `479:335` |
-| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` | `479:326` |
-| Active | `#00cc85` | `#00a36a` | **`#e1f9ea`** | `#99ebce` | `#00a36a` | `3029:19929` |
+| **Pressed** | **`#00a36a`** | **`#00cc85`** | **`#00cc85`** | `#00cc85` | `#00a36a` | `479:326` |
+| Active | `#00cc85` | `#00a36a` | `#ffffff` | `#99ebce` | `#00a36a` | `3029:19929` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | — | `#bfbfbf` | `479:317` |
 
 #### Secondary (S / M / L) — Student
@@ -4118,8 +4168,8 @@ At the cap: both `max-width` and `max-height` are satisfied simultaneously at th
 |---|---|---|---|---|
 | Default | `#ffffff` | `#00cc85` | `#00cc85` | `538:1923` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `538:1915` |
-| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `538:1907` |
-| Active | `#00cc85` | `#00a36a` | **`#e1f9ea`** | `3029:19996` |
+| **Pressed** | **`#00564c`** | **`#00453d`** | **`#00cc85`** | `538:1907` |
+| Active | `#00cc85` | `#00a36a` | `#ffffff` | `3029:19996` |
 
 #### Tertiary (S / M / L) — Student
 
@@ -4127,8 +4177,10 @@ At the cap: both `max-width` and `max-height` are satisfied simultaneously at th
 |---|---|---|---|---|
 | Default | `#ffffff` | transparent | `#666666` | `538:2067` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `538:2059` |
-| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `3029:20022` |
-| Active | `#00cc85` | `#00a36a` | **`#e1f9ea`** | `538:2051` |
+| **Pressed** | **`#00564c`** | **`#00453d`** | **`#00cc85`** | `3029:20022` |
+| Active | `#00cc85` | `#00a36a` | `#ffffff` | `538:2051` |
+
+> **Tertiary arrow anatomy (confirmed 2026-05-31):** Tertiary has **no arrow circle**. The `showRArrow` chevron is a bare `overflow-clip` div placed directly in the content row — no bg fill, no border ring, no padding wrapper. `border: transparent` in Default state means the button body also has no border. Tertiary is structurally the simplest variant. See Rule 202.
 
 #### State=Active — what it is and when to use it
 
@@ -4137,7 +4189,7 @@ At the cap: both `max-width` and `max-height` are satisfied simultaneously at th
 **CSS mapping:**
 ```css
 .btn.is-active { background: var(--surface-primary-default); border-color: var(--border-primary-focus); }
-.btn.is-active .btn__label { color: var(--text-primary-on-color); }  /* #e1f9ea */
+.btn.is-active .btn__label { color: var(--text-primary-on-color); }  /* #ffffff — Rule 154 */
 ```
 
 Not all buttons on the home screen need `.is-active` — only those that represent the user's current selection.
@@ -4157,7 +4209,7 @@ Not all buttons on the home screen need `.is-active` — only those that represe
 | Default | `Surface/general/default` | `#ffffff` | none | — | `Icon/default/default` | `#808080` |
 | Hover | `Surface/secondary/default-subtle` | `#e8fbe8` | `Border/primary/default` | `#00cc85` | `Icon/primary/default` | `#00cc85` |
 | Pressed | `Surface/primary/focus` | `#00a36a` | `Border/primary/default` | `#00cc85` | `Icon/primary/default` | `#00cc85` |
-| Active | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` | `#00a36a` | `Icon/primary/on-color` | `#e1f9ea` |
+| Active | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` | `#00a36a` | `Icon/primary/on-color` | `#ffffff` |
 
 #### CSS implementation
 
@@ -4185,7 +4237,7 @@ Not all buttons on the home screen need `.is-active` — only those that represe
 .nav-btn-icon-clip svg                       { color: var(--icon-default-default); }   /* #808080 */
 .navbar-action-btn:hover  .nav-btn-icon-clip svg { color: var(--icon-primary-default); }  /* #00cc85 */
 .navbar-action-btn:active .nav-btn-icon-clip svg { color: var(--icon-primary-default); }  /* #00cc85 */
-.navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--icon-primary-on-color); } /* #e1f9ea */
+.navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--icon-primary-on-color); } /* #ffffff */
 ```
 
 **`box-shadow: inset` rule:** Use `inset 0 0 0 1px` instead of `border` — prevents 2px layout shift when border appears on hover/active. Never use `border:` on the rect.
@@ -4200,7 +4252,7 @@ The DS COMPONENT_SET `State=Active` variant is a **plain rounded square** — no
 
 | What was wrong | Correct value |
 |---|---|
-| `--icon-primary-on-color: #f6fdfb` | `#e1f9ea` (`Icon/primary/on-color`) |
+| `--icon-primary-on-color: #f6fdfb` or `#e1f9ea` | `#ffffff` (`Icon/primary/on-color`, `Foundation/white` — Rule 154) |
 | Active rect `background: transparent; box-shadow: none` | `Surface/primary/default` + `Border/primary/focus` inset shadow |
 | Active icon `color: var(--text-primary-on-color)` | `color: var(--icon-primary-on-color)` |
 | Speech-bubble `nav-btn-union-bg` shown on Active | Removed — not in COMPONENT_SET Active variant |
@@ -4452,7 +4504,7 @@ This is the "Download App" button in the Nav Menu Tablet CTA. It is a **larger v
 | Gap | 0 | No gap between Content and R Arrow |
 | Fill | `#00cc85` | `var(--surface-primary-default)` |
 | Stroke | `#00a36a` INSIDE | `box-shadow: inset 0 0 0 1px var(--border-primary-focus)` (Rule 60) — NEVER `border:` |
-| Text+icon color | **`#e1f9ea`** | `var(--icon-primary-on-color)` — NOT `--text-primary-on-color` (#f6fdfb) |
+| Text+icon color | **`#ffffff`** | `var(--icon-primary-on-color)` — NOT `--text-primary-on-color`. Token updated 2026-05-24 (Rule 154) from `#e1f9ea` → `#ffffff`. |
 | Icon | 24×24 frame, 20×20 smartphone (2px inset) | Icon container: `width:24px; height:24px; align-items:center; justify-content:center` |
 | Label padding | `0 8px` | DS Label frame: `pad l:8 r:8` |
 | R Arrow | 24×24, fill `#99ebce`, pad 4px | chevron `#00a36a` (`var(--border-primary-focus)`) |
@@ -4466,7 +4518,7 @@ This is the "Download App" button in the Nav Menu Tablet CTA. It is a **larger v
   background: var(--surface-primary-default);
   border: none; box-shadow: inset 0 0 0 1px var(--border-primary-focus);
   border-radius: var(--corner-radius-corner-rounded);
-  color: var(--icon-primary-on-color); /* #e1f9ea */
+  color: var(--icon-primary-on-color); /* #ffffff — Rule 154 */
   font-size: 14px; font-weight: 600; gap: 0;
 }
 .nav-menu-cta__btn-icon     { width:24px; height:24px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
@@ -4478,7 +4530,7 @@ This is the "Download App" button in the Nav Menu Tablet CTA. It is a **larger v
 **Mistakes made (2026-05-21):**
 - `max-height: 48px` instead of `height: 40px`
 - `border: 1px solid` instead of `box-shadow: inset` (Rule 60)
-- `color: var(--text-primary-on-color)` (#f6fdfb) instead of `var(--icon-primary-on-color)` (#e1f9ea) — different tokens, different values
+- `color: var(--text-primary-on-color)` instead of `var(--icon-primary-on-color)` — wrong semantic token; current correct value is `#ffffff` for both (Rule 154), but always use the icon-specific token for icon-colored text
 - `gap: 8px` between items — DS gap:0; spacing comes from label's internal `padding: 0 8px`
 - `flex:1 0 0` on text pushing icon left and arrow right — DS uses CENTER grouping, no growing text
 - `justify-content: flex-end` on arrow — DS uses center
@@ -5909,7 +5961,7 @@ Standard pattern for an element that opens on button click and auto-closes after
 > This is the most important rule in this file. Skip it and you will reproduce a mistake that has already been made.
 
 ```
-Step 0a → Read design-md/zul.design.md          ← ALL rules 1–151 + confirmed specs
+Step 0a → Read design-md/zul.design.md          ← ALL rules 1–211 + confirmed specs
 Step 0b → Open DS: TLVKe3bgJTdVvuPAzgDq2f       ← SINGLE SOURCE OF TRUTH. Not memory. Not docs.
 Step 0c → Audit component anatomy (Rules 49, 93):
            - use_figma: find the COMPONENT SET → list ALL variants by name
@@ -5920,7 +5972,10 @@ Step 0d → For spacing/positioning: read DS screen frame y-coords (Rules 94–9
 Step 0e → get_variable_defs on exact sub-nodes for every fill/stroke/spacing (Rule 12)
 Step 0f → Cross-check CSS variable value against :root before using it (Rule 83)
 Step 0g → For icons: confirm viewBox, path scale, AND CSS dimensions (Rule 87)
-Step 0h → get_screenshot after implementation → compare against DS side-by-side
+Step 0h → For assets: check src/image-repo/[page]/assets/main/[ComponentName]/ first (Rule 211)
+           - grep HTML for existing src= paths before assuming any asset is missing
+           - inline SVG <symbol> defs stay in HTML; external <img src> go in image-repo
+Step 0i → get_screenshot after implementation → compare against DS side-by-side
 ```
 
 ---
@@ -6630,14 +6685,14 @@ When a Figma auto-layout parent has `crossAlign: CENTER` (`align-items: center`)
 
 ---
 
-### Rule 168. Static Card - 1.5 — full confirmed DS specs (updated 2026-05-27)
+### Rule 168. Static Card - 1.5 — full confirmed DS specs (updated 2026-05-29)
 
 **DS file:** `TLVKe3bgJTdVvuPAzgDq2f`, `⚙️ Cards` page, component set `Static Card - 1.5`.
 
-**Card outer:** `height: 220px`, `border: 1px solid #00cc85`, `border-radius: 24px`, `overflow: hidden`, `display: flex`, `background: white`.
+**Card outer:** `height: 220px`, `border: 1px solid #00cc85` (strokeAlign INSIDE), `border-radius: 24px`, `overflow: hidden`, `display: flex`, `background: white`.
 
-**Content frame (outer, node `2616:2959`):**
-- `layoutMode: HORIZONTAL`, `gap: 12px`
+**Content frame (outer — same node as card outer):**
+- `layoutMode: HORIZONTAL`, **`gap: 0`** ← was 12px, corrected 2026-05-29
 - `align-items: center` (crossAlign: CENTER), `justify-content: flex-end` (mainAlign: MAX)
 - `padding: 0` — all padding lives in the child columns
 
@@ -6645,33 +6700,35 @@ When a Figma auto-layout parent has `crossAlign: CENTER` (`align-items: center`)
 
 **Image column (`Vector` frame):**
 - `layoutMode: VERTICAL` → CSS: `flex-direction: column`
-- `szH: HUG` → width determined by content + padding
-- `szV: FILL` → `align-self: stretch`
-- `padding: t:60 r:0 b:60 l:28` (user-adjusted left from DS 60px → 28px for 3-col prototype layout)
+- **`szH: FILL`** → `flex: 1 0 0` (equal 50% column split with right-col) ← was HUG, corrected 2026-05-29
+- **`szV: HUG`** → `align-self: center; height: auto` (hugs at 186px = 130px + 28+28 padding, centred in 220px card) ← was FILL, corrected 2026-05-29
+- `padding: 28px` all sides (DS: Spacing/component/2xl)
 - `align-items: flex-start` (crossAlign: MIN), `justify-content: center` (mainAlign: CENTER)
 
 **Illustration (inside img-col):**
-- `szH: FIXED` → `width: 100px`
-- `szV: FILL` → `flex: 1 0 0; min-height: 1px` (fills 220−60−60 = 100px)
+- `szH: FILL` with `maxWidth: 130` → `width: 130px; max-width: 130px; flex: none` (see Rule 186 for full spec)
+- `szV: FIXED` → `height: 130px; max-height: 130px`
 - `overflow: hidden`; image inside: `width: 100%; height: 100%; object-fit: contain`
 
 **Right column (`Content` frame, inner):**
 - `szH: FILL` → `flex: 1 0 0; min-width: 0`
 - `szV: FILL` → `align-self: stretch`
-- `layoutMode: VERTICAL`, `align-items: flex-end` (crossAlign: MAX), `justify-content: center` (mainAlign: CENTER)
-- `gap: 12px`
-- Padding (user-adjusted from DS 60px → 28px for prototype):
-  - Primary / Tertiary: `padding-right: 28px`
-  - Secondary: `padding: 0 28px`
-- Per-variant gradient (DS update applied by user 2026-05-27):
+- `layoutMode: VERTICAL`, `align-items: flex-end` (crossAlign: MAX)
+- **`justify-content: flex-start`** (mainAlign: MIN) ← was CENTER, corrected 2026-05-29
+- `gap: 16px` (Spacing/component/md)
+- `padding: 28px` all sides (DS: Spacing/component/2xl)
+- Per-variant gradient (DS confirmed):
   - Primary: `linear-gradient(to right, rgba(255,255,201,0) 0%, var(--accents-butter) 40%)`
   - Secondary: `linear-gradient(to right, rgba(246,254,246,0) 0%, var(--surface-secondary-default-hover) 39.9%)`
   - Tertiary: no gradient
 
+**CTA frame (inside right-col):**
+- `szV: FILL` → `flex: 1 0 0` — fills remaining height so button anchors to bottom via own `justify-content: flex-end`
+
 **Variant backgrounds (on content frame):**
 - Primary: `background: var(--butter-400)` = `#ffffd4`
 - Secondary: `background: var(--surface-secondary-default-hover)` = `#f6fef6`
-- Tertiary: `background: var(--surface-subtle)` = `#F8FAFC`
+- **Tertiary: `fills: IMAGE`** ← was `#F8FAFC` solid, changed to IMAGE fill in DS, corrected 2026-05-29. CSS: `background: none` + `background-image` when asset is ready.
 
 **New CSS variable:**
 ```css
@@ -6680,16 +6737,18 @@ When a Figma auto-layout parent has `crossAlign: CENTER` (`align-items: center`)
 
 **Mobile overrides (`@media (max-width: 767px)`):**
 ```css
-.static-card__img-col                       { padding: 16px 0 16px 16px; }
-.static-card--primary   .static-card__right { padding-right: 16px; }
-.static-card--secondary .static-card__right { padding: 0 16px; }
-.static-card--tertiary  .static-card__right { padding-right: 16px; }
+.static-card__img-col  { padding: 14px; }
+.static-card__right    { padding: 14px; }
 ```
 
-**Mistakes made (2026-05-27):**
-1. Set `flex-direction: row` (default) on img-col — DS is VERTICAL. `flex: 1 0 0` on illustration grew horizontally without bound. Fix: `flex-direction: column` on img-col.
+**Mistakes made (2026-05-27 → 2026-05-29):**
+1. Set `flex-direction: row` (default) on img-col — DS is VERTICAL. Fix: `flex-direction: column`.
 2. Did not add `align-self: stretch` on right-col — parent `align-items: center` prevented gradient from filling full card height.
-3. Used 60px padding throughout — prototype uses 28px left/right for better proportions in 3-column grid.
+3. `gap: 12px` on content frame — DS is `0`. Visual separation comes entirely from 28px column padding.
+4. `szH: HUG` on img-col — DS is FILL. Both columns split width equally (`flex: 1 0 0`).
+5. `szV: FILL` on img-col — DS is HUG. img-col centres vertically at 186px; use `align-self: center`.
+6. `justify-content: center` on right-col — DS is MIN (flex-start). CTA fills remaining space via `flex: 1 0 0`.
+7. `background: var(--surface-subtle)` on Tertiary — DS now uses IMAGE fill, not a solid colour. Note: `--surface-subtle` is also not a DS token (confirmed 2026-05-30) — never use it for any surface, including page background.
 
 ---
 
@@ -7481,7 +7540,12 @@ This is a hard rule without exceptions. Every mistake documented in Rules 1–19
 □ 6. get_variable_defs on sub-nodes → confirm Semantic token per fill/stroke/spacing
 □ 7. Cross-check CSS var against :root hex → never guess token from name alone (Rules 83, 191)
 □ 8. For icons: confirm viewBox + path scale + CSS dimensions all consistent (Rule 87)
-□ 9. get_screenshot after implementing → compare against DS, fix before moving on
+□ 9. Post-implementation QA only — see Rule 193: get_screenshot is FORBIDDEN for spec extraction.
+      If anything looks wrong, go back to steps 3–8 (node data), not the screenshot.
+□ 10. For asset exports (illustrations, graphics): use exportAsync ONLY — never node.screenshot() or
+       get_screenshot. Both composite onto canvas background (#1e1e1e), destroying transparency (Rule 194).
+□ 11. Scope check — does the task require exploration steps? If task is a direct export/save, skip steps 3–8
+       and go straight to the action. Match scope to what was requested (Rule 196).
 ```
 
 **What to NEVER do:**
@@ -7490,6 +7554,9 @@ This is a hard rule without exceptions. Every mistake documented in Rules 1–19
 - Use `--radius-xl` (8px) for Primary Card inner — it is the Nav Button radius (Rule 190)
 - Guess token px value from suffix alone — Primitive `xl` ≠ Product `XL` in the corner radius scale (Rule 191)
 - Approximate any hover/pressed/active state — always pull via `get_design_context` on the COMPONENT_SET
+- **Use `get_screenshot` to determine any design value — this is now prohibited (Rule 193)**
+- **Use `node.screenshot()` or `get_screenshot` to export any asset — transparency is destroyed (Rule 194)**
+- **Add unnecessary exploration steps when the task is a simple direct action (Rule 196)**
 
 **When the user reports a value is wrong:**
 1. Immediately open DS (`TLVKe3bgJTdVvuPAzgDq2f`) and run `get_design_context` on the exact node
@@ -7499,4 +7566,1124 @@ This is a hard rule without exceptions. Every mistake documented in Rules 1–19
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-28 (Rules 185–189 — DS size class vs instance size, get_design_context available-space limitation, instance vs master component, Static Card illustration corrected to 130×130px) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 193. Screenshots are PROHIBITED for spec extraction — use DS node inspection only (Dev Mode equivalent)
+
+> **"Stop using screenshots and instead pull component design nodes from Figma DS, fetch 1:1 from there. Understand Component Instances, Variants, and properties accurately. Always capture nodes in Dev Mode."**
+> — Explicit user instruction, 2026-05-29
+
+`get_screenshot` returns a rasterised image — pixel colours on a screen. It does **not** contain:
+- Semantic variable names (`Surface/primary/default`, `Border/tertiary/focus`, …)
+- Exact padding, gap, or `strokeAlign` values
+- Corner radius token paths
+- Font weight, line-height, or letter-spacing details
+- Whether a value is variable-bound or hardcoded
+
+**Using a screenshot to determine any design value is identical to guessing.** Every mistake documented in Rules 1–192 that came from "approximating" a value ultimately traces back to reading a visual instead of reading node data.
+
+---
+
+#### Mandatory node inspection sequence — what to use instead of screenshots
+
+| Information needed | Tool + call |
+|---|---|
+| Component variants and layout | `get_design_context(nodeId)` on the **COMPONENT_SET** node |
+| State tokens (hover, pressed, active, disabled) | `get_design_context(nodeId)` on each **STATE VARIANT** node |
+| Semantic variable name per fill/stroke/spacing | `get_variable_defs(nodeId)` on the **exact sub-node** |
+| Raw dimensions, padding, strokeAlign, radius px | `use_figma` → `findOne(n => n.id === 'nodeId')` → read `.paddingTop/Right/Bottom/Left`, `.strokeAlign`, `.strokeWeight`, `.cornerRadius`, `.width`, `.height` |
+| Layout direction and sizing mode | `use_figma` → `.layoutMode` (`VERTICAL`/`HORIZONTAL`/`NONE`), `.primaryAxisSizingMode`, `.counterAxisSizingMode` |
+| Children order, nesting, visibility | `use_figma` → `.children` array → read `.name`, `.type`, `.visible` per child |
+| Instance vs master dimensions | `use_figma` → query `parent.children[index]` for the INSTANCE node — never the master component (Rule 77) |
+| Variable value → CSS hex | `get_variable_defs` → read `resolvedValue` in the Semantic collection (Light mode) |
+| Icon paths and viewBox | `use_figma` → `exportAsync({ format: 'SVG_STRING' })` on the exact icon node |
+
+**Dev Mode equivalence:** In Figma Dev Mode, you click a node and read all properties from the right panel — padding, fills with variable names, effects, radius. The tools above are the programmatic 1:1 equivalent of Dev Mode. They are exact and authoritative. A screenshot is neither.
+
+---
+
+#### The ONLY permitted use of `get_screenshot`
+
+After implementation is fully coded, call `get_screenshot` on the DS component node as a **final visual sanity check** — confirming overall shape, proportion, and visible structure. This is QA, not spec extraction.
+
+If anything looks wrong at this stage, go back to `get_design_context` / `use_figma` / `get_variable_defs` to diagnose from data — never fix from the screenshot by eyeballing pixel colours or estimating spacing.
+
+---
+
+#### Mistake patterns this rule eliminates
+
+```
+❌ "The screenshot shows the button as dark green so I used #1a6e4a"
+   → Run get_variable_defs on the button node. Read Surface/primary/focus = #00a36a.
+
+❌ "The padding looks like 12px from the screenshot"
+   → Run use_figma → read .paddingLeft. Read the exact px value.
+
+❌ "Hover state appears slightly lighter"
+   → Run get_design_context on the Hover variant node. Read the exact token.
+
+❌ "The border seems thin so I used 1px"
+   → Run use_figma → read .strokeWeight and .strokeAlign. Implement from data.
+
+❌ "I can see the border-radius looks rounded so approximately 16px"
+   → Run use_figma → read .cornerRadius or the bound variable. Read the exact value.
+```
+
+---
+
+#### Summary
+
+```
+get_screenshot     → rasterised visual → FORBIDDEN for spec extraction
+                   → permitted ONLY for post-implementation visual QA
+
+get_design_context → structured component data   → REQUIRED for variants / layout / tokens
+use_figma          → raw node properties (1:1)   → REQUIRED for dimensions / strokeAlign / children
+get_variable_defs  → Semantic variable names      → REQUIRED for token-to-CSS mapping
+exportAsync SVG    → exact icon geometry          → REQUIRED for icon paths / viewBox
+```
+
+**This rule supersedes any prior workflow step that implied using `get_screenshot` for design understanding.** Rule 192 pre-flight step 9 is retained only as post-implementation QA.
+
+---
+
+### Rule 194. `exportAsync` for PNG assets — NEVER use `node.screenshot()` or `get_screenshot`
+
+`node.screenshot()` and `get_screenshot` **composite onto the Figma canvas background** (`#1e1e1e` dark grey). Any transparent area in the asset becomes near-black pixels (R=30, G=30, B=30, A=255) — the transparency is destroyed. The resulting PNG has a black background regardless of what the original asset looks like.
+
+**Rule:** For any asset export — illustrations, graphics, icons with fills — always use `exportAsync`:
+
+```js
+const bytes = await node.exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 2 } });
+```
+
+`exportAsync` respects the node's actual fill/background — transparent nodes export with A=0 alpha.
+
+**Confirmed instance (2026-05-29):** `Graphic/P.LiveTuition` (node `5436:35577`) exported via `get_screenshot` produced a solid black-background PNG (14,505 bytes corrupted). Exported via `exportAsync` at 1× produced a clean transparent-background PNG (13,764 bytes, A=0 corners confirmed).
+
+**Verification after export:**
+- Corner pixels must have A=0 for transparent assets
+- PNG color type 6 = RGBA (has alpha) — confirm with hex editor if needed
+
+**`node.screenshot()` is permitted ONLY for post-implementation QA** (same restriction as `get_screenshot` — Rule 193). Never for asset export.
+
+**See also:** Rule 50 (complex illustrated icons → 2× PNG), Rule 193 (screenshots forbidden for spec extraction).
+
+---
+
+### Rule 195. Large PNG base64 export — split into halves, write to temp files, decode in PowerShell
+
+The Write tool truncates at ~9,000–10,000 characters. A 1× PNG export from a medium illustration produces ~18,000+ base64 characters — too large for a single Write call.
+
+**Pattern:**
+
+```js
+// use_figma — export and split
+const bytes = await node.exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 1 } });
+let bin = '';
+for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+const b64 = btoa(bin);
+const mid = Math.floor(b64.length / 2);
+return { total: b64.length, h1: b64.slice(0, mid), h2: b64.slice(mid) };
+```
+
+```
+1. Write h1 → C:\...\Temp\asset_h1.txt
+2. Write h2 → C:\...\Temp\asset_h2.txt
+```
+
+```powershell
+# PowerShell — concatenate + decode + save
+$b64 = (Get-Content "C:\...\asset_h1.txt" -Raw).Trim() +
+       (Get-Content "C:\...\asset_h2.txt" -Raw).Trim()
+$bytes = [Convert]::FromBase64String($b64)
+[System.IO.File]::WriteAllBytes("C:\path\to\output.png", $bytes)
+Write-Host "Written: $($bytes.Length) bytes"
+```
+
+**Critical: write EXACT `h1`/`h2` values returned by `use_figma` — never extend or pad.** If the file size after decode does not match the expected byte count, the base64 was corrupted during the write step. Re-export and write fresh halves.
+
+**Confirmed working (2026-05-29):** Node `5436:35577` → total 18,352 chars → h1 9,176 + h2 9,176 → decoded 13,764 bytes.
+
+---
+
+### Rule 196. Simple task = direct action — no unnecessary exploration
+
+When a task is clearly scoped and self-contained (e.g. "export this node as a transparent PNG"), execute it directly:
+
+```
+1. use_figma → exportAsync
+2. Write h1, h2 to temp files
+3. PowerShell decode + save
+4. Verify byte count + corner alpha
+```
+
+Do NOT read the HTML file, check CSS rules, fetch design context, inspect component anatomy, or audit parent components unless those steps are **explicitly required by the task description**.
+
+**Over-exploration wastes time and shifts focus away from what the user actually asked for.** Every step added beyond the task scope must have a clear reason.
+
+**Rule:** Match the scope of your actions to what was actually requested. If the user says "fetch this graphic from DS as alpha PNG" — fetch, export, save. Nothing else.
+
+**Confirmed mistake (2026-05-29):** After "export node `5436:35577` as alpha PNG", read `zul.home.screen.html`, checked CSS layout, fetched design context on surrounding components — none of which were needed. User explicitly flagged this as over-complication.
+
+---
+
+### Rule 197. `start` prompt — always show sections listing for the active HTML file
+
+When the user sends the single word **`start`** (case-insensitive, with or without punctuation), immediately respond with a sections listing for the HTML file currently being worked on — before doing anything else.
+
+**Format:**
+
+```
+Sections in [filename]:
+
+| # | Section ID | Line |
+|---|---|---|
+| 1 | SectionId | NNNN |
+...
+```
+
+**How to produce it:**
+```
+grep -n "<section" <active-html-file>
+```
+Extract every `id="..."` value and its line number. Present them in document order.
+
+**Active HTML file = the file most recently discussed or edited in the session.** If ambiguous, ask the user to confirm which file before listing.
+
+**Rule:** This listing must appear at the top of the response — before any other content. Never skip it, never defer it. It is the mandatory session orientation step.
+
+---
+
+### Rule 198. Button - 1.5 action animations — no CSS transitions on any state
+
+All `Button - 1.5` instances use **instant state changes** — no `transition` on any property, on any element (container, label, arrow).
+
+**Rule:** Never add `transition` to `.btn-*`, `.btn-*__text`, `.btn-*__label`, `.btn-*__arrow`, or any child of a Button - 1.5 implementation. State changes (hover, pressed, active, disabled) must cut immediately.
+
+**Applies to every Button - 1.5 variant and size:**
+- Primary/S — `.btn-quiz-cta` (Quiz Cards)
+- Primary/M — `.static-card__btn` (Static Cards)
+- Secondary/M — `.btn-add-classes` (Section headers)
+- Any future Button - 1.5 instance
+
+**Confirmed — all existing implementations:**
+- `.static-card__btn` — no transition (reference behaviour, confirmed snappy, 2026-05-30)
+- `.btn-quiz-cta` — transitions removed (background 0.15s, border-color 0.15s, color 0.15s were wrong; corrected to instant, 2026-05-30)
+- `.btn-add-classes` container — no transition (correct)
+- `.btn-add-classes__arrow` — **transition removed 2026-05-31**: had `transition: background 0.12s ease, box-shadow 0.12s ease, color 0.12s ease`. Caused arrow to lag 120ms behind the button body on state changes — the "weird" interaction feel. Violates Rule 198 even when on a child element, not just the container.
+
+**Why:** Instant cuts feel decisive and tactile. CSS transitions on small pill buttons read as sluggish at 0.15s — the motion draws attention to itself rather than confirming the action.
+
+**Mistake made (2026-05-30):** Added `transition: background 0.15s, border-color 0.15s` to `.btn-quiz-cta` to fix an incomplete animation, then added `transition: color 0.15s` to label and `transition: background 0.15s, color 0.15s` to arrow. All removed — Button - 1.5 must always be instant.
+
+---
+
+### Rule 199. Mandatory pre-flight — ALWAYS refer to DS & zul.design.md before any design work, change, or decision
+
+> **"Always before starting any design, making any changes, or making any decisions — refer to DS and zul.design.md first."**
+> — Zul, 2026-05-30
+
+This is a standing instruction that overrides convenience, habit, or apparent obviousness. Every single action — including a one-line CSS change — must be preceded by reading the relevant rules in `zul.design.md` and verifying the value live in the DS (`TLVKe3bgJTdVvuPAzgDq2f`).
+
+**Pre-flight checklist (mandatory, no exceptions):**
+```
+□ Read zul.design.md — find every rule that applies to the component or change
+□ Open DS: TLVKe3bgJTdVvuPAzgDq2f — re-verify every value live, never from memory
+□ Check existing implementations — grep the HTML file for the component class before writing new CSS
+□ Cross-check sibling components — if changing one Button - 1.5 instance, check ALL instances for consistency
+□ Only then write code
+```
+
+**Why this failed in this session (2026-05-30):**
+When asked about animation on `.btn-quiz-cta`, the first action was to add matching transitions to child elements — without first checking whether the reference component (`.static-card__btn`) had any transitions at all. The correct pre-flight would have been: read Rule 198 (didn't exist yet, but checking the static card first would have revealed the instant-cut pattern). Adding transitions before auditing the existing behaviour created extra work.
+
+**The correct order is always:**
+1. Read zul.design.md for applicable rules
+2. Check the DS for the authoritative spec
+3. Grep existing implementations for the current pattern
+4. Then act — never before
+
+---
+
+### Rule 200. Button - 1.5 — the 3 non-negotiables for every implementation
+
+These three requirements apply to **every Button - 1.5 instance** in the prototype, without exception. Treat them as a pre-flight checklist before writing any Button - 1.5 CSS or HTML.
+
+---
+
+#### 200a. No CSS transitions on any element — ever (extends Rule 198)
+
+`transition` is prohibited on the container, label, text, icon, arrow, and arrow clip of every Button - 1.5. State changes must cut instantly.
+
+```css
+/* WRONG — any of these violates Rule 200a */
+.btn { transition: background 0.15s; }
+.btn__text { transition: color 0.12s ease; }
+.btn__arrow { transition: background 0.12s ease, box-shadow 0.12s ease; }
+
+/* CORRECT — no transition property anywhere */
+```
+
+**Why:** Instant cuts feel decisive and tactile. Any `transition` on a child element while the container has none creates a split animation — part of the button snaps, part lags — which is the exact "weird" behavior reported in May 2026 (`.btn-add-classes__arrow` had `transition: 0.12s` causing the arrow to lag 120ms behind the button body).
+
+**Checklist when implementing Button - 1.5:**
+```
+□ Base rule — no transition property
+□ :hover rule — no transition property
+□ :active / .is-pressing rule — no transition property
+□ __text / __label child — no transition property
+□ __arrow child — no transition property
+□ __arrow-clip child — no transition property
+```
+
+---
+
+#### 200b. Always pair CSS `:active` with JS `is-pressing` class (Rule 39 extended to all buttons)
+
+Every Button - 1.5 `<button>` element must have:
+1. CSS `.btn.is-pressing` with the same values as `.btn:active`
+2. JS mousedown/mouseup/mouseleave handlers toggling `.is-pressing`
+
+CSS `:active` alone is unreliable in VS Code Simple Browser (Electron-based webview). The JS class provides guaranteed pressed feedback.
+
+```js
+// Register BEFORE any try/catch blocks (Rule 14)
+document.querySelectorAll('.btn-quiz-cta, .btn-add-classes').forEach(function (btn) {
+  btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+  btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+  btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+});
+```
+
+```css
+/* Always add is-pressing alongside :active */
+.btn:active,
+.btn.is-pressing { /* pressed state styles */ }
+.btn:active .btn__text,
+.btn.is-pressing .btn__text { /* child overrides */ }
+```
+
+**Applies to every Button - 1.5 instance, including `<button>` elements.** The pattern for navbar action buttons (`.navbar-action-btn`) already follows this correctly — all new buttons must match it.
+
+---
+
+#### 200c. Pressed palette — per-variant, resolved 2026-05-31 (source: design.color.md §6.1)
+
+| Variant | Pressed bg | bg token | Pressed border | border token | Label |
+|---|---|---|---|---|---|
+| **Primary** (S/M/L) | `#00a36a` | `Surface/primary/focus` | `#00cc85` | `Border/primary/default` | `#00cc85` |
+| **Secondary** (S/M/L) | `#00a36a` | `Surface/primary/focus` | `#00cc85` | `Border/primary/default` | `#00cc85` |
+| **Tertiary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
+
+**Source:** `get_design_context` on `538:1907`, re-verified 2026-05-31. Secondary row corrected from `#00564c` → `#00a36a`.
+
+**Key nodes:** Primary/L Pressed `473:650` (bg `#00a36a`), Secondary/M Pressed `538:1907` (bg `#00a36a`, re-verified 2026-05-31), Tertiary/L Pressed `3029:20022` (bg `#00564c`).
+
+---
+
+#### Confirmed implementations as of 2026-05-31
+
+| Class | Variant | No transition | is-pressing CSS | is-pressing JS | Pressed bg |
+|---|---|---|---|---|---|
+| `.static-card__btn` | Primary/M | ✅ | ❌ (missing) | ❌ (missing) | `#00a36a` |
+| `.btn-quiz-cta` | Primary/S | ✅ | ✅ | ✅ | `#00a36a` |
+| `.btn-add-classes` | Secondary/M | ✅ | ✅ | ✅ | `#00564c` |
+
+**`.static-card__btn` still missing `is-pressing` handler** — add in next session touching Section #7 (StaticNewsCard-Desktop).
+
+---
+
+### Rule 201. Cross-file consistency — every resolved rule must propagate to ALL .md files in the same commit
+
+When a rule is resolved, corrected, or added in `zul.design.md`, **immediately update every other file that covers the same topic**:
+
+- `CLAUDE.md` — project-level rules (rules 1–83+)
+- `design.color.md` — color recipes and token reference
+- `design-md/nadia.design.md` — Nadia's prototype rules
+- `design-md/syakila.design.md` — Syakila's prototype rules
+
+**Mandatory checklist after fixing any rule:**
+```
+□ zul.design.md — primary source updated
+□ CLAUDE.md — mirror updated (if same rule exists there)
+□ design.color.md — if color/token value changed, §3/§4/§5/§6 updated
+□ nadia.design.md — if rule exists there, updated
+□ syakila.design.md — if rule exists there, updated
+□ All updates committed together — never split into separate commits
+```
+
+**What happened when this rule was missing (2026-05-31):**
+Three .md files (`CLAUDE.md`, `nadia.design.md`, `syakila.design.md`) all documented the wrong Button - 1.5 Pressed palette (`#00564c` for ALL variants) because the resolution that was applied to `zul.design.md` in May 2026 was never propagated. The contradiction persisted silently across 3 files for days, causing:
+- `CLAUDE.md` to show an "UNRESOLVED CONTRADICTION" flag blocking every future session
+- `nadia.design.md` and `syakila.design.md` to mislead any designer who referenced them for implementation
+
+**Root cause:** The update happened in `zul.design.md` only. The fix was assumed propagated — it was not.
+
+**Rule:** A rule is not "resolved" until it's consistent across **all** files that contain it. One-file fixes create partial truth — partial truth is worse than no truth because it creates false confidence.
+
+---
+
+### Session learnings — 2026-05-30/31
+
+**What happened (2026-05-30):**
+1. Found `.btn-quiz-cta` (Button - 1.5 Primary/S in Quiz Cards) had `transition: background 0.15s, border-color 0.15s` on the container but no transition on children (`__text`, `__arrow`) — so container faded but children snapped.
+2. Added matching `transition: color 0.15s` + `transition: background 0.15s, color 0.15s` to children to make them consistent.
+3. User compared to `.static-card__btn` (Button - 1.5 Primary/M in Static Cards) which felt snappier — inspected it and found it had zero transitions, all state changes are instant cuts.
+4. User chose Option 1: remove all transitions. Established as the permanent rule for all Button - 1.5 instances (Rule 198).
+
+**What happened (2026-05-31):**
+5. Button - 1.5 rules (no-transition, is-pressing, correct pressed palette) were formalized as Rule 198–200 in `zul.design.md`.
+6. User requested same rules applied consistently to ALL .md files.
+7. Audit found `CLAUDE.md`, `nadia.design.md`, `syakila.design.md` all still had wrong/contradictory pressed palette docs — never propagated from the May 2026 resolution.
+8. Full propagation pass completed. Rule 201 (cross-file consistency) added to prevent recurrence.
+
+**What to remember:**
+- Button - 1.5 = instant state changes, no `transition` ever (Rule 198)
+- Before fixing any animation inconsistency, first audit the reference implementation — don't assume animated is correct
+- When a fix introduces new CSS (even small), immediately check: does the rest of the design do this differently?
+- When a rule is resolved — propagate to ALL .md files in the same commit (Rule 201)
+- Always refer to DS and `zul.design.md` before any design work, change, or decision — without exception (Rule 199)
+
+---
+
+---
+
+### Rule 202. Tertiary button — no arrow circle, bare chevron only
+
+**Source:** DS `TLVKe3bgJTdVvuPAzgDq2f`, `get_design_context` on nodes `538:2067` (L), `538:2099` (M), `1452:8381` (S). Audited 2026-05-31.
+
+Tertiary is structurally distinct from Primary and Secondary:
+
+| Element | Primary | Secondary | Tertiary |
+|---|---|---|---|
+| Button border | `1px #00a36a` solid | `1px #00cc85` solid | **none** |
+| R Arrow container | filled circle (bg `#99ebce`) | outlined circle (white + 1px green border) | **no container** |
+| R Arrow | circle → clip | circle → clip | **bare clip only** |
+
+The Tertiary `showRArrow` renders as a bare `overflow-clip` div placed directly inside the content row — no wrapper div, no background, no `box-shadow`, no padding. The clip is 12×12 (S) or 16×16 (M/L), same as Primary/Secondary clip sizes.
+
+**CSS pattern:**
+```css
+/* Primary / Secondary — circle wraps the clip */
+.btn-primary__arrow  { background: #99ebce; padding: 2px; border-radius: 60px; }
+.btn-secondary__arrow { box-shadow: inset 0 0 0 1px var(--border-primary-default); padding: 2px; border-radius: 60px; }
+
+/* Tertiary — no wrapper at all, just the clip */
+.btn-tertiary .btn__arrow-clip { overflow: hidden; width: 16px; height: 16px; flex-shrink: 0; }
+```
+
+**Mistake to avoid:** Do not add a circle div (`<div class="btn__arrow">`) inside a Tertiary button. Any background, padding, or box-shadow on that div creates a visual circle that does not exist in the DS.
+
+**What "no border" means at button level:** `border: transparent` or omitting `border` entirely. Never `border: none` if the button already has a `border` class in the base reset — use `border-color: transparent` to keep layout stable across state changes.
+
+---
+
+### Rule 203. Secondary button outer frame — `strokeAlign: INSIDE` → `box-shadow: inset`, never `border`
+
+**Source:** DS `TLVKe3bgJTdVvuPAzgDq2f`, `use_figma` on node `538:1923` (Secondary/M Default). Confirmed 2026-05-31.
+
+The outer Secondary button frame has `strokeAlign: INSIDE`, `strokeWeight: 1`. Rule 60 is non-negotiable: INSIDE strokes always render as `box-shadow: inset 0 0 0 1px`, never as `border: 1px solid`.
+
+**Why `border` is wrong:** CSS `border: 1px solid` uses CENTER behavior. With `box-sizing: border-box` and `height: 32px`, a 1px border shrinks the inner content to 30px. The DS INSIDE stroke does not consume layout — the element stays 32px and the stroke overlays inside it. Using `border` violates the layout spec.
+
+**Critical cascade consequence:** when `box-shadow: inset` is the border mechanism, state-level `border-color` overrides (`:hover`, `:active`, `.is-active`, `:disabled`) have **zero visual effect** — there is no `border` to color. Every state override must replace the full `box-shadow` property, not `border-color`.
+
+```css
+/* Base */
+.btn-secondary-arrow {
+  border:     none;
+  box-shadow: inset 0 0 0 1px var(--border-primary-default);
+}
+/* Hover — must override box-shadow, NOT border-color */
+.btn-secondary-arrow:hover {
+  background:  var(--surface-secondary-default);
+  box-shadow:  inset 0 0 0 1px var(--border-secondary-focus);
+}
+/* Pressed */
+.btn-secondary-arrow:active {
+  background:  var(--surface-primary-focus);
+  box-shadow:  inset 0 0 0 1px var(--border-primary-default);
+}
+/* Active */
+.btn-secondary-arrow.is-active {
+  background:  var(--surface-primary-default);
+  box-shadow:  inset 0 0 0 1px var(--border-primary-focus);
+}
+/* Disabled */
+.btn-secondary-arrow:disabled,
+.btn-secondary-arrow.is-disabled {
+  background:  var(--surface-disabled-primary);
+  box-shadow:  inset 0 0 0 1px var(--border-disabled-disabled);
+}
+```
+
+**Mistake made (2026-05-31):** `.btn-secondary-arrow` used `border: 1px solid var(--border-primary-default)`. Hover/pressed/disabled overrides used `border-color:` — all silent no-ops because `box-shadow: inset` on the arrow circle coexisted with a `border` on the outer frame, making it appear the border was working. When corrected to `box-shadow`, all `border-color` lines had to be rewritten.
+
+**Rule:** Before writing ANY border on a DS component, call `use_figma` and read `strokeAlign`. Never assume — even for a simple outlined button. `INSIDE` = `box-shadow: inset`. Always.
+
+---
+
+### Rule 204. Secondary/M Pressed arrow circle — confirmed DS values (2026-05-31)
+
+**Source:** DS `use_figma` on node `538:1913` (Secondary/M Pressed R Arrow). Chevron variable resolved via `VariableID:119:10` = `Icon/primary/default`.
+
+| Property | DS value | token | hex |
+|---|---|---|---|
+| bg | `Surface/primary/focus` | `--surface-primary-focus` | `#00a36a` |
+| stroke | `Border/primary/default` (INSIDE) | `box-shadow: inset 0 0 0 1px var(--border-primary-default)` | `#00cc85` |
+| chevron `color` | `Icon/primary/default` | `--icon-primary-default` | `#00cc85` |
+
+The pressed arrow bg (`#00a36a`) matches the outer button bg — the arrow circle "blends in" visually, made visible only by its green ring stroke. The chevron (`#00cc85`) contrasts against the dark teal bg.
+
+**Corrected CSS:**
+```css
+.btn-secondary-arrow:active .btn-secondary-arrow__circle {
+  background:  var(--surface-primary-focus);              /* #00a36a */
+  box-shadow:  inset 0 0 0 1px var(--border-primary-default); /* #00cc85 ring */
+  color:       var(--icon-primary-default);               /* #00cc85 chevron */
+}
+```
+
+**Mistake made (2026-05-31):** All 3 properties were inverted:
+- bg: `var(--surface-primary-default)` = `#00cc85` ← wrong (should be `#00a36a`)
+- box-shadow: `none` ← wrong (should have green ring)
+- color: `var(--surface-primary-focus)` = `#00a36a` ← same as correct bg, making chevron invisible
+
+The chevron was effectively invisible — its stroke color matched the background exactly. The visible effect was a solid green pill with no chevron.
+
+**Also corrected:** Base `.btn-secondary-arrow__circle` `color` changed from `var(--text-primary-default)` to `var(--icon-primary-default)`. Both resolve to `#00cc85`, but Rule 36 mandates the semantically correct token for icon strokes. Confirmed via DS: chevron path variable = `Icon/primary/default`.
+
+---
+
+### Session learnings — 2026-05-31 (Button secondary audit)
+
+**What happened:**
+1. User flagged "View Activity History" button doesn't follow DS.
+2. Live DS audit (`use_figma` on nodes `538:1923`, `538:1929`, `538:1907`, `538:1913`) revealed two violations:
+   - Outer frame used `border: 1px solid` despite `strokeAlign: INSIDE` (Rule 60)
+   - Pressed arrow circle had all 3 properties wrong (bg, stroke, chevron color all inverted)
+3. All state `border-color` overrides (hover/pressed/active/disabled) were silent no-ops — `border-color` does nothing when the "border" is a `box-shadow`.
+4. The chevron in Pressed state was invisible: its `color: var(--surface-primary-focus)` = `#00a36a` matched the also-wrong `background: var(--surface-primary-default)` = `#00cc85` almost exactly (swapped values — neither was DS-correct, and the colors almost cancelled each other visually).
+
+**What to remember:**
+- Rule 60 (`strokeAlign` → CSS mapping) applies to the **outer button frame too** — not just the arrow circle. Every stroke on every element must be verified.
+- When `box-shadow: inset` replaces `border`, every state `border-color` line becomes a silent no-op. Always update the full `box-shadow` in each state.
+- Pressed state arrow is particularly prone to color inversion errors. Always cross-check bg vs chevron contrast — if they're the same hex, the chevron will be invisible.
+- DS variable lookup via `VariableID` is the only reliable way to confirm which Semantic token a fill/stroke is bound to. `Icon/primary/default` ≠ `Text/primary/default` even when they share the same hex.
+- **Refer to DS and `zul.design.md` before any design work, change, or decision — without exception. Not after starting. Not partway through. Before.**
+
+---
+
+---
+
+### Rule 205. Check existing SVG symbols before any asset export (2026-06-01)
+
+Before exporting any icon or graphic from Figma, always check whether it already exists locally as:
+1. An SVG `<symbol id="ic-*">` in the HTML defs block — grep `symbol id=` in the file
+2. An SVG file in `src/image-repo/**/*.svg`
+3. A PNG in the relevant component asset folder
+
+**Never re-export or re-download what is already present.** The `ic-status-coin`, `ic-status-ruby`, `ic-status-streak`, `ic-status-lives`, `ic-status-trophy` symbols are all embedded in `zul.home.screen.html` and `zul.page.template.html` as SVG symbols. Reference them via `<svg><use href="#ic-status-*"/>` — no PNG, no re-export needed.
+
+**If a symbol already exists**, use `<svg width="Npx" height="Npx"><use href="#ic-*"/></svg>` directly at whatever display size the DS specifies.
+
+**Workflow (mandatory before any export):**
+```
+1. grep "symbol id=" in the HTML file → is it already a symbol?
+2. Glob src/image-repo/**/ → does an SVG or PNG file exist?
+3. Only if absent → exportAsync PNG (Rule 78) or embed new symbol
+```
+
+**Mistake made (2026-06-01):** Proceeded with P.Coin + P.Ruby `exportAsync` PNG workflow across two sessions — writing temp files, PowerShell decoding — before checking that `ic-status-coin` and `ic-status-ruby` SVG symbols were already in the defs block. The entire PNG workflow was unnecessary.
+
+---
+
+### Rule 206. Modal header pill text stroke — always verify per modal variant (2026-06-01)
+
+**Source:** DS `use_figma` on node `I5627:50151;3735:32557;5627:50155` (Coins modal "Coins & Ruby" TEXT node).
+
+The Coins modal header pill title text has a TEXT stroke:
+- `strokeAlign: OUTSIDE`, `strokeWeight: 1`
+- Stroke color: `Yellow/600` = `var(--yellow-600)` = `#CBA500`
+- Fill: `Foundation/white` = `#ffffff`
+
+**CSS (Rule 26 — OUTSIDE weight 1 → 2× CSS stroke weight):**
+```css
+.modal-panel--coins .modal-header__title {
+  -webkit-text-stroke: 2px var(--yellow-600);
+  paint-order:         stroke fill;
+}
+```
+
+`paint-order: stroke fill` is **mandatory** — without it the stroke renders over the fill, making the text interior dark. With it, fill is painted on top of stroke, leaving only the outer 1px of the 2px stroke visible — exactly matching DS `strokeAlign: OUTSIDE` weight 1.
+
+**Rule:** Always inspect TEXT nodes inside header pills for stroke properties. Each modal variant (`--score`, `--coins`, `--streak`, `--lives`) may have different stroke color or none at all. Never assume the base `.modal-header__title` handles all stroke cases — scope per variant.
+
+**Also applicable:** Rule 22 (Figma text strokes → CSS `-webkit-text-stroke` + `paint-order`) and Rule 26 (OUTSIDE stroke → CSS doubling rule).
+
+**Mistake made (2026-06-01):** Header pill title text had no stroke CSS. User reported stroke missing. Root cause: did not inspect the TEXT node's `strokes` array via `use_figma` before implementing. Always check TEXT node strokes during anatomy audit (Rule 49 / Step 0c).
+
+---
+
+### Rule 207. Always check all 4 auto-layout alignment properties — primaryAxisAlignItems, counterAxisAlignItems, primaryAxisSizingMode, counterAxisSizingMode (2026-06-01)
+
+When inspecting a frame via `use_figma`, always read ALL FOUR alignment/sizing properties. Missing any one causes layout drift that looks correct but isn't.
+
+| Figma property | CSS equivalent (HORIZONTAL frame) | CSS equivalent (VERTICAL frame) |
+|---|---|---|
+| `primaryAxisAlignItems: CENTER` | `justify-content: center` | `align-items: center` |
+| `primaryAxisAlignItems: MIN` | `justify-content: flex-start` | `align-items: flex-start` |
+| `primaryAxisAlignItems: MAX` | `justify-content: flex-end` | `align-items: flex-end` |
+| `primaryAxisAlignItems: SPACE_BETWEEN` | `justify-content: space-between` | — |
+| `counterAxisAlignItems: CENTER` | `align-items: center` | `justify-content: center` |
+| `counterAxisAlignItems: MIN` | `align-items: flex-start` | `justify-content: flex-start` |
+| `primaryAxisSizingMode: FIXED` | explicit `width:` | explicit `height:` |
+| `primaryAxisSizingMode: AUTO` | `width: fit-content` (HUG) or `flex:1` (FILL) | `height: fit-content` |
+
+**Confirmed — Coins modal rows (DS 2026-06-01):**
+- `primaryAxisAlignItems: CENTER` on HORIZONTAL row → `justify-content: center`
+- `counterAxisAlignItems: MIN` → `align-items: flex-start` (top-aligned)
+- `primaryAxisSizingMode: FIXED` → fixed `width: 398px` (fills parent)
+
+**Mistake made:** Implemented `.modal-coins-row` with gap/padding but omitted `justify-content: center`. The row rendered left-aligned because `justify-content` defaults to `flex-start` in CSS, not `center`. User correctly flagged "should have been centered."
+
+**Rule:** Never implement a frame's CSS without reading all 4 alignment properties. Add them to your implementation checklist alongside padding, gap, border-radius, and fill.
+
+---
+
+### Session learnings — 2026-06-01 (Status Badge Modal — Coins modal fixes)
+
+**What happened:**
+1. Session resumed after context compaction. Proceeded directly to re-export P.Coin + P.Ruby as PNGs from Figma — went through temp file write + PowerShell decode workflow.
+2. User interrupted: "Why rerender coins & ruby icons? Use the one available in local folder."
+3. Checked local repo — `ic-status-coin` and `ic-status-ruby` SVG symbols were already embedded in the HTML defs block. The entire PNG export workflow was unnecessary.
+4. Replaced expired Figma API image URLs with `<svg><use href="#ic-status-coin/ruby">`. Fixed container sizing to `92×92, p:8` (DS-confirmed). Fixed row padding to `pt:16`.
+5. User confirmed layout looked better but flagged: (a) "Coins & Ruby text should have stroke" and (b) "alignment looks left aligned, should be centered."
+6. Pulled DS node specs via `use_figma` — confirmed TEXT stroke (`OUTSIDE, 1px, Yellow/600`) and row `primaryAxisAlignItems: CENTER`.
+7. Applied both fixes: `-webkit-text-stroke: 2px var(--yellow-600)` + `paint-order: stroke fill`, and `justify-content: center` on the row.
+
+**What to remember:**
+- **Check local assets FIRST** — SVG symbols in defs block, SVG files in `src/image-repo/` — before any Figma export workflow. A grep takes 5 seconds; an unnecessary export-decode cycle takes several minutes.
+- **TEXT nodes can have strokes** — always inspect `.strokes`, `.strokeWeight`, `.strokeAlign` on TEXT nodes during anatomy audit, not just on FRAME/INSTANCE nodes.
+- **`primaryAxisAlignItems`** is easy to overlook when focused on padding/gap. It directly controls `justify-content` and must be read for every frame.
+- **Mandatory pre-flight (Step 0) is not optional.** Every mistake in this session — the unnecessary PNG export, the missing text stroke, the missing `justify-content` — was caused by implementing without first running the full DS inspection workflow. Read `zul.design.md` + open live DS + audit component anatomy before ANY change.
+
+---
+
+### Rule 208. DS nested Content frame hierarchy → nested wrapper `<div>` hierarchy in HTML (2026-06-01)
+
+Each DS auto-layout frame with its own `itemSpacing`/`gap` value represents one level of layout hierarchy. When a component has multiple nesting levels, each level must be a separate `<div>` wrapper in HTML — **not flattened into a single parent**.
+
+**Confirmed — Streak Modal (DS node 5628:52014, 2026-06-01):**
+
+DS nesting:
+```
+Modal card         (gap: 24px)   ← outer: separates [header+content] from [button group]
+└── Content        (gap: 8px)    ← middle: separates [header pill] from [image+text+day-pill]
+    └── Content    (gap: 8px)    ← inner: separates [image container], [text], [streak pill]
+```
+
+HTML must mirror:
+```html
+<div class="modal-card">                    <!-- gap: 24px -->
+  <div class="modal-streak-body">           <!-- gap: 8px (middle level) -->
+    <div class="modal-header">…</div>       <!-- header pill -->
+    <div class="modal-image-block">…</div>  <!-- image + text + streak pill (gap: 8px inner) -->
+  </div>
+  <div class="modal-btn-group">…</div>      <!-- buttons -->
+</div>
+```
+
+**What went wrong without the wrapper:** The flat HTML had `modal-header` and `modal-image-block` as direct children of `modal-card` (gap: 24px). This produced 24px between the header pill and the image — DS specifies 8px. The button group was also 24px from the image block — but since the DS outer content frame carries this 24px gap between content and buttons, that is correct.
+
+**Rule:** Before writing any HTML for a multi-frame DS component, read ALL frame `gap` values at every nesting level. If an intermediate frame has a gap different from its parent, add a wrapper `<div>` for that level.
+
+---
+
+### Rule 209. Image container — always set BOTH width AND height when DS node specifies both (2026-06-01)
+
+When `use_figma` returns both `width` and `height` on an image container node, both must be set as explicit CSS properties. Omitting `height` leaves it `auto`, which changes the container's aspect ratio and makes vertically-centered icons appear misaligned.
+
+**Confirmed — Streak modal image container (DS node `I5628:51434;3735:32557;5628:51443`, 2026-06-01):**
+- DS dimensions: `width: 95, height: 114, paddingTop: 8, paddingRight: 8, paddingBottom: 8, paddingLeft: 8`
+- Content area inside: 79×98px (95−16 × 114−16)
+- P.Streak instance: 69.417×98px — fits exactly in the 98px content height
+
+**CSS pattern:**
+```css
+.modal-image-wrap {
+  width:       95px;
+  height:      114px;       /* ← must be explicit, not auto */
+  padding:     8px;
+  box-sizing:  border-box;  /* padding included in 95×114 */
+  flex-shrink: 0;
+  display:     flex;
+  align-items: center;
+  justify-content: center;
+}
+```
+
+**Rule:** In every `use_figma` inspection, read `.width` AND `.height` on image container nodes. If both are non-null/non-zero, both go into CSS. Use `box-sizing: border-box` whenever the container has padding.
+
+---
+
+### Rule 210. All modal header pills use `strokeAlign: INSIDE` — always `box-shadow: inset`, never `border-color` (2026-06-01)
+
+Every Status Modal header pill variant (Score, Coins, Streak, Lives) has `strokeAlign: INSIDE`. The CSS must use `box-shadow: inset 0 0 0 1px var(--token)` + `border: none` — never a `border-color` override.
+
+**What broke:** The base `.modal-header__pill` rule used `border: 1px solid transparent`. Streak and Lives variant rules only overrode `border-color`, activating a real layout-consuming CSS border. This is a Rule 60 violation — an INSIDE stroke must be `box-shadow: inset`, not `border`.
+
+**Confirmed violations corrected (2026-06-01):**
+
+| Variant | Was (wrong) | Correct |
+|---|---|---|
+| `--streak` | `border-color: var(--purple-600)` | `border: none; box-shadow: inset 0 0 0 1px var(--purple-600)` |
+| `--lives` | `border-color: var(--pink-600)` | `border: none; box-shadow: inset 0 0 0 1px var(--pink-600)` |
+| `--coins` | already `box-shadow: inset` ✓ | — |
+| `--score` | already `box-shadow: inset` ✓ | — |
+
+**Rule:** When adding any new modal header pill variant, never inherit or override `border-color` from a base rule that uses `border: 1px solid transparent`. Always set `border: none` and `box-shadow: inset 0 0 0 1px var(--token)` explicitly on the variant class. Verify `strokeAlign` via `use_figma` first (Rule 60).
+
+---
+
+### Rule 211. Asset organisation — all page assets live in `src/image-repo/[page]/assets/main/[ComponentName]/` (2026-06-01)
+
+Every external file asset (`<img src>`, `background-image: url()`) for a page must live under a single organised path:
+
+```
+src/image-repo/[page-name]/assets/main/[ComponentName]/filename
+```
+
+The `[ComponentName]` folder is named after the HTML `<section id>` that uses the asset. This is the same convention already established for `page.template` (`src/image-repo/page.template/assets/main/...`).
+
+**Confirmed structure for `zul.home.screen.html` (2026-06-01):**
+
+```
+src/image-repo/page.home/assets/main/
+├── NavbarPrimary-Desktop/   logo-mark.svg, logo-text.svg, Avatar-Aidan.png
+├── NavBar-Mobile/           logo-mark.svg, logo-text.svg   ← separate copies, per Rule 67
+├── LearnMenu/               feature-*.png × 12
+├── Welcome-Desktop/         Avatar-Aidan.png               ← separate copy, per Rule 67
+├── StaticNewsCard-Desktop/  jdp.jpg, 2 (3).png, 3.jpg
+├── YourSelectedSubjects-Desktop/  quiz card images + bm.png
+└── StatusBadgeModal/        modal-corner.svg
+```
+
+**Three rules that always apply together:**
+
+1. **Check before moving.** Before moving any asset, grep all HTML files in the repo for that path. If another page references the same physical file, **copy** (keep the original in place). If the file is exclusive to this page, **move** (copy to new location, delete original).
+
+   ```bash
+   grep -rl "path/to/asset" --include="*.html" . | grep -v "target-page.html"
+   ```
+
+2. **Per-component copies — never cross-reference.** When the same image is needed in two different HTML sections (e.g., Avatar in both `NavbarPrimary-Desktop` and `Welcome-Desktop`), copy it into **each** component folder separately. Never use one file path shared across two component folders (Rule 67).
+
+3. **Inline symbols vs external files.** SVG `<symbol>` definitions embedded in the HTML `<svg><defs>` block are NOT assets — they have no file path and belong in no folder. Only external file references (`<img src="...">`, `url('...')`) need to go in `image-repo`. When auditing for missing assets, grep for `src=` and `url(` — not for `<symbol>` or `<use href=`.
+
+**Pre-implementation asset audit (mandatory, runs as Step 0h in the session workflow):**
+```
+1. grep HTML for existing src= and background-image: url() paths
+2. Verify each file exists at its referenced path
+3. If any asset is missing → check image-repo/[page]/assets/main/[ComponentName]/ first
+4. Only export from Figma if the file genuinely doesn't exist anywhere in the repo
+```
+
+**What NOT to do:**
+- Never put external `<img src>` files in `zul.test.git/icons/` — that folder is for legacy SVG files only, not organised page assets
+- Never reference an asset from another page's component folder (e.g., `page.template/assets/main/...` from the home screen HTML)
+- Never leave assets scattered across flat folders like `src/image-repo/Quiz-Card/` or `src/image-repo/Home/` once the page structure is established
+
+**Mistakes that prompted this rule (2026-06-01):**
+- Avatar was at `src/image-repo/Home/Avatar-Aidan.png` (flat, no component scope)
+- Quiz card images were at `src/image-repo/Quiz-Card/` (flat, no page scope)
+- Static card images were at `src/image-repo/Static-Card/` (flat, no page scope)
+- Logo and feature icons were at `zul.test.git/icons/` (wrong repo location for page assets)
+- Modal corner was in a differently-named path `home.screen/` instead of `page.home/`
+- All these were consolidated into `src/image-repo/page.home/assets/main/[ComponentName]/` in the 2026-06-01 cleanup
+
+---
+
+### Session learnings — 2026-06-01 (Status Badge Modal — Streak modal fixes)
+
+**What happened:**
+1. Streak modal had 4 issues: (a) header pill border was `border-color` override on base `border: 1px solid transparent` — Rule 60 violation; (b) P.Streak image used expiring Figma asset URL; (c) image container had no explicit height; (d) no structural wrapper for 8px inner gap between header pill and image block.
+2. All 4 fixed in the same session without user needing to flag errors first — because Step 0 mandatory pre-flight (read `zul.design.md` + audit DS live) was followed before touching any code.
+
+**What to remember:**
+- **DS frame nesting = HTML wrapper nesting.** Count the nesting levels and gap values before writing any HTML. Each distinct gap value = one wrapper `<div>`.
+- **Both dimensions, always.** If DS node has both `width` and `height`, both go in CSS.  Never assume the missing dimension can be `auto`.
+- **`border-color` on a `border: 1px solid transparent` base is a Rule 60 violation.** Every modal header pill with an INSIDE stroke must be `border: none; box-shadow: inset`.
+- **SVG symbols render at any `width`/`height`.** `ic-status-streak` renders correctly at 69.417×98px via `<svg width="69.417" height="98"><use href="#ic-status-streak"/></svg>` — no re-export needed.
+
+---
+
+### Session learnings — 2026-06-01 (Asset organisation cleanup)
+
+**What happened:**
+Assets for `zul.home.screen.html` were scattered across 6 different locations: `zul.test.git/icons/` (logos, feature PNGs), `src/image-repo/Home/` (avatar), `src/image-repo/Quiz-Card/` (18 quiz images), `src/image-repo/Static-Card/` (3 images), `src/image-repo/bm.png` (loose root file), and `src/image-repo/home.screen/` (modal SVG). All 41 files were consolidated into `src/image-repo/page.home/assets/main/[ComponentName]/` matching the existing `page.template` convention.
+
+**What to remember:**
+- **Check other pages before moving.** Grep all HTML files for the asset path first. If another page uses it, copy; otherwise move. In this case `syakila.test.git/*.html` referenced `icons/logo-mark.svg` — but that's relative to its own `syakila.test.git/icons/` folder, a completely different physical path. Always verify the actual resolved path, not just the string match.
+- **Inline `<symbol>` defs ≠ external file assets.** Store icons and brand icons live as `<symbol>` in the HTML — they have no file path. Only `<img src>` and `background-image: url()` references need a file in `image-repo`. Grepping for `src=` and `url(` is the correct audit method.
+- **Same asset, two sections = two copies.** Avatar-Aidan.png was used in both `NavbarPrimary-Desktop` and `Welcome-Desktop`. Per Rule 67, it was copied into both component folders separately. Never share one path across two component boundaries.
+- **`icons/` folder is not a page asset store.** `zul.test.git/icons/` holds legacy/miscellaneous SVG files. Page-specific external image assets (logos, feature PNGs, quiz images) belong in `src/image-repo/page.home/assets/main/`, not in `icons/`.
+
+---
+
+### Rule 212. `display: none` blocks CSS transitions — use `opacity` + `pointer-events` for animatable overlays (2026-06-01)
+
+`display: none` cannot be transitioned — the browser removes the element from layout instantly with no interpolation. Toggling `display` between `none` and `flex/block` always produces an instant cut, regardless of any `transition` rules on the element.
+
+**Pattern for animatable overlay/backdrop:**
+```css
+/* Wrong — display toggle prevents any animation */
+.modal-overlay            { display: none; }
+.modal-overlay.is-open    { display: flex; }
+
+/* Correct — always display:flex, animate opacity + pointer-events */
+.modal-overlay {
+  display:        flex;           /* always rendered, never removed */
+  opacity:        0;
+  pointer-events: none;           /* invisible + non-interactive when closed */
+  transition:     opacity 0.22s ease;
+}
+.modal-overlay.is-open    { opacity: 1; pointer-events: auto; }
+.modal-overlay.is-closing { opacity: 0; pointer-events: none; }
+```
+
+**`pointer-events: none`** is mandatory when `opacity: 0` — without it, the invisible overlay still intercepts all clicks.
+
+**Child panels still use `display: none`** — only one panel is active at a time and they need to be fully removed from layout when inactive. The overlay is the only element that needs the opacity approach.
+
+---
+
+### Rule 213. Modal card animation — `@keyframes` entrance + `is-closing` class exit with JS timer (2026-06-01)
+
+**Full confirmed pattern (Status Badge Modals, 2026-06-01):**
+
+```css
+/* Entrance — triggered when .is-open is added */
+.modal-panel.is-open .modal-card {
+  animation: modalIn 0.28s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+/* Exit — triggered when .is-closing is added */
+.modal-panel.is-closing .modal-card {
+  animation: modalOut 0.18s ease-in both;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+@keyframes modalOut {
+  from { opacity: 1; transform: translateY(0)    scale(1);    }
+  to   { opacity: 0; transform: translateY(12px) scale(0.97); }
+}
+```
+
+**`both` fill-mode** — card stays at `from` state before animation starts (prevents flash of final state).
+
+**Spring easing `cubic-bezier(0.34, 1.4, 0.64, 1)`** for entrance — slight overshoot makes the modal feel alive. Exit uses `ease-in` (no spring — closing should feel clean, not bouncy).
+
+**JS closeAll() pattern with timer:**
+```js
+var closeTimer = null;
+
+function openModal(id) {
+  if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }   // cancel in-progress close
+  panels.forEach(function(p) { p.classList.remove('is-open', 'is-closing'); });
+  overlay.classList.remove('is-closing');
+  document.getElementById(id).classList.add('is-open');
+  overlay.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAll() {
+  if (closeTimer) return;   // guard: prevent double-close
+  var openPanel = document.querySelector('.modal-panel.is-open');
+  overlay.classList.add('is-closing');
+  if (openPanel) openPanel.classList.add('is-closing');
+  closeTimer = setTimeout(function() {
+    closeTimer = null;
+    panels.forEach(function(p) { p.classList.remove('is-open', 'is-closing'); });
+    overlay.classList.remove('is-open', 'is-closing');
+    document.body.style.overflow = '';
+  }, 220);   // matches overlay transition duration
+}
+```
+
+**Timer duration = overlay transition duration (220ms).** The card exit (180ms) finishes first, then the overlay fade completes, then DOM cleanup runs. Never set the timer shorter than the longest animation in the close sequence.
+
+**`if (closeTimer) return` guard** — prevents `closeAll()` being called twice (e.g. ESC + overlay click simultaneously) from queuing double cleanup.
+
+---
+
+### Session learnings — 2026-06-01 (Status Badge Modal — smooth animations)
+
+**What was done:**
+1. All 4 Status Badge Modals had instant `display` toggling — no animation.
+2. Replaced with: overlay opacity fade (CSS transition), card spring entrance + exit (`@keyframes`).
+3. JS `closeAll()` updated to add `is-closing` class, defer DOM cleanup 220ms via `setTimeout`.
+4. `openModal()` cancels any in-progress close timer before re-opening.
+
+**What to remember:**
+- **`display: none` cannot be animated.** Always `opacity` + `pointer-events` for overlays/backdrops.
+- **Entrance spring** (`cubic-bezier(0.34, 1.4, 0.64, 1)`) feels alive. **Exit ease-in** (no spring) feels clean. Never use spring easing on exit.
+- **Close needs a timer.** Add `is-closing`, wait for animations to finish (220ms = overlay transition), then remove all classes. Never remove `is-open` immediately — the exit animation won't play.
+- **Guard `closeTimer`** in both directions: `openModal` cancels it on re-open, `closeAll` returns early if already closing.
+- **Before any implementation** — read `zul.design.md` + open live DS. This animation pattern is now documented here so it can be applied consistently to any future overlay/modal component without re-deriving it.
+
+---
+
+### Rule 214. Post-build DS audit — mandatory 1:1 property verification after every component (2026-06-02)
+
+**Source:** User instruction 2026-06-02. Applies to every component built from DS node data.
+
+**The principle:** Reading DS node values correctly and implementing them completely are two different problems. A DS read confirms the right values. It does not verify that every property has been declared on the right CSS element. The gap happens during implementation — variant classes, sibling elements, and "obvious" inherited properties get skipped.
+
+If building from DS node data (not screenshots), the output must be 1:1. There is no excuse for a discrepancy when the exact values are available from the source.
+
+**Mandatory post-build audit — run after completing ANY component:**
+
+```
+For every node in the DS component tree:
+□ TEXT nodes:
+  → color           — explicit CSS `color:` on that element (never rely on inheritance)
+  → font-size       — matches DS fontSize
+  → font-weight     — matches DS fontWeight
+  → line-height     — matches DS lineHeight
+  → font-family     — Poppins unless DS specifies otherwise
+  → text stroke     — check for DS stroke on TEXT node (Rule 206); if present → -webkit-text-stroke + paint-order
+
+□ FRAME/GROUP nodes:
+  → background      — explicit CSS `background:` matches DS fill token
+  → border/stroke   — check strokeAlign first (Rule 60), then apply inset/outset/border correctly
+  → border-radius   — matches DS cornerRadius via correct token
+  → padding         — all 4 sides, not just directional (Rule 75)
+  → gap             — matches DS itemSpacing / counterAxisSpacing
+  → width / height  — fixed if DS specifies both (Rule 209)
+  → flex-direction  — matches DS layoutMode (HORIZONTAL/VERTICAL)
+  → align-items     — matches DS counterAxisAlignItems
+  → justify-content — matches DS primaryAxisAlignItems
+
+□ Visibility:
+  → DS visible: false → NO HTML element, NO CSS rule
+
+□ For every CSS class created:
+  → Does it have ALL properties from the corresponding DS node?
+  → Not just the "different" ones — ALL of them, including color, font-size, line-height
+```
+
+**Workflow:**
+```
+1. Build the component (HTML + CSS) from DS node reads
+2. Re-fetch the DS component node via use_figma
+3. Walk every TEXT and FRAME child node
+4. For each node: compare DS properties vs CSS declarations one by one
+5. Fix every gap before committing
+```
+
+**Why this rule exists:**
+`.modal-stat-caption--inline` was implemented with `font-size`, `line-height`, `gap`, `flex-wrap` — all correctly read from DS — but `color: var(--text-default-caption)` was missing. The DS clearly showed `Text/default/caption = #bfbfbf` on those spans. The property was read correctly; it was never written to CSS because `color` felt "shared" or "inherited." It wasn't — it inherited `#404040` from `body` instead.
+
+**Key insight:** When creating a variant or sibling class, always carry over the full property set — not just what is visually or structurally *different*. `color` on a text element is never optional, regardless of what parent elements declare.
+
+---
+
+### Session learnings — 2026-06-02 (Score Modal caption color + post-build audit rule)
+
+**What was found:**
+- Score Modal `.modal-stat-caption--inline` missing `color: var(--text-default-caption)`.
+- DS node `5575:1112` confirms "It will only take about" and "to complete your goal" → `Text/default/caption` = `#bfbfbf`.
+- Plain spans were inheriting `body` color `#404040` — appeared as dark text instead of light grey caption.
+- Fix: one line — `color: var(--text-default-caption)` added to `.modal-stat-caption--inline`.
+
+**What to remember:**
+- DS reads give correct values; they do not write CSS for you. Coverage audit is a separate, mandatory step.
+- Every text element needs an explicit `color:` declaration — never assume correct inheritance.
+- After every component build, re-walk the DS node tree and cross-check every property.
+
+---
+
+### Rule 215. Secondary button hover — full palette `#b5f291`, NOT subtle `#e8fbe8` (2026-06-02)
+
+**Source:** DS `use_figma` on nodes `538:1883` (SecL-Hover), `1452:8284` (SecS-Hover). Confirmed 2026-06-02.
+
+The Secondary button hover state uses **`Surface/secondary/default` = `#b5f291`** as the background — not `Surface/secondary/default-subtle` = `#e8fbe8`. These are two distinct tokens and hover maps to the full (non-subtle) one.
+
+`#e8fbe8` (`--surface-secondary-default-subtle`) is correct for: dropdown item hover, modal close button hover, nav menu item hover — all contexts where the interaction is low-prominence.
+
+`#b5f291` (`--surface-secondary-default`) is correct for: Button - 1.5 Secondary hover (all sizes), nav menu CTA hover, any button-level interaction.
+
+**DS-confirmed Secondary hover state (all sizes — S, M, L share the same palette):**
+
+| Property | DS value | CSS token |
+|---|---|---|
+| Outer bg | `#b5f291` | `var(--surface-secondary-default)` |
+| Outer border | `#70bc6f` | `inset 0 0 0 1px var(--border-secondary-focus)` |
+| Label | `#70bc6f` | `var(--text-secondary-focus)` |
+| Arrow bg | `#b5f291` | `var(--surface-secondary-default)` |
+| Arrow border | `#70bc6f` | `inset 0 0 0 1px var(--border-secondary-focus)` |
+| Chevron | `#70bc6f` | `var(--text-secondary-focus)` |
+
+**Critical: hover overrides ALL children — outer, label, arrow bg+border, chevron.** Never only override the outer container and assume children inherit. Each child element has its own `background` and `box-shadow` — they do not inherit from the parent hover change.
+
+```css
+.btn-secondary:hover {
+  background: var(--surface-secondary-default);
+  box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+}
+.btn-secondary:hover .btn__label   { color: var(--text-secondary-focus); }
+.btn-secondary:hover .btn__arrow   { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+.btn-secondary:hover .btn__arrow svg { color: var(--text-secondary-focus); }
+```
+
+**Mistake made (2026-06-02):** All three modal secondary button classes (`.modal-btn-sec`, `.modal-btn-sec-l`, and previously `.btn-secondary-arrow`) used `--surface-secondary-default-subtle` (#e8fbe8) for hover. All also missing hover overrides on label, arrow bg, and chevron. Re-confirmed on DS nodes — fixed to `--surface-secondary-default` (#b5f291) with full child overrides.
+
+---
+
+### Rule 216. `border-color` override is silent on `box-shadow:inset` components — ALL state overrides must match the base border mechanism (2026-06-02)
+
+**Source:** Primary/L modal button audit 2026-06-02.
+
+When a component's base border uses `box-shadow: inset 0 0 0 1px`, state overrides (hover, pressed, disabled) **must also use `box-shadow`** — never `border-color`. `border-color` only affects a `border:` property. If no `border:` is declared, `border-color` overrides are completely silent — no error, no warning, just no visual change.
+
+```css
+/* WRONG — base uses box-shadow, but overrides use border-color (silent) */
+.btn { box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+.btn:hover   { border-color: var(--border-secondary-focus); }  /* ← does nothing */
+.btn:active  { border-color: var(--border-primary-default); }  /* ← does nothing */
+
+/* CORRECT — all states use the same mechanism */
+.btn { border: none; box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+.btn:hover   { box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+.btn:active  { box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+```
+
+**Rule:** Before writing ANY state override for a border/stroke: look at the base rule. If base uses `box-shadow: inset` → all overrides use `box-shadow`. If base uses `border:` → all overrides use `border-color`. Never mix mechanisms.
+
+**Checklist when adding state CSS:**
+```
+□ What is the base border mechanism? (border: OR box-shadow: inset)
+□ Do ALL state overrides (hover/pressed/active/disabled) use the same mechanism?
+□ If a state override uses border-color but base uses box-shadow → fix to box-shadow
+```
+
+**Confirmed mistake (Primary/L modal button, 2026-06-02):**
+- Base: `border: 1px solid var(--border-primary-focus)` ← also wrong (strokeAlign INSIDE → must be box-shadow, Rule 60)
+- Hover: `border-color: var(--border-secondary-focus)` ← silent even if base were correct box-shadow
+- Pressed: `border-color: var(--border-primary-default)` ← same
+- Result: hover and pressed had no visible border change at all.
+
+Fix: `border: none; box-shadow: inset 0 0 0 1px var(--border-primary-focus)` as base + `box-shadow` overrides on all states.
+
+**See also:** Rule 60 (strokeAlign → CSS mapping), Rule 85 (Secondary outer frame box-shadow:inset).
+
+---
+
+### Session learnings — 2026-06-02 (Modal Button - 1.5 full audit)
+
+**What was found (3 button classes: Secondary/S, Secondary/L, Primary/L):**
+
+1. **All Secondary hover bg were `#e8fbe8` (subtle)** — DS = `#b5f291`. The subtle variant is for low-prominence hover contexts (dropdowns, nav items), not for button-level interactions.
+2. **All Secondary hover states missing child overrides** — label, arrow bg, arrow border, chevron all need explicit hover declarations. They don't inherit from the outer container hover.
+3. **All Secondary pressed label + chevron = `#ffffff`** — DS = `#00cc85`. Tokens `Text/primary/on-color` (#fff) vs `Text/primary/default` (#00cc85) were swapped.
+4. **Primary/L outer border was `border: 1px solid`** — DS strokeAlign INSIDE → must be `box-shadow: inset`. All state `border-color` overrides were completely silent as a result.
+5. **Primary/L `max-height: 48px`** — DS height = 40px exactly. `max-height` is imprecise; use `height:` for fixed-height DS components.
+6. **Primary/L default arrow chevron was `--icon-tertiary-default` (#00564c)** — DS = `#00a36a`. Different palette entirely.
+7. **Arrow containers missing explicit `width`/`height`** — Added `width: 16px; height: 16px` (S) and `width: 24px; height: 24px` (L/M). Explicit is always safer than relying on padding alone.
+8. **Typo in Streak modal CTA label**: "Aanswer Quiz" → "Answer Quiz".
+
+**Root cause of all errors:** No post-build DS audit was done after implementing the buttons. Each state was built from partial memory rather than a full per-state node inspection. Rule 214 (post-build audit) + Rule 215 (Secondary hover palette) + Rule 216 (border mechanism consistency) are the preventive measures.
+
+**What to remember:**
+- Secondary hover = `#b5f291` (`--surface-secondary-default`). Subtle (`#e8fbe8`) is for dropdowns/nav, not buttons.
+- Hover overrides ALL children. Never only override the outer wrapper.
+- Base border mechanism (box-shadow vs border) must match ALL state overrides. Mixed mechanisms = silent failures.
+- Primary/L outer frame: `strokeAlign INSIDE` → `box-shadow: inset`. Rule 60. Always verify before writing `border:`.
+- Before any design work, change, or decision — read `zul.design.md` + open live DS.
+
+---
+
+---
+
+### Rule 217. Full DS Variable Audit — 2026-06-02
+
+**Audit method:** `use_figma` → `getLocalVariableCollectionsAsync()` + full alias chain resolution on all 4 collections.
+
+#### Collection count changes
+
+| Collection | Was documented | Current | Delta |
+|---|---|---|---|
+| Primitives | 429 | **478** | +49 |
+| Semantic | 277 | **329** | +52 |
+| Product | 174 | **174** | 0 |
+| Responsives | Not audited | **64** | First full audit |
+
+#### New Primitives palettes (+49)
+
+7 new 9-step color ramps added:
+
+| Palette | Base/500 hex | Purpose |
+|---|---|---|
+| `Gold/100–900` | `#fabb0a` | Medals / achievement system |
+| `Silver/100–900` | `#878dbb` | Medals / achievement system |
+| `Bronze/100–900` | `#d47d62` | Medals / achievement system |
+| `Pink-Secondary/50–900` | `#ff9dc1` | Teacher role secondary states |
+| `Pink-Tertiary/50–900` | `#99375b` | Teacher role tertiary states |
+| `Butter/100–900` | `#ffffc9` | Warm cream — replaces "Vanilla" |
+| `Pumpkin/100–900` | `#f2b839` | Warm amber — replaces "Mustard" |
+
+3 new Foundation vars: `Foundation/white 50`, `Foundation/black 50`, `Foundation/slate` (`#444a56`).
+
+**⚠️ Palette renames:** "Vanilla" → `Butter` | "Mustard" → `Pumpkin`. Any `--vanilla-*` or `--mustard-*` CSS variables are invalid and must be replaced.
+
+#### New Semantic variables (+52) — `Subjects/*` namespace
+
+All 18 subject badge palettes now have Semantic aliases. 5 states each:
+```
+Subjects/[subject]/default              → Subject badge primary color
+Subjects/[subject]/default-hover        → Hover darken
+Subjects/[subject]/default-subtle       → Subtle tint background
+Subjects/[subject]/default-subtle-hover → Subtle hover
+Subjects/[subject]/focus                → Focus/pressed darken
+```
+
+Subjects confirmed: `account`, `add-math`, `biology`, `b-melayu`, `business`, `chemistry`, `chi-lang`, and more. These mirror the hex values in Rule 17 — subject badge CSS can now reference `var(--subjects-[name]-default)` instead of hardcoded hex.
+
+#### All critical token values — CONFIRMED CORRECT (2026-06-02)
+
+| Token | Confirmed hex | Status |
+|---|---|---|
+| `Text/primary/on-color` | `#ffffff` | ✓ matches Rule 154 |
+| `Icon/primary/on-color` | `#ffffff` | ✓ matches Rule 154 |
+| `Surface/primary/default` | `#00cc85` | ✓ |
+| `Surface/primary/focus` | `#00a36a` | ✓ |
+| `Surface/secondary/default` | `#b5f291` | ✓ |
+| `Surface/secondary/default-subtle` | `#e8fbe8` | ✓ |
+| `Border/primary/default` | `#00cc85` | ✓ |
+| `Border/primary/focus` | `#00a36a` | ✓ |
+| `Text/default/heading` | `#404040` | ✓ |
+| `Text/default/caption` | `#bfbfbf` | ✓ |
+| `Surface/disabled/primary` | `#f2f2f2` | ✓ |
+| `Surface/disabled/on color` | `#e5e5e5` | ✓ matches Rule 155 |
+| `Surface/general/default` | `#ffffff` | ✓ |
+| `Border/general/default` | `#d9d9d9` | ✓ |
+| `Icon/default/default` | `#808080` | ✓ |
+| `Surface/tertiary/default` | `#00564c` | ✓ |
+
+#### Fixes applied to this file in this audit
+
+1. Variable Collections section — counts, palette list, Responsives spec all updated above.
+2. Rule 19 — Default/Active label `#e1f9ea` → `#ffffff` (Rule 154).
+3. Rule ~~99~~ — Correct value `#e1f9ea` → `#ffffff`.
+4. Rule 116 — Nav Button Active icon hex `#e1f9ea` → `#ffffff`, CSS comment updated, corrected mistakes table updated.
+5. Static card button table — Default label `#e1f9ea` → `#ffffff`.
+6. Quiz card button note — `Text/primary/on-color` hex updated to `#ffffff`.
+7. Nav Menu CTA spec table and CSS comment updated.
+
+**Next audit:** Re-run this audit if any component implementation uses `Text/primary/on-color`, `Icon/primary/on-color`, or any new `Gold/Silver/Bronze/Butter/Pumpkin/Pink-Secondary/Pink-Tertiary` primitive. Token values can change without notice (Rule 153).
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-02 (Rule 217 added — full DS variable audit; +49 Primitives, +52 Semantic vars; Icon/primary/on-color confirmed #ffffff; Vanilla→Butter / Mustard→Pumpkin rename; Responsives grid spec documented) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

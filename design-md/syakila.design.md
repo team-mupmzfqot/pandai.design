@@ -55,7 +55,7 @@
 
 **Mistake made:**
 - Primary button hover was assumed to be a darker green. Actual DS: Primary hover transitions to the **Secondary palette** — `Surface/secondary/default` (`#b5f291`) bg, `Border/secondary/focus` (`#70bc6f`) border, `Text/secondary/focus` (`#70bc6f`) text.
-- Secondary button Pressed state was incorrectly noted as "fills solid with Surface/primary/default". Actual DS node `538:1907` (Secondary/M/Student/Pressed): bg `#00564c` (`Surface/tertiary/default`), border `#00453d` (`Border/tertiary/focus`), text `#00cc85` (`Text/primary/default`) — same dark teal palette as Tertiary Pressed.
+- Secondary button Pressed state was incorrectly noted as "fills solid with Surface/primary/default", then mis-corrected to dark teal `#00564c`. **Re-verified live DS 2026-05-31 via `get_design_context` on node `538:1907`:** bg `#00a36a` (`Surface/primary/focus`), border `#00cc85` (`Border/primary/default`), text `#00cc85` — same palette as Primary Pressed.
 - Disabled state was invented. Actual DS: `Surface/disabled/primary` (`#f2f2f2`) bg, `Border/disabled/disabled` (`#bfbfbf`) border, `Icon/disabled/default` (`#bfbfbf`) text.
 
 ---
@@ -382,20 +382,20 @@ These are the confirmed state values for the Pandai student home screen. All fro
 
 | State | Btn bg | Border | Label | Arrow bg | Chevron | DS node |
 |---|---|---|---|---|---|---|
-| Default | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` | `1437:8154` |
+| Default | `#00cc85` | `#00a36a` | `#ffffff` | `#99ebce` | `#00a36a` | `1437:8154` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` | `1437:8146` |
 | Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` | `1437:8138` |
-| Active | `#00cc85` | `#00a36a` | `#e1f9ea` | `#99ebce` | `#00a36a` | `3029:19941` |
+| Active | `#00cc85` | `#00a36a` | `#ffffff` | `#99ebce` | `#00a36a` | `3029:19941` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` | `1437:8130` |
 
-**Pressed state tokens (confirmed from node `1437:8138`):**
-- Btn bg: `Surface/tertiary/default` (#00564c) — NOT `Surface/primary/focus` (#00a36a)
-- Border: `Border/tertiary/focus` (#00453d)
+**Pressed state tokens — Primary/S (confirmed design.color.md §6.1, live-verified 2026-05-28):**
+- Btn bg: `Surface/primary/focus` (#00a36a) — Primary variant uses PRIMARY focus palette, NOT dark teal
+- Border: `Border/primary/default` (#00cc85)
 - Label: `Text/primary/default` (#00cc85) — NOT `Text/primary/on-color` (#f6fdfb)
 - Arrow bg: `Surface/primary/default` (#00cc85)
-- Chevron: `Icon/tertiary/default` (#00564c)
+- Chevron: `Surface/primary/focus` (#00a36a)
 
-**Mistake made:** Pressed state used `Surface/primary/focus` (#00a36a) for bg and `Text/primary/on-color` (#f6fdfb) for label. DS uses Tertiary palette for Pressed — darker bg (`#00564c`) with the primary green as the label color — the inverse of Default.
+**Correction (2026-05-31):** Prior version of this rule stated Pressed = `Surface/tertiary/default` (#00564c). That dark teal palette applies to **Secondary and Tertiary variants only**. Primary uses the lighter `Surface/primary/focus` (#00a36a). See Rule 40 for the full variant split table.
 
 ---
 
@@ -906,21 +906,24 @@ When looking up states for a component used inside a larger DS assembly (e.g. a 
 
 ---
 
-### 40. Button - 1.5 Pressed palette is consistent across all variants
+### 40. Button - 1.5 Pressed palette — PRIMARY and SECONDARY use different palettes (RESOLVED 2026-05-31)
 
-All three variants (Primary, Secondary, Tertiary) share the **same Pressed state colour palette** — dark teal. The variant only changes the Default/Hover appearance, not the Pressed.
+**Source of truth: `design.color.md` §6.1, live-verified 2026-05-28. Prior documentation (all-variants-same-teal) was wrong.**
 
-**Confirmed Pressed state — all variants, Student type (May 2026):**
+| Variant | Pressed bg | bg token | Pressed border | border token | Label |
+|---|---|---|---|---|---|
+| **Primary** (S/M/L) | `#00a36a` | `Surface/primary/focus` | `#00cc85` | `Border/primary/default` | `#00cc85` |
+| **Secondary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
+| **Tertiary** (S/M/L) | `#00564c` | `Surface/tertiary/default` | `#00453d` | `Border/tertiary/focus` | `#00cc85` |
 
-| Property | Value | Token |
-|---|---|---|
-| Background | `#00564c` | `Surface/tertiary/default` |
-| Border | `#00453d` | `Border/tertiary/focus` |
-| Label/icon | `#00cc85` | `Text/primary/default` / `Icon/primary/default` |
+**Label token all variants:** `Text/primary/default` = `#00cc85`
 
-This applies to: `Primary/S`, `Primary/M`, `Primary/L`, `Secondary/M`, `Tertiary/M`, `Tertiary/L`.
+**Key DS nodes:**
+- Primary/L Pressed: `473:650` (bg `#00a36a`, border `#00cc85`) — confirms Primary ≠ Tertiary
+- Secondary/M Pressed: `538:1907` (bg `#00a36a`, border `#00cc85`) — re-verified 2026-05-31 via `get_design_context`
+- Tertiary/L Pressed: `3029:20022` (bg `#00564c`, border `#00453d`)
 
-**Mistake corrected (May 2026):** CLAUDE.md Rule 2 previously stated Secondary/M Pressed = "fills solid with `Surface/primary/default` (#00cc85)". This was wrong — actual DS node `538:1907` shows dark teal (#00564c), not primary green. Never rely on old notes for pressed state colours — always pull from DS.
+**Correction (2026-05-31):** Secondary Pressed = Primary Pressed = `#00a36a` (`Surface/primary/focus`). Only Tertiary Pressed uses the darker teal `#00564c`. Always re-verify live DS before implementing (DS token values change between sessions).
 
 ---
 
@@ -1514,7 +1517,7 @@ try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 |---|---|---|---|---|---|
 | Default | `#00cc85` | `#00a36a` | `#f6fdfb` | `#99ebce` | `#00a36a` |
 | Hover | `#b5f291` | `#70bc6f` | `#70bc6f` | `#e8fbe8` | `#70bc6f` |
-| Pressed | `#00564c` | `#00453d` | `#00cc85` | `#00cc85` | `#00564c` |
+| Pressed | `#00a36a` | `#00cc85` | `#00cc85` | `#00cc85` | `#00a36a` |
 | Disabled | `#f2f2f2` | `#bfbfbf` | `#bfbfbf` | `#f2f2f2` | `#bfbfbf` |
 
 - Arrow chevron color comes from arrow sub-node (`479:351`) variable defs — NOT the parent button node
@@ -1544,7 +1547,7 @@ try { (function(){ /* carousel */ })(); } catch(e) { console.warn(e); }
 - Arrow: 16×16 circle (`bg: #99ebce`, `border-radius: 60px`, `padding: 2px`) → 12×12 clip (NO padding) → `ic-chevron-btn`
 - Arrow chevron: `#00a36a` (`Surface/primary/focus`) — from arrow clip sub-node, not parent button
 - **Symbol:** `ic-chevron-btn` — `viewBox="0 0 12 12"`, path `M4.5 9L7.5 6L4.5 3`, DS node `1437:8161`
-- **All states:** see Rule 19. Pressed uses Tertiary palette (`#00564c`), not Primary/focus (`#00a36a`).
+- **All states:** see Rule 19. Primary/S Pressed uses `Surface/primary/focus` (`#00a36a`) bg + `#00cc85` border + `#00cc85` label (design.color.md §6.1).
 
 **Subject badge icons (18 subjects) — confirmed May 2026:**
 All sourced from `🔰 Iconography` page via `exportAsync({ format: 'SVG_STRING' })`. See Rule 17.
@@ -1554,7 +1557,7 @@ Badge icon CSS: `width: 16px; height: auto; max-height: 20px` constrains all sub
 - Cards rendered as tall vertical columns. Fixed by: explicit `flex-direction: row` + `width: 148px` on image div + `<div>` placeholder instead of `<img>`
 - Button used `Outline/arrow-right` (→) — actual DS uses `Outline/chevron-right` (›). Always confirm icon from DS context.
 - Arrow clip had `padding: 3px 4.5px` — stroke collapsed to 0.56px. Correct: no padding, use `ic-chevron-btn`.
-- Pressed state used `Surface/primary/focus` (#00a36a) for bg and `Text/primary/on-color` (#f6fdfb) for label — both wrong. DS Pressed = `Surface/tertiary/default` (#00564c) bg + `Text/primary/default` (#00cc85) label (see Rule 19).
+- Pressed state label used `Text/primary/on-color` (#f6fdfb) — wrong. Correct label = `Text/primary/default` (#00cc85). The bg `Surface/primary/focus` (#00a36a) was actually correct for Primary/S (confirmed design.color.md §6.1). See Rule 40.
 - Queried wrong DS node `1644:11342` (Type=Teacher) instead of `1437:8154` (Type=Student) — led to thinking Student=pink. Always verify the `Type=` variant name before trusting variable defs.
 
 ---
@@ -1790,11 +1793,11 @@ See `design-md/zul.design.md` Rule 112.
 | Default | `Surface/general/default` | `#ffffff` | none | — | `Icon/default/default` | `#808080` |
 | Hover | `Surface/secondary/default-subtle` | `#e8fbe8` | `Border/primary/default` | `#00cc85` | `Icon/primary/default` | `#00cc85` |
 | Pressed | `Surface/primary/focus` | `#00a36a` | `Border/primary/default` | `#00cc85` | `Icon/primary/default` | `#00cc85` |
-| Active | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` | `#00a36a` | `Icon/primary/on-color` | `#e1f9ea` |
+| Active | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` | `#00a36a` | `Icon/primary/on-color` | `#ffffff` |
 
 **Active state = plain rounded square. No speech-bubble tail. No `nav-btn-union-bg`.**
 
-**`--icon-primary-on-color` = `#e1f9ea`** — NOT `#f6fdfb` (that is `Text/primary/on-color`, a different token).
+**`--icon-primary-on-color` = `#ffffff`** — DS updated 2026-05-24 from previous value `#e1f9ea`. See CLAUDE.md Rule 61.
 
 **Supersedes Rule 52 item 1 and Rule 99.** Both were based on standalone node `3908:6163` (a VECTOR artifact), not the COMPONENT_SET.
 
@@ -1827,24 +1830,157 @@ All 5 states: `w:20 h:20`, `padding:2px`, `strokeAlign: INSIDE`. State changes =
 
 ---
 
-### Mandatory workflow — BEFORE every design action, change, or decision (updated 2026-05-19)
+### 61. Always sync shared components FROM `zul.page.template.html` BEFORE starting any Syakila page work
 
-**Step 0 (mandatory):** Read `design-md/zul.design.md` AND refer to live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any change, or making any decision. No exceptions.
+`zul.page.template.html` is the **canonical source** for all shared navigation components (Navbar Primary, NavTopMenu, NavBar-Mobile, NavMenu-Tablet, NavMenu-Mobile, Footer, all dropdowns, all JS handlers). Zul's template receives updates first — Syakila pages must pull those updates before any session-specific work begins.
 
-```
-0a. Read design-md/zul.design.md       → ALL rules 1–118, confirmed specs, known mistakes
-0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs
-0c. get_design_context on COMPONENT SET → list ALL variant names
-0d. get_design_context on EACH state   → extract every token BEFORE writing CSS
-0e. get_variable_defs on sub-nodes     → confirm Semantic tokens
-0f. use_figma raw node inspection      → confirm exact padding, strokeAlign, width, height
-0g. exportAsync SVG_STRING for icons   → check size before PNG vs symbol decision
-0h. get_screenshot after implement     → compare against DS, fix before moving on
-```
+**Mandatory pre-session sync checklist:**
+1. `git log --oneline -- "zul.test.git/zul.page.template.html"` → check if any commits are newer than the last Syakila page sync
+2. `git diff <last-sync-sha>..HEAD -- "zul.test.git/zul.page.template.html"` → read the full diff
+3. For each changed shared section (CSS `:root`, shared classes, HTML components, JS handlers) — apply the equivalent change to EVERY Syakila `.html` file
+4. After syncing, verify with `grep` that key anchors match between template and Syakila pages
+
+**Shared sections that must always stay in sync (both files):**
+- `:root` CSS variables (tokens, layout vars)
+- `html`, `body`, `main`, `.page-container`, `.main-content` layout chain
+- `.num-badge` CSS (including `transition` + `#notif-btn.is-active` opacity rule)
+- Notification dropdown CSS (`.notif-item`, `.notif-item__content`, `.notif-item__body`, `.notif-dropdown__footer`, `.notif-see-all`, indicator dot)
+- Nav menu accordion CSS (`.nav-menu-submenu`, `.nav-menu-item.has-submenu.is-open`, `margin-top` trick)
+- NavMenu-Tablet HTML (all `has-submenu` items + submenu divs: Class, Learn, Achievement, Potential, Rewards)
+- NavMenu-Mobile HTML (same items with `submenu-m-*` IDs)
+- Notification dropdown JS IIFE (full read/dismiss interaction — see Rule 62)
+- Tablet accordion JS IIFE + Mobile accordion JS IIFE (see Rule 63)
+- Image paths (`../src/image-repo/page.template/assets/main/...`)
+
+**Mistake made (2026-05-29):** Applied 5 previous sessions of template updates to `learningHub.html` in one batch because the sync was never done incrementally. Cost: full audit + manual edit of every shared section. Prevention: sync after every template commit, not after many.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-05-19 (Rule 60 / zul Rule 118 — strokeAlign:INSIDE=box-shadow:inset, raw use_figma inspection required for exact dimensions, Secondary/M arrow confirmed 20×20 padding:2px all states) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 62. Notification dropdown — full read/dismiss JS interaction pattern
+
+The notification dropdown requires a **two-click dismiss pattern** per item, not a simple close-on-click. This is the canonical JS block — always use this exact pattern, never simplify it.
+
+**Click 1 → mark read (hide unread dot):**
+```js
+item.classList.add('is-read');  // CSS: .notif-item.is-read .notif-item__indicator { opacity: 0; pointer-events: none; }
+```
+
+**Click 2 → collapse and remove item:**
+```js
+item.style.transition    = 'max-height 0.3s ease, opacity 0.2s ease';
+item.style.maxHeight     = item.scrollHeight + 'px';
+item.getBoundingClientRect();   // MANDATORY — flushes layout so transition fires
+item.style.maxHeight     = '0';
+item.style.opacity       = '0';
+item.style.pointerEvents = 'none';
+dismissedCount++;
+if (dismissedCount >= notifItems.length) dropdown.classList.add('is-empty');
+```
+
+**`getBoundingClientRect()` flush is mandatory** — without it the browser batches both `maxHeight` assignments and no transition fires (the item disappears instantly).
+
+**Reset on ALL close paths (both `mouseleave` AND outside-click):**
+```js
+dismissedCount = 0;
+dropdown.classList.remove('is-empty');
+notifItems.forEach(function (item) {
+  item.dataset.clicks      = '0';
+  item.classList.remove('is-read');
+  item.style.transition    = 'none';
+  item.style.maxHeight     = '';
+  item.style.opacity       = '';
+  item.style.pointerEvents = '';
+  requestAnimationFrame(function () { item.style.transition = ''; });
+});
+```
+
+`requestAnimationFrame` after resetting `transition: none` ensures the `none` takes effect before the next paint, so the instant reset doesn't interfere with future transitions.
+
+**Required CSS for the two-click pattern to work:**
+- `.notif-item { overflow: hidden; }` — needed for `max-height` collapse to clip content
+- `.notif-dropdown__footer { transition: padding-top 0.3s ease; }` — smooth footer adjustment
+- `.notif-dropdown.is-empty .notif-dropdown__footer { padding-top: 0; }` — removes gap when all items gone
+- `#notif-btn.is-active .num-badge { opacity: 0; }` — hides counter badge while dropdown is open
+
+**Mistake made (2026-05-29):** `learningHub.html` had only the simple `mouseleave → close` and `outside-click → close` handlers. The full read/dismiss interaction block was never applied. The CSS rules for `is-read`, `is-empty`, and `overflow: hidden` were present but the JS to drive them was missing — so the CSS was dead code.
+
+---
+
+### 63. Nav menu accordion — expandable submenu pattern (tablet + mobile)
+
+Both `#NavMenu-Tablet` and `#NavMenu-Mobile` have expandable sub-menus for Class, Learn, Achievement, Potential, and Rewards. Each requires matching HTML, CSS, and a dedicated JS IIFE.
+
+**HTML pattern — flat siblings (no wrapper divs):**
+```html
+<!-- Trigger -->
+<div class="nav-menu-item has-submenu" role="button" tabindex="0"
+     aria-label="Learn" aria-expanded="false" data-submenu="submenu-learn">
+  <span class="nav-menu-item__icon">...</span>
+  <span class="nav-menu-check" aria-hidden="true">...</span>
+  <span class="nav-menu-item__label">Learn</span>
+  <span class="nav-menu-item__arrow">...</span>
+</div>
+<!-- Submenu — direct sibling, NOT wrapped -->
+<div class="nav-menu-submenu" id="submenu-learn" aria-hidden="true">
+  <div class="nav-menu-item" role="button" tabindex="-1" ...>...</div>
+  ...
+</div>
+```
+
+**ID convention:**
+- Tablet: `submenu-class`, `submenu-learn`, `submenu-achievement`, `submenu-potential`, `submenu-rewards`
+- Mobile: `submenu-m-class`, `submenu-m-learn`, `submenu-m-achievement`, `submenu-m-potential`, `submenu-m-rewards`
+
+**CSS — `margin-top: -8px` trick (phantom gap cancellation):**
+```css
+.nav-menu-submenu {
+  max-height: 0; overflow: hidden;
+  margin-top: calc(-1 * var(--spacing-space-xs));   /* -8px cancels phantom flex gap when closed */
+  transition: max-height 0.2s ease, margin-top 0.2s ease;
+}
+.nav-menu-submenu.is-open { max-height: 500px; margin-top: 0; }   /* restore gap when open */
+#NavMenu-Mobile .nav-menu-submenu.is-open { max-height: 800px; margin-top: 0; padding-bottom: var(--spacing-space-m); }
+```
+
+**JS — each menu (tablet / mobile) gets its own IIFE with:**
+- `closeAllSubmenus()` — runs `cancelAutoCollapse()` first, then closes all open submenus
+- `startAutoCollapse()` — 5s timer; cancelled on each new open
+- `MutationObserver` watching `aria-hidden` on the panel → calls `closeAllSubmenus()` when panel hides
+- Mobile only: `adjustVisibleItems()` called 220ms after open — hides top items (Home/Quiz/Battle/Practice) one-by-one until `content.scrollHeight ≤ 800px`
+
+**Tablet IIFE inserted BEFORE the hamburger toggle IIFE.**
+**Mobile IIFE inserted AFTER the mobile menu close IIFE, before the maximize IIFE.**
+
+**Mistake made (2026-05-29):** `learningHub.html` had the accordion CSS (`.nav-menu-submenu`, `.has-submenu.is-open`) and `#NavMenu-Mobile .nav-menu-submenu` overrides already applied, but the HTML items still lacked `has-submenu` class, `data-submenu` attributes, and the submenu divs — and both JS IIFEs were entirely missing. CSS without JS = no accordion behaviour.
+
+---
+
+### Mandatory workflow — BEFORE every session, every change, every decision (updated 2026-05-29)
+
+> **"Always before starting any design, making any changes, or making any decisions — refer to DS 1.5 and syakila.design.md first."**
+
+**Step 0 (mandatory, no exceptions):**
+
+```
+□ 0a. Read design-md/syakila.design.md   → ALL rules 1–63, confirmed specs, known mistakes
+□ 0b. Read design-md/zul.design.md       → Rules 1–192+, confirmed specs — syakila inherits ALL zul rules
+□ 0c. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT prior notes, NOT docs
+□ 0d. Sync check (Rule 61): git log --oneline -- zul.test.git/zul.page.template.html
+       → if any commit is newer than last Syakila sync → apply diff to ALL Syakila pages FIRST
+□ 0e. get_design_context on COMPONENT SET → list ALL variant names before writing any CSS
+□ 0f. get_design_context on EACH state   → extract every token BEFORE writing any CSS
+□ 0g. use_figma raw node inspection      → confirm exact padding, strokeAlign, width, height
+□ 0h. get_variable_defs on sub-nodes     → confirm Semantic token per fill/stroke/spacing
+□ 0i. Cross-check CSS var against :root  → never guess hex from token name
+□ 0j. get_screenshot after implement     → compare against DS, fix before moving on
+□ 0k. After any fix — grep for same class in ALL Syakila .html files and sync (Rule 184 / zul)
+```
+
+**Never carry forward a radius, color, spacing, or JS pattern from a prior session without re-verifying live in DS and both .md files.** Values change. Use memory as context, not ground truth.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-05-29 (Rules 61–63 — template sync protocol, notification read/dismiss JS pattern, nav menu accordion HTML+JS) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
 
 
 ---
@@ -1861,9 +1997,12 @@ All 5 states: `w:20 h:20`, `padding:2px`, `strokeAlign: INSIDE`. State changes =
 
 ## Canonical template rule
 
-`scoreCard.html` is the canonical navbar/menubar template for all Achievement pages.
+`zul.page.template.html` is the **master template** for all shared navigation shell components (Navbar, NavMenu, dropdowns, Footer, JS handlers). All Syakila pages sync FROM it — never the other way around. See Rule 61 for the sync protocol.
+
+`scoreCard.html` is the canonical navbar/menubar template for all Achievement pages within the Syakila scope.
 `syakila.html` is the home/welcome screen — it uses a different, simpler navbar.
 `AnalysisCard.html` must copy navbar/menubar CSS, HTML, and JS exactly from `scoreCard.html`.
+`learningHub.html` is the Learning Hub page — syncs shared components from `zul.page.template.html`, adds page-specific Learning Hub content (accordion filter panels, content grid).
 
 ---
 
@@ -2079,9 +2218,9 @@ Mobile: `body { padding-bottom: 102px }` when footer stacks vertically.
 
 ## Page background
 
-`body { background: var(--surface-subtle); }` = `#f8fafc`
+`body { background: var(--surface-general-default); }` = `#ffffff`
 
-This makes the 12px gap between the two navbar rows visible (light grey showing between white elements).
+DS Screen page confirmed: `Surface/general/default` is the correct page background token (2026-05-30). `--surface-subtle` (`#f8fafc`) was a fabricated token — not in DS. Use `--surface-general-default` everywhere.
 
 ---
 
@@ -2559,3 +2698,419 @@ Geography uses **dark text `#478220`** on its light green `#77d836` background. 
 | Science | `#ffd641` | `#998027` |
 
 *Last updated: May 2026 (Session 6)*
+
+---
+
+## Session 8 — Practice Card hover state + Learning Hub grid (2026-05-29)
+
+### Mandatory pre-session rule (reinforced this session)
+
+**Always refer to `design-md/syakila.design.md` AND the live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any changes, or making any decisions — including seemingly small fixes.**
+
+Also always check the canonical reference implementation file (e.g. `Nadia.test.git/Practise/nadia_Practise-subject.html`) before touching any component that was originally ported from it.
+
+---
+
+### 64. Practice Card hover — the visual effect is the circles expanding, not a color change alone
+
+The Practice Card - 1.5 hover state (DS node `2339:4823`) has TWO parts:
+1. **Color change** — `background` shifts to `--subj-bg-hover`, `box-shadow: inset 0 0 0 8px var(--subj-bg)` creates a thick colored inner ring
+2. **Circle animation** — `.practice-card__circles` scales up via `transform: scale(1.4)` from `transform-origin: left center`
+
+Without the circle animation, the hover appears static and dull even if the color is technically correct. The circles ARE the primary visual feedback.
+
+**CSS that must exist:**
+```css
+.practice-card__circles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform-origin: left center;
+  transition: transform 0.3s ease;
+}
+.practice-card:hover .practice-card__circles { transform: scale(1.4); }
+```
+
+**Mistake made:** Hover color changes were applied but `transform: scale(1.4)` was completely missing. User reported "no update" — nothing visible changed.
+
+---
+
+### 65. Practice Card circles — direct child of `<article>`, never inside `__image`
+
+`.practice-card__circles` must be a **direct child of `<article class="practice-card">`**, positioned with `position: absolute; inset: 0` relative to the card.
+
+If placed inside `.practice-card__image` (which is `160px` wide), the circles are clipped to that 160px column — the `scale(1.4)` expansion only covers the image area and the effect is invisible on the content side.
+
+```html
+<!-- CORRECT -->
+<article class="practice-card">
+  <div class="practice-card__circles" aria-hidden="true">...</div>
+  <div class="practice-card__image">...</div>
+  <div class="practice-card__content">...</div>
+</article>
+
+<!-- WRONG — circles scoped to 160px image column -->
+<article class="practice-card">
+  <div class="practice-card__image">
+    <div class="practice-card__circles" aria-hidden="true">...</div>  ← WRONG
+    ...
+  </div>
+  ...
+</article>
+```
+
+**Also required:** `position: relative` on `.practice-card` and **NO** `overflow: hidden` on `.practice-card__image` — circles must escape the image column bounds.
+
+**Mistake made:** Circles were inside `__image`. Moving them to be a direct `<article>` child (with `position: relative` on the card and `position: absolute; inset: 0` on circles) fixed the full-card coverage.
+
+---
+
+### 66. `box-shadow: inset` on a card works when children have no explicit background
+
+When a card uses `box-shadow: inset 0 0 0 Npx var(--color)` for its border/ring, it ONLY shows through if the child elements (`.practice-card__image`, `.practice-card__content`) have no explicit `background` set. The card's own background color shows through transparent children, making the ring visible.
+
+**Rule:** Never set a background on child sections of a practice card — they must remain `background: transparent` (or unset) so the inset box-shadow at the card edges is never obscured.
+
+This is why `box-shadow: inset` works correctly in Nadia's implementation even without `border`.
+
+---
+
+### 67. Always read the canonical reference file before touching a ported component
+
+For any component ported from a Nadia or Zul source file, always re-read the source before making changes:
+
+| Component | Canonical source |
+|---|---|
+| Practice Card - 1.5 | `Nadia.test.git/Practise/nadia_Practise-subject.html` |
+| Quiz Card, Primary Card | `zul.test.git/zul.page.template.html` |
+| Shared nav (Navbar, Footer) | `zul.test.git/zul.page.template.html` |
+
+**Why:** DS `get_design_context` output shows the component schema but not the exact implementation choices (inline-style variables, color values, hover mechanisms). The reference file reflects confirmed, working implementation decisions. Copying from it avoids re-discovering the same specs.
+
+**Mistake made:** Attempted to implement hover from DS `get_design_context` alone — missed `transform: scale(1.4)` and circles placement. Fetching Nadia's file gave the complete working structure in one read.
+
+---
+
+### 68. Practice Card — flex: 1 required so cards fill row width equally
+
+`.practice-card` must have `flex: 1` so two cards in a `.practice-cards-row` share the available width equally.
+
+Without `flex: 1`, cards shrink to content width and leave empty space in the row.
+
+```css
+.practice-card {
+  flex:   1;          /* ← required */
+  height: 160px;
+  ...
+}
+```
+
+---
+
+### 69. Primary Card inner content wrapper — remove white bg + border when cards fill the space
+
+The DS Primary Card - 1.5 (Secondary variant, node `2881:36281`) specifies a white inner content placeholder with `border: 1px solid #00a36a`. This is appropriate when the content area contains mixed elements.
+
+**For the Learning Hub practice card grid:** remove the white background and inner border from `.practice-cards-content` so the practice cards sit directly on the green outer card surface. The white layer adds visual noise and makes the layout feel heavier than necessary.
+
+```css
+/* Remove these two lines from .practice-cards-content: */
+background:  var(--surface-general-default);             /* ← remove */
+box-shadow:  inset 0 0 0 1px var(--border-primary-focus); /* ← remove */
+```
+
+**Confirmed preference:** User requested removal after seeing the rendered output.
+
+---
+
+### Practice Card — confirmed final CSS (2026-05-29)
+
+```css
+.practice-card {
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  border: none;
+  box-shadow: inset 0 0 0 1px var(--subj-border);
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--subj-bg);
+  flex: 1;
+  height: 160px;
+  cursor: default;
+  transition: background 0.18s ease, box-shadow 0.18s ease;
+}
+.practice-card:hover {
+  background: var(--subj-bg-hover);
+  box-shadow: inset 0 0 0 8px var(--subj-bg);
+  cursor: pointer;
+}
+.practice-card:hover .practice-card__content { border-left: none; }
+
+.practice-card__circles {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  transform-origin: left center;
+  transition: transform 0.3s ease;
+}
+.practice-card:hover .practice-card__circles { transform: scale(1.4); }
+
+.practice-card__image {
+  width: 160px; min-width: 160px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  /* NO overflow: hidden — circles are direct card children */
+}
+```
+
+**All 8 card inline style values (confirmed from Nadia source):**
+
+| Subject | `--subj-bg` | `--subj-border` | `--subj-bg-hover` | `--subj-title` |
+|---|---|---|---|---|
+| English | `#ff4d56` | `#992e34` | `#cc3e45` | — |
+| Bahasa Melayu | `#4d77ff` | `#2e4799` | `#3e5fcc` | — |
+| Accounting | `#0072ca` | `#004479` | `#005ba2` | `#e6f1fa` |
+| Mathematics | `#42ac7b` | `#28674a` | `#358a62` | — |
+| Biology | `#8431d8` | `#4f1d82` | `#6a27ad` | — |
+| Chemistry | `#e20082` | `#88004e` | `#b50068` | — |
+| Physics | `#27a0d7` | `#176081` | `#1f80ac` | — |
+| Computer Science | `#d10070` | `#7d0043` | `#a7005a` | — |
+
+`--subj-title` is only set for Accounting (light text on medium-blue bg). All other subjects default to `white`.
+
+---
+
+### 198. Button - 1.5 — no CSS transitions on any state (instant cuts only)
+
+All `Button - 1.5` instances use **instant state changes** — no `transition` on any property, on any element (container, label, arrow, arrow-clip).
+
+**Rule:** Never add `transition` to any Button - 1.5 CSS class — `.btn-*`, `.btn-*__text`, `.btn-*__label`, `.btn-*__arrow`, or any child element.
+
+**Why:** The DS does not define easing or duration for button state changes. Adding transitions causes the button body and arrow to animate at different speeds, producing a "laggy arrow" or "staggered" feel. State changes must be instant cuts to match the DS.
+
+Note: Transitions on **cards** (e.g. `.practice-card { transition: background }`) are separate DS-defined hover animations and are NOT affected by this rule. This rule applies to Button - 1.5 elements only.
+
+---
+
+### 199. Button - 1.5 — always pair CSS `:active` with JS `is-pressing` handler
+
+Every Button - 1.5 `<button>` must have **both** CSS `.is-pressing` declarations AND JS mousedown/mouseup/mouseleave handlers toggling that class. CSS `:active` alone is unreliable in VS Code Simple Browser (Electron webview).
+
+```css
+.btn:active,
+.btn.is-pressing { /* pressed bg + border — no transition */ }
+.btn:active .btn__child,
+.btn.is-pressing .btn__child { /* child color overrides */ }
+```
+
+```js
+document.querySelectorAll('.btn-class').forEach(function (btn) {
+  btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+  btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+  btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+});
+```
+
+**`mouseleave` is mandatory** — without it the button stays in pressed state if the cursor moves away while the mouse is held.
+
+*Last updated: 2026-05-31 | Rules 198–199 added — Button-1.5 no transitions + is-pressing JS; Rules 19/40 corrected for Primary Pressed palette (Primary=#00a36a, Secondary/Tertiary=#00564c)*
+
+---
+
+## Session 9 — Learning Hub layout fixes + search (2026-06-01)
+
+### Mandatory pre-session rule (reinforced every session)
+
+**Always refer to `design-md/syakila.design.md` AND the live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any changes, or making any decisions — no exceptions.**
+
+---
+
+### 70. Flex container hug-content — `align-self: flex-start` + remove `flex: 1` from inner content
+
+To make a flex child stop stretching to fill its parent's cross-axis height ("hug content"), two things are required:
+
+1. `align-self: flex-start` on the container itself — stops it stretching to match siblings
+2. Remove `flex: 1` from any inner content div — `flex: 1` on a child prevents the parent from computing its natural height, keeping it tall
+
+`overflow: hidden` must stay on the container to clip children to the rounded `border-radius`. Removing it causes content to visually flow outside the rounded border.
+
+**Confirmed — `.learn-sidebar` (2026-06-01):**
+```css
+.learn-sidebar {
+  align-self:     flex-start;   /* stops height matching the right panel */
+  overflow:       hidden;       /* keeps children clipped to border-radius */
+}
+.learn-sidebar__content {
+  /* flex: 1 REMOVED — was preventing sidebar from computing natural height */
+}
+```
+
+**Mistake made:** Removing `overflow: hidden` from the sidebar (thinking it caused clipping) just moved the clipping problem — content then visually overflowed the rounded border. Root cause was accordion `max-height` too small, not the overflow property.
+
+---
+
+### 71. Filter item height — lock all states to `height: 38px; overflow: hidden`
+
+Filter items change padding/border between states (Default = transparent border, Selected = coloured border). Without a fixed height, selected items become taller than unselected, causing layout shift.
+
+**Calculation (DS confirmed):**
+```
+1px border-top + 8px padding-top + 20px line-height + 8px padding-bottom + 1px border-bottom = 38px
+```
+
+`height: 36px` is wrong — it leaves only 18px for content, clipping 1px from top and bottom of 20px text (descenders cut off).
+
+```css
+.filter-item {
+  height:   38px;
+  overflow: hidden;   /* prevents any child from pushing height above 38px */
+}
+```
+
+---
+
+### 72. Accordion `max-height` animation — `overflow: hidden` must be always-active, not just on collapsed state
+
+**Wrong pattern:**
+```css
+.accordion__body { max-height: 900px; }
+.accordion.is-collapsed .accordion__body { max-height: 0; overflow: hidden; }
+```
+Moving `overflow: hidden` to the collapsed rule only means the open state has no overflow control — long content overflows the parent border.
+
+**Correct pattern:**
+```css
+.accordion__body {
+  overflow:   hidden;     /* ALWAYS — never conditional */
+  max-height: 2000px;     /* open state — must exceed actual content height */
+  transition: max-height 0.25s ease, opacity 0.2s ease;
+}
+.accordion.is-collapsed .accordion__body {
+  max-height: 0;
+  opacity:    0;
+  /* overflow NOT here — already always active above */
+}
+```
+
+**Max-height calculation:** Always measure the actual expanded content. For a subjects list of 21 items:
+`21 × 38px items + 20 × 8px gaps + 32px padding = 798 + 160 + 32 = 990px` → use 2000px for safety.
+
+**Mistake made:** `max-height: 900px` was below the actual 990px subjects list — sidebar's `overflow: hidden` clipped the bottom items silently (no error, no overflow visible, just content cut off).
+
+---
+
+### 73. Practice card grid — always `align-self: flex-start` so border hugs cards, not the page
+
+`.practice-card-grid` must have `align-self: flex-start` unconditionally. Without it, the green border stretches to match the sidebar height even when only a few cards are shown — the border fills the full column height rather than wrapping the cards.
+
+```css
+.practice-card-grid {
+  flex:       1;            /* fills row width */
+  align-self: flex-start;   /* hugs card content height — never stretches to match sidebar */
+}
+```
+
+**Do NOT use `flex: 1` on inner content divs if the grid height should hug its content** — same principle as Rule 70.
+
+---
+
+### 74. Empty state — DS node `3420:205916` confirmed spec
+
+| Property | Value |
+|---|---|
+| Height | **437px fixed** — never follows sidebar/sibling height |
+| Background | `#f6fef6` (`--secondary-50`, Secondary/50) |
+| Border | `1px solid #00cc85` — `strokeAlign: INSIDE` → `box-shadow: inset 0 0 0 1px var(--border-primary-default)` |
+| Border radius | 24px (`corner-4xl`) |
+| Overflow | hidden |
+| Icon | 108×108px clip container, inset 12.5% (13.5px), `Outline/image` icon, `color: var(--icon-success-default)` = `#18c964` |
+| Text | "There is no subjects to show", 24px Poppins Medium (`Header/H3`), `#666666` (`--text-default-body`) |
+| Gap | 16px (`Spacing/space-m`) |
+
+**CSS:**
+```css
+.practice-empty-state {
+  height:      437px;
+  flex-shrink: 0;
+  background:  var(--secondary-50);
+  box-shadow:  inset 0 0 0 1px var(--border-primary-default);
+  border-radius: var(--corner-radius-corner-4xl);
+  /* ... flex col, center, gap 16px */
+}
+```
+
+Show/hide via `.is-visible` class toggled by JS. Show empty state when: no filters selected AND no search query.
+
+---
+
+### 75. Search on filtered cards — combined filter + search pattern
+
+The search input (`.learn-search__input`) filters practice cards by their visible text content. It works on top of the existing grade/subject filters.
+
+**Rules:**
+- Show empty state when: `grades.length === 0 && subjects.length === 0 && query === ''`
+- If query exists with no filters: show cards that match the search across all subjects/grades
+- If query + filters yield zero visible cards: show empty state
+- Wire to `input` event (not `change`) for live-as-you-type filtering
+
+**JS pattern:**
+```js
+function applyFilters() {
+  var query = searchEl.value.trim().toLowerCase();
+  var noFilters = grades.length === 0 && subjects.length === 0;
+
+  if (noFilters && !query) { /* show empty state */ return; }
+
+  var anyVisible = false;
+  cards.forEach(function(card) {
+    var filterMatch  = /* grade + subject checks */;
+    var searchMatch  = !query ||
+      title.toLowerCase().indexOf(query) !== -1 ||
+      stat.toLowerCase().indexOf(query)  !== -1;
+    var show = filterMatch && searchMatch;
+    card.classList.toggle('is-hidden', !show);
+    if (show) anyVisible = true;
+  });
+
+  if (!anyVisible) { /* show empty state */ }
+}
+
+searchInput.addEventListener('input', applyFilters);
+```
+
+---
+
+### 76. SVG polyline overflow — last point must not exceed container bounds
+
+If a `<polyline>` has its last point at a y-coordinate that exceeds the container rect's bottom edge (even by 0.5px), the stroke renders visibly outside the rect — creating a small bump or "tail" that looks like a speech bubble.
+
+**Confirmed — `#ic-image` (Outline/image):**
+```
+rect: y=1 to y=19 (18px height)
+polyline: points="19 13.5 14 8.5 3 19.5"  ← y=19.5 is 0.5px below rect bottom
+```
+At 81px rendered size: 0.5px exceeds the rect by ~1.9px visually → bump visible at bottom-left.
+
+**Fix:** Clip the last point to the rect boundary:
+```
+points="19 13.5 14 8.5 3 19"   ← y=19 exactly matches rect bottom
+```
+
+**Rule:** Always check that all polyline/path endpoints stay within the surrounding rect when implementing outline-style icons. Any point outside the rect will produce a visible stroke artifact.
+
+---
+
+### 77. Learning Hub corner radius confirmed (DS nodes 2881:36272, 2881:36281, 3420:205916)
+
+| Element | Border radius | DS token | DS node |
+|---|---|---|---|
+| Outer card (`.practice-card-grid`) | **24px** | `corner-4xl` | `2881:36272` |
+| Inner white cards area (`.practice-cards-content`) | **18px** | `Corner-2XL` / `Radius/3xl` | `2881:36281` |
+| Empty state (`.practice-empty-state`) | **24px** | `corner-4xl` | `3420:205916` |
+| Left sidebar (`.learn-sidebar`) | **24px** | `corner-4xl` | — |
+
+The inner `.practice-cards-content` white container requires `border-radius: var(--corner-radius-corner-2xl)` (18px) — this was missing and must be added.
+
+---
+
+*Last updated: 2026-06-01 (Session 9)*
