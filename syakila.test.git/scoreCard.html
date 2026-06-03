@@ -2497,23 +2497,42 @@
 
     /* ── Filter dropdown — subject selection (prototype: cycles through subjects on click) ── */
     (function() {
-      var subjects = ['all'].concat(Object.keys(SUBJECT_DATA));
+      var subjects = [
+        { key:'all',       progress:61.5, label:'All Subjects'    },
+        { key:'account',   progress:78.0, label:'Account'         },
+        { key:'add-math',  progress:72.0, label:'Add Math'        },
+        { key:'bm',        progress:76.0, label:'Bahasa Melayu'   },
+        { key:'biology',   progress:88.0, label:'Biology'         },
+        { key:'chemistry', progress:65.0, label:'Chemistry'       },
+        { key:'science',   progress:85.0, label:'Science'         },
+        { key:'economy',   progress:55.0, label:'Economy'         },
+        { key:'english',   progress:90.0, label:'English'         },
+        { key:'geography', progress:60.0, label:'Geography'       },
+        { key:'history',   progress:91.0, label:'History'         },
+        { key:'islamic',   progress:84.0, label:'Islamic Studies' },
+        { key:'kafa',      progress:77.0, label:'KAFA'            },
+        { key:'math',      progress:80.0, label:'Mathematics'     },
+        { key:'rbt',       progress:82.0, label:'RBT'             },
+        { key:'moral',     progress:50.0, label:'Moral Studies'   },
+        { key:'cs',        progress:70.0, label:'Computer Science'},
+        { key:'physics',   progress:78.0, label:'Physics'         },
+        { key:'chinese',   progress:80.0, label:'Chinese Language'},
+      ];
       var idx = 0;
-      var btn   = document.getElementById('subject-filter-btn');
-      var lbl   = document.getElementById('subject-filter-label');
-      var names = { all:'All Subjects', account:'Account', 'add-math':'Add Math', bm:'Bahasa Melayu', biology:'Biology', chemistry:'Chemistry', science:'Science', economy:'Economy', english:'English', geography:'Geography', history:'History', islamic:'Islamic Studies', kafa:'KAFA', math:'Mathematics', rbt:'RBT', moral:'Moral Studies', cs:'Computer Science', physics:'Physics', chinese:'Chinese Language' };
+      var btn = document.getElementById('subject-filter-btn');
+      var lbl = document.getElementById('subject-filter-label');
       if (!btn) return;
       btn.addEventListener('click', function() {
         idx = (idx + 1) % subjects.length;
-        var key         = subjects[idx];
-        var color       = key === 'all' ? '#00cc85' : (SUBJECT_DATA[key]?.bg     || '#00cc85');
-        var borderColor = key === 'all' ? '#00cc85' : (SUBJECT_DATA[key]?.border || '#00cc85');
-        if (lbl) lbl.textContent = names[key] || key;
-        renderBadges(key);
+        var s           = subjects[idx];
+        var color       = s.key === 'all' ? '#00cc85' : (SUBJECT_DATA[s.key]?.bg     || '#00cc85');
+        var borderColor = s.key === 'all' ? '#00cc85' : (SUBJECT_DATA[s.key]?.border || '#00cc85');
+        if (lbl) lbl.textContent = s.label;
+        renderBadges(s.key);
         setAccentColor(color);
         setInnerBorder(borderColor);
-        animateDonut(key === 'all' ? 61.5 : (parseFloat(Object.values(SUBJECT_DATA).find((_,i) => Object.keys(SUBJECT_DATA)[i] === key)?.progress ?? 61.5)), 900);
-        animateGraph(key, 900);
+        animateDonut(s.progress, 900);
+        animateGraph(s.key, 900);
       });
     })();
 

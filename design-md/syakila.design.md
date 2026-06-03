@@ -3309,4 +3309,79 @@ Simple two-breakpoint rule. Desktop unchanged. Tablet + mobile both stack.
 
 ---
 
-*Last updated: 2026-06-03 (Session 10 — quickNotes.view.html: file location, button chevrons, Fano wireframe, bullet list DS structure, tags padding, tablet responsive)*
+---
+
+## Session 11 — Asset path fixes: AnalysisCard.html + scoreCard.html (2026-06-03)
+
+### Mandatory pre-session rule (reinforced — user explicit instruction 2026-06-03)
+
+**Always refer to `design-md/syakila.design.md` AND the live DS (`TLVKe3bgJTdVvuPAzgDq2f`) before starting any design work, making any changes, or making any decisions — no exceptions. This applies to seemingly small fixes too.**
+
+---
+
+### 84. Asset paths for AnalysisCard.html + scoreCard.html — `Achievement/score.card/assets/`, not `Achievement/assets/`
+
+Both files are in `syakila.test.git/`. All their image assets live one level deeper than the broken paths originally used.
+
+| Asset type | Correct relative path |
+|---|---|
+| Avatar, feature icons (Learn Menu), store icons | `../src/image-repo/Achievement/score.card/assets/` |
+| Subject badge icons (18 subjects) | `../src/image-repo/Achievement/score.card/assets/subject-icons/` |
+| Logo mark + logo text | `../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/` |
+
+**Broken → fixed (2026-06-03):**
+- `../src/image-repo/Achievement/assets/` → `../src/image-repo/Achievement/score.card/assets/` — 36 refs in AnalysisCard, 34 in scoreCard
+- `../zul.test.git/icons/logo-mark.svg` → `../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-mark.svg`
+- `../zul.test.git/icons/logo-text.svg` → `../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-text.svg`
+
+**Root cause:** The `Achievement/` folder contains a `score.card/` subfolder — the full path is `Achievement/score.card/assets/`. Both HTML files were missing the `score.card/` level. `zul.test.git/icons/` was never the correct home for logos; they live in the page template asset folder.
+
+**Why it's silent:** Broken asset paths do not produce CSS errors or console warnings in simple browsers. The only signal is a broken image icon in the browser. Always grep-verify every `src=` path against the actual file tree before committing.
+
+**Full asset inventory — `src/image-repo/Achievement/score.card/assets/`:**
+```
+avatar-user.png
+feature-live-tuition.svg   feature-live-help.svg     feature-quiz.svg
+feature-practice.svg       feature-chapters.svg       feature-textbook.svg
+feature-quick-notes.svg    feature-videos.png         feature-experiments.svg
+feature-personality.svg    feature-university.svg     feature-rewards.svg
+icon-playstore.png         icon-appstore.png           icon-appgallery.png
+subject-icons/icon-{account,add-math,biology,bmelayu,business,chemistry,
+  chinese-lang,comp-science,economy,english,geography,history,islamic,
+  kafa,math,moral,physics,rbt,science}.svg  (+icon-geography.png)
+```
+
+**Rule:** Before referencing any asset in a Syakila HTML file, verify the path with PowerShell `Get-ChildItem` or `ls`. Never trust memory or prior-session notes for folder structure.
+
+---
+
+### 85. Logo assets for Syakila pages — always from `page.template`, never from `zul.test.git/icons/`
+
+`zul.test.git/icons/` does NOT contain `logo-mark.svg` or `logo-text.svg`. Both Syakila pages must use:
+
+```html
+<img src="../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-mark.svg" ...>
+<img src="../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-text.svg" ...>
+```
+
+This is the same canonical source used by `zul.page.template.html` (CLAUDE.md Rule 67). Syakila pages share the same logo assets — never invent a different path.
+
+---
+
+### Updated mandatory pre-flight (post Session 11)
+
+```
+□ 0a. Read design-md/syakila.design.md   → ALL rules 1–85+, confirmed specs, known mistakes
+□ 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth
+□ 0c. Verify file location               → Syakila files ONLY in syakila.test.git/ (Rule 78)
+□ 0d. Verify ALL <img src=> paths        → ls/Get-ChildItem each referenced folder (Rules 84–85)
+□ 0e. get_design_context on COMPONENT SET → list ALL variant names
+□ 0f. get_design_context on EACH state   → extract every token BEFORE writing CSS
+□ 0g. use_figma raw node inspection      → padding, strokeAlign, width, height
+□ 0h. get_variable_defs on sub-nodes     → confirm Semantic tokens
+□ 0i. After any fix — grep both HTML files for same class and sync (Rule 63)
+```
+
+---
+
+*Last updated: 2026-06-03 (Session 11 — AnalysisCard + scoreCard asset path fixes; Rules 84–85)*
