@@ -94,24 +94,120 @@
       --scale-200: 8px;
 
       /* Subject Colors Ã¢â‚¬â€ ALL confirmed from DS get_variable_defs */
-      --subjects-b-melayu-default:   #4d77ff;   /* Subjects/b-melayu/default */
-      --subjects-english-default:    #ff4d56;   /* Subjects/english/default */
-      --subjects-math-default:       #42ac7b;   /* Subjects/math/default */
-      --subjects-science-default:    #ffd641;   /* Subjects/science/default */
-      --subjects-chemistry-default:  #e20082;   /* Subjects/chemistry/default */
-      --subjects-physics-default:    #27a0d7;   /* Subjects/physics/default */
-      --subjects-history-default:    #a97c50;   /* Subjects/history/default */
-      --subjects-geo-default:        #77d836;   /* Subjects/geo/default */
-      --subjects-islamic-default:    #de4d7f;   /* Subjects/islamic/default */
-      --subjects-moral-default:      #0072ca;   /* Subjects/moral/default */
-      --subjects-biology-default:    #8431d8;   /* Subjects/biology/default */
-      --subjects-add-math-default:   #283589;   /* Subjects/add-math/default */
-      --subjects-economy-default:    #ff5733;   /* Subjects/economy/default */
-      --subjects-account-default:    #0072ca;   /* Subjects/account/default */
-      --subjects-business-default:   #efb42b;   /* Subjects/business/default */
-      --subjects-cs-default:         #d10070;   /* Subjects/comp-science/default */
-      --subjects-kafa-default:       #8ae3a9;   /* Subjects/kafa/default */
-      --subjects-rbt-default:        #353535;   /* Subjects/rbt/default */
+      /* Subject Colors — all 5 tiers, all 19 subjects. Confirmed from DS (Subjects A–E, G–S collections) */
+      --subjects-account-default:                #0072ca;
+      --subjects-account-default-hover:          #005ba2;
+      --subjects-account-default-subtle:         #e6f1fa;
+      --subjects-account-default-subtle-hover:   #99c7ea;
+      --subjects-account-focus:                  #004479;
+
+      --subjects-add-math-default:               #283589;
+      --subjects-add-math-default-hover:         #202a6e;
+      --subjects-add-math-default-subtle:        #eaebf3;
+      --subjects-add-math-default-subtle-hover:  #a9aed0;
+      --subjects-add-math-focus:                 #182052;
+
+      --subjects-b-melayu-default:               #4d77ff;
+      --subjects-b-melayu-default-hover:         #3e5fcc;
+      --subjects-b-melayu-default-subtle:        #f6f9ff;
+      --subjects-b-melayu-default-subtle-hover:  #b8c9ff;
+      --subjects-b-melayu-focus:                 #2e4799;
+
+      --subjects-biology-default:                #8431d8;
+      --subjects-biology-default-hover:          #6a27ad;
+      --subjects-biology-default-subtle:         #f3ebfb;
+      --subjects-biology-default-subtle-hover:   #ceadef;
+      --subjects-biology-focus:                  #4f1d82;
+
+      --subjects-business-default:               #efb42b;
+      --subjects-business-default-hover:         #bf9022;
+      --subjects-business-default-subtle:        #fef8ea;
+      --subjects-business-default-subtle-hover:  #f9e1aa;
+      --subjects-business-focus:                 #8f6c1a;
+
+      --subjects-chemistry-default:              #e20082;
+      --subjects-chemistry-default-hover:        #b50068;
+      --subjects-chemistry-default-subtle:       #fce6f3;
+      --subjects-chemistry-default-subtle-hover: #ed99c6;
+      --subjects-chemistry-focus:                #88004e;
+
+      --subjects-chinese-default:                #f94848;
+      --subjects-chinese-default-hover:          #c73a3a;
+      --subjects-chinese-default-subtle:         #ffeded;
+      --subjects-chinese-default-subtle-hover:   #fdb6b6;
+      --subjects-chinese-focus:                  #952b2b;
+
+      --subjects-cs-default:                     #d10070;
+      --subjects-cs-default-hover:               #a7005a;
+      --subjects-cs-default-subtle:              #fbe6f1;
+      --subjects-cs-default-subtle-hover:        #ed99c6;
+      --subjects-cs-focus:                       #7d0043;
+
+      --subjects-economy-default:                #ff5733;
+      --subjects-economy-default-hover:          #cc4629;
+      --subjects-economy-default-subtle:         #ffeeeb;
+      --subjects-economy-default-subtle-hover:   #ffbcad;
+      --subjects-economy-focus:                  #99341f;
+
+      --subjects-english-default:                #ff4d56;
+      --subjects-english-default-hover:          #cc3e45;
+      --subjects-english-default-subtle:         #ffedee;
+      --subjects-english-default-subtle-hover:   #ffb8bb;
+      --subjects-english-focus:                  #992e34;
+
+      --subjects-geo-default:                    #77d836;
+      --subjects-geo-default-hover:              #5fad2b;
+      --subjects-geo-default-subtle:             #f2fbeb;
+      --subjects-geo-default-subtle-hover:       #c9efaf;
+      --subjects-geo-focus:                      #478220;
+
+      --subjects-history-default:                #a97c50;
+      --subjects-history-default-hover:          #876340;
+      --subjects-history-default-subtle:         #f7f2ee;
+      --subjects-history-default-subtle-hover:   #ddcbb9;
+      --subjects-history-focus:                  #654a30;
+
+      --subjects-islamic-default:                #de4d7f;
+      --subjects-islamic-default-hover:          #b23e66;
+      --subjects-islamic-default-subtle:         #fcedf2;
+      --subjects-islamic-default-subtle-hover:   #f2b8cc;
+      --subjects-islamic-focus:                  #852e4c;
+
+      --subjects-kafa-default:                   #8ae3a9;
+      --subjects-kafa-default-hover:             #6eb687;
+      --subjects-kafa-default-subtle:            #f4fcf7;
+      --subjects-kafa-default-subtle-hover:      #d0f4dd;
+      --subjects-kafa-focus:                     #538865;
+
+      --subjects-math-default:                   #42ac7b;
+      --subjects-math-default-hover:             #358a62;
+      --subjects-math-default-subtle:            #ecf7f2;
+      --subjects-math-default-subtle-hover:      #b3deca;
+      --subjects-math-focus:                     #28674a;
+
+      --subjects-moral-default:                  #0072ca;
+      --subjects-moral-default-hover:            #005ba2;
+      --subjects-moral-default-subtle:           #e6f1fa;
+      --subjects-moral-default-subtle-hover:     #99c7ea;
+      --subjects-moral-focus:                    #004479;
+
+      --subjects-physics-default:                #27a0d7;
+      --subjects-physics-default-hover:          #1f80ac;
+      --subjects-physics-default-subtle:         #eaf6fb;
+      --subjects-physics-default-subtle-hover:   #a9d9ef;
+      --subjects-physics-focus:                  #176081;
+
+      --subjects-rbt-default:                    #353535;
+      --subjects-rbt-default-hover:              #2a2a2a;
+      --subjects-rbt-default-subtle:             #d7d7d7;
+      --subjects-rbt-default-subtle-hover:       #aeaeae;
+      --subjects-rbt-focus:                      #202020;
+
+      --subjects-science-default:                #ffd641;
+      --subjects-science-default-hover:          #ccab34;
+      --subjects-science-default-subtle:         #fffbec;
+      --subjects-science-default-subtle-hover:   #ffefb3;
+      --subjects-science-focus:                  #998027;
 
       /* Typography */
       --font-family: 'Poppins', sans-serif;
@@ -2062,7 +2158,6 @@
 
     /* QUICK NOTES SELECTIONS - Section styles · DS node 3638:47307 · 2026-06-03 */
 
-    :root { --subjects-b-melayu-focus: #2e4799; }
 
     #QuickNotesSelections-Viewport {
       display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
@@ -2091,8 +2186,8 @@
     }
 
     .qn-card__header {
-      background: var(--qn-subj-bg);
-      border: 1px solid var(--qn-subj-border);
+      background: var(--qn-subj-default, var(--subjects-b-melayu-default));
+      border: 1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
       border-radius: var(--corner-radius-corner-2xl);
       height: 110px; max-height: 110px;
       overflow: hidden; display: flex; align-items: center; position: relative;
@@ -2134,9 +2229,9 @@
 
     .qn-table { border: 1px solid var(--border-general-default); border-radius: var(--corner-radius-corner-xl); overflow: hidden; width: 100%; }
 
-    .qn-table__heading-row { display: flex; align-items: center; width: 100%; box-shadow: inset 0 -1px 0 0 var(--qn-subj-default); }
+    .qn-table__heading-row { display: flex; align-items: center; width: 100%; box-shadow: inset 0 -1px 0 0 var(--qn-subj-default, var(--subjects-b-melayu-default)); }
     .qn-table__heading-cell {
-      background: var(--qn-subj-50, #f6f9ff);
+      background: var(--qn-subj-default-subtle, var(--subjects-b-melayu-default-subtle));
       flex: 1 0 0; height: 56px; min-height: 56px;
       padding: var(--spacing-space-m); display: flex; align-items: center; overflow: hidden;
     }
@@ -3310,7 +3405,7 @@
 
           <!-- Quick Notes Card - 1.5 (DS node 3695:56321) — B.Melayu, Form 4 -->
           <section id="QuickNotes-Desktop" aria-label="Quick Notes content">
-            <div class="qn-card" style="--qn-subj-bg:#4d77ff; --qn-subj-border:#2e4799; --qn-subj-default:#4d77ff; --qn-subj-50:#f6f9ff;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-b-melayu-default); --qn-subj-focus:var(--subjects-b-melayu-focus); --qn-subj-default-subtle:var(--subjects-b-melayu-default-subtle); --qn-subj-default-subtle-hover:var(--subjects-b-melayu-default-subtle-hover); --qn-subj-default-hover:var(--subjects-b-melayu-default-hover);">
 
               <!-- Subject header: B.Melayu — bg #4d77ff, border #2e4799, h:110px, r:18px -->
               <div class="qn-card__header">
@@ -4917,6 +5012,83 @@
         learnSearchInput.addEventListener('input', applyFilters);
       }
     } catch(e) { console.warn('Learning Hub init error:', e); }
+  </script>
+
+  <script>
+    /* btn-learn → navigate to quickNotes.view.html, forwarding subject params */
+    document.querySelectorAll('.btn-learn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var dest = 'quickNotes.view.html';
+        if (window.location.search) dest += window.location.search;
+        window.location.href = dest;
+      });
+    });
+  </script>
+
+  <script>
+    /* Apply subject context from URL params passed by quickNotes.html */
+    (function () {
+      var params  = new URLSearchParams(window.location.search);
+      var subject = params.get('subject');
+      var icon    = params.get('icon');
+
+      /* Breadcrumb "Quick Notes" link — always navigates back */
+      var qnLink = document.querySelector('#Breadcrumb-Desktop .pd-link15:nth-child(2)');
+      if (qnLink) {
+        qnLink.style.cursor = 'pointer';
+        qnLink.addEventListener('click', function () {
+          window.location.href = 'quickNotes.html';
+        });
+      }
+
+      if (!subject) return; /* no params — keep hardcoded default */
+
+      /* Map subject name → DS token key */
+      var SUBJ_KEY = {
+        'Bahasa Melayu': 'b-melayu',         'Additional Mathematics': 'add-math',
+        'Accounting': 'account',              'Biology': 'biology',
+        'Business Studies': 'business',       'Chemistry': 'chemistry',
+        'Chinese Language': 'chinese',        'Computer Science': 'cs',
+        'Economy': 'economy',                 'English': 'english',
+        'Geography': 'geo',                   'History': 'history',
+        'Islamic Studies': 'islamic',         'KAFA': 'kafa',
+        'Mathematics': 'math',                'Moral Studies': 'moral',
+        'Physics': 'physics',                 'Reka Bentuk & Teknologi': 'rbt',
+        'Science': 'science'
+      };
+      var key = SUBJ_KEY[subject];
+      if (!key) return;
+
+      /* Set DS token references on the card — no hex math */
+      var card = document.querySelector('#QuickNotes-Desktop .qn-card');
+      if (card) {
+        card.style.setProperty('--qn-subj-default',              'var(--subjects-' + key + '-default)');
+        card.style.setProperty('--qn-subj-default-hover',        'var(--subjects-' + key + '-default-hover)');
+        card.style.setProperty('--qn-subj-default-subtle',       'var(--subjects-' + key + '-default-subtle)');
+        card.style.setProperty('--qn-subj-default-subtle-hover', 'var(--subjects-' + key + '-default-subtle-hover)');
+        card.style.setProperty('--qn-subj-focus',                'var(--subjects-' + key + '-focus)');
+      }
+
+      /* Update subject name text */
+      var titleEl = document.querySelector('#QuickNotes-Desktop .qn-card__topics');
+      if (titleEl) titleEl.textContent = subject;
+
+      /* Update subject icon src */
+      if (icon) {
+        var iconEl = document.querySelector('#QuickNotes-Desktop .qn-card__subject-icon');
+        if (iconEl) {
+          iconEl.src = iconEl.src.replace(/[^\/\\]+$/, icon);
+          iconEl.alt = subject;
+        }
+      }
+
+      /* Update breadcrumb current label */
+      var crumbCurrent = document.querySelector('#Breadcrumb-Desktop .pd-link15__text--current');
+      if (crumbCurrent) crumbCurrent.textContent = 'All notes for ' + subject;
+
+      /* Update page title */
+      document.title = 'Pandai — Quick Notes: ' + subject;
+    })();
   </script>
 
 </body>

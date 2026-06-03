@@ -3384,4 +3384,115 @@ This is the same canonical source used by `zul.page.template.html` (CLAUDE.md Ru
 
 ---
 
-*Last updated: 2026-06-03 (Session 11 — AnalysisCard + scoreCard asset path fixes; Rules 84–85)*
+### 86. Quick Notes navigation — URL params carry subject + icon only (no hex)
+
+When a user clicks a row or chevron button in `quickNotes.html`, navigate to `quickNotes.selections.html` passing only `subject` (display name) and `icon` (filename). Never pass raw hex colors in URL params — subject colors are resolved entirely from DS tokens on the receiving page.
+
+```js
+// quickNotes.html — click handler (correct)
+var params = new URLSearchParams({ subject: subject, icon: icon });
+window.location.href = 'quickNotes.selections.html?' + params.toString();
+```
+
+**Chain:**
+- `quickNotes.html` → `quickNotes.selections.html?subject=X&icon=Y`
+- `quickNotes.selections.html` → `quickNotes.view.html?subject=X&icon=Y` (btn-learn forwards same params)
+- `quickNotes.view.html` → back → `quickNotes.selections.html?subject=X&icon=Y` (btn-back preserves params)
+
+**Mistake made (2026-06-04):** Original implementation passed `bg` and `border` raw hex values in URL params and used `mixWhite`/`scaleDark` math to compute tints on the receiving page. This was NOT using DS tokens. Corrected to token-only approach (Rule 87).
+
+---
+
+### 87. Subject color tokens — always use DS 5-tier `--subjects-*` tokens, never compute hex tints
+
+The DS has TWO Subjects variable collections: `Subjects (A–E)` and `Subjects (G–S)`. Each provides **5 color tiers** per subject (confirmed 2026-06-04 via `use_figma`):
+
+| DS Token | CSS Var Suffix | Usage in Quick Notes |
+|---|---|---|
+| `Subject/default` | `--subjects-*-default` | Card header bg, topic pill border + text color |
+| `Subject/default-hover` | `--subjects-*-default-hover` | Info table outer border |
+| `Subject/default-subtle` | `--subjects-*-default-subtle` | Light bg — topic header, table heading, chapter cell |
+| `Subject/default-subtle-hover` | `--subjects-*-default-subtle-hover` | Medium tint — cell dividers, table cell borders |
+| `Subject/focus` | `--subjects-*-focus` | Dark — card border, topic body borders, related card border |
+
+**All 19 subject keys** (DS token suffix → display name):
+`account` · `add-math` · `b-melayu` · `biology` · `business` · `chemistry` · `chinese` · `cs` · `economy` · `english` · `geo` · `history` · `islamic` · `kafa` · `math` · `moral` · `physics` · `rbt` · `science`
+
+**JS pattern — set token references, never compute hex:**
+```js
+var SUBJ_KEY = {
+  'Bahasa Melayu': 'b-melayu',   'Additional Mathematics': 'add-math',
+  'Accounting': 'account',        'Biology': 'biology',
+  'Business Studies': 'business', 'Chemistry': 'chemistry',
+  'Chinese Language': 'chinese',  'Computer Science': 'cs',
+  'Economy': 'economy',           'English': 'english',
+  'Geography': 'geo',             'History': 'history',
+  'Islamic Studies': 'islamic',   'KAFA': 'kafa',
+  'Mathematics': 'math',          'Moral Studies': 'moral',
+  'Physics': 'physics',           'Reka Bentuk & Teknologi': 'rbt',
+  'Science': 'science'
+};
+var key = SUBJ_KEY[subject];
+if (key && section) {
+  section.style.setProperty('--qn-subj-default',              'var(--subjects-' + key + '-default)');
+  section.style.setProperty('--qn-subj-default-hover',        'var(--subjects-' + key + '-default-hover)');
+  section.style.setProperty('--qn-subj-default-subtle',       'var(--subjects-' + key + '-default-subtle)');
+  section.style.setProperty('--qn-subj-default-subtle-hover', 'var(--subjects-' + key + '-default-subtle-hover)');
+  section.style.setProperty('--qn-subj-focus',                'var(--subjects-' + key + '-focus)');
+}
+```
+
+**CSS cascade pattern:** Set all 5 `--qn-subj-*` vars on the **section** (`#QuickNotes-View-Desktop`) so they cascade to both the left card and the right sidebar without setting them twice.
+
+**Card inline style pattern (quickNotes.html list view):**
+```html
+<div class="qn-card" style="--qn-subj-default:var(--subjects-b-melayu-default); --qn-subj-focus:var(--subjects-b-melayu-focus);" data-subject="Bahasa Melayu" data-icon="border-bmelayu.svg">
+```
+Only `default` and `focus` needed in quickNotes.html (card header bg + border). The other 3 tiers are only set by JS on the view page.
+
+**`:root` in all 3 Quick Notes files** must contain all 5 tiers × 19 subjects = 95 token definitions. Values confirmed from DS 2026-06-04:
+
+| Subject | default | default-hover | default-subtle | default-subtle-hover | focus |
+|---|---|---|---|---|---|
+| Account | `#0072ca` | `#005ba2` | `#e6f1fa` | `#99c7ea` | `#004479` |
+| Add Math | `#283589` | `#202a6e` | `#eaebf3` | `#a9aed0` | `#182052` |
+| B. Melayu | `#4d77ff` | `#3e5fcc` | `#f6f9ff` | `#b8c9ff` | `#2e4799` |
+| Biology | `#8431d8` | `#6a27ad` | `#f3ebfb` | `#ceadef` | `#4f1d82` |
+| Business | `#efb42b` | `#bf9022` | `#fef8ea` | `#f9e1aa` | `#8f6c1a` |
+| Chemistry | `#e20082` | `#b50068` | `#fce6f3` | `#ed99c6` | `#88004e` |
+| Chinese | `#f94848` | `#c73a3a` | `#ffeded` | `#fdb6b6` | `#952b2b` |
+| Comp. Sci | `#d10070` | `#a7005a` | `#fbe6f1` | `#ed99c6` | `#7d0043` |
+| Economy | `#ff5733` | `#cc4629` | `#ffeeeb` | `#ffbcad` | `#99341f` |
+| English | `#ff4d56` | `#cc3e45` | `#ffedee` | `#ffb8bb` | `#992e34` |
+| Geography | `#77d836` | `#5fad2b` | `#f2fbeb` | `#c9efaf` | `#478220` |
+| History | `#a97c50` | `#876340` | `#f7f2ee` | `#ddcbb9` | `#654a30` |
+| Islamic Studies | `#de4d7f` | `#b23e66` | `#fcedf2` | `#f2b8cc` | `#852e4c` |
+| KAFA | `#8ae3a9` | `#6eb687` | `#f4fcf7` | `#d0f4dd` | `#538865` |
+| Math | `#42ac7b` | `#358a62` | `#ecf7f2` | `#b3deca` | `#28674a` |
+| Moral | `#0072ca` | `#005ba2` | `#e6f1fa` | `#99c7ea` | `#004479` |
+| Physics | `#27a0d7` | `#1f80ac` | `#eaf6fb` | `#a9d9ef` | `#176081` |
+| RBT | `#353535` | `#2a2a2a` | `#d7d7d7` | `#aeaeae` | `#202020` |
+| Science | `#ffd641` | `#ccab34` | `#fffbec` | `#ffefb3` | `#998027` |
+
+**Never use `mixWhite()` or `scaleDark()` to compute tints.** Those functions existed to approximate DS token values — the actual tokens are now in `:root`. Any future subject-colored element must reference `var(--qn-subj-*)` → `var(--subjects-*-*)` → DS confirmed hex.
+
+---
+
+### Updated mandatory pre-flight (post Session 12)
+
+```
+□ 0a. Read design-md/syakila.design.md   → ALL rules 1–87+, confirmed specs, known mistakes
+□ 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth
+□ 0c. Verify file location               → Syakila files ONLY in syakila.test.git/ (Rule 78)
+□ 0d. Verify ALL <img src=> paths        → ls/Get-ChildItem each referenced folder (Rules 84–85)
+□ 0e. get_design_context on COMPONENT SET → list ALL variant names
+□ 0f. get_design_context on EACH state   → extract every token BEFORE writing CSS
+□ 0g. use_figma raw node inspection      → padding, strokeAlign, width, height
+□ 0h. get_variable_defs on sub-nodes     → confirm Semantic tokens
+□ 0i. After any fix — grep both HTML files for same class and sync (Rule 63)
+□ 0j. For subject colors: use --subjects-*-{tier} tokens (Rule 87), never hex math
+```
+
+---
+
+*Last updated: 2026-06-04 (Session 12 — Quick Notes navigation wiring + full DS subject token refactor; Rules 86–87)*

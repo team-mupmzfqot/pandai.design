@@ -91,25 +91,120 @@
       --scale-50:  2px;
       --scale-200: 8px;
 
-      /* Subject Colors â€” ALL confirmed from DS get_variable_defs */
-      --subjects-b-melayu-default:   #4d77ff;   /* Subjects/b-melayu/default */
-      --subjects-english-default:    #ff4d56;   /* Subjects/english/default */
-      --subjects-math-default:       #42ac7b;   /* Subjects/math/default */
-      --subjects-science-default:    #ffd641;   /* Subjects/science/default */
-      --subjects-chemistry-default:  #e20082;   /* Subjects/chemistry/default */
-      --subjects-physics-default:    #27a0d7;   /* Subjects/physics/default */
-      --subjects-history-default:    #a97c50;   /* Subjects/history/default */
-      --subjects-geo-default:        #77d836;   /* Subjects/geo/default */
-      --subjects-islamic-default:    #de4d7f;   /* Subjects/islamic/default */
-      --subjects-moral-default:      #0072ca;   /* Subjects/moral/default */
-      --subjects-biology-default:    #8431d8;   /* Subjects/biology/default */
-      --subjects-add-math-default:   #283589;   /* Subjects/add-math/default */
-      --subjects-economy-default:    #ff5733;   /* Subjects/economy/default */
-      --subjects-account-default:    #0072ca;   /* Subjects/account/default */
-      --subjects-business-default:   #efb42b;   /* Subjects/business/default */
-      --subjects-cs-default:         #d10070;   /* Subjects/comp-science/default */
-      --subjects-kafa-default:       #8ae3a9;   /* Subjects/kafa/default */
-      --subjects-rbt-default:        #353535;   /* Subjects/rbt/default */
+      /* Subject Colors — all 5 tiers, all 19 subjects. Confirmed from DS (Subjects A–E, G–S collections) */
+      --subjects-account-default:                #0072ca;
+      --subjects-account-default-hover:          #005ba2;
+      --subjects-account-default-subtle:         #e6f1fa;
+      --subjects-account-default-subtle-hover:   #99c7ea;
+      --subjects-account-focus:                  #004479;
+
+      --subjects-add-math-default:               #283589;
+      --subjects-add-math-default-hover:         #202a6e;
+      --subjects-add-math-default-subtle:        #eaebf3;
+      --subjects-add-math-default-subtle-hover:  #a9aed0;
+      --subjects-add-math-focus:                 #182052;
+
+      --subjects-b-melayu-default:               #4d77ff;
+      --subjects-b-melayu-default-hover:         #3e5fcc;
+      --subjects-b-melayu-default-subtle:        #f6f9ff;
+      --subjects-b-melayu-default-subtle-hover:  #b8c9ff;
+      --subjects-b-melayu-focus:                 #2e4799;
+
+      --subjects-biology-default:                #8431d8;
+      --subjects-biology-default-hover:          #6a27ad;
+      --subjects-biology-default-subtle:         #f3ebfb;
+      --subjects-biology-default-subtle-hover:   #ceadef;
+      --subjects-biology-focus:                  #4f1d82;
+
+      --subjects-business-default:               #efb42b;
+      --subjects-business-default-hover:         #bf9022;
+      --subjects-business-default-subtle:        #fef8ea;
+      --subjects-business-default-subtle-hover:  #f9e1aa;
+      --subjects-business-focus:                 #8f6c1a;
+
+      --subjects-chemistry-default:              #e20082;
+      --subjects-chemistry-default-hover:        #b50068;
+      --subjects-chemistry-default-subtle:       #fce6f3;
+      --subjects-chemistry-default-subtle-hover: #ed99c6;
+      --subjects-chemistry-focus:                #88004e;
+
+      --subjects-chinese-default:                #f94848;
+      --subjects-chinese-default-hover:          #c73a3a;
+      --subjects-chinese-default-subtle:         #ffeded;
+      --subjects-chinese-default-subtle-hover:   #fdb6b6;
+      --subjects-chinese-focus:                  #952b2b;
+
+      --subjects-cs-default:                     #d10070;
+      --subjects-cs-default-hover:               #a7005a;
+      --subjects-cs-default-subtle:              #fbe6f1;
+      --subjects-cs-default-subtle-hover:        #ed99c6;
+      --subjects-cs-focus:                       #7d0043;
+
+      --subjects-economy-default:                #ff5733;
+      --subjects-economy-default-hover:          #cc4629;
+      --subjects-economy-default-subtle:         #ffeeeb;
+      --subjects-economy-default-subtle-hover:   #ffbcad;
+      --subjects-economy-focus:                  #99341f;
+
+      --subjects-english-default:                #ff4d56;
+      --subjects-english-default-hover:          #cc3e45;
+      --subjects-english-default-subtle:         #ffedee;
+      --subjects-english-default-subtle-hover:   #ffb8bb;
+      --subjects-english-focus:                  #992e34;
+
+      --subjects-geo-default:                    #77d836;
+      --subjects-geo-default-hover:              #5fad2b;
+      --subjects-geo-default-subtle:             #f2fbeb;
+      --subjects-geo-default-subtle-hover:       #c9efaf;
+      --subjects-geo-focus:                      #478220;
+
+      --subjects-history-default:                #a97c50;
+      --subjects-history-default-hover:          #876340;
+      --subjects-history-default-subtle:         #f7f2ee;
+      --subjects-history-default-subtle-hover:   #ddcbb9;
+      --subjects-history-focus:                  #654a30;
+
+      --subjects-islamic-default:                #de4d7f;
+      --subjects-islamic-default-hover:          #b23e66;
+      --subjects-islamic-default-subtle:         #fcedf2;
+      --subjects-islamic-default-subtle-hover:   #f2b8cc;
+      --subjects-islamic-focus:                  #852e4c;
+
+      --subjects-kafa-default:                   #8ae3a9;
+      --subjects-kafa-default-hover:             #6eb687;
+      --subjects-kafa-default-subtle:            #f4fcf7;
+      --subjects-kafa-default-subtle-hover:      #d0f4dd;
+      --subjects-kafa-focus:                     #538865;
+
+      --subjects-math-default:                   #42ac7b;
+      --subjects-math-default-hover:             #358a62;
+      --subjects-math-default-subtle:            #ecf7f2;
+      --subjects-math-default-subtle-hover:      #b3deca;
+      --subjects-math-focus:                     #28674a;
+
+      --subjects-moral-default:                  #0072ca;
+      --subjects-moral-default-hover:            #005ba2;
+      --subjects-moral-default-subtle:           #e6f1fa;
+      --subjects-moral-default-subtle-hover:     #99c7ea;
+      --subjects-moral-focus:                    #004479;
+
+      --subjects-physics-default:                #27a0d7;
+      --subjects-physics-default-hover:          #1f80ac;
+      --subjects-physics-default-subtle:         #eaf6fb;
+      --subjects-physics-default-subtle-hover:   #a9d9ef;
+      --subjects-physics-focus:                  #176081;
+
+      --subjects-rbt-default:                    #353535;
+      --subjects-rbt-default-hover:              #2a2a2a;
+      --subjects-rbt-default-subtle:             #d7d7d7;
+      --subjects-rbt-default-subtle-hover:       #aeaeae;
+      --subjects-rbt-focus:                      #202020;
+
+      --subjects-science-default:                #ffd641;
+      --subjects-science-default-hover:          #ccab34;
+      --subjects-science-default-subtle:         #fffbec;
+      --subjects-science-default-subtle-hover:   #ffefb3;
+      --subjects-science-focus:                  #998027;
 
       /* Typography */
       --font-family: 'Poppins', sans-serif;
@@ -2104,8 +2199,8 @@
     }
 
     .qn-card__header {
-      background:     var(--subjects-b-melayu-default);       /* #4d77ff */
-      border:         1px solid var(--subject-bm-focus);      /* #2e4799 */
+      background:     var(--qn-subj-default, var(--subjects-b-melayu-default));
+      border:         1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
       border-radius:  var(--corner-radius-corner-2xl);        /* 18px */
       height:         110px;
       max-height:     110px;
@@ -2235,10 +2330,10 @@
     }
 
     .qn-topic-header {
-      background:     var(--subject-bm-50);               /* #f6f9ff */
-      border-top:     1px solid var(--subject-bm-focus);  /* #2e4799 */
-      border-left:    1px solid var(--subject-bm-focus);
-      border-right:   1px solid var(--subject-bm-focus);
+      background:     var(--qn-subj-default-subtle, var(--subjects-b-melayu-default-subtle));
+      border-top:     1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
+      border-left:    1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
+      border-right:   1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
       border-radius:  18px 18px 0 0;
       display:        flex;
       align-items:    center;
@@ -2259,8 +2354,8 @@
       display:         flex;
       align-items:     center;
       gap:             4px;
-      background:      var(--subject-bm-50);              /* #f6f9ff */
-      border:          1px solid var(--subjects-b-melayu-default); /* #4d77ff */
+      background:      var(--qn-subj-default-subtle, var(--subjects-b-melayu-default-subtle));
+      border:          1px solid var(--qn-subj-default, var(--subjects-b-melayu-default));
       border-radius:   60px;
       padding:         2px 8px;
       min-height:      24px;
@@ -2270,7 +2365,7 @@
     .qn-topic-pill svg {
       width:       14px;
       height:      14px;
-      color:       var(--subjects-b-melayu-default);
+      color:       var(--qn-subj-default, var(--subjects-b-melayu-default));
       flex-shrink: 0;
     }
 
@@ -2279,7 +2374,7 @@
       font-weight:  500;
       font-size:    12px;
       line-height:  12px;
-      color:        var(--subjects-b-melayu-default);
+      color:        var(--qn-subj-default, var(--subjects-b-melayu-default));
       white-space:  nowrap;
     }
 
@@ -2295,9 +2390,9 @@
     /* Topic body */
     .qn-topic-body {
       background:     var(--surface-general-default);
-      border-bottom:  1px solid var(--subject-bm-focus);
-      border-left:    1px solid var(--subject-bm-focus);
-      border-right:   1px solid var(--subject-bm-focus);
+      border-bottom:  1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
+      border-left:    1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
+      border-right:   1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
       border-radius:  0 0 18px 18px;
       overflow:       hidden;
       padding:        var(--spacing-space-m);
@@ -2338,7 +2433,7 @@
 
     /* Diftong table */
     .qn-table {
-      border:        1px solid var(--subject-bm-100);     /* #dbe4ff */
+      border:        1px solid var(--qn-subj-default-subtle-hover, var(--subjects-b-melayu-default-subtle-hover));
       border-radius: 16px;
       overflow:      hidden;
       width:         100%;
@@ -2355,14 +2450,14 @@
       align-items: center;
       min-height:  56px;
       padding:     var(--spacing-space-m);
-      border-bottom: 1px solid var(--subject-bm-100);
-      border-right:  1px solid var(--subject-bm-100);
+      border-bottom: 1px solid var(--qn-subj-default-subtle-hover, var(--subjects-b-melayu-default-subtle-hover));
+      border-right:  1px solid var(--qn-subj-default-subtle-hover, var(--subjects-b-melayu-default-subtle-hover));
     }
 
     .qn-table__row:last-child .qn-table__cell { border-bottom: none; }
 
     .qn-table__head .qn-table__cell {
-      background:   var(--subject-bm-50);
+      background:   var(--qn-subj-default-subtle, var(--subjects-b-melayu-default-subtle));
       font-family:  var(--font-family);
       font-weight:  500;
       font-size:    16px;
@@ -2466,7 +2561,7 @@
 
     /* Info table */
     .qn-info-table {
-      border:        1px solid var(--subject-bm-hover);    /* #3e5fcc */
+      border:        1px solid var(--qn-subj-default-hover, var(--subjects-b-melayu-default-hover));
       border-radius: 18px;
       overflow:      hidden;
       width:         100%;
@@ -2486,22 +2581,22 @@
     }
 
     .qn-info-cell--label {
-      background:   var(--subject-bm-400);                 /* #7192ff */
+      background:   var(--qn-subj-default, var(--subjects-b-melayu-default));
       width:        91px;
       flex-shrink:  0;
       font-family:  var(--font-family);
       font-weight:  600;
       font-size:    14px;
       line-height:  20px;
-      color:        var(--text-on-color-heading);           /* white */
+      color:        var(--text-on-color-heading);
       white-space:  nowrap;
-      border-bottom: 1px solid var(--subject-bm-subtle-hover); /* #b8c9ff */
+      border-bottom: 1px solid var(--qn-subj-default-subtle-hover, var(--subjects-b-melayu-default-subtle-hover));
     }
 
     .qn-info-cell--value {
       flex:         1 0 0;
       min-width:    0;
-      border-bottom: 1px solid var(--subject-bm-subtle-hover);
+      border-bottom: 1px solid var(--qn-subj-default-subtle-hover, var(--subjects-b-melayu-default-subtle-hover));
       font-family:  var(--font-family);
       font-weight:  500;
       font-size:    12px;
@@ -2509,7 +2604,7 @@
       color:        var(--text-default-body);
     }
 
-    .qn-info-cell--chapter { background: var(--subject-bm-50); } /* #f6f9ff */
+    .qn-info-cell--chapter { background: var(--qn-subj-default-subtle, var(--subjects-b-melayu-default-subtle)); }
 
     /* Topic row — no bottom border, white bg */
     .qn-info-row--topic .qn-info-cell--label  { border-bottom: none; }
@@ -2669,14 +2764,14 @@
 
     /* Related Notes card */
     .qn-related-card {
-      border:        1px solid var(--subject-bm-focus);    /* #2e4799 */
+      border:        1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
       border-radius: 18px;
       overflow:      hidden;
       width:         100%;
     }
 
     .qn-related-header {
-      background:   var(--subject-bm-400);                 /* #7192ff */
+      background:   var(--qn-subj-default, var(--subjects-b-melayu-default));
       border-bottom: 1px solid var(--border-general-default); /* #d9d9d9 */
       display:      flex;
       align-items:  center;
@@ -4050,7 +4145,11 @@
         btnBack.addEventListener('mousedown',  function () { btnBack.classList.add('is-pressing'); });
         btnBack.addEventListener('mouseup',    function () { btnBack.classList.remove('is-pressing'); });
         btnBack.addEventListener('mouseleave', function () { btnBack.classList.remove('is-pressing'); });
-        btnBack.addEventListener('click',      function () { window.location.href = 'quickNotes.selections.html'; });
+        btnBack.addEventListener('click',      function () {
+          var back = 'quickNotes.selections.html';
+          if (window.location.search) back += window.location.search;
+          window.location.href = back;
+        });
       }
       if (btnView) {
         btnView.addEventListener('mousedown',  function () { btnView.classList.add('is-pressing'); });
@@ -5281,6 +5380,55 @@
       document.addEventListener('mozfullscreenchange',    syncIcon);
 
       /* ESC is handled natively by the browser — fullscreenchange fires on exit */
+    })();
+  </script>
+
+  <script>
+    /* Apply subject context from URL params passed by quickNotes.selections.html */
+    (function () {
+      var params  = new URLSearchParams(window.location.search);
+      var subject = params.get('subject');
+      var icon    = params.get('icon');
+
+      if (!subject) return; /* no params — keep hardcoded BM default */
+
+      /* Map subject name → DS token key */
+      var SUBJ_KEY = {
+        'Bahasa Melayu': 'b-melayu',         'Additional Mathematics': 'add-math',
+        'Accounting': 'account',              'Biology': 'biology',
+        'Business Studies': 'business',       'Chemistry': 'chemistry',
+        'Chinese Language': 'chinese',        'Computer Science': 'cs',
+        'Economy': 'economy',                 'English': 'english',
+        'Geography': 'geo',                   'History': 'history',
+        'Islamic Studies': 'islamic',         'KAFA': 'kafa',
+        'Mathematics': 'math',                'Moral Studies': 'moral',
+        'Physics': 'physics',                 'Reka Bentuk & Teknologi': 'rbt',
+        'Science': 'science'
+      };
+      var key = SUBJ_KEY[subject];
+      if (!key) return;
+
+      /* Set DS token references on the section — cascades to both left card and right sidebar */
+      var section = document.querySelector('#QuickNotes-View-Desktop');
+      if (section) {
+        section.style.setProperty('--qn-subj-default',              'var(--subjects-' + key + '-default)');
+        section.style.setProperty('--qn-subj-default-hover',        'var(--subjects-' + key + '-default-hover)');
+        section.style.setProperty('--qn-subj-default-subtle',       'var(--subjects-' + key + '-default-subtle)');
+        section.style.setProperty('--qn-subj-default-subtle-hover', 'var(--subjects-' + key + '-default-subtle-hover)');
+        section.style.setProperty('--qn-subj-focus',                'var(--subjects-' + key + '-focus)');
+      }
+
+      /* Update subject icon — use the shared icons/ folder */
+      if (icon) {
+        var iconEl = document.querySelector('#QuickNotes-View-Desktop .qn-card__header-icon img');
+        if (iconEl) {
+          iconEl.src = '../src/image-repo/Learn/quick.notes/icons/' + icon;
+          iconEl.alt = subject;
+        }
+      }
+
+      /* Update page title */
+      document.title = 'Pandai — Quick Notes: ' + subject;
     })();
   </script>
 
