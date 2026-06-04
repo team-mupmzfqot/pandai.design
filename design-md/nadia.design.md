@@ -3281,3 +3281,64 @@ Added a `randomizeContent()` function (called on `DOMContentLoaded`) that sets r
 **Note:** Filter sidebar counts ("Background (1020)", "Head", "Screen" etc.) were not present in the HTML — no filter panel exists in this file. If added later, include those selectors in `randomizeContent()`.
 
 *Last updated: 2026-06-03 | Session 20 — Rewards Avatar: 80 images + randomizeContent | Branch: staging*
+
+---
+
+## Session 21 — DS audit + fixes: nadia_Class-MyClasses.html (2026-06-04)
+
+**File changed:** `Nadia.test.git/Class/nadia_Class-MyClasses.html`
+
+### Audit scope
+Shared template components (Navbar, NavMenu, NavTopMenu, dropdowns, Footer) were excluded — inherited from page template and previously audited. Only page-specific components were checked against DS 1.5 (`TLVKe3bgJTdVvuPAzgDq2f`): **Breadcrumb - 1.5** (node `837:1033`), **Class Card - 1.5** (node `2339:5253`), avatar, live badge, divider, CTA.
+
+### DS nodes confirmed in this session
+| Component | DS node | Key finding |
+|---|---|---|
+| Class Card - 1.5 | `2339:5253` | Only 1 variant (Type=Default) |
+| Breadcrumb - 1.5 | `837:1033` | No action buttons in DS component — buttons are page-level |
+
+### Fixes applied (8 total)
+
+#### 1. Rule 198 — btn-enter transitions removed
+`transition:` on `.btn-enter`, `.btn-enter__label`, `.btn-enter__arrow`, `.btn-enter__arrow svg` — all 4 removed. Button - 1.5 must use instant state changes only.
+
+#### 2. Missing "Premium Only" tag in CTA (all 20 cards)
+DS CTA frame: HORIZONTAL — `"Premium Only"` text (14px / 600 / `#00cc85`, `flex:1`) on left + Button on right. HTML only had the button right-aligned.
+- Added `.cc__premium { font-size:14px; font-weight:600; color:var(--surface-primary-default); flex:1; }`
+- Changed `.cc__cta { justify-content: space-between; }`
+- Added `<span class="cc__premium">Premium Only</span>` before every `btn-enter`
+
+#### 3. Rule 36 — live-badge inline SVG → `<use href="#ic-video"/>` (all 20 cards)
+Inline `<polygon>/<rect>` replaced with `ic-video` symbol. Added `<symbol id="ic-video">` to defs block. Live badge SVG now uses `color: var(--surface-primary-default)` for stroke inheritance.
+
+#### 4. Live badge background `#d9f7ed` → `#e1f9ea`
+DS Label Badge - 1.5 fill = `#e1f9ea`. HTML had an approximate value.
+
+#### 5. Avatar placeholder background white → `#e1f9ea`
+DS Avatar - 1.5 fill = `#e1f9ea`. Added `.ds-avatar { background: #e1f9ea }`. Visible only when no photo is loaded.
+
+#### 6. `.bc-sep` color `#d9d9d9` → `#bfbfbf`
+DS Breadcrumb separator line stroke = `#bfbfbf`. HTML was using the general border token instead.
+
+#### 7. Rule 36 — bc-chevron inline polyline → `<use href="#ic-chevron-right"/>`
+Single instance in breadcrumb trail replaced.
+
+#### 8. Divider rebuilt: Divider Var 5 + "+ More" chip (all 20 cards)
+DS uses `Divider Var 5 .prev` — two `#d9d9d9` lines flanking a `+ More` interactive chip (`Outline/plus-circle` 12px + "More" 10px / 400 / `#bfbfbf`). HTML had a plain 1px colored line per-subject.
+
+Changes:
+- `.cc__divider` rebuilt as `display:flex; align-items:center; height:16px` with `::before`/`::after` pseudo-element lines (`#d9d9d9`)
+- `.cc__divider-more` button added (10px / 400 / `#bfbfbf`, `gap:2px`, `padding:0 8px`)
+- Added `<symbol id="ic-plus-circle">` to defs
+- Removed all 20 subject-specific `.cc--*.cc__divider { background: ... }` overrides
+- Rebuilt all 20 divider elements in HTML
+
+#### 9. `.cc__hdr` gap `16px` → `0`
+DS Header frame gap = 0. Title has `flex:1` which right-aligns the DLP badge without gap.
+
+### Remaining known deviations (low priority)
+- **Rule 60** — `.cc` and `.cc__inner` use `border: 1px solid` for INSIDE strokes. Should be `box-shadow: inset 0 0 0 1px`. Low visual impact for fluid containers.
+- **Breadcrumb action buttons** — Timetable / Browse Classes / Join Class use `padding:8px 12px; font-size:14px` instead of Button - 1.5 M specs (`2px 8px` outer, `12px` font). These are page-level buttons not in the DS Breadcrumb component — defer to designer review.
+- **cards-grid gap: 20px** — No DS semantic token at 20px (`space-m`=16, `space-l`=24). Needs page-spec verification.
+
+*Last updated: 2026-06-04 | Session 21 — Class MyClasses DS audit + 8 fixes | Branch: staging*
