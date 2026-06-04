@@ -2409,10 +2409,11 @@
       transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
     }
 
-    /* 3×4 grid — DS: grid-cols:3, min-h per cell 114px */
+    /* 3×4 grid — DS node 3908:2463: grid-cols:3, gap:8px both axes, min-h per cell 114px */
     .learn-dropdown__grid {
       display:               grid;
       grid-template-columns: repeat(3, 1fr);
+      gap:                   var(--spacing-space-xs);
     }
 
     /* Cell — DS State=Default: transparent bg, no border, 12px radius, flex-col, gap 4px, p-8px */
@@ -2460,13 +2461,13 @@
       flex-shrink: 0;
     }
 
-    /* Label — DS State=Default: 14px SemiBold, #404040 (Text/default/heading, varName 106:34) */
+    /* Label — DS node 3908:2464: 14px SemiBold, Text/default/body #666 */
     .learn-dropdown__label {
       font-family: var(--font-family);
       font-size:   14px;
       font-weight: 600;
       line-height: 20px;
-      color:       var(--text-default-heading);
+      color:       var(--text-default-body);
       text-align:  center;
       transition:  color 0.12s ease;
     }
