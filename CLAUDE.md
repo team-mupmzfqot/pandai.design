@@ -428,13 +428,27 @@ The base `.subject-badge` CSS is always the **L size** (32px). The quiz card con
 
 ---
 
-### 21. Never put `cursor: pointer` on card or container elements
+### 21. Never put `cursor: pointer` on card or container elements — unless the entire card IS the target
 
 `cursor: pointer` belongs **only on interactive elements** — `<button>`, `<a>`, and `<div role="button">`. Card containers (`<article>`, `<div class="card">`) must use `cursor: default`, even when they contain buttons.
 
 Putting `cursor: pointer` on a card gives users the false impression that the entire card surface is one clickable unit, which conflicts with having a distinct button inside the card.
 
 **Rule:** Set `cursor: default` on card containers. The browser renders the hand cursor automatically on `<button>` and `<a>` children — no override needed.
+
+**Exception — whole-card navigable target:** When the entire card surface IS the clickable unit (no separate button inside — the card itself navigates somewhere), `cursor: pointer` on `:hover` is correct. Apply it only on `:hover`, not on the base rule.
+
+```css
+/* Card with internal button — pointer on card is wrong */
+.class-card    { cursor: default; }   /* card itself is not clickable */
+.btn-enter     { cursor: pointer; }   /* button inside is */
+
+/* Card that IS the clickable target — pointer on hover is correct */
+.practice-card              { cursor: default; }
+.practice-card:hover        { cursor: pointer; }   /* whole surface navigates */
+```
+
+**Confirmed instance (2026-06-04):** Practice Card — entire card surface navigates to a subject page, no internal button. `cursor: pointer` on `:hover` is correct DS behaviour.
 
 **Mistake made:** `.quiz-card { cursor: pointer }` caused the entire quiz card surface (including the image area and text) to show a hand cursor. The correct pattern: `cursor: default` on the card, `cursor: pointer` is inherited by the `<button>` inside.
 
@@ -2616,4 +2630,48 @@ When a base rule uses `box-shadow: inset 0 0 0 1px`, ALL state overrides (hover,
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-02 (Rules 88–89 added — Secondary hover #b5f291 not subtle; border-color silent on box-shadow:inset; modal button full audit session learnings) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### 90. SVG `<symbol>` definitions must be inside `<defs>` — never after the closing tag
+
+Any `<symbol>` placed **after** `</defs></svg>` is outside the SVG document scope. The browser cannot resolve `<use href="#ic-*">` references to symbols outside SVG — the icon renders as a blank, empty element with **no error, no browser warning**.
+
+```html
+<!-- WRONG — symbol outside defs, icon renders blank -->
+  </defs>
+</svg>
+<symbol id="ic-file"> … </symbol>   ← unreachable
+
+<!-- CORRECT — all symbols inside defs, before closing tag -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    …
+    <symbol id="ic-file"> … </symbol>   ← reachable
+  </defs>
+</svg>
+```
+
+**Check after every `<symbol>` addition:** confirm it sits before `</defs>`, not after. A stray orphaned `</svg>` after a symbol block is the same bug — it closes the SVG before the symbol is registered.
+
+**Confirmed instance (May 2026, nadia_Practise-subject.html):** `ic-video`, `ic-corner-down-right`, and `ic-file` were placed after `</defs></svg>`. The flashcard stat icon (`ic-file`) rendered blank — only discovered visually; no console error. Fixed by moving all three back inside `<defs>`.
+
+---
+
+### 91. Always fetch live DS tokens before documenting or implementing any value
+
+Before writing any hex value, spacing, radius, border weight, or component spec to a `.md` file or `.html` file — call `use_figma`, `get_design_context`, or `get_variable_defs` on the exact DS node (`TLVKe3bgJTdVvuPAzgDq2f`) to confirm the current value.
+
+**Session notes and prior documentation are context for navigation, not authoritative values.** Token hex values can change between sessions without notice (Rule 61). Documenting stale values creates errors that are invisible until implementation time.
+
+**Applies to every session, every task, every fix. No exceptions.**
+
+**What this means in practice:**
+- A rule citing a color hex (`#e1f9ea`) is only valid if that hex was confirmed by a live DS fetch in that session
+- If you cannot fetch from DS (network, auth), state that explicitly — never fall back to guessing from session notes
+- After fetching, document the **token name** (e.g. `Surface/primary/default-subtle`) first, the resolved hex second — the token name is more stable
+
+**Confirmed gap (2026-06-04):** Proposed documenting `#bfbfbf` for `bc-sep` based on prior session notes without re-fetching. User caught this. Live fetch confirmed `Border/general/default-secondary` = `#bfbfbf` — same value, but the fetch is mandatory regardless.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-04 (Rule 21 clarified — cursor:pointer exception for whole-card navigable targets; Rules 90–91 added — SVG symbol placement; always fetch live DS tokens) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
