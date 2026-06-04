@@ -2520,6 +2520,10 @@ Key CSS decisions:
 | AnalysisCard | `body` had `overflow-x:clip; min-width:390px; width:100%` | `overflow-x:hidden` only | scoreCard canonical |
 | AnalysisCard | `.menubar-nav` had extra `overflow:hidden` | Removed | scoreCard canonical |
 | AnalysisCard | Nav-btn hover icon token name wrong | `--icon-secondary-hover` (not `--icon-secondary-on-color`) | DS token name |
+| reportCard | `.pd-card` outer border invisible | `box-shadow: inset` → `border: 1px solid var(--border-primary-default)` — children cover inset shadow | Rule 80 |
+| reportCard | `.pd-table15` border invisible | `box-shadow: inset` / `outline` → `border: 1px solid var(--border-general-default)` | Rule 80 |
+| reportCard | Double gap between breadcrumbs and card | Merged duplicate `.pd-breadcrumbs15` rules — second had `margin-bottom:16px` overriding first's `margin-bottom:0` | Rule 81 |
+| reportCard | Card header missing icon | Added `Outline/file-text` (24×24, `#ic-file-text`) beside title in `.pd-card__title-group` | DS node I4055:57157;2881:36277 |
 
 ---
 
@@ -3128,6 +3132,62 @@ Every file created for Syakila's prototype must live in `syakila.test.git/`. Nev
 
 ---
 
+### 80. `box-shadow: inset` is invisible on full-bleed containers — use `border: 1px solid` instead (confirmed 2026-06-04)
+
+**Rule:** When a container element has `overflow: hidden` AND its children fill 100% of the content area (e.g. table cells filling a table frame, card rows filling a card), `box-shadow: inset` is completely hidden behind those children. It renders in the content layer, **below** child elements. Use `border: 1px solid` instead — the border renders in the element's own **border area**, which is outside the content box and is never covered by children, even with `overflow: hidden`.
+
+```css
+/* WRONG — inset shadow hidden behind full-bleed children */
+.pd-card  { box-shadow: inset 0 0 0 1px var(--border-primary-default); overflow: hidden; }
+.pd-table { box-shadow: inset 0 0 0 1px var(--border-general-default); overflow: hidden; }
+
+/* CORRECT — border always visible, unaffected by overflow:hidden */
+.pd-card  { border: 1px solid var(--border-primary-default); overflow: hidden; }
+.pd-table { border: 1px solid var(--border-general-default); overflow: hidden; }
+```
+
+**DS-confirmed values (node 4055:57157 + 4055:57185, fetched 2026-06-04):**
+- Primary Card outer frame: `border: 1px solid var(--border/default, #00cc85)` — **green**
+- Content Placeholder (table wrapper): `border: 1px solid var(--border/general/default, #d9d9d9)` — **grey**
+- All body cells: `border-b border-r border-solid #d9d9d9` — bottom + right only (outer frame covers the rest)
+
+**When `box-shadow: inset` IS correct:** Only use it for sub-components where children do NOT fill the full element — e.g. a button (has padding, label doesn't fill edge-to-edge), an avatar circle, an input field. Rule 60 (`strokeAlign: INSIDE` → `box-shadow: inset`) still applies in those cases.
+
+**Mistakes made (2026-06-04):** `.pd-card` and `.pd-table15` both used `box-shadow: inset 0 0 0 1px` — borders were completely invisible because table cells / card content filled 100% of the container. Three attempts failed (box-shadow → box-shadow with green → outline) before identifying the root cause. The DS node data clearly shows `border: 1px solid` on both elements — always fetch node data before approximating.
+
+---
+
+### 81. Duplicate CSS rules — later rule always wins, comment-only rules are dead code (confirmed 2026-06-04)
+
+If two rules with identical selectors and the same specificity set the same property, the **later one always wins** — regardless of any comment between them.
+
+```css
+/* This comment does nothing — the rule below it is still overridden */
+.pd-breadcrumbs15 { margin-bottom: 0; }          /* ← loses */
+.pd-breadcrumbs15 { ...; margin-bottom: 16px; }  /* ← wins */
+```
+
+**Fix:** Merge into one rule. Never rely on a comment to "explain" why a reset rule exists if a second rule further down overrides it. Delete the first rule and keep only the merged final intent.
+
+**Confirmed mistake (2026-06-04):** `.pd-breadcrumbs15` had `margin-bottom: 0` on line 2248 and `margin-bottom: var(--spacing-space-m)` on line 2250. The 16px margin-bottom doubled the gap (16px gap from `.main-content` + 16px margin = 32px). Fixed by merging into one rule with `margin-bottom: 0`.
+
+---
+
+### 82. Always fetch DS node data before assuming a CSS border technique (confirmed 2026-06-04)
+
+Before writing ANY border/stroke CSS on a container, call `get_design_context` or `use_figma` on the DS node and read the **exact CSS class** the tool outputs. The DS design context outputs real Tailwind/CSS classes like `border border-[#00cc85] border-solid` — this directly tells you to use `border: 1px solid`, not `box-shadow: inset`.
+
+**Workflow:**
+```
+1. get_design_context on the DS component node
+2. Read the output className for the container — look for `border`, `box-shadow`, `outline`
+3. Map to CSS exactly as the DS shows — no approximation
+```
+
+**Do NOT apply Rule 60 (`strokeAlign: INSIDE` → `box-shadow: inset`) blindly** — Rule 60 is for non-full-bleed sub-elements. For containers where children fill edge-to-edge, the DS itself uses `border: 1px solid` even for INSIDE strokes. Always verify by reading the actual DS output.
+
+---
+
 ### 79. Quick Notes — button arrow clips use DS clip symbols, never standalone 24×24 icons (confirmed 2026-06-03)
 
 Both the "Back to List" (Secondary/M, left arrow) and "View all notes" (Primary/M, right arrow) buttons use `ic-chevron-btn-m` — the DS-exported 16×16 clip symbol — not the standalone 24×24 `Outline/chevron-right` icon.
@@ -3496,3 +3556,117 @@ Only `default` and `focus` needed in quickNotes.html (card header bg + border). 
 ---
 
 *Last updated: 2026-06-04 (Session 12 — Quick Notes navigation wiring + full DS subject token refactor; Rules 86–87)*
+
+---
+
+### 88. SVG `preserveAspectRatio="none"` → ellipse distortion — remove when viewBox is dynamic
+
+When a graph SVG uses JS to dynamically set its `viewBox` to match the rendered container dimensions (via `getBoundingClientRect()`), adding `preserveAspectRatio="none"` causes independent X/Y scaling. If the container's aspect ratio ever differs from the initial `viewBox`, all circles become ellipses and the entire graph distorts.
+
+**Rule:** Never use `preserveAspectRatio="none"` on a dynamic graph SVG. Remove the attribute entirely and let the browser use the default `xMidYMid meet`. When `initGraph()` sets `viewBox="0 0 W H"` to exactly match the rendered container, the SVG content fills the container 1:1 with no distortion.
+
+```html
+<!-- Wrong — causes circle → ellipse when aspect ratio drifts -->
+<svg id="score-graph" viewBox="0 0 380 120" preserveAspectRatio="none" fill="none">
+
+<!-- Correct — initGraph() sets viewBox to match container; no preserveAspectRatio needed -->
+<svg id="score-graph" viewBox="0 0 380 120" fill="none">
+```
+
+**Confirmed instance (scoreCard.html, 2026-06-04):** `initGraph()` sets `viewBox` to `getBoundingClientRect()` dimensions. `preserveAspectRatio="none"` made data-point circles render as ellipses on first paint. Removing the attribute fixed all circles to perfect round shapes.
+
+---
+
+### 89. DS Curve chart (node `5376:191596`) — confirmed visual spec
+
+**Source:** `use_figma` on node `5376:191596`, confirmed 2026-06-04.
+
+The DS "Curve chart" GROUP has 1 line vector + 6 dot vectors:
+
+| Element | DS property | CSS |
+|---|---|---|
+| Curve line | stroke `rgb(0, 86, 76)` = `#00564c`, `strokeWeight ≈ 0.85` | `stroke="var(--surface-tertiary-default)"` `stroke-width="1"` |
+| Data dots | solid fill `rgb(0, 204, 133)` = `#00cc85`, **no stroke** | `fill="var(--surface-primary-default)"` no `stroke` attr |
+| Dot radius | 24.56px diameter at 669px DS width ≈ 3.7% of width | `r="5"` at typical card-widget scale |
+
+**Critical differences from intuitive implementation:**
+- Line is **dark teal** (`#00564c` — `surface-tertiary-default`), NOT primary green
+- Dots are **solid filled** (no white center, no stroke ring) — opposite of a typical outlined data point
+- Line `stroke-width="1"`, NOT `1.5`
+
+**Mistake made (before DS fetch):** Line was `stroke="var(--surface-primary-default)"` (#00cc85) with `stroke-width="1.5"`. Dots were `fill="var(--surface-general-default)"` (white) + `stroke="var(--surface-primary-default)"` (green ring) + `r="3"`. All three wrong. Always fetch DS node before implementing any chart element — never assume data-point styling from memory.
+
+---
+
+### 90. Subject filter chips = Button - 1.5 — fetch DS before writing any button states
+
+Subject filter chips (and any pill-shaped toggle group) are `Button - 1.5` instances:
+- **Default (unselected)**: `Secondary/M` variant — outlined, white bg, green border+text
+- **Active (selected)**: `Primary/M` variant — solid green bg, white text
+
+**Confirmed DS specs for chip states (scoreCard.html, 2026-06-04):**
+
+| State | bg | border (box-shadow inset) | text/label |
+|---|---|---|---|
+| Default | `--surface-general-default` (#ffffff) | `--border-primary-default` (#00cc85) | `--text-primary-default` (#00cc85) |
+| Hover | `--surface-secondary-default` (#b5f291) | `--border-secondary-focus` (#70bc6f) | `--text-secondary-focus` (#70bc6f) |
+| Pressed | `--surface-primary-focus` (#00a36a) | `--border-primary-default` (#00cc85) | `--text-primary-default` (#00cc85) |
+| Active | `--surface-primary-default` (#00cc85) | `--border-primary-focus` (#00a36a) | `--text-primary-on-color` (#ffffff) |
+| Active+Pressed | `--surface-primary-focus` (#00a36a) | `--border-primary-default` (#00cc85) | `--text-primary-default` (#00cc85) |
+
+**Padding:** `2px 8px` (Button - 1.5 M outer padding = `py:2 px:8`). Never `2px 12px` — that was wrong before DS fetch.
+
+**Hover bg is `#b5f291` (full secondary), NOT `#e8fbe8` (subtle).** See CLAUDE.md Rule 88.
+
+**Outer border mechanism:** `strokeAlign: INSIDE` → always `box-shadow: inset 0 0 0 1px` (CLAUDE.md Rule 60). Never `border: 1px solid` on these chips.
+
+**Mistake made (2026-06-04):** Padding was `2px 12px` and hover bg was `#e8fbe8`. Both wrong — DS confirmed only after `get_design_context`. Never guess button padding or hover color from memory.
+
+---
+
+### 91. Always add JS `is-pressing` for every interactive chip or button (scoreCard pattern)
+
+CSS `:active` alone is unreliable in Electron webview (VS Code Simple Browser). Every `Button - 1.5` rendered as a `<button>` or interactive `<div>` needs BOTH:
+1. CSS `.is-pressing` class rules matching the pressed state tokens
+2. JS `mousedown` → add, `mouseup` → remove, `mouseleave` → remove
+
+**Pattern — always inside the same `forEach` loop as the `click` handler:**
+```js
+chipsRow.querySelectorAll('.sc-subject-chip').forEach(function(chip) {
+  chip.addEventListener('click', function() { selectSubject(chip.dataset.key); });
+  chip.addEventListener('mousedown', function() { chip.classList.add('is-pressing'); });
+  chip.addEventListener('mouseup',    function() { chip.classList.remove('is-pressing'); });
+  chip.addEventListener('mouseleave', function() { chip.classList.remove('is-pressing'); });
+});
+```
+
+**`mouseleave` cleanup is mandatory** — without it, the chip stays stuck in pressed state if the cursor moves away while the button is held.
+
+**Confirmed mistake (2026-06-04):** CSS pressed state was added to `.sc-subject-chip:active, .sc-subject-chip.is-pressing` but the JS handlers were never written. The pressed visual never appeared. Fix: add all three listeners before considering the component complete. See also CLAUDE.md Rule 83.
+
+---
+
+### Updated mandatory pre-flight (post Session 13 — scoreCard)
+
+**ALWAYS before starting any design work, making any change, or making any decision — refer to DS and syakila.design.md first. No exceptions.**
+
+```
+□ 0a. Read design-md/syakila.design.md   → ALL rules 1–91, confirmed specs, known mistakes
+□ 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT prior notes
+□ 0c. Verify file location               → Syakila files ONLY in syakila.test.git/ (Rule 78)
+□ 0d. Verify ALL <img src=> paths        → ls/Get-ChildItem each referenced folder (Rules 84–85)
+□ 0e. get_design_context on COMPONENT SET → list ALL variant names
+□ 0f. get_design_context on EACH state   → extract every token BEFORE writing CSS
+□ 0g. use_figma raw node inspection      → padding, strokeAlign, width, height, r
+□ 0h. get_variable_defs on sub-nodes     → confirm Semantic tokens
+□ 0i. For SVG graphs: remove preserveAspectRatio="none" if viewBox is dynamic (Rule 88)
+□ 0j. For chart/graph elements: fetch DS node, confirm line color + dot fill before any CSS (Rule 89)
+□ 0k. For button/chip states: fetch DS node, confirm padding + all state colors before any CSS (Rule 90)
+□ 0l. For every interactive element: add JS is-pressing handlers in same loop as click (Rule 91)
+□ 0m. After any fix — grep both HTML files for same class and sync (Rule 63)
+□ 0n. For subject colors: use --subjects-*-{tier} tokens (Rule 87), never hex math
+```
+
+---
+
+*Last updated: 2026-06-04 (Session 13 — scoreCard.html: SVG graph DS update, curve chart spec, chip states, is-pressing; Rules 88–91)*
