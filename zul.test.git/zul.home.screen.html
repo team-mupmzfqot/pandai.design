@@ -1069,7 +1069,7 @@
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        SECTION 2 â€” Carousel - 1.5  (node 1200:1789)
        5 image cards (428Ã—186px), gap 16px, corner-xl (16px)
-       Prev/Next buttons: Pill Button - 1.5 (node 5721:493) — Left=24px default, Right=108px, Hover=#e8fbe8, Pressed=#00cc85
+       Prev/Next buttons: Pill Button - 1.5 (node 5721:493) — Left=24px default, Right=108px, Hover=#d1f7d1, Pressed=#00cc85
        Indicator dots at bottom
     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     /* Carousel - 1.5  (node 1200:1789) */
@@ -1089,7 +1089,6 @@
       overflow:     hidden;
       display:      flex;
       align-items:  center;
-      border-radius: var(--corner-radius-corner-2xl);   /* DS Content frame radius:18 — confirmed 1376:2209 */
     }
 
     /* Track — flex row of cards */
@@ -1139,20 +1138,14 @@
       padding:     var(--spacing-space-m);   /* p-[16px] */
       z-index:     2;
     }
-    /* 3-side borders on button wrappers form the carousel outer frame (DS: no border on Content frame) */
+    /* Gradient fade overlays — white-to-transparent (DS node 1200:1837/1861) */
     .carousel__btn-wrap--prev {
-      left:          0;
-      border-top:    1px solid var(--border-default);
-      border-left:   1px solid var(--border-default);
-      border-bottom: 1px solid var(--border-default);
-      border-radius: var(--corner-radius-corner-2xl) 0 0 var(--corner-radius-corner-2xl);
+      left:       0;
+      background: linear-gradient(-90deg, rgba(255,255,255,0) 0%, var(--surface-general-default) 100%);
     }
     .carousel__btn-wrap--next {
-      right:         0;
-      border-top:    1px solid var(--border-default);
-      border-right:  1px solid var(--border-default);
-      border-bottom: 1px solid var(--border-default);
-      border-radius: 0 var(--corner-radius-corner-2xl) var(--corner-radius-corner-2xl) 0;
+      right:      0;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, var(--surface-general-default) 100%);
     }
 
     /* Pill Button - 1.5 (node 5721:493) — strokeAlign INSIDE → box-shadow:inset (Rule 60), no transitions (Rule 82) */
@@ -1201,7 +1194,7 @@
     }
     .carousel__btn__icon svg { display: block; flex-shrink: 0; }
 
-    /* Indicator (node 1376:2406): 5 dots, 12×12, gap:10, padding:4 */
+    /* Indicator (node 1376:2406): 12×12 dots gap:10 padding:4; active = 49×12px elongated pill */
     .carousel__indicator {
       display:     flex;
       flex-shrink: 0;
@@ -1212,11 +1205,16 @@
     .carousel__dot {
       width:         12px;
       height:        12px;
-      border-radius: 50%;
+      border-radius: 108px;
+      border:        1px solid var(--border-general-default);           /* inactive border: #d9d9d9 — DS 6360:40960 */
       flex-shrink:   0;
-      background:    var(--surface-general-default-secondary);   /* inactive: Surface/general/default-secondary #f2f2f2 — DS confirmed 1376:2406 */
+      background:    var(--surface-general-default-secondary);          /* inactive bg: #f2f2f2 — DS confirmed 1376:2406 */
     }
-    .carousel__dot.is-active { background: var(--surface-primary-default); }  /* active: #00cc85 */
+    .carousel__dot.is-active {
+      width:        49px;                                                /* elongated pill — DS confirmed 6360:40964 */
+      background:   var(--surface-secondary-default);                   /* #b5f291 — Surface/secondary/default */
+      border-color: var(--icon-primary-default);                        /* #00cc85 — Icon/primary/default */
+    }
 
     /* CAROUSEL THREE-CARD CROP VIEW — full page width
        Card width fills half the content area so 3 cards = 50% left + 100% center + 50% right.
@@ -3870,6 +3868,7 @@
         width:  8px;
         height: 8px;
       }
+      .carousel__dot.is-active { width: 8px; }   /* mobile: round, not elongated */
 
       /* Quiz card: floor at 300px on mobile */
       .quiz-card {

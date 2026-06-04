@@ -2715,25 +2715,67 @@ return { w: node.parent.width, h: node.parent.height };
 
 ---
 
-### Mandatory workflow — BEFORE every session, every design action, every change, every decision
+### 94. Carousel - 1.5 nav buttons — Rule 42 obsolete (DS redesigned 2026-06-04) (= Rule 223 in zul.design.md)
 
-> **Always before starting any design, making any changes, or making any decisions — refer to DS and zul.design.md first. No exceptions.**
+Rule 42 is obsolete. The 3-side border composite frame approach was removed from the DS.
 
+- **Old**: Left/Right wrappers had `border-top/left/bottom: 1px #00cc85` forming the outer frame
+- **New**: Wrappers are gradient overlays (`linear-gradient` white-to-transparent), no borders. Outer frame comes from card borders only.
+- Each wrapper contains a `Pill Button - 1.5` instance (Rule 220 for Pill Button specs)
+
+```css
+.carousel__btn-wrap--prev { left: 0;  background: linear-gradient(-90deg, rgba(255,255,255,0) 0%, var(--surface-general-default) 100%); }
+.carousel__btn-wrap--next { right: 0; background: linear-gradient(90deg,  rgba(255,255,255,0) 0%, var(--surface-general-default) 100%); }
 ```
-□ 0a. Read design-md/zul.design.md       → ALL rules 1–219, confirmed specs, known mistakes
-□ 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs, NOT prior notes
-□ 0c. get_design_context on COMPONENT SET → list ALL variant names before any CSS
-□ 0d. get_design_context on EACH state   → extract every token BEFORE writing CSS
-□ 0e. use_figma raw inspection           → confirm padding, strokeAlign, width, height, radius
-□ 0f. get_variable_defs on sub-nodes     → confirm Semantic token per fill/stroke/spacing
-□ 0g. Cross-check CSS var against :root  → never guess px from token name
-□ 0h. exportAsync for icons — confirm DS frame w/h → viewBox = `-1 -1 [w+2] [h+2]`
-□ 0i. Post-implementation QA — get_screenshot ONLY after coding; NEVER for spec extraction
-□ 0j. After any fix — grep BOTH html files and sync (Rule 184)
-```
-
-**Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes, wrong padding — all traceable to not reading zul.design.md and not auditing DS first.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-04 (Rules 92–93 added — flex gap phantom spacing fix, SVG viewBox frame dimension confirmation; mandatory pre-flight checklist updated to rules 1–219) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 95. Carousel - 1.5 Content frame — no border-radius (Rule 132 obsolete) (= Rule 224 in zul.design.md)
+
+Rule 132 (`corner-2xl = 18px` on Content frame) is obsolete. DS node `1376:2209` now has `overflow-clip` only — no `cornerRadius`. Carousel outer edges are straight, not rounded.
+
+```css
+.carousel__content { overflow: hidden; /* no border-radius */ }
+```
+
+---
+
+### 96. Carousel - 1.5 indicator — active dot is 49×12px pill, inactive has border (= Rule 225 in zul.design.md)
+
+| | Inactive | Active |
+|---|---|---|
+| Width | 12px | **49px** |
+| bg | `#f2f2f2` (Surface/general/default-secondary) | `#b5f291` (Surface/secondary/default) |
+| border | `1px solid #d9d9d9` (Border/general/default) | `1px solid #00cc85` (Icon/primary/default) |
+
+Mobile: active dot stays `8×8` round — override `width: 8px` in mobile breakpoint.
+
+**Mistake made:** Active was `#00cc85`. Correct is `#b5f291`. Inactive was missing `1px solid #d9d9d9` border.
+
+---
+
+### Mandatory workflow — BEFORE every session, every design action, every change, every decision
+
+> **Always before starting any design, making any changes, or making any decisions — refer to DS, zul.design.md, AND load related memory/skills first. No exceptions.**
+
+```
+□ 0a. Read design-md/zul.design.md       → ALL rules 1–225, confirmed specs, known mistakes
+□ 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs, NOT prior notes
+□ 0c. Load related memory files          → check MEMORY.md index, load any relevant project/feedback memories
+□ 0d. Load related Figma skills          → /figma-use before use_figma; /figma-generate-design for page layouts
+□ 0e. get_design_context on COMPONENT SET → list ALL variant names before any CSS
+□ 0f. get_design_context on EACH state   → extract every token BEFORE writing CSS
+□ 0g. use_figma raw inspection           → confirm padding, strokeAlign, width, height, radius
+□ 0h. get_variable_defs on sub-nodes     → confirm Semantic token per fill/stroke/spacing
+□ 0i. Cross-check CSS var against :root  → never guess px from token name
+□ 0j. exportAsync for icons — confirm DS frame w/h → viewBox = `-1 -1 [w+2] [h+2]`
+□ 0k. Post-implementation QA — get_screenshot ONLY after coding; NEVER for spec extraction
+□ 0l. After any fix — grep BOTH html files and sync (Rule 184)
+□ 0m. Prior rules can become obsolete — if a component was last audited > 3 days ago, re-audit live DS before implementing
+```
+
+**Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes, wrong padding — all traceable to not reading zul.design.md, not loading memory, and not auditing DS first.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-04 (Rules 94–96 added — Carousel DS redesign: gradient nav overlays, no Content frame radius, 49×12px active indicator pill; mandatory workflow updated with memory + skills load steps, rule 0m obsolescence check) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

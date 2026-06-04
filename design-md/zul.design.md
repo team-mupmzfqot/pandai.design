@@ -8934,8 +8934,122 @@ activeNode.reactions  = [{ trigger: { type: 'ON_CLICK' }, actions: [{ type: 'NOD
 □ 0l. DS variants may be added between sessions — always list COMPONENT_SET children before building
 ```
 
-**Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes, wrong padding — all traceable to not reading zul.design.md and not auditing DS first.
+**Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes, wrong padding — all traceable to not reading zul.design.md, not loading memory, and not auditing DS first.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-04 (Rule 220 updated — Pill Button - 1.5 DS re-audit: states reduced 6→3, hover bg = #d1f7d1 new token, default icon = #00a36a new token Icon/primary/default-hover) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 223. Carousel - 1.5 nav buttons — Rule 42 obsolete (DS redesigned 2026-06-04)
+
+**Source:** Live DS audit 2026-06-04, `get_design_context` on nodes `1200:1789` (Desktop), `1200:1837` (Left Button), `1200:1861` (Right Button).
+
+**Rule 42 is obsolete.** The 3-side border composite frame approach no longer exists in the DS.
+
+| Element | Old (Rule 42) | Current DS |
+|---|---|---|
+| Left/Right wrappers | `border-top/left/bottom: 1px #00cc85` | **Gradient fill only — no border** |
+| Outer frame visual | Composed from 3-side borders | Comes entirely from card `border: 1px #00cc85` |
+| Wrapper border-radius | `18px 0 0 18px` / `0 18px 18px 0` | **None** |
+
+**Correct CSS — gradient overlays:**
+```css
+.carousel__btn-wrap--prev {
+  position: absolute; top: 0; bottom: 0; left: 0;
+  padding: var(--spacing-space-m); display: flex; align-items: center;
+  background: linear-gradient(-90deg, rgba(255,255,255,0) 0%, var(--surface-general-default) 100%);
+  z-index: 2;
+}
+.carousel__btn-wrap--next {
+  position: absolute; top: 0; bottom: 0; right: 0;
+  padding: var(--spacing-space-m); display: flex; align-items: center;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, var(--surface-general-default) 100%);
+  z-index: 2;
+}
+```
+
+Each wrapper contains a `Pill Button - 1.5` instance (see Rule 220 for full Pill Button specs).
+
+**Mistake made:** Prior implementation used 3-side borders (Rule 42). Rule 42 was correct at time of writing but the DS was redesigned. Always re-audit before implementing — prior rules can become obsolete between sessions (see Rule 0o).
+
+---
+
+### 224. Carousel - 1.5 Content frame — no border-radius (Rule 132 obsolete)
+
+**Source:** Live DS audit 2026-06-04, `get_design_context` on node `1376:2209`.
+
+**Rule 132 is obsolete.** The Content frame has **no `cornerRadius`** — only `overflow-clip`. The 18px radius was removed when the nav buttons were redesigned.
+
+```css
+/* CORRECT */
+.carousel__content { overflow: hidden; /* no border-radius */ }
+
+/* WRONG — obsolete Rule 132 */
+/* .carousel__content { border-radius: var(--corner-radius-corner-2xl); } */
+```
+
+The left/right outer edges of the carousel are straight — no rounding on the content container. Card corners (`corner-4xl = 24px` desktop, `corner-xl = 16px` mobile) are unchanged.
+
+---
+
+### 225. Carousel - 1.5 indicator — active dot is 49×12px pill, inactive has 1px border
+
+**Source:** Live DS audit 2026-06-04, `get_design_context` nodes `6360:40960` (inactive) and `6360:40964` (active).
+
+| Property | Inactive | Active |
+|---|---|---|
+| Width | 12px | **49px** (elongated pill) |
+| Height | 12px | 12px |
+| Border-radius | 108px | 108px |
+| Background | `Surface/general/default-secondary = #f2f2f2` | `Surface/secondary/default = #b5f291` |
+| Border | `1px solid Border/general/default = #d9d9d9` | `1px solid Icon/primary/default = #00cc85` |
+
+**The inactive dot has a visible border** — was missing in prior implementation. Active bg changed from `#00cc85` (wrong) to `#b5f291`.
+
+```css
+.carousel__dot {
+  width: 12px; height: 12px; border-radius: 108px; flex-shrink: 0;
+  border:     1px solid var(--border-general-default);    /* #d9d9d9 */
+  background: var(--surface-general-default-secondary);   /* #f2f2f2 */
+}
+.carousel__dot.is-active {
+  width:        49px;
+  background:   var(--surface-secondary-default);         /* #b5f291 */
+  border-color: var(--icon-primary-default);              /* #00cc85 */
+}
+/* Mobile: active stays round */
+@media (max-width: 767px) {
+  .carousel__dot           { width: 8px; height: 8px; }
+  .carousel__dot.is-active { width: 8px; }
+}
+```
+
+**Mistakes made:** Active dot was `#00cc85` (Surface/primary/default) — wrong. Correct is `#b5f291` (Surface/secondary/default). Inactive dot was missing `1px solid #d9d9d9` border entirely.
+
+---
+
+### Mandatory workflow — BEFORE every session, every design action, every change, every decision (updated 2026-06-04)
+
+> **Always before starting any design, making any changes, or making any decisions — refer to DS, zul.design.md, AND load related memory/skills first. No exceptions.**
+
+```
+□ 0a. Read design-md/zul.design.md       → ALL rules 1–225, confirmed specs, known mistakes
+□ 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs, NOT prior notes
+□ 0c. Load related memory files          → check MEMORY.md index, load any relevant project/feedback memories
+□ 0d. Load related Figma skills          → /figma-use before use_figma; /figma-generate-design for page layouts
+□ 0e. get_design_context on COMPONENT SET → list ALL variant names before any CSS
+□ 0f. get_design_context on EACH state   → extract every token BEFORE writing CSS
+□ 0g. use_figma raw inspection           → confirm padding, strokeAlign, clipsContent, width, height, radius
+□ 0h. get_variable_defs on sub-nodes     → confirm Semantic token per fill/stroke/spacing
+□ 0i. Cross-check CSS var against :root  → never guess px from token name
+□ 0j. exportAsync for icons — confirm DS frame w/h → viewBox = `-1 -1 [w+2] [h+2]`
+□ 0k. Post-implementation QA — get_screenshot ONLY after coding; NEVER for spec extraction (Rule 193)
+□ 0l. After any fix — grep BOTH html files and sync (Rule 184)
+□ 0m. For Figma API reactions — use `actions:[]` array, check trigger type before adding `delay`
+□ 0n. DS variants may be added/changed between sessions — always list COMPONENT_SET children before building
+□ 0o. Prior rules can become obsolete — if a component was last audited > 3 days ago, re-audit live DS before implementing
+```
+
+**Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes, wrong padding — all traceable to not reading zul.design.md, not loading memory, and not auditing DS first.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-04 (Rules 223–225 — Carousel - 1.5 DS redesign audit: gradient nav overlays replace 3-side borders, Content frame has no radius, indicator active dot = 49×12px #b5f291 pill; mandatory workflow updated with memory + skills load steps) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
