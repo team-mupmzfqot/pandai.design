@@ -17,7 +17,7 @@
       --text-primary-default:  #00cc85;
       --text-primary-focus:    #00a36a;
       --text-tertiary-default: #00564c;
-      --text-primary-on-color: #f6fdfb;
+      --text-primary-on-color: #ffffff;    /* Text/primary/on-color — Foundation/white (Rule 61) */
 
       --surface-general-default:              #ffffff;
       --surface-general-default-secondary:    #f2f2f2;
@@ -44,7 +44,7 @@
       --icon-default-default:    #808080;
       --icon-primary-default:    #00cc85;
       --icon-secondary-hover: #70bc6f;
-      --icon-primary-on-color:   #f6fdfb;
+      --icon-primary-on-color:   #ffffff;    /* Icon/primary/on-color — Foundation/white (Rule 61) */
       --icon-tertiary-default:   #00564c;
 
       --corner-pill:    999px;
@@ -72,6 +72,31 @@
       --page-max-width: 100%;
       --page-padding-x: 60px;
       --section-gap:    var(--space-m);
+
+      /* Subject badge colors — DS confirmed CLAUDE.md Rule 17 */
+      --subjects-chinese-bg:    #f94848; --subjects-chinese-border:    #c73a3a;
+      --subjects-english-bg:    #ff4d56; --subjects-english-border:    #cc3e45;
+      --subjects-bm-bg:         #4d77ff; --subjects-bm-border:         #2e4799;
+      --subjects-math-bg:       #42ac7b; --subjects-math-border:       #358a62;
+      --subjects-islamic-bg:    #de4d7f; --subjects-islamic-border:    #b23e66;
+      --subjects-moral-bg:      #0072ca; --subjects-moral-border:      #005ba2;
+      --subjects-science-bg:    #ffd641; --subjects-science-border:    #ccab34;
+      --subjects-add-math-bg:   #283589; --subjects-add-math-border:   #182052;
+      --subjects-biology-bg:    #8431d8; --subjects-biology-border:    #6a27ad;
+      --subjects-chemistry-bg:  #e20082; --subjects-chemistry-border:  #b50068;
+      --subjects-physics-bg:    #27a0d7; --subjects-physics-border:    #1f80ac;
+      --subjects-history-bg:    #a97c50; --subjects-history-border:    #876340;
+      --subjects-geography-bg:  #77d836; --subjects-geography-border:  #5fad2b;
+      --subjects-economy-bg:    #ff5733; --subjects-economy-border:    #cc4629;
+      --subjects-account-bg:    #0072ca; --subjects-account-border:    #004479;
+      --subjects-business-bg:   #efb42b; --subjects-business-border:   #bf9022;
+      --subjects-cs-bg:         #d10070; --subjects-cs-border:         #a7005a;
+      --subjects-kafa-bg:       #8ae3a9; --subjects-kafa-border:       #6eb687;
+      --subjects-rbt-bg:        #353535; --subjects-rbt-border:        #2a2a2a;
+      /* Special text colors for light-background subjects */
+      --subjects-science-text:   #998027;
+      --subjects-geography-text: #478220;
+      --subjects-kafa-text:      #538865;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -498,25 +523,33 @@
     .pd-breadcrumbs__chevron { width: 16px; height: 16px; color: var(--text-primary-default); flex-shrink: 0; }
 
     /* ───────────────────────────────────────────────
-       FILTER CARD  DS 5376:191594
-       Green border, #e8fbe8 bg, horizontal row
+       FILTER CARD  DS 5376:250770
+       Primary Card: green border, #e8fbe8 bg, vertical layout
+       Row 1: filter header (left) + dropdown button (right)
+       Row 2: subjects chips — hidden until button clicked
     ─────────────────────────────────────────────── */
     .sc-filter-card {
-      display: flex; align-items: center; gap: var(--space-m);
+      display: flex; flex-direction: column;
       padding: var(--space-m);
       background: var(--surface-secondary-default-subtle);
-      border: 1px solid var(--border-primary-default);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
       border-radius: var(--corner-4xl);
       margin-bottom: var(--space-m);
+      gap: 0;
+    }
+    /* Top row: header label left, dropdown button right */
+    .sc-filter-row {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: var(--space-m);
     }
     .sc-filter-header {
-      display: flex; align-items: center; gap: var(--space-xs);
+      display: flex; align-items: center; gap: 4px;
       flex-shrink: 0;
     }
     .sc-filter-icon-wrap {
       width: 28px; height: 28px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      color: var(--icon-primary-default);
+      color: var(--icon-tertiary-default);
     }
     .sc-filter-icon-wrap svg { display: block; width: 24px; height: 24px; }
     .sc-filter-title {
@@ -524,29 +557,85 @@
       color: var(--text-tertiary-default);
       white-space: nowrap;
     }
+
+    /* Button-Dropdown-1.5 — DS confirmed: 40px h, 60px radius, white bg, #d9d9d9 border */
     .sc-filter-dropdown {
       display: flex; align-items: center; gap: var(--space-xs);
-      height: 32px; padding: 2px var(--space-xs) 2px var(--space-m);
+      height: 40px; padding: 8px 8px 8px 12px;
       background: var(--surface-general-default);
-      border: 1px solid var(--border-general-default);
+      border: none; box-shadow: inset 0 0 0 1px #d9d9d9;
       border-radius: var(--corner-rounded);
       cursor: pointer; font-family: var(--font);
-      flex-grow: 1; min-width: 0; max-width: 313px;
+      flex-shrink: 0; width: 313px; max-width: 100%;
+      user-select: none;
     }
+    .sc-filter-dropdown.is-open { box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+    .sc-filter-dropdown:hover   { box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+
     .sc-filter-dropdown__label {
       flex: 1; min-width: 0;
-      font-size: 12px; font-weight: 600; line-height: 18px;
-      color: var(--text-primary-default);
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: #666666; text-align: left;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
+
+    /* Green circle arrow */
     .sc-filter-dropdown__arrow {
-      width: 20px; height: 20px; flex-shrink: 0;
+      width: 24px; height: 24px; flex-shrink: 0;
       background: var(--surface-primary-default);
       border-radius: 60px; padding: 4px;
       display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s ease;
     }
-    .sc-filter-dropdown__arrow svg { display: block; width: 12px; height: 12px; color: var(--surface-general-default); }
-    .sc-filter-dropdown:hover { border-color: var(--border-primary-default); }
+    .sc-filter-dropdown.is-open .sc-filter-dropdown__arrow { transform: rotate(180deg); }
+    .sc-filter-dropdown__arrow svg { display: block; width: 16px; height: 16px; color: var(--surface-general-default); }
+
+    /* Subjects chip row — hidden by default, expands on open */
+    .sc-subjects-row {
+      display: flex; align-items: center; justify-content: center;
+      flex-wrap: wrap; gap: 12px;
+      max-height: 0; overflow: hidden; opacity: 0;
+      transition: max-height 0.25s ease, opacity 0.2s ease, padding-top 0.25s ease;
+    }
+    .sc-subjects-row.is-open {
+      max-height: 500px; opacity: 1;
+      padding-top: var(--space-m);
+    }
+
+    /* Subject pill buttons — DS Button-1.5 Secondary/M */
+    .sc-subject-chip {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 32px; min-height: 32px; max-height: 32px;
+      padding: 2px 8px;
+      border-radius: 60px;
+      background: var(--surface-general-default);
+      border: none; box-shadow: inset 0 0 0 1px var(--border-primary-default);
+      font-family: var(--font); font-size: 12px; font-weight: 600; line-height: 18px;
+      color: var(--text-primary-default);
+      cursor: pointer; user-select: none; white-space: nowrap;
+    }
+    .sc-subject-chip.is-active {
+      background: var(--surface-primary-default);
+      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+      color: var(--text-primary-on-color);
+    }
+    .sc-subject-chip:hover:not(.is-active) {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+      color: var(--text-secondary-focus);
+    }
+    .sc-subject-chip:active:not(.is-active),
+    .sc-subject-chip.is-pressing:not(.is-active) {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+      color: var(--text-primary-default);
+    }
+    .sc-subject-chip.is-active:active,
+    .sc-subject-chip.is-active.is-pressing {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+      color: var(--text-primary-default);
+    }
 
     /* ───────────────────────────────────────────────
        SCORE CARD - 1.5  DS 5376:191595
@@ -620,6 +709,26 @@
       transform: translateY(-50%);
       display: block; flex-shrink: 0;
     }
+    /* Subject badge modifier classes — set --badge-bg / --badge-border from DS tokens */
+    .sc-badge--chinese   { --badge-bg: var(--subjects-chinese-bg);   --badge-border: var(--subjects-chinese-border); }
+    .sc-badge--english   { --badge-bg: var(--subjects-english-bg);   --badge-border: var(--subjects-english-border); }
+    .sc-badge--bm        { --badge-bg: var(--subjects-bm-bg);        --badge-border: var(--subjects-bm-border); }
+    .sc-badge--math      { --badge-bg: var(--subjects-math-bg);      --badge-border: var(--subjects-math-border); }
+    .sc-badge--islamic   { --badge-bg: var(--subjects-islamic-bg);   --badge-border: var(--subjects-islamic-border); }
+    .sc-badge--moral     { --badge-bg: var(--subjects-moral-bg);     --badge-border: var(--subjects-moral-border); }
+    .sc-badge--science   { --badge-bg: var(--subjects-science-bg);   --badge-border: var(--subjects-science-border);   --badge-text: var(--subjects-science-text); }
+    .sc-badge--add-math  { --badge-bg: var(--subjects-add-math-bg);  --badge-border: var(--subjects-add-math-border); }
+    .sc-badge--biology   { --badge-bg: var(--subjects-biology-bg);   --badge-border: var(--subjects-biology-border); }
+    .sc-badge--chemistry { --badge-bg: var(--subjects-chemistry-bg); --badge-border: var(--subjects-chemistry-border); }
+    .sc-badge--physics   { --badge-bg: var(--subjects-physics-bg);   --badge-border: var(--subjects-physics-border); }
+    .sc-badge--history   { --badge-bg: var(--subjects-history-bg);   --badge-border: var(--subjects-history-border); }
+    .sc-badge--geography { --badge-bg: var(--subjects-geography-bg); --badge-border: var(--subjects-geography-border); --badge-text: var(--subjects-geography-text); }
+    .sc-badge--economy   { --badge-bg: var(--subjects-economy-bg);   --badge-border: var(--subjects-economy-border); }
+    .sc-badge--account   { --badge-bg: var(--subjects-account-bg);   --badge-border: var(--subjects-account-border); }
+    .sc-badge--business  { --badge-bg: var(--subjects-business-bg);  --badge-border: var(--subjects-business-border); }
+    .sc-badge--cs        { --badge-bg: var(--subjects-cs-bg);        --badge-border: var(--subjects-cs-border); }
+    .sc-badge--kafa      { --badge-bg: var(--subjects-kafa-bg);      --badge-border: var(--subjects-kafa-border);      --badge-text: var(--subjects-kafa-text); }
+    .sc-badge--rbt       { --badge-bg: var(--subjects-rbt-bg);       --badge-border: var(--subjects-rbt-border); }
     .sc-overview-title {
       font-size: 20px; font-weight: 500; line-height: 28px;
       color: var(--text-default-heading); text-align: center;
@@ -659,21 +768,23 @@
       display: flex; flex-direction: column; gap: var(--space-m);
     }
 
-    /* ── Mid Container  DS 5376:191595  h:300 p:20 r:18  green border ── */
+    /* ── Mid Container  DS 5376:191657  h:300 p:20 gap:45 r:18  strokeAlign:INSIDE ── */
     .sc-mid {
       flex: 0 0 auto;
       height: 300px;
-      display: flex; flex-direction: column; gap: 12px;
+      display: flex; flex-direction: column; gap: 45px;
       padding: 20px;
       background: var(--surface-general-default);
-      border: 1px solid var(--sc-inner-border, var(--border-primary-default));
+      border: none;
+      box-shadow: inset 0 0 0 1px var(--sc-inner-border, var(--border-primary-default));
       border-radius: var(--corner-2xl);
       overflow: hidden;
     }
-    .sc-mid__header { display: flex; align-items: center; gap: var(--space-xs); }
-    .sc-mid__content { display: flex; flex-direction: column; gap: 0; }
-    .sc-mid__subtitle { font-size: 20px; font-weight: 500; line-height: 28px; color: var(--text-default-heading); }
-    .sc-mid__value    { font-size: 28px; font-weight: 700; line-height: 36px; color: var(--text-primary-focus); }
+    /* DS gap:12, align:MIN (top) */
+    .sc-mid__header { display: flex; align-items: flex-start; gap: 12px; }
+    .sc-mid__content { display: flex; flex-direction: column; gap: var(--space-none); flex: 1 0 0; min-width: 0; }
+    .sc-mid__subtitle { font-size: 20px; font-weight: 500; line-height: 32px; color: var(--text-default-heading); }
+    .sc-mid__value    { font-size: 28px; font-weight: 700; line-height: 42px; color: var(--text-primary-focus); }
 
     /* Line chart — fills remaining height in mid container */
     .sc-graph { width: 100%; flex: 1; min-height: 0; }
@@ -961,9 +1072,9 @@
       .sc-mini-stat-label { font-size: 12px; line-height: 16px; }
       .sc-mini-stat-value { font-size: 22px; line-height: 28px; }
       .sc-mini-stat-item  { padding: 0 16px; }
-      /* Filter card wraps on narrow */
-      .sc-filter-card { flex-wrap: wrap; }
-      .sc-filter-dropdown { max-width: 100%; }
+      /* Filter card — row wraps on narrow */
+      .sc-filter-row { flex-wrap: wrap; gap: var(--space-xs); }
+      .sc-filter-dropdown { width: 100%; max-width: 100%; }
       /* Stat row wraps to 2-per-row */
       .sc-stat-row { flex-wrap: wrap; }
       .sc-stat-solo { flex-basis: calc(50% - 5px); }
@@ -1119,6 +1230,8 @@
     <!-- ── Breadcrumb + panel chevron-right ── -->
     <symbol id="ic-chevron-right-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18L15 12L9 6"/></symbol>
     <symbol id="ic-chevron-right" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18L15 12L9 6"/></symbol>
+    <symbol id="ic-chevron-btn" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 9L7.5 6L4.5 3"/></symbol>
+    <symbol id="ic-download" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
 
     <!-- ── Menu Bar + Panel icons — DS 3406:774 ── -->
     <symbol id="ic-clipboard" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4H18C18.5304 4 19.0391 4.21071 19.4142 4.58579C19.7893 4.96086 20 5.46957 20 6V20C20 20.5304 19.7893 21.0391 19.4142 21.4142C19.0391 21.7893 18.5304 22 18 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V6C4 5.46957 4.21071 4.96086 4.58579 4.58579C4.96086 4.21071 5.46957 4 6 4H8M9 2H15C15.5523 2 16 2.44772 16 3V5C16 5.55228 15.5523 6 15 6H9C8.44772 6 8 5.55228 8 5V3C8 2.44772 8.44772 2 9 2Z"/></symbol>
@@ -1665,21 +1778,51 @@
     </div>
   </section>
 
-  <!-- ── FILTER CARD  DS 5376:191594  green border, #e8fbe8 bg ── -->
+  <!-- ── FILTER CARD  DS 5376:250770  Primary Card, VERTICAL layout ── -->
   <section id="Subjects-Desktop">
     <div class="sc-filter-card">
-      <div class="sc-filter-header">
-        <div class="sc-filter-icon-wrap">
-          <svg aria-hidden="true"><use href="#ic-grid"/></svg>
+
+      <!-- Row 1: title (left) + Button-Dropdown-1.5 (right) -->
+      <div class="sc-filter-row">
+        <div class="sc-filter-header">
+          <div class="sc-filter-icon-wrap">
+            <svg aria-hidden="true"><use href="#ic-grid"/></svg>
+          </div>
+          <span class="sc-filter-title">Filter by Subjects</span>
         </div>
-        <span class="sc-filter-title">Filter by Subjects</span>
+
+        <!-- Button-Dropdown-1.5  DS: 313×40 white bg #d9d9d9 border 60px radius -->
+        <button class="sc-filter-dropdown" id="subject-filter-btn" type="button" aria-expanded="false">
+          <span class="sc-filter-dropdown__label" id="subject-filter-label">All Subjects</span>
+          <div class="sc-filter-dropdown__arrow">
+            <svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg>
+          </div>
+        </button>
       </div>
-      <button class="sc-filter-dropdown" id="subject-filter-btn" type="button">
-        <span class="sc-filter-dropdown__label" id="subject-filter-label">All Subjects</span>
-        <div class="sc-filter-dropdown__arrow">
-          <svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg>
-        </div>
-      </button>
+
+      <!-- Row 2: subject chips — expands below on button click -->
+      <div class="sc-subjects-row" id="sc-subjects-row" role="group" aria-label="Select subject">
+        <button class="sc-subject-chip is-active" data-key="all"       type="button">All Subjects</button>
+        <button class="sc-subject-chip"           data-key="account"   type="button">Account</button>
+        <button class="sc-subject-chip"           data-key="add-math"  type="button">Add Math</button>
+        <button class="sc-subject-chip"           data-key="bm"        type="button">Bahasa Melayu</button>
+        <button class="sc-subject-chip"           data-key="biology"   type="button">Biology</button>
+        <button class="sc-subject-chip"           data-key="chemistry" type="button">Chemistry</button>
+        <button class="sc-subject-chip"           data-key="science"   type="button">Science</button>
+        <button class="sc-subject-chip"           data-key="economy"   type="button">Economy</button>
+        <button class="sc-subject-chip"           data-key="english"   type="button">English</button>
+        <button class="sc-subject-chip"           data-key="geography" type="button">Geography</button>
+        <button class="sc-subject-chip"           data-key="history"   type="button">History</button>
+        <button class="sc-subject-chip"           data-key="islamic"   type="button">Islamic Studies</button>
+        <button class="sc-subject-chip"           data-key="kafa"      type="button">KAFA</button>
+        <button class="sc-subject-chip"           data-key="math"      type="button">Mathematics</button>
+        <button class="sc-subject-chip"           data-key="rbt"       type="button">RBT</button>
+        <button class="sc-subject-chip"           data-key="moral"     type="button">Moral Studies</button>
+        <button class="sc-subject-chip"           data-key="cs"        type="button">Computer Science</button>
+        <button class="sc-subject-chip"           data-key="physics"   type="button">Physics</button>
+        <button class="sc-subject-chip"           data-key="chinese"   type="button">Chinese Language</button>
+      </div>
+
     </div>
   </section>
 
@@ -1742,19 +1885,17 @@
 
           <!-- Line chart  7 data points  Sun→Sat  animated -->
           <div class="sc-graph" aria-label="Score trend line chart">
-            <svg id="score-graph" viewBox="0 0 380 120" preserveAspectRatio="none" fill="none">
-              <!-- Zero baseline -->
-              <line x1="0" y1="68" x2="380" y2="68" stroke="var(--border-general-default)" stroke-width="1"/>
+            <svg id="score-graph" viewBox="0 0 380 120" fill="none">
               <!-- Smooth line -->
-              <path id="graph-line" stroke="var(--surface-primary-default)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <path id="graph-line" stroke="var(--surface-tertiary-default)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
               <!-- Dots -->
-              <circle id="graph-dot-0" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-1" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-2" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-3" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-4" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-5" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-6" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
+              <circle id="graph-dot-0" r="5" fill="var(--surface-primary-default)"/>
+              <circle id="graph-dot-1" r="5" fill="var(--surface-primary-default)"/>
+              <circle id="graph-dot-2" r="5" fill="var(--surface-primary-default)"/>
+              <circle id="graph-dot-3" r="5" fill="var(--surface-primary-default)"/>
+              <circle id="graph-dot-4" r="5" fill="var(--surface-primary-default)"/>
+              <circle id="graph-dot-5" r="5" fill="var(--surface-primary-default)"/>
+              <circle id="graph-dot-6" r="5" fill="var(--surface-primary-default)"/>
               <!-- Hit areas -->
               <rect id="graph-hit-0" fill="transparent" style="cursor:pointer"/>
               <rect id="graph-hit-1" fill="transparent" style="cursor:pointer"/>
@@ -2310,7 +2451,7 @@
       'geography': { name: 'Geography',         bg: '#77d836', border: '#5fad2b', text: '#478220', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-geography.png'  },
       'history':   { name: 'History',           bg: '#a97c50', border: '#876340', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-history.svg'    },
       'islamic':   { name: 'Islamic Studies',   bg: '#de4d7f', border: '#b23e66', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-islamic.svg'    },
-      'kafa':      { name: 'KAFA',              bg: '#8ae3a9', border: '#6eb687', text: '#358a62', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-kafa.svg'       },
+      'kafa':      { name: 'KAFA',              bg: '#8ae3a9', border: '#6eb687', text: '#538865', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-kafa.svg'       },
       'math':      { name: 'Mathematics',       bg: '#42ac7b', border: '#358a62', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-math.svg'       },
       'moral':     { name: 'Moral Studies',     bg: '#0072ca', border: '#005ba2', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-moral.svg'      },
       'cs':        { name: 'Computer Science',  bg: '#d10070', border: '#a7005a', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-comp-science.svg'},
@@ -2319,10 +2460,10 @@
       'chinese':   { name: 'Chinese Language',  bg: '#f94848', border: '#c73a3a', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chinese-lang.svg'},
     };
 
-    function badgeHTML(s) {
-      return `<div class="sc-subject-badge" style="--badge-bg:${s.bg};--badge-border:${s.border}">
+    function badgeHTML(s, key) {
+      return `<div class="sc-subject-badge sc-badge--${key}">
         <div class="sc-subject-badge__icon"><img src="${s.icon}" alt="${s.name}"></div>
-        <div class="sc-subject-badge__label" style="color:${s.text}">
+        <div class="sc-subject-badge__label">
           <svg class="sc-subject-badge__pointer" width="4" height="8" viewBox="0 0 4 8" fill="white" aria-hidden="true"><path d="M 0 0 L 4 4 L 0 8 Z"/></svg>
           ${s.name}
         </div>
@@ -2337,7 +2478,7 @@
         container.innerHTML = ALL_PILL_HTML;
       } else {
         const s = SUBJECT_DATA[key];
-        container.innerHTML = s ? badgeHTML(s) : ALL_PILL_HTML;
+        container.innerHTML = s ? badgeHTML(s, key) : ALL_PILL_HTML;
       }
     }
 
@@ -2391,11 +2532,39 @@
       'rbt':       [ 50,  65,  55,  70,  60,  75,  65],
       'chinese':   [ 45,  55,  65,  50,  70,  60,  75],
     };
-    const GRAPH_X    = [34, 86, 138, 190, 242, 294, 346];
-    const BAR_W      = 28;
-    const BASELINE_Y = 68;
-    const MAX_AMP    = 55;
-    let graphAnimFrame = null;
+    let GRAPH_X    = [34, 86, 138, 190, 242, 294, 346];
+    let BAR_W      = 28;
+    let BASELINE_Y = 68;
+    let MAX_AMP    = 55;
+    let GRAPH_W    = 380;
+    let GRAPH_H    = 120;
+    let graphAnimFrame  = null;
+    let currentGraphKey = 'all';
+    const graphSvg = document.getElementById('score-graph');
+
+    function initGraph() {
+      const rect = graphSvg.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      GRAPH_W = rect.width;
+      GRAPH_H = rect.height;
+      graphSvg.setAttribute('viewBox', `0 0 ${Math.round(GRAPH_W)} ${Math.round(GRAPH_H)}`);
+      /* reserve bottom 18px for day labels */
+      const labelH   = 18;
+      BASELINE_Y = (GRAPH_H - labelH) * (68 / 120);
+      MAX_AMP    = (GRAPH_H - labelH) * (55 / 120);
+      const paddingX = GRAPH_W * (34 / 380);
+      const stepX    = (GRAPH_W - 2 * paddingX) / 6;
+      GRAPH_X = Array.from({ length: 7 }, (_, i) => Math.round(paddingX + i * stepX));
+      BAR_W   = Math.round(stepX * 0.54);
+      /* reposition day labels to match new GRAPH_X */
+      const labelY = (GRAPH_H - 4).toFixed(1);
+      graphSvg.querySelectorAll('text').forEach(function(el, i) {
+        if (GRAPH_X[i] !== undefined) {
+          el.setAttribute('x', GRAPH_X[i]);
+          el.setAttribute('y', labelY);
+        }
+      });
+    }
 
     function gY(val, maxAbs) {
       return maxAbs === 0 ? BASELINE_Y : BASELINE_Y - (val / maxAbs) * MAX_AMP;
@@ -2425,7 +2594,7 @@
         document.getElementById(`graph-dot-${i}`).setAttribute('cy', dotY.toFixed(2));
         const hit = document.getElementById(`graph-hit-${i}`);
         hit.setAttribute('x', x - BAR_W / 2); hit.setAttribute('y', 5);
-        hit.setAttribute('width', BAR_W); hit.setAttribute('height', 88);
+        hit.setAttribute('width', BAR_W); hit.setAttribute('height', Math.round(GRAPH_H - 10));
       });
       document.getElementById('graph-line').setAttribute('d', smoothCurve(pts));
     }
@@ -2435,7 +2604,6 @@
     const graphTooltip = document.createElement('div');
     graphTooltip.className = 'graph-tooltip';
     document.body.appendChild(graphTooltip);
-    const graphSvg = document.getElementById('score-graph');
 
     GRAPH_X.forEach((x, i) => {
       const hit = document.getElementById(`graph-hit-${i}`);
@@ -2444,14 +2612,17 @@
         const bar = document.getElementById(`graph-bar-${i}`);
         const barTop = parseFloat(bar.getAttribute('y'));
         graphTooltip.textContent = DAYS[i];
-        graphTooltip.style.left = (svgRect.left + x * svgRect.width / 380) + 'px';
-        graphTooltip.style.top  = (svgRect.top  + barTop * svgRect.height / 120) + 'px';
+        graphTooltip.style.left = (svgRect.left + GRAPH_X[i] * svgRect.width  / GRAPH_W) + 'px';
+        graphTooltip.style.top  = (svgRect.top  + barTop     * svgRect.height / GRAPH_H) + 'px';
         graphTooltip.classList.add('is-visible');
       });
       hit.addEventListener('mouseleave', () => graphTooltip.classList.remove('is-visible'));
     });
 
+    window.addEventListener('resize', () => { initGraph(); animateGraph(currentGraphKey, 0); });
+
     function animateGraph(key, duration) {
+      currentGraphKey = key;
       const vals = GRAPH_DATA[key] || GRAPH_DATA['all'];
       if (graphAnimFrame) cancelAnimationFrame(graphAnimFrame);
       renderGraphAt(vals, 0);
@@ -2495,52 +2666,83 @@
       if (cardOuter) cardOuter.style.setProperty('--sc-inner-border', color);
     }
 
-    /* ── Filter dropdown — subject selection (prototype: cycles through subjects on click) ── */
+    /* ── Filter dropdown — expand/collapse + chip selection ── */
     (function() {
-      var subjects = [
-        { key:'all',       progress:61.5, label:'All Subjects'    },
-        { key:'account',   progress:78.0, label:'Account'         },
-        { key:'add-math',  progress:72.0, label:'Add Math'        },
-        { key:'bm',        progress:76.0, label:'Bahasa Melayu'   },
-        { key:'biology',   progress:88.0, label:'Biology'         },
-        { key:'chemistry', progress:65.0, label:'Chemistry'       },
-        { key:'science',   progress:85.0, label:'Science'         },
-        { key:'economy',   progress:55.0, label:'Economy'         },
-        { key:'english',   progress:90.0, label:'English'         },
-        { key:'geography', progress:60.0, label:'Geography'       },
-        { key:'history',   progress:91.0, label:'History'         },
-        { key:'islamic',   progress:84.0, label:'Islamic Studies' },
-        { key:'kafa',      progress:77.0, label:'KAFA'            },
-        { key:'math',      progress:80.0, label:'Mathematics'     },
-        { key:'rbt',       progress:82.0, label:'RBT'             },
-        { key:'moral',     progress:50.0, label:'Moral Studies'   },
-        { key:'cs',        progress:70.0, label:'Computer Science'},
-        { key:'physics',   progress:78.0, label:'Physics'         },
-        { key:'chinese',   progress:80.0, label:'Chinese Language'},
-      ];
-      var idx = 0;
-      var btn = document.getElementById('subject-filter-btn');
-      var lbl = document.getElementById('subject-filter-label');
-      if (!btn) return;
-      btn.addEventListener('click', function() {
-        idx = (idx + 1) % subjects.length;
-        var s           = subjects[idx];
-        var color       = s.key === 'all' ? '#00cc85' : (SUBJECT_DATA[s.key]?.bg     || '#00cc85');
-        var borderColor = s.key === 'all' ? '#00cc85' : (SUBJECT_DATA[s.key]?.border || '#00cc85');
+      var SUBJECTS = {
+        'all':       { progress:61.5, label:'All Subjects'     },
+        'account':   { progress:78.0, label:'Account'          },
+        'add-math':  { progress:72.0, label:'Add Math'         },
+        'bm':        { progress:76.0, label:'Bahasa Melayu'    },
+        'biology':   { progress:88.0, label:'Biology'          },
+        'chemistry': { progress:65.0, label:'Chemistry'        },
+        'science':   { progress:85.0, label:'Science'          },
+        'economy':   { progress:55.0, label:'Economy'          },
+        'english':   { progress:90.0, label:'English'          },
+        'geography': { progress:60.0, label:'Geography'        },
+        'history':   { progress:91.0, label:'History'          },
+        'islamic':   { progress:84.0, label:'Islamic Studies'  },
+        'kafa':      { progress:77.0, label:'KAFA'             },
+        'math':      { progress:80.0, label:'Mathematics'      },
+        'rbt':       { progress:82.0, label:'RBT'              },
+        'moral':     { progress:50.0, label:'Moral Studies'    },
+        'cs':        { progress:70.0, label:'Computer Science' },
+        'physics':   { progress:78.0, label:'Physics'          },
+        'chinese':   { progress:80.0, label:'Chinese Language' }
+      };
+      var btn      = document.getElementById('subject-filter-btn');
+      var lbl      = document.getElementById('subject-filter-label');
+      var chipsRow = document.getElementById('sc-subjects-row');
+      if (!btn || !chipsRow) return;
+
+      function openSubjects() {
+        chipsRow.classList.add('is-open');
+        btn.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      function closeSubjects() {
+        chipsRow.classList.remove('is-open');
+        btn.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      function selectSubject(key) {
+        var s = SUBJECTS[key];
+        if (!s) return;
         if (lbl) lbl.textContent = s.label;
-        renderBadges(s.key);
+        chipsRow.querySelectorAll('.sc-subject-chip').forEach(function(chip) {
+          chip.classList.toggle('is-active', chip.dataset.key === key);
+        });
+        var color       = key === 'all' ? '#00cc85' : (SUBJECT_DATA[key] ? SUBJECT_DATA[key].bg     : '#00cc85');
+        var borderColor = key === 'all' ? '#00cc85' : (SUBJECT_DATA[key] ? SUBJECT_DATA[key].border : '#00cc85');
+        renderBadges(key);
         setAccentColor(color);
         setInnerBorder(borderColor);
         animateDonut(s.progress, 900);
-        animateGraph(s.key, 900);
+        animateGraph(key, 900);
+        closeSubjects();
+      }
+
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (chipsRow.classList.contains('is-open')) closeSubjects(); else openSubjects();
       });
+      chipsRow.querySelectorAll('.sc-subject-chip').forEach(function(chip) {
+        chip.addEventListener('click', function() { selectSubject(chip.dataset.key); });
+        chip.addEventListener('mousedown', function() { chip.classList.add('is-pressing'); });
+        chip.addEventListener('mouseup', function() { chip.classList.remove('is-pressing'); });
+        chip.addEventListener('mouseleave', function() { chip.classList.remove('is-pressing'); });
+      });
+      document.addEventListener('click', function(e) {
+        if (!btn.contains(e.target) && !chipsRow.contains(e.target)) closeSubjects();
+      });
+      document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeSubjects(); });
     })();
 
     /* Initial render — "All" is active on load */
     renderBadges('all');
     setAccentColor('#00cc85');
     setInnerBorder('#00cc85');
-    animateGraph('all', 900);
+    /* setTimeout lets flex layout fully settle before reading SVG dimensions */
+    setTimeout(function() { initGraph(); animateGraph('all', 900); }, 0);
 
   } catch(e) { console.warn('Score card init error:', e); }
 </script>

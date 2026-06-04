@@ -87,25 +87,50 @@
       --scale-50:  2px;
       --scale-200: 8px;
 
-      /* Subject Colors â€” ALL confirmed from DS get_variable_defs */
-      --subjects-b-melayu-default:   #4d77ff;   /* Subjects/b-melayu/default */
-      --subjects-english-default:    #ff4d56;   /* Subjects/english/default */
-      --subjects-math-default:       #42ac7b;   /* Subjects/math/default */
-      --subjects-science-default:    #ffd641;   /* Subjects/science/default */
-      --subjects-chemistry-default:  #e20082;   /* Subjects/chemistry/default */
-      --subjects-physics-default:    #27a0d7;   /* Subjects/physics/default */
-      --subjects-history-default:    #a97c50;   /* Subjects/history/default */
-      --subjects-geo-default:        #77d836;   /* Subjects/geo/default */
-      --subjects-islamic-default:    #de4d7f;   /* Subjects/islamic/default */
-      --subjects-moral-default:      #0072ca;   /* Subjects/moral/default */
-      --subjects-biology-default:    #8431d8;   /* Subjects/biology/default */
-      --subjects-add-math-default:   #283589;   /* Subjects/add-math/default */
-      --subjects-economy-default:    #ff5733;   /* Subjects/economy/default */
-      --subjects-account-default:    #0072ca;   /* Subjects/account/default */
-      --subjects-business-default:   #efb42b;   /* Subjects/business/default */
-      --subjects-cs-default:         #d10070;   /* Subjects/comp-science/default */
-      --subjects-kafa-default:       #8ae3a9;   /* Subjects/kafa/default */
-      --subjects-rbt-default:        #353535;   /* Subjects/rbt/default */
+      /* Subject badge colors — DS confirmed CLAUDE.md Rule 17 */
+      --subjects-chinese-bg:    #f94848; --subjects-chinese-border:    #c73a3a;
+      --subjects-english-bg:    #ff4d56; --subjects-english-border:    #cc3e45;
+      --subjects-bm-bg:         #4d77ff; --subjects-bm-border:         #2e4799;
+      --subjects-math-bg:       #42ac7b; --subjects-math-border:       #358a62;
+      --subjects-islamic-bg:    #de4d7f; --subjects-islamic-border:    #b23e66;
+      --subjects-moral-bg:      #0072ca; --subjects-moral-border:      #005ba2;
+      --subjects-science-bg:    #ffd641; --subjects-science-border:    #ccab34;
+      --subjects-add-math-bg:   #283589; --subjects-add-math-border:   #182052;
+      --subjects-biology-bg:    #8431d8; --subjects-biology-border:    #6a27ad;
+      --subjects-chemistry-bg:  #e20082; --subjects-chemistry-border:  #b50068;
+      --subjects-physics-bg:    #27a0d7; --subjects-physics-border:    #1f80ac;
+      --subjects-history-bg:    #a97c50; --subjects-history-border:    #876340;
+      --subjects-geography-bg:  #77d836; --subjects-geography-border:  #5fad2b;
+      --subjects-economy-bg:    #ff5733; --subjects-economy-border:    #cc4629;
+      --subjects-account-bg:    #0072ca; --subjects-account-border:    #004479;
+      --subjects-business-bg:   #efb42b; --subjects-business-border:   #bf9022;
+      --subjects-cs-bg:         #d10070; --subjects-cs-border:         #a7005a;
+      --subjects-kafa-bg:       #8ae3a9; --subjects-kafa-border:       #6eb687;
+      --subjects-rbt-bg:        #353535; --subjects-rbt-border:        #2a2a2a;
+      /* Subject default-subtle — DS confirmed Subjects/xxx/default-subtle */
+      --subjects-chinese-subtle:  #ffeded;
+      --subjects-english-subtle:  #ffedee;
+      --subjects-bm-subtle:       #f6f9ff;
+      --subjects-math-subtle:     #ecf7f2;
+      --subjects-islamic-subtle:  #fcedf2;
+      --subjects-moral-subtle:    #e6f1fa;
+      --subjects-science-subtle:  #fffbec;
+      --subjects-add-math-subtle: #eaebf3;
+      --subjects-biology-subtle:  #f3ebfb;
+      --subjects-chemistry-subtle:#fce6f3;
+      --subjects-physics-subtle:  #eaf6fb;
+      --subjects-history-subtle:  #f7f2ee;
+      --subjects-geography-subtle:#f2fbeb;
+      --subjects-economy-subtle:  #ffeeeb;
+      --subjects-account-subtle:  #e6f1fa;
+      --subjects-business-subtle: #fef8ea;
+      --subjects-cs-subtle:       #fbe6f1;
+      --subjects-kafa-subtle:     #f4fcf7;
+      --subjects-rbt-subtle:      #d7d7d7;
+      /* Special text colors for light-background subjects */
+      --subjects-science-text:   #998027;
+      --subjects-geography-text: #478220;
+      --subjects-kafa-text:      #538865;
 
       /* Typography */
       --font-family: 'Poppins', sans-serif;
@@ -2219,10 +2244,8 @@
     .check-in-card__stats-icon { width: 24px; height: 24px; flex-shrink: 0; }
     .check-in-card__stats-value { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-tertiary-default); white-space: nowrap; }
 
-    /* Breadcrumb: remove bottom margin (main-content gap handles spacing) */
-    .pd-breadcrumbs15 { margin-bottom: 0; }
-
-    .pd-breadcrumbs15 { display: flex; align-items: center; gap: var(--spacing-space-m); min-height: 36px; margin-bottom: var(--spacing-space-m); }
+    /* Breadcrumb: margin-bottom:0 — main-content gap handles section spacing */
+    .pd-breadcrumbs15 { display: flex; align-items: center; gap: var(--spacing-space-m); min-height: 36px; margin-bottom: 0; }
     .pd-breadcrumbs__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
     .pd-breadcrumbs__sep   { width: 1px; align-self: stretch; background: var(--border-general-default); flex-shrink: 0; }
     .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--spacing-space-xs); flex-wrap: wrap; }
@@ -2232,33 +2255,39 @@
     .pd-link15__text--parent { color: var(--text-primary-default); }
     .pd-breadcrumbs__chevron { width: 16px; height: 16px; color: var(--text-primary-default); flex-shrink: 0; }
 
-    .pd-card          { background: var(--surface-secondary-50); border-radius: var(--corner-4xl); border: var(--scale-25) solid var(--border-default); overflow: hidden; }
+    /* Primary Card - 1.5 — fill=#e8fbe8 · stroke=#00cc85 · radius=24 — DS node 4055:57157 uses border:1px solid, not box-shadow:inset */
+    .pd-card          { background: var(--surface-secondary-50); border-radius: var(--corner-4xl); border: 1px solid var(--border-primary-default); overflow: hidden; }
     .pd-card__header  { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-space-m) var(--spacing-space-m) 0; }
+    .pd-card__title-group { display: flex; align-items: center; gap: var(--spacing-space-xs); color: var(--text-tertiary-default); }
+    .pd-card__title-group svg { display: block; width: 24px; height: 24px; flex-shrink: 0; }
     .pd-card__title   { font-size: 18px; font-weight: 600; line-height: 28px; color: var(--text-tertiary-default); }
 
-    /* Button – 1.5 · Secondary · L  DS 538:1891
-       Default → Hover → Pressed → Disabled                                    */
+    /* Button – 1.5 · Secondary · M  DS I4055:57157;2881:36280
+       h=32 · pad=2px 8px · stroke=#00cc85 INSIDE → box-shadow:inset (Rule 60)
+       leading icon: 16×16 · label: 12px SemiBold lh:18 · color: #00cc85       */
     .pd-btn15-secondary {
       display: inline-flex; align-items: center; justify-content: center;
-      padding: var(--scale-200) var(--spacing-space-s);
+      height: 32px; max-height: 32px;
+      padding: 2px var(--spacing-space-xs);
       background: var(--surface-general-default);
-      border: var(--scale-25) solid var(--border-primary-default);
-      border-radius: var(--corner-rounded); cursor: pointer; gap: var(--spacing-space-none);
+      border: none;
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+      border-radius: var(--corner-rounded); cursor: pointer; gap: 0;
       color: var(--text-primary-default);
     }
-    .pd-btn15-secondary:hover  { background: var(--surface-secondary-default); border-color: var(--border-secondary-focus); color: var(--text-secondary-focus); }
+    .pd-btn15-secondary:hover  { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); color: var(--text-secondary-focus); }
     .pd-btn15-secondary:active,
-    .pd-btn15-secondary.is-pressing { background: var(--surface-primary-focus); border-color: var(--border-primary-default); color: var(--text-primary-default); }
-    .pd-btn15-secondary:disabled { background: var(--surface-disabled-primary); border-color: var(--border-disabled-disabled); color: var(--text-disabled-default); cursor: not-allowed; }
-    .pd-btn15-secondary__icon       { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .pd-btn15-secondary__icon svg   { display: block; width: 20px; height: 20px; }
-    .pd-btn15-secondary__text-wrap  { display: flex; align-items: center; padding: 0 var(--spacing-space-xs); }
-    .pd-btn15-secondary__label      { font-size: 14px; font-weight: 600; line-height: 20px; white-space: nowrap; }
+    .pd-btn15-secondary.is-pressing { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); color: var(--text-primary-default); }
+    .pd-btn15-secondary:disabled { background: var(--surface-disabled-primary); box-shadow: inset 0 0 0 1px var(--border-disabled-disabled); color: var(--text-disabled-default); cursor: not-allowed; }
+    .pd-btn15-secondary__icon       { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+    .pd-btn15-secondary__icon svg   { display: block; width: 16px; height: 16px; }
+    .pd-btn15-secondary__text-wrap  { display: flex; align-items: center; padding: 0 var(--spacing-space-xxs); }
+    .pd-btn15-secondary__label      { font-size: 12px; font-weight: 600; line-height: 18px; white-space: nowrap; }
 
     /* TABLE 1.5  DS 2251:37512 */
     /* Table wrapper: flex row — [scrollable table | DS scrollbar] inside green card area */
     .pd-table-wrapper {
-      display: flex; align-items: stretch; gap: var(--spacing-space-xs);
+      display: flex; align-items: stretch; gap: 9px; /* DS frame gap=9 between table (1266px) and scrollbar (14px) */
       margin: var(--spacing-space-m);
     }
 
@@ -2271,7 +2300,8 @@
     }
     .pd-table-scroll::-webkit-scrollbar { display: none; }
 
-    .pd-table15 { display: flex; flex-direction: column; border-radius: var(--corner-2xl); border: var(--scale-25) solid var(--border-general-default); }
+    /* Table frame — DS node 4055:57185 Content Placeholder: border:1px solid #d9d9d9 — border renders in border area, visible above overflow:hidden content */
+    .pd-table15 { display: flex; flex-direction: column; border-radius: var(--corner-2xl); border: 1px solid var(--border-general-default); overflow: hidden; }
 
     /* DS Scrollbar 1.5  node 2337:9879
        Container: white bg | 1px #d9d9d9 border | pill radius | 4px padding
@@ -2305,9 +2335,10 @@
       display: flex; align-items: stretch; width: 100%; height: 56px; flex-shrink: 0;
       position: sticky; top: 0; z-index: 10;
     }
+    /* Heading Cell - 1.5 — DS fill=#f2f2f2 (Surface/general/default-secondary) · h=56 */
     .pd-heading-cell {
       display: flex; align-items: center;
-      background: var(--surface-general-default);
+      background: var(--surface-general-default-secondary);
       border-bottom: var(--scale-25) solid var(--border-general-default);
       height: 56px; min-height: 56px; max-height: 56px;
     }
@@ -2318,39 +2349,46 @@
     .pd-body-row:last-child .pd-body-cell:first-child { border-bottom-left-radius: var(--corner-2xl); }
     .pd-body-row:last-child .pd-body-cell:last-child  { border-bottom-right-radius: var(--corner-2xl); }
     .pd-heading-cell__inner { display: flex; align-items: center; gap: var(--spacing-space-xs); height: 100%; padding: var(--spacing-space-m); flex-shrink: 0; }
-    .pd-heading-cell__text  { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; line-height: 16px; color: var(--text-default-body); white-space: nowrap; }
+    /* DS heading "Header" TEXT node — sz=16 wt=Medium lh=24 color=#666666 · no uppercase, no tracking */
+    .pd-heading-cell__text  { font-size: 16px; font-weight: 500; line-height: 24px; color: var(--text-default-body); white-space: nowrap; }
 
     .pd-body-row  { display: flex; align-items: stretch; width: 100%; }
+    /* Body Cell - 1.5 — DS h=56 · fill=#ffffff · body cell inner pad=16px all sides */
     .pd-body-cell {
       display: flex; align-items: center;
       background: var(--surface-general-default);
       border-bottom: var(--scale-25) solid var(--border-general-default);
-      min-height: 64px;
+      min-height: 56px;
     }
-    /* Subject column only gets the per-row subject tint */
-    .pd-body-cell.pd-col-subject { background: var(--row-bg, var(--surface-general-default)); }
+    /* Subject column — DS fill=#f2fbeb on all rows (confirmed DS body row inspection) */
+    .pd-body-cell.pd-col-subject { background: #f2fbeb; }
     /* border/general always visible on every row */
     .pd-body-cell__inner { display: flex; align-items: center; gap: var(--spacing-space-xs); padding: var(--spacing-space-m); flex-shrink: 0; }
     .pd-body-cell__text  { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
 
-    .pd-col-num       { width: 52px;  flex-shrink: 0; }
+    /* DS confirmed fixed column widths — Heading Cell instances (nodes 4055:57187–4055:57193) */
+    .pd-col-num       { width: 56px;  flex-shrink: 0; }
     .pd-col-subject   { width: 260px; flex-shrink: 0; }
-    .pd-col-progress  { flex: 4; min-width: 0; }
-    .pd-col-score     { flex: 1; min-width: 0; }
-    .pd-col-grade     { flex: 1; min-width: 0; }
-    .pd-col-questions { flex: 1; min-width: 0; }
-    .pd-col-analysis  { flex: 1; min-width: 0; }
+    .pd-col-progress  { width: 420px; flex-shrink: 0; }
+    .pd-col-score     { width: 135px; flex-shrink: 0; }
+    .pd-col-grade     { width: 135px; flex-shrink: 0; }
+    .pd-col-questions { width: 135px; flex-shrink: 0; }
+    .pd-col-analysis  { width: 135px; flex-shrink: 0; }
 
     /* Right divider on all cells except the last column and subject column */
     .pd-heading-cell:not(.pd-col-analysis):not(.pd-col-subject),
     .pd-body-cell:not(.pd-col-analysis):not(.pd-col-subject) { border-right: var(--scale-25) solid var(--border-general-default); }
 
+    /* Num column — DS heading+body mainAlign=CENTER */
+    .pd-heading-cell.pd-col-num .pd-heading-cell__inner,
+    .pd-body-cell.pd-col-num .pd-body-cell__inner { justify-content: center; width: 100%; }
+
     .pd-heading-cell.pd-col-score .pd-heading-cell__inner,
     .pd-heading-cell.pd-col-grade .pd-heading-cell__inner,
     .pd-heading-cell.pd-col-questions .pd-heading-cell__inner,
-    .pd-heading-cell.pd-col-analysis .pd-heading-cell__inner { width: 100%; justify-content: center; flex-shrink: 1; }
+    .pd-heading-cell.pd-col-analysis .pd-heading-cell__inner { width: 100%; justify-content: center; }
 
-    .pd-body-cell.pd-col-progress .pd-body-cell__inner { width: 100%; flex-shrink: 1; padding: var(--spacing-space-m); }
+    .pd-body-cell.pd-col-progress .pd-body-cell__inner { width: 100%; padding: var(--spacing-space-m); }
 
     .pd-body-cell.pd-col-score .pd-body-cell__inner,
     .pd-body-cell.pd-col-grade .pd-body-cell__inner,
@@ -2445,6 +2483,48 @@
       clip-path: polygon(0 0, 100% 50%, 0 100%);
     }
 
+    /* Subject badge modifier classes — set --badge-bg / --badge-border from DS tokens */
+    .pd-badge--chinese   { --badge-bg: var(--subjects-chinese-bg);   --badge-border: var(--subjects-chinese-border); }
+    .pd-badge--english   { --badge-bg: var(--subjects-english-bg);   --badge-border: var(--subjects-english-border); }
+    .pd-badge--bm        { --badge-bg: var(--subjects-bm-bg);        --badge-border: var(--subjects-bm-border); }
+    .pd-badge--math      { --badge-bg: var(--subjects-math-bg);      --badge-border: var(--subjects-math-border); }
+    .pd-badge--islamic   { --badge-bg: var(--subjects-islamic-bg);   --badge-border: var(--subjects-islamic-border); }
+    .pd-badge--moral     { --badge-bg: var(--subjects-moral-bg);     --badge-border: var(--subjects-moral-border); }
+    .pd-badge--science   { --badge-bg: var(--subjects-science-bg);   --badge-border: var(--subjects-science-border);   --badge-text: var(--subjects-science-text); }
+    .pd-badge--add-math  { --badge-bg: var(--subjects-add-math-bg);  --badge-border: var(--subjects-add-math-border); }
+    .pd-badge--biology   { --badge-bg: var(--subjects-biology-bg);   --badge-border: var(--subjects-biology-border); }
+    .pd-badge--chemistry { --badge-bg: var(--subjects-chemistry-bg); --badge-border: var(--subjects-chemistry-border); }
+    .pd-badge--physics   { --badge-bg: var(--subjects-physics-bg);   --badge-border: var(--subjects-physics-border); }
+    .pd-badge--history   { --badge-bg: var(--subjects-history-bg);   --badge-border: var(--subjects-history-border); }
+    .pd-badge--geography { --badge-bg: var(--subjects-geography-bg); --badge-border: var(--subjects-geography-border); --badge-text: var(--subjects-geography-text); }
+    .pd-badge--economy   { --badge-bg: var(--subjects-economy-bg);   --badge-border: var(--subjects-economy-border); }
+    .pd-badge--account   { --badge-bg: var(--subjects-account-bg);   --badge-border: var(--subjects-account-border); }
+    .pd-badge--business  { --badge-bg: var(--subjects-business-bg);  --badge-border: var(--subjects-business-border); }
+    .pd-badge--cs        { --badge-bg: var(--subjects-cs-bg);        --badge-border: var(--subjects-cs-border); }
+    .pd-badge--kafa      { --badge-bg: var(--subjects-kafa-bg);      --badge-border: var(--subjects-kafa-border);      --badge-text: var(--subjects-kafa-text); }
+    .pd-badge--rbt       { --badge-bg: var(--subjects-rbt-bg);       --badge-border: var(--subjects-rbt-border); }
+
+    /* Subject cell subtle background — specificity matches .pd-body-cell.pd-col-subject */
+    .pd-body-cell.pd-col-subject--chinese   { background: var(--subjects-chinese-subtle); }
+    .pd-body-cell.pd-col-subject--english   { background: var(--subjects-english-subtle); }
+    .pd-body-cell.pd-col-subject--bm        { background: var(--subjects-bm-subtle); }
+    .pd-body-cell.pd-col-subject--math      { background: var(--subjects-math-subtle); }
+    .pd-body-cell.pd-col-subject--islamic   { background: var(--subjects-islamic-subtle); }
+    .pd-body-cell.pd-col-subject--moral     { background: var(--subjects-moral-subtle); }
+    .pd-body-cell.pd-col-subject--science   { background: var(--subjects-science-subtle); }
+    .pd-body-cell.pd-col-subject--add-math  { background: var(--subjects-add-math-subtle); }
+    .pd-body-cell.pd-col-subject--biology   { background: var(--subjects-biology-subtle); }
+    .pd-body-cell.pd-col-subject--chemistry { background: var(--subjects-chemistry-subtle); }
+    .pd-body-cell.pd-col-subject--physics   { background: var(--subjects-physics-subtle); }
+    .pd-body-cell.pd-col-subject--history   { background: var(--subjects-history-subtle); }
+    .pd-body-cell.pd-col-subject--geography { background: var(--subjects-geography-subtle); }
+    .pd-body-cell.pd-col-subject--economy   { background: var(--subjects-economy-subtle); }
+    .pd-body-cell.pd-col-subject--account   { background: var(--subjects-account-subtle); }
+    .pd-body-cell.pd-col-subject--business  { background: var(--subjects-business-subtle); }
+    .pd-body-cell.pd-col-subject--cs        { background: var(--subjects-cs-subtle); }
+    .pd-body-cell.pd-col-subject--kafa      { background: var(--subjects-kafa-subtle); }
+    .pd-body-cell.pd-col-subject--rbt       { background: var(--subjects-rbt-subtle); }
+
     /* PROGRESS BAR 1.5  DS 690:513 */
     .pd-progress15__track { background: var(--surface-general-default-secondary); border-radius: var(--corner-pill); height: 4px; overflow: hidden; width: 100%; }
     .pd-progress15__fill  { height: 4px; background: var(--surface-primary-default); border-radius: var(--corner-pill); }
@@ -2481,7 +2561,7 @@
       .pd-table-scroll::-webkit-scrollbar { display: none; }
 
       /* Table shell: no border/radius — each row is its own card */
-      .pd-table15 { display: flex; flex-direction: column; gap: var(--spacing-space-xs); border: none; border-radius: 0; }
+      .pd-table15 { display: flex; flex-direction: column; gap: var(--spacing-space-xs); box-shadow: none; border: none; border-radius: 0; overflow: visible; }
 
       /* Hide the header row */
       .pd-heading-row { display: none; }
@@ -3669,7 +3749,10 @@
   <div class="pd-card">
 
     <div class="pd-card__header">
-      <h2 class="pd-card__title">Report Card Summary</h2>
+      <div class="pd-card__title-group">
+        <svg aria-hidden="true"><use href="#ic-file-text"/></svg>
+        <h2 class="pd-card__title">Report Card Summary</h2>
+      </div>
 
       <!-- Button – 1.5 · Secondary · L  DS 538:1891 -->
       <button class="pd-btn15-secondary" type="button">
@@ -3703,15 +3786,15 @@
       <!-- Row 1: Chinese Language SJKC  80% A 25 -->
       <div class="pd-body-row" style="--row-bg:rgba(249,72,72,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">1</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
-          <div class="pd-subject-badge" style="--badge-bg:#f94848;--badge-border:#c73a3a">
+        <div class="pd-body-cell pd-col-subject pd-col-subject--chinese"><div class="pd-body-cell__inner">
+          <div class="pd-subject-badge pd-badge--chinese">
             <div class="pd-subject-badge__icon">
               <img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chinese-lang.svg" alt="Chinese Language" />
             </div>
             <div class="pd-subject-badge__label">Chinese Language</div>
           </div>
         </div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:80%;background:#f94848"></div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:80%;background:var(--subjects-chinese-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">80%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">25</span></div></div>
@@ -3728,15 +3811,15 @@
       <!-- Row 2: English  90% A 392 -->
       <div class="pd-body-row" style="--row-bg:rgba(255,77,86,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">2</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
-          <div class="pd-subject-badge" style="--badge-bg:#ff4d56;--badge-border:#cc3e45">
+        <div class="pd-body-cell pd-col-subject pd-col-subject--english"><div class="pd-body-cell__inner">
+          <div class="pd-subject-badge pd-badge--english">
             <div class="pd-subject-badge__icon">
               <img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-english.svg" alt="English" />
             </div>
             <div class="pd-subject-badge__label">English</div>
           </div>
         </div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:90%;background:#ff4d56"></div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:90%;background:var(--subjects-english-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">90%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">392</span></div></div>
@@ -3754,15 +3837,15 @@
 
       <div class="pd-body-row" style="--row-bg:rgba(77,119,255,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">3</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
-          <div class="pd-subject-badge" style="--badge-bg:#4d77ff;--badge-border:#2e4799">
+        <div class="pd-body-cell pd-col-subject pd-col-subject--bm"><div class="pd-body-cell__inner">
+          <div class="pd-subject-badge pd-badge--bm">
             <div class="pd-subject-badge__icon">
               <img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-bmelayu.svg" alt="Bahasa Melayu" />
             </div>
             <div class="pd-subject-badge__label">Bahasa Melayu</div>
           </div>
         </div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:76%;background:#4d77ff"></div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:76%;background:var(--subjects-bm-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">76%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">B</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">192</span></div></div>
@@ -3779,15 +3862,15 @@
       <!-- Row 4: Mathematics  80% A 328 -->
       <div class="pd-body-row" style="--row-bg:rgba(66,172,123,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">4</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
-          <div class="pd-subject-badge" style="--badge-bg:#42ac7b;--badge-border:#358a62">
+        <div class="pd-body-cell pd-col-subject pd-col-subject--math"><div class="pd-body-cell__inner">
+          <div class="pd-subject-badge pd-badge--math">
             <div class="pd-subject-badge__icon">
               <img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-math.svg" alt="Mathematics" />
             </div>
             <div class="pd-subject-badge__label">Mathematics</div>
           </div>
         </div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:80%;background:#42ac7b"></div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:80%;background:var(--subjects-math-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">80%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">328</span></div></div>
@@ -3804,15 +3887,15 @@
       <!-- Row 5: Pendidikan Islam  84% A 25 -->
       <div class="pd-body-row" style="--row-bg:rgba(222,77,127,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">5</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
-          <div class="pd-subject-badge" style="--badge-bg:#de4d7f;--badge-border:#b23e66">
+        <div class="pd-body-cell pd-col-subject pd-col-subject--islamic"><div class="pd-body-cell__inner">
+          <div class="pd-subject-badge pd-badge--islamic">
             <div class="pd-subject-badge__icon">
               <img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-islamic.svg" alt="Pendidikan Islam" />
             </div>
             <div class="pd-subject-badge__label">Pendidikan Islam</div>
           </div>
         </div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:84%;background:#de4d7f"></div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:84%;background:var(--subjects-islamic-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">84%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">25</span></div></div>
@@ -3829,15 +3912,15 @@
       <!-- Row 6: Pendidikan Moral  50% C 4 -->
       <div class="pd-body-row" style="--row-bg:rgba(0,114,202,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">6</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
-          <div class="pd-subject-badge" style="--badge-bg:#0072ca;--badge-border:#005ba2">
+        <div class="pd-body-cell pd-col-subject pd-col-subject--moral"><div class="pd-body-cell__inner">
+          <div class="pd-subject-badge pd-badge--moral">
             <div class="pd-subject-badge__icon">
               <img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-moral.svg" alt="Pendidikan Moral" />
             </div>
             <div class="pd-subject-badge__label">Pendidikan Moral</div>
           </div>
         </div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:50%;background:#0072ca"></div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:50%;background:var(--subjects-moral-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">50%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">C</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">4</span></div></div>
@@ -3854,15 +3937,15 @@
       <!-- Row 7: Science  85% A 209 -->
       <div class="pd-body-row" style="--row-bg:rgba(255,214,65,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">7</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
-          <div class="pd-subject-badge" style="--badge-bg:#ffd641;--badge-border:#ccab34;--badge-text:#998027">
+        <div class="pd-body-cell pd-col-subject pd-col-subject--science"><div class="pd-body-cell__inner">
+          <div class="pd-subject-badge pd-badge--science">
             <div class="pd-subject-badge__icon">
               <img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-science.svg" alt="Science" />
             </div>
             <div class="pd-subject-badge__label">Science</div>
           </div>
         </div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:85%;background:#ffd641"></div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:85%;background:var(--subjects-science-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">85%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">209</span></div></div>
@@ -3879,8 +3962,8 @@
       <!-- Row 8: Add Math -->
       <div class="pd-body-row" style="--row-bg:rgba(40,53,137,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">8</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#283589;--badge-border:#182052"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-add-math.svg" alt="Add Math"/></div><div class="pd-subject-badge__label">Add Math</div></div></div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:72%;background:#283589"></div></div></div></div>
+        <div class="pd-body-cell pd-col-subject pd-col-subject--add-math"><div class="pd-body-cell__inner"><div class="pd-subject-badge pd-badge--add-math"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-add-math.svg" alt="Add Math"/></div><div class="pd-subject-badge__label">Add Math</div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:72%;background:var(--subjects-add-math-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">72%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">B</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">140</span></div></div>
@@ -3890,8 +3973,8 @@
       <!-- Row 9: Biology -->
       <div class="pd-body-row" style="--row-bg:rgba(132,49,216,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">9</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#8431d8;--badge-border:#6a27ad"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-biology.svg" alt="Biology"/></div><div class="pd-subject-badge__label">Biology</div></div></div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:88%;background:#8431d8"></div></div></div></div>
+        <div class="pd-body-cell pd-col-subject pd-col-subject--biology"><div class="pd-body-cell__inner"><div class="pd-subject-badge pd-badge--biology"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-biology.svg" alt="Biology"/></div><div class="pd-subject-badge__label">Biology</div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:88%;background:var(--subjects-biology-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">88%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">210</span></div></div>
@@ -3901,8 +3984,8 @@
       <!-- Row 10: Chemistry -->
       <div class="pd-body-row" style="--row-bg:rgba(226,0,130,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">10</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#e20082;--badge-border:#b50068"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chemistry.svg" alt="Chemistry"/></div><div class="pd-subject-badge__label">Chemistry</div></div></div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:65%;background:#e20082"></div></div></div></div>
+        <div class="pd-body-cell pd-col-subject pd-col-subject--chemistry"><div class="pd-body-cell__inner"><div class="pd-subject-badge pd-badge--chemistry"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chemistry.svg" alt="Chemistry"/></div><div class="pd-subject-badge__label">Chemistry</div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:65%;background:var(--subjects-chemistry-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">65%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">C</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">98</span></div></div>
@@ -3912,8 +3995,8 @@
       <!-- Row 11: Physics -->
       <div class="pd-body-row" style="--row-bg:rgba(39,160,215,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">11</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#27a0d7;--badge-border:#1f80ac"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-physics.svg" alt="Physics"/></div><div class="pd-subject-badge__label">Physics</div></div></div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:78%;background:#27a0d7"></div></div></div></div>
+        <div class="pd-body-cell pd-col-subject pd-col-subject--physics"><div class="pd-body-cell__inner"><div class="pd-subject-badge pd-badge--physics"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-physics.svg" alt="Physics"/></div><div class="pd-subject-badge__label">Physics</div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:78%;background:var(--subjects-physics-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">78%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">B</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">175</span></div></div>
@@ -3923,8 +4006,8 @@
       <!-- Row 12: History -->
       <div class="pd-body-row" style="--row-bg:rgba(169,124,80,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">12</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#a97c50;--badge-border:#876340"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-history.svg" alt="History"/></div><div class="pd-subject-badge__label">History</div></div></div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:91%;background:#a97c50"></div></div></div></div>
+        <div class="pd-body-cell pd-col-subject pd-col-subject--history"><div class="pd-body-cell__inner"><div class="pd-subject-badge pd-badge--history"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-history.svg" alt="History"/></div><div class="pd-subject-badge__label">History</div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:91%;background:var(--subjects-history-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">91%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">302</span></div></div>
@@ -3934,8 +4017,8 @@
       <!-- Row 13: Geography -->
       <div class="pd-body-row" style="--row-bg:rgba(119,216,54,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">13</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#77d836;--badge-border:#5fad2b;--badge-text:#478220"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-geography.png" alt="Geography"/></div><div class="pd-subject-badge__label">Geography</div></div></div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:60%;background:#77d836"></div></div></div></div>
+        <div class="pd-body-cell pd-col-subject pd-col-subject--geography"><div class="pd-body-cell__inner"><div class="pd-subject-badge pd-badge--geography"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-geography.png" alt="Geography"/></div><div class="pd-subject-badge__label">Geography</div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:60%;background:var(--subjects-geography-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">60%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">C</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">88</span></div></div>
@@ -3945,8 +4028,8 @@
       <!-- Row 14: Economy -->
       <div class="pd-body-row" style="--row-bg:rgba(255,87,51,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">14</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#ff5733;--badge-border:#cc4629"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-economy.svg" alt="Economy"/></div><div class="pd-subject-badge__label">Economy</div></div></div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:55%;background:#ff5733"></div></div></div></div>
+        <div class="pd-body-cell pd-col-subject pd-col-subject--economy"><div class="pd-body-cell__inner"><div class="pd-subject-badge pd-badge--economy"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-economy.svg" alt="Economy"/></div><div class="pd-subject-badge__label">Economy</div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:55%;background:var(--subjects-economy-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">55%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">C</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">62</span></div></div>
@@ -3956,8 +4039,8 @@
       <!-- Row 15: Account -->
       <div class="pd-body-row" style="--row-bg:rgba(0,114,202,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">15</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#0072ca;--badge-border:#004479"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-account.svg" alt="Account"/></div><div class="pd-subject-badge__label">Account</div></div></div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:83%;background:#0072ca"></div></div></div></div>
+        <div class="pd-body-cell pd-col-subject pd-col-subject--account"><div class="pd-body-cell__inner"><div class="pd-subject-badge pd-badge--account"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-account.svg" alt="Account"/></div><div class="pd-subject-badge__label">Account</div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:83%;background:var(--subjects-account-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">83%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">256</span></div></div>
@@ -3967,8 +4050,8 @@
       <!-- Row 16: Business -->
       <div class="pd-body-row" style="--row-bg:rgba(239,180,43,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">16</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#efb42b;--badge-border:#bf9022"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-business.svg" alt="Business"/></div><div class="pd-subject-badge__label">Business</div></div></div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:70%;background:#efb42b"></div></div></div></div>
+        <div class="pd-body-cell pd-col-subject pd-col-subject--business"><div class="pd-body-cell__inner"><div class="pd-subject-badge pd-badge--business"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-business.svg" alt="Business"/></div><div class="pd-subject-badge__label">Business</div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:70%;background:var(--subjects-business-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">70%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">B</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">118</span></div></div>
@@ -3978,8 +4061,8 @@
       <!-- Row 17: Comp Science -->
       <div class="pd-body-row" style="--row-bg:rgba(209,0,112,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">17</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#d10070;--badge-border:#a7005a"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-comp-science.svg" alt="Computer Science"/></div><div class="pd-subject-badge__label">Computer Science</div></div></div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:95%;background:#d10070"></div></div></div></div>
+        <div class="pd-body-cell pd-col-subject pd-col-subject--cs"><div class="pd-body-cell__inner"><div class="pd-subject-badge pd-badge--cs"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-comp-science.svg" alt="Computer Science"/></div><div class="pd-subject-badge__label">Computer Science</div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:95%;background:var(--subjects-cs-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">95%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">380</span></div></div>
@@ -3989,8 +4072,8 @@
       <!-- Row 18: KAFA -->
       <div class="pd-body-row" style="--row-bg:rgba(138,227,169,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">18</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#8ae3a9;--badge-border:#6eb687;--badge-text:#538865"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-kafa.svg" alt="KAFA"/></div><div class="pd-subject-badge__label">KAFA</div></div></div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:77%;background:#8ae3a9"></div></div></div></div>
+        <div class="pd-body-cell pd-col-subject pd-col-subject--kafa"><div class="pd-body-cell__inner"><div class="pd-subject-badge pd-badge--kafa"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-kafa.svg" alt="KAFA"/></div><div class="pd-subject-badge__label">KAFA</div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:77%;background:var(--subjects-kafa-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">77%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">B</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">45</span></div></div>
@@ -4000,8 +4083,8 @@
       <!-- Row 19: RBT -->
       <div class="pd-body-row" style="--row-bg:rgba(53,53,53,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">19</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#353535;--badge-border:#2a2a2a"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-rbt.svg" alt="RBT"/></div><div class="pd-subject-badge__label">RBT</div></div></div></div>
-        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:82%;background:#353535"></div></div></div></div>
+        <div class="pd-body-cell pd-col-subject pd-col-subject--rbt"><div class="pd-body-cell__inner"><div class="pd-subject-badge pd-badge--rbt"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-rbt.svg" alt="RBT"/></div><div class="pd-subject-badge__label">RBT</div></div></div></div>
+        <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:82%;background:var(--subjects-rbt-bg)"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">82%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">130</span></div></div>
