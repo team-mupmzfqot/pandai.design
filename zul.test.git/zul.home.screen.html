@@ -61,6 +61,7 @@
       /* Border */
       --border-primary-default:   #00cc85;   /* Border/primary/default */
       --border-primary-focus:     #00a36a;   /* Border/primary/focus */
+      --border-secondary-default: #b5f291;   /* Border/secondary/default — Focus indicator dot border */
       --border-secondary-focus:   #70bc6f;   /* Border/secondary/focus — hover border on all buttons */
       --border-default:           #00cc85;   /* Border/default â€” navbar, footer, quiz card */
       --border-general-default:   #d9d9d9;   /* Border/general/default — carousel cards */
@@ -2730,6 +2731,13 @@
       transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
     }
 
+    /* Notifications List — DS node 6305:45076: flex-col, gap 8px between items */
+    .notif-list {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xs);
+    }
+
     /* Navbar Notification Button - Parts (DS 3908:13427/13443/13456) */
     .notif-item {
       cursor:      pointer;
@@ -2767,11 +2775,11 @@
       padding-bottom:      0;
     }
     .notif-item:hover .notif-item__text { color: var(--text-tertiary-default); }
-    /* Focus — Surface/secondary/default-subtle #e8fbe8 · 1px #00cc85 inset · 16px radius */
+    /* Focus — DS node 3908:13456: Surface/secondary/default #b5f291 · 1px Border/secondary/focus #70bc6f · 16px radius */
     .notif-item:active .notif-item__content,
     .notif-item:focus-visible .notif-item__content {
-      background:    var(--surface-secondary-default-subtle);
-      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+      background:    var(--surface-secondary-default);
+      box-shadow:    inset 0 0 0 1px var(--border-secondary-focus);
       border-radius: var(--corner-radius-corner-xl);
       padding:       var(--spacing-space-s);
     }
@@ -2781,7 +2789,11 @@
       padding-bottom:      0;
     }
     .notif-item:active .notif-item__text,
-    .notif-item:focus-visible .notif-item__text { color: var(--text-primary-default); }
+    .notif-item:focus-visible .notif-item__text { color: var(--text-tertiary-default); }
+    .notif-item:active .notif-item__time,
+    .notif-item:focus-visible .notif-item__time { color: var(--text-secondary-focus); }
+    .notif-item:active .notif-item__dot,
+    .notif-item:focus-visible .notif-item__dot  { box-shadow: 0 0 0 1px var(--border-secondary-default); }
 
     /* Avatar — 60×60 clip, user-circle at 50px (DS inset 8.33% = 5px each side) */
     .notif-item__avatar {
@@ -4316,74 +4328,79 @@
          Triggered by bell button · right-aligned to bell button right edge via JS -->
     <div class="notif-dropdown" id="notif-dropdown" aria-label="Notifications" role="menu">
 
-      <!-- Navbar Notification Button - Parts ×4 (DS 3908:13427) -->
-      <div class="notif-item" role="menuitem" tabindex="0">
-        <div class="notif-item__content">
-          <div class="notif-item__body">
-            <div class="notif-item__avatar" aria-hidden="true">
-              <svg><use href="#ic-user-circle"/></svg>
-            </div>
-            <div class="notif-item__texts">
-              <div class="notif-item__texts-inner">
-                <p class="notif-item__text">Your quiz result for Chapter 3 is ready. Check your score now!</p>
-                <span class="notif-item__time">2 Hours Ago...</span>
-              </div>
-            </div>
-            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
-          </div>
-        </div>
-      </div>
+      <!-- Notifications List — DS node 6305:45076: gap 8px between items -->
+      <div class="notif-list">
 
-      <div class="notif-item" role="menuitem" tabindex="0">
-        <div class="notif-item__content">
-          <div class="notif-item__body">
-            <div class="notif-item__avatar" aria-hidden="true">
-              <svg><use href="#ic-user-circle"/></svg>
-            </div>
-            <div class="notif-item__texts">
-              <div class="notif-item__texts-inner">
-                <p class="notif-item__text">Live Tuition for Add Maths starts in 30 minutes. Join now!</p>
-                <span class="notif-item__time">5 Hours Ago...</span>
+        <!-- Navbar Notification Button - Parts ×4 (DS 3908:13427) -->
+        <div class="notif-item" role="menuitem" tabindex="0">
+          <div class="notif-item__content">
+            <div class="notif-item__body">
+              <div class="notif-item__avatar" aria-hidden="true">
+                <svg><use href="#ic-user-circle"/></svg>
               </div>
+              <div class="notif-item__texts">
+                <div class="notif-item__texts-inner">
+                  <p class="notif-item__text">Your quiz result for Chapter 3 is ready. Check your score now!</p>
+                  <span class="notif-item__time">2 Hours Ago...</span>
+                </div>
+              </div>
+              <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
             </div>
-            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
           </div>
         </div>
-      </div>
 
-      <div class="notif-item" role="menuitem" tabindex="0">
-        <div class="notif-item__content">
-          <div class="notif-item__body">
-            <div class="notif-item__avatar" aria-hidden="true">
-              <svg><use href="#ic-user-circle"/></svg>
-            </div>
-            <div class="notif-item__texts">
-              <div class="notif-item__texts-inner">
-                <p class="notif-item__text">You earned 50 coins from completing today's daily challenge.</p>
-                <span class="notif-item__time">1 Day Ago...</span>
+        <div class="notif-item" role="menuitem" tabindex="0">
+          <div class="notif-item__content">
+            <div class="notif-item__body">
+              <div class="notif-item__avatar" aria-hidden="true">
+                <svg><use href="#ic-user-circle"/></svg>
               </div>
+              <div class="notif-item__texts">
+                <div class="notif-item__texts-inner">
+                  <p class="notif-item__text">Live Tuition for Add Maths starts in 30 minutes. Join now!</p>
+                  <span class="notif-item__time">5 Hours Ago...</span>
+                </div>
+              </div>
+              <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
             </div>
-            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
           </div>
         </div>
-      </div>
 
-      <div class="notif-item" role="menuitem" tabindex="0">
-        <div class="notif-item__content">
-          <div class="notif-item__body">
-            <div class="notif-item__avatar" aria-hidden="true">
-              <svg><use href="#ic-user-circle"/></svg>
-            </div>
-            <div class="notif-item__texts">
-              <div class="notif-item__texts-inner">
-                <p class="notif-item__text">New Quick Notes for Physics Chapter 5 are now available.</p>
-                <span class="notif-item__time">6 Days Ago...</span>
+        <div class="notif-item" role="menuitem" tabindex="0">
+          <div class="notif-item__content">
+            <div class="notif-item__body">
+              <div class="notif-item__avatar" aria-hidden="true">
+                <svg><use href="#ic-user-circle"/></svg>
               </div>
+              <div class="notif-item__texts">
+                <div class="notif-item__texts-inner">
+                  <p class="notif-item__text">You earned 50 coins from completing today's daily challenge.</p>
+                  <span class="notif-item__time">1 Day Ago...</span>
+                </div>
+              </div>
+              <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
             </div>
-            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
           </div>
         </div>
-      </div>
+
+        <div class="notif-item" role="menuitem" tabindex="0">
+          <div class="notif-item__content">
+            <div class="notif-item__body">
+              <div class="notif-item__avatar" aria-hidden="true">
+                <svg><use href="#ic-user-circle"/></svg>
+              </div>
+              <div class="notif-item__texts">
+                <div class="notif-item__texts-inner">
+                  <p class="notif-item__text">New Quick Notes for Physics Chapter 5 are now available.</p>
+                  <span class="notif-item__time">6 Days Ago...</span>
+                </div>
+              </div>
+              <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end notif-list -->
 
       <!-- "See all notification" — Primary/L Button - 1.5, no arrow, full-width -->
       <div class="notif-dropdown__footer">
