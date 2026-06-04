@@ -4713,17 +4713,14 @@
       btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
     });
 
-    // Quick Notes view buttons — is-pressing (Rule 83)
+    // Quick Notes view buttons — navigate to selections page (icon button only, not row)
     document.querySelectorAll('.qn-btn-view').forEach(function (btn) {
       btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
       btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
       btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
-    });
-
-    // Quick Notes rows — navigate to selections page with subject context
-    document.querySelectorAll('.qn-card__row').forEach(function (row) {
-      row.addEventListener('click', function () {
-        var card    = row.closest('.qn-card');
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var card    = btn.closest('.qn-card');
         if (!card) { window.location.href = 'quickNotes.selections.html'; return; }
         var subject = card.dataset.subject || '';
         var icon    = card.dataset.icon    || '';
