@@ -5998,6 +5998,11 @@
             item.style.maxHeight     = '0';
             item.style.opacity       = '0';
             item.style.pointerEvents = 'none';
+            // After transition completes, remove from flex flow so gap doesn't stack
+            item.addEventListener('transitionend', function onCollapsed() {
+              item.removeEventListener('transitionend', onCollapsed);
+              if (item.style.maxHeight === '0px') item.style.display = 'none';
+            });
             // Synchronous counter — no timing dependency
             dismissedCount++;
             if (dismissedCount >= notifItems.length) {
@@ -6018,6 +6023,7 @@
           item.style.maxHeight     = '';
           item.style.opacity       = '';
           item.style.pointerEvents = '';
+          item.style.display       = '';
           requestAnimationFrame(function () { item.style.transition = ''; });
         });
         dropdown.classList.remove('is-open');
@@ -6037,6 +6043,7 @@
             item.style.maxHeight     = '';
             item.style.opacity       = '';
             item.style.pointerEvents = '';
+            item.style.display       = '';
             requestAnimationFrame(function () { item.style.transition = ''; });
           });
         }
