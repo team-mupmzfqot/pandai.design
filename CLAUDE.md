@@ -2674,4 +2674,66 @@ Before writing any hex value, spacing, radius, border weight, or component spec 
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-04 (Rule 21 clarified — cursor:pointer exception for whole-card navigable targets; Rules 90–91 added — SVG symbol placement; always fetch live DS tokens) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 92. Flex `gap` phantom spacing from collapsed items — `transitionend → display:none` (= Rule 218 in zul.design.md)
+
+When flex items are collapsed via `max-height: 0; overflow: hidden`, they remain as flex children. `gap` still fires for every zero-height item — N dismissed items = N × gap phantom pixels stacking at one end.
+
+**Fix:** After the collapse transition finishes, set `display: none` to fully remove the item from flex flow.
+
+```js
+item.addEventListener('transitionend', function onCollapsed() {
+  item.removeEventListener('transitionend', onCollapsed);
+  if (item.style.maxHeight === '0px') item.style.display = 'none';
+});
+```
+
+**Restore on every reset path** (mouseleave, outside-click, any close handler):
+```js
+item.style.display = '';
+```
+
+Missing `display: ''` on any reset path means items don't reappear on reopen.
+
+**Complement to Rule 70 / Rule 212:** `display:none` is correct here because it's set AFTER the transition finishes. Never set `display:none` before a transition starts.
+
+**Confirmed instance (2026-06-04):** Notification dropdown — `.notif-list { gap: 8px }` with 3 dismissed items → 24px phantom gap, making top padding appear 40px vs 16px on L/R/B.
+
+---
+
+### 93. SVG icon `viewBox` must match the DS export frame — confirm per icon, never assume 24×24 (= Rule 219 in zul.design.md)
+
+Rule 27 (1px buffer viewBox) applies to every icon, but the coordinate space differs per icon. Never assume 24×24.
+
+**Confirmed instance (2026-06-04):** `#ic-user-circle` had `viewBox="-1 -1 26 26"` with 24×24 paths. DS node `3908:13415` is a **60×60** frame. Correct: `viewBox="-1 -1 62 62"` with 60×60 coordinate paths. Wrong viewBox made stroke appear visually thicker than DS intended.
+
+**Pre-export check:**
+```js
+const node = figma.getNodeById('ICON_NODE_ID');
+return { w: node.parent.width, h: node.parent.height };
+// viewBox = `-1 -1 ${w+2} ${h+2}`
+```
+
+---
+
+### Mandatory workflow — BEFORE every session, every design action, every change, every decision
+
+> **Always before starting any design, making any changes, or making any decisions — refer to DS and zul.design.md first. No exceptions.**
+
+```
+□ 0a. Read design-md/zul.design.md       → ALL rules 1–219, confirmed specs, known mistakes
+□ 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs, NOT prior notes
+□ 0c. get_design_context on COMPONENT SET → list ALL variant names before any CSS
+□ 0d. get_design_context on EACH state   → extract every token BEFORE writing CSS
+□ 0e. use_figma raw inspection           → confirm padding, strokeAlign, width, height, radius
+□ 0f. get_variable_defs on sub-nodes     → confirm Semantic token per fill/stroke/spacing
+□ 0g. Cross-check CSS var against :root  → never guess px from token name
+□ 0h. exportAsync for icons — confirm DS frame w/h → viewBox = `-1 -1 [w+2] [h+2]`
+□ 0i. Post-implementation QA — get_screenshot ONLY after coding; NEVER for spec extraction
+□ 0j. After any fix — grep BOTH html files and sync (Rule 184)
+```
+
+**Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes, wrong padding — all traceable to not reading zul.design.md and not auditing DS first.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-04 (Rules 92–93 added — flex gap phantom spacing fix, SVG viewBox frame dimension confirmation; mandatory pre-flight checklist updated to rules 1–219) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

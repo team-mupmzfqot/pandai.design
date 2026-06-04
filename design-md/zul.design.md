@@ -8686,4 +8686,64 @@ Subjects confirmed: `account`, `add-math`, `biology`, `b-melayu`, `business`, `c
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-02 (Rule 217 added — full DS variable audit; +49 Primitives, +52 Semantic vars; Icon/primary/on-color confirmed #ffffff; Vanilla→Butter / Mustard→Pumpkin rename; Responsives grid spec documented) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### Rule 218. Flex `gap` phantom spacing from collapsed items — `transitionend → display:none` (2026-06-04)
+
+When flex items are animated to `max-height: 0; overflow: hidden` (collapsed), they remain as flex children. The flex container's `gap` still fires **before and after** each zero-height item — every dismissed item contributes phantom gap pixels that visually stack as extra padding at one end.
+
+**Confirmed instance — Notification dropdown (2026-06-04):**
+`.notif-list { gap: 8px }` with 3 dismissed items → 3 × 8px = 24px phantom gap above the last visible item. The dropdown's 16px top padding appeared as 40px.
+
+**Fix: `transitionend → display:none` after collapse:**
+```js
+item.style.transition    = 'max-height 0.3s ease, opacity 0.2s ease';
+item.style.maxHeight     = item.scrollHeight + 'px';
+item.getBoundingClientRect();   // flush layout — transition fires from current value
+item.style.maxHeight     = '0';
+item.style.opacity       = '0';
+item.style.pointerEvents = 'none';
+// Remove from flex flow AFTER transition finishes so gap doesn't stack
+item.addEventListener('transitionend', function onCollapsed() {
+  item.removeEventListener('transitionend', onCollapsed);
+  if (item.style.maxHeight === '0px') item.style.display = 'none';
+});
+```
+
+**Restore on EVERY reset path:**
+```js
+// mouseleave, outside-click — ALL reset handlers must include:
+item.style.display = '';
+```
+Missing `display: ''` on any reset path means items don't reappear when the dropdown reopens.
+
+**Distinction from Rule 212:** Rule 212 says "don't toggle `display` to animate" — that applies to entry animations where the element must be visible before the transition begins. This rule is the complement: `display:none` is correct **after** a collapse transition has already finished. The sequence is: animate first → `transitionend` fires → set `display:none`. Never set `display:none` before a transition.
+
+**Rule:** After any `max-height` collapse animation on a flex child, always follow up with `transitionend → display:none`. Always restore `display: ''` on every close/reset path so items reappear on reopen.
+
+---
+
+### Rule 219. SVG icon `viewBox` must match the DS export coordinate space — re-confirmed per icon (2026-06-04)
+
+Rule 27 states that SVG `viewBox` must match the DS frame coordinate space + 1px buffer. This must be verified per icon — never assumed from a "standard" 24×24.
+
+**Confirmed instance — `#ic-user-circle` (2026-06-04):**
+- Symbol had `viewBox="-1 -1 26 26"` with 24×24 coordinate paths
+- DS node `3908:13415` exports at **60×60** coordinates (the icon lives in a 60×60 DS frame)
+- Correct: `viewBox="-1 -1 62 62"` with 60×60 coordinate paths
+
+This caused the icon to render at the wrong apparent size — the smaller-coordinate paths spread to fill the 60×60 CSS container, making the stroke visually thicker than intended.
+
+**How to catch before it becomes a bug:**
+```js
+// use_figma — read the enclosing frame size before exporting
+const node = figma.getNodeById('ICON_NODE_ID');
+return { w: node.parent.width, h: node.parent.height };
+// then set viewBox = `-1 -1 ${w+2} ${h+2}`
+```
+
+**Rule:** Before using `exportAsync({ format: 'SVG_STRING' })` on any icon, confirm the DS frame dimensions. `viewBox` = `"-1 -1 [w+2] [h+2]"`. Never assume 24×24.
+
+**Reference:** Rule 27 (full viewBox specification), confirmed examples: `ic-user-circle` (60×60 → `-1 -1 62 62`), all 6 Navbar action icons (24×24 → `-1 -1 26 26`), all 8 nav-btn icons (20×20 clips, tight viewBox).
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-04 (Rules 218–219 added — flex gap phantom spacing fix, transitionend→display:none pattern; SVG viewBox coordinate space re-confirmation) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
