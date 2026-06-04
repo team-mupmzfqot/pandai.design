@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Report Card for Year 1 — Pandai</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -86,7 +87,7 @@
     .pd-icon svg { display: block; width: 20px; height: 20px; }
 
     /* ───────────────────────────────────────────────
-       NAVBAR 1.5  DS 2337:21975 — matches zul.home.screen.html exactly
+       NAVBAR 1.5  DS 2337:21975 — matches home.html exactly
     ─────────────────────────────────────────────── */
     .navbar { padding: 0 var(--page-padding-x); display: flex; flex-direction: column; gap: var(--space-s); }
 
@@ -147,7 +148,7 @@
       gap: var(--space-xs); padding: var(--space-xs);
     }
 
-    /* Nav button — matches zul.home.screen.html nav-btn pattern exactly */
+    /* Nav button — matches home.html nav-btn pattern exactly */
     .nav-btn {
       display:        flex;
       flex-direction: column;
@@ -241,7 +242,7 @@
     /* ───────────────────────────────────────────────
        PAGE + BREADCRUMBS + CARD — same as before
     ─────────────────────────────────────────────── */
-    /* Page layout — matches zul.home.screen.html */
+    /* Page layout — matches home.html */
     .page-container {
       max-width:     var(--page-max-width);
       margin:        0 auto;
@@ -615,7 +616,7 @@
     .pd-progress15__track { background: var(--surface-general-default-secondary); border-radius: var(--corner-pill); height: 4px; overflow: hidden; width: 100%; }
     .pd-progress15__fill  { height: 4px; background: var(--surface-primary-default); border-radius: var(--corner-pill); }
 
-    /* FOOTER 1.5  DS 2073:6579 — matches zul.home.screen.html exactly */
+    /* FOOTER 1.5  DS 2073:6579 — matches home.html exactly */
     .footer {
       position:   fixed;
       bottom:     0;
@@ -670,7 +671,7 @@
     }
 
     /* Mobile Navbar — Navbar 1.5 Mobile (DS node 1943:22641)
-       Single row: logo left, hamburger right. Matches zul.home.screen.html exactly. */
+       Single row: logo left, hamburger right. Matches home.html exactly. */
     .navbar-mobile {
       height:          64px;
       background:      var(--surface-general-default);
@@ -711,7 +712,7 @@
     #NavBar-Mobile  { display: none; }
 
     /* ═══════════════════════════════════════════════════
-       RESPONSIVE BREAKPOINTS — matches zul.home.screen.html
+       RESPONSIVE BREAKPOINTS — matches home.html
        < 1320px → mobile navbar
        Tablet  ≤ 1279px
        Mobile  ≤  767px
@@ -1088,7 +1089,7 @@
     <symbol id="ic-menu" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M3 12H21M3 6H21M3 18H21"/>
     </symbol>
-    <!-- Topbar action icons — exact symbols from zul.home.screen.html -->
+    <!-- Topbar action icons — exact symbols from home.html -->
     <symbol id="ic-search" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 11 19 C 15.418 19 19 15.418 19 11 C 19 6.582 15.418 3 11 3 C 6.582 3 3 6.582 3 11 C 3 15.418 6.582 19 11 19 Z"/><path d="M 21 21 L 16.65 16.65"/></symbol>
     <symbol id="ic-maximize" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 3 16 L 3 19 C 3 19.53 3.211 20.039 3.586 20.414 C 3.961 20.789 4.47 21 5 21 L 8 21"/><path d="M 8 3 L 5 3 C 4.47 3 3.961 3.211 3.586 3.586 C 3.211 3.961 3 4.47 3 5 L 3 8 M 21 8 L 21 5 C 21 4.47 20.789 3.961 20.414 3.586 C 20.039 3.211 19.53 3 19 3 L 16 3 M 16 21 L 19 21 C 19.53 21 20.039 20.789 20.414 20.414 C 20.789 20.039 21 19.53 21 19 L 21 16"/></symbol>
     <symbol id="ic-smartphone" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 17 2 L 7 2 C 5.895 2 5 2.895 5 4 L 5 20 C 5 21.105 5.895 22 7 22 L 17 22 C 18.105 22 19 21.105 19 20 L 19 4 C 19 2.895 18.105 2 17 2 Z"/><path d="M 12 18 L 12.01 18"/></symbol>
@@ -1171,7 +1172,7 @@
 
 
 <!-- ═══════════════════════════════════════════════
-     NAVBAR 1.5 — exact section from zul.home.screen.html
+     NAVBAR 1.5 — exact section from home.html
      Achievement nav button is active (is-active)
 ═══════════════════════════════════════════════ -->
 <section id="NavBar-Desktop">
@@ -1180,8 +1181,8 @@
   <!-- Row 1 — Brand bar (64px) -->
   <div class="navbar-brand">
     <a class="navbar-logo" href="#">
-      <img src="../zul.test.git/icons/logo-mark.svg" class="navbar-logo__mark" alt="Pandai mark">
-      <img src="../zul.test.git/icons/logo-text.svg" class="navbar-logo__text" alt="Pandai">
+      <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/logo-mark.svg" class="navbar-logo__mark" alt="Pandai mark">
+      <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/logo-text.svg" class="navbar-logo__text" alt="Pandai">
     </a>
     <div class="navbar-actions">
       <!-- Search pill  DS node 4689:4319 — flex:1, h:40, corner-pill, border-primary -->
@@ -1282,18 +1283,18 @@
 
 <!-- Learn Menu 1.5 popup  DS node 3908:2462 — 3×4 grid of 12 feature items -->
 <div class="learn-menu" id="learn-menu" role="menu" aria-hidden="true">
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-live-tuition.svg" alt="Live Tuition"></div><span class="learn-menu__label">Live Tuition</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-live-help.svg" alt="Live Help"></div><span class="learn-menu__label">Live Help</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-quiz.svg" alt="Quiz"></div><span class="learn-menu__label">Quiz</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-practice.svg" alt="Practice"></div><span class="learn-menu__label">Practice</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-chapters.svg" alt="Chapters"></div><span class="learn-menu__label">Chapters</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-textbook.svg" alt="Textbooks"></div><span class="learn-menu__label">Textbooks</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-quick-notes.svg" alt="Quick Notes"></div><span class="learn-menu__label">Quick Notes</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-videos.png" alt="Videos"></div><span class="learn-menu__label">Videos</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-experiments.svg" alt="Experiments"></div><span class="learn-menu__label">Experiments</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-personality.svg" alt="Personality"></div><span class="learn-menu__label">Personality</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-university.svg" alt="University"></div><span class="learn-menu__label">University</span></div>
-  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/assets/feature-rewards.svg" alt="Rewards"></div><span class="learn-menu__label">Rewards</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-live-tuition.svg" alt="Live Tuition"></div><span class="learn-menu__label">Live Tuition</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-live-help.svg" alt="Live Help"></div><span class="learn-menu__label">Live Help</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-quiz.svg" alt="Quiz"></div><span class="learn-menu__label">Quiz</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-practice.svg" alt="Practice"></div><span class="learn-menu__label">Practice</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-chapters.svg" alt="Chapters"></div><span class="learn-menu__label">Chapters</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-textbook.svg" alt="Textbooks"></div><span class="learn-menu__label">Textbooks</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-quick-notes.svg" alt="Quick Notes"></div><span class="learn-menu__label">Quick Notes</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-videos.png" alt="Videos"></div><span class="learn-menu__label">Videos</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-experiments.svg" alt="Experiments"></div><span class="learn-menu__label">Experiments</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-personality.svg" alt="Personality"></div><span class="learn-menu__label">Personality</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-university.svg" alt="University"></div><span class="learn-menu__label">University</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-rewards.svg" alt="Rewards"></div><span class="learn-menu__label">Rewards</span></div>
 </div>
 
 <!-- Profile Menu popup  DS node 3908:4194 -->
@@ -1384,15 +1385,15 @@
 <!-- Download Apps Dropdown  DS node 3909:3059 -->
 <div class="download-dropdown" id="download-dropdown" role="menu" aria-hidden="true">
   <a class="download-dropdown__item" href="#" role="menuitem">
-    <img src="../src/image-repo/Achievement/assets/icon-playstore.png" alt="Google Play" width="24" height="24">
+    <img src="../src/image-repo/Achievement/score.card/assets/icon-playstore.png" alt="Google Play" width="24" height="24">
     <span class="download-dropdown__item-label">Google Android</span>
   </a>
   <a class="download-dropdown__item" href="#" role="menuitem">
-    <img src="../src/image-repo/Achievement/assets/icon-appstore.png" alt="App Store" width="24" height="24">
+    <img src="../src/image-repo/Achievement/score.card/assets/icon-appstore.png" alt="App Store" width="24" height="24">
     <span class="download-dropdown__item-label">Apple iOS</span>
   </a>
   <a class="download-dropdown__item" href="#" role="menuitem">
-    <img src="../src/image-repo/Achievement/assets/icon-appgallery.png" alt="Huawei AppGallery" width="24" height="24">
+    <img src="../src/image-repo/Achievement/score.card/assets/icon-appgallery.png" alt="Huawei AppGallery" width="24" height="24">
     <span class="download-dropdown__item-label">Huawei</span>
   </a>
 </div>
@@ -1418,7 +1419,7 @@
 
 <!-- Achievement Subtopic dropdown  DS node 4742:74267 -->
 <div class="nav-subtopic-dropdown" id="achievement-dropdown" role="menu" aria-hidden="true">
-  <a class="nav-subtopic-dropdown__item" href="scoreCard.html" role="menuitem"><svg aria-hidden="true"><use href="#ic-pie-chart"/></svg><span class="nav-subtopic-dropdown__item-label">Score Card</span></a>
+  <a class="nav-subtopic-dropdown__item" href="achievement-score-card.html" role="menuitem"><svg aria-hidden="true"><use href="#ic-pie-chart"/></svg><span class="nav-subtopic-dropdown__item-label">Score Card</span></a>
   <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-filled-check-circle"/></svg><span class="nav-subtopic-dropdown__item-label">Report Card</span></div>
   <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-calendar"/></svg><span class="nav-subtopic-dropdown__item-label">History</span></div>
   <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-shield"/></svg><span class="nav-subtopic-dropdown__item-label">Badges</span></div>
@@ -1450,8 +1451,8 @@
 <section id="NavBar-Mobile">
   <div class="navbar-mobile">
     <a class="navbar-mobile__logo" href="#">
-      <img src="../zul.test.git/icons/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
-      <img src="../zul.test.git/icons/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
+      <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
+      <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
     </a>
     <button class="navbar-mobile__menu-btn" aria-label="Open menu" type="button">
       <svg aria-hidden="true"><use href="#ic-menu"/></svg>
@@ -1528,7 +1529,7 @@
         <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
           <div class="pd-subject-badge" style="--badge-bg:#f94848;--badge-border:#c73a3a">
             <div class="pd-subject-badge__icon">
-              <img src="../src/image-repo/Achievement/assets/subject-icons/icon-chinese-lang.svg" alt="Chinese Language" />
+              <img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chinese-lang.svg" alt="Chinese Language" />
             </div>
             <div class="pd-subject-badge__label">Chinese Language</div>
           </div>
@@ -1537,7 +1538,7 @@
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">80%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">25</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary">
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary">
                   <span class="pd-btn15-primary__label">View</span>
                   <span class="pd-btn15-primary__arrow">
                     <svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1553,7 +1554,7 @@
         <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
           <div class="pd-subject-badge" style="--badge-bg:#ff4d56;--badge-border:#cc3e45">
             <div class="pd-subject-badge__icon">
-              <img src="../src/image-repo/Achievement/assets/subject-icons/icon-english.svg" alt="English" />
+              <img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-english.svg" alt="English" />
             </div>
             <div class="pd-subject-badge__label">English</div>
           </div>
@@ -1562,7 +1563,7 @@
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">90%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">392</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary">
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary">
                   <span class="pd-btn15-primary__label">View</span>
                   <span class="pd-btn15-primary__arrow">
                     <svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1579,7 +1580,7 @@
         <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
           <div class="pd-subject-badge" style="--badge-bg:#4d77ff;--badge-border:#2e4799">
             <div class="pd-subject-badge__icon">
-              <img src="../src/image-repo/Achievement/assets/subject-icons/icon-bmelayu.svg" alt="Bahasa Melayu" />
+              <img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-bmelayu.svg" alt="Bahasa Melayu" />
             </div>
             <div class="pd-subject-badge__label">Bahasa Melayu</div>
           </div>
@@ -1588,7 +1589,7 @@
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">76%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">B</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">192</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary">
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary">
                   <span class="pd-btn15-primary__label">View</span>
                   <span class="pd-btn15-primary__arrow">
                     <svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1604,7 +1605,7 @@
         <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
           <div class="pd-subject-badge" style="--badge-bg:#42ac7b;--badge-border:#358a62">
             <div class="pd-subject-badge__icon">
-              <img src="../src/image-repo/Achievement/assets/subject-icons/icon-math.svg" alt="Mathematics" />
+              <img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-math.svg" alt="Mathematics" />
             </div>
             <div class="pd-subject-badge__label">Mathematics</div>
           </div>
@@ -1613,7 +1614,7 @@
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">80%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">328</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary">
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary">
                   <span class="pd-btn15-primary__label">View</span>
                   <span class="pd-btn15-primary__arrow">
                     <svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1629,7 +1630,7 @@
         <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
           <div class="pd-subject-badge" style="--badge-bg:#de4d7f;--badge-border:#b23e66">
             <div class="pd-subject-badge__icon">
-              <img src="../src/image-repo/Achievement/assets/subject-icons/icon-islamic.svg" alt="Pendidikan Islam" />
+              <img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-islamic.svg" alt="Pendidikan Islam" />
             </div>
             <div class="pd-subject-badge__label">Pendidikan Islam</div>
           </div>
@@ -1638,7 +1639,7 @@
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">84%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">25</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary">
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary">
                   <span class="pd-btn15-primary__label">View</span>
                   <span class="pd-btn15-primary__arrow">
                     <svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1654,7 +1655,7 @@
         <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
           <div class="pd-subject-badge" style="--badge-bg:#0072ca;--badge-border:#005ba2">
             <div class="pd-subject-badge__icon">
-              <img src="../src/image-repo/Achievement/assets/subject-icons/icon-moral.svg" alt="Pendidikan Moral" />
+              <img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-moral.svg" alt="Pendidikan Moral" />
             </div>
             <div class="pd-subject-badge__label">Pendidikan Moral</div>
           </div>
@@ -1663,7 +1664,7 @@
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">50%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">C</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">4</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary">
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary">
                   <span class="pd-btn15-primary__label">View</span>
                   <span class="pd-btn15-primary__arrow">
                     <svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1679,7 +1680,7 @@
         <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner">
           <div class="pd-subject-badge" style="--badge-bg:#ffd641;--badge-border:#ccab34;--badge-text:#998027">
             <div class="pd-subject-badge__icon">
-              <img src="../src/image-repo/Achievement/assets/subject-icons/icon-science.svg" alt="Science" />
+              <img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-science.svg" alt="Science" />
             </div>
             <div class="pd-subject-badge__label">Science</div>
           </div>
@@ -1688,7 +1689,7 @@
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">85%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">209</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary">
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary">
                   <span class="pd-btn15-primary__label">View</span>
                   <span class="pd-btn15-primary__arrow">
                     <svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1701,133 +1702,133 @@
       <!-- Row 8: Add Math -->
       <div class="pd-body-row" style="--row-bg:rgba(40,53,137,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">8</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#283589;--badge-border:#182052"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/assets/subject-icons/icon-add-math.svg" alt="Add Math"/></div><div class="pd-subject-badge__label">Add Math</div></div></div></div>
+        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#283589;--badge-border:#182052"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-add-math.svg" alt="Add Math"/></div><div class="pd-subject-badge__label">Add Math</div></div></div></div>
         <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:72%;background:#283589"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">72%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">B</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">140</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
       </div>
 
       <!-- Row 9: Biology -->
       <div class="pd-body-row" style="--row-bg:rgba(132,49,216,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">9</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#8431d8;--badge-border:#6a27ad"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/assets/subject-icons/icon-biology.svg" alt="Biology"/></div><div class="pd-subject-badge__label">Biology</div></div></div></div>
+        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#8431d8;--badge-border:#6a27ad"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-biology.svg" alt="Biology"/></div><div class="pd-subject-badge__label">Biology</div></div></div></div>
         <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:88%;background:#8431d8"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">88%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">210</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
       </div>
 
       <!-- Row 10: Chemistry -->
       <div class="pd-body-row" style="--row-bg:rgba(226,0,130,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">10</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#e20082;--badge-border:#b50068"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/assets/subject-icons/icon-chemistry.svg" alt="Chemistry"/></div><div class="pd-subject-badge__label">Chemistry</div></div></div></div>
+        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#e20082;--badge-border:#b50068"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chemistry.svg" alt="Chemistry"/></div><div class="pd-subject-badge__label">Chemistry</div></div></div></div>
         <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:65%;background:#e20082"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">65%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">C</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">98</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
       </div>
 
       <!-- Row 11: Physics -->
       <div class="pd-body-row" style="--row-bg:rgba(39,160,215,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">11</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#27a0d7;--badge-border:#1f80ac"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/assets/subject-icons/icon-physics.svg" alt="Physics"/></div><div class="pd-subject-badge__label">Physics</div></div></div></div>
+        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#27a0d7;--badge-border:#1f80ac"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-physics.svg" alt="Physics"/></div><div class="pd-subject-badge__label">Physics</div></div></div></div>
         <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:78%;background:#27a0d7"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">78%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">B</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">175</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
       </div>
 
       <!-- Row 12: History -->
       <div class="pd-body-row" style="--row-bg:rgba(169,124,80,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">12</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#a97c50;--badge-border:#876340"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/assets/subject-icons/icon-history.svg" alt="History"/></div><div class="pd-subject-badge__label">History</div></div></div></div>
+        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#a97c50;--badge-border:#876340"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-history.svg" alt="History"/></div><div class="pd-subject-badge__label">History</div></div></div></div>
         <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:91%;background:#a97c50"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">91%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">302</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
       </div>
 
       <!-- Row 13: Geography -->
       <div class="pd-body-row" style="--row-bg:rgba(119,216,54,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">13</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#77d836;--badge-border:#5fad2b;--badge-text:#478220"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/assets/subject-icons/icon-geography.png" alt="Geography"/></div><div class="pd-subject-badge__label">Geography</div></div></div></div>
+        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#77d836;--badge-border:#5fad2b;--badge-text:#478220"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-geography.png" alt="Geography"/></div><div class="pd-subject-badge__label">Geography</div></div></div></div>
         <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:60%;background:#77d836"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">60%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">C</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">88</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
       </div>
 
       <!-- Row 14: Economy -->
       <div class="pd-body-row" style="--row-bg:rgba(255,87,51,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">14</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#ff5733;--badge-border:#cc4629"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/assets/subject-icons/icon-economy.svg" alt="Economy"/></div><div class="pd-subject-badge__label">Economy</div></div></div></div>
+        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#ff5733;--badge-border:#cc4629"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-economy.svg" alt="Economy"/></div><div class="pd-subject-badge__label">Economy</div></div></div></div>
         <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:55%;background:#ff5733"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">55%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">C</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">62</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
       </div>
 
       <!-- Row 15: Account -->
       <div class="pd-body-row" style="--row-bg:rgba(0,114,202,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">15</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#0072ca;--badge-border:#004479"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/assets/subject-icons/icon-account.svg" alt="Account"/></div><div class="pd-subject-badge__label">Account</div></div></div></div>
+        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#0072ca;--badge-border:#004479"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-account.svg" alt="Account"/></div><div class="pd-subject-badge__label">Account</div></div></div></div>
         <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:83%;background:#0072ca"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">83%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">256</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
       </div>
 
       <!-- Row 16: Business -->
       <div class="pd-body-row" style="--row-bg:rgba(239,180,43,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">16</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#efb42b;--badge-border:#bf9022"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/assets/subject-icons/icon-business.svg" alt="Business"/></div><div class="pd-subject-badge__label">Business</div></div></div></div>
+        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#efb42b;--badge-border:#bf9022"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-business.svg" alt="Business"/></div><div class="pd-subject-badge__label">Business</div></div></div></div>
         <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:70%;background:#efb42b"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">70%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">B</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">118</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
       </div>
 
       <!-- Row 17: Comp Science -->
       <div class="pd-body-row" style="--row-bg:rgba(209,0,112,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">17</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#d10070;--badge-border:#a7005a"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/assets/subject-icons/icon-comp-science.svg" alt="Computer Science"/></div><div class="pd-subject-badge__label">Computer Science</div></div></div></div>
+        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#d10070;--badge-border:#a7005a"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-comp-science.svg" alt="Computer Science"/></div><div class="pd-subject-badge__label">Computer Science</div></div></div></div>
         <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:95%;background:#d10070"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">95%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">380</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
       </div>
 
       <!-- Row 18: KAFA -->
       <div class="pd-body-row" style="--row-bg:rgba(138,227,169,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">18</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#8ae3a9;--badge-border:#6eb687;--badge-text:#538865"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/assets/subject-icons/icon-kafa.svg" alt="KAFA"/></div><div class="pd-subject-badge__label">KAFA</div></div></div></div>
+        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#8ae3a9;--badge-border:#6eb687;--badge-text:#538865"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-kafa.svg" alt="KAFA"/></div><div class="pd-subject-badge__label">KAFA</div></div></div></div>
         <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:77%;background:#8ae3a9"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">77%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">B</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">45</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
       </div>
 
       <!-- Row 19: RBT -->
       <div class="pd-body-row" style="--row-bg:rgba(53,53,53,0.10)">
         <div class="pd-body-cell pd-col-num"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">19</span></div></div>
-        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#353535;--badge-border:#2a2a2a"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/assets/subject-icons/icon-rbt.svg" alt="RBT"/></div><div class="pd-subject-badge__label">RBT</div></div></div></div>
+        <div class="pd-body-cell pd-col-subject"><div class="pd-body-cell__inner"><div class="pd-subject-badge" style="--badge-bg:#353535;--badge-border:#2a2a2a"><div class="pd-subject-badge__icon"><img src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-rbt.svg" alt="RBT"/></div><div class="pd-subject-badge__label">RBT</div></div></div></div>
         <div class="pd-body-cell pd-col-progress"><div class="pd-body-cell__inner"><div class="pd-progress15__track"><div class="pd-progress15__fill" style="width:82%;background:#353535"></div></div></div></div>
         <div class="pd-body-cell pd-col-score"><div class="pd-body-cell__inner"><span class="pd-cell-score">82%</span></div></div>
         <div class="pd-body-cell pd-col-grade"><div class="pd-body-cell__inner"><span class="pd-cell-grade">A</span></div></div>
         <div class="pd-body-cell pd-col-questions"><div class="pd-body-cell__inner"><span class="pd-body-cell__text">130</span></div></div>
-        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="AnalysisCard.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
+        <div class="pd-body-cell pd-col-analysis"><div class="pd-body-cell__inner"><a href="achievement-analysis-card.html" class="pd-btn15-primary"><span class="pd-btn15-primary__label">View</span><span class="pd-btn15-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#00cc85" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></a></div></div>
       </div>
 
     </div><!-- /pd-table15 -->
@@ -1863,7 +1864,7 @@
 
 
 <!-- ═══════════════════════════════════════════════
-     FOOTER 1.5  DS 2073:6579 — matches zul.home.screen.html exactly
+     FOOTER 1.5  DS 2073:6579 — matches home.html exactly
 ═══════════════════════════════════════════════ -->
 <footer class="footer">
   <div class="footer__inner">
@@ -1892,7 +1893,7 @@
     var label   = row.querySelector('.pd-subject-badge__label');
     var viewBtn = row.querySelector('a.pd-btn15-primary');
     if (label && viewBtn) {
-      viewBtn.href = 'AnalysisCard.html?subject=' + encodeURIComponent(label.textContent.trim());
+      viewBtn.href = 'achievement-analysis-card.html?subject=' + encodeURIComponent(label.textContent.trim());
     }
   });
 
@@ -2297,5 +2298,174 @@
     });
   })();
 </script>
+<script>
+/* test.page.compiled — Top Menu Bar navigation + persistent active state (v5) */
+(function () {
+  var TOP_ROUTES = {
+    'Home':     'home.html',
+    'Practice': 'practice.html'
+  };
+  var SUB_ROUTES = {
+    'My Classes':       'class-my-classes.html',
+    'Browse Classes':   'class-browse-classes.html',
+    'Learning Hub':     'learn-learning-hub.html',
+    'Quick Notes':      'learn-quick-notes.html',
+    'Score Card':       'achievement-score-card.html',
+    'Report Card':      'achievement-report-card.html',
+    'Coin Quests':      'rewards-coin-quests.html',
+    'My Rewards':       'rewards-my-rewards.html',
+    'Merchandise':      'rewards-merchandise.html',
+    'eVoucher':         'rewards-evoucher.html',
+    'Avatar':           'rewards-avatar.html'
+  };
+  /* Page → parent main-menu label that should show active state */
+  var PAGE_ACTIVE_MAIN = {
+    'home.html':                       'Home',
+    'practice.html':                   'Practice',
+    'class-my-classes.html':           'Class',
+    'class-browse-classes.html':       'Class',
+    'learn-learning-hub.html':         'Learn',
+    'learn-quick-notes.html':          'Learn',
+    'achievement-score-card.html':     'Achievement',
+    'achievement-report-card.html':    'Achievement',
+    'achievement-analysis-card.html':  'Achievement',
+    'rewards-coin-quests.html':        'Rewards',
+    'rewards-my-rewards.html':         'Rewards',
+    'rewards-merchandise.html':        'Rewards',
+    'rewards-evoucher.html':           'Rewards',
+    'rewards-avatar.html':             'Rewards'
+  };
+
+  var SEL_A_BTN  = '#NavTopMenu-Desktop .nav-menu-btn';
+  var SEL_A_ITEM = '#NavTopMenu-Desktop .nav-menu-dropdown__item';
+  var SEL_B_BTN  = '.navbar-nav .nav-btn, .menubar-nav .nav-btn';
+  var SEL_B_ITEM = '.nav-subtopic-dropdown__item';
+
+  function nav(href) { return function (e) { e.preventDefault(); e.stopPropagation(); window.location.href = href; }; }
+
+  function currentFile() {
+    var p = window.location.pathname.replace(/[?#].*$/, '');
+    if (p.charAt(p.length - 1) === '/') return 'home.html';
+    var f = p.substring(p.lastIndexOf('/') + 1).toLowerCase();
+    if (!f) return 'home.html';
+    if (f.indexOf('.html') < 0) f += '.html';
+    return f;
+  }
+
+  function wireLinks() {
+    document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
+      if (btn.hasAttribute('aria-haspopup')) return;
+      var href = TOP_ROUTES[(btn.getAttribute('aria-label') || '').trim()];
+      if (href && !btn.dataset.tpcWired) {
+        btn.addEventListener('click', nav(href), true);
+        btn.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_A_ITEM).forEach(function (item) {
+      var lbl = item.querySelector('.nav-menu-dropdown__label');
+      if (!lbl) return;
+      var href = SUB_ROUTES[lbl.textContent.trim()];
+      if (href && !item.dataset.tpcWired) {
+        item.addEventListener('click', nav(href), true);
+        item.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
+      if (btn.hasAttribute('aria-haspopup')) return;
+      var lbl = btn.querySelector('.nav-btn__label');
+      if (!lbl) return;
+      var href = TOP_ROUTES[lbl.textContent.trim()];
+      if (href && !btn.dataset.tpcWired) {
+        btn.addEventListener('click', nav(href), true);
+        btn.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_B_ITEM).forEach(function (item) {
+      var lbl = item.querySelector('.nav-subtopic-dropdown__item-label');
+      if (!lbl) return;
+      var href = SUB_ROUTES[lbl.textContent.trim()];
+      if (!href) return;
+      if (item.tagName === 'A') item.setAttribute('href', href);
+      if (!item.dataset.tpcWired) {
+        item.addEventListener('click', nav(href), true);
+        item.dataset.tpcWired = '1';
+      }
+    });
+  }
+
+  var applying = false;
+  function applyActive() {
+    if (applying) return;
+    applying = true;
+    try {
+      var label = PAGE_ACTIVE_MAIN[currentFile()];
+      document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
+        var match = !!(label && (btn.getAttribute('aria-label') || '').trim() === label);
+        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
+        if (match) {
+          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
+        } else if (btn.hasAttribute('aria-current')) {
+          btn.removeAttribute('aria-current');
+        }
+      });
+      document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
+        var lbl = btn.querySelector('.nav-btn__label');
+        var match = !!(label && lbl && lbl.textContent.trim() === label);
+        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
+        if (match) {
+          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
+        } else if (btn.hasAttribute('aria-current')) {
+          btn.removeAttribute('aria-current');
+        }
+      });
+    } finally {
+      applying = false;
+    }
+  }
+
+  var observing = false;
+  function startObserver() {
+    if (observing || typeof MutationObserver !== 'function') return;
+    var targets = [];
+    var a = document.getElementById('NavTopMenu-Desktop'); if (a) targets.push(a);
+    document.querySelectorAll('.navbar-nav, .menubar-nav').forEach(function (n) { targets.push(n); });
+    if (!targets.length) return;
+    /* Synchronous re-apply on every batch of mutations — runs as microtask, before paint */
+    var observer = new MutationObserver(applyActive);
+    targets.forEach(function (t) {
+      observer.observe(t, { attributes: true, subtree: true, attributeFilter: ['class', 'aria-current'] });
+    });
+    observing = true;
+  }
+
+  function init() {
+    wireLinks();
+    applyActive();
+    startObserver();
+    /* Defeat any deferred init code that re-asserts Home — multiple deferred passes */
+    [0, 50, 150, 400, 1000, 2500].forEach(function (d) { setTimeout(applyActive, d); });
+    /* 5s safety net: re-check every 250ms for 5s after load */
+    var ticks = 0;
+    var iv = setInterval(function () {
+      applyActive();
+      if (++ticks >= 20) clearInterval(iv);
+    }, 250);
+    /* Also re-apply on user interaction */
+    document.addEventListener('click',     function () { setTimeout(applyActive, 0); }, true);
+    document.addEventListener('mouseleave',function () { setTimeout(applyActive, 0); }, true);
+    document.addEventListener('mouseup',   function () { setTimeout(applyActive, 0); }, true);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+
+
+
 </body>
 </html>

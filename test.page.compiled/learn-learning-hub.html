@@ -1,7 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ms">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pandai â€” Learning Hub</title>
 
@@ -2388,7 +2389,7 @@
     /* .practice-cards-row removed — grid on container handles 2-col layout */
 
     /* Practice Card - 1.5 â€” DS node 2339:4823
-       Fetched from Nadia.test.git/Practise/nadia_Practise-subject.html */
+       Fetched from Nadia.test.git/Practise/practice.html */
     .practice-card {
       display: flex;
       align-items: stretch;
@@ -2947,7 +2948,7 @@
           <span class="learn-dropdown__label">Textbooks</span>
         </div>
 
-        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quick Notes" onclick="window.location.href='quickNotes.html'">
+        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quick Notes" onclick="window.location.href='learn-quick-notes.html'">
           <img class="learn-dropdown__icon" src="../src/image-repo/page.template/assets/main/LearnMenu/feature-quick-notes.png" alt="" width="70" height="70">
           <span class="learn-dropdown__label">Quick Notes</span>
         </div>
@@ -3239,7 +3240,7 @@
           <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-folder"/></svg></div>
           <span class="nav-menu-dropdown__label">Learning Hub</span>
         </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0" onclick="window.location.href='quickNotes.html'">
+        <div class="nav-menu-dropdown__item" role="button" tabindex="0" onclick="window.location.href='learn-quick-notes.html'">
           <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></div>
           <span class="nav-menu-dropdown__label">Quick Notes</span>
         </div>
@@ -3457,7 +3458,7 @@
             <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-folder"/></svg></span>
             <span class="nav-menu-item__label">Learning Hub</span>
           </div>
-          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Quick Notes" onclick="window.location.href='quickNotes.html'">
+          <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Quick Notes" onclick="window.location.href='learn-quick-notes.html'">
             <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
             <span class="nav-menu-item__label">Quick Notes</span>
           </div>
@@ -3657,8 +3658,8 @@
                 </div>
 
                 <!-- Grades accordion â€” Button-Dropdown-1.5 trigger + two Dropdown List boxes -->
-                <div class="learn-accordion is-collapsed" id="accordion-grades">
-                  <button class="learn-accordion__toggle" aria-expanded="false" aria-controls="accordion-grades-body" type="button">
+                <div class="learn-accordion" id="accordion-grades">
+                  <button class="learn-accordion__toggle" aria-expanded="true" aria-controls="accordion-grades-body" type="button">
                     <span class="learn-accordion__label">Grades</span>
                     <span class="learn-accordion__chevron" aria-hidden="true">
                       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10L8 6L12 10"/></svg>
@@ -3730,8 +3731,8 @@
                 </div><!-- end grades accordion -->
 
                 <!-- Subjects accordion -->
-                <div class="learn-accordion is-collapsed" id="accordion-subjects">
-                  <button class="learn-accordion__toggle" aria-expanded="false" aria-controls="accordion-subjects-body" type="button">
+                <div class="learn-accordion" id="accordion-subjects">
+                  <button class="learn-accordion__toggle" aria-expanded="true" aria-controls="accordion-subjects-body" type="button">
                     <span class="learn-accordion__label">Subjects</span>
                     <span class="learn-accordion__chevron" aria-hidden="true">
                       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10L8 6L12 10"/></svg>
@@ -4722,7 +4723,7 @@
           <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-folder"/></svg></span>
           <span class="nav-menu-item__label">Learning Hub</span>
         </div>
-        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Quick Notes" onclick="window.location.href='quickNotes.html'">
+        <div class="nav-menu-item" role="button" tabindex="-1" aria-label="Quick Notes" onclick="window.location.href='learn-quick-notes.html'">
           <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
           <span class="nav-menu-item__label">Quick Notes</span>
         </div>
@@ -5248,6 +5249,175 @@
       }
     } catch(e) { console.warn('Learning Hub init error:', e); }
   </script>
+
+<script>
+/* test.page.compiled — Top Menu Bar navigation + persistent active state (v5) */
+(function () {
+  var TOP_ROUTES = {
+    'Home':     'home.html',
+    'Practice': 'practice.html'
+  };
+  var SUB_ROUTES = {
+    'My Classes':       'class-my-classes.html',
+    'Browse Classes':   'class-browse-classes.html',
+    'Learning Hub':     'learn-learning-hub.html',
+    'Quick Notes':      'learn-quick-notes.html',
+    'Score Card':       'achievement-score-card.html',
+    'Report Card':      'achievement-report-card.html',
+    'Coin Quests':      'rewards-coin-quests.html',
+    'My Rewards':       'rewards-my-rewards.html',
+    'Merchandise':      'rewards-merchandise.html',
+    'eVoucher':         'rewards-evoucher.html',
+    'Avatar':           'rewards-avatar.html'
+  };
+  /* Page → parent main-menu label that should show active state */
+  var PAGE_ACTIVE_MAIN = {
+    'home.html':                       'Home',
+    'practice.html':                   'Practice',
+    'class-my-classes.html':           'Class',
+    'class-browse-classes.html':       'Class',
+    'learn-learning-hub.html':         'Learn',
+    'learn-quick-notes.html':          'Learn',
+    'achievement-score-card.html':     'Achievement',
+    'achievement-report-card.html':    'Achievement',
+    'achievement-analysis-card.html':  'Achievement',
+    'rewards-coin-quests.html':        'Rewards',
+    'rewards-my-rewards.html':         'Rewards',
+    'rewards-merchandise.html':        'Rewards',
+    'rewards-evoucher.html':           'Rewards',
+    'rewards-avatar.html':             'Rewards'
+  };
+
+  var SEL_A_BTN  = '#NavTopMenu-Desktop .nav-menu-btn';
+  var SEL_A_ITEM = '#NavTopMenu-Desktop .nav-menu-dropdown__item';
+  var SEL_B_BTN  = '.navbar-nav .nav-btn, .menubar-nav .nav-btn';
+  var SEL_B_ITEM = '.nav-subtopic-dropdown__item';
+
+  function nav(href) { return function (e) { e.preventDefault(); e.stopPropagation(); window.location.href = href; }; }
+
+  function currentFile() {
+    var p = window.location.pathname.replace(/[?#].*$/, '');
+    if (p.charAt(p.length - 1) === '/') return 'home.html';
+    var f = p.substring(p.lastIndexOf('/') + 1).toLowerCase();
+    if (!f) return 'home.html';
+    if (f.indexOf('.html') < 0) f += '.html';
+    return f;
+  }
+
+  function wireLinks() {
+    document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
+      if (btn.hasAttribute('aria-haspopup')) return;
+      var href = TOP_ROUTES[(btn.getAttribute('aria-label') || '').trim()];
+      if (href && !btn.dataset.tpcWired) {
+        btn.addEventListener('click', nav(href), true);
+        btn.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_A_ITEM).forEach(function (item) {
+      var lbl = item.querySelector('.nav-menu-dropdown__label');
+      if (!lbl) return;
+      var href = SUB_ROUTES[lbl.textContent.trim()];
+      if (href && !item.dataset.tpcWired) {
+        item.addEventListener('click', nav(href), true);
+        item.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
+      if (btn.hasAttribute('aria-haspopup')) return;
+      var lbl = btn.querySelector('.nav-btn__label');
+      if (!lbl) return;
+      var href = TOP_ROUTES[lbl.textContent.trim()];
+      if (href && !btn.dataset.tpcWired) {
+        btn.addEventListener('click', nav(href), true);
+        btn.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_B_ITEM).forEach(function (item) {
+      var lbl = item.querySelector('.nav-subtopic-dropdown__item-label');
+      if (!lbl) return;
+      var href = SUB_ROUTES[lbl.textContent.trim()];
+      if (!href) return;
+      if (item.tagName === 'A') item.setAttribute('href', href);
+      if (!item.dataset.tpcWired) {
+        item.addEventListener('click', nav(href), true);
+        item.dataset.tpcWired = '1';
+      }
+    });
+  }
+
+  var applying = false;
+  function applyActive() {
+    if (applying) return;
+    applying = true;
+    try {
+      var label = PAGE_ACTIVE_MAIN[currentFile()];
+      document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
+        var match = !!(label && (btn.getAttribute('aria-label') || '').trim() === label);
+        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
+        if (match) {
+          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
+        } else if (btn.hasAttribute('aria-current')) {
+          btn.removeAttribute('aria-current');
+        }
+      });
+      document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
+        var lbl = btn.querySelector('.nav-btn__label');
+        var match = !!(label && lbl && lbl.textContent.trim() === label);
+        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
+        if (match) {
+          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
+        } else if (btn.hasAttribute('aria-current')) {
+          btn.removeAttribute('aria-current');
+        }
+      });
+    } finally {
+      applying = false;
+    }
+  }
+
+  var observing = false;
+  function startObserver() {
+    if (observing || typeof MutationObserver !== 'function') return;
+    var targets = [];
+    var a = document.getElementById('NavTopMenu-Desktop'); if (a) targets.push(a);
+    document.querySelectorAll('.navbar-nav, .menubar-nav').forEach(function (n) { targets.push(n); });
+    if (!targets.length) return;
+    /* Synchronous re-apply on every batch of mutations — runs as microtask, before paint */
+    var observer = new MutationObserver(applyActive);
+    targets.forEach(function (t) {
+      observer.observe(t, { attributes: true, subtree: true, attributeFilter: ['class', 'aria-current'] });
+    });
+    observing = true;
+  }
+
+  function init() {
+    wireLinks();
+    applyActive();
+    startObserver();
+    /* Defeat any deferred init code that re-asserts Home — multiple deferred passes */
+    [0, 50, 150, 400, 1000, 2500].forEach(function (d) { setTimeout(applyActive, d); });
+    /* 5s safety net: re-check every 250ms for 5s after load */
+    var ticks = 0;
+    var iv = setInterval(function () {
+      applyActive();
+      if (++ticks >= 20) clearInterval(iv);
+    }, 250);
+    /* Also re-apply on user interaction */
+    document.addEventListener('click',     function () { setTimeout(applyActive, 0); }, true);
+    document.addEventListener('mouseleave',function () { setTimeout(applyActive, 0); }, true);
+    document.addEventListener('mouseup',   function () { setTimeout(applyActive, 0); }, true);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+
+
 
 </body>
 </html>

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Score Card — Pandai</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -93,7 +94,7 @@
     .pd-icon svg { display: block; width: 20px; height: 20px; }
 
     /* ───────────────────────────────────────────────
-       NAVBAR 1.5  DS 2337:21975 — matches syakila.html exactly
+       NAVBAR 1.5  DS 2337:21975 — matches achievement-report-card.html exactly
     ─────────────────────────────────────────────── */
     .navbar { padding: 0 var(--page-padding-x); display: flex; flex-direction: column; gap: var(--space-s); }
 
@@ -498,60 +499,44 @@
     .pd-breadcrumbs__chevron { width: 16px; height: 16px; color: var(--text-primary-default); flex-shrink: 0; }
 
     /* ───────────────────────────────────────────────
-       FILTER CARD  DS 5376:191594
-       Green border, #e8fbe8 bg, horizontal row
+       SUBJECT FILTER PILLS  DS 3107:65099
+       Flex-wrap centered. "All" = Primary, others = Secondary.
     ─────────────────────────────────────────────── */
-    .sc-filter-card {
-      display: flex; align-items: center; gap: var(--space-m);
-      padding: var(--space-m);
-      background: var(--surface-secondary-default-subtle);
-      border: 1px solid var(--border-primary-default);
-      border-radius: var(--corner-4xl);
+    .sc-subjects {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
       margin-bottom: var(--space-m);
     }
-    .sc-filter-header {
-      display: flex; align-items: center; gap: var(--space-xs);
-      flex-shrink: 0;
-    }
-    .sc-filter-icon-wrap {
-      width: 28px; height: 28px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--icon-primary-default);
-    }
-    .sc-filter-icon-wrap svg { display: block; width: 24px; height: 24px; }
-    .sc-filter-title {
-      font-size: 18px; font-weight: 600; line-height: 28px;
-      color: var(--text-tertiary-default);
-      white-space: nowrap;
-    }
-    .sc-filter-dropdown {
-      display: flex; align-items: center; gap: var(--space-xs);
-      height: 32px; padding: 2px var(--space-xs) 2px var(--space-m);
-      background: var(--surface-general-default);
-      border: 1px solid var(--border-general-default);
+
+    .sc-pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 32px; padding: 2px 8px;
+      border: 1px solid var(--border-primary-default);
       border-radius: var(--corner-rounded);
-      cursor: pointer; font-family: var(--font);
-      flex-grow: 1; min-width: 0; max-width: 313px;
-    }
-    .sc-filter-dropdown__label {
-      flex: 1; min-width: 0;
-      font-size: 12px; font-weight: 600; line-height: 18px;
+      background: var(--surface-general-default);
       color: var(--text-primary-default);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      font-size: 12px; font-weight: 600; line-height: 18px;
+      cursor: pointer; white-space: nowrap;
+      font-family: var(--font);
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
-    .sc-filter-dropdown__arrow {
-      width: 20px; height: 20px; flex-shrink: 0;
+    .sc-pill.is-active {
       background: var(--surface-primary-default);
-      border-radius: 60px; padding: 4px;
-      display: flex; align-items: center; justify-content: center;
+      border-color: var(--border-primary-focus);
+      color: var(--text-primary-on-color);
     }
-    .sc-filter-dropdown__arrow svg { display: block; width: 12px; height: 12px; color: var(--surface-general-default); }
-    .sc-filter-dropdown:hover { border-color: var(--border-primary-default); }
+    .sc-pill:hover:not(.is-active) {
+      background: var(--surface-secondary-default);
+      border-color: var(--border-secondary-focus);
+      color: var(--text-secondary-focus);
+    }
 
     /* ───────────────────────────────────────────────
-       SCORE CARD - 1.5  DS 5376:191595
-       Outer: grey border #d9d9d9, #e8fbe8 bg, 24px radius
-       2 columns: left (flex:1) + right-col (flex:2)
+       SCORE CARD - 1.5  DS 3107:65119
+       Outer: 24px radius, #e8fbe8 bg, green border
+       3 equal columns, gap + padding 16px
     ─────────────────────────────────────────────── */
     .sc-card-outer {
       display: flex;
@@ -563,7 +548,7 @@
       align-items: stretch;
     }
 
-    /* ── Left Container  p:20 gap:8 r:18  green inner border ── */
+    /* ── Left Container  DS 3107:65120  p:20 gap:50 r:18 ── */
     .sc-left {
       flex: 1;
       min-width: 0;
@@ -571,12 +556,13 @@
       justify-content: space-between;
       padding: 20px;
       background: var(--surface-general-default);
-      border: 1px solid var(--sc-inner-border, var(--border-primary-default));
+      border: 1px solid var(--sc-inner-border, var(--border-general-default));
       border-radius: var(--corner-2xl);
     }
+
     .sc-left__header { display: flex; flex-direction: column; gap: 7px; }
 
-    /* "All Subjects" pill */
+    /* "All Subjects" pill — matches the original DS secondary button style */
     .sc-all-pill {
       width: fit-content; height: 32px;
       padding: 0 var(--space-m);
@@ -589,10 +575,13 @@
       font-family: var(--font);
     }
 
-    /* Subject badge display — DS L size (32px) */
+    /* Subject badge display — DS L size (32px)  Rule 20 */
     .sc-badge-display {
-      display: flex; flex-wrap: wrap;
-      gap: 6px; align-items: center; justify-content: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      justify-content: center;
     }
     .sc-subject-badge {
       display: inline-flex; align-items: center;
@@ -602,14 +591,18 @@
     }
     .sc-subject-badge__icon {
       display: flex; align-items: center; justify-content: center;
-      width: 40px; height: 32px; background: #fff;
-      padding: 4px 8px 4px 12px; flex-shrink: 0;
+      width: 40px; height: 32px;
+      background: #fff;
+      padding: 4px 8px 4px 12px;
+      flex-shrink: 0;
     }
-    .sc-subject-badge__icon img { display: block; width: 20px; height: 20px; object-fit: contain; }
+    .sc-subject-badge__icon img {
+      display: block; width: 20px; height: 20px; object-fit: contain;
+    }
     .sc-subject-badge__label {
       position: relative;
       display: flex; align-items: center;
-      height: 32px; padding: 0 16px;
+      height: 32px; padding: 0 16px 0 16px;
       background: var(--badge-bg, #00cc85);
       font-size: 14px; font-weight: 500; line-height: 20px;
       color: var(--badge-text, #f2f2f2);
@@ -620,12 +613,14 @@
       transform: translateY(-50%);
       display: block; flex-shrink: 0;
     }
+
     .sc-overview-title {
       font-size: 20px; font-weight: 500; line-height: 28px;
-      color: var(--text-default-heading); text-align: center;
+      color: var(--text-default-heading);
+      text-align: center;
     }
 
-    /* Donut chart  138×138 */
+    /* Donut chart  DS 3107:65132  138×138 */
     .sc-donut-wrap {
       display: flex; align-items: center; justify-content: center;
       position: relative; flex-shrink: 0; align-self: center;
@@ -636,10 +631,11 @@
       transform: translate(-50%, -50%);
       font-size: 28px; font-weight: 700;
       color: var(--surface-primary-default);
-      font-family: var(--font); pointer-events: none;
+      font-family: var(--font);
+      pointer-events: none;
     }
 
-    /* Bottom mini stat card  p:24 r:18 */
+    /* Bottom mini stat card  DS 3107:65136  p:24 r:18 */
     .sc-mini-stat-card {
       background: var(--surface-general-default);
       border-radius: var(--corner-2xl);
@@ -648,35 +644,31 @@
       min-height: 60px;
     }
     .sc-mini-stat-item { flex: 1; display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center; padding: 0 24px; }
-    .sc-mini-stat-item + .sc-mini-stat-item { border-left: 1px solid var(--border-general-default); }
+    .sc-mini-stat-item + .sc-mini-stat-item {
+      border-left: 1px solid var(--border-general-default);
+    }
     .sc-mini-stat-value { font-size: 28px; font-weight: 700; line-height: 36px; color: var(--text-primary-focus); }
     .sc-mini-stat-label { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-heading); }
 
-    /* ── Right column wrapper  DS 5376:191595  flex:2 ── */
-    .sc-right-col {
-      flex: 2;
-      min-width: 0;
-      display: flex; flex-direction: column; gap: var(--space-m);
-    }
-
-    /* ── Mid Container  DS 5376:191595  h:300 p:20 r:18  green border ── */
+    /* ── Mid Container  DS 3107:65145  p:20 gap:45 r:18 ── */
     .sc-mid {
-      flex: 0 0 auto;
-      height: 300px;
-      display: flex; flex-direction: column; gap: 12px;
+      flex: 1;
+      min-width: 0;
+      min-height: 30px;
+      display: flex; flex-direction: column; gap: 45px;
       padding: 20px;
       background: var(--surface-general-default);
-      border: 1px solid var(--sc-inner-border, var(--border-primary-default));
+      border: 1px solid var(--sc-inner-border, var(--border-general-default));
       border-radius: var(--corner-2xl);
-      overflow: hidden;
     }
-    .sc-mid__header { display: flex; align-items: center; gap: var(--space-xs); }
+
+    .sc-mid__header { display: flex; flex-direction: column; gap: 12px; }
     .sc-mid__content { display: flex; flex-direction: column; gap: 0; }
     .sc-mid__subtitle { font-size: 20px; font-weight: 500; line-height: 28px; color: var(--text-default-heading); }
     .sc-mid__value    { font-size: 28px; font-weight: 700; line-height: 36px; color: var(--text-primary-focus); }
 
-    /* Line chart — fills remaining height in mid container */
-    .sc-graph { width: 100%; flex: 1; min-height: 0; }
+    /* Line chart */
+    .sc-graph { width: 100%; aspect-ratio: 380/120; margin-top: auto; margin-bottom: 24px; }
     .sc-graph svg { display: block; width: 100%; height: 100%; }
 
     /* Graph day label tooltip */
@@ -691,32 +683,47 @@
     }
     .graph-tooltip.is-visible { opacity: 1; }
 
-    /* ── Stat row  DS 5376:191595  5 equal individual cards ── */
-    .sc-stat-row {
-      display: flex; gap: 10px;
-      flex-shrink: 0;
-    }
-    .sc-stat-solo {
-      flex: 1; min-width: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 12px;
-      padding: 24px var(--space-xs);
-      background: var(--surface-general-default);
-      border: 1px solid var(--sc-inner-border, var(--border-primary-default));
-      border-radius: var(--corner-2xl);
+    /* ── Right Container  DS 3107:65162  gap:16 ── */
+    .sc-right {
+      flex: 1;
+      min-width: 0;
+      display: flex; flex-direction: column; gap: var(--space-m);
     }
 
-    /* Icon circle  48×48  #d1f7d1 bg */
+    /* Stat cards (right column)  DS 3107:65163 / 65176 / 65189 */
+    .sc-stat-card {
+      background: var(--surface-general-default);
+      border-radius: var(--corner-2xl);
+      padding: 28px 24px;
+      display: flex; align-items: center;
+      border: 1px solid var(--sc-inner-border, var(--border-general-default));
+      flex: 1;
+    }
+    .sc-stat-card--sm { padding: 12px 24px; flex: 0 0 auto; }
+
+    .sc-stat-half {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 12px;
+    }
+    .sc-stat-half + .sc-stat-half {
+      padding-left: 16px;
+      border-left: 1px solid var(--sc-inner-border, var(--border-primary-default));
+    }
+    .sc-stat-half--row {
+      flex-direction: row; align-items: center; justify-content: flex-start;
+      gap: 12px; padding-left: 0; border-left: none;
+    }
+    .sc-stat-half--row .sc-stat-texts { align-items: flex-start; text-align: left; }
+
+    /* Icon circle (48×48, #d1f7d1 bg)  DS p:10 r:60 */
     .sc-icon-circle {
       width: 48px; height: 48px; border-radius: 60px;
       background: #d1f7d1;
       display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; color: var(--icon-primary-default);
+      flex-shrink: 0;
+      color: var(--icon-primary-default);
     }
     .sc-icon-circle svg { display: block; width: 22px; height: 22px; }
-    /* Large icon circle for mid container header (56px) */
-    .sc-icon-circle--lg { width: 56px; height: 56px; flex-shrink: 0; }
-    .sc-icon-circle--lg svg { width: 28px; height: 28px; }
 
     .sc-stat-texts { display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center; }
     .sc-stat-label { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-heading); }
@@ -938,7 +945,7 @@
     .footer__heart { width: 20px; height: 20px; flex-shrink: 0; display: block; color: var(--icon-primary-default); }
 
     /* ═══════════════════════════════════════════════════
-       RESPONSIVE BREAKPOINTS — matches syakila.html
+       RESPONSIVE BREAKPOINTS — matches achievement-report-card.html
        < 1320px → mobile navbar
        Tablet  ≤ 1279px
        Mobile  ≤  767px
@@ -951,22 +958,15 @@
       #NavBar-Tablet       { display: block; padding: 0 var(--page-padding-x); }
       #MenuBar-Desktop     { display: none; }
       #Breadcrumbs-Desktop { display: none; }
-      .footer__inner { padding-left: var(--space-m); padding-right: var(--space-m); }
-      /* Score card: stack left + right-col vertically */
       .sc-card-outer { flex-direction: column; }
-      .sc-right-col { flex: none; }
-      .sc-mid { height: auto; min-height: 260px; }
-      /* Mini stats */
+      .footer__inner { padding-left: var(--space-m); padding-right: var(--space-m); }
       .sc-mini-stat-card  { padding: 16px; }
       .sc-mini-stat-label { font-size: 12px; line-height: 16px; }
       .sc-mini-stat-value { font-size: 22px; line-height: 28px; }
       .sc-mini-stat-item  { padding: 0 16px; }
-      /* Filter card wraps on narrow */
-      .sc-filter-card { flex-wrap: wrap; }
-      .sc-filter-dropdown { max-width: 100%; }
-      /* Stat row wraps to 2-per-row */
-      .sc-stat-row { flex-wrap: wrap; }
-      .sc-stat-solo { flex-basis: calc(50% - 5px); }
+      .sc-left, .sc-mid { flex: 0 0 auto; }
+      .sc-mid { gap: 16px; }
+      .sc-graph { margin-top: 0; margin-bottom: 0; }
       .menubar-panel {
         width: min(1288px, calc(100% - 48px)); top: 0;
         border-top: 0;
@@ -983,23 +983,18 @@
       body { padding-bottom: 86px; }
 
       /* Score card layout */
-      .sc-left { width: 100%; flex: none; }
-      .sc-mid { height: auto; }
-      /* Stat row: 2-per-row on mobile */
-      .sc-stat-row { gap: var(--space-xs); }
-      .sc-stat-solo { flex-basis: calc(50% - 4px); padding: var(--space-xs); gap: 8px; }
-      /* Mini stats */
-      .sc-mini-stat-card  { padding: 12px; }
+      .sc-left, .sc-mid { width: 100%; flex: none; }
+      .sc-subjects { gap: 8px; }
+      .sc-mini-stat-card { padding: 12px; }
       .sc-mini-stat-value { font-size: 20px; line-height: 28px; }
       .sc-mini-stat-label { font-size: 10px; line-height: 14px; }
       /* DS Responsives mobile: H4 → 18px/28lh, T1/T2 → 16px/24lh */
       .sc-overview-title { font-size: 18px; line-height: 28px; }
-      .sc-mid__subtitle  { font-size: 16px; line-height: 24px; }
-      .sc-mid__value     { font-size: 24px; line-height: 32px; }
-      .sc-stat-value     { font-size: 16px; line-height: 24px; }
-      .sc-stat-label     { font-size: 10px; line-height: 14px; }
-      .sc-donut-label    { font-size: 22px; }
-      .sc-filter-title   { font-size: 16px; line-height: 24px; }
+      .sc-mid__subtitle { font-size: 16px; line-height: 24px; }
+      .sc-mid__value    { font-size: 24px; line-height: 32px; }
+      .sc-stat-value    { font-size: 16px; line-height: 24px; }
+      .sc-stat-label    { font-size: 10px; line-height: 14px; }
+      .sc-donut-label   { font-size: 22px; }
       .menubar-overlay {
         display: flex;
         align-items: center;
@@ -1036,7 +1031,7 @@
 <svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
   <defs>
 
-    <!-- ── Topbar action icons (named symbols from syakila.html) ── -->
+    <!-- ── Topbar action icons (named symbols from achievement-report-card.html) ── -->
     <symbol id="ic-search" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 11 19 C 15.418 19 19 15.418 19 11 C 19 6.582 15.418 3 11 3 C 6.582 3 3 6.582 3 11 C 3 15.418 6.582 19 11 19 Z"/><path d="M 21 21 L 16.65 16.65"/></symbol>
     <symbol id="ic-maximize" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 3 16 L 3 19 C 3 19.53 3.211 20.039 3.586 20.414 C 3.961 20.789 4.47 21 5 21 L 8 21"/><path d="M 8 3 L 5 3 C 4.47 3 3.961 3.211 3.586 3.586 C 3.211 3.961 3 4.47 3 5 L 3 8 M 21 8 L 21 5 C 21 4.47 20.789 3.961 20.414 3.586 C 20.039 3.211 19.53 3 19 3 L 16 3 M 16 21 L 19 21 C 19.53 21 20.039 20.789 20.414 20.414 C 20.789 20.039 21 19.53 21 19 L 21 16"/></symbol>
     <symbol id="ic-smartphone" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 17 2 L 7 2 C 5.895 2 5 2.895 5 4 L 5 20 C 5 21.105 5.895 22 7 22 L 17 22 C 18.105 22 19 21.105 19 20 L 19 4 C 19 2.895 18.105 2 17 2 Z"/><path d="M 12 18 L 12.01 18"/></symbol>
@@ -1222,8 +1217,6 @@
     <symbol id="ic-shopping-bag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(3,2)"><path d="M3 0L0 4L0 18C0 18.53 0.21 19.04 0.59 19.41C0.96 19.79 1.47 20 2 20L16 20C16.53 20 17.04 19.79 17.41 19.41C17.79 19.04 18 18.53 18 18L18 4L15 0L3 0ZM13 8C13 9.06 12.58 10.08 11.83 10.83C11.08 11.58 10.06 12 9 12C7.94 12 6.92 11.58 6.17 10.83C5.42 10.08 5 9.06 5 8M0 4L18 4"/></g></symbol>
     <symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(1,1)"><path d="M8 21C8.55 21 9 20.55 9 20C9 19.45 8.55 19 8 19C7.45 19 7 19.45 7 20C7 20.55 7.45 21 8 21ZM19 21C19.55 21 20 20.55 20 20C20 19.45 19.55 19 19 19C18.45 19 18 19.45 18 20C18 20.55 18.45 21 19 21ZM0 0L4 0L6.68 13.39C6.77 13.85 7.02 14.26 7.39 14.56C7.75 14.85 8.21 15.01 8.68 15L18.4 15C18.87 15.01 19.33 14.85 19.69 14.56C20.06 14.26 20.31 13.85 20.4 13.39L22 5L5 5"/></g></symbol>
     <symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,2)"><path d="M10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20ZM6 12C6 12 7.5 14 10 14C12.5 14 14 12 14 12M7 7L7.01 7M13 7L13.01 7"/></g></symbol>
-    <!-- ic-grid = DS Outline/grid node 611:3024 — 2×2 grid of rectangles -->
-    <symbol id="ic-grid" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3L10 3L10 10L3 10Z M14 3L21 3L21 10L14 10Z M14 14L21 14L21 21L14 21Z M3 14L10 14L10 21L3 21Z"/></symbol>
 
   </defs>
 </svg>
@@ -1239,8 +1232,8 @@
 <nav class="navbar">
   <div class="navbar-brand">
     <a class="navbar-logo" href="#">
-      <img src="../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-mark.svg" class="navbar-logo__mark" alt="Pandai mark">
-      <img src="../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-text.svg" class="navbar-logo__text" alt="Pandai">
+      <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/logo-mark.svg" class="navbar-logo__mark" alt="Pandai mark">
+      <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/logo-text.svg" class="navbar-logo__text" alt="Pandai">
     </a>
     <div class="navbar-actions">
       <div class="navbar-action-icons">
@@ -1498,7 +1491,7 @@
 <!-- Achievement Subtopic dropdown  DS node 4742:74267 -->
 <div class="nav-subtopic-dropdown" id="achievement-dropdown" role="menu" aria-hidden="true">
   <div class="nav-subtopic-dropdown__item is-active" role="menuitem"><svg aria-hidden="true"><use href="#ic-pie-chart"/></svg><span class="nav-subtopic-dropdown__item-label">Score Card</span></div>
-  <a class="nav-subtopic-dropdown__item" href="syakila.html" role="menuitem"><svg aria-hidden="true"><use href="#ic-filled-check-circle"/></svg><span class="nav-subtopic-dropdown__item-label">Report Card</span></a>
+  <a class="nav-subtopic-dropdown__item" href="achievement-report-card.html" role="menuitem"><svg aria-hidden="true"><use href="#ic-filled-check-circle"/></svg><span class="nav-subtopic-dropdown__item-label">Report Card</span></a>
   <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-calendar"/></svg><span class="nav-subtopic-dropdown__item-label">History</span></div>
   <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-shield"/></svg><span class="nav-subtopic-dropdown__item-label">Badges</span></div>
   <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-award"/></svg><span class="nav-subtopic-dropdown__item-label">Leaderboard</span></div>
@@ -1665,29 +1658,38 @@
     </div>
   </section>
 
-  <!-- ── FILTER CARD  DS 5376:191594  green border, #e8fbe8 bg ── -->
+  <!-- ── SUBJECT FILTER PILLS  DS 3107:65099 ── -->
   <section id="Subjects-Desktop">
-    <div class="sc-filter-card">
-      <div class="sc-filter-header">
-        <div class="sc-filter-icon-wrap">
-          <svg aria-hidden="true"><use href="#ic-grid"/></svg>
-        </div>
-        <span class="sc-filter-title">Filter by Subjects</span>
-      </div>
-      <button class="sc-filter-dropdown" id="subject-filter-btn" type="button">
-        <span class="sc-filter-dropdown__label" id="subject-filter-label">All Subjects</span>
-        <div class="sc-filter-dropdown__arrow">
-          <svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg>
-        </div>
-      </button>
+    <div class="sc-subjects">
+      <!-- Row 1: All active, then subjects alphabetically as DS shows -->
+      <button class="sc-pill is-active" data-subject="all"      data-progress="61.5" type="button">All</button>
+      <button class="sc-pill" data-subject="account"   data-progress="78.0" type="button">Account</button>
+      <button class="sc-pill" data-subject="add-math"  data-progress="72.0" type="button">Add Math</button>
+      <button class="sc-pill" data-subject="bm"        data-progress="76.0" type="button">Bahasa Melayu</button>
+      <button class="sc-pill" data-subject="biology"   data-progress="88.0" type="button">Biology</button>
+      <button class="sc-pill" data-subject="chemistry" data-progress="65.0" type="button">Chemistry</button>
+      <button class="sc-pill" data-subject="science"   data-progress="85.0" type="button">Science</button>
+      <button class="sc-pill" data-subject="economy"   data-progress="55.0" type="button">Economy</button>
+      <button class="sc-pill" data-subject="english"   data-progress="90.0" type="button">English</button>
+      <button class="sc-pill" data-subject="geography" data-progress="60.0" type="button">Geography</button>
+      <button class="sc-pill" data-subject="history"   data-progress="91.0" type="button">History</button>
+      <button class="sc-pill" data-subject="islamic"   data-progress="84.0" type="button">Islamic Studies</button>
+      <button class="sc-pill" data-subject="kafa"      data-progress="77.0" type="button">KAFA</button>
+      <button class="sc-pill" data-subject="math"      data-progress="80.0" type="button">Mathematics</button>
+      <!-- Row 2 -->
+      <button class="sc-pill" data-subject="rbt"       data-progress="82.0" type="button">RBT</button>
+      <button class="sc-pill" data-subject="moral"     data-progress="50.0" type="button">Moral Studies</button>
+      <button class="sc-pill" data-subject="cs"        data-progress="70.0" type="button">Computer Science</button>
+      <button class="sc-pill" data-subject="physics"   data-progress="78.0" type="button">Physics</button>
+      <button class="sc-pill" data-subject="chinese"   data-progress="80.0" type="button">Chinese Language</button>
     </div>
   </section>
 
-  <!-- ── SCORE CARD  DS 5376:191595  grey outer border, 2-column layout ── -->
+  <!-- ── SCORE CARD  DS 3107:65119  ── -->
   <section id="ScoreCard-Desktop">
     <div class="sc-card-outer">
 
-      <!-- LEFT CONTAINER  p:20 gap:8 r:18  green inner border -->
+      <!-- LEFT CONTAINER  DS 3107:65120  p:20 gap:50 r:18 -->
       <div class="sc-left">
 
         <!-- Header: active subject badge(s) + "Score Overview" title -->
@@ -1696,7 +1698,7 @@
           <h2 class="sc-overview-title">Score Overview</h2>
         </div>
 
-        <!-- Donut chart  61.5%  200×200  r=74 sw=28 -->
+        <!-- Donut chart  61.5%  170×170  r=62 sw=14 → 110px inner diameter -->
         <div class="sc-donut-wrap">
           <svg viewBox="0 0 200 200" width="200" height="200" aria-label="Score Overview: 61.5%">
             <!-- Grey track -->
@@ -1709,7 +1711,7 @@
           <span id="donut-label" class="sc-donut-label" aria-hidden="true">61.5%</span>
         </div>
 
-        <!-- Bottom stats card  p:24 r:18 -->
+        <!-- Bottom stats card  DS 3107:65136  p:24 r:18 -->
         <div class="sc-mini-stat-card">
           <div class="sc-mini-stat-item">
             <span class="sc-mini-stat-value">10</span>
@@ -1723,64 +1725,62 @@
 
       </div><!-- /sc-left -->
 
-      <!-- RIGHT COLUMN  DS 5376:191595  flex:2  gap:16 -->
-      <div class="sc-right-col">
+      <!-- MID CONTAINER  DS 3107:65145  p:20 gap:45 r:18 -->
+      <div class="sc-mid">
 
-        <!-- MID CONTAINER  h:300 p:20 r:18  green inner border -->
-        <div class="sc-mid">
-
-          <!-- Header: large icon circle (56px) + subtitle + value  horizontal row -->
-          <div class="sc-mid__header">
-            <div class="sc-icon-circle sc-icon-circle--lg">
-              <svg aria-hidden="true"><use href="#ic-activity"/></svg>
-            </div>
-            <div class="sc-mid__content">
-              <span class="sc-mid__subtitle">Score for the past one week</span>
-              <span class="sc-mid__value">133</span>
-            </div>
+        <!-- Header: activity icon + subtitle + value -->
+        <div class="sc-mid__header">
+          <div class="sc-icon-circle">
+            <svg aria-hidden="true"><use href="#ic-activity"/></svg>
           </div>
-
-          <!-- Line chart  7 data points  Sun→Sat  animated -->
-          <div class="sc-graph" aria-label="Score trend line chart">
-            <svg id="score-graph" viewBox="0 0 380 120" preserveAspectRatio="none" fill="none">
-              <!-- Zero baseline -->
-              <line x1="0" y1="68" x2="380" y2="68" stroke="var(--border-general-default)" stroke-width="1"/>
-              <!-- Smooth line -->
-              <path id="graph-line" stroke="var(--surface-primary-default)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              <!-- Dots -->
-              <circle id="graph-dot-0" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-1" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-2" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-3" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-4" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-5" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-6" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <!-- Hit areas -->
-              <rect id="graph-hit-0" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-1" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-2" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-3" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-4" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-5" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-6" fill="transparent" style="cursor:pointer"/>
-              <!-- Day labels -->
-              <text x="34"  y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Sun</text>
-              <text x="86"  y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Mon</text>
-              <text x="138" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Tue</text>
-              <text x="190" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Wed</text>
-              <text x="242" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Thu</text>
-              <text x="294" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Fri</text>
-              <text x="346" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Sat</text>
-            </svg>
+          <div class="sc-mid__content">
+            <span class="sc-mid__subtitle">Score for the past one week</span>
+            <span class="sc-mid__value">133</span>
           </div>
+        </div>
 
-        </div><!-- /sc-mid -->
+        <!-- Line chart  7 data points  Sun→Sat  animated -->
+        <div class="sc-graph" aria-label="Score trend line chart">
+          <svg id="score-graph" viewBox="0 0 380 120" preserveAspectRatio="none" fill="none">
+            <!-- Zero baseline -->
+            <line x1="0" y1="68" x2="380" y2="68" stroke="var(--border-general-default)" stroke-width="1"/>
+            <!-- Smooth line -->
+            <path id="graph-line" stroke="var(--surface-primary-default)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <!-- Dots -->
+            <circle id="graph-dot-0" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
+            <circle id="graph-dot-1" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
+            <circle id="graph-dot-2" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
+            <circle id="graph-dot-3" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
+            <circle id="graph-dot-4" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
+            <circle id="graph-dot-5" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
+            <circle id="graph-dot-6" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
+            <!-- Hit areas -->
+            <rect id="graph-hit-0" fill="transparent" style="cursor:pointer"/>
+            <rect id="graph-hit-1" fill="transparent" style="cursor:pointer"/>
+            <rect id="graph-hit-2" fill="transparent" style="cursor:pointer"/>
+            <rect id="graph-hit-3" fill="transparent" style="cursor:pointer"/>
+            <rect id="graph-hit-4" fill="transparent" style="cursor:pointer"/>
+            <rect id="graph-hit-5" fill="transparent" style="cursor:pointer"/>
+            <rect id="graph-hit-6" fill="transparent" style="cursor:pointer"/>
+            <!-- Day labels -->
+            <text x="34"  y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Sun</text>
+            <text x="86"  y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Mon</text>
+            <text x="138" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Tue</text>
+            <text x="190" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Wed</text>
+            <text x="242" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Thu</text>
+            <text x="294" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Fri</text>
+            <text x="346" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Sat</text>
+          </svg>
+        </div>
 
-        <!-- STAT ROW  DS 5376:191595  5 equal individual cards  gap:10 -->
-        <div class="sc-stat-row">
+      </div><!-- /sc-mid -->
 
-          <!-- Card 1: Current Streak -->
-          <div class="sc-stat-solo">
+      <!-- RIGHT CONTAINER  DS 3107:65162  gap:16 -->
+      <div class="sc-right">
+
+        <!-- Stat Card 1: Current Streak | Longest Streak  DS 3107:65163  h:156 p:24 r:18 -->
+        <div class="sc-stat-card">
+          <div class="sc-stat-half">
             <div class="sc-icon-circle">
               <svg aria-hidden="true"><use href="#ic-rotate-cw"/></svg>
             </div>
@@ -1789,20 +1789,20 @@
               <span class="sc-stat-value">2 Days</span>
             </div>
           </div>
-
-          <!-- Card 2: Longest Streak -->
-          <div class="sc-stat-solo">
+          <div class="sc-stat-half">
             <div class="sc-icon-circle">
               <svg aria-hidden="true"><use href="#ic-refresh-cw"/></svg>
             </div>
             <div class="sc-stat-texts">
               <span class="sc-stat-label">Longest Streak</span>
-              <span class="sc-stat-value">22 Days</span>
+              <span class="sc-stat-value">1 Days</span>
             </div>
           </div>
+        </div>
 
-          <!-- Card 3: Today's Quiz -->
-          <div class="sc-stat-solo">
+        <!-- Stat Card 2: Today's Quiz | Total Quiz  DS 3107:65176  h:156 p:24 r:18 -->
+        <div class="sc-stat-card">
+          <div class="sc-stat-half">
             <div class="sc-icon-circle">
               <svg aria-hidden="true"><use href="#ic-edit-3"/></svg>
             </div>
@@ -1811,20 +1811,20 @@
               <span class="sc-stat-value">2 Quizzes</span>
             </div>
           </div>
-
-          <!-- Card 4: Total Quiz -->
-          <div class="sc-stat-solo">
+          <div class="sc-stat-half">
             <div class="sc-icon-circle">
               <svg aria-hidden="true"><use href="#ic-copy"/></svg>
             </div>
             <div class="sc-stat-texts">
               <span class="sc-stat-label">Total Quiz</span>
-              <span class="sc-stat-value">205 Quizzes</span>
+              <span class="sc-stat-value">204 Quizzes</span>
             </div>
           </div>
+        </div>
 
-          <!-- Card 5: Last Submission -->
-          <div class="sc-stat-solo">
+        <!-- Stat Card 3: Last Submission  DS 3107:65189  h:88 p:12/24 r:18 -->
+        <div class="sc-stat-card sc-stat-card--sm">
+          <div class="sc-stat-half sc-stat-half--row">
             <div class="sc-icon-circle">
               <svg aria-hidden="true"><use href="#ic-clock"/></svg>
             </div>
@@ -1833,10 +1833,9 @@
               <span class="sc-stat-value">5 Hours Ago</span>
             </div>
           </div>
+        </div>
 
-        </div><!-- /sc-stat-row -->
-
-      </div><!-- /sc-right-col -->
+      </div><!-- /sc-right -->
 
     </div><!-- /sc-card-outer -->
   </section>
@@ -2488,6 +2487,9 @@
         el.style.background = hexToRgba(color, 0.15);
         el.style.color = color;
       });
+      document.querySelectorAll('.sc-stat-half + .sc-stat-half').forEach(el => {
+        el.style.borderLeftColor = color;
+      });
     }
 
     const cardOuter = document.querySelector('.sc-card-outer');
@@ -2495,46 +2497,22 @@
       if (cardOuter) cardOuter.style.setProperty('--sc-inner-border', color);
     }
 
-    /* ── Filter dropdown — subject selection (prototype: cycles through subjects on click) ── */
-    (function() {
-      var subjects = [
-        { key:'all',       progress:61.5, label:'All Subjects'    },
-        { key:'account',   progress:78.0, label:'Account'         },
-        { key:'add-math',  progress:72.0, label:'Add Math'        },
-        { key:'bm',        progress:76.0, label:'Bahasa Melayu'   },
-        { key:'biology',   progress:88.0, label:'Biology'         },
-        { key:'chemistry', progress:65.0, label:'Chemistry'       },
-        { key:'science',   progress:85.0, label:'Science'         },
-        { key:'economy',   progress:55.0, label:'Economy'         },
-        { key:'english',   progress:90.0, label:'English'         },
-        { key:'geography', progress:60.0, label:'Geography'       },
-        { key:'history',   progress:91.0, label:'History'         },
-        { key:'islamic',   progress:84.0, label:'Islamic Studies' },
-        { key:'kafa',      progress:77.0, label:'KAFA'            },
-        { key:'math',      progress:80.0, label:'Mathematics'     },
-        { key:'rbt',       progress:82.0, label:'RBT'             },
-        { key:'moral',     progress:50.0, label:'Moral Studies'   },
-        { key:'cs',        progress:70.0, label:'Computer Science'},
-        { key:'physics',   progress:78.0, label:'Physics'         },
-        { key:'chinese',   progress:80.0, label:'Chinese Language'},
-      ];
-      var idx = 0;
-      var btn = document.getElementById('subject-filter-btn');
-      var lbl = document.getElementById('subject-filter-label');
-      if (!btn) return;
-      btn.addEventListener('click', function() {
-        idx = (idx + 1) % subjects.length;
-        var s           = subjects[idx];
-        var color       = s.key === 'all' ? '#00cc85' : (SUBJECT_DATA[s.key]?.bg     || '#00cc85');
-        var borderColor = s.key === 'all' ? '#00cc85' : (SUBJECT_DATA[s.key]?.border || '#00cc85');
-        if (lbl) lbl.textContent = s.label;
-        renderBadges(s.key);
+    /* ── Subject filter pills — toggle active, render badges, animate donut + graph ── */
+    document.querySelectorAll('.sc-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.sc-pill').forEach(p => p.classList.remove('is-active'));
+        pill.classList.add('is-active');
+        const key         = pill.dataset.subject;
+        const target      = parseFloat(pill.dataset.progress ?? '0');
+        const color       = key === 'all' ? '#00cc85' : (SUBJECT_DATA[key]?.bg     || '#00cc85');
+        const borderColor = key === 'all' ? '#00cc85' : (SUBJECT_DATA[key]?.border || '#00cc85');
+        renderBadges(key);
         setAccentColor(color);
         setInnerBorder(borderColor);
-        animateDonut(s.progress, 900);
-        animateGraph(s.key, 900);
+        animateDonut(target, 900);
+        animateGraph(key, 900);
       });
-    })();
+    });
 
     /* Initial render — "All" is active on load */
     renderBadges('all');
@@ -2544,6 +2522,175 @@
 
   } catch(e) { console.warn('Score card init error:', e); }
 </script>
+
+<script>
+/* test.page.compiled — Top Menu Bar navigation + persistent active state (v5) */
+(function () {
+  var TOP_ROUTES = {
+    'Home':     'home.html',
+    'Practice': 'practice.html'
+  };
+  var SUB_ROUTES = {
+    'My Classes':       'class-my-classes.html',
+    'Browse Classes':   'class-browse-classes.html',
+    'Learning Hub':     'learn-learning-hub.html',
+    'Quick Notes':      'learn-quick-notes.html',
+    'Score Card':       'achievement-score-card.html',
+    'Report Card':      'achievement-report-card.html',
+    'Coin Quests':      'rewards-coin-quests.html',
+    'My Rewards':       'rewards-my-rewards.html',
+    'Merchandise':      'rewards-merchandise.html',
+    'eVoucher':         'rewards-evoucher.html',
+    'Avatar':           'rewards-avatar.html'
+  };
+  /* Page → parent main-menu label that should show active state */
+  var PAGE_ACTIVE_MAIN = {
+    'home.html':                       'Home',
+    'practice.html':                   'Practice',
+    'class-my-classes.html':           'Class',
+    'class-browse-classes.html':       'Class',
+    'learn-learning-hub.html':         'Learn',
+    'learn-quick-notes.html':          'Learn',
+    'achievement-score-card.html':     'Achievement',
+    'achievement-report-card.html':    'Achievement',
+    'achievement-analysis-card.html':  'Achievement',
+    'rewards-coin-quests.html':        'Rewards',
+    'rewards-my-rewards.html':         'Rewards',
+    'rewards-merchandise.html':        'Rewards',
+    'rewards-evoucher.html':           'Rewards',
+    'rewards-avatar.html':             'Rewards'
+  };
+
+  var SEL_A_BTN  = '#NavTopMenu-Desktop .nav-menu-btn';
+  var SEL_A_ITEM = '#NavTopMenu-Desktop .nav-menu-dropdown__item';
+  var SEL_B_BTN  = '.navbar-nav .nav-btn, .menubar-nav .nav-btn';
+  var SEL_B_ITEM = '.nav-subtopic-dropdown__item';
+
+  function nav(href) { return function (e) { e.preventDefault(); e.stopPropagation(); window.location.href = href; }; }
+
+  function currentFile() {
+    var p = window.location.pathname.replace(/[?#].*$/, '');
+    if (p.charAt(p.length - 1) === '/') return 'home.html';
+    var f = p.substring(p.lastIndexOf('/') + 1).toLowerCase();
+    if (!f) return 'home.html';
+    if (f.indexOf('.html') < 0) f += '.html';
+    return f;
+  }
+
+  function wireLinks() {
+    document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
+      if (btn.hasAttribute('aria-haspopup')) return;
+      var href = TOP_ROUTES[(btn.getAttribute('aria-label') || '').trim()];
+      if (href && !btn.dataset.tpcWired) {
+        btn.addEventListener('click', nav(href), true);
+        btn.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_A_ITEM).forEach(function (item) {
+      var lbl = item.querySelector('.nav-menu-dropdown__label');
+      if (!lbl) return;
+      var href = SUB_ROUTES[lbl.textContent.trim()];
+      if (href && !item.dataset.tpcWired) {
+        item.addEventListener('click', nav(href), true);
+        item.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
+      if (btn.hasAttribute('aria-haspopup')) return;
+      var lbl = btn.querySelector('.nav-btn__label');
+      if (!lbl) return;
+      var href = TOP_ROUTES[lbl.textContent.trim()];
+      if (href && !btn.dataset.tpcWired) {
+        btn.addEventListener('click', nav(href), true);
+        btn.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_B_ITEM).forEach(function (item) {
+      var lbl = item.querySelector('.nav-subtopic-dropdown__item-label');
+      if (!lbl) return;
+      var href = SUB_ROUTES[lbl.textContent.trim()];
+      if (!href) return;
+      if (item.tagName === 'A') item.setAttribute('href', href);
+      if (!item.dataset.tpcWired) {
+        item.addEventListener('click', nav(href), true);
+        item.dataset.tpcWired = '1';
+      }
+    });
+  }
+
+  var applying = false;
+  function applyActive() {
+    if (applying) return;
+    applying = true;
+    try {
+      var label = PAGE_ACTIVE_MAIN[currentFile()];
+      document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
+        var match = !!(label && (btn.getAttribute('aria-label') || '').trim() === label);
+        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
+        if (match) {
+          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
+        } else if (btn.hasAttribute('aria-current')) {
+          btn.removeAttribute('aria-current');
+        }
+      });
+      document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
+        var lbl = btn.querySelector('.nav-btn__label');
+        var match = !!(label && lbl && lbl.textContent.trim() === label);
+        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
+        if (match) {
+          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
+        } else if (btn.hasAttribute('aria-current')) {
+          btn.removeAttribute('aria-current');
+        }
+      });
+    } finally {
+      applying = false;
+    }
+  }
+
+  var observing = false;
+  function startObserver() {
+    if (observing || typeof MutationObserver !== 'function') return;
+    var targets = [];
+    var a = document.getElementById('NavTopMenu-Desktop'); if (a) targets.push(a);
+    document.querySelectorAll('.navbar-nav, .menubar-nav').forEach(function (n) { targets.push(n); });
+    if (!targets.length) return;
+    /* Synchronous re-apply on every batch of mutations — runs as microtask, before paint */
+    var observer = new MutationObserver(applyActive);
+    targets.forEach(function (t) {
+      observer.observe(t, { attributes: true, subtree: true, attributeFilter: ['class', 'aria-current'] });
+    });
+    observing = true;
+  }
+
+  function init() {
+    wireLinks();
+    applyActive();
+    startObserver();
+    /* Defeat any deferred init code that re-asserts Home — multiple deferred passes */
+    [0, 50, 150, 400, 1000, 2500].forEach(function (d) { setTimeout(applyActive, d); });
+    /* 5s safety net: re-check every 250ms for 5s after load */
+    var ticks = 0;
+    var iv = setInterval(function () {
+      applyActive();
+      if (++ticks >= 20) clearInterval(iv);
+    }, 250);
+    /* Also re-apply on user interaction */
+    document.addEventListener('click',     function () { setTimeout(applyActive, 0); }, true);
+    document.addEventListener('mouseleave',function () { setTimeout(applyActive, 0); }, true);
+    document.addEventListener('mouseup',   function () { setTimeout(applyActive, 0); }, true);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+
+
 
 </body>
 </html>

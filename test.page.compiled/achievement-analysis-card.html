@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Score Card — Pandai</title>
+  <title>Analysis for Bahasa Melayu Form 5 — Pandai</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     /* ═══════════════════════════════════════════════════
@@ -29,6 +30,8 @@
       --surface-secondary-default-subtle:     #e8fbe8;
       --surface-tertiary-default:             #00564c;
       --surface-disabled-primary:             #f2f2f2;
+      --surface-alert-default:                #ff9f43;
+      --surface-warning-default:              #ff4c51;
 
       --border-primary-default:  #00cc85;
       --border-primary-focus:    #00a36a;
@@ -63,10 +66,6 @@
       --space-xxs:  4px;
       --space-none: 0px;
 
-      --scale-25:  1px;
-      --scale-200: 8px;
-      --scale-500: 20px;
-
       --font:           'Poppins', sans-serif;
       --page-bg:        var(--surface-general-default);
       --page-max-width: 100%;
@@ -88,12 +87,8 @@
     }
     button, input, select, textarea { font-family: inherit; }
 
-    /* ── Shared icon wrapper ── */
-    .pd-icon { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; flex-shrink: 0; }
-    .pd-icon svg { display: block; width: 20px; height: 20px; }
-
     /* ───────────────────────────────────────────────
-       NAVBAR 1.5  DS 2337:21975 — matches syakila.html exactly
+       NAVBAR 1.5  DS 2337:21975 — matches achievement-report-card.html exactly
     ─────────────────────────────────────────────── */
     .navbar { padding: 0 var(--page-padding-x); display: flex; flex-direction: column; gap: var(--space-s); }
 
@@ -191,7 +186,6 @@
     .nav-btn:hover .nav-btn__inner          { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
     .nav-btn:hover .nav-btn__label          { color: var(--text-secondary-focus); }
     .nav-btn:hover .nav-btn__icon-wrap      { color: var(--icon-secondary-hover); }
-    /* Pressed — DS State=Pressed: Surface/primary/focus #00a36a, green text/icon */
     .nav-btn.is-pressed .nav-btn__inner     { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
     .nav-btn.is-pressed .nav-btn__label     { color: var(--text-primary-default); }
     .nav-btn.is-pressed .nav-btn__icon-wrap { color: var(--icon-primary-default); }
@@ -278,7 +272,6 @@
       transition: opacity 0.18s, transform 0.18s;
     }
     .profile-menu.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
-    /* Header */
     .profile-menu__header {
       background: #f6fef6; border: 1px solid var(--border-primary-default);
       border-radius: 16px; padding: var(--space-m);
@@ -321,7 +314,6 @@
     }
     .profile-menu__upgrade svg { width: 20px; height: 20px; flex-shrink: 0; }
     .profile-menu__upgrade-text { font-size: 14px; font-weight: 400; line-height: 20px; white-space: nowrap; }
-    /* Menu list */
     .profile-menu__menu { display: flex; flex-direction: column; gap: var(--space-xs); }
     .profile-menu__item {
       display: flex; align-items: center; gap: 10px;
@@ -375,6 +367,7 @@
       transition: opacity 0.18s, transform 0.18s;
     }
     .notif-dropdown.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    /* Item — Default state: outer no-border, inner bottom divider */
     .notif-item {
       display: flex; align-items: flex-start;
       padding: 12px 12px 0;
@@ -389,19 +382,23 @@
       transition: border-color 0.15s, padding 0.15s;
     }
     .notif-item:last-of-type .notif-item__inner { border-bottom: none; }
+    /* Hover state — #f6fef6 bg, green border, 16px radius */
     .notif-item:hover { background: #f6fef6; border-color: var(--border-primary-default); padding: 12px; }
     .notif-item:hover .notif-item__inner { border-bottom: none; padding-bottom: 0; }
     .notif-item:hover .notif-item__text { color: var(--text-tertiary-default); }
+    /* Pressed state — Surface/primary/focus bg */
     .notif-item.is-pressed { background: var(--surface-primary-focus); border-color: var(--border-primary-default); padding: 12px; }
     .notif-item.is-pressed .notif-item__inner { border-bottom: none; padding-bottom: 0; }
     .notif-item.is-pressed .notif-item__text { color: var(--text-primary-default); }
     .notif-item.is-pressed .notif-item__time { color: var(--text-primary-default); }
+    /* Avatar — 60×60, icon 50×50 (inset 8.33%) */
     .notif-item__avatar { width: 60px; height: 60px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--icon-primary-default); }
     .notif-item__avatar svg { width: 50px; height: 50px; }
     .notif-item__texts { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
     .notif-item__text { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-default-body); }
     .notif-item__time { font-size: 10px; font-weight: 500; line-height: 12px; color: var(--text-primary-default); }
     .notif-item__dot { width: 8px; height: 8px; border-radius: 60px; background: var(--surface-primary-default); flex-shrink: 0; margin-top: 4px; }
+    /* CTA button */
     .notif-dropdown__cta {
       margin-top: var(--space-m); width: 100%; height: 48px;
       background: var(--surface-primary-default);
@@ -496,231 +493,6 @@
     .pd-link15__text         { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
     .pd-link15__text--parent { color: var(--text-primary-default); }
     .pd-breadcrumbs__chevron { width: 16px; height: 16px; color: var(--text-primary-default); flex-shrink: 0; }
-
-    /* ───────────────────────────────────────────────
-       FILTER CARD  DS 5376:191594
-       Green border, #e8fbe8 bg, horizontal row
-    ─────────────────────────────────────────────── */
-    .sc-filter-card {
-      display: flex; align-items: center; gap: var(--space-m);
-      padding: var(--space-m);
-      background: var(--surface-secondary-default-subtle);
-      border: 1px solid var(--border-primary-default);
-      border-radius: var(--corner-4xl);
-      margin-bottom: var(--space-m);
-    }
-    .sc-filter-header {
-      display: flex; align-items: center; gap: var(--space-xs);
-      flex-shrink: 0;
-    }
-    .sc-filter-icon-wrap {
-      width: 28px; height: 28px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--icon-primary-default);
-    }
-    .sc-filter-icon-wrap svg { display: block; width: 24px; height: 24px; }
-    .sc-filter-title {
-      font-size: 18px; font-weight: 600; line-height: 28px;
-      color: var(--text-tertiary-default);
-      white-space: nowrap;
-    }
-    .sc-filter-dropdown {
-      display: flex; align-items: center; gap: var(--space-xs);
-      height: 32px; padding: 2px var(--space-xs) 2px var(--space-m);
-      background: var(--surface-general-default);
-      border: 1px solid var(--border-general-default);
-      border-radius: var(--corner-rounded);
-      cursor: pointer; font-family: var(--font);
-      flex-grow: 1; min-width: 0; max-width: 313px;
-    }
-    .sc-filter-dropdown__label {
-      flex: 1; min-width: 0;
-      font-size: 12px; font-weight: 600; line-height: 18px;
-      color: var(--text-primary-default);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .sc-filter-dropdown__arrow {
-      width: 20px; height: 20px; flex-shrink: 0;
-      background: var(--surface-primary-default);
-      border-radius: 60px; padding: 4px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .sc-filter-dropdown__arrow svg { display: block; width: 12px; height: 12px; color: var(--surface-general-default); }
-    .sc-filter-dropdown:hover { border-color: var(--border-primary-default); }
-
-    /* ───────────────────────────────────────────────
-       SCORE CARD - 1.5  DS 5376:191595
-       Outer: grey border #d9d9d9, #e8fbe8 bg, 24px radius
-       2 columns: left (flex:1) + right-col (flex:2)
-    ─────────────────────────────────────────────── */
-    .sc-card-outer {
-      display: flex;
-      gap: var(--space-m);
-      padding: var(--space-m);
-      background: var(--surface-secondary-default-subtle);
-      border: 1px solid var(--border-general-default);
-      border-radius: var(--corner-4xl);
-      align-items: stretch;
-    }
-
-    /* ── Left Container  p:20 gap:8 r:18  green inner border ── */
-    .sc-left {
-      flex: 1;
-      min-width: 0;
-      display: flex; flex-direction: column; gap: 8px;
-      justify-content: space-between;
-      padding: 20px;
-      background: var(--surface-general-default);
-      border: 1px solid var(--sc-inner-border, var(--border-primary-default));
-      border-radius: var(--corner-2xl);
-    }
-    .sc-left__header { display: flex; flex-direction: column; gap: 7px; }
-
-    /* "All Subjects" pill */
-    .sc-all-pill {
-      width: fit-content; height: 32px;
-      padding: 0 var(--space-m);
-      display: flex; align-items: center; justify-content: center;
-      border: 1px solid var(--border-primary-default);
-      border-radius: var(--corner-rounded);
-      background: var(--surface-general-default);
-      color: var(--text-primary-default);
-      font-size: 12px; font-weight: 600; line-height: 18px;
-      font-family: var(--font);
-    }
-
-    /* Subject badge display — DS L size (32px) */
-    .sc-badge-display {
-      display: flex; flex-wrap: wrap;
-      gap: 6px; align-items: center; justify-content: center;
-    }
-    .sc-subject-badge {
-      display: inline-flex; align-items: center;
-      height: 32px; border-radius: 60px;
-      border: 1px solid var(--badge-border, #ccc);
-      overflow: hidden; flex-shrink: 0;
-    }
-    .sc-subject-badge__icon {
-      display: flex; align-items: center; justify-content: center;
-      width: 40px; height: 32px; background: #fff;
-      padding: 4px 8px 4px 12px; flex-shrink: 0;
-    }
-    .sc-subject-badge__icon img { display: block; width: 20px; height: 20px; object-fit: contain; }
-    .sc-subject-badge__label {
-      position: relative;
-      display: flex; align-items: center;
-      height: 32px; padding: 0 16px;
-      background: var(--badge-bg, #00cc85);
-      font-size: 14px; font-weight: 500; line-height: 20px;
-      color: var(--badge-text, #f2f2f2);
-      white-space: nowrap; font-family: var(--font);
-    }
-    .sc-subject-badge__pointer {
-      position: absolute; left: 0; top: 50%;
-      transform: translateY(-50%);
-      display: block; flex-shrink: 0;
-    }
-    .sc-overview-title {
-      font-size: 20px; font-weight: 500; line-height: 28px;
-      color: var(--text-default-heading); text-align: center;
-    }
-
-    /* Donut chart  138×138 */
-    .sc-donut-wrap {
-      display: flex; align-items: center; justify-content: center;
-      position: relative; flex-shrink: 0; align-self: center;
-    }
-    .sc-donut-wrap svg { display: block; }
-    .sc-donut-label {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 28px; font-weight: 700;
-      color: var(--surface-primary-default);
-      font-family: var(--font); pointer-events: none;
-    }
-
-    /* Bottom mini stat card  p:24 r:18 */
-    .sc-mini-stat-card {
-      background: var(--surface-general-default);
-      border-radius: var(--corner-2xl);
-      padding: 24px;
-      display: flex; align-items: center;
-      min-height: 60px;
-    }
-    .sc-mini-stat-item { flex: 1; display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center; padding: 0 24px; }
-    .sc-mini-stat-item + .sc-mini-stat-item { border-left: 1px solid var(--border-general-default); }
-    .sc-mini-stat-value { font-size: 28px; font-weight: 700; line-height: 36px; color: var(--text-primary-focus); }
-    .sc-mini-stat-label { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-heading); }
-
-    /* ── Right column wrapper  DS 5376:191595  flex:2 ── */
-    .sc-right-col {
-      flex: 2;
-      min-width: 0;
-      display: flex; flex-direction: column; gap: var(--space-m);
-    }
-
-    /* ── Mid Container  DS 5376:191595  h:300 p:20 r:18  green border ── */
-    .sc-mid {
-      flex: 0 0 auto;
-      height: 300px;
-      display: flex; flex-direction: column; gap: 12px;
-      padding: 20px;
-      background: var(--surface-general-default);
-      border: 1px solid var(--sc-inner-border, var(--border-primary-default));
-      border-radius: var(--corner-2xl);
-      overflow: hidden;
-    }
-    .sc-mid__header { display: flex; align-items: center; gap: var(--space-xs); }
-    .sc-mid__content { display: flex; flex-direction: column; gap: 0; }
-    .sc-mid__subtitle { font-size: 20px; font-weight: 500; line-height: 28px; color: var(--text-default-heading); }
-    .sc-mid__value    { font-size: 28px; font-weight: 700; line-height: 36px; color: var(--text-primary-focus); }
-
-    /* Line chart — fills remaining height in mid container */
-    .sc-graph { width: 100%; flex: 1; min-height: 0; }
-    .sc-graph svg { display: block; width: 100%; height: 100%; }
-
-    /* Graph day label tooltip */
-    .graph-tooltip {
-      position: fixed; z-index: 200; pointer-events: none;
-      background: var(--text-default-heading); color: #fff;
-      font-family: var(--font); font-size: 11px; font-weight: 500;
-      padding: 3px 8px; border-radius: 6px;
-      transform: translate(-50%, calc(-100% - 8px));
-      opacity: 0; transition: opacity 0.15s;
-      white-space: nowrap;
-    }
-    .graph-tooltip.is-visible { opacity: 1; }
-
-    /* ── Stat row  DS 5376:191595  5 equal individual cards ── */
-    .sc-stat-row {
-      display: flex; gap: 10px;
-      flex-shrink: 0;
-    }
-    .sc-stat-solo {
-      flex: 1; min-width: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 12px;
-      padding: 24px var(--space-xs);
-      background: var(--surface-general-default);
-      border: 1px solid var(--sc-inner-border, var(--border-primary-default));
-      border-radius: var(--corner-2xl);
-    }
-
-    /* Icon circle  48×48  #d1f7d1 bg */
-    .sc-icon-circle {
-      width: 48px; height: 48px; border-radius: 60px;
-      background: #d1f7d1;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; color: var(--icon-primary-default);
-    }
-    .sc-icon-circle svg { display: block; width: 22px; height: 22px; }
-    /* Large icon circle for mid container header (56px) */
-    .sc-icon-circle--lg { width: 56px; height: 56px; flex-shrink: 0; }
-    .sc-icon-circle--lg svg { width: 28px; height: 28px; }
-
-    .sc-stat-texts { display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center; }
-    .sc-stat-label { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-heading); }
-    .sc-stat-value { font-size: 18px; font-weight: 700; line-height: 28px; color: var(--text-primary-focus); }
 
     /* ───────────────────────────────────────────────
        MOBILE NAVBAR  DS 1943:22641
@@ -918,6 +690,338 @@
     .mobile-nav-tab.is-active { background: var(--surface-primary-default); color: var(--text-primary-on-color); }
     .mobile-nav-tab.is-active svg { color: var(--text-primary-on-color); }
 
+    /* ═══════════════════════════════════════════════════
+       ANALYSIS CARD
+       Based on DS node 3282:68207
+    ═══════════════════════════════════════════════════ */
+
+    /* ── Primary Card outer (bg #e8fbe8, green border, 24px r) ── */
+    .an-outer {
+      display: flex; flex-direction: column; gap: var(--space-xs);
+      padding: var(--space-m);
+      background: var(--surface-secondary-default-subtle); /* #e8fbe8 */
+      border: 1px solid var(--border-default);
+      border-radius: var(--corner-4xl);
+      overflow: hidden;
+    }
+
+    /* ── Card header row (subject badge + download btn) ── */
+    .an-header {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 32px; flex-shrink: 0;
+    }
+
+    /* ── Subject Badge BM — L size (32px)
+       DS: Subject Badge/Bahasa Melayu - L
+       border: 1px solid #2e4799 (L variant from design context)
+    ── */
+    .an-subject-badge {
+      display: inline-flex; align-items: center;
+      height: 32px; border-radius: 60px;
+      border: 1px solid var(--badge-border, #2e4799);
+      overflow: hidden; flex-shrink: 0;
+    }
+    .an-subject-badge__icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 32px;
+      background: var(--surface-general-default);
+      padding: 4px 8px 4px 12px; flex-shrink: 0;
+    }
+    .an-subject-badge__icon img { display: block; width: 20px; height: 20px; object-fit: contain; }
+    .an-subject-badge__label {
+      position: relative;
+      display: flex; align-items: center;
+      height: 32px; padding: 0 16px 0 12px;
+      background: var(--badge-bg, #4d77ff);
+      font-size: 14px; font-weight: 500; line-height: 20px;
+      color: var(--badge-text, #f2f2f2); white-space: nowrap; font-family: var(--font);
+    }
+    .an-subject-badge__pointer {
+      position: absolute; left: 0; top: 50%;
+      transform: translateY(-50%);
+      display: block; flex-shrink: 0;
+    }
+
+    /* ── Download button (Secondary style, 32px) ── */
+    .an-download-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      height: 32px; padding: 2px 8px;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-rounded);
+      color: var(--text-primary-default);
+      font-family: var(--font); font-size: 12px; font-weight: 600; line-height: 18px;
+      cursor: pointer; white-space: nowrap; flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .an-download-btn svg { display: block; width: 16px; height: 16px; flex-shrink: 0; }
+    .an-download-btn:hover {
+      background: var(--surface-secondary-default);
+      border-color: var(--border-secondary-focus);
+      color: var(--text-secondary-focus);
+    }
+
+    /* ── Content area (flex-col, gap-16px) ── */
+    .an-content {
+      display: flex; flex-direction: column; gap: var(--space-m);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       ANALYTICS INNER CARD
+       DS: white bg, grey border, 18px r, pt-28 px-60 pb-54
+    ═══════════════════════════════════════════════════ */
+    .an-analytics-card {
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-general-default);
+      border-radius: var(--corner-2xl);
+      padding: 28px 60px 54px;
+      overflow: visible;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Row with grade + donut pairs. gap-60px between grade and donut section */
+    .an-analytics-row {
+      display: flex; align-items: center;
+      gap: 60px; width: 100%; overflow: hidden;
+    }
+
+    /* ── Grade column (195px w, flex-col gap-16px) ── */
+    .an-grade {
+      width: 195px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: var(--space-m);
+      justify-content: center;
+    }
+
+    /* "A 97%" large grade row */
+    .an-grade__title-row {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--text-default-heading);
+      font-size: 56px; line-height: 1;
+    }
+    .an-grade__letter { font-weight: 700; }
+    .an-grade__pct    { font-weight: 400; }
+
+    /* Mastery pill (green, 32px, pill shape) */
+    .an-mastery-pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 32px; padding: 2px 16px;
+      background: var(--surface-primary-default);
+      border-radius: var(--corner-rounded);
+      font-family: var(--font); font-size: 14px; font-weight: 400; line-height: 20px;
+      color: white; white-space: nowrap;
+      align-self: flex-start;
+    }
+    .an-mastery-pill.mastery--good,
+    .an-mastery-pill.mastery--satisfactory,
+    .an-mastery-pill.mastery--minimal      { background: #ff8c00; }
+    .an-mastery-pill.mastery--inadequate   { background: #f94848; }
+
+    /* Stat lines */
+    .an-grade__stat {
+      font-size: 14px; font-weight: 400; line-height: 20px;
+      color: #626262;
+    }
+    .an-grade__details {
+      display: flex; flex-direction: column; gap: var(--space-m);
+    }
+
+    /* ── Two donut columns (flex-1 each, no gap between them) ── */
+    .an-donut-pairs {
+      flex: 1; min-width: 0;
+      display: flex; align-items: center;
+      align-self: stretch;
+    }
+
+    /* Single donut + legend column (donut left, legend right, 28px gap) */
+    .an-donut-col {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: row; align-items: center;
+      gap: 28px; justify-content: flex-start;
+    }
+
+    /* ── Donut chart wrapper ── */
+    .an-donut-wrap { flex-shrink: 0; cursor: pointer; }
+    .an-donut-wrap svg { display: block; }
+
+    /* ── Donut ring animation: grows from 0 → target on load ── */
+    @keyframes donut-grow {
+      from { stroke-dashoffset: var(--c); }
+      to   { stroke-dashoffset: var(--offset); }
+    }
+    .an-donut-ring {
+      stroke-dashoffset: var(--c);  /* start hidden */
+      animation: donut-grow 1.2s ease-out forwards;
+    }
+
+    /* ── Per-ring hit areas (transparent wide strokes over each ring) ── */
+    .an-ring-hit { cursor: pointer; }
+
+    /* ── Per-ring labels: hidden by default, JS shows/hides individually ── */
+    .an-ring-label {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+
+    /* ── Legend section ── */
+    .an-legend {
+      display: flex; flex-direction: column; gap: 16px;
+      flex-shrink: 1; min-width: 130px;
+      align-self: center;
+    }
+
+    .an-legend__title {
+      font-size: 16px; font-weight: 700; line-height: 24px;
+      color: #626262; max-width: 212px;
+    }
+
+    .an-legend__rows {
+      display: flex; flex-direction: column; gap: 30px;
+    }
+
+    .an-legend__row {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 142px;
+    }
+
+    /* Legend level pill (Easy / Medium / Hard / LOTS / MOTS / HOTS) */
+    .an-legend__pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 24px; padding: 2px 8px;
+      border-radius: var(--corner-rounded);
+      font-family: var(--font); font-size: 12px; font-weight: 400; line-height: 12px;
+      color: white; white-space: nowrap;
+    }
+    .an-legend__pill--easy   { background: var(--surface-primary-default); }  /* green  */
+    .an-legend__pill--medium { background: var(--surface-alert-default);   }  /* orange */
+    .an-legend__pill--hard   { background: var(--surface-warning-default); }  /* red    */
+
+    .an-legend__pill-wrap {
+      position: relative; display: inline-flex;
+    }
+    .an-legend__pill-wrap .an-legend__pill { cursor: help; }
+
+    .an-tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: var(--space-s);
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-general-default);
+      border-radius: 4px;
+      font-size: 14px; font-weight: 500; line-height: 20px;
+      color: var(--text-default-body);
+      white-space: nowrap;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      z-index: 20;
+    }
+    .an-tooltip::after {
+      content: '';
+      position: absolute;
+      bottom: -5px; left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 8px; height: 8px;
+      background: var(--surface-general-default);
+      border-right: 1px solid var(--border-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+    }
+    .an-legend__pill-wrap:hover .an-tooltip {
+      opacity: 1; transform: translateX(-50%) translateY(0);
+    }
+
+    .an-legend__value {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: #626262; width: 35px; text-align: right;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       TOPICS + TABLE sections
+    ═══════════════════════════════════════════════════ */
+
+    /* Grouped section: subheader + its content, tighter inner gap */
+    .an-section {
+      display: flex; flex-direction: column; gap: var(--space-xs); /* 8px */
+    }
+
+    /* Section subheaders ("Topics for improvement", "Result of topics") */
+    .an-subheader {
+      font-size: 18px; font-weight: 600; line-height: 28px;
+      color: var(--text-tertiary-default); /* #00564c */
+    }
+
+    /* Topic improvement pills row */
+    .an-pills {
+      display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-m);
+    }
+
+    .an-pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 24px; padding: 2px 8px;
+      background: var(--surface-primary-default);
+      border-radius: var(--corner-rounded);
+      font-family: var(--font); font-size: 12px; font-weight: 400; line-height: 12px;
+      color: var(--text-primary-on-color); /* #f6fdfb */
+      white-space: nowrap;
+    }
+
+    /* ── Table — Result of topics
+       DS: border #d9d9d9, overflow-clip, rounded-18px
+       Columns: Chapter(100px) | Topic(flex-1) | Score(108px) | Status(242px)
+    ── */
+    .an-table-outer {
+      border: 1px solid var(--border-general-default);
+      border-radius: var(--corner-2xl);
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .an-table {
+      width: 100%; border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .an-col--chapter { width: 100px; }
+    /* .an-col--topic auto-expands */
+    .an-col--score  { width: 108px; }
+    .an-col--status { width: 242px; }
+
+    .an-th {
+      background: var(--surface-general-default-secondary); /* #f2f2f2 */
+      padding: var(--space-m);
+      font-family: var(--font); font-size: 16px; font-weight: 500; line-height: 24px;
+      color: var(--text-default-body);
+      text-align: left; height: 56px;
+      border-right: 1px solid var(--border-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+    }
+    .an-th:last-child { border-right: none; }
+    .an-th--chapter { text-align: center; }
+
+    .an-td {
+      background: var(--surface-general-default);
+      padding: var(--space-m);
+      font-family: var(--font); font-size: 14px; font-weight: 400; line-height: 20px;
+      color: var(--text-default-body);
+      height: 56px;
+      border-right: 1px solid var(--border-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+      vertical-align: middle;
+    }
+    .an-td:last-child { border-right: none; }
+    .an-table tbody tr:last-child .an-td { border-bottom: none; }
+    .an-td--chapter { text-align: center; }
+
+    /* Status cell: dot + text */
+    .an-status {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .an-status-dot {
+      width: 12px; height: 12px; border-radius: 60px;
+      flex-shrink: 0; display: inline-block;
+    }
+
     /* ───────────────────────────────────────────────
        FOOTER 1.5  DS 2073:6579
     ─────────────────────────────────────────────── */
@@ -938,8 +1042,8 @@
     .footer__heart { width: 20px; height: 20px; flex-shrink: 0; display: block; color: var(--icon-primary-default); }
 
     /* ═══════════════════════════════════════════════════
-       RESPONSIVE BREAKPOINTS — matches syakila.html
-       < 1320px → mobile navbar
+       RESPONSIVE BREAKPOINTS — matches achievement-report-card.html
+       < 1320px → tablet navbar
        Tablet  ≤ 1279px
        Mobile  ≤  767px
     ═══════════════════════════════════════════════════ */
@@ -952,21 +1056,6 @@
       #MenuBar-Desktop     { display: none; }
       #Breadcrumbs-Desktop { display: none; }
       .footer__inner { padding-left: var(--space-m); padding-right: var(--space-m); }
-      /* Score card: stack left + right-col vertically */
-      .sc-card-outer { flex-direction: column; }
-      .sc-right-col { flex: none; }
-      .sc-mid { height: auto; min-height: 260px; }
-      /* Mini stats */
-      .sc-mini-stat-card  { padding: 16px; }
-      .sc-mini-stat-label { font-size: 12px; line-height: 16px; }
-      .sc-mini-stat-value { font-size: 22px; line-height: 28px; }
-      .sc-mini-stat-item  { padding: 0 16px; }
-      /* Filter card wraps on narrow */
-      .sc-filter-card { flex-wrap: wrap; }
-      .sc-filter-dropdown { max-width: 100%; }
-      /* Stat row wraps to 2-per-row */
-      .sc-stat-row { flex-wrap: wrap; }
-      .sc-stat-solo { flex-basis: calc(50% - 5px); }
       .menubar-panel {
         width: min(1288px, calc(100% - 48px)); top: 0;
         border-top: 0;
@@ -974,32 +1063,52 @@
       }
     }
 
-    /* Mobile ≤ 767px */
+    /* ── Tablet ≤ 1279px ─────────────────────────────── */
+    @media (max-width: 1279px) {
+      :root { --page-padding-x: 32px; }
+
+      /* Analytics card: reduce padding */
+      .an-analytics-card { padding: 24px; }
+
+      /* 2-column grid: grade (fixed 180px left) | donuts (flexible right) */
+      .an-analytics-row {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: 28px;
+        align-items: start;
+      }
+
+      /* Grade: auto-sized by grid, slightly smaller font */
+      .an-grade { width: auto; }
+      .an-grade__title-row { font-size: 44px; }
+
+      /* Right column: both donuts side by side (same as desktop), scaled down */
+      .an-donut-col { gap: 16px; }
+      .an-donut-wrap svg { width: 120px; height: 120px; flex-shrink: 0; }
+
+      /* Legend: tighten row width to fit smaller columns */
+      .an-legend__title { font-size: 14px; }
+      .an-legend__row { width: auto; min-width: 100px; }
+      .an-legend__rows { gap: 16px; }
+
+      /* Table: reduce fixed columns so table fits without horizontal scroll */
+      .an-col--chapter { width: 60px; }
+      .an-col--score   { width: 80px; }
+      .an-col--status  { width: auto; }
+    }
+
+    /* ── Mobile ≤ 767px ──────────────────────────────── */
     @media (max-width: 767px) {
-      :root { --page-padding-x: var(--space-m); }
+      :root { --page-padding-x: var(--space-m); }  /* 16px */
+
       #NavBar-Tablet { display: none; }
       #NavBar-Mobile-Bottom { display: flex; z-index: 200; }
       .footer { display: none; }
       body { padding-bottom: 86px; }
 
-      /* Score card layout */
-      .sc-left { width: 100%; flex: none; }
-      .sc-mid { height: auto; }
-      /* Stat row: 2-per-row on mobile */
-      .sc-stat-row { gap: var(--space-xs); }
-      .sc-stat-solo { flex-basis: calc(50% - 4px); padding: var(--space-xs); gap: 8px; }
-      /* Mini stats */
-      .sc-mini-stat-card  { padding: 12px; }
-      .sc-mini-stat-value { font-size: 20px; line-height: 28px; }
-      .sc-mini-stat-label { font-size: 10px; line-height: 14px; }
-      /* DS Responsives mobile: H4 → 18px/28lh, T1/T2 → 16px/24lh */
-      .sc-overview-title { font-size: 18px; line-height: 28px; }
-      .sc-mid__subtitle  { font-size: 16px; line-height: 24px; }
-      .sc-mid__value     { font-size: 24px; line-height: 32px; }
-      .sc-stat-value     { font-size: 16px; line-height: 24px; }
-      .sc-stat-label     { font-size: 10px; line-height: 14px; }
-      .sc-donut-label    { font-size: 22px; }
-      .sc-filter-title   { font-size: 16px; line-height: 24px; }
+      /* ── Mobile panel: slides in from left, 329px wide, single column
+         DS Nav Menu Mobile - 1.5 node 3427:2442
+      ── */
       .menubar-overlay {
         display: flex;
         align-items: center;
@@ -1015,15 +1124,142 @@
         transform: none;
         border-left: 0;
         border-radius: 0 var(--corner-4xl) var(--corner-4xl) 0;
+        overflow-y: auto;
+        max-height: 100%;
       }
-      .menubar-panel__menu { flex-direction: column; }
+      /* Single column — collapse 2-col layout */
+      .menubar-panel__menu    { flex-direction: column; }
       .menubar-panel__divider { display: none; }
-      .menubar-panel__col { flex: none; width: 100%; }
+      .menubar-panel__col     { flex: none; width: 100%; }
+      /* CTA: stack Notification above Download App */
+      .menubar-panel__cta     { flex-direction: column; border-radius: 20px; }
+      .panel-cta-notif        { width: 100%; }
+      .panel-cta-download     { flex: none; width: 100%; }
+      /* Localization: tighter padding */
       .menubar-panel__localization { padding: var(--space-m) var(--space-xl); }
-      /* Mobile CTA: stack Notification above Download App (DS 3427:2477 — flex-col) */
-      .menubar-panel__cta { flex-direction: column; border-radius: 20px; }
-      .panel-cta-notif { width: 100%; }
-      .panel-cta-download { flex: none; width: 100%; }
+
+      /* Outer card + analytics card: tighter padding */
+      .an-outer          { padding: 12px; }
+      .an-analytics-card { padding: var(--space-m); }
+      .an-analytics-row  { display: flex; flex-direction: column; gap: var(--space-m); }
+
+      /* ── Grade: CSS grid, letter box left / pct+mastery right / stats full-width ── */
+      .an-grade {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        column-gap: var(--space-m);
+        row-gap: var(--space-xs);
+        width: 100%;
+        background: var(--surface-primary-default-subtle);
+        border: 1px solid var(--border-primary-default);
+        border-radius: var(--corner-m);
+        padding: var(--space-s) var(--space-m);
+      }
+      /* Dissolve wrappers — children become direct grid items */
+      .an-grade__title-row { display: contents; }
+      .an-grade__details   { display: contents; }
+
+      /* Letter: white square box, green border, col 1 spanning both header rows */
+      .an-grade__letter {
+        grid-column: 1; grid-row: 1 / 3;
+        align-self: center;
+        display: flex; align-items: center; justify-content: center;
+        width: 88px; height: 88px;
+        background: var(--surface-general-default);
+        border: 1px solid var(--border-primary-default);
+        border-radius: var(--corner-m);
+        font-size: 40px; font-weight: 700;
+        color: var(--text-default-heading);
+        line-height: 1;
+      }
+
+      /* Percentage: col 2, row 1 — large, bottom-aligned */
+      .an-grade__pct {
+        grid-column: 2; grid-row: 1;
+        align-self: end;
+        font-size: 48px; font-weight: 400;
+        color: var(--text-default-heading);
+        line-height: 1;
+      }
+
+      /* Mastery pill: col 2, row 2 — top-aligned */
+      .an-mastery-pill {
+        grid-column: 2; grid-row: 2;
+        align-self: start; justify-self: start;
+      }
+
+      /* Stats: full-width bordered rows below the grid header */
+      .an-grade__stat {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: var(--space-xs) var(--space-m);
+        background: var(--surface-general-default);
+        border: 1px solid var(--border-general-default);
+        margin: 0;
+      }
+      .an-grade__stat:first-of-type {
+        border-bottom: none;
+        border-radius: var(--corner-m) var(--corner-m) 0 0;
+        margin-top: var(--space-xs);
+        padding-top: var(--space-xs);
+      }
+      .an-grade__stat:last-of-type {
+        border-radius: 0 0 var(--corner-m) var(--corner-m);
+      }
+
+      /* ── Divider + donut section: each row = donut left + legend table right ── */
+      .an-donut-pairs {
+        flex-direction: column; gap: var(--space-s);
+        border-top: 1px solid var(--border-general-default);
+        padding-top: var(--space-s);
+        align-items: stretch;
+      }
+      .an-donut-col   { width: 100%; flex-direction: column; align-items: center; gap: var(--space-s); }
+      .an-donut-wrap  { flex-shrink: 0; }
+      .an-donut-wrap svg { width: 100px; height: 100px; }
+
+      /* Legend: full-width bordered table below the donut */
+      .an-legend        { flex: unset; width: 100%; min-width: 0; align-items: stretch; }
+      .an-legend__title { display: block; font-size: 10px; line-height: 14px; }
+      .an-legend__rows  { gap: 0; border: 1px solid var(--border-general-default); border-radius: var(--corner-m); overflow: hidden; }
+      .an-legend__row   { width: 100%; padding: 6px 8px; border-bottom: 1px solid var(--border-general-default); margin: 0; }
+      .an-legend__row:last-child { border-bottom: none; }
+
+      /* ── Table: tablet-style layout scaled for mobile ── */
+      .an-table-outer { overflow-x: auto; }
+      .an-table       { min-width: unset; }
+
+      .an-col--chapter { width: 40px; }
+      .an-col--score   { width: 48px; }
+      .an-col--status  { width: 100px; }
+
+      .an-th {
+        padding: 8px;
+        font-size: 10px; line-height: 14px;
+        height: auto; min-height: 40px;
+      }
+      .an-td {
+        padding: 8px;
+        font-size: 10px; line-height: 14px;
+        height: auto; min-height: 40px;
+        word-break: break-word;
+      }
+      .an-status { flex-wrap: wrap; gap: 4px; }
+      .an-pills  { gap: var(--space-xs); }
+
+
+      /* Footer: stack vertically, center both groups */
+      body { padding-bottom: 102px; }
+      .footer__inner {
+        flex-direction: column;
+        justify-content: center;
+        align-items:     center;
+        gap:             var(--space-xs);
+        height:          auto;
+        padding:         var(--space-s) var(--space-2xl);
+      }
+      .footer__left  { justify-content: center; }
+      .footer__right { justify-content: center; }
     }
   </style>
 </head>
@@ -1036,7 +1272,7 @@
 <svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
   <defs>
 
-    <!-- ── Topbar action icons (named symbols from syakila.html) ── -->
+    <!-- ── Topbar action icons (named symbols from achievement-report-card.html) ── -->
     <symbol id="ic-search" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 11 19 C 15.418 19 19 15.418 19 11 C 19 6.582 15.418 3 11 3 C 6.582 3 3 6.582 3 11 C 3 15.418 6.582 19 11 19 Z"/><path d="M 21 21 L 16.65 16.65"/></symbol>
     <symbol id="ic-maximize" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 3 16 L 3 19 C 3 19.53 3.211 20.039 3.586 20.414 C 3.961 20.789 4.47 21 5 21 L 8 21"/><path d="M 8 3 L 5 3 C 4.47 3 3.961 3.211 3.586 3.586 C 3.211 3.961 3 4.47 3 5 L 3 8 M 21 8 L 21 5 C 21 4.47 20.789 3.961 20.414 3.586 C 20.039 3.211 19.53 3 19 3 L 16 3 M 16 21 L 19 21 C 19.53 21 20.039 20.789 20.414 20.414 C 20.789 20.039 21 19.53 21 19 L 21 16"/></symbol>
     <symbol id="ic-smartphone" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 17 2 L 7 2 C 5.895 2 5 2.895 5 4 L 5 20 C 5 21.105 5.895 22 7 22 L 17 22 C 18.105 22 19 21.105 19 20 L 19 4 C 19 2.895 18.105 2 17 2 Z"/><path d="M 12 18 L 12.01 18"/></symbol>
@@ -1159,30 +1395,9 @@
     <symbol id="ic-bm" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12C6.42826 12 7.3185 11.6839 7.97487 11.1213C8.63125 10.5587 9 9.79565 9 9C9 8.20435 8.63125 7.44129 7.97487 6.87868C7.3185 6.31607 6.42826 6 5.5 6H2V18H5.5C6.42826 18 7.3185 17.6839 7.97487 17.1213C8.63125 16.5587 9 15.7956 9 15C9 14.2044 8.63125 13.4413 7.97487 12.8787C7.3185 12.3161 6.42826 12 5.5 12ZM5.5 12H2M12 18V6L17 15L22 6V18"/></symbol>
     <symbol id="ic-mandarin" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.1178H11.4117M9.29405 3V5.11762C9.29405 9.79545 6.92338 13.5881 4 13.5881M5.0578 9.35284C5.0578 11.6229 8.18341 13.4907 12.1518 13.5881M12.47 21L16.7052 11.4707L20.9405 21M19.9885 18.8821H13.4238"/></symbol>
 
-    <!-- ── Score Card icons  DS 3107:65165–65192 ── -->
-    <!-- Outline/activity  DS I3107:65148;260:372  viewBox +1px buffer -->
-    <symbol id="ic-activity" viewBox="-1 -1 22 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M19.0833 9H15.4167L12.6667 17.25L7.16667 0.75L4.41667 9H0.75"/>
-    </symbol>
-    <!-- Outline/rotate-cw  DS I3107:65166;611:2634 -->
-    <symbol id="ic-rotate-cw" viewBox="-1 -1 22 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M13.5796 7.16489H19.0796V1.66489M19.0796 7.16489L14.8355 3.16822C13.571 1.90298 11.9296 1.08298 10.1586 0.83177C8.38758 0.580565 6.58288 0.911769 5.01647 1.77547C3.45005 2.63918 2.20679 3.98859 1.47402 5.62037C0.741247 7.25214 0.558674 9.07787 0.953811 10.8224C1.34895 12.567 2.30038 14.1359 3.66475 15.2927C5.02912 16.4495 6.73249 17.1315 8.51819 17.2359C10.3039 17.3404 12.0752 16.8617 13.5651 15.8719C15.0551 14.8821 16.1829 13.4348 16.7788 11.7482"/>
-    </symbol>
-    <!-- Outline/refresh-cw  DS I3107:65172;611:2638 -->
-    <symbol id="ic-refresh-cw" viewBox="-1 -1 24 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15.4167 7.1645H20.9167V1.6645M20.9167 7.1645L16.6633 3.16783C15.6781 2.18215 14.4593 1.4621 13.1206 1.07487C11.7819 0.687644 10.3668 0.645853 9.0076 0.953401C7.64834 1.26095 6.38915 1.90781 5.34751 2.83363C4.30587 3.75945 3.51574 4.93405 3.05083 6.24783M6.25 10.8312H0.75V16.3312M0.75 10.8312L5.00333 14.8278C5.98852 15.8135 7.20734 16.5336 8.54607 16.9208C9.88481 17.308 11.2998 17.3498 12.6591 17.0423C14.0183 16.7347 15.2775 16.0878 16.3192 15.162C17.3608 14.2362 18.1509 13.0616 18.6158 11.7478"/>
-    </symbol>
-    <!-- Outline/edit-3  DS I3107:65179;611:3011 -->
-    <symbol id="ic-edit-3" viewBox="-1 -1 20 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M0.75 19.0833H17.25M10.8333 0.75L14.5 4.41667L4.41667 14.5H0.75V10.8333L10.8333 0.75Z"/>
-    </symbol>
-    <!-- Outline/copy  DS I3107:65185;611:2936 -->
-    <symbol id="ic-copy" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M3.5 12.6667H2.58333C2.0971 12.6667 1.63079 12.4735 1.28697 12.1297C0.943154 11.7859 0.75 11.3196 0.75 10.8333V2.58333C0.75 2.0971 0.943154 1.63079 1.28697 1.28697C1.63079 0.943154 2.0971 0.75 2.58333 0.75H10.8333C11.3196 0.75 11.7859 0.943154 12.1297 1.28697C12.4735 1.63079 12.6667 2.0971 12.6667 2.58333V3.5M9 7.16667H17.25C18.2625 7.16667 19.0833 7.98748 19.0833 9V17.25C19.0833 18.2625 18.2625 19.0833 17.25 19.0833H9C7.98748 19.0833 7.16667 18.2625 7.16667 17.25V9C7.16667 7.98748 7.98748 7.16667 9 7.16667Z"/>
-    </symbol>
-    <!-- Outline/clock  DS I3107:65192;611:2945 -->
-    <symbol id="ic-clock" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M9.91667 4.41667V9.91667L13.5833 11.75M19.0833 9.91667C19.0833 14.9793 14.9793 19.0833 9.91667 19.0833C4.85406 19.0833 0.75 14.9793 0.75 9.91667C0.75 4.85406 4.85406 0.75 9.91667 0.75C14.9793 0.75 19.0833 4.85406 19.0833 9.91667Z"/>
+    <!-- ── Download icon — DS Filled/download node 3075:61036 ── -->
+    <symbol id="ic-download" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M17 10L12 15L7 10M12 15V3"/>
     </symbol>
     <!-- Profile Menu icons — DS Iconography page -->
     <symbol id="ic-user" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"/></symbol>
@@ -1222,11 +1437,10 @@
     <symbol id="ic-shopping-bag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(3,2)"><path d="M3 0L0 4L0 18C0 18.53 0.21 19.04 0.59 19.41C0.96 19.79 1.47 20 2 20L16 20C16.53 20 17.04 19.79 17.41 19.41C17.79 19.04 18 18.53 18 18L18 4L15 0L3 0ZM13 8C13 9.06 12.58 10.08 11.83 10.83C11.08 11.58 10.06 12 9 12C7.94 12 6.92 11.58 6.17 10.83C5.42 10.08 5 9.06 5 8M0 4L18 4"/></g></symbol>
     <symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(1,1)"><path d="M8 21C8.55 21 9 20.55 9 20C9 19.45 8.55 19 8 19C7.45 19 7 19.45 7 20C7 20.55 7.45 21 8 21ZM19 21C19.55 21 20 20.55 20 20C20 19.45 19.55 19 19 19C18.45 19 18 19.45 18 20C18 20.55 18.45 21 19 21ZM0 0L4 0L6.68 13.39C6.77 13.85 7.02 14.26 7.39 14.56C7.75 14.85 8.21 15.01 8.68 15L18.4 15C18.87 15.01 19.33 14.85 19.69 14.56C20.06 14.26 20.31 13.85 20.4 13.39L22 5L5 5"/></g></symbol>
     <symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,2)"><path d="M10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20ZM6 12C6 12 7.5 14 10 14C12.5 14 14 12 14 12M7 7L7.01 7M13 7L13.01 7"/></g></symbol>
-    <!-- ic-grid = DS Outline/grid node 611:3024 — 2×2 grid of rectangles -->
-    <symbol id="ic-grid" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3L10 3L10 10L3 10Z M14 3L21 3L21 10L14 10Z M14 14L21 14L21 21L14 21Z M3 14L10 14L10 21L3 21Z"/></symbol>
 
   </defs>
 </svg>
+
 
 <!-- ═══════════════════════════════════════════════
      SECTION 1 — NAVBAR  DS 2339:2443
@@ -1239,8 +1453,8 @@
 <nav class="navbar">
   <div class="navbar-brand">
     <a class="navbar-logo" href="#">
-      <img src="../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-mark.svg" class="navbar-logo__mark" alt="Pandai mark">
-      <img src="../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-text.svg" class="navbar-logo__text" alt="Pandai">
+      <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/logo-mark.svg" class="navbar-logo__mark" alt="Pandai mark">
+      <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/logo-text.svg" class="navbar-logo__text" alt="Pandai">
     </a>
     <div class="navbar-actions">
       <div class="navbar-action-icons">
@@ -1497,8 +1711,8 @@
 
 <!-- Achievement Subtopic dropdown  DS node 4742:74267 -->
 <div class="nav-subtopic-dropdown" id="achievement-dropdown" role="menu" aria-hidden="true">
-  <div class="nav-subtopic-dropdown__item is-active" role="menuitem"><svg aria-hidden="true"><use href="#ic-pie-chart"/></svg><span class="nav-subtopic-dropdown__item-label">Score Card</span></div>
-  <a class="nav-subtopic-dropdown__item" href="syakila.html" role="menuitem"><svg aria-hidden="true"><use href="#ic-filled-check-circle"/></svg><span class="nav-subtopic-dropdown__item-label">Report Card</span></a>
+  <a class="nav-subtopic-dropdown__item" href="achievement-score-card.html" role="menuitem"><svg aria-hidden="true"><use href="#ic-pie-chart"/></svg><span class="nav-subtopic-dropdown__item-label">Score Card</span></a>
+  <a class="nav-subtopic-dropdown__item" href="achievement-report-card.html" role="menuitem"><svg aria-hidden="true"><use href="#ic-filled-check-circle"/></svg><span class="nav-subtopic-dropdown__item-label">Report Card</span></a>
   <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-calendar"/></svg><span class="nav-subtopic-dropdown__item-label">History</span></div>
   <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-shield"/></svg><span class="nav-subtopic-dropdown__item-label">Badges</span></div>
   <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-award"/></svg><span class="nav-subtopic-dropdown__item-label">Leaderboard</span></div>
@@ -1546,7 +1760,6 @@
     <!-- Nav items — 2 cols (tablet) / 1 col (mobile) -->
     <div class="menubar-panel__menu">
       <div class="menubar-panel__col">
-        <!-- Home (active state shown as default, scoreCard=Achievement active below) -->
         <div class="panel-item">
           <svg aria-hidden="true"><use href="#ic-home"/></svg>          <span class="panel-item__label">Home</span>        </div>
         <div class="panel-item">
@@ -1642,210 +1855,348 @@
 ═══════════════════════════════════════════════ -->
 <main class="pd-page">
 
-  <!-- ── BREADCRUMBS 1.5  DS 3107:65098 ── -->
+  <!-- ── BREADCRUMBS  DS 3282:68210 ── -->
   <section id="Breadcrumbs-Desktop">
     <div class="pd-breadcrumbs15">
-      <h1 class="pd-breadcrumbs__title">Score Card</h1>
+      <h1 id="an-breadcrumb-title" class="pd-breadcrumbs__title">Analysis for Bahasa Melayu Form 5</h1>
       <div class="pd-breadcrumbs__sep"></div>
       <div class="pd-breadcrumbs__links">
 
-        <!-- Achievement parent link: bar-chart icon + label + chevron -->
+        <!-- Level 1: Achievement — Icon Left=true (achievement icon) + text + Icon Right=true (chevron) -->
         <button class="pd-link15" type="button">
           <svg class="pd-link15__icon-home" aria-hidden="true"><use href="#ic-bar-chart-2"/></svg>
           <span class="pd-link15__text pd-link15__text--parent">Achievement</span>
           <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
         </button>
 
-        <!-- Score Card — active/current page -->
+        <!-- Level 2: Report Card — Icon Left=false + text + Icon Right=true (chevron) -->
+        <button class="pd-link15" id="bc-report-card" type="button">
+          <span class="pd-link15__text pd-link15__text--parent">Report Card for Form 5</span>
+          <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
+        </button>
+
+        <!-- Level 3: Bahasa Melayu — State=Active, Icon Left=false, Icon Right=false -->
         <span class="pd-link15" style="cursor:default">
-          <span class="pd-link15__text">Score Card</span>
+          <span id="an-breadcrumb-subject" class="pd-link15__text">Bahasa Melayu</span>
         </span>
 
       </div>
     </div>
-  </section>
+  </section><!-- end Breadcrumbs -->
 
-  <!-- ── FILTER CARD  DS 5376:191594  green border, #e8fbe8 bg ── -->
-  <section id="Subjects-Desktop">
-    <div class="sc-filter-card">
-      <div class="sc-filter-header">
-        <div class="sc-filter-icon-wrap">
-          <svg aria-hidden="true"><use href="#ic-grid"/></svg>
-        </div>
-        <span class="sc-filter-title">Filter by Subjects</span>
-      </div>
-      <button class="sc-filter-dropdown" id="subject-filter-btn" type="button">
-        <span class="sc-filter-dropdown__label" id="subject-filter-label">All Subjects</span>
-        <div class="sc-filter-dropdown__arrow">
-          <svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg>
-        </div>
-      </button>
-    </div>
-  </section>
 
-  <!-- ── SCORE CARD  DS 5376:191595  grey outer border, 2-column layout ── -->
-  <section id="ScoreCard-Desktop">
-    <div class="sc-card-outer">
+  <!-- ═══════════════════════════════════════════════
+       ANALYSIS CARD  DS node 3282:68739
+       Outer: bg #e8fbe8, border green, r-24px, p-16px
+  ═══════════════════════════════════════════════ -->
+  <section id="AnalysisCard-Desktop">
+    <div class="an-outer">
 
-      <!-- LEFT CONTAINER  p:20 gap:8 r:18  green inner border -->
-      <div class="sc-left">
+      <!-- ── HEADER: Subject badge + Download button ── -->
+      <div class="an-header">
 
-        <!-- Header: active subject badge(s) + "Score Overview" title -->
-        <div class="sc-left__header">
-          <div class="sc-badge-display" id="badge-display"></div>
-          <h2 class="sc-overview-title">Score Overview</h2>
-        </div>
-
-        <!-- Donut chart  61.5%  200×200  r=74 sw=28 -->
-        <div class="sc-donut-wrap">
-          <svg viewBox="0 0 200 200" width="200" height="200" aria-label="Score Overview: 61.5%">
-            <!-- Grey track -->
-            <circle cx="100" cy="100" r="74" fill="none" stroke="#e8e8e8" stroke-width="28"/>
-            <!-- Green progress: 61.5% — circumference 2π×74≈464.9, dash≈285.9, gap≈179.0 -->
-            <circle id="donut-progress" cx="100" cy="100" r="74" fill="none" stroke="#00cc85" stroke-width="28"
-              stroke-dasharray="285.9 179.0" stroke-linecap="round"
-              transform="rotate(-90 100 100)"/>
-          </svg>
-          <span id="donut-label" class="sc-donut-label" aria-hidden="true">61.5%</span>
-        </div>
-
-        <!-- Bottom stats card  p:24 r:18 -->
-        <div class="sc-mini-stat-card">
-          <div class="sc-mini-stat-item">
-            <span class="sc-mini-stat-value">10</span>
-            <span class="sc-mini-stat-label">Today's Score</span>
+        <!-- Subject Badge BM — L size (32px)
+             DS: Subject Badge/Bahasa Melayu - L, border #2e4799 bg #4d77ff -->
+        <div id="an-badge" class="an-subject-badge">
+          <div class="an-subject-badge__icon">
+            <img id="an-badge-icon" src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-bmelayu.svg" alt="Bahasa Melayu" width="20" height="20">
           </div>
-          <div class="sc-mini-stat-item">
-            <span class="sc-mini-stat-value">816</span>
-            <span class="sc-mini-stat-label">This Year's Score</span>
-          </div>
-        </div>
-
-      </div><!-- /sc-left -->
-
-      <!-- RIGHT COLUMN  DS 5376:191595  flex:2  gap:16 -->
-      <div class="sc-right-col">
-
-        <!-- MID CONTAINER  h:300 p:20 r:18  green inner border -->
-        <div class="sc-mid">
-
-          <!-- Header: large icon circle (56px) + subtitle + value  horizontal row -->
-          <div class="sc-mid__header">
-            <div class="sc-icon-circle sc-icon-circle--lg">
-              <svg aria-hidden="true"><use href="#ic-activity"/></svg>
-            </div>
-            <div class="sc-mid__content">
-              <span class="sc-mid__subtitle">Score for the past one week</span>
-              <span class="sc-mid__value">133</span>
-            </div>
-          </div>
-
-          <!-- Line chart  7 data points  Sun→Sat  animated -->
-          <div class="sc-graph" aria-label="Score trend line chart">
-            <svg id="score-graph" viewBox="0 0 380 120" preserveAspectRatio="none" fill="none">
-              <!-- Zero baseline -->
-              <line x1="0" y1="68" x2="380" y2="68" stroke="var(--border-general-default)" stroke-width="1"/>
-              <!-- Smooth line -->
-              <path id="graph-line" stroke="var(--surface-primary-default)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              <!-- Dots -->
-              <circle id="graph-dot-0" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-1" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-2" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-3" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-4" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-5" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <circle id="graph-dot-6" r="3" fill="var(--surface-general-default)" stroke="var(--surface-primary-default)" stroke-width="1.5"/>
-              <!-- Hit areas -->
-              <rect id="graph-hit-0" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-1" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-2" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-3" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-4" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-5" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-6" fill="transparent" style="cursor:pointer"/>
-              <!-- Day labels -->
-              <text x="34"  y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Sun</text>
-              <text x="86"  y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Mon</text>
-              <text x="138" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Tue</text>
-              <text x="190" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Wed</text>
-              <text x="242" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Thu</text>
-              <text x="294" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Fri</text>
-              <text x="346" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Sat</text>
+          <div id="an-badge-label" class="an-subject-badge__label">
+            <svg class="an-subject-badge__pointer" width="4" height="8" viewBox="0 0 4 8" fill="white" aria-hidden="true">
+              <path d="M 0 0 L 4 4 L 0 8 Z"/>
             </svg>
+            Bahasa Melayu
           </div>
+        </div>
 
-        </div><!-- /sc-mid -->
+        <!-- Download button — Secondary style, 32px -->
+        <button class="an-download-btn" type="button">
+          <svg aria-hidden="true"><use href="#ic-download"/></svg>
+          Download
+        </button>
 
-        <!-- STAT ROW  DS 5376:191595  5 equal individual cards  gap:10 -->
-        <div class="sc-stat-row">
+      </div><!-- /an-header -->
 
-          <!-- Card 1: Current Streak -->
-          <div class="sc-stat-solo">
-            <div class="sc-icon-circle">
-              <svg aria-hidden="true"><use href="#ic-rotate-cw"/></svg>
-            </div>
-            <div class="sc-stat-texts">
-              <span class="sc-stat-label">Current Streak</span>
-              <span class="sc-stat-value">2 Days</span>
-            </div>
+
+      <!-- ── CONTENT AREA: analytics + topics + table ── -->
+      <div class="an-content">
+
+        <!-- ══ ANALYTICS INNER CARD
+             DS: white bg, border #d9d9d9, r-18px, pt-28 px-60 pb-54
+        ══ -->
+        <div class="an-analytics-card">
+          <div class="an-analytics-row">
+
+            <!-- GRADE SECTION (195px, flex-col gap-16px) -->
+            <div class="an-grade">
+              <!-- "A 97%" — A is Bold 56px, 97% is Regular 56px, both #404040 -->
+              <div class="an-grade__title-row">
+                <span id="an-grade-letter" class="an-grade__letter">A</span>
+                <span id="an-grade-pct" class="an-grade__pct">97%</span>
+              </div>
+              <!-- Details: mastery pill + stats — grouped so mobile can flip to row layout -->
+              <div class="an-grade__details">
+                <span id="an-mastery-pill" class="an-mastery-pill">Mastery</span>
+                <p class="an-grade__stat">555 Questions Answered</p>
+                <p class="an-grade__stat">70 Set Submitted</p>
+              </div>
+            </div><!-- /an-grade -->
+
+            <!-- DONUT PAIRS (flex-1, 2 equal cols) -->
+            <div class="an-donut-pairs">
+
+              <!-- ── Difficulty Level: donut + legend ── -->
+              <div class="an-donut-col">
+
+                <!-- Progress Wheel — 3 concentric rings
+                     Outer(r=84) = Easy 100% green
+                     Middle(r=63) = Medium 82% orange
+                     Inner(r=42) = Hard 75% red
+                     Grey tracks beneath each colored arc
+                     All arcs rotate from -90° (12 o'clock)
+                -->
+                <div class="an-donut-wrap">
+                  <svg viewBox="0 0 210 210" width="210" height="210" aria-label="Result by Difficulty Level: Easy 100%, Medium 82%, Hard 75%">
+                    <!-- Grey tracks (full 360°) -->
+                    <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="63" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="42" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <!-- Easy  — outer ring, green, 90% — C=527.8, offset=52.8 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="84" fill="none" stroke="#00cc85" stroke-width="16"
+                      stroke-dasharray="527.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:527.8;--offset:52.8"/>
+                    <!-- Medium — middle ring, orange, 82% — C=395.8, offset=71.2 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="63" fill="none" stroke="#ff9f43" stroke-width="16"
+                      stroke-dasharray="395.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:395.8;--offset:71.2;animation-delay:0.1s"/>
+                    <!-- Hard   — inner ring, red, 75% — C=263.9, offset=66.0 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="42" fill="none" stroke="#ff4c51" stroke-width="16"
+                      stroke-dasharray="263.9" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:263.9;--offset:66.0;animation-delay:0.2s"/>
+                    <!-- Hit areas — transparent wide strokes, one per ring, no fill overlap -->
+                    <circle class="an-ring-hit" cx="105" cy="105" r="84" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="63" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="42" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <!-- Per-ring labels (JS shows one at a time) -->
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#00cc85">90%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff9f43">82%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff4c51">75%</text>
+                  </svg>
+                </div>
+
+                <!-- Legend for Difficulty Level -->
+                <div class="an-legend">
+                  <p class="an-legend__title">Result by Difficulty&nbsp;Level</p>
+                  <div class="an-legend__rows">
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill an-legend__pill--easy">Easy</span>
+                      <span class="an-legend__value">90%</span>
+                    </div>
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill an-legend__pill--medium">Medium</span>
+                      <span class="an-legend__value">82%</span>
+                    </div>
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill an-legend__pill--hard">Hard</span>
+                      <span class="an-legend__value">75%</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div><!-- /Difficulty Level col -->
+
+              <!-- ── Thinking Skills: donut + legend ── -->
+              <div class="an-donut-col">
+
+                <!-- Progress Wheel — 3 concentric rings
+                     Outer(r=84) = LOTS 80% green
+                     Middle(r=63) = MOTS 75% orange
+                     Inner(r=42) = HOTS 100% red
+                -->
+                <div class="an-donut-wrap">
+                  <svg viewBox="0 0 210 210" width="210" height="210" aria-label="Result by Thinking Skills: LOTS 80%, MOTS 75%, HOTS 100%">
+                    <!-- Grey tracks -->
+                    <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="63" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="42" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <!-- LOTS  — outer ring, green, 80% — C=527.8, offset=105.6 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="84" fill="none" stroke="#00cc85" stroke-width="16"
+                      stroke-dasharray="527.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:527.8;--offset:105.6"/>
+                    <!-- MOTS — middle ring, orange, 75% — C=395.8, offset=99.0 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="63" fill="none" stroke="#ff9f43" stroke-width="16"
+                      stroke-dasharray="395.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:395.8;--offset:99.0;animation-delay:0.1s"/>
+                    <!-- HOTS — inner ring, red, 90% — C=263.9, offset=26.4 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="42" fill="none" stroke="#ff4c51" stroke-width="16"
+                      stroke-dasharray="263.9" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:263.9;--offset:26.4;animation-delay:0.2s"/>
+                    <!-- Hit areas — transparent wide strokes, one per ring -->
+                    <circle class="an-ring-hit" cx="105" cy="105" r="84" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="63" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="42" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <!-- Per-ring labels (JS shows one at a time) -->
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#00cc85">80%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff9f43">75%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff4c51">90%</text>
+                  </svg>
+                </div>
+
+                <!-- Legend for Thinking Skills -->
+                <div class="an-legend">
+                  <p class="an-legend__title">Result by Thinking Skills</p>
+                  <div class="an-legend__rows">
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill-wrap">
+                        <span class="an-legend__pill an-legend__pill--easy">LOTS</span>
+                        <span class="an-tooltip" role="tooltip">Lower Order Thinking Skills</span>
+                      </span>
+                      <span class="an-legend__value">80%</span>
+                    </div>
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill-wrap">
+                        <span class="an-legend__pill an-legend__pill--medium">MOTS</span>
+                        <span class="an-tooltip" role="tooltip">Medium Order Thinking Skills</span>
+                      </span>
+                      <span class="an-legend__value">75%</span>
+                    </div>
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill-wrap">
+                        <span class="an-legend__pill an-legend__pill--hard">HOTS</span>
+                        <span class="an-tooltip" role="tooltip">High Order Thinking Skills</span>
+                      </span>
+                      <span class="an-legend__value">90%</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div><!-- /Thinking Skills col -->
+
+            </div><!-- /an-donut-pairs -->
+
+          </div><!-- /an-analytics-row -->
+        </div><!-- /an-analytics-card -->
+
+
+        <!-- ══ TOPICS FOR IMPROVEMENT
+             SemiBold 18px, #00564c + green pills
+        ══ -->
+        <div class="an-section">
+          <p class="an-subheader">Topics for improvement</p>
+          <div class="an-pills">
+            <span class="an-pill">Kemahiran mendengar dan bertutur</span>
+            <span class="an-pill">Kemahiran membaca</span>
+            <span class="an-pill">Aspek tatabahasa</span>
+            <span class="an-pill">Kemahiran menulis</span>
           </div>
+        </div>
 
-          <!-- Card 2: Longest Streak -->
-          <div class="sc-stat-solo">
-            <div class="sc-icon-circle">
-              <svg aria-hidden="true"><use href="#ic-refresh-cw"/></svg>
-            </div>
-            <div class="sc-stat-texts">
-              <span class="sc-stat-label">Longest Streak</span>
-              <span class="sc-stat-value">22 Days</span>
-            </div>
-          </div>
 
-          <!-- Card 3: Today's Quiz -->
-          <div class="sc-stat-solo">
-            <div class="sc-icon-circle">
-              <svg aria-hidden="true"><use href="#ic-edit-3"/></svg>
-            </div>
-            <div class="sc-stat-texts">
-              <span class="sc-stat-label">Today's Quiz</span>
-              <span class="sc-stat-value">2 Quizzes</span>
-            </div>
-          </div>
+        <!-- ══ RESULT OF TOPICS
+             SemiBold 18px, #00564c + Table 1.5
+        ══ -->
+        <div class="an-section">
+          <p class="an-subheader">Result of topics</p>
 
-          <!-- Card 4: Total Quiz -->
-          <div class="sc-stat-solo">
-            <div class="sc-icon-circle">
-              <svg aria-hidden="true"><use href="#ic-copy"/></svg>
-            </div>
-            <div class="sc-stat-texts">
-              <span class="sc-stat-label">Total Quiz</span>
-              <span class="sc-stat-value">205 Quizzes</span>
-            </div>
-          </div>
+        <!-- Table — DS Table - 1.5
+             Outer: border #d9d9d9, r-18px, overflow-hidden
+             Cols: Chapter(100px) | Topic(flex-1) | Score(108px) | Status(242px)
+             Header: bg #f2f2f2, Medium 16px, #666
+             Body:   bg white,   Regular 14px, #666, h-56px each
+             Status: colored dot (12px) + label text
+        -->
+        <div class="an-table-outer">
+          <table class="an-table">
+            <colgroup>
+              <col class="an-col--chapter">
+              <col><!-- topic: auto-expand -->
+              <col class="an-col--score">
+              <col class="an-col--status">
+            </colgroup>
+            <thead>
+              <tr>
+                <th class="an-th an-th--chapter">Chapter</th>
+                <th class="an-th">Topic</th>
+                <th class="an-th">Score</th>
+                <th class="an-th">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1: Mastery (green dot) -->
+              <tr>
+                <td class="an-td an-td--chapter">1</td>
+                <td class="an-td">Kemahiran mendengar dan bertutur</td>
+                <td class="an-td">100%</td>
+                <td class="an-td">
+                  <div class="an-status">
+                    <span class="an-status-dot" style="background:#00cc85"></span>
+                    Mastery
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 2: Need Attention (red dot) -->
+              <tr>
+                <td class="an-td an-td--chapter">2</td>
+                <td class="an-td">Kemahiran menulis</td>
+                <td class="an-td">50%</td>
+                <td class="an-td">
+                  <div class="an-status">
+                    <span class="an-status-dot" style="background:#ff4c51"></span>
+                    Need Attention
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 3: Not Started (grey dot) -->
+              <tr>
+                <td class="an-td an-td--chapter">3</td>
+                <td class="an-td">Aspek Tatabahasa</td>
+                <td class="an-td">0%</td>
+                <td class="an-td">
+                  <div class="an-status">
+                    <span class="an-status-dot" style="background:#f2f2f2;border:1px solid #d9d9d9"></span>
+                    Not Started
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 4: Basic Understanding (orange dot) -->
+              <tr>
+                <td class="an-td an-td--chapter">4</td>
+                <td class="an-td">Aspek Seni dan Bahasa</td>
+                <td class="an-td">67%</td>
+                <td class="an-td">
+                  <div class="an-status">
+                    <span class="an-status-dot" style="background:#ff9f43"></span>
+                    Basic Understanding
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div><!-- /an-table-outer -->
+        </div><!-- /an-section result -->
 
-          <!-- Card 5: Last Submission -->
-          <div class="sc-stat-solo">
-            <div class="sc-icon-circle">
-              <svg aria-hidden="true"><use href="#ic-clock"/></svg>
-            </div>
-            <div class="sc-stat-texts">
-              <span class="sc-stat-label">Last Submission</span>
-              <span class="sc-stat-value">5 Hours Ago</span>
-            </div>
-          </div>
+      </div><!-- /an-content -->
 
-        </div><!-- /sc-stat-row -->
-
-      </div><!-- /sc-right-col -->
-
-    </div><!-- /sc-card-outer -->
-  </section>
+    </div><!-- /an-outer -->
+  </section><!-- end AnalysisCard-Desktop -->
 
 </main>
 
 
 <!-- ═══════════════════════════════════════════════
-     FOOTER 1.5  DS 2073:6579 / 3107:65213
+     FOOTER 1.5  DS 2073:6579
 ═══════════════════════════════════════════════ -->
 <footer class="footer">
   <div class="footer__inner">
@@ -1864,6 +2215,34 @@
 
 
 <script>
+  /* ── Per-ring hover (desktop) + tap (mobile/tablet) interaction ── */
+  try {
+    document.querySelectorAll('.an-donut-wrap').forEach(wrap => {
+      const hits   = Array.from(wrap.querySelectorAll('.an-ring-hit'));
+      const labels = Array.from(wrap.querySelectorAll('.an-ring-label'));
+
+      const clearAll = () => labels.forEach(l => { l.style.opacity = '0'; });
+      const showRing = (i) => { clearAll(); labels[i].style.opacity = '1'; };
+
+      hits.forEach((hit, i) => {
+        /* Desktop: hover shows that ring's % */
+        hit.addEventListener('mouseenter', () => showRing(i));
+        hit.addEventListener('mouseleave', clearAll);
+
+        /* Mobile/tablet: tap toggles that ring's % */
+        hit.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const active = labels[i].style.opacity === '1';
+          clearAll();
+          if (!active) showRing(i);
+        });
+      });
+
+      /* Tap anywhere outside closes the label */
+      document.addEventListener('click', clearAll);
+    });
+  } catch(e) { console.warn('donut interaction error:', e); }
+
   /* ── Action icon pressed state (Rule 39: JS mousedown, not CSS :active on div) ── */
   document.querySelectorAll('.navbar-action-icon').forEach(icon => {
     icon.addEventListener('mousedown',  () => icon.classList.add('is-pressed'));
@@ -1938,7 +2317,6 @@
       const btnRect = avatarBtn.getBoundingClientRect();
       const secRect = navSec.getBoundingClientRect();
       profileMenu.style.right = Math.round(secRect.right - btnRect.right) + 'px';
-      /* close learn menu if open */
       const lm = document.getElementById('learn-menu');
       const wb = document.getElementById('waffle-btn');
       if (lm) { lm.classList.remove('is-open'); lm.setAttribute('aria-hidden', 'true'); }
@@ -2186,6 +2564,104 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
   })();
 
+  /* ── Subject-aware page init — reads ?subject= URL param and swaps all elements ── */
+  (function () {
+    function scoreToGrade(pct) {
+      if (pct > 90) return 'A+';
+      if (pct > 80) return 'A';
+      if (pct > 70) return 'A-';
+      if (pct > 65) return 'B+';
+      if (pct > 60) return 'B';
+      if (pct > 55) return 'C+';
+      if (pct > 50) return 'C';
+      if (pct > 45) return 'D';
+      if (pct > 40) return 'E';
+      return 'F';
+    }
+
+    var MASTERY = {
+      'A+': 'Mastery', 'A': 'Mastery', 'A-': 'Mastery',
+      'B+': 'Good',      'B': 'Good',
+      'C+': 'Satisfactory', 'C': 'Satisfactory',
+      'D':  'Minimal',
+      'E':  'Inadequate', 'F': 'Inadequate'
+    };
+
+    var MASTERY_CLASS = {
+      'Mastery':      'mastery--cemerlang',
+      'Good':         'mastery--good',
+      'Satisfactory': 'mastery--satisfactory',
+      'Minimal':      'mastery--minimal',
+      'Inadequate':   'mastery--inadequate'
+    };
+
+    var SUBJECTS = {
+      'Chinese Language': { score: 80, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chinese-lang.svg', alt: 'Chinese Language', bg: '#f94848', border: '#c73a3a', text: '#f2f2f2' },
+      'English':          { score: 90, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-english.svg',       alt: 'English',          bg: '#ff4d56', border: '#cc3e45', text: '#f2f2f2' },
+      'Bahasa Melayu':    { score: 76, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-bmelayu.svg',        alt: 'Bahasa Melayu',    bg: '#4d77ff', border: '#2e4799', text: '#f2f2f2' },
+      'Mathematics':      { score: 80, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-math.svg',           alt: 'Mathematics',      bg: '#42ac7b', border: '#358a62', text: '#f2f2f2' },
+      'Pendidikan Islam': { score: 84, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-islamic.svg',        alt: 'Pendidikan Islam', bg: '#de4d7f', border: '#b23e66', text: '#f2f2f2' },
+      'Pendidikan Moral': { score: 50, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-moral.svg',          alt: 'Pendidikan Moral', bg: '#0072ca', border: '#005ba2', text: '#f2f2f2' },
+      'Science':          { score: 85, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-science.svg',        alt: 'Science',          bg: '#ffd641', border: '#ccab34', text: '#998027' },
+      'Add Math':         { score: 72, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-add-math.svg',       alt: 'Add Math',         bg: '#283589', border: '#182052', text: '#f2f2f2' },
+      'Biology':          { score: 88, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-biology.svg',        alt: 'Biology',          bg: '#8431d8', border: '#6a27ad', text: '#f2f2f2' },
+      'Chemistry':        { score: 65, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chemistry.svg',      alt: 'Chemistry',        bg: '#e20082', border: '#b50068', text: '#f2f2f2' },
+      'Physics':          { score: 78, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-physics.svg',        alt: 'Physics',          bg: '#27a0d7', border: '#1f80ac', text: '#f2f2f2' },
+      'History':          { score: 91, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-history.svg',        alt: 'History',          bg: '#a97c50', border: '#876340', text: '#f2f2f2' },
+      'Geography':        { score: 60, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-geography.png',      alt: 'Geography',        bg: '#77d836', border: '#5fad2b', text: '#478220' },
+      'Economy':          { score: 55, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-economy.svg',        alt: 'Economy',          bg: '#ff5733', border: '#cc4629', text: '#f2f2f2' },
+      'Account':          { score: 83, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-account.svg',        alt: 'Account',          bg: '#0072ca', border: '#004479', text: '#f2f2f2' },
+      'Business':         { score: 70, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-business.svg',       alt: 'Business',         bg: '#efb42b', border: '#bf9022', text: '#f2f2f2' },
+      'Computer Science': { score: 95, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-comp-science.svg',  alt: 'Computer Science', bg: '#d10070', border: '#a7005a', text: '#f2f2f2' },
+      'KAFA':             { score: 77, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-kafa.svg',           alt: 'KAFA',             bg: '#8ae3a9', border: '#6eb687', text: '#538865' },
+      'RBT':              { score: 82, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-rbt.svg',            alt: 'RBT',              bg: '#353535', border: '#2a2a2a', text: '#f2f2f2' }
+    };
+
+    var params  = new URLSearchParams(window.location.search);
+    var subject = params.get('subject') || 'Bahasa Melayu';
+    var d       = SUBJECTS[subject] || SUBJECTS['Bahasa Melayu'];
+    var grade   = scoreToGrade(d.score);
+    var mastery = MASTERY[grade] || 'Mastery';
+
+    // Breadcrumb
+    var titleEl   = document.getElementById('an-breadcrumb-title');
+    var subjectEl = document.getElementById('an-breadcrumb-subject');
+    if (titleEl)   titleEl.textContent = 'Analysis for ' + subject + ' Form 5';
+    if (subjectEl) subjectEl.textContent = subject;
+
+    var bcReportCard = document.getElementById('bc-report-card');
+    if (bcReportCard) bcReportCard.addEventListener('click', function() { window.location.href = 'achievement-report-card.html'; });
+
+    // Subject badge — update CSS vars + icon + label
+    var badgeEl      = document.getElementById('an-badge');
+    var badgeIconEl  = document.getElementById('an-badge-icon');
+    var badgeLabelEl = document.getElementById('an-badge-label');
+    if (badgeEl) {
+      badgeEl.style.setProperty('--badge-bg',     d.bg);
+      badgeEl.style.setProperty('--badge-border', d.border);
+      badgeEl.style.setProperty('--badge-text',   d.text || '#f2f2f2');
+    }
+    if (badgeIconEl)  { badgeIconEl.src = d.icon; badgeIconEl.alt = d.alt; }
+    if (badgeLabelEl) {
+      var ptr = badgeLabelEl.querySelector('.an-subject-badge__pointer');
+      badgeLabelEl.textContent = subject;
+      if (ptr) badgeLabelEl.insertBefore(ptr, badgeLabelEl.firstChild);
+    }
+
+    // Grade letter + percentage
+    var gradeLetterEl = document.getElementById('an-grade-letter');
+    var gradePctEl    = document.getElementById('an-grade-pct');
+    if (gradeLetterEl) gradeLetterEl.textContent = grade;
+    if (gradePctEl)    gradePctEl.textContent    = d.score + '%';
+
+    // Mastery pill — swap text + color class
+    var masteryEl = document.getElementById('an-mastery-pill');
+    if (masteryEl) {
+      masteryEl.textContent = mastery;
+      masteryEl.className   = 'an-mastery-pill ' + (MASTERY_CLASS[mastery] || '');
+    }
+  })();
+
   /* Nav button handlers — registered before non-critical JS */
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -2295,255 +2771,176 @@
     });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAll(); });
   })();
-
-  /* ── Subject data: DS-confirmed badge colors (CLAUDE.md Rule 17) ── */
-  try {
-    const SUBJECT_DATA = {
-      'account':   { name: 'Account',          bg: '#0072ca', border: '#004479', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-account.svg'    },
-      'add-math':  { name: 'Add Math',          bg: '#283589', border: '#182052', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-add-math.svg'   },
-      'bm':        { name: 'Bahasa Melayu',     bg: '#4d77ff', border: '#2e4799', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-bmelayu.svg'    },
-      'biology':   { name: 'Biology',           bg: '#8431d8', border: '#6a27ad', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-biology.svg'    },
-      'chemistry': { name: 'Chemistry',         bg: '#e20082', border: '#b50068', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chemistry.svg'  },
-      'science':   { name: 'Science',           bg: '#ffd641', border: '#ccab34', text: '#998027', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-science.svg'    },
-      'economy':   { name: 'Economy',           bg: '#ff5733', border: '#cc4629', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-economy.svg'    },
-      'english':   { name: 'English',           bg: '#ff4d56', border: '#cc3e45', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-english.svg'    },
-      'geography': { name: 'Geography',         bg: '#77d836', border: '#5fad2b', text: '#478220', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-geography.png'  },
-      'history':   { name: 'History',           bg: '#a97c50', border: '#876340', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-history.svg'    },
-      'islamic':   { name: 'Islamic Studies',   bg: '#de4d7f', border: '#b23e66', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-islamic.svg'    },
-      'kafa':      { name: 'KAFA',              bg: '#8ae3a9', border: '#6eb687', text: '#358a62', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-kafa.svg'       },
-      'math':      { name: 'Mathematics',       bg: '#42ac7b', border: '#358a62', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-math.svg'       },
-      'moral':     { name: 'Moral Studies',     bg: '#0072ca', border: '#005ba2', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-moral.svg'      },
-      'cs':        { name: 'Computer Science',  bg: '#d10070', border: '#a7005a', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-comp-science.svg'},
-      'physics':   { name: 'Physics',           bg: '#27a0d7', border: '#1f80ac', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-physics.svg'    },
-      'rbt':       { name: 'RBT',               bg: '#353535', border: '#2a2a2a', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-rbt.svg'        },
-      'chinese':   { name: 'Chinese Language',  bg: '#f94848', border: '#c73a3a', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chinese-lang.svg'},
-    };
-
-    function badgeHTML(s) {
-      return `<div class="sc-subject-badge" style="--badge-bg:${s.bg};--badge-border:${s.border}">
-        <div class="sc-subject-badge__icon"><img src="${s.icon}" alt="${s.name}"></div>
-        <div class="sc-subject-badge__label" style="color:${s.text}">
-          <svg class="sc-subject-badge__pointer" width="4" height="8" viewBox="0 0 4 8" fill="white" aria-hidden="true"><path d="M 0 0 L 4 4 L 0 8 Z"/></svg>
-          ${s.name}
-        </div>
-      </div>`;
-    }
-
-    const ALL_PILL_HTML = `<div class="sc-all-pill">All Subjects</div>`;
-
-    function renderBadges(key) {
-      const container = document.getElementById('badge-display');
-      if (key === 'all') {
-        container.innerHTML = ALL_PILL_HTML;
-      } else {
-        const s = SUBJECT_DATA[key];
-        container.innerHTML = s ? badgeHTML(s) : ALL_PILL_HTML;
-      }
-    }
-
-    /* ── Donut progress animation ── */
-    const CIRCUMFERENCE = 2 * Math.PI * 74; // ≈ 464.95 (r=74)
-    const progressCircle = document.getElementById('donut-progress');
-    const donutLabel     = document.getElementById('donut-label');
-    let animFrame = null;
-
-    function animateDonut(targetPct, duration) {
-      if (animFrame) cancelAnimationFrame(animFrame);
-      const start = performance.now();
-      function step(now) {
-        const t       = Math.min((now - start) / duration, 1);
-        const eased   = 1 - Math.pow(1 - t, 3);
-        const current = eased * targetPct;
-        const dash    = (CIRCUMFERENCE * current / 100).toFixed(2);
-        const gap     = (CIRCUMFERENCE - dash).toFixed(2);
-        progressCircle.setAttribute('stroke-dasharray', `${dash} ${gap}`);
-        donutLabel.textContent = current.toFixed(1) + '%';
-        if (t < 1) {
-          animFrame = requestAnimationFrame(step);
-        } else {
-          const fd = (CIRCUMFERENCE * targetPct / 100).toFixed(2);
-          progressCircle.setAttribute('stroke-dasharray', `${fd} ${(CIRCUMFERENCE - fd).toFixed(2)}`);
-          donutLabel.textContent = targetPct.toFixed(1) + '%';
-        }
-      }
-      animFrame = requestAnimationFrame(step);
-    }
-
-    /* ── Graph: 7-day (Sun→Sat) animated chart ── */
-    const GRAPH_DATA = {
-      'all':       [ 20, -15,  45,  35,  55,  70,  40],
-      'account':   [ 30,  10,  50,  25,  60,  45,  55],
-      'add-math':  [-10,  20,  35,  50,  40,  65,  30],
-      'bm':        [ 15,  30,  55,  20,  70,  45,  60],
-      'biology':   [ 40,  -5,  60,  30,  75,  55,  80],
-      'chemistry': [ 10,  25,  -5,  45,  30,  60,  20],
-      'science':   [ 50,  30,  70,  55,  80,  65,  75],
-      'economy':   [-20,  10,  25,  -5,  40,  20,  35],
-      'english':   [ 60,  45,  75,  55,  80,  70,  85],
-      'geography': [ 20,  35,  10,  50,  30,  45,  25],
-      'history':   [ 55,  70,  60,  75,  65,  80,  70],
-      'islamic':   [ 40,  55,  45,  60,  50,  70,  55],
-      'kafa':      [ 30,  45,  60,  40,  55,  65,  50],
-      'math':      [ 45,  60,  50,  70,  55,  75,  65],
-      'moral':     [ -5,  15,  30, -10,  25,  40,  20],
-      'cs':        [ 35,  50,  65,  45,  60,  70,  55],
-      'physics':   [ 40,  55,  45,  65,  50,  70,  60],
-      'rbt':       [ 50,  65,  55,  70,  60,  75,  65],
-      'chinese':   [ 45,  55,  65,  50,  70,  60,  75],
-    };
-    const GRAPH_X    = [34, 86, 138, 190, 242, 294, 346];
-    const BAR_W      = 28;
-    const BASELINE_Y = 68;
-    const MAX_AMP    = 55;
-    let graphAnimFrame = null;
-
-    function gY(val, maxAbs) {
-      return maxAbs === 0 ? BASELINE_Y : BASELINE_Y - (val / maxAbs) * MAX_AMP;
-    }
-
-    function smoothCurve(pts) {
-      const t = 0.35;
-      let d = `M${pts[0][0]},${pts[0][1].toFixed(2)}`;
-      for (let i = 0; i < pts.length - 1; i++) {
-        const p0 = pts[Math.max(0, i - 1)], p1 = pts[i];
-        const p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
-        const cp1x = (p1[0] + (p2[0] - p0[0]) * t).toFixed(2);
-        const cp1y = (p1[1] + (p2[1] - p0[1]) * t).toFixed(2);
-        const cp2x = (p2[0] - (p3[0] - p1[0]) * t).toFixed(2);
-        const cp2y = (p2[1] - (p3[1] - p1[1]) * t).toFixed(2);
-        d += ` C${cp1x},${cp1y} ${cp2x},${cp2y} ${p2[0]},${p2[1].toFixed(2)}`;
-      }
-      return d;
-    }
-
-    function renderGraphAt(vals, progress) {
-      const maxAbs = Math.max(...vals.map(v => Math.abs(v)), 1);
-      const pts = GRAPH_X.map((x, i) => [x, gY(vals[i] * progress, maxAbs)]);
-      GRAPH_X.forEach((x, i) => {
-        const [, dotY] = pts[i];
-        document.getElementById(`graph-dot-${i}`).setAttribute('cx', x);
-        document.getElementById(`graph-dot-${i}`).setAttribute('cy', dotY.toFixed(2));
-        const hit = document.getElementById(`graph-hit-${i}`);
-        hit.setAttribute('x', x - BAR_W / 2); hit.setAttribute('y', 5);
-        hit.setAttribute('width', BAR_W); hit.setAttribute('height', 88);
-      });
-      document.getElementById('graph-line').setAttribute('d', smoothCurve(pts));
-    }
-
-    /* ── Bar tooltip on hover ── */
-    const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const graphTooltip = document.createElement('div');
-    graphTooltip.className = 'graph-tooltip';
-    document.body.appendChild(graphTooltip);
-    const graphSvg = document.getElementById('score-graph');
-
-    GRAPH_X.forEach((x, i) => {
-      const hit = document.getElementById(`graph-hit-${i}`);
-      hit.addEventListener('mouseenter', () => {
-        const svgRect = graphSvg.getBoundingClientRect();
-        const bar = document.getElementById(`graph-bar-${i}`);
-        const barTop = parseFloat(bar.getAttribute('y'));
-        graphTooltip.textContent = DAYS[i];
-        graphTooltip.style.left = (svgRect.left + x * svgRect.width / 380) + 'px';
-        graphTooltip.style.top  = (svgRect.top  + barTop * svgRect.height / 120) + 'px';
-        graphTooltip.classList.add('is-visible');
-      });
-      hit.addEventListener('mouseleave', () => graphTooltip.classList.remove('is-visible'));
-    });
-
-    function animateGraph(key, duration) {
-      const vals = GRAPH_DATA[key] || GRAPH_DATA['all'];
-      if (graphAnimFrame) cancelAnimationFrame(graphAnimFrame);
-      renderGraphAt(vals, 0);
-      const start = performance.now();
-      function step(now) {
-        const t     = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - t, 3);
-        renderGraphAt(vals, eased);
-        if (t < 1) graphAnimFrame = requestAnimationFrame(step);
-        else renderGraphAt(vals, 1);
-      }
-      graphAnimFrame = requestAnimationFrame(step);
-    }
-
-    /* ── Accent color — syncs donut, label, graph line + dots to subject color ── */
-    function hexToRgba(hex, alpha) {
-      const r = parseInt(hex.slice(1,3), 16);
-      const g = parseInt(hex.slice(3,5), 16);
-      const b = parseInt(hex.slice(5,7), 16);
-      return `rgba(${r},${g},${b},${alpha})`;
-    }
-
-    function setAccentColor(color) {
-      document.getElementById('donut-progress').setAttribute('stroke', color);
-      document.getElementById('donut-label').style.color = color;
-      document.getElementById('graph-line').setAttribute('stroke', color);
-      for (let i = 0; i < 7; i++) {
-        document.getElementById(`graph-dot-${i}`).setAttribute('stroke', color);
-      }
-      document.querySelectorAll('.sc-stat-value, .sc-mid__value, .sc-mini-stat-value').forEach(el => {
-        el.style.color = color;
-      });
-      document.querySelectorAll('.sc-icon-circle').forEach(el => {
-        el.style.background = hexToRgba(color, 0.15);
-        el.style.color = color;
-      });
-    }
-
-    const cardOuter = document.querySelector('.sc-card-outer');
-    function setInnerBorder(color) {
-      if (cardOuter) cardOuter.style.setProperty('--sc-inner-border', color);
-    }
-
-    /* ── Filter dropdown — subject selection (prototype: cycles through subjects on click) ── */
-    (function() {
-      var subjects = [
-        { key:'all',       progress:61.5, label:'All Subjects'    },
-        { key:'account',   progress:78.0, label:'Account'         },
-        { key:'add-math',  progress:72.0, label:'Add Math'        },
-        { key:'bm',        progress:76.0, label:'Bahasa Melayu'   },
-        { key:'biology',   progress:88.0, label:'Biology'         },
-        { key:'chemistry', progress:65.0, label:'Chemistry'       },
-        { key:'science',   progress:85.0, label:'Science'         },
-        { key:'economy',   progress:55.0, label:'Economy'         },
-        { key:'english',   progress:90.0, label:'English'         },
-        { key:'geography', progress:60.0, label:'Geography'       },
-        { key:'history',   progress:91.0, label:'History'         },
-        { key:'islamic',   progress:84.0, label:'Islamic Studies' },
-        { key:'kafa',      progress:77.0, label:'KAFA'            },
-        { key:'math',      progress:80.0, label:'Mathematics'     },
-        { key:'rbt',       progress:82.0, label:'RBT'             },
-        { key:'moral',     progress:50.0, label:'Moral Studies'   },
-        { key:'cs',        progress:70.0, label:'Computer Science'},
-        { key:'physics',   progress:78.0, label:'Physics'         },
-        { key:'chinese',   progress:80.0, label:'Chinese Language'},
-      ];
-      var idx = 0;
-      var btn = document.getElementById('subject-filter-btn');
-      var lbl = document.getElementById('subject-filter-label');
-      if (!btn) return;
-      btn.addEventListener('click', function() {
-        idx = (idx + 1) % subjects.length;
-        var s           = subjects[idx];
-        var color       = s.key === 'all' ? '#00cc85' : (SUBJECT_DATA[s.key]?.bg     || '#00cc85');
-        var borderColor = s.key === 'all' ? '#00cc85' : (SUBJECT_DATA[s.key]?.border || '#00cc85');
-        if (lbl) lbl.textContent = s.label;
-        renderBadges(s.key);
-        setAccentColor(color);
-        setInnerBorder(borderColor);
-        animateDonut(s.progress, 900);
-        animateGraph(s.key, 900);
-      });
-    })();
-
-    /* Initial render — "All" is active on load */
-    renderBadges('all');
-    setAccentColor('#00cc85');
-    setInnerBorder('#00cc85');
-    animateGraph('all', 900);
-
-  } catch(e) { console.warn('Score card init error:', e); }
 </script>
+
+<script>
+/* test.page.compiled — Top Menu Bar navigation + persistent active state (v5) */
+(function () {
+  var TOP_ROUTES = {
+    'Home':     'home.html',
+    'Practice': 'practice.html'
+  };
+  var SUB_ROUTES = {
+    'My Classes':       'class-my-classes.html',
+    'Browse Classes':   'class-browse-classes.html',
+    'Learning Hub':     'learn-learning-hub.html',
+    'Quick Notes':      'learn-quick-notes.html',
+    'Score Card':       'achievement-score-card.html',
+    'Report Card':      'achievement-report-card.html',
+    'Coin Quests':      'rewards-coin-quests.html',
+    'My Rewards':       'rewards-my-rewards.html',
+    'Merchandise':      'rewards-merchandise.html',
+    'eVoucher':         'rewards-evoucher.html',
+    'Avatar':           'rewards-avatar.html'
+  };
+  /* Page → parent main-menu label that should show active state */
+  var PAGE_ACTIVE_MAIN = {
+    'home.html':                       'Home',
+    'practice.html':                   'Practice',
+    'class-my-classes.html':           'Class',
+    'class-browse-classes.html':       'Class',
+    'learn-learning-hub.html':         'Learn',
+    'learn-quick-notes.html':          'Learn',
+    'achievement-score-card.html':     'Achievement',
+    'achievement-report-card.html':    'Achievement',
+    'achievement-analysis-card.html':  'Achievement',
+    'rewards-coin-quests.html':        'Rewards',
+    'rewards-my-rewards.html':         'Rewards',
+    'rewards-merchandise.html':        'Rewards',
+    'rewards-evoucher.html':           'Rewards',
+    'rewards-avatar.html':             'Rewards'
+  };
+
+  var SEL_A_BTN  = '#NavTopMenu-Desktop .nav-menu-btn';
+  var SEL_A_ITEM = '#NavTopMenu-Desktop .nav-menu-dropdown__item';
+  var SEL_B_BTN  = '.navbar-nav .nav-btn, .menubar-nav .nav-btn';
+  var SEL_B_ITEM = '.nav-subtopic-dropdown__item';
+
+  function nav(href) { return function (e) { e.preventDefault(); e.stopPropagation(); window.location.href = href; }; }
+
+  function currentFile() {
+    var p = window.location.pathname.replace(/[?#].*$/, '');
+    if (p.charAt(p.length - 1) === '/') return 'home.html';
+    var f = p.substring(p.lastIndexOf('/') + 1).toLowerCase();
+    if (!f) return 'home.html';
+    if (f.indexOf('.html') < 0) f += '.html';
+    return f;
+  }
+
+  function wireLinks() {
+    document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
+      if (btn.hasAttribute('aria-haspopup')) return;
+      var href = TOP_ROUTES[(btn.getAttribute('aria-label') || '').trim()];
+      if (href && !btn.dataset.tpcWired) {
+        btn.addEventListener('click', nav(href), true);
+        btn.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_A_ITEM).forEach(function (item) {
+      var lbl = item.querySelector('.nav-menu-dropdown__label');
+      if (!lbl) return;
+      var href = SUB_ROUTES[lbl.textContent.trim()];
+      if (href && !item.dataset.tpcWired) {
+        item.addEventListener('click', nav(href), true);
+        item.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
+      if (btn.hasAttribute('aria-haspopup')) return;
+      var lbl = btn.querySelector('.nav-btn__label');
+      if (!lbl) return;
+      var href = TOP_ROUTES[lbl.textContent.trim()];
+      if (href && !btn.dataset.tpcWired) {
+        btn.addEventListener('click', nav(href), true);
+        btn.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_B_ITEM).forEach(function (item) {
+      var lbl = item.querySelector('.nav-subtopic-dropdown__item-label');
+      if (!lbl) return;
+      var href = SUB_ROUTES[lbl.textContent.trim()];
+      if (!href) return;
+      if (item.tagName === 'A') item.setAttribute('href', href);
+      if (!item.dataset.tpcWired) {
+        item.addEventListener('click', nav(href), true);
+        item.dataset.tpcWired = '1';
+      }
+    });
+  }
+
+  var applying = false;
+  function applyActive() {
+    if (applying) return;
+    applying = true;
+    try {
+      var label = PAGE_ACTIVE_MAIN[currentFile()];
+      document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
+        var match = !!(label && (btn.getAttribute('aria-label') || '').trim() === label);
+        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
+        if (match) {
+          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
+        } else if (btn.hasAttribute('aria-current')) {
+          btn.removeAttribute('aria-current');
+        }
+      });
+      document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
+        var lbl = btn.querySelector('.nav-btn__label');
+        var match = !!(label && lbl && lbl.textContent.trim() === label);
+        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
+        if (match) {
+          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
+        } else if (btn.hasAttribute('aria-current')) {
+          btn.removeAttribute('aria-current');
+        }
+      });
+    } finally {
+      applying = false;
+    }
+  }
+
+  var observing = false;
+  function startObserver() {
+    if (observing || typeof MutationObserver !== 'function') return;
+    var targets = [];
+    var a = document.getElementById('NavTopMenu-Desktop'); if (a) targets.push(a);
+    document.querySelectorAll('.navbar-nav, .menubar-nav').forEach(function (n) { targets.push(n); });
+    if (!targets.length) return;
+    /* Synchronous re-apply on every batch of mutations — runs as microtask, before paint */
+    var observer = new MutationObserver(applyActive);
+    targets.forEach(function (t) {
+      observer.observe(t, { attributes: true, subtree: true, attributeFilter: ['class', 'aria-current'] });
+    });
+    observing = true;
+  }
+
+  function init() {
+    wireLinks();
+    applyActive();
+    startObserver();
+    /* Defeat any deferred init code that re-asserts Home — multiple deferred passes */
+    [0, 50, 150, 400, 1000, 2500].forEach(function (d) { setTimeout(applyActive, d); });
+    /* 5s safety net: re-check every 250ms for 5s after load */
+    var ticks = 0;
+    var iv = setInterval(function () {
+      applyActive();
+      if (++ticks >= 20) clearInterval(iv);
+    }, 250);
+    /* Also re-apply on user interaction */
+    document.addEventListener('click',     function () { setTimeout(applyActive, 0); }, true);
+    document.addEventListener('mouseleave',function () { setTimeout(applyActive, 0); }, true);
+    document.addEventListener('mouseup',   function () { setTimeout(applyActive, 0); }, true);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+
+
 
 </body>
 </html>

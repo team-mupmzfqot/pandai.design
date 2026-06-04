@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pandai â€” Learning Hub</title>
+  <title>Pandai — Quick Notes Selections</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,24 +94,120 @@
       --scale-200: 8px;
 
       /* Subject Colors Ã¢â‚¬â€ ALL confirmed from DS get_variable_defs */
-      --subjects-b-melayu-default:   #4d77ff;   /* Subjects/b-melayu/default */
-      --subjects-english-default:    #ff4d56;   /* Subjects/english/default */
-      --subjects-math-default:       #42ac7b;   /* Subjects/math/default */
-      --subjects-science-default:    #ffd641;   /* Subjects/science/default */
-      --subjects-chemistry-default:  #e20082;   /* Subjects/chemistry/default */
-      --subjects-physics-default:    #27a0d7;   /* Subjects/physics/default */
-      --subjects-history-default:    #a97c50;   /* Subjects/history/default */
-      --subjects-geo-default:        #77d836;   /* Subjects/geo/default */
-      --subjects-islamic-default:    #de4d7f;   /* Subjects/islamic/default */
-      --subjects-moral-default:      #0072ca;   /* Subjects/moral/default */
-      --subjects-biology-default:    #8431d8;   /* Subjects/biology/default */
-      --subjects-add-math-default:   #283589;   /* Subjects/add-math/default */
-      --subjects-economy-default:    #ff5733;   /* Subjects/economy/default */
-      --subjects-account-default:    #0072ca;   /* Subjects/account/default */
-      --subjects-business-default:   #efb42b;   /* Subjects/business/default */
-      --subjects-cs-default:         #d10070;   /* Subjects/comp-science/default */
-      --subjects-kafa-default:       #8ae3a9;   /* Subjects/kafa/default */
-      --subjects-rbt-default:        #353535;   /* Subjects/rbt/default */
+      /* Subject Colors — all 5 tiers, all 19 subjects. Confirmed from DS (Subjects A–E, G–S collections) */
+      --subjects-account-default:                #0072ca;
+      --subjects-account-default-hover:          #005ba2;
+      --subjects-account-default-subtle:         #e6f1fa;
+      --subjects-account-default-subtle-hover:   #99c7ea;
+      --subjects-account-focus:                  #004479;
+
+      --subjects-add-math-default:               #283589;
+      --subjects-add-math-default-hover:         #202a6e;
+      --subjects-add-math-default-subtle:        #eaebf3;
+      --subjects-add-math-default-subtle-hover:  #a9aed0;
+      --subjects-add-math-focus:                 #182052;
+
+      --subjects-b-melayu-default:               #4d77ff;
+      --subjects-b-melayu-default-hover:         #3e5fcc;
+      --subjects-b-melayu-default-subtle:        #f6f9ff;
+      --subjects-b-melayu-default-subtle-hover:  #b8c9ff;
+      --subjects-b-melayu-focus:                 #2e4799;
+
+      --subjects-biology-default:                #8431d8;
+      --subjects-biology-default-hover:          #6a27ad;
+      --subjects-biology-default-subtle:         #f3ebfb;
+      --subjects-biology-default-subtle-hover:   #ceadef;
+      --subjects-biology-focus:                  #4f1d82;
+
+      --subjects-business-default:               #efb42b;
+      --subjects-business-default-hover:         #bf9022;
+      --subjects-business-default-subtle:        #fef8ea;
+      --subjects-business-default-subtle-hover:  #f9e1aa;
+      --subjects-business-focus:                 #8f6c1a;
+
+      --subjects-chemistry-default:              #e20082;
+      --subjects-chemistry-default-hover:        #b50068;
+      --subjects-chemistry-default-subtle:       #fce6f3;
+      --subjects-chemistry-default-subtle-hover: #ed99c6;
+      --subjects-chemistry-focus:                #88004e;
+
+      --subjects-chinese-default:                #f94848;
+      --subjects-chinese-default-hover:          #c73a3a;
+      --subjects-chinese-default-subtle:         #ffeded;
+      --subjects-chinese-default-subtle-hover:   #fdb6b6;
+      --subjects-chinese-focus:                  #952b2b;
+
+      --subjects-cs-default:                     #d10070;
+      --subjects-cs-default-hover:               #a7005a;
+      --subjects-cs-default-subtle:              #fbe6f1;
+      --subjects-cs-default-subtle-hover:        #ed99c6;
+      --subjects-cs-focus:                       #7d0043;
+
+      --subjects-economy-default:                #ff5733;
+      --subjects-economy-default-hover:          #cc4629;
+      --subjects-economy-default-subtle:         #ffeeeb;
+      --subjects-economy-default-subtle-hover:   #ffbcad;
+      --subjects-economy-focus:                  #99341f;
+
+      --subjects-english-default:                #ff4d56;
+      --subjects-english-default-hover:          #cc3e45;
+      --subjects-english-default-subtle:         #ffedee;
+      --subjects-english-default-subtle-hover:   #ffb8bb;
+      --subjects-english-focus:                  #992e34;
+
+      --subjects-geo-default:                    #77d836;
+      --subjects-geo-default-hover:              #5fad2b;
+      --subjects-geo-default-subtle:             #f2fbeb;
+      --subjects-geo-default-subtle-hover:       #c9efaf;
+      --subjects-geo-focus:                      #478220;
+
+      --subjects-history-default:                #a97c50;
+      --subjects-history-default-hover:          #876340;
+      --subjects-history-default-subtle:         #f7f2ee;
+      --subjects-history-default-subtle-hover:   #ddcbb9;
+      --subjects-history-focus:                  #654a30;
+
+      --subjects-islamic-default:                #de4d7f;
+      --subjects-islamic-default-hover:          #b23e66;
+      --subjects-islamic-default-subtle:         #fcedf2;
+      --subjects-islamic-default-subtle-hover:   #f2b8cc;
+      --subjects-islamic-focus:                  #852e4c;
+
+      --subjects-kafa-default:                   #8ae3a9;
+      --subjects-kafa-default-hover:             #6eb687;
+      --subjects-kafa-default-subtle:            #f4fcf7;
+      --subjects-kafa-default-subtle-hover:      #d0f4dd;
+      --subjects-kafa-focus:                     #538865;
+
+      --subjects-math-default:                   #42ac7b;
+      --subjects-math-default-hover:             #358a62;
+      --subjects-math-default-subtle:            #ecf7f2;
+      --subjects-math-default-subtle-hover:      #b3deca;
+      --subjects-math-focus:                     #28674a;
+
+      --subjects-moral-default:                  #0072ca;
+      --subjects-moral-default-hover:            #005ba2;
+      --subjects-moral-default-subtle:           #e6f1fa;
+      --subjects-moral-default-subtle-hover:     #99c7ea;
+      --subjects-moral-focus:                    #004479;
+
+      --subjects-physics-default:                #27a0d7;
+      --subjects-physics-default-hover:          #1f80ac;
+      --subjects-physics-default-subtle:         #eaf6fb;
+      --subjects-physics-default-subtle-hover:   #a9d9ef;
+      --subjects-physics-focus:                  #176081;
+
+      --subjects-rbt-default:                    #353535;
+      --subjects-rbt-default-hover:              #2a2a2a;
+      --subjects-rbt-default-subtle:             #d7d7d7;
+      --subjects-rbt-default-subtle-hover:       #aeaeae;
+      --subjects-rbt-focus:                      #202020;
+
+      --subjects-science-default:                #ffd641;
+      --subjects-science-default-hover:          #ccab34;
+      --subjects-science-default-subtle:         #fffbec;
+      --subjects-science-default-subtle-hover:   #ffefb3;
+      --subjects-science-focus:                  #998027;
 
       /* Typography */
       --font-family: 'Poppins', sans-serif;
@@ -2060,484 +2156,149 @@
       color:  var(--text-disabled-default);
     }
 
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       LEARNING HUB â€” Section styles
-       DS node 3420:205734 Â· Confirmed 2026-05-26
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* QUICK NOTES SELECTIONS - Section styles · DS node 3638:47307 · 2026-06-03 */
 
-    /* Override page-viewport to remove the placeholder box-shadow + center alignment */
-    #LearningHub-Viewport {
-      display:         flex;
-      flex-direction:  column;
-      align-items:     stretch;
-      justify-content: flex-start;
-      flex:            1;
-      min-height:      0;
-      background:      transparent;
-      box-shadow:      none;
-      border-radius:   0;
-      gap:             var(--spacing-space-m);
+
+    #QuickNotesSelections-Viewport {
+      display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
+      flex: 1; min-height: 0; background: transparent; box-shadow: none; border-radius: 0;
+      gap: var(--spacing-space-m);
     }
 
-    /* â”€â”€ Breadcrumb bar â€” syakila.design.md confirmed pattern â”€â”€ */
-    .pd-breadcrumbs15  { display: flex; align-items: center; gap: var(--spacing-space-m); min-height: 36px; margin-bottom: var(--spacing-space-m); }
+    .pd-breadcrumbs15 { display: flex; align-items: center; gap: var(--spacing-space-m); min-height: 36px; }
     .pd-breadcrumbs__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
-    .pd-breadcrumbs__sep   { width: 1px; align-self: stretch; background: var(--border-general-default); flex-shrink: 0; }
+    .pd-breadcrumbs__sep { width: 1px; align-self: stretch; background: var(--border-general-default); flex-shrink: 0; }
     .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--spacing-space-xs); flex-wrap: wrap; }
-    .pd-link15 {
-      display: flex; align-items: center; gap: 4px;
-      background: none; border: none; padding: 0; cursor: pointer;
-      color: var(--text-default-body);
-      text-decoration: none;
-    }
-    .pd-link15__icon-home  { display: block; width: 20px; height: 20px; flex-shrink: 0; color: var(--text-primary-default); }
-    .pd-link15__text         { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
-    .pd-link15__text--parent { color: var(--text-primary-default); }
-    .pd-breadcrumbs__chevron { width: 16px; height: 16px; color: var(--text-primary-default); flex-shrink: 0; }
+    .pd-link15 { display: flex; align-items: center; gap: 4px; border: none; background: none; padding: 0; font-family: var(--font-family); cursor: pointer; }
+    .pd-link15__icon { width: 20px; height: 20px; flex-shrink: 0; color: var(--text-primary-default); }
+    .pd-link15__text { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary-default); white-space: nowrap; }
+    .pd-link15__text--current { color: var(--text-default-body); }
+    .pd-breadcrumbs__chevron { width: 20px; height: 20px; flex-shrink: 0; color: var(--text-primary-default); }
 
-    /* â”€â”€ Main two-column layout â”€â”€ */
-    .learn-layout {
-      display:    flex;
-      gap:        var(--spacing-space-m);
-      flex:       1;
-      min-height: 0;
-      align-items: stretch;
-      max-width:  100%;
-      overflow-x: hidden;
-    }
-
-    /* â”€â”€ Left sidebar â€” DS Primary Card 1.5: border #d9d9d9, r=24px, p=16px, white â”€â”€ */
-    .learn-sidebar {
-      width:          318px;
-      min-width:      318px;
-      flex-shrink:    0;
-      align-self:     flex-start;
-      display:        flex;
-      flex-direction: column;
-      background:     var(--surface-general-default);
-      border:         1px solid var(--border-general-default);
-      border-radius:  var(--corner-radius-corner-4xl);
-      padding:        var(--spacing-space-m);
-      overflow:       hidden;
-      box-sizing:     border-box;
-    }
-
-    .learn-sidebar__content {
-      min-width:      0;
-      display:        flex;
-      flex-direction: column;
-      gap:            var(--spacing-space-xs);
-    }
-
-    /* Search input â€” DS Input Field 1.5 style */
-    .learn-search {
-      display:       flex;
-      align-items:   center;
-      gap:           var(--spacing-space-xs);
-      height:        48px;
-      padding:       var(--spacing-space-xs) var(--spacing-space-m);
-      background:    var(--surface-general-default);
-      border-radius: var(--corner-radius-corner-pill);
-      box-shadow:    inset 0 0 0 1px var(--border-general-default);
-      flex-shrink:   0;
-      transition:    box-shadow 0.15s ease;
-    }
-    .learn-search:focus-within {
-      box-shadow: inset 0 0 0 1px var(--border-primary-default);
-    }
-    .learn-search__icon { display: flex; align-items: center; flex-shrink: 0; color: var(--icon-default-default); }
-    .learn-search__icon svg { width: 20px; height: 20px; display: block; }
-    .learn-search__input {
-      flex:        1 0 0;
-      min-width:   0;
-      border:      none;
-      outline:     none;
-      background:  transparent;
-      font-family: var(--font-family);
-      font-size:   14px;
-      font-weight: 400;
-      line-height: 20px;
-      color:       var(--text-default-body);
-      padding:     0;
-    }
-    .learn-search__input::placeholder { color: var(--text-default-caption); }
-
-    /* Accordion section â€” DS Dropdown - 1.5 pattern */
-    .learn-accordion { display: flex; flex-direction: column; gap: 8px; }
-
-    /* Accordion header button â€” DS Button-Dropdown-1.5: white bg, 1px grey border, pill, 40px */
-    .learn-accordion__toggle {
-      display:         flex;
-      align-items:     center;
-      width:           100%;
-      height:          40px;
-      padding:         var(--spacing-space-xs) var(--spacing-space-xs) var(--spacing-space-xs) 12px;
-      gap:             var(--spacing-space-xs);
-      background:      var(--surface-general-default);
-      border:          1px solid var(--border-general-default);
-      border-radius:   var(--corner-radius-corner-rounded);
-      cursor:          pointer;
-      user-select:     none;
-      transition:      background 0.12s ease, border-color 0.12s ease;
-      flex-shrink:     0;
-    }
-    .learn-accordion__toggle:hover { border-color: var(--border-primary-default); }
-    .learn-accordion__label {
-      flex:        1 0 0;
-      font-size:   14px;
-      font-weight: 600;
-      line-height: 20px;
-      color:       var(--text-default-body);
-      text-align:  left;
-    }
-    /* Green pill arrow â€” DS Button-Dropdown-1.5 right arrow (bg #00cc85, padding 4px, 24px, pill) */
-    .learn-accordion__chevron {
-      width:           24px;
-      height:          24px;
-      min-width:       24px;
-      background:      var(--surface-primary-default);
-      border-radius:   var(--corner-radius-corner-rounded);
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      flex-shrink:     0;
-      transition:      transform 0.2s ease;
-      color:           var(--surface-general-default);
-    }
-    .learn-accordion__chevron svg { width: 16px; height: 16px; display: block; }
-    .learn-accordion.is-collapsed .learn-accordion__chevron { transform: rotate(180deg); }
-
-    /* Accordion body â€” transparent wrapper holding .dropdown-list boxes */
-    .learn-accordion__body {
-      display:        flex;
-      flex-direction: column;
-      gap:            var(--spacing-space-xs);
-      max-height:     2000px;
-      overflow:       hidden;
-      transition:     max-height 0.25s ease, opacity 0.2s ease;
-      opacity:        1;
-    }
-    .learn-accordion.is-collapsed .learn-accordion__body {
-      max-height: 0;
-      opacity:    0;
-    }
-
-    /* Dropdown List - 1.5 box â€” DS node 5215:122545: white, r=20, pad=16, gap=8 */
-    .dropdown-list {
-      background:     var(--surface-general-default);
-      border:         1px solid var(--border-general-default);
-      border-radius:  20px;
-      padding:        var(--spacing-space-m);
-      display:        flex;
-      flex-direction: column;
-      gap:            8px;
-    }
-
-    /* Filter item â€” DS Dropdown - Parts: gap=8px, py=8px px=16px, border:1px transparent, pill radius */
-    .filter-item {
-      display:       flex;
-      align-items:   center;
-      gap:           var(--spacing-space-xs);        /* 8px DS confirmed */
-      padding:       var(--spacing-space-xs) var(--spacing-space-m);  /* 8px 16px */
-      border-radius: var(--corner-radius-corner-pill);
-      border:        1px solid transparent;          /* prevents layout shift on hover */
-      cursor:        pointer;
-      user-select:   none;
-      transition:    background 0.12s ease, border-color 0.12s ease;
-      height:        38px;
-      overflow:      hidden;
-    }
-
-    /* Hover â€” bg #e8fbe8, border #00cc85, pill, label #00cc85 */
-    .filter-item:hover {
-      background:    var(--surface-secondary-default-subtle);
-      border-color:  var(--border-primary-default);
-      border-radius: var(--corner-radius-corner-pill);
-    }
-    .filter-item:hover .filter-item__label { color: var(--text-primary-default); }
-
-    /* Selected â€” bg #b5f291, border #00a36a, pill */
-    .filter-item.is-selected,
-    .filter-item.is-selected:hover {
-      background:    #b5f291;
-      border-color:  var(--border-primary-focus);
-      border-radius: var(--corner-radius-corner-pill);
-    }
-    .filter-item.is-selected .filter-item__label,
-    .filter-item.is-selected:hover .filter-item__label { color: var(--text-primary-default-hover); }
-
-    /* Disabled */
-    .filter-item.is-disabled,
-    .filter-item.is-disabled:hover {
-      background:    transparent;
-      border-color:  transparent;
-      cursor:        not-allowed;
-    }
-    .filter-item.is-disabled .filter-item__label { color: var(--text-disabled-default); }
-
-    /* Main/header item â€” selectable group label, SemiBold weight only */
-    .filter-item--main .filter-item__label {
-      font-weight: 600;
-    }
-
-    /* Sub-items â€” 28px left indent (DS Dropdown sub-list: pl-28px pr-12px py-8px) */
-    .filter-item:not(.filter-item--main) {
-      padding: var(--spacing-space-xs) 12px var(--spacing-space-xs) 28px;
-    }
-
-    /* Checkbox - 1.5 (DS node 587:540) â€” 16Ã—16, r=4px, 2px pad, 12Ã—12 check icon */
-    .dd-checkbox {
-      width:           16px;
-      height:          16px;
-      min-width:       16px;
-      border-radius:   4px;
-      border:          1px solid var(--border-general-default);
-      background:      var(--surface-general-default);
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      flex-shrink:     0;
-      padding:         2px;
-      box-sizing:      border-box;
-      transition:      background 0.12s ease, border-color 0.12s ease;
-    }
-    .dd-checkbox svg { display: none; width: 12px; height: 12px; color: white; flex-shrink: 0; }
-    .filter-item.is-selected .dd-checkbox {
-      background:   var(--surface-primary-default);
-      border-color: var(--border-primary-focus);
-    }
-    .filter-item.is-selected .dd-checkbox svg { display: block; }
-
-    /* Label â€” DS Body/B2: Medium 14px lh 20px */
-    .filter-item__label {
-      flex:        1 0 0;
-      min-width:   0;
-      font-size:   14px;
-      font-weight: 500;
-      line-height: 20px;
-      color:       var(--text-default-body);
-      white-space: nowrap;
-      overflow:    hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* â”€â”€ Practice Card Grid (Primary Card - 1.5 content area) â”€â”€ */
-    .practice-card-grid {
-      flex:            1;
-      min-width:       0;
-      align-self:      flex-start;   /* hugs content — never stretches to match sidebar */
-      background:      var(--surface-secondary-default-subtle);   /* #e8fbe8 â€” DS Surface/secondary/default-subtle */
-      border:          1px solid var(--border-primary-default);   /* #00cc85 â€” DS Border/default */
-      border-radius:   var(--corner-radius-corner-4xl);   /* 24px */
-      padding:         var(--spacing-space-m);   /* 16px */
-      display:         flex;
-      flex-direction:  column;
-      gap:             var(--spacing-space-xs);   /* 8px â€” DS Primary Card outer gap */
-    }
-
-    .practice-cards-content {
-      display:               grid;
-      grid-template-columns: 1fr 1fr;
-      gap:                   var(--spacing-space-m);   /* 16px */
-      overflow-y:            auto;
-      align-content:         start;
-      flex:                  1;
-    }
-
-    .practice-card.is-hidden      { display: none; }
-    .practice-cards-content.is-hidden { display: none; }
-
-    /* Empty state â€” DS node 3420:205916 â€” shown when no filters are selected */
-    .practice-empty-state {
-      display:         none;
-      flex-direction:  column;
-      align-items:     center;
-      justify-content: center;
-      gap:             var(--spacing-space-m);        /* Spacing/space-m = 16px */
-      background:      var(--secondary-50);           /* Secondary/50 = #f6fef6 */
-      box-shadow:      inset 0 0 0 1px var(--border-primary-default); /* Border/default #00cc85, strokeAlign INSIDE */
-      border-radius:   var(--corner-radius-corner-4xl); /* Corner-4XL = 24px */
-      padding:         var(--spacing-space-m);
-      height:          437px;   /* DS h-[437px] — fixed, does not follow sidebar height */
-      flex-shrink:     0;
-    }
-    .practice-empty-state.is-visible { display: flex; }
-
-
-
-    /* Icon/image â€” 108Ã—108 container, inner vector 81Ã—81 (12.5% inset), stroke = Icon/success/default */
-    .practice-empty-state__icon {
-      width:       108px;
-      height:      108px;
-      padding:     13.5px; /* 12.5% of 108px = DS confirmed inset */
-      box-sizing:  border-box;
-      flex-shrink: 0;
-      color:       var(--icon-success-default); /* Icon/success/default = #18c964 */
-    }
-    .practice-empty-state__icon svg { width: 100%; height: 100%; display: block; }
-
-    .practice-empty-state__label {
-      font-family: 'Poppins', sans-serif;  /* Header/H3 */
-      font-size:   24px;
-      font-weight: 500;
-      line-height: 36px;
-      color:       var(--text-default-body); /* Text/default/body = #666666 */
-      text-align:  center;
-    }
-
-    /* .practice-cards-row removed — grid on container handles 2-col layout */
-
-    /* Practice Card - 1.5 â€” DS node 2339:4823
-       Fetched from Nadia.test.git/Practise/nadia_Practise-subject.html */
-    .practice-card {
-      display: flex;
-      align-items: stretch;
-      position: relative;
-      border: none;
-      box-shadow: inset 0 0 0 1px var(--subj-border);
-      border-radius: 24px;
-      overflow: hidden;
-      background: var(--subj-bg);
-      height: 160px;
-      cursor: default;
-      transition: background 0.18s ease, box-shadow 0.18s ease;
-    }
-    .practice-card:hover {
-      background: var(--subj-bg-hover);
-      box-shadow: inset 0 0 0 8px var(--subj-bg);
-      cursor: pointer;
-    }
-    .practice-card:hover .practice-card__content { border-left: none; }
-
-    /* Decorative circles â€” direct child of card, covers full card width on hover */
-    .practice-card__circles {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      transform-origin: left center;
-      transition: transform 0.3s ease;
-    }
-    .practice-card:hover .practice-card__circles { transform: scale(1.4); }
-    .practice-card__circle {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.12);
-    }
-    .practice-card__circle--1 { width: 50px;  height: 50px;  top: -17px; left: -11px; }
-    .practice-card__circle--2 { width: 85px;  height: 85px;  top:  14px; left:  64px; }
-    .practice-card__circle--3 { width: 184px; height: 184px; top:  68px; left: -92px; }
-
-    /* Left image panel */
-    .practice-card__image {
-      width: 160px;
-      min-width: 160px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    .practice-card__icon-wrap {
-      position: relative;
-      width: 100px;
-      height: 100px;
-      overflow: hidden;
-      z-index: 1;
-      flex-shrink: 0;
-    }
-    .practice-card__icon-img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: contain;
-    }
-
-    /* Right content panel */
-    .practice-card__content {
-      flex: 1;
-      min-width: 0;
-      border-left: 1px solid var(--subj-bg);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 0;
-    }
-    .practice-card__inner {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    .qn-card {
+      background: var(--surface-secondary-default-subtle);
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-radius-corner-4xl);
+      padding: var(--spacing-space-m);
+      display: flex; flex-direction: column;
+      gap: var(--spacing-space-m);
       width: 100%;
     }
-    .practice-card__title {
-      font-size: 24px;
-      font-weight: 700;
-      line-height: 36px;
-      color: var(--subj-title, white);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      width: 100%;
-      margin: 0;
-    }
-    .practice-card__stats {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 0 8px;
-      align-items: flex-start;
-      width: 100%;
-    }
-    .practice-card__stat {
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-      min-height: 24px;
-      flex-shrink: 0;
-    }
-    .practice-card__stat-icon {
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .practice-card__stat-icon svg {
-      width: 20px;
-      height: 20px;
-      display: block;
-      color: var(--subj-text, white);
-    }
-    .practice-card__stat-label {
-      height: 24px;
-      display: flex;
-      align-items: center;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 20px;
-      color: var(--subj-text, white);
-      white-space: nowrap;
+
+    .qn-card__header {
+      background: var(--qn-subj-default, var(--subjects-b-melayu-default));
+      border: 1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
+      border-radius: var(--corner-radius-corner-2xl);
+      height: 110px; max-height: 110px;
+      overflow: hidden; display: flex; align-items: center; position: relative;
+      flex-shrink: 0; width: 100%;
     }
 
-    /* â”€â”€ Responsive â”€â”€ */
+    .qn-card__fano {
+      position: absolute; top: 0; right: -25px;
+      height: 110px; width: auto;
+      mix-blend-mode: overlay; opacity: 0.5; pointer-events: none;
+    }
+
+    .qn-card__icon-col {
+      flex: 1 0 0; max-width: 110px; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 12px 0 0 12px;
+    }
+    .qn-card__subject-icon {
+      width: 60px; height: 60px; display: block; flex-shrink: 0; object-fit: contain;
+    }
+
+    .qn-card__header-content {
+      flex: 1 0 0; min-width: 0; height: 110px;
+      display: flex; align-items: center;
+      padding: var(--spacing-space-m) var(--spacing-space-m) var(--spacing-space-m) var(--spacing-space-xl);
+      gap: 2px; border-radius: 0 12px 12px 0;
+    }
+
+    .qn-card__label { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 2px; justify-content: center; }
+    .qn-card__topics { font-size: 24px; font-weight: 700; line-height: 36px; color: #ffffff; white-space: nowrap; }
+    .qn-card__topic-desc { font-size: 14px; font-weight: 500; line-height: 20px; color: #ffffff; white-space: nowrap; }
+
+    /* DS node I3695:56321;2339:5079 — no border, no bg; gap between tables */
+    .qn-card__content {
+      display: flex; flex-direction: column; gap: var(--spacing-space-s);
+      width: 100%; flex-shrink: 0;
+      overflow: hidden; border-radius: var(--corner-radius-corner-xl);
+    }
+
+    .qn-table { border: 1px solid var(--border-general-default); border-radius: var(--corner-radius-corner-xl); overflow: hidden; width: 100%; }
+
+    .qn-table__heading-row { display: flex; align-items: center; width: 100%; box-shadow: inset 0 -1px 0 0 var(--qn-subj-default, var(--subjects-b-melayu-default)); }
+    .qn-table__heading-cell {
+      background: var(--qn-subj-default-subtle, var(--subjects-b-melayu-default-subtle));
+      flex: 1 0 0; height: 56px; min-height: 56px;
+      padding: var(--spacing-space-m); display: flex; align-items: center; overflow: hidden;
+    }
+    .qn-table__heading-text { font-size: 16px; font-weight: 500; line-height: 24px; color: var(--text-default-body); white-space: nowrap; }
+
+    .qn-table__body-row { display: flex; align-items: center; width: 100%; }
+
+    .qn-table__topic-cell {
+      background: var(--surface-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+      border-right: 1px solid var(--border-general-default);
+      flex: 1 0 0; min-height: 56px; min-width: 0; overflow: hidden;
+      display: flex; align-items: center;
+    }
+    .qn-table__topic-inner { flex: 1 0 0; min-width: 0; padding: var(--spacing-space-m); display: flex; align-items: center; gap: 8px; }
+    .qn-table__topic-text { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
+
+    .qn-table__btn-cell {
+      background: var(--surface-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+      width: 110px; flex-shrink: 0; min-height: 56px;
+      display: flex; align-items: center; overflow: hidden;
+    }
+    .qn-table__btn-inner { padding: var(--spacing-space-m); display: flex; align-items: center; gap: 8px; height: 56px; box-sizing: border-box; }
+    .qn-table__body-row:last-child .qn-table__topic-cell,
+    .qn-table__body-row:last-child .qn-table__btn-cell { border-bottom: none; }
+
+    /* Button - 1.5 Primary/M (DS node 2251:39430) — Rule 82: NO transitions on btn children */
+    .btn-learn {
+      display: flex; align-items: center; justify-content: center;
+      height: 32px; max-height: 32px; padding: 2px 8px;
+      background: var(--surface-primary-default);
+      border: 1px solid var(--border-primary-focus);
+      border-radius: var(--corner-radius-corner-rounded);
+      cursor: pointer; font-family: var(--font-family); flex-shrink: 0; white-space: nowrap;
+    }
+    .btn-learn__label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--text-primary-on-color); padding: 0 var(--spacing-space-xxs); }
+    .btn-learn__arrow {
+      width: 20px; height: 20px; padding: 2px;
+      background: var(--surface-primary-default-subtle-hover);
+      border-radius: var(--corner-radius-corner-rounded);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .btn-learn__arrow-clip { width: 16px; height: 16px; overflow: hidden; flex-shrink: 0; }
+    .btn-learn__arrow-clip svg { display: block; width: 16px; height: 16px; color: var(--border-primary-focus); }
+
+    .btn-learn:hover { background: var(--surface-secondary-default); border-color: var(--border-secondary-focus); }
+    .btn-learn:hover .btn-learn__label { color: var(--text-secondary-focus); }
+    .btn-learn:hover .btn-learn__arrow { background: var(--surface-secondary-default-subtle); }
+    .btn-learn:hover .btn-learn__arrow-clip svg { color: var(--border-secondary-focus); }
+    .btn-learn:active, .btn-learn.is-pressing { background: var(--surface-primary-focus); border-color: var(--border-primary-default); }
+    .btn-learn:active .btn-learn__label, .btn-learn.is-pressing .btn-learn__label { color: var(--text-primary-default); }
+    .btn-learn:active .btn-learn__arrow, .btn-learn.is-pressing .btn-learn__arrow { background: var(--surface-primary-default); }
+    .btn-learn:active .btn-learn__arrow-clip svg, .btn-learn.is-pressing .btn-learn__arrow-clip svg { color: var(--surface-tertiary-default); }
+
     @media (max-width: 1279px) {
-      #Breadcrumb-Desktop       { display: none; }
-      .practice-cards-content   { grid-template-columns: 1fr; }
-      .learn-layout             { flex-direction: column; }
-      .learn-sidebar            { width: 100%; min-width: 0; }
-      .practice-card-grid       { align-self: stretch; width: 100%; }
-      .practice-card__image     { width: 120px; min-width: 120px; }
-      .practice-card__icon-wrap { width: 80px; height: 80px; }
-      .practice-card__title     { font-size: 20px; line-height: 30px; }
+      .qn-card__topics { font-size: 20px; line-height: 32px; }
     }
     @media (max-width: 767px) {
-      .practice-card            { height: auto; }
-      .practice-card__image     { width: 80px; min-width: 80px; }
-      .practice-card__icon-wrap { width: 56px; height: 56px; }
-      .practice-card__title     { font-size: 14px; line-height: 22px; }
+      .qn-card__header { height: auto; min-height: 80px; }
+      .qn-card__topics { font-size: 18px; line-height: 28px; }
+      .qn-card__header-content { padding: var(--spacing-space-m); }
+      .qn-card__icon-col { max-width: 72px; width: 72px; }
+      .qn-card__subject-icon { width: 44px; height: 44px; }
+      .qn-table__topic-text { white-space: normal; }
+      .qn-table__btn-cell { width: 90px; }
     }
-
   </style>
 </head>
 <body>
@@ -3114,7 +2875,7 @@
     <nav class="navbar-nav-menu" aria-label="Main navigation">
 
       <!-- Home (no chevron) -->
-      <div class="nav-menu-btn is-active" role="button" tabindex="0" aria-label="Home" aria-current="page">
+      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Home">
         <div class="nav-menu-btn__inner">
           <div class="nav-menu-btn__icon-wrap">
             <div class="nav-menu-btn__icon-clip" data-icon="home"><svg aria-hidden="true"><use href="#ic-home"/></svg></div>
@@ -3165,7 +2926,7 @@
       </div>
 
       <!-- Learn (with chevron dropdown) -->
-      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Learn" aria-haspopup="true">
+      <div class="nav-menu-btn is-active" role="button" tabindex="0" aria-label="Learn" aria-haspopup="true" aria-current="page">
         <div class="nav-menu-btn__inner">
           <div class="nav-menu-btn__icon-wrap">
             <div class="nav-menu-btn__icon-clip" data-icon="learn"><svg aria-hidden="true"><use href="#ic-book"/></svg></div>
@@ -3618,180 +3379,176 @@
     <div class="page-container">
       <div class="main-content">
 
-        <section id="LearningHub-Viewport" class="page-viewport" aria-label="Learning Hub">
+        <section id="QuickNotesSelections-Viewport" class="page-viewport" aria-label="Quick Notes Selections">
 
-          <!-- Breadcrumb - 1.5 (DS node 3420:205733) â€” syakila.design.md confirmed pattern -->
-          <section id="Breadcrumb-Desktop" aria-label="Breadcrumb">
+          <!-- Breadcrumb - 1.5 (DS node 3638:47311) -->
+          <section id="Breadcrumb-Desktop" aria-label="Breadcrumb navigation">
             <div class="pd-breadcrumbs15">
-              <h1 class="pd-breadcrumbs__title">Learning Hub</h1>
+              <h1 class="pd-breadcrumbs__title">Quick Notes</h1>
               <div class="pd-breadcrumbs__sep" aria-hidden="true"></div>
               <div class="pd-breadcrumbs__links">
                 <button class="pd-link15" type="button">
-                  <svg class="pd-link15__icon-home" aria-hidden="true"><use href="#ic-book"/></svg>
-                  <span class="pd-link15__text pd-link15__text--parent">learn</span>
+                  <svg class="pd-link15__icon" aria-hidden="true"><use href="#ic-book"/></svg>
+                  <span class="pd-link15__text">Learn</span>
+                  <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
+                </button>
+                <button class="pd-link15" type="button">
+                  <span class="pd-link15__text">Quick Notes</span>
                   <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
                 </button>
                 <span class="pd-link15" style="cursor:default">
-                  <span class="pd-link15__text">Learning Hub</span>
+                  <span class="pd-link15__text pd-link15__text--current">All notes for Form 4</span>
                 </span>
               </div>
             </div>
           </section>
 
-          <!-- Main Layout: sidebar + grid (DS node 3420:205734) -->
-          <section id="LearningHub-Desktop" aria-label="Learning Hub content">
-            <div class="learn-layout">
+          <!-- Quick Notes Card - 1.5 (DS node 3695:56321) — B.Melayu, Form 4 -->
+          <section id="QuickNotes-Desktop" aria-label="Quick Notes content">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-b-melayu-default); --qn-subj-focus:var(--subjects-b-melayu-focus); --qn-subj-default-subtle:var(--subjects-b-melayu-default-subtle); --qn-subj-default-subtle-hover:var(--subjects-b-melayu-default-subtle-hover); --qn-subj-default-hover:var(--subjects-b-melayu-default-hover);">
 
-              <!-- Left sidebar: Primary Card - 1.5 filter panel (DS node 5215:122499) -->
-              <aside class="learn-sidebar" aria-label="Filters">
-
-                <!-- Scrollable content column -->
-                <div class="learn-sidebar__content">
-
-                <!-- Search input â€” Input Field 1.5 -->
-                <div class="learn-search">
-                  <span class="learn-search__icon" aria-hidden="true">
-                    <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-search"/></svg>
-                  </span>
-                  <input class="learn-search__input" type="search" placeholder="Search grade or subject" aria-label="Search grade or subject">
+              <!-- Subject header: B.Melayu — bg #4d77ff, border #2e4799, h:110px, r:18px -->
+              <div class="qn-card__header">
+                <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
+                <div class="qn-card__icon-col">
+                  <img class="qn-card__subject-icon" src="../src/image-repo/Learn/quick.notes/icons/border-bmelayu.svg" alt="Bahasa Melayu" width="60" height="60">
                 </div>
-
-                <!-- Grades accordion â€” Button-Dropdown-1.5 trigger + two Dropdown List boxes -->
-                <div class="learn-accordion is-collapsed" id="accordion-grades">
-                  <button class="learn-accordion__toggle" aria-expanded="false" aria-controls="accordion-grades-body" type="button">
-                    <span class="learn-accordion__label">Grades</span>
-                    <span class="learn-accordion__chevron" aria-hidden="true">
-                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10L8 6L12 10"/></svg>
-                    </span>
-                  </button>
-                  <div class="learn-accordion__body" id="accordion-grades-body">
-
-                    <!-- Box 1: Primary School -->
-                    <div class="dropdown-list" role="list" aria-label="Primary School grades">
-                      <div class="filter-item filter-item--main" role="listitem" tabindex="0">
-                        <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
-                        <span class="filter-item__label">Primary School</span>
-                      </div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="year-1">
-                        <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
-                        <span class="filter-item__label">Year 1</span>
-                      </div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="year-2">
-                        <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
-                        <span class="filter-item__label">Year 2</span>
-                      </div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="year-3">
-                        <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
-                        <span class="filter-item__label">Year 3</span>
-                      </div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="year-4">
-                        <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
-                        <span class="filter-item__label">Year 4</span>
-                      </div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="year-5">
-                        <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
-                        <span class="filter-item__label">Year 5</span>
-                      </div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="year-6">
-                        <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
-                        <span class="filter-item__label">Year 6</span>
-                      </div>
-                    </div><!-- end Primary School box -->
-
-                    <!-- Box 2: Secondary School -->
-                    <div class="dropdown-list" role="list" aria-label="Secondary School grades">
-                      <div class="filter-item filter-item--main" role="listitem" tabindex="0">
-                        <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
-                        <span class="filter-item__label">Secondary School</span>
-                      </div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="form-1">
-                        <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
-                        <span class="filter-item__label">Form 1</span>
-                      </div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="form-2">
-                        <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
-                        <span class="filter-item__label">Form 2</span>
-                      </div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="form-3">
-                        <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
-                        <span class="filter-item__label">Form 3</span>
-                      </div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="form-4">
-                        <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
-                        <span class="filter-item__label">Form 4</span>
-                      </div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="grade" data-value="form-5">
-                        <div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div>
-                        <span class="filter-item__label">Form 5</span>
-                      </div>
-                    </div><!-- end Secondary School box -->
-
-                  </div><!-- end accordion body -->
-                </div><!-- end grades accordion -->
-
-                <!-- Subjects accordion -->
-                <div class="learn-accordion is-collapsed" id="accordion-subjects">
-                  <button class="learn-accordion__toggle" aria-expanded="false" aria-controls="accordion-subjects-body" type="button">
-                    <span class="learn-accordion__label">Subjects</span>
-                    <span class="learn-accordion__chevron" aria-hidden="true">
-                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10L8 6L12 10"/></svg>
-                    </span>
-                  </button>
-                  <div class="learn-accordion__body" id="accordion-subjects-body">
-
-                    <!-- Box: All subjects -->
-                    <div class="dropdown-list" role="list" aria-label="Subject options">
-                      <div class="filter-item filter-item--main" role="listitem" tabindex="0"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">All Subject</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="add-math"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Add Math</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="asas-sains-komputer"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Asas Sains Komputer</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="bahasa-melayu"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Bahasa Melayu</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="biology"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Biology</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="chemistry"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Chemistry</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="chinese-language"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Chinese Language</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="ekonomi"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Ekonomi</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="english"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">English</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="geography"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Geography</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="kafa"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">KAFA</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="mathematics"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Mathematics</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="pendidikan-islam"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Pendidikan Islam</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="pendidikan-moral"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Pendidikan Moral</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="perniagaan"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Perniagaan</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="physics"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Physics</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="prinsip-perakaunan"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Prinsip Perakaunan</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="rbt"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Reka Bentuk dan Teknologi</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="sains-komputer"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Sains Komputer</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="science"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Science</span></div>
-                      <div class="filter-item" role="listitem" tabindex="0" data-filter="subject" data-value="sejarah"><div class="dd-checkbox" aria-hidden="true"><svg width="12" height="12" aria-hidden="true"><use href="#ic-check"/></svg></div><span class="filter-item__label">Sejarah</span></div>
-                    </div><!-- end subjects box -->
-
-                  </div><!-- end accordion body -->
-                </div><!-- end subjects accordion -->
-
-                </div><!-- end learn-sidebar__content -->
-
-              </aside><!-- end learn-sidebar -->
-
-              <!-- Right: Practice Card grid (DS Primary Card - 1.5, Secondary variant, node 2881:36272) -->
-              <div class="practice-card-grid" aria-label="Subject courses">
-
-                <!-- Content Placeholder â€” white inner container (DS node 2881:36281) -->
-                <div class="practice-cards-content" role="list">
-
-                </div><!-- end practice-cards-content -->
-
-                <!-- Empty state â€” DS node 3420:205916 â€” visible when no filters checked -->
-                <div class="practice-empty-state" aria-live="polite">
-                  <div class="practice-empty-state__icon" aria-hidden="true">
-                    <svg><use href="#ic-image"/></svg>
+                <div class="qn-card__header-content">
+                  <div class="qn-card__label">
+                    <p class="qn-card__topics">Bahasa Melayu</p>
+                    <p class="qn-card__topic-desc">Topic Descriptions</p>
                   </div>
-                  <p class="practice-empty-state__label">There is no subjects to show</p>
                 </div>
+              </div>
 
-              </div><!-- end practice-card-grid -->
-            </div><!-- end learn-layout -->
-          </section><!-- end LearningHub-Desktop -->
+              <!-- Table content (DS node I3695:56321;2339:5079) -->
+              <div class="qn-card__content">
 
-        </section><!-- end LearningHub-Viewport -->
+                <!-- Table group 1 — Functions -->
+                <div class="qn-table">
+                  <div class="qn-table__heading-row">
+                    <div class="qn-table__heading-cell">
+                      <span class="qn-table__heading-text">Functions</span>
+                    </div>
+                  </div>
+                  <div class="qn-table__body-row">
+                    <div class="qn-table__topic-cell">
+                      <div class="qn-table__topic-inner"><span class="qn-table__topic-text">Composite Functions</span></div>
+                    </div>
+                    <div class="qn-table__btn-cell">
+                      <div class="qn-table__btn-inner">
+                        <button class="btn-learn" type="button" aria-label="Learn Composite Functions">
+                          <span class="btn-learn__label">Learn</span>
+                          <div class="btn-learn__arrow">
+                            <div class="btn-learn__arrow-clip">
+                              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12L10 8L6 4"/></svg>
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="qn-table__body-row">
+                    <div class="qn-table__topic-cell">
+                      <div class="qn-table__topic-inner"><span class="qn-table__topic-text">Inverse Functions</span></div>
+                    </div>
+                    <div class="qn-table__btn-cell">
+                      <div class="qn-table__btn-inner">
+                        <button class="btn-learn" type="button" aria-label="Learn Inverse Functions">
+                          <span class="btn-learn__label">Learn</span>
+                          <div class="btn-learn__arrow">
+                            <div class="btn-learn__arrow-clip">
+                              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12L10 8L6 4"/></svg>
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="qn-table__body-row">
+                    <div class="qn-table__topic-cell">
+                      <div class="qn-table__topic-inner"><span class="qn-table__topic-text">Absolute Value Functions</span></div>
+                    </div>
+                    <div class="qn-table__btn-cell">
+                      <div class="qn-table__btn-inner">
+                        <button class="btn-learn" type="button" aria-label="Learn Absolute Value Functions">
+                          <span class="btn-learn__label">Learn</span>
+                          <div class="btn-learn__arrow">
+                            <div class="btn-learn__arrow-clip">
+                              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12L10 8L6 4"/></svg>
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- end table group 1 -->
+
+                <!-- Table group 2 — Functions (second block) -->
+                <div class="qn-table">
+                  <div class="qn-table__heading-row">
+                    <div class="qn-table__heading-cell">
+                      <span class="qn-table__heading-text">Functions</span>
+                    </div>
+                  </div>
+                  <div class="qn-table__body-row">
+                    <div class="qn-table__topic-cell">
+                      <div class="qn-table__topic-inner"><span class="qn-table__topic-text">Composite Functions</span></div>
+                    </div>
+                    <div class="qn-table__btn-cell">
+                      <div class="qn-table__btn-inner">
+                        <button class="btn-learn" type="button" aria-label="Learn Composite Functions">
+                          <span class="btn-learn__label">Learn</span>
+                          <div class="btn-learn__arrow">
+                            <div class="btn-learn__arrow-clip">
+                              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12L10 8L6 4"/></svg>
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="qn-table__body-row">
+                    <div class="qn-table__topic-cell">
+                      <div class="qn-table__topic-inner"><span class="qn-table__topic-text">Composite Functions</span></div>
+                    </div>
+                    <div class="qn-table__btn-cell">
+                      <div class="qn-table__btn-inner">
+                        <button class="btn-learn" type="button" aria-label="Learn Composite Functions">
+                          <span class="btn-learn__label">Learn</span>
+                          <div class="btn-learn__arrow">
+                            <div class="btn-learn__arrow-clip">
+                              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12L10 8L6 4"/></svg>
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="qn-table__body-row">
+                    <div class="qn-table__topic-cell">
+                      <div class="qn-table__topic-inner"><span class="qn-table__topic-text">Composite Functions</span></div>
+                    </div>
+                    <div class="qn-table__btn-cell">
+                      <div class="qn-table__btn-inner">
+                        <button class="btn-learn" type="button" aria-label="Learn Composite Functions">
+                          <span class="btn-learn__label">Learn</span>
+                          <div class="btn-learn__arrow">
+                            <div class="btn-learn__arrow-clip">
+                              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12L10 8L6 4"/></svg>
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- end table group 2 -->
+
+              </div><!-- end .qn-card__content -->
+            </div><!-- end .qn-card -->
+          </section><!-- end QuickNotes-Desktop -->
+
+        </section><!-- end QuickNotesSelections-Viewport -->
 
       </div>
     </div>
@@ -3820,6 +3577,14 @@
 
 
   <script>
+
+    // Learn buttons — is-pressing handler + navigation to quickNotes.view.html (Rule 83)
+    document.querySelectorAll('.btn-learn').forEach(function (btn) {
+      btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+      btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+      btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+      btn.addEventListener('click',      function () { window.location.href = 'quickNotes.view.html'; });
+    });
 
     // Search bar â€” btn click â†’ open + focus + start 3s timer; inactivity â†’ close + reset btn (Rule 14: critical first)
     (function () {
@@ -5247,6 +5012,83 @@
         learnSearchInput.addEventListener('input', applyFilters);
       }
     } catch(e) { console.warn('Learning Hub init error:', e); }
+  </script>
+
+  <script>
+    /* btn-learn → navigate to quickNotes.view.html, forwarding subject params */
+    document.querySelectorAll('.btn-learn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var dest = 'quickNotes.view.html';
+        if (window.location.search) dest += window.location.search;
+        window.location.href = dest;
+      });
+    });
+  </script>
+
+  <script>
+    /* Apply subject context from URL params passed by quickNotes.html */
+    (function () {
+      var params  = new URLSearchParams(window.location.search);
+      var subject = params.get('subject');
+      var icon    = params.get('icon');
+
+      /* Breadcrumb "Quick Notes" link — always navigates back */
+      var qnLink = document.querySelector('#Breadcrumb-Desktop .pd-link15:nth-child(2)');
+      if (qnLink) {
+        qnLink.style.cursor = 'pointer';
+        qnLink.addEventListener('click', function () {
+          window.location.href = 'quickNotes.html';
+        });
+      }
+
+      if (!subject) return; /* no params — keep hardcoded default */
+
+      /* Map subject name → DS token key */
+      var SUBJ_KEY = {
+        'Bahasa Melayu': 'b-melayu',         'Additional Mathematics': 'add-math',
+        'Accounting': 'account',              'Biology': 'biology',
+        'Business Studies': 'business',       'Chemistry': 'chemistry',
+        'Chinese Language': 'chinese',        'Computer Science': 'cs',
+        'Economy': 'economy',                 'English': 'english',
+        'Geography': 'geo',                   'History': 'history',
+        'Islamic Studies': 'islamic',         'KAFA': 'kafa',
+        'Mathematics': 'math',                'Moral Studies': 'moral',
+        'Physics': 'physics',                 'Reka Bentuk & Teknologi': 'rbt',
+        'Science': 'science'
+      };
+      var key = SUBJ_KEY[subject];
+      if (!key) return;
+
+      /* Set DS token references on the card — no hex math */
+      var card = document.querySelector('#QuickNotes-Desktop .qn-card');
+      if (card) {
+        card.style.setProperty('--qn-subj-default',              'var(--subjects-' + key + '-default)');
+        card.style.setProperty('--qn-subj-default-hover',        'var(--subjects-' + key + '-default-hover)');
+        card.style.setProperty('--qn-subj-default-subtle',       'var(--subjects-' + key + '-default-subtle)');
+        card.style.setProperty('--qn-subj-default-subtle-hover', 'var(--subjects-' + key + '-default-subtle-hover)');
+        card.style.setProperty('--qn-subj-focus',                'var(--subjects-' + key + '-focus)');
+      }
+
+      /* Update subject name text */
+      var titleEl = document.querySelector('#QuickNotes-Desktop .qn-card__topics');
+      if (titleEl) titleEl.textContent = subject;
+
+      /* Update subject icon src */
+      if (icon) {
+        var iconEl = document.querySelector('#QuickNotes-Desktop .qn-card__subject-icon');
+        if (iconEl) {
+          iconEl.src = iconEl.src.replace(/[^\/\\]+$/, icon);
+          iconEl.alt = subject;
+        }
+      }
+
+      /* Update breadcrumb current label */
+      var crumbCurrent = document.querySelector('#Breadcrumb-Desktop .pd-link15__text--current');
+      if (crumbCurrent) crumbCurrent.textContent = 'All notes for ' + subject;
+
+      /* Update page title */
+      document.title = 'Pandai — Quick Notes: ' + subject;
+    })();
   </script>
 
 </body>
