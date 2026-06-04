@@ -8767,16 +8767,21 @@ return { w: node.parent.width, h: node.parent.height };
 
 CSS specificity note: `.carousel__btn-wrap--prev .carousel__btn` and `.carousel__btn:hover` both have specificity `0-2-0`. Hover/pressed rules must be declared **after** per-side radius rules to correctly override the Left variant on hover.
 
-#### States — all tokens confirmed 2026-06-04
+#### States — confirmed 2026-06-04 (re-audited — DS reduced to 3 states)
+
+**COMPONENT_SET now has 3 states only: Default, Hover, Pressed. Active, Disabled, Focus variants removed.**
 
 | State | bg token | bg hex | stroke token | stroke hex | icon token | icon hex |
 |---|---|---|---|---|---|---|
-| Default | `Surface/secondary/default` | `#b5f291` | `Border/primary/default` INSIDE | `#00cc85` | `Icon/primary/default` | `#00cc85` |
-| Hover | `Surface/secondary/default-subtle` | `#e8fbe8` | (same) | `#00cc85` | `Icon/primary/default` | `#00cc85` |
+| Default | `Surface/secondary/default` | `#b5f291` | `Border/primary/default` INSIDE | `#00cc85` | `Icon/primary/default-hover` | `#00a36a` |
+| Hover | `Surface/secondary/default-subtle-hover` | `#d1f7d1` | `Border/primary/default` INSIDE | `#00cc85` | `Icon/primary/default` | `#00cc85` |
 | Pressed | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` INSIDE | `#00a36a` | `Icon/primary/on-color` | `#ffffff` |
-| Active | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` INSIDE | `#00a36a` | `Icon/primary/on-color` | `#ffffff` |
-| Disabled | `Surface/disabled/primary` | `#f2f2f2` | `Border/disabled/disabled` INSIDE | `#bfbfbf` | `Icon/disabled/default` | `#bfbfbf` |
-| Focus | `Surface/secondary/default-subtle` | `#e8fbe8` | `Border/primary/default` INSIDE | `#00cc85` | `Icon/primary/default` | `#00cc85` |
+
+**New tokens added to DS (2026-06-04):**
+- `Surface/secondary/default-subtle-hover` → `#d1f7d1` (Lime/200) — replaces old hover bg `Surface/secondary/default-subtle` (#e8fbe8)
+- `Icon/primary/default-hover` → `#00a36a` (OG-Green/600) — Default state icon (darker than hover)
+
+**Icon color inverts between Default and Hover** — Default icon is darker (`#00a36a`), Hover icon is lighter (`#00cc85`). This is intentional DS design: background also lightens on hover (`#b5f291` → `#d1f7d1`).
 
 #### CSS pattern (correct implementation)
 ```css
@@ -8797,12 +8802,14 @@ CSS specificity note: `.carousel__btn-wrap--prev .carousel__btn` and `.carousel_
 .carousel__btn-wrap--prev .carousel__btn { border-radius: 24px; }
 .carousel__btn-wrap--next .carousel__btn { border-radius: 108px; }
 /* Hover/pressed after per-side rules — equal specificity, last wins */
-.carousel__btn:hover { background: var(--surface-secondary-default-subtle); border-radius: 108px; }
+.carousel__btn:hover { background: var(--surface-secondary-default-subtle-hover); border-radius: 108px; } /* #d1f7d1 */
+.carousel__btn:hover .carousel__btn__icon { color: var(--icon-primary-default); }  /* #00cc85 — icon lightens on hover */
 .carousel__btn:active,
 .carousel__btn.is-pressing { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border-radius: 108px; }
 .carousel__btn:active .carousel__btn__icon,
 .carousel__btn.is-pressing .carousel__btn__icon { color: var(--icon-primary-on-color); }
-.carousel__btn__icon { width: 24px; height: 24px; color: var(--icon-primary-default); flex-shrink: 0; }
+/* Default icon = #00a36a (Icon/primary/default-hover) — darker than hover state */
+.carousel__btn__icon { width: 24px; height: 24px; color: var(--icon-primary-default-hover); flex-shrink: 0; }
 .carousel__btn__icon svg { display: block; flex-shrink: 0; }
 ```
 
@@ -8931,4 +8938,4 @@ activeNode.reactions  = [{ trigger: { type: 'ON_CLICK' }, actions: [{ type: 'NOD
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-04 (Rules 220–222 added — Pill Button - 1.5 full spec, Carousel new variants + radius correction, Figma Plugin API reactions format; pre-flight checklist updated to rules 1–222) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+*Generated: May 2026 | Last updated: 2026-06-04 (Rule 220 updated — Pill Button - 1.5 DS re-audit: states reduced 6→3, hover bg = #d1f7d1 new token, default icon = #00a36a new token Icon/primary/default-hover) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

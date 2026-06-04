@@ -25,6 +25,7 @@
       --surface-primary-default-subtle-hover:  #99ebce;
       --surface-secondary-default:             #b5f291;  /* Surface/secondary/default */
       --surface-secondary-default-subtle:      #e8fbe8;  /* Surface/secondary/default-subtle */
+      --surface-secondary-default-subtle-hover: #d1f7d1; /* Surface/secondary/default-subtle-hover — Pill Button hover bg (DS updated 2026-06-04) */
       --surface-secondary-default-hover:       #f6fef6;  /* Surface/secondary/default-hover — profile menu header bg */
       --surface-disabled-primary:        #f2f2f2;
       --surface-disabled-on-color:       #e5e5e5;   /* Surface/disabled/on color — disabled button arrow bg (DS confirmed 2026-05-24) */
@@ -53,7 +54,8 @@
 
       /* Icon */
       --icon-default-default:     #808080;   /* Icon/default/default — action icons, inactive (DS confirmed 2026-05-14) */
-      --icon-primary-default:     #00cc85;   /* Icon/primary/default — nav button icons, default */
+      --icon-primary-default:       #00cc85;   /* Icon/primary/default — nav button icons, hover state */
+      --icon-primary-default-hover: #00a36a;   /* Icon/primary/default-hover — Pill Button default icon (DS updated 2026-06-04) */
       --icon-secondary-hover:     #70bc6f;   /* Icon/secondary/hover — nav button icons, hover state */
       --icon-primary-on-color:    #ffffff;   /* Icon/primary/on-color — Foundation/white (DS updated 2026-05-24, was #e1f9ea) */
       --icon-tertiary-default:    #00564c;   /* Icon/tertiary/default — pressed arrow chevron */
@@ -1171,11 +1173,12 @@
     .carousel__btn-wrap--prev .carousel__btn { border-radius: 24px; }
     .carousel__btn-wrap--next .carousel__btn { border-radius: 108px; }
 
-    /* Hover — left switches to pill, fill lightens */
+    /* Hover — left switches to pill, fill lightens; icon lightens to #00cc85 */
     .carousel__btn:hover {
-      background:   var(--surface-secondary-default-subtle); /* #e8fbe8 */
+      background:   var(--surface-secondary-default-subtle-hover); /* #d1f7d1 DS updated 2026-06-04 */
       border-radius: 108px;
     }
+    .carousel__btn:hover .carousel__btn__icon { color: var(--icon-primary-default); /* #00cc85 */ }
 
     /* Pressed — pair :active with JS .is-pressing (Rule 83) */
     .carousel__btn:active,
@@ -1189,11 +1192,11 @@
       color: var(--icon-primary-on-color); /* #ffffff */
     }
 
-    /* Icon — 24×24, no clip (DS clipsContent: false) */
+    /* Icon — 24×24, no clip (DS clipsContent: false). Default icon = #00a36a (Icon/primary/default-hover) */
     .carousel__btn__icon {
       width:       24px;
       height:      24px;
-      color:       var(--icon-primary-default); /* #00cc85 */
+      color:       var(--icon-primary-default-hover); /* #00a36a DS updated 2026-06-04 */
       flex-shrink: 0;
     }
     .carousel__btn__icon svg { display: block; flex-shrink: 0; }
