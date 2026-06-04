@@ -61,6 +61,7 @@
       /* Border */
       --border-primary-default:   #00cc85;   /* Border/primary/default */
       --border-primary-focus:     #00a36a;   /* Border/primary/focus */
+      --border-secondary-default: #b5f291;   /* Border/secondary/default — Focus indicator dot border */
       --border-secondary-focus:   #70bc6f;   /* Border/secondary/focus — hover border on all buttons */
       --border-default:           #00cc85;   /* Border/default â€” navbar, footer, quiz card */
       --border-general-default:   #d9d9d9;   /* Border/general/default — carousel cards */
@@ -2409,10 +2410,11 @@
       transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
     }
 
-    /* 3×4 grid — DS: grid-cols:3, min-h per cell 114px */
+    /* 3×4 grid — DS node 3908:2463: grid-cols:3, gap:8px both axes, min-h per cell 114px */
     .learn-dropdown__grid {
       display:               grid;
       grid-template-columns: repeat(3, 1fr);
+      gap:                   var(--spacing-space-xs);
     }
 
     /* Cell — DS State=Default: transparent bg, no border, 12px radius, flex-col, gap 4px, p-8px */
@@ -2460,13 +2462,13 @@
       flex-shrink: 0;
     }
 
-    /* Label — DS State=Default: 14px SemiBold, #404040 (Text/default/heading, varName 106:34) */
+    /* Label — DS node 3908:2464: 14px SemiBold, Text/default/body #666 */
     .learn-dropdown__label {
       font-family: var(--font-family);
       font-size:   14px;
       font-weight: 600;
       line-height: 20px;
-      color:       var(--text-default-heading);
+      color:       var(--text-default-body);
       text-align:  center;
       transition:  color 0.12s ease;
     }
@@ -2729,6 +2731,13 @@
       transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
     }
 
+    /* Notifications List — DS node 6305:45076: flex-col, gap 8px between items */
+    .notif-list {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xs);
+    }
+
     /* Navbar Notification Button - Parts (DS 3908:13427/13443/13456) */
     .notif-item {
       cursor:      pointer;
@@ -2766,11 +2775,11 @@
       padding-bottom:      0;
     }
     .notif-item:hover .notif-item__text { color: var(--text-tertiary-default); }
-    /* Focus — Surface/secondary/default-subtle #e8fbe8 · 1px #00cc85 inset · 16px radius */
+    /* Focus — DS node 3908:13456: Surface/secondary/default #b5f291 · 1px Border/secondary/focus #70bc6f · 16px radius */
     .notif-item:active .notif-item__content,
     .notif-item:focus-visible .notif-item__content {
-      background:    var(--surface-secondary-default-subtle);
-      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+      background:    var(--surface-secondary-default);
+      box-shadow:    inset 0 0 0 1px var(--border-secondary-focus);
       border-radius: var(--corner-radius-corner-xl);
       padding:       var(--spacing-space-s);
     }
@@ -2780,7 +2789,11 @@
       padding-bottom:      0;
     }
     .notif-item:active .notif-item__text,
-    .notif-item:focus-visible .notif-item__text { color: var(--text-primary-default); }
+    .notif-item:focus-visible .notif-item__text { color: var(--text-tertiary-default); }
+    .notif-item:active .notif-item__time,
+    .notif-item:focus-visible .notif-item__time { color: var(--text-secondary-focus); }
+    .notif-item:active .notif-item__dot,
+    .notif-item:focus-visible .notif-item__dot  { box-shadow: 0 0 0 1px var(--border-secondary-default); }
 
     /* Avatar — 60×60 clip, user-circle at 50px (DS inset 8.33% = 5px each side) */
     .notif-item__avatar {
@@ -3950,8 +3963,8 @@
 </g></symbol>
 
       <!-- Profile Menu icons — all DS exports, viewBox -1 -1 26 26 (1px stroke buffer per Rule 27) -->
-      <!-- Outline/user-circle (1942:23330) — My Profile -->
-      <symbol id="ic-user-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20C18 18.4087 17.3679 16.8826 16.2426 15.7574C15.1174 14.6321 13.5913 14 12 14M12 14C10.4087 14 8.88258 14.6321 7.75736 15.7574C6.63214 16.8826 6 18.4087 6 20M12 14C14.2091 14 16 12.2091 16 10C16 7.79086 14.2091 6 12 6C9.79086 6 8 7.79086 8 10C8 12.2091 9.79086 14 12 14ZM22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
+      <!-- Outline/user-circle (3908:13415 60×60 DS export) — My Profile / Notif avatar -->
+      <symbol id="ic-user-circle" viewBox="-1 -1 62 62" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M45 50C45 46.0218 43.4196 42.2064 40.6066 39.3934C37.7936 36.5804 33.9782 35 30 35M30 35C26.0218 35 22.2064 36.5804 19.3934 39.3934C16.5804 42.2064 15 46.0218 15 50M30 35C35.5228 35 40 30.5228 40 25C40 19.4772 35.5228 15 30 15C24.4772 15 20 19.4772 20 25C20 30.5228 24.4772 35 30 35ZM55 30C55 43.8071 43.8071 55 30 55C16.1929 55 5 43.8071 5 30C5 16.1929 16.1929 5 30 5C43.8071 5 55 16.1929 55 30Z"/></symbol>
       <!-- Outline/user-check (260:1300) — Manage Account -->
       <symbol id="ic-user-check" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M17 11L19 13L23 9M12.5 7C12.5 9.20914 10.7091 11 8.5 11C6.29086 11 4.5 9.20914 4.5 7C4.5 4.79086 6.29086 3 8.5 3C10.7091 3 12.5 4.79086 12.5 7Z"/></symbol>
       <!-- Outline/star 24px (260:1192) — Subscribe Pandai Premium -->
@@ -4106,7 +4119,7 @@
               <div class="nav-btn-content">
                 <div class="nav-btn-rect" aria-hidden="true"></div>
                 <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
-                <div class="num-badge num-badge--primary" aria-label="5 notifications" aria-live="polite">5</div>
+                <div class="num-badge num-badge--primary" aria-label="4 notifications" aria-live="polite">4</div>
               </div>
             </button>
             <button class="navbar-action-btn" aria-label="Language" id="locale-btn" type="button" aria-haspopup="true">
@@ -4314,75 +4327,78 @@
          320px panel · 4 items · "See all notification" button
          Triggered by bell button · right-aligned to bell button right edge via JS -->
     <div class="notif-dropdown" id="notif-dropdown" aria-label="Notifications" role="menu">
-
-      <!-- Navbar Notification Button - Parts ×4 (DS 3908:13427) -->
-      <div class="notif-item" role="menuitem" tabindex="0">
-        <div class="notif-item__content">
-          <div class="notif-item__body">
-            <div class="notif-item__avatar" aria-hidden="true">
-              <svg><use href="#ic-user-circle"/></svg>
-            </div>
-            <div class="notif-item__texts">
-              <div class="notif-item__texts-inner">
-                <p class="notif-item__text">Your quiz result for Chapter 3 is ready. Check your score now!</p>
-                <span class="notif-item__time">2 Hours Ago...</span>
+      <!-- Notifications List — DS node 6305:45076: gap 8px between items -->
+      <div class="notif-list">
+        <!-- Navbar Notification Button - Parts ×4 (DS 3908:13427) -->
+        <div class="notif-item" role="menuitem" tabindex="0">
+          <div class="notif-item__content">
+            <div class="notif-item__body">
+              <div class="notif-item__avatar" aria-hidden="true">
+                <svg><use href="#ic-user-circle"/></svg>
               </div>
+              <div class="notif-item__texts">
+                <div class="notif-item__texts-inner">
+                  <p class="notif-item__text">Your quiz result for Chapter 3 is ready. Check your score now!</p>
+                  <span class="notif-item__time">2 Hours Ago...</span>
+                </div>
+              </div>
+              <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
             </div>
-            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
           </div>
         </div>
-      </div>
 
-      <div class="notif-item" role="menuitem" tabindex="0">
-        <div class="notif-item__content">
-          <div class="notif-item__body">
-            <div class="notif-item__avatar" aria-hidden="true">
-              <svg><use href="#ic-user-circle"/></svg>
-            </div>
-            <div class="notif-item__texts">
-              <div class="notif-item__texts-inner">
-                <p class="notif-item__text">Live Tuition for Add Maths starts in 30 minutes. Join now!</p>
-                <span class="notif-item__time">5 Hours Ago...</span>
+        <div class="notif-item" role="menuitem" tabindex="0">
+          <div class="notif-item__content">
+            <div class="notif-item__body">
+              <div class="notif-item__avatar" aria-hidden="true">
+                <svg><use href="#ic-user-circle"/></svg>
               </div>
+              <div class="notif-item__texts">
+                <div class="notif-item__texts-inner">
+                  <p class="notif-item__text">Live Tuition for Add Maths starts in 30 minutes. Join now!</p>
+                  <span class="notif-item__time">5 Hours Ago...</span>
+                </div>
+              </div>
+              <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
             </div>
-            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
           </div>
         </div>
-      </div>
 
-      <div class="notif-item" role="menuitem" tabindex="0">
-        <div class="notif-item__content">
-          <div class="notif-item__body">
-            <div class="notif-item__avatar" aria-hidden="true">
-              <svg><use href="#ic-user-circle"/></svg>
-            </div>
-            <div class="notif-item__texts">
-              <div class="notif-item__texts-inner">
-                <p class="notif-item__text">You earned 50 coins from completing today's daily challenge.</p>
-                <span class="notif-item__time">1 Day Ago...</span>
+        <div class="notif-item" role="menuitem" tabindex="0">
+          <div class="notif-item__content">
+            <div class="notif-item__body">
+              <div class="notif-item__avatar" aria-hidden="true">
+                <svg><use href="#ic-user-circle"/></svg>
               </div>
+              <div class="notif-item__texts">
+                <div class="notif-item__texts-inner">
+                  <p class="notif-item__text">You earned 50 coins from completing today's daily challenge.</p>
+                  <span class="notif-item__time">1 Day Ago...</span>
+                </div>
+              </div>
+              <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
             </div>
-            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
           </div>
         </div>
-      </div>
 
-      <div class="notif-item" role="menuitem" tabindex="0">
-        <div class="notif-item__content">
-          <div class="notif-item__body">
-            <div class="notif-item__avatar" aria-hidden="true">
-              <svg><use href="#ic-user-circle"/></svg>
-            </div>
-            <div class="notif-item__texts">
-              <div class="notif-item__texts-inner">
-                <p class="notif-item__text">New Quick Notes for Physics Chapter 5 are now available.</p>
-                <span class="notif-item__time">6 Days Ago...</span>
+        <div class="notif-item" role="menuitem" tabindex="0">
+          <div class="notif-item__content">
+            <div class="notif-item__body">
+              <div class="notif-item__avatar" aria-hidden="true">
+                <svg><use href="#ic-user-circle"/></svg>
               </div>
+              <div class="notif-item__texts">
+                <div class="notif-item__texts-inner">
+                  <p class="notif-item__text">New Quick Notes for Physics Chapter 5 are now available.</p>
+                  <span class="notif-item__time">6 Days Ago...</span>
+                </div>
+              </div>
+              <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
             </div>
-            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
           </div>
         </div>
-      </div>
+
+      </div><!-- end notif-list -->
 
       <!-- "See all notification" — Primary/L Button - 1.5, no arrow, full-width -->
       <div class="notif-dropdown__footer">
@@ -5982,6 +5998,11 @@
             item.style.maxHeight     = '0';
             item.style.opacity       = '0';
             item.style.pointerEvents = 'none';
+            // After transition completes, remove from flex flow so gap doesn't stack
+            item.addEventListener('transitionend', function onCollapsed() {
+              item.removeEventListener('transitionend', onCollapsed);
+              if (item.style.maxHeight === '0px') item.style.display = 'none';
+            });
             // Synchronous counter — no timing dependency
             dismissedCount++;
             if (dismissedCount >= notifItems.length) {
@@ -6002,6 +6023,7 @@
           item.style.maxHeight     = '';
           item.style.opacity       = '';
           item.style.pointerEvents = '';
+          item.style.display       = '';
           requestAnimationFrame(function () { item.style.transition = ''; });
         });
         dropdown.classList.remove('is-open');
@@ -6021,6 +6043,7 @@
             item.style.maxHeight     = '';
             item.style.opacity       = '';
             item.style.pointerEvents = '';
+            item.style.display       = '';
             requestAnimationFrame(function () { item.style.transition = ''; });
           });
         }
