@@ -56,6 +56,7 @@
       --icon-default-default:     #808080;   /* Icon/default/default — action icons, inactive (DS confirmed 2026-05-14) */
       --icon-primary-default:       #00cc85;   /* Icon/primary/default — nav button icons, hover state */
       --icon-primary-default-hover: #00a36a;   /* Icon/primary/default-hover — Pill Button default icon (DS updated 2026-06-04) */
+      --icon-primary-focus:         #00a36a;   /* Icon/primary/focus — Side Button default icon */
       --icon-secondary-hover:     #70bc6f;   /* Icon/secondary/hover — nav button icons, hover state */
       --icon-primary-on-color:    #ffffff;   /* Icon/primary/on-color — Foundation/white (DS updated 2026-05-24, was #e1f9ea) */
       --icon-tertiary-default:    #00564c;   /* Icon/tertiary/default — pressed arrow chevron */
@@ -122,7 +123,7 @@
       /* Layout */
       --page-max-width:          100%;
       --page-padding-x:          60px;
-      --nav-dropdown-top:        72px;   /* navbar 64px + gap. DS=80px (16px gap). Change here to revert. */
+      --nav-dropdown-top:        80px;   /* navbar 72px + 8px gap. Change here to revert. */
       --section-gap:             var(--spacing-space-m);   /* Spacing/space-m = 16px */
       --overlay-dark:            rgba(26, 26, 26, 0.5);    /* Overlay/Overlay-Dark → Foundation/black 50 (DS confirmed) */
       --check-in-card-max-width: 390px;
@@ -1082,13 +1083,14 @@
       overflow:       hidden;
     }
 
-    /* Content = overflow container holding track + buttons */
+    /* Content = overflow container holding track + buttons (DS Type=Desktop node 1376:2209: radius/4xl=24px) */
     .carousel__content {
-      position:     relative;
-      width:        100%;
-      overflow:     hidden;
-      display:      flex;
-      align-items:  center;
+      position:      relative;
+      width:         100%;
+      overflow:      hidden;
+      display:       flex;
+      align-items:   center;
+      border-radius: var(--corner-radius-corner-4xl);   /* 24px — clips btn wrapper corners */
     }
 
     /* Track — flex row of cards */
@@ -1128,7 +1130,7 @@
       object-fit: cover;
     }
 
-    /* Button wrapper — absolute at left/right edges, padding 16px creates inset */
+    /* Button wrapper — absolute at left/right edges, padding 16px (DS node 1200:1837/1861) */
     .carousel__btn-wrap {
       position:    absolute;
       top:         0;
@@ -1138,61 +1140,117 @@
       padding:     var(--spacing-space-m);   /* p-[16px] */
       z-index:     2;
     }
-    /* Gradient fade overlays — white-to-transparent (DS node 1200:1837/1861) */
+    /* 3-side borders — clipped by content frame border-radius to form seamless rounded frame (Rule 42) */
     .carousel__btn-wrap--prev {
-      left:       0;
-      background: linear-gradient(-90deg, rgba(255,255,255,0) 0%, var(--surface-general-default) 100%);
+      left:          0;
+      border-top:    1px solid var(--border-primary-default);
+      border-left:   1px solid var(--border-primary-default);
+      border-bottom: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-radius-corner-4xl) 0 0 var(--corner-radius-corner-4xl);
     }
     .carousel__btn-wrap--next {
-      right:      0;
-      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, var(--surface-general-default) 100%);
+      right:         0;
+      border-top:    1px solid var(--border-primary-default);
+      border-right:  1px solid var(--border-primary-default);
+      border-bottom: 1px solid var(--border-primary-default);
+      border-radius: 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl) 0;
     }
 
-    /* Pill Button - 1.5 (node 5721:493) — strokeAlign INSIDE → box-shadow:inset (Rule 60), no transitions (Rule 82) */
+    /* Pill Button - 1.5 (node 5721:493, Rule 220+227) — main featured carousel nav buttons */
+    /* Outer: always pill (108px), white OUTSIDE ring (strokeAlign:OUTSIDE), fills wrapper height */
     .carousel__btn {
-      width:       32px;
-      height:      100%;
-      padding:     8px 4px;
-      display:     flex;
-      align-items: center;
+      align-self:    stretch;
+      min-height:    40px;
+      display:       flex;
+      align-items:   stretch;
+      cursor:        pointer;
+      user-select:   none;
+      border:        none;
+      border-radius: 108px;
+      background:    transparent;
+      padding:       0;
+      overflow:      hidden;
+      box-shadow:    0 0 0 4px var(--border-on-color); /* white OUTSIDE ring — strokeAlign:OUTSIDE */
+    }
+    /* Inner content: green bg + green INSIDE ring (strokeAlign:INSIDE) — per-side radius */
+    .carousel__btn__content {
+      display:         flex;
+      align-items:     center;
       justify-content: center;
-      cursor:      pointer;
-      user-select: none;
-      border:      none;
-      background:  var(--surface-secondary-default);              /* #b5f291 Default fill */
-      box-shadow:  inset 0 0 0 1px var(--border-primary-default); /* #00cc85 INSIDE stroke */
+      flex:            1;
+      background:      var(--surface-secondary-default);            /* #b5f291 */
+      box-shadow:      inset 0 0 0 1px var(--border-primary-default); /* #00cc85 INSIDE */
+      padding:         8px 4px;
+      border-radius:   24px;                                        /* Left default: radius/4xl */
     }
-    /* Left Default = 24px (radius/4xl), Right Default = 108px (radius/pill) */
-    .carousel__btn-wrap--prev .carousel__btn { border-radius: 24px; }
-    .carousel__btn-wrap--next .carousel__btn { border-radius: 108px; }
-
-    /* Hover — left switches to pill, fill lightens; icon lightens to #00cc85 */
-    .carousel__btn:hover {
-      background:   var(--surface-secondary-default-subtle-hover); /* #d1f7d1 DS updated 2026-06-04 */
-      border-radius: 108px;
+    .carousel__btn--right .carousel__btn__content { border-radius: 108px; } /* Right: radius/pill */
+    /* Hover */
+    .carousel__btn:hover .carousel__btn__content {
+      background: var(--surface-secondary-default-subtle);          /* #e8fbe8 */
     }
-    .carousel__btn:hover .carousel__btn__icon { color: var(--icon-primary-default); /* #00cc85 */ }
-
     /* Pressed — pair :active with JS .is-pressing (Rule 83) */
-    .carousel__btn:active,
-    .carousel__btn.is-pressing {
-      background:  var(--surface-primary-default);               /* #00cc85 */
-      box-shadow:  inset 0 0 0 1px var(--border-primary-focus);  /* #00a36a */
-      border-radius: 108px;
+    .carousel__btn:active .carousel__btn__content,
+    .carousel__btn.is-pressing .carousel__btn__content {
+      background: var(--surface-primary-default);                   /* #00cc85 */
+      box-shadow: inset 0 0 0 1px var(--border-primary-focus);      /* #00a36a INSIDE */
     }
     .carousel__btn:active .carousel__btn__icon,
-    .carousel__btn.is-pressing .carousel__btn__icon {
-      color: var(--icon-primary-on-color); /* #ffffff */
-    }
-
-    /* Icon — 24×24, no clip (DS clipsContent: false). Default icon = #00a36a (Icon/primary/default-hover) */
-    .carousel__btn__icon {
-      width:       24px;
-      height:      24px;
-      color:       var(--icon-primary-default-hover); /* #00a36a DS updated 2026-06-04 */
-      flex-shrink: 0;
-    }
+    .carousel__btn.is-pressing .carousel__btn__icon { color: var(--icon-primary-on-color); }
+    /* Icon */
+    .carousel__btn__icon { width: 24px; height: 24px; color: var(--icon-primary-default-hover); flex-shrink: 0; }
     .carousel__btn__icon svg { display: block; flex-shrink: 0; }
+
+    /* Side Button - 1.5 (COMPONENT_SET 5627:47996) — strokeAlign INSIDE → box-shadow:inset only. No transitions (Rule 82). */
+    .side-btn {
+      width:        36px;
+      align-self:   stretch;       /* fills wrapper height via Rule 232 — never height:100% */
+      display:      flex;
+      align-items:  center;
+      justify-content: center;
+      cursor:       pointer;
+      user-select:  none;
+      border:       none;
+      flex-shrink:  0;
+    }
+    /* Default — Left: rounded on left exterior (24px), flat on right interior */
+    .side-btn--left {
+      background:    var(--surface-secondary-default);              /* #b5f291 */
+      box-shadow:    inset 0 0 0 1px var(--border-primary-default); /* #00cc85 INSIDE */
+      padding:       8px 8px 8px 4px;
+      border-radius: 24px 0 0 24px;
+      color:         var(--icon-primary-focus);                     /* #00a36a */
+    }
+    /* Default — Right: flat on left interior, rounded on right exterior (24px) */
+    .side-btn--right {
+      background:    var(--surface-secondary-default);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+      padding:       8px 4px 8px 8px;
+      border-radius: 0 24px 24px 0;
+      color:         var(--icon-primary-focus);                     /* #00a36a */
+    }
+    /* Hover — bg lightens; icon nudges towards content (padding swaps) */
+    .side-btn--left:hover {
+      background: var(--surface-secondary-default-subtle);          /* #e8fbe8 */
+      padding:    8px 4px 8px 8px;
+      color:      var(--icon-primary-default);                      /* #00cc85 */
+    }
+    .side-btn--right:hover {
+      background: var(--surface-secondary-default-subtle);
+      padding:    8px 8px 8px 4px;
+      color:      var(--icon-primary-default);
+    }
+    /* Pressed — bg = primary green, stroke darkens; both types use pl:4 pr:8 (Rule 83) */
+    .side-btn--left:active,
+    .side-btn--left.is-pressing,
+    .side-btn--right:active,
+    .side-btn--right.is-pressing {
+      background: var(--surface-primary-default);                   /* #00cc85 */
+      box-shadow: inset 0 0 0 1px var(--border-primary-focus);      /* #00a36a */
+      padding:    8px 8px 8px 4px;
+      color:      var(--icon-primary-on-color);                     /* #ffffff */
+    }
+    .side-btn__icon { width: 24px; height: 24px; display: flex; flex-shrink: 0; }
+    .side-btn__icon svg { display: block; }
 
     /* Indicator (node 1376:2406): 12×12 dots gap:10 padding:4; active = 49×12px elongated pill */
     .carousel__indicator {
@@ -2105,7 +2163,7 @@
       align-items:   center;
       gap:           var(--spacing-space-2xl);   /* 28px — Spacing/space-2xl */
       padding:       var(--spacing-space-xs) var(--spacing-space-xl);   /* 8px · 24px — DS px-[Spacing/space-xl] */
-      height:        64px;
+      height:        72px;   /* DS Navbar Top = 72px (t:8 + 56px content + b:8) */
       overflow:      visible;   /* must be visible so Union tail (44×52) clears the navbar bottom edge */
     }
 
@@ -2314,16 +2372,17 @@
       color:      var(--text-primary-on-color);            /* #ffffff */
       box-shadow: 0 0 0 1px var(--border-on-color);        /* 1px white border OUTSIDE (strokeAlign:OUTSIDE) */
     }
-    #notif-btn.is-active .num-badge { opacity: 0; }
+    #notif-btn.is-active .num-badge,
+    #tablet-notif-btn.is-active .num-badge { opacity: 0; }
 
     /* Avatar - 1.5 (node 684:621): flex items-start · 48×48 · border · overflow-clip */
     .navbar-avatar {
       display:       flex;
       align-items:   flex-start;
-      width:         48px;
-      height:        48px;
-      min-width:     48px;
-      min-height:    48px;
+      width:         56px;
+      height:        56px;
+      min-width:     56px;
+      min-height:    56px;
       border-radius: var(--corner-radius-corner-rounded);   /* 60px */
       border:        1px solid var(--border-default);
       background:    var(--surface-general-default);
@@ -2346,27 +2405,39 @@
       display:         block;
     }
 
-    /* Number Badge - 1.5 (node 1084:1826): absolute right-[-0.48px] top-0 within Avatar group */
+    /* DS Avatar - 1.5, Size=L Type=Image = 56×56 frame (includes space for badge) */
+    .navbar-avatar-group {
+      position:    relative;
+      width:       56px;
+      height:      56px;
+      flex-shrink: 0;
+    }
+    /* Wrapper for welcome avatar — moves badge outside overflow:hidden circle */
+    .welcome-avatar-group {
+      position:    relative;
+      width:       100px;
+      height:      100px;
+      min-width:   100px;
+      min-height:  100px;
+      flex-shrink: 0;
+    }
+    /* P.Premium badge — absolutely positioned top:0 right:0 of avatar frame.
+       Size matches DS: L/Image=16px, XL/Image=20px, XXL/Image=28px */
     .navbar-badge {
       position:        absolute;
       top:             0;
-      right:           -0.48px;   /* DS: right-[-0.48px] relative to Avatar group */
-      background:      var(--surface-primary-default);
-      border-radius:   var(--corner-radius-corner-rounded);
-      box-shadow:      0 0 0 1px var(--border-on-color);          /* 1px white border OUTSIDE (strokeAlign:OUTSIDE) */
-      min-width:       20px;
+      right:           0;
+      width:           20px;   /* DS navbar Content frame: P.Premium = 20×20 */
       height:          20px;
-      padding:         var(--spacing-space-xxs);   /* 4px */
       display:         flex;
       align-items:     center;
       justify-content: center;
-      font-size:       10px;
-      font-weight:     600;
-      line-height:     1;          /* Rule 146: never DS line-height in fixed-height flex badge */
-      color:           var(--text-primary-on-color);
-      overflow:        hidden;
       pointer-events:  none;
     }
+    .navbar-badge svg { width: 100%; height: 100%; }
+    /* XXL/Image (profile dropdown, welcome desktop) */
+    .profile-dropdown__avatar-wrap .navbar-badge,
+    .welcome-avatar-group .navbar-badge            { width: 28px; height: 28px; }
 
     /* ─── Profile Menu - 1.5 (DS node 3908:3679)
        320px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding · 8px gap
@@ -2723,13 +2794,13 @@
 
     /* ─── Notification dropdown (DS node 3908:13057, Navbar Notification - 1.5)
        320px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
-       Right-aligned to bell button via JS · top: var(--nav-dropdown-top) · same animation as all other dropdowns
+       Right-aligned to bell button via JS · top: --nav-dropdown-top (72px) · same gap as all other dropdowns
     ──────────────────────────────────────────────────────────────────────────────────────── */
     .notif-dropdown {
-      position:       absolute;
-      top:            var(--nav-dropdown-top);
-      right:          0;
-      left:           auto;
+      position:       fixed;
+      top:            0;
+      left:           0;
+      right:          auto;
       z-index:        500;
       width:          320px;
       background:     var(--surface-general-default);
@@ -3194,25 +3265,14 @@
     .navbar-mobile__logo-mark { display: block; height: 28px;     width: auto; }
     .navbar-mobile__logo-text { display: block; height: 19.573px; width: auto; }
 
-    .navbar-mobile__menu-btn {
-      width:            40px;
-      height:           40px;
-      display:          flex;
-      align-items:      center;
-      justify-content:  center;
-      cursor:           pointer;
-      user-select:      none;
-      flex-shrink:      0;
-      color:            var(--icon-primary-default);
-      background:       none;
-      border:           none;
-      padding:          0;
+    /* DS Menu Icon frame (1943:22623): HORIZONTAL, gap=8px — bell + hamburger */
+    .navbar-mobile__buttons {
+      display:     flex;
+      align-items: center;
+      gap:         8px;
     }
-    .navbar-mobile__menu-btn svg {
-      display: block;
-      width:   24px;
-      height:  24px;
-    }
+
+    /* .navbar-mobile__menu-btn removed — button now uses .navbar-action-btn (Nav Button - 1.5, 44×44) */
 
     /* ─────────────────────────────────────────────────────
        HAMBURGER → X ANIMATION
@@ -3230,9 +3290,9 @@
     .ham-mid { transform-box: view-box; transform-origin: 50% 50%; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.2s ease; }
     .ham-bot { transform-box: view-box; transform-origin: 50% 75%; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
     /* 50% 25% = (12,6) · 50% 50% = (12,12) · 50% 75% = (12,18) in 24×24 viewport */
-    .navbar-mobile__menu-btn.is-open .ham-top { transform: translateY(6px)  rotate(45deg);  }
-    .navbar-mobile__menu-btn.is-open .ham-mid { opacity: 0; transform: scaleX(0); }
-    .navbar-mobile__menu-btn.is-open .ham-bot { transform: translateY(-6px) rotate(-45deg); }
+    #tablet-menu-btn.is-open .ham-top { transform: translateY(6px)  rotate(45deg);  }
+    #tablet-menu-btn.is-open .ham-mid { opacity: 0; transform: scaleX(0); }
+    #tablet-menu-btn.is-open .ham-bot { transform: translateY(-6px) rotate(-45deg); }
 
     /* ─────────────────────────────────────────────────────
        NAV MENU TABLET — Nav Menu Tablet - 1.5 (DS node 3427:4590)
@@ -3741,7 +3801,6 @@
       display:     flex;
       align-items: center;
     }
-    .recent-carousel__btn-side .carousel__btn { height: 100%; }
     .recent-carousel__viewport {
       flex:      1;
       min-width: 0;
@@ -3775,6 +3834,8 @@
 
       /* Avatar - 1.5 Size=XL on tablet (64×64, node 684:627) */
       .welcome-avatar { width: 64px; height: 64px; min-width: 64px; min-height: 64px; }
+      .welcome-avatar-group { width: 64px; height: 64px; min-width: 64px; min-height: 64px; }
+      .welcome-avatar-group .navbar-badge { width: 20px; height: 20px; }
 
       /* Welcome section — Tablet + Mobile: welcome-row flex-wrap layout
          Row 1: welcome-text (flex:1) + Avatar-Mobile
@@ -3886,8 +3947,10 @@
       /* Status badges: allow wrapping when pills don't fit in a single row */
       .status-badges { flex-wrap: wrap; }
 
-      /* Avatar - 1.5 Size=L on mobile (48×48) — tablet uses XXL (100×100) */
-      .welcome-avatar { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
+      /* Avatar - 1.5 Size=L on mobile (56×56 Type=Image, node 684:621) */
+      .welcome-avatar { width: 56px; height: 56px; min-width: 56px; min-height: 56px; }
+      .welcome-avatar-group { width: 56px; height: 56px; min-width: 56px; min-height: 56px; }
+      .welcome-avatar-group .navbar-badge { width: 16px; height: 16px; }
 
       /* Mobile: hide top hamburger navbar → replaced by bottom Navbar Mobile - 1.5 */
       #NavBar-Mobile { display: none; }
@@ -4082,6 +4145,9 @@
       <!-- Outline/shopping-bag (260:1133) --><symbol id="ic-shopping-bag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 6V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V6L6 2H18L21 6ZM3 6H21M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10"/></symbol>
       <!-- Outline/shopping-cart (260:1137) --><symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6M10 21C10 21.5523 9.55228 22 9 22C8.44772 22 8 21.5523 8 21C8 20.4477 8.44772 20 9 20C9.55228 20 10 20.4477 10 21ZM21 21C21 21.5523 20.5523 22 20 22C19.4477 22 19 21.5523 19 21C19 20.4477 19.4477 20 20 20C20.5523 20 21 20.4477 21 21Z"/></symbol>
       <!-- Outline/smile (260:1181) --><symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14M9 9H9.01M15 9H15.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
+      <!-- P.Premium (6352:41216) — clipPath in defs (Rule 57: url() resolves from document root, not <use> shadow) -->
+      <clipPath id="clip-premium"><rect width="20" height="20" fill="white"/></clipPath>
+      <symbol id="ic-premium" viewBox="0 0 20 20" fill="none"><g clip-path="url(#clip-premium)"><path d="M8.18945 2.68805C8.90941 1.15493 11.0906 1.15493 11.8105 2.68805L13.4287 6.13629L17.1924 6.71539C18.8009 6.96261 19.4562 8.92502 18.3193 10.0894L15.5332 12.942L16.1758 16.8785C16.4446 18.5264 14.6955 19.7587 13.2344 18.9507L10 17.1627L6.76562 18.9507C5.3045 19.7587 3.55544 18.5264 3.82422 16.8785L4.46582 12.942L1.68066 10.0894C0.543759 8.92502 1.19912 6.96261 2.80762 6.71539L6.57031 6.13629L8.18945 2.68805Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.09473 3.11383C9.45466 2.34708 10.5453 2.34707 10.9053 3.11383L12.6377 6.80328C12.7084 6.95396 12.8492 7.06012 13.0137 7.08551L17.041 7.70367C17.845 7.82751 18.1728 8.80905 17.6045 9.39117L14.6426 12.4244C14.5317 12.5379 14.4814 12.6975 14.5068 12.8541L15.1895 17.0396C15.3238 17.8634 14.4492 18.4793 13.7188 18.0757L10.2422 16.1529C10.0916 16.0696 9.90837 16.0696 9.75781 16.1529L6.28125 18.0757C5.55077 18.4793 4.67621 17.8634 4.81055 17.0396L5.49316 12.8541C5.51863 12.6975 5.46828 12.5379 5.35742 12.4244L2.39551 9.39117C1.82719 8.80905 2.15501 7.82751 2.95898 7.70367L6.98633 7.08551C7.15083 7.06012 7.29156 6.95396 7.3623 6.80328L9.09473 3.11383Z" fill="#FFF200" stroke="#F2B839" stroke-linecap="round" stroke-linejoin="round"/></g></symbol>
 
     </defs>
   </svg>
@@ -4160,13 +4226,15 @@
           </div>
         </div>
 
-        <!-- Avatar - 1.5 Size=L Type=Image (node 684:621): 48×48 circle · image fill 60×60 at x:-6 y:0 -->
-        <div class="navbar-avatar" aria-label="Profile">
-          <img class="navbar-avatar__image" src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
+        <!-- Avatar group: 48×48 position:relative wrapper so badge anchors to avatar bounds -->
+        <div class="navbar-avatar-group">
+          <!-- Avatar - 1.5 Size=L Type=Image (node 684:621): 48×48 circle · image fill 60×60 at x:-6 y:0 -->
+          <div class="navbar-avatar" aria-label="Profile">
+            <img class="navbar-avatar__image" src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
+          </div>
+          <!-- P.Premium badge (node 1084:1826): 20×20 gold star, top:0 right:0 of Avatar group -->
+          <span class="navbar-badge" aria-label="Premium member"><svg aria-hidden="true"><use href="#ic-premium"/></svg></span>
         </div>
-
-        <!-- Number Badge - 1.5 (node 1084:1826): absolute right:-0.48px top:0 of Avatar group -->
-        <span class="navbar-badge" aria-label="15 notifications">15</span>
 
       </div>
 
@@ -4184,6 +4252,7 @@
           <div class="profile-dropdown__avatar">
             <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
           </div>
+          <span class="navbar-badge" aria-label="Premium member"><svg aria-hidden="true"><use href="#ic-premium"/></svg></span>
         </div>
 
         <!-- Name / username / plan pill -->
@@ -4346,90 +4415,6 @@
 
     </div><!-- end locale-dropdown -->
 
-    <!-- Navbar Notification - 1.5 (DS node 3908:13057, Type=Default)
-         320px panel · 4 items · "See all notification" button
-         Triggered by bell button · right-aligned to bell button right edge via JS -->
-    <div class="notif-dropdown" id="notif-dropdown" aria-label="Notifications" role="menu">
-      <!-- Notifications List — DS node 6305:45076: gap 8px between items -->
-      <div class="notif-list">
-        <!-- Navbar Notification Button - Parts ×4 (DS 3908:13427) -->
-        <div class="notif-item" role="menuitem" tabindex="0">
-          <div class="notif-item__content">
-            <div class="notif-item__body">
-              <div class="notif-item__avatar" aria-hidden="true">
-                <svg><use href="#ic-user-circle"/></svg>
-              </div>
-              <div class="notif-item__texts">
-                <div class="notif-item__texts-inner">
-                  <p class="notif-item__text">Your quiz result for Chapter 3 is ready. Check your score now!</p>
-                  <span class="notif-item__time">2 Hours Ago...</span>
-                </div>
-              </div>
-              <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="notif-item" role="menuitem" tabindex="0">
-          <div class="notif-item__content">
-            <div class="notif-item__body">
-              <div class="notif-item__avatar" aria-hidden="true">
-                <svg><use href="#ic-user-circle"/></svg>
-              </div>
-              <div class="notif-item__texts">
-                <div class="notif-item__texts-inner">
-                  <p class="notif-item__text">Live Tuition for Add Maths starts in 30 minutes. Join now!</p>
-                  <span class="notif-item__time">5 Hours Ago...</span>
-                </div>
-              </div>
-              <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="notif-item" role="menuitem" tabindex="0">
-          <div class="notif-item__content">
-            <div class="notif-item__body">
-              <div class="notif-item__avatar" aria-hidden="true">
-                <svg><use href="#ic-user-circle"/></svg>
-              </div>
-              <div class="notif-item__texts">
-                <div class="notif-item__texts-inner">
-                  <p class="notif-item__text">You earned 50 coins from completing today's daily challenge.</p>
-                  <span class="notif-item__time">1 Day Ago...</span>
-                </div>
-              </div>
-              <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="notif-item" role="menuitem" tabindex="0">
-          <div class="notif-item__content">
-            <div class="notif-item__body">
-              <div class="notif-item__avatar" aria-hidden="true">
-                <svg><use href="#ic-user-circle"/></svg>
-              </div>
-              <div class="notif-item__texts">
-                <div class="notif-item__texts-inner">
-                  <p class="notif-item__text">New Quick Notes for Physics Chapter 5 are now available.</p>
-                  <span class="notif-item__time">6 Days Ago...</span>
-                </div>
-              </div>
-              <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- end notif-list -->
-
-      <!-- "See all notification" — Primary/L Button - 1.5, no arrow, full-width -->
-      <div class="notif-dropdown__footer">
-        <button class="notif-see-all" type="button">See all notification</button>
-      </div>
-
-    </div><!-- end notif-dropdown -->
-
     <!-- Download Apps dropdown (DS node 3909:3405, Navbar Download Apps - 1.5)
          238px panel · 3 items with app store icons
          Triggered by smartphone button · right-aligned to button right edge via JS -->
@@ -4453,6 +4438,90 @@
     </div><!-- end download-dropdown -->
 
   </section><!-- end NavbarPrimary-Desktop -->
+
+  <!-- Navbar Notification - 1.5 (DS node 3908:13057, Type=Default)
+       320px panel · 4 items · "See all notification" button
+       Shared by desktop #notif-btn AND tablet #tablet-notif-btn · position:fixed, top+right set by JS -->
+  <div class="notif-dropdown" id="notif-dropdown" aria-label="Notifications" role="menu">
+    <!-- Notifications List — DS node 6305:45076: gap 8px between items -->
+    <div class="notif-list">
+      <!-- Navbar Notification Button - Parts ×4 (DS 3908:13427) -->
+      <div class="notif-item" role="menuitem" tabindex="0">
+        <div class="notif-item__content">
+          <div class="notif-item__body">
+            <div class="notif-item__avatar" aria-hidden="true">
+              <svg><use href="#ic-user-circle"/></svg>
+            </div>
+            <div class="notif-item__texts">
+              <div class="notif-item__texts-inner">
+                <p class="notif-item__text">Your quiz result for Chapter 3 is ready. Check your score now!</p>
+                <span class="notif-item__time">2 Hours Ago...</span>
+              </div>
+            </div>
+            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notif-item" role="menuitem" tabindex="0">
+        <div class="notif-item__content">
+          <div class="notif-item__body">
+            <div class="notif-item__avatar" aria-hidden="true">
+              <svg><use href="#ic-user-circle"/></svg>
+            </div>
+            <div class="notif-item__texts">
+              <div class="notif-item__texts-inner">
+                <p class="notif-item__text">Live Tuition for Add Maths starts in 30 minutes. Join now!</p>
+                <span class="notif-item__time">5 Hours Ago...</span>
+              </div>
+            </div>
+            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notif-item" role="menuitem" tabindex="0">
+        <div class="notif-item__content">
+          <div class="notif-item__body">
+            <div class="notif-item__avatar" aria-hidden="true">
+              <svg><use href="#ic-user-circle"/></svg>
+            </div>
+            <div class="notif-item__texts">
+              <div class="notif-item__texts-inner">
+                <p class="notif-item__text">You earned 50 coins from completing today's daily challenge.</p>
+                <span class="notif-item__time">1 Day Ago...</span>
+              </div>
+            </div>
+            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notif-item" role="menuitem" tabindex="0">
+        <div class="notif-item__content">
+          <div class="notif-item__body">
+            <div class="notif-item__avatar" aria-hidden="true">
+              <svg><use href="#ic-user-circle"/></svg>
+            </div>
+            <div class="notif-item__texts">
+              <div class="notif-item__texts-inner">
+                <p class="notif-item__text">New Quick Notes for Physics Chapter 5 are now available.</p>
+                <span class="notif-item__time">6 Days Ago...</span>
+              </div>
+            </div>
+            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end notif-list -->
+
+    <!-- "See all notification" — Primary/L Button - 1.5, no arrow, full-width -->
+    <div class="notif-dropdown__footer">
+      <button class="notif-see-all" type="button">See all notification</button>
+    </div>
+
+  </div><!-- end notif-dropdown -->
 
   <!-- ═══════════════════════════════════════════════════════════════
        NAV TOP MENU DESKTOP — Nav Top Menu Desktop - 1.5
@@ -4706,13 +4775,30 @@
         <img src="../src/image-repo/page.home/assets/main/NavBar-Mobile/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
         <img src="../src/image-repo/page.home/assets/main/NavBar-Mobile/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
       </a>
-      <button class="navbar-mobile__menu-btn" id="tablet-menu-btn" aria-label="Open menu" type="button">
-        <svg class="ham-svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-          <path class="ham-top" d="M3 6H21"/>
-          <path class="ham-mid" d="M3 12H21"/>
-          <path class="ham-bot" d="M3 18H21"/>
-        </svg>
-      </button>
+      <div class="navbar-mobile__buttons">
+        <!-- DS: Outline/bell (node 260:491) — Nav Button L, Size=L, 44×44 -->
+        <button class="navbar-action-btn" id="tablet-notif-btn" aria-label="Notifications" type="button" aria-haspopup="true">
+          <div class="nav-btn-content">
+            <div class="nav-btn-rect"></div>
+            <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+            <div class="num-badge num-badge--primary" aria-label="4 notifications" aria-live="polite">4</div>
+          </div>
+        </button>
+        <!-- DS: Outline/menu (node 260:922) — Nav Button L, Size=L, 44×44 -->
+        <!-- DS: Outline/menu — Nav Button - 1.5, 44×44, same structure as bell -->
+        <button class="navbar-action-btn" id="tablet-menu-btn" aria-label="Open menu" type="button">
+          <div class="nav-btn-content">
+            <div class="nav-btn-rect" aria-hidden="true"></div>
+            <div class="nav-btn-icon-clip">
+              <svg class="ham-svg" viewBox="-1 -1 26 26" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <path class="ham-top" d="M3 6H21"/>
+                <path class="ham-mid" d="M3 12H21"/>
+                <path class="ham-bot" d="M3 18H21"/>
+              </svg>
+            </div>
+          </div>
+        </button>
+      </div>
     </div>
   </section><!-- end NavBar-Mobile -->
 
@@ -5059,8 +5145,12 @@
           <!-- Avatar-Mobile — Avatar - 1.5 Size=L Type=Image (node 684:621)
                Mobile-only: visible at ≤767px, sits right of #Welcome-Desktop -->
           <section id="Avatar-Mobile" aria-label="User profile">
-            <div class="welcome-avatar">
-              <img class="welcome-avatar__image" src="../src/image-repo/page.home/assets/main/Welcome-Desktop/Avatar-Aidan.png" alt="User avatar">
+            <!-- welcome-avatar-group: badge outside overflow:hidden circle, still constrained to avatar size -->
+            <div class="welcome-avatar-group">
+              <div class="welcome-avatar">
+                <img class="welcome-avatar__image" src="../src/image-repo/page.home/assets/main/Welcome-Desktop/Avatar-Aidan.png" alt="User avatar">
+              </div>
+              <span class="navbar-badge" aria-label="Premium member"><svg aria-hidden="true"><use href="#ic-premium"/></svg></span>
             </div>
           </section>
 
@@ -5100,20 +5190,24 @@
               </div>
             </div>
 
-            <!-- Left Button: Pill Button - 1.5 Type=Left (node 1200:1837) -->
+            <!-- Left Button: Pill Button - 1.5 Type=Left (node 1200:1816) -->
             <div class="carousel__btn-wrap carousel__btn-wrap--prev">
-              <button class="carousel__btn" id="carouselPrev" aria-label="Previous">
-                <span class="carousel__btn__icon">
-                  <svg width="24" height="24" aria-hidden="true"><use href="#ic-chevron-left"/></svg>
+              <button class="carousel__btn carousel__btn--left" id="carouselPrev" aria-label="Previous">
+                <span class="carousel__btn__content">
+                  <span class="carousel__btn__icon">
+                    <svg width="24" height="24" aria-hidden="true"><use href="#ic-chevron-left"/></svg>
+                  </span>
                 </span>
               </button>
             </div>
 
-            <!-- Right Button: Pill Button - 1.5 Type=Right (node 1200:1861) -->
+            <!-- Right Button: Pill Button - 1.5 Type=Right (node 1200:1862) -->
             <div class="carousel__btn-wrap carousel__btn-wrap--next">
-              <button class="carousel__btn" id="carouselNext" aria-label="Next">
-                <span class="carousel__btn__icon">
-                  <svg width="24" height="24" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+              <button class="carousel__btn carousel__btn--right" id="carouselNext" aria-label="Next">
+                <span class="carousel__btn__content">
+                  <span class="carousel__btn__icon">
+                    <svg width="24" height="24" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+                  </span>
                 </span>
               </button>
             </div>
@@ -5551,11 +5645,11 @@
           <!-- Primary Card content — Quiz Card Carousel (4 cards, 3 visible, left/right nav) -->
           <div class="primary-card__content">
 
-            <!-- Left Button — 16px clear gap via flex layout, no card overlap -->
-            <div class="recent-carousel__btn-side">
-              <button class="carousel__btn" id="recentPrev" aria-label="Previous">
-                <span class="carousel__btn__icon">
-                  <svg width="20" height="20" aria-hidden="true"><use href="#ic-chevron-left"/></svg>
+            <!-- Left Button — Side Button - 1.5 Type=Left -->
+            <div class="recent-carousel__btn-side recent-carousel__btn-side--left">
+              <button class="side-btn side-btn--left" id="recentPrev" aria-label="Previous">
+                <span class="side-btn__icon">
+                  <svg width="24" height="24" aria-hidden="true"><use href="#ic-chevron-left"/></svg>
                 </span>
               </button>
             </div>
@@ -5627,11 +5721,11 @@
             </div><!-- end recentTrack -->
             </div><!-- end recent-carousel__viewport -->
 
-            <!-- Right Button -->
-            <div class="recent-carousel__btn-side">
-              <button class="carousel__btn" id="recentNext" aria-label="Next">
-                <span class="carousel__btn__icon">
-                  <svg width="20" height="20" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+            <!-- Right Button — Side Button - 1.5 Type=Right -->
+            <div class="recent-carousel__btn-side recent-carousel__btn-side--right">
+              <button class="side-btn side-btn--right" id="recentNext" aria-label="Next">
+                <span class="side-btn__icon">
+                  <svg width="24" height="24" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
                 </span>
               </button>
             </div>
@@ -5747,18 +5841,20 @@
         var waffleBtn    = document.getElementById('waffle-btn');
         var localeDd     = document.getElementById('locale-dropdown');
         var localeBtn    = document.getElementById('locale-btn');
-        var notifDd      = document.getElementById('notif-dropdown');
-        var notifBtn     = document.getElementById('notif-btn');
-        var downloadDd   = document.getElementById('download-dropdown');
-        var downloadBtn  = document.getElementById('download-btn');
-        if (learnDd)     learnDd.classList.remove('is-open');
-        if (waffleBtn)   waffleBtn.classList.remove('is-active');
-        if (localeDd)    localeDd.classList.remove('is-open');
-        if (localeBtn)   localeBtn.classList.remove('is-active');
-        if (notifDd)     notifDd.classList.remove('is-open');
-        if (notifBtn)    notifBtn.classList.remove('is-active');
-        if (downloadDd)  downloadDd.classList.remove('is-open');
-        if (downloadBtn) downloadBtn.classList.remove('is-active');
+        var notifDd         = document.getElementById('notif-dropdown');
+        var notifBtn        = document.getElementById('notif-btn');
+        var tabletNotifBtn  = document.getElementById('tablet-notif-btn');
+        var downloadDd      = document.getElementById('download-dropdown');
+        var downloadBtn     = document.getElementById('download-btn');
+        if (learnDd)        learnDd.classList.remove('is-open');
+        if (waffleBtn)      waffleBtn.classList.remove('is-active');
+        if (localeDd)       localeDd.classList.remove('is-open');
+        if (localeBtn)      localeBtn.classList.remove('is-active');
+        if (notifDd)        notifDd.classList.remove('is-open');
+        if (notifBtn)       notifBtn.classList.remove('is-active');
+        if (tabletNotifBtn) tabletNotifBtn.classList.remove('is-active');
+        if (downloadDd)     downloadDd.classList.remove('is-open');
+        if (downloadBtn)    downloadBtn.classList.remove('is-active');
         dropdown.classList.toggle('is-open');
       });
 
@@ -5792,17 +5888,19 @@
         var profileDd   = document.getElementById('profile-dropdown');
         var localeDd    = document.getElementById('locale-dropdown');
         var localeBtn   = document.getElementById('locale-btn');
-        var notifDd     = document.getElementById('notif-dropdown');
-        var notifBtn    = document.getElementById('notif-btn');
-        var downloadDd  = document.getElementById('download-dropdown');
-        var downloadBtn = document.getElementById('download-btn');
-        if (profileDd)  profileDd.classList.remove('is-open');
-        if (localeDd)   localeDd.classList.remove('is-open');
-        if (localeBtn)  localeBtn.classList.remove('is-active');
-        if (notifDd)    notifDd.classList.remove('is-open');
-        if (notifBtn)   notifBtn.classList.remove('is-active');
-        if (downloadDd)  downloadDd.classList.remove('is-open');
-        if (downloadBtn) downloadBtn.classList.remove('is-active');
+        var notifDd        = document.getElementById('notif-dropdown');
+        var notifBtn       = document.getElementById('notif-btn');
+        var tabletNotifBtn = document.getElementById('tablet-notif-btn');
+        var downloadDd     = document.getElementById('download-dropdown');
+        var downloadBtn    = document.getElementById('download-btn');
+        if (profileDd)      profileDd.classList.remove('is-open');
+        if (localeDd)       localeDd.classList.remove('is-open');
+        if (localeBtn)      localeBtn.classList.remove('is-active');
+        if (notifDd)        notifDd.classList.remove('is-open');
+        if (notifBtn)       notifBtn.classList.remove('is-active');
+        if (tabletNotifBtn) tabletNotifBtn.classList.remove('is-active');
+        if (downloadDd)     downloadDd.classList.remove('is-open');
+        if (downloadBtn)    downloadBtn.classList.remove('is-active');
         if (willOpen) positionDropdown();
         dropdown.classList.toggle('is-open');
         waffleBtn.classList.toggle('is-active', willOpen);
@@ -5859,17 +5957,19 @@
         var profileDd   = document.getElementById('profile-dropdown');
         var learnDd     = document.getElementById('learn-dropdown');
         var waffleBtn   = document.getElementById('waffle-btn');
-        var notifDd     = document.getElementById('notif-dropdown');
-        var notifBtn    = document.getElementById('notif-btn');
-        var downloadDd  = document.getElementById('download-dropdown');
-        var downloadBtn = document.getElementById('download-btn');
-        if (profileDd)  profileDd.classList.remove('is-open');
-        if (learnDd)    learnDd.classList.remove('is-open');
-        if (waffleBtn)  waffleBtn.classList.remove('is-active');
-        if (notifDd)    notifDd.classList.remove('is-open');
-        if (notifBtn)   notifBtn.classList.remove('is-active');
-        if (downloadDd)  downloadDd.classList.remove('is-open');
-        if (downloadBtn) downloadBtn.classList.remove('is-active');
+        var notifDd        = document.getElementById('notif-dropdown');
+        var notifBtn       = document.getElementById('notif-btn');
+        var tabletNotifBtn = document.getElementById('tablet-notif-btn');
+        var downloadDd     = document.getElementById('download-dropdown');
+        var downloadBtn    = document.getElementById('download-btn');
+        if (profileDd)      profileDd.classList.remove('is-open');
+        if (learnDd)        learnDd.classList.remove('is-open');
+        if (waffleBtn)      waffleBtn.classList.remove('is-active');
+        if (notifDd)        notifDd.classList.remove('is-open');
+        if (notifBtn)       notifBtn.classList.remove('is-active');
+        if (tabletNotifBtn) tabletNotifBtn.classList.remove('is-active');
+        if (downloadDd)     downloadDd.classList.remove('is-open');
+        if (downloadBtn)    downloadBtn.classList.remove('is-active');
         if (willOpen) positionDropdown();
         dropdown.classList.toggle('is-open');
         localeBtn.classList.toggle('is-active', willOpen);
@@ -5931,15 +6031,17 @@
         var waffleBtn   = document.getElementById('waffle-btn');
         var localeDd    = document.getElementById('locale-dropdown');
         var localeBtn   = document.getElementById('locale-btn');
-        var notifDd     = document.getElementById('notif-dropdown');
-        var notifBtn    = document.getElementById('notif-btn');
-        if (profileDd)  profileDd.classList.remove('is-open');
-        if (learnDd)    learnDd.classList.remove('is-open');
-        if (waffleBtn)  waffleBtn.classList.remove('is-active');
-        if (localeDd)   localeDd.classList.remove('is-open');
-        if (localeBtn)  localeBtn.classList.remove('is-active');
-        if (notifDd)    notifDd.classList.remove('is-open');
-        if (notifBtn)   notifBtn.classList.remove('is-active');
+        var notifDd        = document.getElementById('notif-dropdown');
+        var notifBtn       = document.getElementById('notif-btn');
+        var tabletNotifBtn = document.getElementById('tablet-notif-btn');
+        if (profileDd)      profileDd.classList.remove('is-open');
+        if (learnDd)        learnDd.classList.remove('is-open');
+        if (waffleBtn)      waffleBtn.classList.remove('is-active');
+        if (localeDd)       localeDd.classList.remove('is-open');
+        if (localeBtn)      localeBtn.classList.remove('is-active');
+        if (notifDd)        notifDd.classList.remove('is-open');
+        if (notifBtn)       notifBtn.classList.remove('is-active');
+        if (tabletNotifBtn) tabletNotifBtn.classList.remove('is-active');
         if (willOpen) positionDropdown();
         dropdown.classList.toggle('is-open');
         downloadBtn.classList.toggle('is-active', willOpen);
@@ -5962,25 +6064,46 @@
       });
     })();
 
-    // Notification dropdown — bell button click → position + toggle; mouseleave → close (Rule 14: critical first)
+    // Notification dropdown — desktop (#notif-btn) + tablet (#tablet-notif-btn) share one dropdown (Rule 52/53)
+    // position:fixed · top+right set by positionDropdown(activeBtn) using viewport-relative coords
     (function () {
-      var notifBtn   = document.getElementById('notif-btn');
-      var navSection = document.getElementById('NavbarPrimary-Desktop');
-      var dropdown   = document.getElementById('notif-dropdown');
-      if (!notifBtn || !navSection || !dropdown) return;
+      var notifBtn       = document.getElementById('notif-btn');
+      var tabletNotifBtn = document.getElementById('tablet-notif-btn');
+      var dropdown       = document.getElementById('notif-dropdown');
+      if (!dropdown) return;
 
-      function positionDropdown() {
-        var btnRect     = notifBtn.getBoundingClientRect();
-        var sectionRect = navSection.getBoundingClientRect();
-        // Right-align: dropdown right edge = bell button right edge → extends leftward
-        var rightOffset = sectionRect.right - btnRect.right;
-        var dropW       = dropdown.offsetWidth || 320;
-        var maxRight    = sectionRect.width - dropW;
-        dropdown.style.right = Math.max(0, Math.min(rightOffset, maxRight)) + 'px';
-        dropdown.style.left  = 'auto';
+      function positionDropdown(activeBtn) {
+        var btnRect  = activeBtn.getBoundingClientRect();
+        var dropW    = dropdown.offsetWidth || 320;
+        var dropTop  = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-dropdown-top').trim()) || 80;
+        // Use left-based positioning: dropdown right edge = button right edge
+        var dropLeft = Math.max(0, btnRect.right - dropW);
+        dropdown.style.left  = dropLeft + 'px';
+        dropdown.style.right = 'auto';
+        dropdown.style.top   = dropTop + 'px';
       }
 
-      notifBtn.addEventListener('click', function () {
+      var notifItems     = dropdown.querySelectorAll('.notif-item');
+      var dismissedCount = 0;
+
+      function closeNotif() {
+        dismissedCount = 0;
+        dropdown.classList.remove('is-open', 'is-empty');
+        if (notifBtn)       notifBtn.classList.remove('is-active');
+        if (tabletNotifBtn) tabletNotifBtn.classList.remove('is-active');
+        notifItems.forEach(function (item) {
+          item.dataset.clicks      = '0';
+          item.classList.remove('is-read');
+          item.style.transition    = 'none';
+          item.style.maxHeight     = '';
+          item.style.opacity       = '';
+          item.style.pointerEvents = '';
+          item.style.display       = '';
+          requestAnimationFrame(function () { item.style.transition = ''; });
+        });
+      }
+
+      function handleBellClick(activeBtn) {
         var willOpen    = !dropdown.classList.contains('is-open');
         var profileDd   = document.getElementById('profile-dropdown');
         var learnDd     = document.getElementById('learn-dropdown');
@@ -5996,85 +6119,62 @@
         if (localeBtn)  localeBtn.classList.remove('is-active');
         if (downloadDd)  downloadDd.classList.remove('is-open');
         if (downloadBtn) downloadBtn.classList.remove('is-active');
-        if (willOpen) positionDropdown();
-        dropdown.classList.toggle('is-open');
-        notifBtn.classList.toggle('is-active', willOpen);
+        if (notifBtn)       notifBtn.classList.remove('is-active');
+        if (tabletNotifBtn) tabletNotifBtn.classList.remove('is-active');
+        if (willOpen) positionDropdown(activeBtn);
+        dropdown.classList.toggle('is-open', willOpen);
+        activeBtn.classList.toggle('is-active', willOpen);
+      }
+
+      if (notifBtn)       notifBtn.addEventListener('click',       function () { handleBellClick(notifBtn); });
+      if (tabletNotifBtn) tabletNotifBtn.addEventListener('click', function () { handleBellClick(tabletNotifBtn); });
+
+      // is-pressing feedback for both buttons (Rule 83)
+      [notifBtn, tabletNotifBtn].forEach(function (btn) {
+        if (!btn) return;
+        btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+        btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+        btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
       });
 
-      // Notification item interaction — click 1: mark read (hide dot) · click 2: dismiss (collapse)
-      var notifItems    = dropdown.querySelectorAll('.notif-item');
-      var dismissedCount = 0;
-
+      // Notification item interaction — click 1: mark read · click 2: dismiss (collapse)
       notifItems.forEach(function (item) {
         item.dataset.clicks = '0';
         item.addEventListener('click', function () {
           var n = (parseInt(item.dataset.clicks, 10) || 0) + 1;
           item.dataset.clicks = String(n);
           if (n === 1) {
-            // First press — hide unread indicator dot
             item.classList.add('is-read');
           } else if (n === 2) {
-            // Second press — collapse and hide the item
             item.style.transition    = 'max-height 0.3s ease, opacity 0.2s ease';
             item.style.maxHeight     = item.scrollHeight + 'px';
-            item.getBoundingClientRect(); // flush layout so transition fires
+            item.getBoundingClientRect();
             item.style.maxHeight     = '0';
             item.style.opacity       = '0';
             item.style.pointerEvents = 'none';
-            // After transition completes, remove from flex flow so gap doesn't stack
             item.addEventListener('transitionend', function onCollapsed() {
               item.removeEventListener('transitionend', onCollapsed);
               if (item.style.maxHeight === '0px') item.style.display = 'none';
             });
-            // Synchronous counter — no timing dependency
             dismissedCount++;
-            if (dismissedCount >= notifItems.length) {
-              dropdown.classList.add('is-empty');
-            }
+            if (dismissedCount >= notifItems.length) dropdown.classList.add('is-empty');
           }
         });
       });
 
-      dropdown.addEventListener('mouseleave', function () {
-        // Reset all items instantly (dropdown is closing, reset won't be seen)
-        dismissedCount = 0;
-        dropdown.classList.remove('is-empty');
-        notifItems.forEach(function (item) {
-          item.dataset.clicks      = '0';
-          item.classList.remove('is-read');
-          item.style.transition    = 'none';
-          item.style.maxHeight     = '';
-          item.style.opacity       = '';
-          item.style.pointerEvents = '';
-          item.style.display       = '';
-          requestAnimationFrame(function () { item.style.transition = ''; });
-        });
-        dropdown.classList.remove('is-open');
-        notifBtn.classList.remove('is-active');
-      });
+      dropdown.addEventListener('mouseleave', closeNotif);
 
-      // Close on outside click — also reset item states
       document.addEventListener('click', function (e) {
-        if (!dropdown.contains(e.target) && !notifBtn.contains(e.target)) {
-          dismissedCount = 0;
-          dropdown.classList.remove('is-open', 'is-empty');
-          notifBtn.classList.remove('is-active');
-          notifItems.forEach(function (item) {
-            item.dataset.clicks      = '0';
-            item.classList.remove('is-read');
-            item.style.transition    = 'none';
-            item.style.maxHeight     = '';
-            item.style.opacity       = '';
-            item.style.pointerEvents = '';
-            item.style.display       = '';
-            requestAnimationFrame(function () { item.style.transition = ''; });
-          });
-        }
+        var clickedBtn = (notifBtn && notifBtn.contains(e.target)) ||
+                         (tabletNotifBtn && tabletNotifBtn.contains(e.target));
+        if (!dropdown.contains(e.target) && !clickedBtn) closeNotif();
       }, true);
 
-      // Reposition on resize if open
       window.addEventListener('resize', function () {
-        if (dropdown.classList.contains('is-open')) positionDropdown();
+        if (dropdown.classList.contains('is-open')) {
+          var activeBtn = (notifBtn && notifBtn.classList.contains('is-active')) ? notifBtn : tabletNotifBtn;
+          if (activeBtn) positionDropdown(activeBtn);
+        }
       });
     })();
 
@@ -6345,6 +6445,11 @@
         menuPanel.classList.contains('is-open') ? closeTabletMenu() : openTabletMenu();
       });
 
+      // is-pressing feedback — Rule 83 (CSS :active unreliable on divs/buttons in Electron)
+      menuBtn.addEventListener('mousedown',  function () { menuBtn.classList.add('is-pressing'); });
+      menuBtn.addEventListener('mouseup',    function () { menuBtn.classList.remove('is-pressing'); });
+      menuBtn.addEventListener('mouseleave', function () { menuBtn.classList.remove('is-pressing'); });
+
       if (closeBtn) closeBtn.addEventListener('click', closeTabletMenu);
 
       // Click overlay to close
@@ -6497,6 +6602,12 @@
         });
         btnPrev.addEventListener('click', () => { slide(idx - 1); resetAuto(); });
         btnNext.addEventListener('click', () => { slide(idx + 1); resetAuto(); });
+
+        [btnPrev, btnNext].forEach(function(btn) {
+          btn.addEventListener('mousedown',  function() { btn.classList.add('is-pressing'); });
+          btn.addEventListener('mouseup',    function() { btn.classList.remove('is-pressing'); });
+          btn.addEventListener('mouseleave', function() { btn.classList.remove('is-pressing'); });
+        });
 
         startAuto();
       })();

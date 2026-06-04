@@ -2715,28 +2715,45 @@ return { w: node.parent.width, h: node.parent.height };
 
 ---
 
-### 94. Carousel - 1.5 nav buttons — Rule 42 obsolete (DS redesigned 2026-06-04) (= Rule 223 in zul.design.md)
+### 94. Carousel - 1.5 nav buttons — Type=Desktop uses Rule 42; Type=Desktop 4 uses gradients (= Rules 223 + 226 in zul.design.md)
 
-Rule 42 is obsolete. The 3-side border composite frame approach was removed from the DS.
+**COMPONENT_SET `3060:868` now has 5 variants (was 2). Prototype uses `Type=Desktop`. Confirmed 2026-06-05.**
 
-- **Old**: Left/Right wrappers had `border-top/left/bottom: 1px #00cc85` forming the outer frame
-- **New**: Wrappers are gradient overlays (`linear-gradient` white-to-transparent), no borders. Outer frame comes from card borders only.
-- Each wrapper contains a `Pill Button - 1.5` instance (Rule 220 for Pill Button specs)
+| Variant | Approach |
+|---|---|
+| `Type=Desktop` (`1200:1789`) | **3-side border frame, 24px Content radius ← prototype target** |
+| `Type=Desktop 4` (`6392:418`) | Gradient overlays, no Content radius |
+| `Type=Desktop 2/3` | Other layouts |
+| `Type=Mobile` (`3060:869`) | No nav buttons |
+
+**Prior note "Rule 42 is obsolete" was wrong** — it described Desktop 4 only. For our prototype (Type=Desktop), Rule 42 is the correct pattern.
 
 ```css
-.carousel__btn-wrap--prev { left: 0;  background: linear-gradient(-90deg, rgba(255,255,255,0) 0%, var(--surface-general-default) 100%); }
-.carousel__btn-wrap--next { right: 0; background: linear-gradient(90deg,  rgba(255,255,255,0) 0%, var(--surface-general-default) 100%); }
+/* Type=Desktop — 3-side borders, 24px Content frame radius (Rule 42) */
+.carousel__content { overflow: hidden; border-radius: var(--corner-radius-corner-4xl); }
+.carousel__btn-wrap--prev {
+  left: 0;
+  border-top: 1px solid var(--border-primary-default);
+  border-left: 1px solid var(--border-primary-default);
+  border-bottom: 1px solid var(--border-primary-default);
+  border-radius: var(--corner-radius-corner-4xl) 0 0 var(--corner-radius-corner-4xl);
+}
+.carousel__btn-wrap--next {
+  right: 0;
+  border-top: 1px solid var(--border-primary-default);
+  border-right: 1px solid var(--border-primary-default);
+  border-bottom: 1px solid var(--border-primary-default);
+  border-radius: 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl) 0;
+}
 ```
+
+**Rule:** Always confirm which DS variant the prototype follows (step 0f in workflow) before any carousel work. Never assume from a prior session.
 
 ---
 
-### 95. Carousel - 1.5 Content frame — no border-radius (Rule 132 obsolete) (= Rule 224 in zul.design.md)
+### 95. Carousel - 1.5 Content frame — 24px radius for Type=Desktop (= Rules 224 + 226 in zul.design.md)
 
-Rule 132 (`corner-2xl = 18px` on Content frame) is obsolete. DS node `1376:2209` now has `overflow-clip` only — no `cornerRadius`. Carousel outer edges are straight, not rounded.
-
-```css
-.carousel__content { overflow: hidden; /* no border-radius */ }
-```
+Rule 224 ("no border-radius") applies to `Type=Desktop 4` only. Our prototype uses `Type=Desktop` which has `border-radius: var(--corner-radius-corner-4xl)` (24px) on the Content frame. This radius clips the absolute button wrappers to create the seamless rounded outer frame.
 
 ---
 
@@ -2754,28 +2771,101 @@ Mobile: active dot stays `8×8` round — override `width: 8px` in mobile breakp
 
 ---
 
-### Mandatory workflow — BEFORE every session, every design action, every change, every decision
+### 97. Pill Button - 1.5 — dual strokes: 4px white OUTSIDE + 1px green INSIDE (= Rule 227 in zul.design.md)
+
+**Source:** `use_figma` on all 6 Pill Button states. Confirmed 2026-06-05.
+
+Two strokes, two CSS `box-shadow` values combined on one element:
+- Outer COMPONENT: `strokeAlign: OUTSIDE`, 4px white → `0 0 0 4px var(--border-on-color)`
+- Inner Content FRAME: `strokeAlign: INSIDE`, 1px green → `inset 0 0 0 1px var(--border-primary-default)`
+
+```css
+/* Default */
+.carousel__btn {
+  box-shadow: 0 0 0 4px var(--border-on-color), inset 0 0 0 1px var(--border-primary-default);
+}
+/* Pressed — must re-declare BOTH (partial override drops the outer ring) */
+.carousel__btn:active,
+.carousel__btn.is-pressing {
+  box-shadow: 0 0 0 4px var(--border-on-color), inset 0 0 0 1px var(--border-primary-focus);
+}
+/* Hover — inherits base box-shadow, no override needed */
+```
+
+**Rule:** Any `box-shadow` state override must re-declare all values. CSS replaces the whole property — partial declarations silently drop the other rings.
+
+---
+
+### 98. Profile dropdown is a positioning exception — CSS-only, no JS (= Rule 228 in zul.design.md)
+
+The profile dropdown is the **only** navbar dropdown that stays at `right: var(--page-padding-x)` via CSS alone. It is NOT right-aligned to the avatar button edge. All other action-button dropdowns (notif, learn, locale, download) use `positionDropdown()` in JS.
+
+**Never add `positionDropdown()` to the profile dropdown IIFE.**
+
+**Mistake made (2026-06-05):** Added JS positioning to profile dropdown; reverted after user clarified it is a positioning exception.
+
+---
+
+### 99. `position: fixed` dropdowns → `left`-based formula, never `right`-based (= Rule 229 in zul.design.md)
+
+For any `position: fixed` dropdown, use:
+```js
+var dropLeft = Math.max(0, btnRect.right - dropW);
+dropdown.style.left  = dropLeft + 'px';
+dropdown.style.right = 'auto';
+```
+
+**Never use `right = window.innerWidth - btnRect.right`** — theoretically equivalent but unreliable due to scrollbar width ambiguity and browser differences in `window.innerWidth`. The `left` approach uses viewport-relative math directly.
+
+**CSS initial state must also use `left`:**
+```css
+.notif-dropdown { position: fixed; top: 0; left: 0; right: auto; }
+```
+
+**Confirmed fix (2026-06-05):** Notif dropdown was misaligned using `right`-based formula. Switched to `left`-based — resolved.
+
+---
+
+### 100. Navbar Top confirmed specs — DS node 866:5576 (updated 2026-06-05) (= Rule 230 in zul.design.md)
+
+| Property | Confirmed | Prior (wrong) |
+|---|---|---|
+| Height | **72px** (t:8 + 56px content + b:8) | 64px |
+| Avatar (L/Image) | **56×56px** | 48px |
+| P.Premium badge (Navbar Content frame) | **20×20px** | 16×16px |
+| `--nav-dropdown-top` | **80px** (72px + 8px gap) | 72px |
+
+**Badge distinction:** Avatar component set has 16×16 internal badge for L size. Navbar Content frame places a separate **20×20** P.Premium sibling. Always inspect the parent frame, not just the component set.
+
+---
+
+### Mandatory workflow — BEFORE every session, every design action, every change, every decision (updated 2026-06-05)
 
 > **Always before starting any design, making any changes, or making any decisions — refer to DS, zul.design.md, AND load related memory/skills first. No exceptions.**
 
 ```
-□ 0a. Read design-md/zul.design.md       → ALL rules 1–225, confirmed specs, known mistakes
+□ 0a. Read design-md/zul.design.md       → ALL rules 1–230, confirmed specs, known mistakes
 □ 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs, NOT prior notes
 □ 0c. Load related memory files          → check MEMORY.md index, load any relevant project/feedback memories
 □ 0d. Load related Figma skills          → /figma-use before use_figma; /figma-generate-design for page layouts
 □ 0e. get_design_context on COMPONENT SET → list ALL variant names before any CSS
-□ 0f. get_design_context on EACH state   → extract every token BEFORE writing CSS
-□ 0g. use_figma raw inspection           → confirm padding, strokeAlign, width, height, radius
-□ 0h. get_variable_defs on sub-nodes     → confirm Semantic token per fill/stroke/spacing
-□ 0i. Cross-check CSS var against :root  → never guess px from token name
-□ 0j. exportAsync for icons — confirm DS frame w/h → viewBox = `-1 -1 [w+2] [h+2]`
-□ 0k. Post-implementation QA — get_screenshot ONLY after coding; NEVER for spec extraction
-□ 0l. After any fix — grep BOTH html files and sync (Rule 184)
-□ 0m. Prior rules can become obsolete — if a component was last audited > 3 days ago, re-audit live DS before implementing
+□ 0f. Confirm which variant the prototype follows (Rule 226) — ask designer if uncertain; never assume
+□ 0g. get_design_context on EACH state   → extract every token BEFORE writing CSS
+□ 0h. use_figma raw inspection           → confirm padding, strokeAlign, clipsContent, width, height, radius
+□ 0i. get_variable_defs on sub-nodes     → confirm Semantic token per fill/stroke/spacing
+□ 0j. Cross-check CSS var against :root  → never guess px from token name
+□ 0k. exportAsync for icons — confirm DS frame w/h → viewBox = `-1 -1 [w+2] [h+2]`
+□ 0l. Post-implementation QA — get_screenshot ONLY after coding; NEVER for spec extraction
+□ 0m. After any fix — grep BOTH html files and sync (Rule 184)
+□ 0n. DS variants may be added/changed between sessions — always list COMPONENT_SET children before building
+□ 0o. Prior rules can become obsolete — if a component was last audited > 3 days ago, re-audit live DS before implementing
+□ 0p. Multi-value box-shadow — any state override must re-declare ALL values (Rule 227); partial override silently drops rings
+□ 0q. Profile dropdown = CSS-only exception (Rule 228/98) — never add positionDropdown() to its IIFE
+□ 0r. position:fixed dropdowns → left-based formula: dropLeft = btnRect.right - dropW (Rule 229/99)
 ```
 
-**Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes, wrong padding — all traceable to not reading zul.design.md, not loading memory, and not auditing DS first.
+**Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes, wrong padding — all traceable to not reading zul.design.md, not loading memory/skills, and not auditing DS first.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-04 (Rules 94–96 added — Carousel DS redesign: gradient nav overlays, no Content frame radius, 49×12px active indicator pill; mandatory workflow updated with memory + skills load steps, rule 0m obsolescence check) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+*Generated: May 2026 | Last updated: 2026-06-05 (Rules 94–95 corrected — Carousel uses Type=Desktop / Rule 42, not Desktop 4 gradients; Rule 97 = Pill Button dual strokes; workflow steps 0f + 0n–0p added) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*

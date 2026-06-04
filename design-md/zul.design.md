@@ -4021,7 +4021,7 @@ Any value that is shared across multiple components and may need to change toget
 **Pattern:**
 ```css
 :root {
-  --nav-dropdown-top: 72px;  /* navbar 64px + gap. DS=80px (16px). Change here to apply everywhere. */
+  --nav-dropdown-top: 80px;  /* navbar 72px + 8px gap. Change here to apply everywhere. */
 }
 .profile-dropdown { top: var(--nav-dropdown-top); }
 .learn-dropdown   { top: var(--nav-dropdown-top); }
@@ -4035,7 +4035,7 @@ Any value that is shared across multiple components and may need to change toget
 **Rule:** Before writing any value that will appear more than once, check if a CSS variable already exists. If not, create one and use it everywhere.
 
 **Confirmed instances in this prototype:**
-- `--nav-dropdown-top` — all 5 nav dropdown `top` values (currently 72px = 64 + 8px gap)
+- `--nav-dropdown-top` — all 5 nav dropdown `top` values (80px = navbar 72px + 8px gap; updated 2026-06-05)
 - `--page-max-width` — body + container max-width
 - `--page-padding-x` — horizontal padding on all page sections
 - `--section-gap` — gap between all `.main-content` sections
@@ -9026,30 +9026,341 @@ The left/right outer edges of the carousel are straight — no rounding on the c
 
 ---
 
-### Mandatory workflow — BEFORE every session, every design action, every change, every decision (updated 2026-06-04)
+### 226. Carousel — always confirm which DS variant the prototype follows before any CSS work
+
+**Source:** 2026-06-05 DS audit. Carousel COMPONENT_SET `3060:868` grew from 2 to 5 variants between sessions.
+
+| Variant | Node | Structure |
+|---|---|---|
+| `Type=Desktop` | `1200:1789` | 3-side border frame, 24px Content radius **← prototype target** |
+| `Type=Desktop 2` | `5089:76827` | Side panels, 18px Content radius |
+| `Type=Desktop 3` | `5627:48557` | External side buttons, no Content border/radius |
+| `Type=Desktop 4` | `6392:418` | Gradient overlays, no Content radius |
+| `Type=Mobile` | `3060:869` | No nav buttons |
+
+**Rules 223 and 224 describe Type=Desktop 4 only.** Rule 42 (composite 3-side border frame) is the correct pattern for our prototype which uses **Type=Desktop**.
+
+**Confirmed CSS for Type=Desktop prototype (2026-06-05):**
+```css
+/* Content frame — 24px radius clips the button wrapper corners seamlessly */
+.carousel__content { overflow: hidden; border-radius: var(--corner-radius-corner-4xl); }
+
+/* Left wrapper — border on 3 sides, left radius only */
+.carousel__btn-wrap--prev {
+  left: 0;
+  border-top:    1px solid var(--border-primary-default);
+  border-left:   1px solid var(--border-primary-default);
+  border-bottom: 1px solid var(--border-primary-default);
+  border-radius: var(--corner-radius-corner-4xl) 0 0 var(--corner-radius-corner-4xl);
+}
+/* Right wrapper — border on 3 sides, right radius only */
+.carousel__btn-wrap--next {
+  right: 0;
+  border-top:    1px solid var(--border-primary-default);
+  border-right:  1px solid var(--border-primary-default);
+  border-bottom: 1px solid var(--border-primary-default);
+  border-radius: 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl) 0;
+}
+```
+
+**Rule:** Before any carousel work, confirm which DS variant is targeted. Call `get_design_context` on the COMPONENT_SET, list all variants, and ask/confirm with the designer if in doubt. Never assume prior session's variant is still correct — DS adds variants between sessions.
+
+**Mistake made (2026-06-04 → 2026-06-05):** Assumed Desktop 4 was the target (gradient overlays). Prototype was corrected to Type=Desktop (3-side borders). Rules 223/224 were written as universal — they apply only to Desktop 4. Always tie rules to the specific variant they describe.
+
+---
+
+### 227. Pill Button - 1.5 — dual strokes: 4px white OUTSIDE + 1px green INSIDE
+
+**Source:** `use_figma` on all 6 Pill Button states (`5721:494`–`5721:514`). Confirmed 2026-06-05.
+
+The Pill Button has TWO strokes on two separate layers:
+- **Outer COMPONENT**: `strokeAlign: OUTSIDE`, `strokeWeight: 4px`, `stroke: #ffffff` (Border/on-color)
+- **Inner Content FRAME**: `strokeAlign: INSIDE`, `strokeWeight: 1px`, `stroke: #00cc85` (Border/primary/default)
+
+Both must be combined in a single `box-shadow` on the `.carousel__btn` element:
+
+```css
+/* Default — 4px white OUTSIDE ring + 1px green INSIDE ring */
+.carousel__btn {
+  box-shadow: 0 0 0 4px var(--border-on-color),
+              inset 0 0 0 1px var(--border-primary-default);
+}
+
+/* Hover — inherits base box-shadow; no override needed */
+
+/* Pressed — outer ring stays white, inner stroke changes to focus green */
+.carousel__btn:active,
+.carousel__btn.is-pressing {
+  box-shadow: 0 0 0 4px var(--border-on-color),
+              inset 0 0 0 1px var(--border-primary-focus);   /* #00a36a */
+}
+```
+
+**Rule:** Any `box-shadow` override on a state must re-declare the full combined value — both the OUTSIDE white ring AND the updated inner value. Declaring only one ring causes the other to disappear silently.
+
+**Mistake made:** Prior Rule 220 docs only noted the INSIDE stroke. The 4px white OUTSIDE ring was added to the DS and missed until the 2026-06-05 audit. The pressed state only had `inset 0 0 0 1px` — the outer white ring vanished on press.
+
+---
+
+### Rule 228 — Profile dropdown is a positioning exception — `right: var(--page-padding-x)`, no JS (confirmed 2026-06-05)
+
+The profile dropdown is the **only** navbar dropdown that does NOT use a JS `positionDropdown()` function. It is anchored via CSS alone, flush with the navbar's right page padding.
+
+```css
+.profile-dropdown {
+  position: absolute;
+  top:   var(--nav-dropdown-top);
+  right: var(--page-padding-x);   /* CSS-only — intentionally NOT aligned to avatar button edge */
+}
+```
+
+**The 4 action button dropdowns** (notif, learn/waffle, locale, download) **all use JS `positionDropdown()`** — right-aligned to their specific trigger button via `getBoundingClientRect()`.
+
+**Never add `positionDropdown()` to the profile dropdown IIFE.** The profile panel is intentionally anchored to the page edge, not the avatar.
+
+**Rule:** When implementing a new dropdown, first confirm whether it belongs to the profile exception or the action-button group before writing any JS.
+
+**Mistake made (2026-06-05):** Added `positionDropdown()` to profile dropdown, trying to align it to the avatar button. Reverted after user clarified profile is a positional exception.
+
+---
+
+### Rule 229 — `position: fixed` dropdowns → use `left`-based positioning, never `right` (confirmed 2026-06-05)
+
+For dropdowns with `position: fixed` (currently: notif dropdown, shared by desktop and tablet bell buttons), use **`left`-based** positioning instead of `right`-based.
+
+**Why `right` fails:** `right = window.innerWidth - btnRect.right` is theoretically correct for `position: fixed`, but `window.innerWidth` can differ from the actual CSS layout viewport due to scrollbar presence, Electron webview quirks, or browser subpixel differences. The result is a subtle but visible horizontal offset.
+
+**Correct `left`-based formula:**
+```js
+function positionDropdown(activeBtn) {
+  var btnRect  = activeBtn.getBoundingClientRect();
+  var dropW    = dropdown.offsetWidth || 320;
+  var dropTop  = parseFloat(getComputedStyle(document.documentElement)
+                   .getPropertyValue('--nav-dropdown-top').trim()) || 80;
+  // Right-align: dropdown right edge = button right edge
+  var dropLeft = Math.max(0, btnRect.right - dropW);
+  dropdown.style.left  = dropLeft + 'px';
+  dropdown.style.right = 'auto';
+  dropdown.style.top   = dropTop + 'px';
+}
+```
+
+`btnRect.right - dropW` = the left coordinate where the dropdown must start so its right edge lands on the button's right edge. Viewport-coordinate math, no `window.innerWidth` needed.
+
+**CSS default (closed state):**
+```css
+.notif-dropdown {
+  position: fixed;
+  top:   0;
+  left:  0;     /* JS overrides on open */
+  right: auto;
+}
+```
+
+**Rule:** For any `position: absolute` dropdown inside `#NavbarPrimary-Desktop`, use `sectionRect.right - btnRect.right` (existing approach). For any `position: fixed` dropdown, use `left = btnRect.right - dropW`. Never mix the two on the same dropdown.
+
+**Mistake made (2026-06-05):** Notif dropdown used `right = window.innerWidth - btnRect.right`. Appeared correct in theory but caused misalignment in browser. Switched to `left`-based — resolved immediately.
+
+---
+
+### Rule 230 — Navbar Top (DS node 866:5576) confirmed specs — updated 2026-06-05
+
+**Source:** `use_figma` on node `866:5576` (Navbar Primary Desktop - 1.5, Type=Desktop). Confirmed 2026-06-05. Supersedes any prior session notes citing 64px height.
+
+| Property | Confirmed value | Prior (wrong) |
+|---|---|---|
+| Height | **72px** (t:8 + 56px content + b:8) | 64px |
+| Avatar (L/Image) | **56×56px** | 48px |
+| P.Premium badge (in navbar Content frame) | **20×20px** | 16×16px (Avatar component set internal badge) |
+| `--nav-dropdown-top` | **80px** (72px navbar + 8px gap) | 72px |
+
+**Badge sizing distinction:** The Avatar - 1.5 component set (`650:435`) has an internal 16×16 badge for its L size. But in the Navbar Content frame, the P.Premium badge is placed as a **separate sibling** at 20×20. Always inspect the actual parent frame children, not the component set defaults.
+
+**Mistake made (2026-06-05):** Navbar height was set to 64px from memory. DS inspection of node `866:5576` confirmed `72px`. Badge was set to 16×16 from Avatar component anatomy. Navbar Content frame inspection showed a separate 20×20 P.Premium sibling. Both required re-reading live DS — prior session notes were wrong on both.
+
+---
+
+### Mandatory workflow — BEFORE every session, every design action, every change, every decision (updated 2026-06-05)
 
 > **Always before starting any design, making any changes, or making any decisions — refer to DS, zul.design.md, AND load related memory/skills first. No exceptions.**
 
 ```
-□ 0a. Read design-md/zul.design.md       → ALL rules 1–225, confirmed specs, known mistakes
+□ 0a. Read design-md/zul.design.md       → ALL rules 1–230, confirmed specs, known mistakes
 □ 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs, NOT prior notes
 □ 0c. Load related memory files          → check MEMORY.md index, load any relevant project/feedback memories
 □ 0d. Load related Figma skills          → /figma-use before use_figma; /figma-generate-design for page layouts
 □ 0e. get_design_context on COMPONENT SET → list ALL variant names before any CSS
-□ 0f. get_design_context on EACH state   → extract every token BEFORE writing CSS
-□ 0g. use_figma raw inspection           → confirm padding, strokeAlign, clipsContent, width, height, radius
-□ 0h. get_variable_defs on sub-nodes     → confirm Semantic token per fill/stroke/spacing
-□ 0i. Cross-check CSS var against :root  → never guess px from token name
-□ 0j. exportAsync for icons — confirm DS frame w/h → viewBox = `-1 -1 [w+2] [h+2]`
-□ 0k. Post-implementation QA — get_screenshot ONLY after coding; NEVER for spec extraction (Rule 193)
-□ 0l. After any fix — grep BOTH html files and sync (Rule 184)
-□ 0m. For Figma API reactions — use `actions:[]` array, check trigger type before adding `delay`
-□ 0n. DS variants may be added/changed between sessions — always list COMPONENT_SET children before building
-□ 0o. Prior rules can become obsolete — if a component was last audited > 3 days ago, re-audit live DS before implementing
+□ 0f. Confirm which variant the prototype follows (Rule 226) — ask designer if in doubt; never assume
+□ 0g. get_design_context on EACH state   → extract every token BEFORE writing CSS
+□ 0h. use_figma raw inspection           → confirm padding, strokeAlign, clipsContent, width, height, radius
+□ 0i. get_variable_defs on sub-nodes     → confirm Semantic token per fill/stroke/spacing
+□ 0j. Cross-check CSS var against :root  → never guess px from token name
+□ 0k. exportAsync for icons — confirm DS frame w/h → viewBox = `-1 -1 [w+2] [h+2]`
+□ 0l. Post-implementation QA — get_screenshot ONLY after coding; NEVER for spec extraction (Rule 193)
+□ 0m. After any fix — grep BOTH html files and sync (Rule 184)
+□ 0n. For Figma API reactions — use `actions:[]` array, check trigger type before adding `delay`
+□ 0o. DS variants may be added/changed between sessions — always list COMPONENT_SET children before building
+□ 0p. Prior rules can become obsolete — if a component was last audited > 3 days ago, re-audit live DS before implementing
+□ 0q. Multi-value box-shadow — any state override must re-declare ALL values (Rule 227); partial override silently drops rings
+□ 0r. Profile dropdown = positioning exception (Rule 228) — CSS-only, no positionDropdown(). Never add JS to it.
+□ 0s. position:fixed dropdowns → left-based formula: dropLeft = btnRect.right - dropW (Rule 229). Never right-based.
+□ 0t. DS multi-element components — never collapse nested frames with DIFFERENT border-radius + strokes into one HTML element (Rule 231)
+□ 0u. Height filling in flex — use align-self:stretch (not height:100%) when parent has padding + align-items:center (Rule 232)
 ```
 
-**Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes, wrong padding — all traceable to not reading zul.design.md, not loading memory, and not auditing DS first.
+**Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes, wrong padding — all traceable to not reading zul.design.md, not loading memory/skills, and not auditing DS first.
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-04 (Rules 223–225 — Carousel - 1.5 DS redesign audit: gradient nav overlays replace 3-side borders, Content frame has no radius, indicator active dot = 49×12px #b5f291 pill; mandatory workflow updated with memory + skills load steps) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 231. Pill Button - 1.5 in Carousel — two-element structure required; Rule 227 single-element approach is wrong
+
+**Source:** `get_design_context` on `1200:1789` + visual QA. Confirmed 2026-06-05. Supersedes Rule 227 CSS implementation.
+
+Rule 227 correctly identified the dual strokes but incorrectly instructed combining them on one element. **Single-element + `box-shadow` produces the wrong outer-ring shape.**
+
+**Why single-element fails:** `box-shadow: 0 0 0 4px white` follows the element's own `border-radius`. Left button element has `border-radius: 24px` — white ring appears 24px-rounded. DS outer wrapper is always `border-radius: 108px` (full pill). Left button looks visually "off": rectangle white ring instead of pill.
+
+**DS structure — two nested elements:**
+```
+Outer (Pill Button component):
+  border-radius: 108px     ← ALWAYS pill (left AND right type)
+  box-shadow: 0 0 0 4px var(--border-on-color)   ← white OUTSIDE ring
+  background: transparent
+  align-self: stretch      ← fills wrapper height (Rule 232)
+  overflow: hidden         ← clips inner content to pill shape
+
+  Inner (.carousel__btn__content):
+  border-radius: 24px (left) / 108px (right)
+  background: var(--surface-secondary-default)             ← #b5f291
+  box-shadow: inset 0 0 0 1px var(--border-primary-default)  ← green INSIDE
+  padding: 8px 4px
+```
+
+**Correct CSS:**
+```css
+.carousel__btn {
+  align-self: stretch; min-height: 40px;
+  display: flex; align-items: stretch;
+  cursor: pointer; user-select: none;
+  border: none; border-radius: 108px; background: transparent;
+  padding: 0; overflow: hidden;
+  box-shadow: 0 0 0 4px var(--border-on-color);
+}
+.carousel__btn__content {
+  display: flex; align-items: center; justify-content: center; flex: 1;
+  background: var(--surface-secondary-default);
+  box-shadow: inset 0 0 0 1px var(--border-primary-default);
+  padding: 8px 4px; border-radius: 24px;   /* left default */
+}
+.carousel__btn--right .carousel__btn__content { border-radius: 108px; }
+.carousel__btn:hover .carousel__btn__content  { background: var(--surface-secondary-default-subtle); }
+.carousel__btn:active .carousel__btn__content,
+.carousel__btn.is-pressing .carousel__btn__content {
+  background: var(--surface-primary-default);
+  box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+}
+.carousel__btn:active .carousel__btn__icon,
+.carousel__btn.is-pressing .carousel__btn__icon { color: var(--icon-primary-on-color); }
+.carousel__btn__icon { width: 24px; height: 24px; color: var(--icon-primary-default-hover); flex-shrink: 0; }
+.carousel__btn__icon svg { display: block; flex-shrink: 0; }
+```
+
+**HTML:**
+```html
+<button class="carousel__btn carousel__btn--left" id="carouselPrev" aria-label="Previous">
+  <span class="carousel__btn__content">
+    <span class="carousel__btn__icon"><svg width="24" height="24"><use href="#ic-chevron-left"/></svg></span>
+  </span>
+</button>
+```
+
+**General rule:** When a DS component has nested frames with DIFFERENT `border-radius` values AND different strokes, always use separate HTML elements. A single element can only carry one `border-radius` — its OUTSIDE `box-shadow` ring always follows that one radius. If the DS outer wrapper is a pill (108px) and the inner face is 24px, a single element cannot replicate both.
+
+**Mistake made (2026-06-05):** Left button outer ring appeared as a 24px rectangle. Fixed by splitting into outer `<button>` (108px, white ring) and inner `<span>` (24px/108px per type, green bg).
+
+---
+
+### 232. `align-self: stretch` fills flex content area; `height: 100%` overflows padding
+
+**Source:** Pill Button height fix, 2026-06-05.
+
+When a flex parent has **both** `align-items: center` **and** a definite height (e.g. `position: absolute; top:0; bottom:0`):
+- `height: 100%` → resolves against container's FULL computed height (including padding area) → potential overflow
+- `align-self: stretch` → overrides `align-items: center` for that one child, fills from padding-edge to padding-edge → correct
+
+```css
+/* Parent — definite height + padding + centered */
+.carousel__btn-wrap {
+  position: absolute; top: 0; bottom: 0;
+  display: flex; align-items: center;
+  padding: var(--spacing-space-m);   /* 16px */
+}
+
+/* WRONG */
+.carousel__btn { height: 100%; }   /* may overflow padding */
+
+/* CORRECT */
+.carousel__btn { align-self: stretch; }   /* fills content area (height − 32px) */
+```
+
+**Rule:** For any flex item that should fill its parent's content area (height minus padding), always use `align-self: stretch`. Reserve `height: 100%` for absolutely positioned children or parents with no padding.
+
+---
+
+### 233. Side Button - 1.5 — confirmed DS specs (COMPONENT_SET 5627:47996)
+
+**Source:** `get_design_context` + `use_figma` DS audit. Confirmed 2026-06-05. Used in Recent Activities carousel.
+
+Single stroke only (`strokeAlign: INSIDE`, 1px green, `box-shadow: inset`). No outer white ring — unlike Pill Button.
+
+| Property | Left | Right |
+|---|---|---|
+| Width | `36px` | `36px` |
+| Height | `align-self: stretch` | `align-self: stretch` |
+| Border-radius | `24px 0 0 24px` | `0 24px 24px 0` |
+| Padding default | `8px 8px 8px 4px` | `8px 4px 8px 8px` |
+| Padding hover | `8px 4px 8px 8px` (swapped) | `8px 8px 8px 4px` (swapped) |
+| Padding pressed | `8px 8px 8px 4px` (both) | `8px 8px 8px 4px` (both) |
+| Bg default | `#b5f291` `Surface/secondary/default` | same |
+| Bg hover | `#e8fbe8` `Surface/secondary/default-subtle` | same |
+| Bg pressed | `#00cc85` `Surface/primary/default` | same |
+| Stroke pressed | `inset 0 0 0 1px var(--border-primary-focus)` `#00a36a` | same |
+| Icon default | `#00a36a` `Icon/primary/focus` | same |
+| Icon hover | `#00cc85` `Icon/primary/default` | same |
+| Icon pressed | `#ffffff` `Icon/primary/on-color` | same |
+
+**Hover padding swap** = icon nudges visually toward carousel content on hover (more padding on the exterior side).
+
+No transitions (Rule 82). JS `is-pressing` (Rule 83).
+
+```css
+.side-btn {
+  width: 36px; align-self: stretch;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; user-select: none; border: none; flex-shrink: 0;
+}
+.side-btn--left  { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-primary-default); padding: 8px 8px 8px 4px; border-radius: 24px 0 0 24px; color: var(--icon-primary-focus); }
+.side-btn--right { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-primary-default); padding: 8px 4px 8px 8px; border-radius: 0 24px 24px 0; color: var(--icon-primary-focus); }
+.side-btn--left:hover  { background: var(--surface-secondary-default-subtle); padding: 8px 4px 8px 8px; color: var(--icon-primary-default); }
+.side-btn--right:hover { background: var(--surface-secondary-default-subtle); padding: 8px 8px 8px 4px; color: var(--icon-primary-default); }
+.side-btn--left:active,  .side-btn--left.is-pressing,
+.side-btn--right:active, .side-btn--right.is-pressing {
+  background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+  padding: 8px 8px 8px 4px; color: var(--icon-primary-on-color);
+}
+.side-btn__icon { width: 24px; height: 24px; display: flex; flex-shrink: 0; }
+.side-btn__icon svg { display: block; }
+```
+
+**HTML wrapper pattern:**
+```html
+<div class="recent-carousel__btn-side recent-carousel__btn-side--left">
+  <button class="side-btn side-btn--left" id="recentPrev" aria-label="Previous">
+    <span class="side-btn__icon"><svg width="24" height="24"><use href="#ic-chevron-left"/></svg></span>
+  </button>
+</div>
+```
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-05 (Rules 231–233 — Pill Button two-element structure corrects Rule 227; align-self:stretch vs height:100%; Side Button - 1.5 confirmed specs; mandatory workflow steps 0t/0u added) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
