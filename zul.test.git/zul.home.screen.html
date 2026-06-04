@@ -1067,7 +1067,7 @@
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        SECTION 2 â€” Carousel - 1.5  (node 1200:1789)
        5 image cards (428Ã—186px), gap 16px, corner-xl (16px)
-       Prev/Next buttons: Surface/primary/default, pill-shaped
+       Prev/Next buttons: Pill Button - 1.5 (node 5721:493) — Left=24px default, Right=108px, Hover=#e8fbe8, Pressed=#00cc85
        Indicator dots at bottom
     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     /* Carousel - 1.5  (node 1200:1789) */
@@ -1153,28 +1153,49 @@
       border-radius: 0 var(--corner-radius-corner-2xl) var(--corner-radius-corner-2xl) 0;
     }
 
-    /* Button Icon - 1.5/S/Default: pill, full height of wrapper content */
+    /* Pill Button - 1.5 (node 5721:493) — strokeAlign INSIDE → box-shadow:inset (Rule 60), no transitions (Rule 82) */
     .carousel__btn {
-      height:          100%;
-      padding:         2px;
-      background:      var(--surface-primary-default);
-      border:          1px solid var(--border-primary-focus);
-      border-radius:   var(--corner-radius-corner-pill);   /* 108px */
-      display:         flex;
-      align-items:     center;
+      width:       32px;
+      height:      100%;
+      padding:     8px 4px;
+      display:     flex;
+      align-items: center;
       justify-content: center;
-      cursor:          pointer;
+      cursor:      pointer;
+      user-select: none;
+      border:      none;
+      background:  var(--surface-secondary-default);              /* #b5f291 Default fill */
+      box-shadow:  inset 0 0 0 1px var(--border-primary-default); /* #00cc85 INSIDE stroke */
+    }
+    /* Left Default = 24px (radius/4xl), Right Default = 108px (radius/pill) */
+    .carousel__btn-wrap--prev .carousel__btn { border-radius: 24px; }
+    .carousel__btn-wrap--next .carousel__btn { border-radius: 108px; }
+
+    /* Hover — left switches to pill, fill lightens */
+    .carousel__btn:hover {
+      background:   var(--surface-secondary-default-subtle); /* #e8fbe8 */
+      border-radius: 108px;
     }
 
+    /* Pressed — pair :active with JS .is-pressing (Rule 83) */
+    .carousel__btn:active,
+    .carousel__btn.is-pressing {
+      background:  var(--surface-primary-default);               /* #00cc85 */
+      box-shadow:  inset 0 0 0 1px var(--border-primary-focus);  /* #00a36a */
+      border-radius: 108px;
+    }
+    .carousel__btn:active .carousel__btn__icon,
+    .carousel__btn.is-pressing .carousel__btn__icon {
+      color: var(--icon-primary-on-color); /* #ffffff */
+    }
+
+    /* Icon — 24×24, no clip (DS clipsContent: false) */
     .carousel__btn__icon {
-      width:           24px;
-      height:          24px;
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      color:           var(--text-primary-on-color);
+      width:       24px;
+      height:      24px;
+      color:       var(--icon-primary-default); /* #00cc85 */
+      flex-shrink: 0;
     }
-
     .carousel__btn__icon svg { display: block; flex-shrink: 0; }
 
     /* Indicator (node 1376:2406): 5 dots, 12×12, gap:10, padding:4 */
@@ -5077,20 +5098,20 @@
               </div>
             </div>
 
-            <!-- Left Button (node 1200:1837): Outline/chevron-left (260:537) -->
+            <!-- Left Button: Pill Button - 1.5 Type=Left (node 1200:1837) -->
             <div class="carousel__btn-wrap carousel__btn-wrap--prev">
               <button class="carousel__btn" id="carouselPrev" aria-label="Previous">
                 <span class="carousel__btn__icon">
-                  <svg width="20" height="20" aria-hidden="true"><use href="#ic-chevron-left"/></svg>
+                  <svg width="24" height="24" aria-hidden="true"><use href="#ic-chevron-left"/></svg>
                 </span>
               </button>
             </div>
 
-            <!-- Right Button (node 1200:1861): Outline/chevron-right (260:539) -->
+            <!-- Right Button: Pill Button - 1.5 Type=Right (node 1200:1861) -->
             <div class="carousel__btn-wrap carousel__btn-wrap--next">
               <button class="carousel__btn" id="carouselNext" aria-label="Next">
                 <span class="carousel__btn__icon">
-                  <svg width="20" height="20" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+                  <svg width="24" height="24" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
                 </span>
               </button>
             </div>
@@ -6395,6 +6416,12 @@
 
         btnPrev.addEventListener('click', () => { slide(idx - 1); resetAuto(); });
         btnNext.addEventListener('click', () => { slide(idx + 1); resetAuto(); });
+
+        [btnPrev, btnNext].forEach(function(btn) {
+          btn.addEventListener('mousedown',  function() { btn.classList.add('is-pressing'); });
+          btn.addEventListener('mouseup',    function() { btn.classList.remove('is-pressing'); });
+          btn.addEventListener('mouseleave', function() { btn.classList.remove('is-pressing'); });
+        });
 
         startAuto();
       })();

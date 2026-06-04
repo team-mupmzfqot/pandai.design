@@ -8746,4 +8746,189 @@ return { w: node.parent.width, h: node.parent.height };
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-04 (Rules 218–219 added — flex gap phantom spacing fix, transitionend→display:none pattern; SVG viewBox coordinate space re-confirmation) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+---
+
+### Rule 220. Pill Button - 1.5 — full confirmed spec (COMPONENT_SET `5721:493`, 2026-06-04)
+
+**Location:** `⚙️ Icon Button` page. Replaces Button Icon - 1.5 as the carousel navigation button in Carousel - 1.5.
+
+#### Dimensions and structure
+- Width: `32px` fixed; Height: `100%` (fills carousel button-wrapper height)
+- Padding: `8px 4px` (top/bottom 8px, left/right 4px)
+- Layout: flex column, center-center
+- Content frame `strokeAlign: INSIDE` → CSS `box-shadow: inset 0 0 0 1px` (never `border:`) — Rule 60
+- Icon container: `clipsContent: false` → **NO** `overflow: hidden`, **NO** clip padding. Icon is 24×24, sits bare in the content frame.
+
+#### Type radius — per-side, CSS specificity order matters
+| Variant | Default border-radius | Hover/Pressed border-radius |
+|---|---|---|
+| `Type=Left` (prev button) | `24px` (exterior left side rounded) | `108px` (full pill) |
+| `Type=Right` (next button) | `108px` (full pill) | `108px` (no change) |
+
+CSS specificity note: `.carousel__btn-wrap--prev .carousel__btn` and `.carousel__btn:hover` both have specificity `0-2-0`. Hover/pressed rules must be declared **after** per-side radius rules to correctly override the Left variant on hover.
+
+#### States — all tokens confirmed 2026-06-04
+
+| State | bg token | bg hex | stroke token | stroke hex | icon token | icon hex |
+|---|---|---|---|---|---|---|
+| Default | `Surface/secondary/default` | `#b5f291` | `Border/primary/default` INSIDE | `#00cc85` | `Icon/primary/default` | `#00cc85` |
+| Hover | `Surface/secondary/default-subtle` | `#e8fbe8` | (same) | `#00cc85` | `Icon/primary/default` | `#00cc85` |
+| Pressed | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` INSIDE | `#00a36a` | `Icon/primary/on-color` | `#ffffff` |
+| Active | `Surface/primary/default` | `#00cc85` | `Border/primary/focus` INSIDE | `#00a36a` | `Icon/primary/on-color` | `#ffffff` |
+| Disabled | `Surface/disabled/primary` | `#f2f2f2` | `Border/disabled/disabled` INSIDE | `#bfbfbf` | `Icon/disabled/default` | `#bfbfbf` |
+| Focus | `Surface/secondary/default-subtle` | `#e8fbe8` | `Border/primary/default` INSIDE | `#00cc85` | `Icon/primary/default` | `#00cc85` |
+
+#### CSS pattern (correct implementation)
+```css
+.carousel__btn {
+  width:       32px;
+  height:      100%;
+  padding:     8px 4px;
+  display:     flex;
+  align-items: center;
+  justify-content: center;
+  cursor:      pointer;
+  user-select: none;
+  border:      none;
+  background:  var(--surface-secondary-default);              /* #b5f291 */
+  box-shadow:  inset 0 0 0 1px var(--border-primary-default); /* #00cc85 INSIDE */
+}
+/* Per-side radius — declared BEFORE hover/pressed so they can be overridden */
+.carousel__btn-wrap--prev .carousel__btn { border-radius: 24px; }
+.carousel__btn-wrap--next .carousel__btn { border-radius: 108px; }
+/* Hover/pressed after per-side rules — equal specificity, last wins */
+.carousel__btn:hover { background: var(--surface-secondary-default-subtle); border-radius: 108px; }
+.carousel__btn:active,
+.carousel__btn.is-pressing { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border-radius: 108px; }
+.carousel__btn:active .carousel__btn__icon,
+.carousel__btn.is-pressing .carousel__btn__icon { color: var(--icon-primary-on-color); }
+.carousel__btn__icon { width: 24px; height: 24px; color: var(--icon-primary-default); flex-shrink: 0; }
+.carousel__btn__icon svg { display: block; flex-shrink: 0; }
+```
+
+#### No CSS transitions (Rule 82)
+Never add `transition` to `.carousel__btn` or any of its children. All Button - 1.5 variants and Pill Button - 1.5 use instant state changes.
+
+#### JS `is-pressing` required (Rule 83)
+CSS `:active` is unreliable on `<button>` in Electron webviews. Always pair with `mousedown`/`mouseup`/`mouseleave` handlers:
+```js
+[btnPrev, btnNext].forEach(function(btn) {
+  btn.addEventListener('mousedown',  function() { btn.classList.add('is-pressing'); });
+  btn.addEventListener('mouseup',    function() { btn.classList.remove('is-pressing'); });
+  btn.addEventListener('mouseleave', function() { btn.classList.remove('is-pressing'); });
+});
+```
+
+**Mistake made (2026-06-04):** Prior implementation used Button Icon - 1.5 with a clip container (`overflow:hidden`, padding-based inset). Pill Button - 1.5 has `clipsContent: false` — no clip. Adding `overflow:hidden` or padding to the icon container shrinks/clips the icon incorrectly.
+
+---
+
+### Rule 221. Carousel - 1.5 — new variants discovered 2026-06-04
+
+**COMPONENT_SET `3060:868` has 3 variants, not 2:**
+
+| Variant | Node | Notes |
+|---|---|---|
+| `Type=Desktop` | `1200:1789` | Original — Pill Button - 1.5 nav, 186px cards |
+| `Type=Desktop 2` | `5089:76827` | New — updated layout |
+| `Type=Desktop 3` | `5627:48557` | New — updated layout |
+| `Type=Mobile` | `3060:869` | Unchanged — 152px cards, no nav buttons |
+
+**Action required when implementing Carousel:** always call `get_design_context` on the COMPONENT_SET node `3060:868` to list all current variants before building. The DS evolves — new variants may be added between sessions.
+
+**Carousel button wrapper radius — 18px confirmed:**
+The DS carousel uses `border-radius: 18px` on the button wrapper containers (matching the carousel content frame `Radius/3xl = 18px`, Rule 132). Prior documentation that said `24px` was incorrect. The per-side CSS for the button wrappers uses `18px` on the interior corner, `108px` on the exterior:
+
+```css
+/* Correct carousel content + button wrapper radius */
+.carousel__content { border-radius: 18px; overflow: hidden; }
+.carousel__btn-wrap--prev { border-radius: 18px 0 0 18px; }
+.carousel__btn-wrap--next { border-radius: 0 18px 18px 0; }
+```
+
+---
+
+### Rule 222. Figma Plugin API reactions — correct format (confirmed 2026-06-04)
+
+When adding prototype interactions to component variants via `use_figma`, the reactions format has two critical rules that produce silent errors if wrong.
+
+#### 1. `actions` array, never `action` singular
+
+```js
+// WRONG — silent error: "Please update the `actions` field instead of the `action` field"
+node.reactions = [{ trigger: {...}, action: { type: 'NODE_NAVIGATE', ... } }];
+
+// CORRECT — actions is an array
+node.reactions = [{ trigger: {...}, actions: [{ type: 'NODE_NAVIGATE', ... }] }];
+```
+
+#### 2. `delay` only on MOUSE_* triggers — never on ON_HOVER, ON_PRESS, ON_CLICK
+
+```js
+// WRONG — error: "Unrecognized key(s) in object: 'delay' at [1].trigger"
+{ type: 'ON_PRESS', delay: 0 }
+
+// CORRECT — bare trigger object for ON_* types
+{ type: 'ON_PRESS' }
+{ type: 'ON_HOVER' }
+{ type: 'ON_CLICK' }
+
+// delay is only valid on MOUSE_* types:
+{ type: 'MOUSE_DOWN', delay: 0 }
+{ type: 'MOUSE_UP', delay: 0 }
+{ type: 'MOUSE_ENTER', delay: 0 }
+{ type: 'MOUSE_LEAVE', delay: 0 }
+```
+
+#### 3. ON_HOVER and ON_PRESS auto-revert — no separate MOUSE_LEAVE/MOUSE_UP needed from Default
+
+When wiring variant states:
+- `Default → [ON_HOVER] → Hover` — Figma automatically reverts to Default on mouse-leave. No MOUSE_LEAVE reaction needed on the Hover state to go back.
+- `Default → [ON_PRESS] → Pressed` — Figma automatically reverts to Default on mouse-up.
+- `ON_CLICK` navigates permanently — used for `Default ↔ Active` toggle.
+
+This means each Default state node only needs 2–3 reactions (Hover, Press, optionally Click). Other states need fewer or zero reactions since Figma handles the revert.
+
+#### Full pattern for Pill Button - 1.5 variant wiring
+```js
+// Default variant — receives all triggers
+defaultNode.reactions = [
+  { trigger: { type: 'ON_HOVER' },  actions: [{ type: 'NODE_NAVIGATE', destinationId: hoverId,    navigation: 'SWAP', preserveScrollPosition: false }] },
+  { trigger: { type: 'ON_PRESS' },  actions: [{ type: 'NODE_NAVIGATE', destinationId: pressedId,  navigation: 'SWAP', preserveScrollPosition: false }] },
+  { trigger: { type: 'ON_CLICK' },  actions: [{ type: 'NODE_NAVIGATE', destinationId: activeId,   navigation: 'SWAP', preserveScrollPosition: false }] },
+];
+// Hover/Pressed variants — auto-revert, only need click/press back to default
+hoverNode.reactions   = [{ trigger: { type: 'ON_PRESS' }, actions: [{ type: 'NODE_NAVIGATE', destinationId: pressedId, navigation: 'SWAP', preserveScrollPosition: false }] }];
+pressedNode.reactions = [];  // ON_PRESS auto-reverts to Default
+// Active — click to deactivate
+activeNode.reactions  = [{ trigger: { type: 'ON_CLICK' }, actions: [{ type: 'NODE_NAVIGATE', destinationId: defaultId, navigation: 'SWAP', preserveScrollPosition: false }] }];
+```
+
+**Note:** Prototype interactions are **invisible in Figma's Design view** — they only appear in the Prototype panel when a variant node is selected. "Nothing happened visually" after adding reactions via API is expected behaviour — the reactions ARE saved (confirm via `node.reactions` read-back).
+
+---
+
+### Mandatory workflow — BEFORE every session, every design action, every change, every decision (updated 2026-06-04)
+
+> **Always before starting any design, making any changes, or making any decisions — refer to DS and zul.design.md first. No exceptions.**
+
+```
+□ 0a. Read design-md/zul.design.md       → ALL rules 1–222, confirmed specs, known mistakes
+□ 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs, NOT prior notes
+□ 0c. get_design_context on COMPONENT SET → list ALL variant names before any CSS
+□ 0d. get_design_context on EACH state   → extract every token BEFORE writing CSS
+□ 0e. use_figma raw inspection           → confirm padding, strokeAlign, clipsContent, width, height, radius
+□ 0f. get_variable_defs on sub-nodes     → confirm Semantic token per fill/stroke/spacing
+□ 0g. Cross-check CSS var against :root  → never guess px from token name
+□ 0h. exportAsync for icons — confirm DS frame w/h → viewBox = `-1 -1 [w+2] [h+2]`
+□ 0i. Post-implementation QA — get_screenshot ONLY after coding; NEVER for spec extraction (Rule 193)
+□ 0j. After any fix — grep BOTH html files and sync (Rule 184)
+□ 0k. For Figma API reactions — use `actions:[]` array, check trigger type before adding `delay`
+□ 0l. DS variants may be added between sessions — always list COMPONENT_SET children before building
+```
+
+**Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes, wrong padding — all traceable to not reading zul.design.md and not auditing DS first.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-04 (Rules 220–222 added — Pill Button - 1.5 full spec, Carousel new variants + radius correction, Figma Plugin API reactions format; pre-flight checklist updated to rules 1–222) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
