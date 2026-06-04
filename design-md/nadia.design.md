@@ -3342,3 +3342,20 @@ DS Header frame gap = 0. Title has `flex:1` which right-aligns the DLP badge wit
 - **cards-grid gap: 20px** — No DS semantic token at 20px (`space-m`=16, `space-l`=24). Needs page-spec verification.
 
 *Last updated: 2026-06-04 | Session 21 — Class MyClasses DS audit + 8 fixes | Branch: staging*
+
+---
+
+## Session 22 — Rewards: My Rewards JS text rendering fix
+
+**File:** `Nadia.test.git/Rewards/nadia_Rewards-Myrewards.html`
+
+### Bug fixed
+
+#### 1. JS code rendered as plain text at bottom of page
+`</script>` closed the carousel block at line 4149. The sidebar toggle + voucher button JS that followed (lines 4151–4170) was outside any `<script>` tag — browser rendered it as raw text overlapping the footer.
+
+- Added missing `<script>` opening tag before the sidebar JS block
+- Existing `</script>` at line 4172 now correctly closes the block
+- Related: Rule 62 (orphaned comment/tag silently kills JS) — same root cause pattern
+
+*Last updated: 2026-06-04 | Session 22 — Rewards My Rewards JS text fix | Branch: staging*
