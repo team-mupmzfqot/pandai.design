@@ -4498,6 +4498,44 @@
   </script>
 
 <script>
+/* test.page.compiled — Rewards left sidebar navigation (v2) */
+(function () {
+  var ROUTES = {
+    'Coin Quest':  'rewards-coin-quests.html',
+    'My Reward':   'rewards-my-rewards.html',
+    'Merchandise': 'rewards-merchandise.html',
+    'eVoucher':    'rewards-evoucher.html',
+    'Avatar':      'rewards-avatar.html'
+  };
+  /* Snapshot the originally-active button at load. The page's own JS toggles
+     sidebar-btn--active on click before navigation, so we can't trust the
+     class at click time. */
+  var initialActive = document.querySelector('.sidebar-btn.sidebar-btn--active');
+  var initialLabel  = initialActive ? (initialActive.querySelector('.sidebar-btn__label') || {}).textContent : '';
+  initialLabel = (initialLabel || '').trim();
+
+  document.querySelectorAll('.sidebar-btn').forEach(function (btn) {
+    if (btn.dataset.tpcSidebarWired === '1') return;
+    var lbl = btn.querySelector('.sidebar-btn__label');
+    if (!lbl) return;
+    var label = lbl.textContent.trim();
+    var href = ROUTES[label];
+    if (!href) return;
+    btn.dataset.tpcSidebarWired = '1';
+    btn.style.cursor = 'pointer';
+    /* Capture phase so we fire BEFORE the page's bubble-phase active-toggle handler */
+    btn.addEventListener('click', function (e) {
+      if (label === initialLabel) return; /* already on this page — let other handlers run */
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.href = href;
+    }, true);
+  });
+})();
+</script>
+
+
+<script>
 /* test.page.compiled — Top Menu Bar navigation + persistent active state (v5) */
 (function () {
   var TOP_ROUTES = {
