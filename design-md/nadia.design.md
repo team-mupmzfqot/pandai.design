@@ -3281,3 +3281,363 @@ Added a `randomizeContent()` function (called on `DOMContentLoaded`) that sets r
 **Note:** Filter sidebar counts ("Background (1020)", "Head", "Screen" etc.) were not present in the HTML — no filter panel exists in this file. If added later, include those selectors in `randomizeContent()`.
 
 *Last updated: 2026-06-03 | Session 20 — Rewards Avatar: 80 images + randomizeContent | Branch: staging*
+
+---
+
+## Session 21 — DS audit + fixes: nadia_Class-MyClasses.html (2026-06-04)
+
+**File changed:** `Nadia.test.git/Class/nadia_Class-MyClasses.html`
+
+### Audit scope
+Shared template components (Navbar, NavMenu, NavTopMenu, dropdowns, Footer) were excluded — inherited from page template and previously audited. Only page-specific components were checked against DS 1.5 (`TLVKe3bgJTdVvuPAzgDq2f`): **Breadcrumb - 1.5** (node `837:1033`), **Class Card - 1.5** (node `2339:5253`), avatar, live badge, divider, CTA.
+
+### DS nodes confirmed in this session
+| Component | DS node | Key finding |
+|---|---|---|
+| Class Card - 1.5 | `2339:5253` | Only 1 variant (Type=Default) |
+| Breadcrumb - 1.5 | `837:1033` | No action buttons in DS component — buttons are page-level |
+
+### Fixes applied (8 total)
+
+#### 1. Rule 198 — btn-enter transitions removed
+`transition:` on `.btn-enter`, `.btn-enter__label`, `.btn-enter__arrow`, `.btn-enter__arrow svg` — all 4 removed. Button - 1.5 must use instant state changes only.
+
+#### 2. Missing "Premium Only" tag in CTA (all 20 cards)
+DS CTA frame: HORIZONTAL — `"Premium Only"` text (14px / 600 / `#00cc85`, `flex:1`) on left + Button on right. HTML only had the button right-aligned.
+- Added `.cc__premium { font-size:14px; font-weight:600; color:var(--surface-primary-default); flex:1; }`
+- Changed `.cc__cta { justify-content: space-between; }`
+- Added `<span class="cc__premium">Premium Only</span>` before every `btn-enter`
+
+#### 3. Rule 36 — live-badge inline SVG → `<use href="#ic-video"/>` (all 20 cards)
+Inline `<polygon>/<rect>` replaced with `ic-video` symbol. Added `<symbol id="ic-video">` to defs block. Live badge SVG now uses `color: var(--surface-primary-default)` for stroke inheritance.
+
+#### 4. Live badge background `#d9f7ed` → `#e1f9ea`
+DS Label Badge - 1.5 fill = `#e1f9ea`. HTML had an approximate value.
+
+#### 5. Avatar placeholder background white → `#e1f9ea`
+DS Avatar - 1.5 fill = `#e1f9ea`. Added `.ds-avatar { background: #e1f9ea }`. Visible only when no photo is loaded.
+
+#### 6. `.bc-sep` color `#d9d9d9` → `#bfbfbf`
+DS Breadcrumb separator line stroke = `#bfbfbf`. HTML was using the general border token instead.
+
+#### 7. Rule 36 — bc-chevron inline polyline → `<use href="#ic-chevron-right"/>`
+Single instance in breadcrumb trail replaced.
+
+#### 8. Divider rebuilt: Divider Var 5 + "+ More" chip (all 20 cards)
+DS uses `Divider Var 5 .prev` — two `#d9d9d9` lines flanking a `+ More` interactive chip (`Outline/plus-circle` 12px + "More" 10px / 400 / `#bfbfbf`). HTML had a plain 1px colored line per-subject.
+
+Changes:
+- `.cc__divider` rebuilt as `display:flex; align-items:center; height:16px` with `::before`/`::after` pseudo-element lines (`#d9d9d9`)
+- `.cc__divider-more` button added (10px / 400 / `#bfbfbf`, `gap:2px`, `padding:0 8px`)
+- Added `<symbol id="ic-plus-circle">` to defs
+- Removed all 20 subject-specific `.cc--*.cc__divider { background: ... }` overrides
+- Rebuilt all 20 divider elements in HTML
+
+#### 9. `.cc__hdr` gap `16px` → `0`
+DS Header frame gap = 0. Title has `flex:1` which right-aligns the DLP badge without gap.
+
+### Remaining known deviations (low priority)
+- **Rule 60** — `.cc` and `.cc__inner` use `border: 1px solid` for INSIDE strokes. Should be `box-shadow: inset 0 0 0 1px`. Low visual impact for fluid containers.
+- **Breadcrumb action buttons** — Timetable / Browse Classes / Join Class use `padding:8px 12px; font-size:14px` instead of Button - 1.5 M specs (`2px 8px` outer, `12px` font). These are page-level buttons not in the DS Breadcrumb component — defer to designer review.
+- **cards-grid gap: 20px** — No DS semantic token at 20px (`space-m`=16, `space-l`=24). Needs page-spec verification.
+
+*Last updated: 2026-06-04 | Session 21 — Class MyClasses DS audit + 8 fixes | Branch: staging*
+
+---
+
+## Session 22 — Rewards: My Rewards JS text rendering fix
+
+**File:** `Nadia.test.git/Rewards/nadia_Rewards-Myrewards.html`
+
+### Bug fixed
+
+#### 1. JS code rendered as plain text at bottom of page
+`</script>` closed the carousel block at line 4149. The sidebar toggle + voucher button JS that followed (lines 4151–4170) was outside any `<script>` tag — browser rendered it as raw text overlapping the footer.
+
+- Added missing `<script>` opening tag before the sidebar JS block
+- Existing `</script>` at line 4172 now correctly closes the block
+- Related: Rule 62 (orphaned comment/tag silently kills JS) — same root cause pattern
+
+*Last updated: 2026-06-04 | Session 22 — Rewards My Rewards JS text fix | Branch: staging*
+
+---
+
+## Session 23 — Cross-file DS audit: 7 files, 11 findings (2026-06-04)
+
+**Files audited:**
+- `Nadia.test.git/Practise/nadia_Practise-subject.html`
+- `Nadia.test.git/Rewards/nadia_Rewards-CoinQuest.html`
+- `Nadia.test.git/Rewards/nadia_Rewards-evoucher.html`
+- `Nadia.test.git/Rewards/nadia_Rewards-Merchandise.html`
+- `Nadia.test.git/Rewards/nadia_Rewards-Myrewards.html`
+- `Nadia.test.git/Class/nadia_Class-MyClasses.html`
+- `Nadia.test.git/Class/nadia_Class-BrowseClasses.html`
+
+> **All token values below were fetched live from DS `TLVKe3bgJTdVvuPAzgDq2f` during this session. Never carry these forward as ground truth — re-fetch from DS before using them in any future implementation.**
+
+---
+
+### DS-verified token values
+
+#### 1. `bc-sep` separator — confirmed token (DS node `3655:16650`)
+
+Token: `Border/general/default-secondary` = `#bfbfbf`
+
+| File | `bc-sep` value | Status |
+|---|---|---|
+| `nadia_Class-MyClasses.html` | `#bfbfbf` | ✅ Correct |
+| All other 6 files | `#d9d9d9` | ❌ Wrong — using `Border/general/default` |
+
+**Pending fix:** Apply `background: var(--border-general-default-secondary)` (add token to `:root` if absent) to `bc-sep` in all 6 remaining files.
+
+---
+
+#### 2. Label Badge - 1.5 — all 14 variants confirmed (DS `843:666`)
+
+All token names and hex values fetched live. The DS has 7 semantic types × 2 sizes (M/S):
+
+| DS Type | Quest usage | `bg` token | `bg` hex | `stroke` token | `stroke` hex | `text` token | `text` hex |
+|---|---|---|---|---|---|---|---|
+| Primary / Success | Easy | `Surface/primary/default-subtle` | `#e1f9ea` | `Border/primary/default-hover` | `#66e0b6` | `Text/primary/default` | `#00cc85` |
+| Alert | Medium | `Surface/alert/default-subtle` | `#fff6ed` | `Border/alert/default-hover` | `#ffcea0` | `Text/alert/default` | `#ff9f43` |
+| Warning | Hard | `Surface/warning/default-subtle` | `#ffeeee` | `Border/warning/default-hover` | `#ffa5a7` | `Text/warning/default` | `#ff4c51` |
+| Info | Daily / Weekly | `Surface/informative/default-subtle` | `#e6f6fd` | `Border/informative/default-hover` | `#7fd0f3` | `Text/informative/default` | `#00a2e8` |
+| Tertiary | — | `Surface/disabled/primary` | `#f2f2f2` | `Border/general/default-secondary` | `#bfbfbf` | — | — |
+| Secondary | — | `Surface/general/default` | `#ffffff` | `Border/primary/default` | `#00cc85` | — | — |
+
+**Bugs found in CoinQuest, eVoucher, Merchandise:**
+- `lbadge--easy` bg = `#d9f7ed` — wrong. DS: `Surface/primary/default-subtle` = `#e1f9ea`
+- `lbadge--medium` and `lbadge--hard` have `font-size: 14px; line-height: 20px` override — wrong. All Label Badge sizes within a size variant are uniform. No difficulty type overrides font-size.
+
+**Confirmed correct in HTML:** Medium border `#ffcea0`, Hard border `#ffa5a7`, text colors for all types, Daily/Weekly colors.
+
+---
+
+#### 3. Practice Card - 1.5 — hover spec confirmed (DS `2339:4823`, hover node `4945:75075`)
+
+| State | Property | Token | Value |
+|---|---|---|---|
+| Default | Card bg | `Subjects/[name]/default` | per-subject |
+| Default | Card stroke | `Subjects/[name]/focus` | per-subject, 1px `strokeAlign: INSIDE` |
+| Default | Content separator | `Subjects/[name]/default` | 1px same-color = visually invisible |
+| Hover | Card bg | `Subjects/[name]/default-hover` | per-subject |
+| Hover | Card stroke | `Subjects/[name]/default` | per-subject, **8px `strokeAlign: INSIDE`** |
+| Hover | Content separator | none | border-left removed |
+
+**CSS pattern (confirmed):**
+```css
+.practice-card { box-shadow: inset 0 0 0 1px var(--subj-border); }
+.practice-card:hover { background: var(--subj-bg-hover); box-shadow: inset 0 0 0 8px var(--subj-bg); }
+.practice-card:hover .practice-card__content { border-left: none; }
+```
+
+**All Subject/focus values — confirmed live (for `--subj-border`):**
+
+| Subject | `Subjects/[x]/focus` |
+|---|---|
+| Add Math | `#182052` |
+| Account | `#004479` |
+| Bahasa Melayu | `#2e4799` |
+| Biology | `#4f1d82` |
+| Business | `#8f6c1a` |
+| Chemistry | `#88004e` |
+| Chinese Language | `#952b2b` |
+| Computer Science | `#7d0043` |
+| Economy | `#99341f` |
+| English | `#992e34` |
+| Geography | `#478220` |
+| History | `#654a30` |
+| Islamic Studies | `#852e4c` |
+| KAFA | `#538865` |
+| Mathematics | `#28674a` |
+| Moral Studies | `#004479` |
+| Physics | `#176081` |
+| RBT | `#202020` |
+| Science | `#998027` |
+
+**All Subject/default-hover values** — re-verified live, match Session 16 values ✅.
+
+---
+
+#### 4. Divider - 1.5 — full spec confirmed (DS `833:3821`)
+
+Only 2 variants: `Type=Default` and `Type=Dashed`. No "Var 5" — Session 21 used an informal label.
+
+**Structure (Type=Default):**
+- Container: `16px` tall, `HORIZONTAL`, no padding, no gap
+- Line 1 + Line 2: 1px LINE, `Border/general/default` = `#d9d9d9`, `strokeAlign: CENTER`
+- Center chip: `padding: 0 8px`, `gap: 2px`, HORIZONTAL
+  - `Outline/plus-circle` icon: 12×12, stroke `Icon/primary/default` = `#00cc85`
+  - "More" text: `Text/default/caption` = `#bfbfbf`
+
+**CSS pattern:**
+```css
+.cc__divider {
+  display: flex; align-items: center; height: 16px;
+}
+.cc__divider::before,
+.cc__divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: var(--border-general-default);   /* #d9d9d9 */
+}
+.cc__divider-more {
+  display: inline-flex; align-items: center;
+  gap: 2px; padding: 0 8px;
+  font-size: 10px; font-weight: 400;
+  color: var(--text-default-caption);          /* #bfbfbf */
+}
+.cc__divider-more svg { width: 12px; height: 12px; color: var(--icon-primary-default); }
+```
+
+**Status across files:**
+- `nadia_Class-MyClasses.html` — ✅ correct (Session 21 fix applied)
+- `nadia_Class-BrowseClasses.html` — ❌ plain 1px subject-coloured line, no chip
+
+---
+
+#### 5. Coin Quest Card - 1.5 — structure confirmed (DS `2339:5019`)
+
+| Element | Token | Hex |
+|---|---|---|
+| Card bg | `Surface/general/default` | `#ffffff` |
+| Card stroke | `Border/general/default` | `#d9d9d9` |
+| Image panel bg | `Surface/secondary/default-subtle` | `#e8fbe8` |
+| Image panel stroke | `Border/secondary/default-hover` | `#baf3b9` |
+| Progress bar track | `Surface/general/default-secondary` | `#f2f2f2` |
+| Progress bar fill | `Surface/primary/default` | `#00cc85` |
+| Claim btn bg | `Surface/primary/default` | `#00cc85` |
+| Claim btn border | `Border/primary/focus` | `#00a36a` |
+| Claim btn arrow bg | `Surface/primary/default-subtle-hover` | `#99ebce` |
+
+---
+
+### Code / architecture findings
+
+#### 6. Class pages — nav persistence BUG
+
+Both `nadia_Class-MyClasses.html` and `nadia_Class-BrowseClasses.html` have `restoreHome()` hardcoded to `[aria-label="Home"]`. When any nav dropdown closes on the Class page, Home becomes active instead of Class. Neither file has `data-active-nav` on `<body>`.
+
+**Fix (same pattern as Rewards pages, Sessions 13–14):**
+1. Add `<body data-active-nav="Class">` to both files
+2. Replace `restoreHome()` body with the generic `data-active-nav` pattern:
+```js
+function restoreHome() {
+  var persistLabel = document.body.getAttribute('data-active-nav');
+  if (persistLabel) {
+    var persistBtn = navSection.querySelector('[aria-label="' + persistLabel + '"]');
+    if (persistBtn) { persistBtn.classList.add('is-active'); persistBtn.setAttribute('aria-current', 'page'); return; }
+  }
+  var homeBtn = navSection.querySelector('[aria-label="Home"]');
+  if (homeBtn) { homeBtn.classList.add('is-active'); homeBtn.setAttribute('aria-current', 'page'); }
+}
+```
+
+---
+
+#### 7. CoinQuest `btn-claim` — Rule 82 violation
+
+`nadia_Rewards-CoinQuest.html` has:
+- `.btn-claim__label { transition: color 0.12s ease; }` ← must remove
+- `.btn-claim__arrow { transition: background 0.12s ease; }` ← must remove
+
+Button - 1.5 must use instant state changes only (Rule 82). Same violation applies to eVoucher and Merchandise if they share this CSS.
+
+---
+
+#### 8. Old shorthand tokens — 4 files not yet migrated
+
+| File | Old tokens in use |
+|---|---|
+| `nadia_Rewards-CoinQuest.html` | `--og-*`, `--sp-*`, `--r-*` |
+| `nadia_Rewards-evoucher.html` | `--og-*`, `--sp-*`, `--r-*` |
+| `nadia_Rewards-Merchandise.html` | `--og-*`, `--sp-*`, `--r-*` |
+| `nadia_Class-BrowseClasses.html` | `--og-*`, `--sp-*`, `--r-*`, `--bm-500`, `--en-500`, `--mt-500`, `--text-heading`, `--text-body` |
+
+Canonical standard = `--spacing-space-m`, `--surface-primary-default`, `--corner-radius-corner-rounded`, `--subjects-b-melayu-default`, etc. Pending migration — do not mix old and canonical in new CSS.
+
+---
+
+### New rules
+
+#### Rule: Always fetch live DS tokens — no session-note trust (global)
+
+Before documenting or implementing **any** design value (color, spacing, radius, border, typography), call `use_figma`, `get_design_context`, or `get_variable_defs` on the exact DS node (`TLVKe3bgJTdVvuPAzgDq2f`) to confirm the current value. Session notes are context for navigation, not authoritative values. Token hex values can change between sessions without notice (Rule 61).
+
+**Applies to:** Every task, every session, every fix. No exceptions.
+
+---
+
+#### Rule: `data-active-nav` is mandatory on `<body>` for every non-Home page
+
+Any page built from `zul.page.template.html` where the active nav item is not Home **must** have `<body data-active-nav="[Label]">` and the generic `restoreHome()` implementation (see §6 above).
+
+**Current status:**
+
+| File | `data-active-nav` | `restoreHome` target | Status |
+|---|---|---|---|
+| `nadia_Rewards-CoinQuest.html` | `"Rewards"` | generic | ✅ |
+| `nadia_Rewards-evoucher.html` | `"Rewards"` | generic | ✅ |
+| `nadia_Rewards-Merchandise.html` | `"Rewards"` | generic | ✅ |
+| `nadia_Rewards-Myrewards.html` | — | `restoreCurrentPage()` | ⚠️ older pattern |
+| `nadia_Practise-subject.html` | — | `restoreCurrentPage()` | ⚠️ older pattern |
+| `nadia_Class-MyClasses.html` | — | hardcodes Home | ❌ bug |
+| `nadia_Class-BrowseClasses.html` | — | hardcodes Home | ❌ bug |
+
+MyRewards and Practice-subject use an older-but-working `restoreCurrentPage()` equivalent. Class pages have a live bug.
+
+---
+
+#### Rule: Practice Card - 1.5 — confirmed component spec
+
+**DS component set:** `2339:4823` | **Instance example:** `5072:104628` (652×160px)
+
+- Grid: `repeat(2, 1fr)`, `gap: var(--spacing-space-m)` — 2-col at desktop + tablet, 1-col at ≤767px
+- Card height: `160px` (DS confirmed)
+- Card border: `Subjects/[name]/focus`, 1px, `strokeAlign: INSIDE` → `box-shadow: inset 0 0 0 1px var(--subj-border)`
+- Left image panel: `160px` wide, contains 100×100 icon wrap
+- Icon: `<img>` `object-fit: contain`, 100×100 container (80×80 at tablet, 68×68 at mobile)
+- Decorative circles: 3 `<div>` elements, first child of card root, `rgba(255,255,255,0.12)`, scale 1.4× on hover from `transform-origin: left center`
+- Right content panel: `flex:1`, `padding: 16px`, no background (card bg shows through), `border-left: 1px solid var(--subj-bg)` (same-color = invisible separator)
+- Stats row: `flex-row`, `flex-wrap`, `gap: 0 8px` — stat item = 24×24 icon container + 14px Regular label
+- Per-card CSS variables via inline style: `--subj-bg`, `--subj-border`, `--subj-bg-hover`, `--subj-title`, `--subj-text`
+
+**Image assets:** `src/image-repo/page.practise/assets/main/PracticeCard/[subject].svg` (geography = `.png`)
+
+---
+
+#### Rule: `cursor: pointer` on `:hover` for navigable whole-card targets
+
+Rule 21 ("no `cursor: pointer` on cards") applies to cards that **contain a separate interactive button**. When the **entire card surface is the clickable target** (no internal button — the card itself navigates), `cursor: pointer` on `:hover` is correct DS behaviour.
+
+```css
+/* Wrong — card contains separate Enter Class button */
+.class-card { cursor: pointer; }
+
+/* Correct — Practice card IS the clickable target, no internal button */
+.practice-card { cursor: default; }
+.practice-card:hover { cursor: pointer; }
+```
+
+---
+
+#### Rule: SVG `<symbol>` definitions must be inside `<defs>` — promote from Session 18
+
+Any `<symbol>` element placed **after** `</defs></svg>` is outside the SVG document scope. The browser cannot resolve `<use href="#ic-*">` to a symbol outside SVG — the icon renders invisible with **no error, no warning**.
+
+```html
+<!-- WRONG — outside defs, renders blank -->
+</defs></svg>
+<symbol id="ic-file"> … </symbol>
+
+<!-- CORRECT — inside defs, before closing tag -->
+<defs>
+  …
+  <symbol id="ic-file"> … </symbol>
+</defs></svg>
+```
+
+**Check after every `<symbol>` addition:** verify it sits before `</defs>`, not after.
+
+---
+
+*Last updated: 2026-06-04 | Session 23 — Cross-file audit: 7 files, 11 findings, all tokens DS-verified | Branch: staging*

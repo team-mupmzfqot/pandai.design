@@ -1,0 +1,2949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analysis for Bahasa Melayu Form 5 — Pandai</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ═══════════════════════════════════════════════════
+       PANDAI DS 1.5 — CSS Custom Properties
+       Token names match Figma variable names exactly.
+       DS file: TLVKe3bgJTdVvuPAzgDq2f
+    ═══════════════════════════════════════════════════ */
+    :root {
+      --text-default-heading:  #404040;
+      --text-default-body:     #666;
+      --text-primary-default:  #00cc85;
+      --text-primary-focus:    #00a36a;
+      --text-tertiary-default: #00564c;
+      --text-primary-on-color: #f6fdfb;
+
+      --surface-general-default:              #ffffff;
+      --surface-general-default-secondary:    #f2f2f2;
+      --surface-primary-default:              #00cc85;
+      --surface-primary-default-subtle:       #d9f7ed;
+      --surface-primary-default-subtle-hover: #99ebce;
+      --surface-primary-focus:                #00a36a;
+      --surface-secondary-default:            #b5f291;
+      --surface-secondary-default-subtle:     #e8fbe8;
+      --surface-tertiary-default:             #00564c;
+      --surface-disabled-primary:             #f2f2f2;
+      --surface-alert-default:                #ff9f43;
+      --surface-warning-default:              #ff4c51;
+
+      --border-primary-default:  #00cc85;
+      --border-primary-focus:    #00a36a;
+      --border-default:          #00cc85;
+      --border-general-default:  #d9d9d9;
+      --border-secondary-focus:  #70bc6f;
+      --border-tertiary-focus:   #00453d;
+      --border-disabled-disabled: #bfbfbf;
+
+      --text-secondary-focus:    #70bc6f;
+      --text-disabled-default:   #bfbfbf;
+      --icon-default:            #d9d9d9;
+      --icon-default-default:    #808080;
+      --icon-primary-default:    #00cc85;
+      --icon-secondary-hover: #70bc6f;
+      --icon-primary-on-color:   #f6fdfb;
+      --icon-tertiary-default:   #00564c;
+
+      --corner-pill:    999px;
+      --corner-rounded: 60px;
+      --corner-4xl:     24px;
+      --corner-2xl:     18px;
+      --corner-m:       8px;
+
+      --space-3xl:  60px;
+      --space-2xl:  28px;
+      --space-xl:   24px;
+      --space-l:    20px;
+      --space-m:    16px;
+      --space-s:    12px;
+      --space-xs:   8px;
+      --space-xxs:  4px;
+      --space-none: 0px;
+
+      --font:           'Poppins', sans-serif;
+      --page-bg:        var(--surface-general-default);
+      --page-max-width: 100%;
+      --page-padding-x: 60px;
+      --section-gap:    var(--space-m);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { overflow-x: hidden; }
+    body {
+      font-family: var(--font);
+      background: var(--page-bg);
+      color: var(--text-default-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      padding-bottom: 74px; /* 44px fixed footer + 30px DS gap */
+    }
+    button, input, select, textarea { font-family: inherit; }
+
+    /* ───────────────────────────────────────────────
+       NAVBAR 1.5  DS 2337:21975 — matches achievement-report-card.html exactly
+    ─────────────────────────────────────────────── */
+    .navbar { padding: 0 var(--page-padding-x); display: flex; flex-direction: column; gap: var(--space-s); }
+
+    .navbar-brand {
+      height: 64px;
+      background: var(--surface-general-default);
+      border-bottom: 1px solid var(--border-primary-default);
+      border-left:   1px solid var(--border-primary-default);
+      border-right:  1px solid var(--border-primary-default);
+      border-radius: 0 0 var(--corner-4xl) var(--corner-4xl);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-xs) var(--space-xl);
+    }
+    .navbar-logo { display: flex; align-items: center; flex-shrink: 0; height: 28px; gap: 8px; text-decoration: none; }
+    .navbar-logo__mark { height: 28px; width: auto; }
+    .navbar-logo__text { height: 18px; width: auto; }
+
+    .navbar-actions { display: flex; position: relative; align-items: center; gap: var(--space-xl); }
+
+    /* Nav Button - Parts  DS 3427:63384 — 44×44, padding 10px, 4 states */
+    .navbar-action-icons { display: flex; align-items: center; gap: var(--space-xs); flex-shrink: 0; }
+    .navbar-action-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      padding: 10px; border-radius: var(--corner-m);
+      color: var(--icon-default-default);
+      cursor: pointer; user-select: none;
+      border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      position: relative;
+    }
+    .navbar-action-icon svg { display: block; width: 24px; height: 24px; flex-shrink: 0; }
+    .navbar-action-icon:hover   { background: var(--surface-secondary-default-subtle); border-color: var(--border-primary-default); color: var(--icon-primary-default); }
+    .navbar-action-icon.is-pressed { background: var(--surface-primary-focus); border-color: var(--border-primary-default); color: var(--icon-primary-default); }
+    .navbar-action-icon.is-active  { background: var(--surface-primary-default); border-color: var(--border-primary-focus); color: var(--icon-primary-on-color); }
+
+    .navbar-avatar {
+      width: 48px; height: 48px; border-radius: var(--corner-rounded);
+      border: 1px solid var(--border-default); background: var(--surface-general-default);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; flex-shrink: 0; position: relative;
+    }
+    .navbar-avatar__img { width: 62px; height: 50px; object-fit: cover; position: absolute; }
+    .navbar-badge {
+      position: absolute; top: 0; right: -0.5px;
+      min-width: 20px; height: 20px;
+      background: var(--surface-primary-default); border-radius: var(--corner-rounded);
+      padding: var(--space-xxs); display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 600; color: var(--text-primary-on-color); line-height: var(--space-s);
+    }
+
+    .navbar-nav {
+      height: 56px;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-default);
+      border-radius: var(--corner-pill);
+      display: flex; align-items: flex-start;
+      gap: var(--space-xs); padding: var(--space-xs);
+    }
+
+    .nav-btn {
+      display: flex; flex-direction: column; gap: 20px;
+      height: 40px; overflow: hidden; flex-shrink: 0;
+      align-items: flex-start; cursor: pointer; user-select: none;
+    }
+    .nav-btn__inner {
+      display: flex; align-items: center; justify-content: center;
+      gap: var(--space-xs); padding: var(--space-xs) var(--space-s);
+      border-radius: var(--corner-pill); min-height: 24px;
+    }
+    .nav-btn__icon-wrap { color: var(--icon-primary-default); }
+    .nav-btn__icon-clip {
+      width: 20px; height: 20px; box-sizing: border-box;
+      padding: 1.67px; overflow: hidden; flex-shrink: 0;
+    }
+    .nav-btn__icon-clip svg { display: block; width: 100%; height: 100%; }
+    .nav-btn__chevron-clip { padding: 0; }
+    .nav-btn__icon-clip[data-icon="home"]        { padding: 1.67px 2.5px; }
+    .nav-btn__icon-clip[data-icon="battle"]      { padding: 2.5px; }
+    .nav-btn__icon-clip[data-icon="practice"]    { padding: 2.5px 1.67px; }
+    .nav-btn__icon-clip[data-icon="class"]       { padding: 2.5px 0.83px; }
+    .nav-btn__icon-clip[data-icon="learn"]       { padding: 1.67px 3.33px; }
+    .nav-btn__icon-clip[data-icon="achievement"] { padding: 2.5px 1.67px; }
+    .nav-btn__icon-clip[data-icon="potential"]   { padding: 1.67px 1.67px 2.48px 1.67px; }
+
+    .nav-btn__label {
+      font-size: 14px; font-weight: 500; line-height: 20px;
+      color: var(--text-default-body); white-space: nowrap;
+    }
+    .nav-btn__icon-wrap {
+      display: flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px; color: var(--icon-primary-default);
+    }
+
+    .nav-btn:hover .nav-btn__inner          { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+    .nav-btn:hover .nav-btn__label          { color: var(--text-secondary-focus); }
+    .nav-btn:hover .nav-btn__icon-wrap      { color: var(--icon-secondary-hover); }
+    .nav-btn.is-pressed .nav-btn__inner     { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+    .nav-btn.is-pressed .nav-btn__label     { color: var(--text-primary-default); }
+    .nav-btn.is-pressed .nav-btn__icon-wrap { color: var(--icon-primary-default); }
+    /* Active/Selected — DS State=Active: Surface/primary/default #00cc85, on-color text/icon */
+    .nav-btn.is-active .nav-btn__inner      { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+    .nav-btn.is-active .nav-btn__label      { color: var(--text-primary-on-color); }
+    .nav-btn.is-active .nav-btn__icon-wrap  { color: var(--icon-primary-on-color); }
+    .nav-btn.is-active:hover .nav-btn__inner     { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+    .nav-btn.is-active:hover .nav-btn__label     { color: var(--text-primary-on-color); }
+    .nav-btn.is-active:hover .nav-btn__icon-wrap { color: var(--icon-primary-on-color); }
+
+    /* ───────────────────────────────────────────────
+       LEARN MENU POPUP  DS node 3908:2462
+    ─────────────────────────────────────────────── */
+    #NavBar-Desktop { position: relative; }
+    .learn-menu {
+      position: absolute;
+      top: 68px; right: 0;
+      z-index: 200;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-4xl);
+      padding: var(--space-m);
+      width: 364px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-xs);
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    .learn-menu.is-open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .learn-menu__item {
+      display: flex; flex-direction: column; align-items: center;
+      gap: var(--space-xxs);
+      padding: var(--space-xs);
+      border-radius: 12px;
+      border: 1px solid transparent;
+      cursor: pointer; user-select: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .learn-menu__item:hover {
+      background: var(--surface-secondary-default-subtle);
+      border-color: var(--border-primary-default);
+    }
+    .learn-menu__item:hover .learn-menu__label {
+      color: var(--text-tertiary-default);
+    }
+    .learn-menu__item.is-selected {
+      background: var(--surface-secondary-default);
+      border-color: var(--border-secondary-focus);
+    }
+    .learn-menu__item.is-selected .learn-menu__label {
+      color: var(--text-tertiary-default);
+    }
+    .learn-menu__icon {
+      width: 70px; height: 70px; border-radius: 12px; flex-shrink: 0;
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .learn-menu__icon img { width: 70px; height: 70px; object-fit: cover; display: block; }
+    .learn-menu__label {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--text-default-heading); text-align: center;
+    }
+
+    /* ── Profile Menu Popup  DS node 3908:4194 ── */
+    .navbar-avatar-wrap { position: relative; cursor: pointer; user-select: none; display: flex; align-items: center; }
+    .profile-menu {
+      position: absolute; top: 68px; right: 0; z-index: 200;
+      width: 320px;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-4xl);
+      padding: var(--space-m);
+      display: flex; flex-direction: column; gap: var(--space-xs);
+      opacity: 0; transform: translateY(-8px); pointer-events: none;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    .profile-menu.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .profile-menu__header {
+      background: #f6fef6; border: 1px solid var(--border-primary-default);
+      border-radius: 16px; padding: var(--space-m);
+      display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%;
+    }
+    .profile-menu__avatar-wrap { position: relative; width: 64px; height: 64px; flex-shrink: 0; }
+    .profile-menu__avatar-circle {
+      width: 64px; height: 64px; border-radius: var(--corner-rounded);
+      border: 1px solid var(--border-primary-default); background: #e1f9ea;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      color: var(--icon-primary-default);
+    }
+    .profile-menu__avatar-circle svg { width: 52px; height: 52px; }
+    .profile-menu__num-badge {
+      position: absolute; top: -2px; right: -6px;
+      min-width: 20px; height: 20px; padding: 0 4px;
+      background: var(--surface-primary-default); border-radius: var(--corner-rounded);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 600; color: var(--text-primary-on-color); line-height: 1;
+    }
+    .profile-menu__user-info { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; }
+    .profile-menu__name-row { display: flex; align-items: center; gap: 4px; justify-content: center; }
+    .profile-menu__name { font-size: 18px; font-weight: 700; line-height: 28px; color: var(--text-tertiary-default); white-space: nowrap; }
+    .profile-menu__verified {
+      width: 14px; height: 14px; border-radius: var(--corner-rounded);
+      background: #00a2e8; border: 1px solid white; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; color: white;
+    }
+    .profile-menu__verified svg { width: 8px; height: 8px; }
+    .profile-menu__handle { font-size: 12px; font-weight: 500; line-height: 12px; color: var(--text-default-body); }
+    .profile-menu__pill {
+      display: inline-flex; align-items: center;
+      border: 1px solid var(--border-primary-default); border-radius: var(--corner-rounded);
+      padding: 2px 8px; font-size: 10px; font-weight: 500; line-height: 12px;
+      color: var(--text-primary-default);
+    }
+    .profile-menu__upgrade {
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none; cursor: pointer; color: var(--text-primary-default);
+    }
+    .profile-menu__upgrade svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .profile-menu__upgrade-text { font-size: 14px; font-weight: 400; line-height: 20px; white-space: nowrap; }
+    .profile-menu__menu { display: flex; flex-direction: column; gap: var(--space-xs); }
+    .profile-menu__item {
+      display: flex; align-items: center; gap: 10px;
+      padding: var(--space-xs) var(--space-m);
+      border-radius: var(--corner-rounded); border: 1px solid transparent;
+      cursor: pointer; user-select: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .profile-menu__item svg { width: 24px; height: 24px; flex-shrink: 0; color: var(--icon-primary-default); }
+    .profile-menu__item-label { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-default-body); flex: 1; }
+    .profile-menu__item:hover { background: var(--surface-secondary-default-subtle); border-color: var(--border-primary-default); }
+    .profile-menu__item:hover .profile-menu__item-label { color: var(--text-primary-default); }
+    .profile-menu__item.is-active { background: var(--surface-secondary-default); border-color: var(--border-primary-focus); }
+    .profile-menu__item.is-active .profile-menu__item-label { color: var(--text-primary-focus); }
+    .profile-menu__divider { height: 1px; background: var(--border-general-default); }
+
+    /* ── Language Dropdown  DS node 3928:3067 ── */
+    .locale-dropdown {
+      position: absolute; top: 68px; right: 0; z-index: 200;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-4xl);
+      padding: var(--space-m);
+      display: flex; flex-direction: column; gap: var(--space-xs);
+      opacity: 0; transform: translateY(-8px); pointer-events: none;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    .locale-dropdown.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .locale-dropdown__item {
+      padding: var(--space-xs) var(--space-m);
+      border-radius: var(--corner-rounded);
+      border: 1px solid transparent;
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--text-default-body); white-space: nowrap;
+      cursor: pointer; user-select: none;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .locale-dropdown__item:hover { background: var(--surface-secondary-default-subtle); border-color: var(--border-primary-default); color: var(--text-primary-default); }
+    .locale-dropdown__item.is-active { background: var(--surface-secondary-default); border-color: var(--border-primary-focus); color: var(--text-primary-focus); }
+
+    /* ── Notification Dropdown  DS node 3908:13101 ── */
+    .notif-dropdown {
+      position: absolute; top: 68px; right: 0; z-index: 200;
+      width: 320px;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-4xl);
+      padding: var(--space-m);
+      display: flex; flex-direction: column;
+      opacity: 0; transform: translateY(-8px); pointer-events: none;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    .notif-dropdown.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    /* Item — Default state: outer no-border, inner bottom divider */
+    .notif-item {
+      display: flex; align-items: flex-start;
+      padding: 12px 12px 0;
+      border: 1px solid transparent; border-radius: 16px;
+      cursor: pointer; user-select: none;
+      transition: background 0.15s, border-color 0.15s, padding 0.15s;
+    }
+    .notif-item__inner {
+      display: flex; gap: 8px; align-items: flex-start;
+      flex: 1; min-width: 0; padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-general-default);
+      transition: border-color 0.15s, padding 0.15s;
+    }
+    .notif-item:last-of-type .notif-item__inner { border-bottom: none; }
+    /* Hover state — #f6fef6 bg, green border, 16px radius */
+    .notif-item:hover { background: #f6fef6; border-color: var(--border-primary-default); padding: 12px; }
+    .notif-item:hover .notif-item__inner { border-bottom: none; padding-bottom: 0; }
+    .notif-item:hover .notif-item__text { color: var(--text-tertiary-default); }
+    /* Pressed state — Surface/primary/focus bg */
+    .notif-item.is-pressed { background: var(--surface-primary-focus); border-color: var(--border-primary-default); padding: 12px; }
+    .notif-item.is-pressed .notif-item__inner { border-bottom: none; padding-bottom: 0; }
+    .notif-item.is-pressed .notif-item__text { color: var(--text-primary-default); }
+    .notif-item.is-pressed .notif-item__time { color: var(--text-primary-default); }
+    /* Avatar — 60×60, icon 50×50 (inset 8.33%) */
+    .notif-item__avatar { width: 60px; height: 60px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--icon-primary-default); }
+    .notif-item__avatar svg { width: 50px; height: 50px; }
+    .notif-item__texts { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+    .notif-item__text { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-default-body); }
+    .notif-item__time { font-size: 10px; font-weight: 500; line-height: 12px; color: var(--text-primary-default); }
+    .notif-item__dot { width: 8px; height: 8px; border-radius: 60px; background: var(--surface-primary-default); flex-shrink: 0; margin-top: 4px; }
+    /* CTA button */
+    .notif-dropdown__cta {
+      margin-top: var(--space-m); width: 100%; height: 48px;
+      background: var(--surface-primary-default);
+      border: 1px solid var(--border-primary-focus);
+      border-radius: var(--corner-rounded);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--text-primary-on-color);
+      cursor: pointer; user-select: none; font-family: var(--font);
+      transition: background 0.15s;
+    }
+    .notif-dropdown__cta:hover { background: var(--surface-primary-focus); }
+
+    /* ── Download Apps Dropdown  DS node 3909:3059 ── */
+    .download-dropdown {
+      position: absolute; top: 68px; right: 0; z-index: 200;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-4xl);
+      padding: var(--space-m);
+      display: flex; flex-direction: column; gap: var(--space-xs);
+      opacity: 0; transform: translateY(-8px); pointer-events: none;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    .download-dropdown.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .download-dropdown__item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 16px;
+      border: 1px solid transparent; border-radius: var(--corner-m);
+      text-decoration: none;
+      cursor: pointer; user-select: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .download-dropdown__item:hover {
+      background: var(--surface-secondary-default-subtle);
+      border-color: var(--border-primary-default);
+    }
+    .download-dropdown__item img { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; }
+    .download-dropdown__item-label {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: var(--text-default-body);
+      width: 140px;
+    }
+
+    /* ── Nav subtopic dropdowns (shared)  DS node 4742:74267 etc. ── */
+    #MenuBar-Desktop { position: relative; }
+    .nav-subtopic-dropdown {
+      position: absolute; z-index: 200;
+      width: 242px;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-4xl);
+      padding: var(--space-m);
+      display: flex; flex-direction: column; gap: var(--space-xs);
+      opacity: 0; transform: translateY(-8px); pointer-events: none;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    .nav-subtopic-dropdown.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .nav-subtopic-dropdown__item {
+      text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+      padding: var(--space-xs) var(--space-m);
+      border-radius: var(--corner-rounded);
+      border: 1px solid transparent;
+      color: var(--text-default-body);
+      cursor: pointer; user-select: none;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .nav-subtopic-dropdown__item svg { width: 24px; height: 24px; flex-shrink: 0; color: var(--icon-primary-default); }
+    .nav-subtopic-dropdown__item-label { font-size: 14px; font-weight: 600; line-height: 20px; color: inherit; flex: 1; }
+    .nav-subtopic-dropdown__item:hover { background: var(--surface-secondary-default-subtle); border-color: var(--border-primary-default); color: var(--text-primary-default); }
+    .nav-subtopic-dropdown__item.is-active { background: var(--surface-secondary-default); border-color: var(--border-primary-focus); color: var(--text-primary-focus); }
+
+    /* ───────────────────────────────────────────────
+       PAGE SHELL
+    ─────────────────────────────────────────────── */
+    .pd-page { flex: 1; padding: var(--space-m) var(--page-padding-x) var(--space-m); }
+
+    /* ───────────────────────────────────────────────
+       BREADCRUMBS 1.5  DS 837:1033
+    ─────────────────────────────────────────────── */
+    .pd-breadcrumbs15 { display: flex; align-items: center; gap: var(--space-m); min-height: 36px; margin-bottom: var(--space-m); }
+    .pd-breadcrumbs__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
+    .pd-breadcrumbs__sep   { width: 1px; align-self: stretch; background: var(--border-general-default); flex-shrink: 0; }
+    .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--space-xs); flex-wrap: wrap; }
+    .pd-link15 {
+      display: flex; align-items: center; gap: var(--space-xs);
+      background: none; border: none; padding: 0; cursor: pointer;
+      color: var(--text-default-body);
+    }
+    .pd-link15__icon-home { display: block; width: 20px; height: 20px; flex-shrink: 0; color: var(--text-primary-default); }
+    .pd-link15__text         { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
+    .pd-link15__text--parent { color: var(--text-primary-default); }
+    .pd-breadcrumbs__chevron { width: 16px; height: 16px; color: var(--text-primary-default); flex-shrink: 0; }
+
+    /* ───────────────────────────────────────────────
+       MOBILE NAVBAR  DS 1943:22641
+    ─────────────────────────────────────────────── */
+    .navbar-mobile {
+      height: 64px; background: var(--surface-general-default);
+      border-bottom: 1px solid var(--border-primary-default);
+      border-left:   1px solid var(--border-primary-default);
+      border-right:  1px solid var(--border-primary-default);
+      border-radius: 0 0 var(--corner-4xl) var(--corner-4xl);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-m) 24px;
+    }
+    .navbar-mobile__logo { display: flex; align-items: center; text-decoration: none; }
+    .navbar-mobile__logo svg { display: block; width: 116px; height: 28px; }
+    .navbar-mobile__menu-btn {
+      width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; user-select: none; flex-shrink: 0;
+      color: var(--icon-primary-default); background: none; border: none; padding: 0;
+    }
+    .navbar-mobile__menu-btn svg { display: block; width: 24px; height: 24px; }
+
+    #NavBar-Tablet { display: none; }
+    #MenuBar-Desktop { margin-top: var(--space-s); }  /* 12px gap — matches original .navbar gap */
+
+    /* ───────────────────────────────────────────────
+       SECTION 2 — MENU BAR  DS 3406:774
+       Desktop: pill nav row. Tablet/Mobile: slide-in panel.
+    ─────────────────────────────────────────────── */
+    .menubar-nav {
+      height: 56px;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-default);
+      border-radius: var(--corner-pill);
+      display: flex; align-items: flex-start;
+      gap: var(--space-xs); padding: var(--space-xs);
+    }
+
+    /* Slide-in overlay backdrop */
+    .menubar-overlay {
+      position: fixed; inset: 0; z-index: 150;
+      background: rgba(0,0,0,0.35);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .menubar-overlay.is-open { opacity: 1; pointer-events: all; }
+
+    /* Panel card */
+    .menubar-panel {
+      position: absolute;
+      top: 80px; left: 50%; transform: translateX(-50%);
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-default);
+      border-radius: var(--corner-4xl);
+      overflow: hidden;
+      width: min(1288px, calc(100% - 64px));
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      padding: var(--space-m);
+    }
+    .menubar-panel__header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--space-xs) var(--space-m);
+    }
+    .menubar-panel__logo { display: block; width: 116px; height: 28px; }
+    .menubar-panel__close {
+      width: 24px; height: 24px; background: none; border: none; padding: 0;
+      cursor: pointer; color: var(--icon-default-default); flex-shrink: 0;
+    }
+    .menubar-panel__close svg { display: block; width: 24px; height: 24px; }
+    .menubar-panel__search {
+      display: flex; align-items: center; gap: 10px;
+      height: 40px; padding: var(--space-xs) var(--space-s);
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-pill); margin-bottom: var(--space-m);
+      color: var(--text-disabled-default); font-size: 14px; font-weight: 400;
+      line-height: 20px; font-family: var(--font);
+    }
+    .menubar-panel__search svg { width: 24px; height: 24px; flex-shrink: 0; color: var(--icon-primary-default); }
+    .menubar-panel__menu {
+      display: flex; gap: var(--space-xs); align-items: flex-start;
+    }
+    .menubar-panel__col {
+      flex: 1; display: flex; flex-direction: column; gap: var(--space-xs);
+    }
+    .menubar-panel__divider {
+      width: 1px; background: var(--border-general-default);
+      flex-shrink: 0; align-self: stretch; margin: 0 var(--space-xs);
+    }
+
+    /* Panel menu item — DS Dropdown-Parts states */
+    .panel-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: var(--space-xs) var(--space-m);
+      border-radius: var(--corner-pill); cursor: pointer; user-select: none;
+      font-size: 14px; font-weight: 500; line-height: 20px;
+      color: var(--text-default-body); font-family: var(--font);
+      border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .panel-item svg { width: 24px; height: 24px; flex-shrink: 0; color: var(--icon-primary-default); }
+    .panel-item__label { flex: 1; min-width: 0; }
+    .panel-item .panel-item__chevron { color: var(--icon-primary-default); }
+
+    /* Hover — Surface/secondary/default-subtle + Border/primary/default + Text/primary/default */
+    .panel-item:hover:not(.is-active) {
+      background: var(--surface-secondary-default-subtle);
+      border-color: var(--border-primary-default);
+      color: var(--text-primary-default);
+    }
+    /* Active touch feedback */
+    .panel-item:active:not(.is-active) {
+      background: var(--surface-secondary-default);
+      border-color: var(--border-primary-focus);
+      color: var(--text-primary-focus);
+    }
+    /* Selected — Surface/secondary/default + Border/primary/focus + Text/primary/default-hover */
+    .panel-item.is-active {
+      background: var(--surface-secondary-default);
+      border-color: var(--border-primary-focus);
+      color: var(--text-primary-focus);
+    }
+    .panel-item.is-active svg,
+    .panel-item.is-active .panel-item__chevron { color: var(--text-primary-focus); }
+
+    /* Search bar — Default: Border/general/default | Focus: Border/primary/default */
+    .menubar-panel__search:focus-within {
+      border-color: var(--border-primary-default);
+    }
+
+    /* Panel footer */
+    .menubar-panel__footer { margin-top: var(--space-m); display: flex; flex-direction: column; gap: 0; }
+    .menubar-panel__cta {
+      display: flex; gap: var(--space-xs); align-items: center;
+      background: var(--surface-secondary-default-subtle);
+      border: 1px solid #d1f7d1; border-radius: 20px; padding: var(--space-xs);
+    }
+    .panel-cta-notif {
+      display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;
+      padding: var(--space-xs) var(--space-m);
+      font-size: 14px; font-weight: 500; line-height: 20px;
+      color: var(--text-default-body); font-family: var(--font);
+    }
+    .panel-cta-notif svg { width: 24px; height: 24px; color: var(--icon-primary-default); flex-shrink: 0; }
+    /* Download App button — Button - 1.5 Primary/M  DS 3427:2478 */
+    .panel-cta-download {
+      display: flex; align-items: center; gap: 0; flex: 1; min-width: 0;
+      max-height: 48px; padding: var(--space-xs) var(--space-s); /* 8px 12px */
+      background: var(--surface-primary-default);
+      border: 1px solid var(--border-primary-focus);
+      border-radius: var(--corner-rounded); cursor: pointer;
+      font-family: var(--font);
+    }
+    .panel-cta-download__content {
+      display: flex; align-items: center; min-height: 24px; flex-shrink: 0; flex: 1; min-width: 0;
+    }
+    .panel-cta-download__icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .panel-cta-download__icon svg { width: 20px; height: 20px; color: var(--text-primary-on-color); }
+    .panel-cta-download__label {
+      padding: 0 var(--space-xs); font-size: 14px; font-weight: 500;
+      line-height: 20px; color: var(--text-primary-on-color);
+      white-space: nowrap; font-family: var(--font); flex-shrink: 1;
+    }
+    .panel-cta-download__arrow {
+      background: var(--surface-primary-default-subtle-hover); /* #99ebce */
+      border-radius: var(--corner-rounded); padding: 4px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; max-height: 24px;
+    }
+    .panel-cta-download__arrow svg { width: 16px; height: 16px; color: var(--icon-primary-default); }
+    .menubar-panel__localization {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-m) 60px;
+    }
+    .menubar-panel__localization svg { width: 24px; height: 24px; color: var(--text-default-body); }
+
+    /* Mobile bottom tab bar  DS 3406:734 */
+    #NavBar-Mobile-Bottom { display: none; }
+    .mobile-bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+      height: 56px;
+      background: var(--surface-general-default);
+      border-top: 1px solid var(--border-default);
+      display: flex; align-items: center; justify-content: center;
+      gap: var(--space-xxs); padding: var(--space-m);
+    }
+    .mobile-nav-tab {
+      display: flex; align-items: center; justify-content: center; gap: 4px;
+      height: 24px; padding: 2px var(--space-xs); border-radius: var(--corner-rounded);
+      font-size: 12px; font-weight: 600; line-height: 18px;
+      color: var(--text-default-body); cursor: pointer; user-select: none;
+      font-family: var(--font); background: var(--surface-general-default);
+    }
+    .mobile-nav-tab svg { display: block; width: 16px; height: 16px; flex-shrink: 0; color: var(--icon-primary-default); }
+    .mobile-nav-tab.is-active { background: var(--surface-primary-default); color: var(--text-primary-on-color); }
+    .mobile-nav-tab.is-active svg { color: var(--text-primary-on-color); }
+
+    /* ═══════════════════════════════════════════════════
+       ANALYSIS CARD
+       Based on DS node 3282:68207
+    ═══════════════════════════════════════════════════ */
+
+    /* ── Primary Card outer (bg #e8fbe8, green border, 24px r) ── */
+    .an-outer {
+      display: flex; flex-direction: column; gap: var(--space-xs);
+      padding: var(--space-m);
+      background: var(--surface-secondary-default-subtle); /* #e8fbe8 */
+      border: 1px solid var(--border-default);
+      border-radius: var(--corner-4xl);
+      overflow: hidden;
+    }
+
+    /* ── Card header row (subject badge + download btn) ── */
+    .an-header {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 32px; flex-shrink: 0;
+    }
+
+    /* ── Subject Badge BM — L size (32px)
+       DS: Subject Badge/Bahasa Melayu - L
+       border: 1px solid #2e4799 (L variant from design context)
+    ── */
+    .an-subject-badge {
+      display: inline-flex; align-items: center;
+      height: 32px; border-radius: 60px;
+      border: 1px solid var(--badge-border, #2e4799);
+      overflow: hidden; flex-shrink: 0;
+    }
+    .an-subject-badge__icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 32px;
+      background: var(--surface-general-default);
+      padding: 4px 8px 4px 12px; flex-shrink: 0;
+    }
+    .an-subject-badge__icon img { display: block; width: 20px; height: 20px; object-fit: contain; }
+    .an-subject-badge__label {
+      position: relative;
+      display: flex; align-items: center;
+      height: 32px; padding: 0 16px 0 12px;
+      background: var(--badge-bg, #4d77ff);
+      font-size: 14px; font-weight: 500; line-height: 20px;
+      color: var(--badge-text, #f2f2f2); white-space: nowrap; font-family: var(--font);
+    }
+    .an-subject-badge__pointer {
+      position: absolute; left: 0; top: 50%;
+      transform: translateY(-50%);
+      display: block; flex-shrink: 0;
+    }
+
+    /* ── Download button (Secondary style, 32px) ── */
+    .an-download-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      height: 32px; padding: 2px 8px;
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-rounded);
+      color: var(--text-primary-default);
+      font-family: var(--font); font-size: 12px; font-weight: 600; line-height: 18px;
+      cursor: pointer; white-space: nowrap; flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .an-download-btn svg { display: block; width: 16px; height: 16px; flex-shrink: 0; }
+    .an-download-btn:hover {
+      background: var(--surface-secondary-default);
+      border-color: var(--border-secondary-focus);
+      color: var(--text-secondary-focus);
+    }
+
+    /* ── Content area (flex-col, gap-16px) ── */
+    .an-content {
+      display: flex; flex-direction: column; gap: var(--space-m);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       ANALYTICS INNER CARD
+       DS: white bg, grey border, 18px r, pt-28 px-60 pb-54
+    ═══════════════════════════════════════════════════ */
+    .an-analytics-card {
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-general-default);
+      border-radius: var(--corner-2xl);
+      padding: 28px 60px 54px;
+      overflow: visible;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Row with grade + donut pairs. gap-60px between grade and donut section */
+    .an-analytics-row {
+      display: flex; align-items: center;
+      gap: 60px; width: 100%; overflow: hidden;
+    }
+
+    /* ── Grade column (195px w, flex-col gap-16px) ── */
+    .an-grade {
+      width: 195px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: var(--space-m);
+      justify-content: center;
+    }
+
+    /* "A 97%" large grade row */
+    .an-grade__title-row {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--text-default-heading);
+      font-size: 56px; line-height: 1;
+    }
+    .an-grade__letter { font-weight: 700; }
+    .an-grade__pct    { font-weight: 400; }
+
+    /* Mastery pill (green, 32px, pill shape) */
+    .an-mastery-pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 32px; padding: 2px 16px;
+      background: var(--surface-primary-default);
+      border-radius: var(--corner-rounded);
+      font-family: var(--font); font-size: 14px; font-weight: 400; line-height: 20px;
+      color: white; white-space: nowrap;
+      align-self: flex-start;
+    }
+    .an-mastery-pill.mastery--good,
+    .an-mastery-pill.mastery--satisfactory,
+    .an-mastery-pill.mastery--minimal      { background: #ff8c00; }
+    .an-mastery-pill.mastery--inadequate   { background: #f94848; }
+
+    /* Stat lines */
+    .an-grade__stat {
+      font-size: 14px; font-weight: 400; line-height: 20px;
+      color: #626262;
+    }
+    .an-grade__details {
+      display: flex; flex-direction: column; gap: var(--space-m);
+    }
+
+    /* ── Two donut columns (flex-1 each, no gap between them) ── */
+    .an-donut-pairs {
+      flex: 1; min-width: 0;
+      display: flex; align-items: center;
+      align-self: stretch;
+    }
+
+    /* Single donut + legend column (donut left, legend right, 28px gap) */
+    .an-donut-col {
+      flex: 1; min-width: 0;
+      display: flex; flex-direction: row; align-items: center;
+      gap: 28px; justify-content: flex-start;
+    }
+
+    /* ── Donut chart wrapper ── */
+    .an-donut-wrap { flex-shrink: 0; cursor: pointer; }
+    .an-donut-wrap svg { display: block; }
+
+    /* ── Donut ring animation: grows from 0 → target on load ── */
+    @keyframes donut-grow {
+      from { stroke-dashoffset: var(--c); }
+      to   { stroke-dashoffset: var(--offset); }
+    }
+    .an-donut-ring {
+      stroke-dashoffset: var(--c);  /* start hidden */
+      animation: donut-grow 1.2s ease-out forwards;
+    }
+
+    /* ── Per-ring hit areas (transparent wide strokes over each ring) ── */
+    .an-ring-hit { cursor: pointer; }
+
+    /* ── Per-ring labels: hidden by default, JS shows/hides individually ── */
+    .an-ring-label {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+
+    /* ── Legend section ── */
+    .an-legend {
+      display: flex; flex-direction: column; gap: 16px;
+      flex-shrink: 1; min-width: 130px;
+      align-self: center;
+    }
+
+    .an-legend__title {
+      font-size: 16px; font-weight: 700; line-height: 24px;
+      color: #626262; max-width: 212px;
+    }
+
+    .an-legend__rows {
+      display: flex; flex-direction: column; gap: 30px;
+    }
+
+    .an-legend__row {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 142px;
+    }
+
+    /* Legend level pill (Easy / Medium / Hard / LOTS / MOTS / HOTS) */
+    .an-legend__pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 24px; padding: 2px 8px;
+      border-radius: var(--corner-rounded);
+      font-family: var(--font); font-size: 12px; font-weight: 400; line-height: 12px;
+      color: white; white-space: nowrap;
+    }
+    .an-legend__pill--easy   { background: var(--surface-primary-default); }  /* green  */
+    .an-legend__pill--medium { background: var(--surface-alert-default);   }  /* orange */
+    .an-legend__pill--hard   { background: var(--surface-warning-default); }  /* red    */
+
+    .an-legend__pill-wrap {
+      position: relative; display: inline-flex;
+    }
+    .an-legend__pill-wrap .an-legend__pill { cursor: help; }
+
+    .an-tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: var(--space-s);
+      background: var(--surface-general-default);
+      border: 1px solid var(--border-general-default);
+      border-radius: 4px;
+      font-size: 14px; font-weight: 500; line-height: 20px;
+      color: var(--text-default-body);
+      white-space: nowrap;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      z-index: 20;
+    }
+    .an-tooltip::after {
+      content: '';
+      position: absolute;
+      bottom: -5px; left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 8px; height: 8px;
+      background: var(--surface-general-default);
+      border-right: 1px solid var(--border-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+    }
+    .an-legend__pill-wrap:hover .an-tooltip {
+      opacity: 1; transform: translateX(-50%) translateY(0);
+    }
+
+    .an-legend__value {
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      color: #626262; width: 35px; text-align: right;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       TOPICS + TABLE sections
+    ═══════════════════════════════════════════════════ */
+
+    /* Grouped section: subheader + its content, tighter inner gap */
+    .an-section {
+      display: flex; flex-direction: column; gap: var(--space-xs); /* 8px */
+    }
+
+    /* Section subheaders ("Topics for improvement", "Result of topics") */
+    .an-subheader {
+      font-size: 18px; font-weight: 600; line-height: 28px;
+      color: var(--text-tertiary-default); /* #00564c */
+    }
+
+    /* Topic improvement pills row */
+    .an-pills {
+      display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-m);
+    }
+
+    .an-pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 24px; padding: 2px 8px;
+      background: var(--surface-primary-default);
+      border-radius: var(--corner-rounded);
+      font-family: var(--font); font-size: 12px; font-weight: 400; line-height: 12px;
+      color: var(--text-primary-on-color); /* #f6fdfb */
+      white-space: nowrap;
+    }
+
+    /* ── Table — Result of topics
+       DS: border #d9d9d9, overflow-clip, rounded-18px
+       Columns: Chapter(100px) | Topic(flex-1) | Score(108px) | Status(242px)
+    ── */
+    .an-table-outer {
+      border: 1px solid var(--border-general-default);
+      border-radius: var(--corner-2xl);
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .an-table {
+      width: 100%; border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .an-col--chapter { width: 100px; }
+    /* .an-col--topic auto-expands */
+    .an-col--score  { width: 108px; }
+    .an-col--status { width: 242px; }
+
+    .an-th {
+      background: var(--surface-general-default-secondary); /* #f2f2f2 */
+      padding: var(--space-m);
+      font-family: var(--font); font-size: 16px; font-weight: 500; line-height: 24px;
+      color: var(--text-default-body);
+      text-align: left; height: 56px;
+      border-right: 1px solid var(--border-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+    }
+    .an-th:last-child { border-right: none; }
+    .an-th--chapter { text-align: center; }
+
+    .an-td {
+      background: var(--surface-general-default);
+      padding: var(--space-m);
+      font-family: var(--font); font-size: 14px; font-weight: 400; line-height: 20px;
+      color: var(--text-default-body);
+      height: 56px;
+      border-right: 1px solid var(--border-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+      vertical-align: middle;
+    }
+    .an-td:last-child { border-right: none; }
+    .an-table tbody tr:last-child .an-td { border-bottom: none; }
+    .an-td--chapter { text-align: center; }
+
+    /* Status cell: dot + text */
+    .an-status {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .an-status-dot {
+      width: 12px; height: 12px; border-radius: 60px;
+      flex-shrink: 0; display: inline-block;
+    }
+
+    /* ───────────────────────────────────────────────
+       FOOTER 1.5  DS 2073:6579
+    ─────────────────────────────────────────────── */
+    .footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 100; background: var(--surface-general-default);
+      border-top: 1px solid var(--border-default);
+    }
+    .footer__inner {
+      height: 44px; display: flex; align-items: center;
+      justify-content: space-between;
+      padding-left: var(--space-2xl); padding-right: var(--space-2xl);
+    }
+    .footer__left  { display: flex; align-items: center; gap: var(--space-xxs); flex-shrink: 0; }
+    .footer__right { display: flex; align-items: center; gap: var(--space-xxs); flex-shrink: 0; }
+    .footer__text  { font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
+    .footer__link  { font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-default-body); white-space: nowrap; cursor: pointer; text-decoration: none; }
+    .footer__heart { width: 20px; height: 20px; flex-shrink: 0; display: block; color: var(--icon-primary-default); }
+
+    /* ═══════════════════════════════════════════════════
+       RESPONSIVE BREAKPOINTS — matches achievement-report-card.html
+       < 1320px → tablet navbar
+       Tablet  ≤ 1279px
+       Mobile  ≤  767px
+    ═══════════════════════════════════════════════════ */
+
+    /* < 1320px — tablet: compact navbar, hide desktop nav pill */
+    @media (max-width: 1319px) {
+      :root { --page-padding-x: 32px; }
+      #NavBar-Desktop      { display: none; }
+      #NavBar-Tablet       { display: block; padding: 0 var(--page-padding-x); }
+      #MenuBar-Desktop     { display: none; }
+      #Breadcrumbs-Desktop { display: none; }
+      .footer__inner { padding-left: var(--space-m); padding-right: var(--space-m); }
+      .menubar-panel {
+        width: min(1288px, calc(100% - 48px)); top: 0;
+        border-top: 0;
+        border-radius: 0 0 var(--corner-4xl) var(--corner-4xl);
+      }
+    }
+
+    /* ── Tablet ≤ 1279px ─────────────────────────────── */
+    @media (max-width: 1279px) {
+      :root { --page-padding-x: 32px; }
+
+      /* Analytics card: reduce padding */
+      .an-analytics-card { padding: 24px; }
+
+      /* 2-column grid: grade (fixed 180px left) | donuts (flexible right) */
+      .an-analytics-row {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        gap: 28px;
+        align-items: start;
+      }
+
+      /* Grade: auto-sized by grid, slightly smaller font */
+      .an-grade { width: auto; }
+      .an-grade__title-row { font-size: 44px; }
+
+      /* Right column: both donuts side by side (same as desktop), scaled down */
+      .an-donut-col { gap: 16px; }
+      .an-donut-wrap svg { width: 120px; height: 120px; flex-shrink: 0; }
+
+      /* Legend: tighten row width to fit smaller columns */
+      .an-legend__title { font-size: 14px; }
+      .an-legend__row { width: auto; min-width: 100px; }
+      .an-legend__rows { gap: 16px; }
+
+      /* Table: reduce fixed columns so table fits without horizontal scroll */
+      .an-col--chapter { width: 60px; }
+      .an-col--score   { width: 80px; }
+      .an-col--status  { width: auto; }
+    }
+
+    /* ── Mobile ≤ 767px ──────────────────────────────── */
+    @media (max-width: 767px) {
+      :root { --page-padding-x: var(--space-m); }  /* 16px */
+
+      #NavBar-Tablet { display: none; }
+      #NavBar-Mobile-Bottom { display: flex; z-index: 200; }
+      .footer { display: none; }
+      body { padding-bottom: 86px; }
+
+      /* ── Mobile panel: slides in from left, 329px wide, single column
+         DS Nav Menu Mobile - 1.5 node 3427:2442
+      ── */
+      .menubar-overlay {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0 0 60px 0;
+      }
+      .menubar-panel {
+        position: relative;
+        left: auto; top: auto; bottom: auto;
+        width: min(329px, 100%);
+        height: auto;
+        max-height: unset;
+        transform: none;
+        border-left: 0;
+        border-radius: 0 var(--corner-4xl) var(--corner-4xl) 0;
+        overflow-y: auto;
+        max-height: 100%;
+      }
+      /* Single column — collapse 2-col layout */
+      .menubar-panel__menu    { flex-direction: column; }
+      .menubar-panel__divider { display: none; }
+      .menubar-panel__col     { flex: none; width: 100%; }
+      /* CTA: stack Notification above Download App */
+      .menubar-panel__cta     { flex-direction: column; border-radius: 20px; }
+      .panel-cta-notif        { width: 100%; }
+      .panel-cta-download     { flex: none; width: 100%; }
+      /* Localization: tighter padding */
+      .menubar-panel__localization { padding: var(--space-m) var(--space-xl); }
+
+      /* Outer card + analytics card: tighter padding */
+      .an-outer          { padding: 12px; }
+      .an-analytics-card { padding: var(--space-m); }
+      .an-analytics-row  { display: flex; flex-direction: column; gap: var(--space-m); }
+
+      /* ── Grade: CSS grid, letter box left / pct+mastery right / stats full-width ── */
+      .an-grade {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        column-gap: var(--space-m);
+        row-gap: var(--space-xs);
+        width: 100%;
+        background: var(--surface-primary-default-subtle);
+        border: 1px solid var(--border-primary-default);
+        border-radius: var(--corner-m);
+        padding: var(--space-s) var(--space-m);
+      }
+      /* Dissolve wrappers — children become direct grid items */
+      .an-grade__title-row { display: contents; }
+      .an-grade__details   { display: contents; }
+
+      /* Letter: white square box, green border, col 1 spanning both header rows */
+      .an-grade__letter {
+        grid-column: 1; grid-row: 1 / 3;
+        align-self: center;
+        display: flex; align-items: center; justify-content: center;
+        width: 88px; height: 88px;
+        background: var(--surface-general-default);
+        border: 1px solid var(--border-primary-default);
+        border-radius: var(--corner-m);
+        font-size: 40px; font-weight: 700;
+        color: var(--text-default-heading);
+        line-height: 1;
+      }
+
+      /* Percentage: col 2, row 1 — large, bottom-aligned */
+      .an-grade__pct {
+        grid-column: 2; grid-row: 1;
+        align-self: end;
+        font-size: 48px; font-weight: 400;
+        color: var(--text-default-heading);
+        line-height: 1;
+      }
+
+      /* Mastery pill: col 2, row 2 — top-aligned */
+      .an-mastery-pill {
+        grid-column: 2; grid-row: 2;
+        align-self: start; justify-self: start;
+      }
+
+      /* Stats: full-width bordered rows below the grid header */
+      .an-grade__stat {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: var(--space-xs) var(--space-m);
+        background: var(--surface-general-default);
+        border: 1px solid var(--border-general-default);
+        margin: 0;
+      }
+      .an-grade__stat:first-of-type {
+        border-bottom: none;
+        border-radius: var(--corner-m) var(--corner-m) 0 0;
+        margin-top: var(--space-xs);
+        padding-top: var(--space-xs);
+      }
+      .an-grade__stat:last-of-type {
+        border-radius: 0 0 var(--corner-m) var(--corner-m);
+      }
+
+      /* ── Divider + donut section: each row = donut left + legend table right ── */
+      .an-donut-pairs {
+        flex-direction: column; gap: var(--space-s);
+        border-top: 1px solid var(--border-general-default);
+        padding-top: var(--space-s);
+        align-items: stretch;
+      }
+      .an-donut-col   { width: 100%; flex-direction: column; align-items: center; gap: var(--space-s); }
+      .an-donut-wrap  { flex-shrink: 0; }
+      .an-donut-wrap svg { width: 100px; height: 100px; }
+
+      /* Legend: full-width bordered table below the donut */
+      .an-legend        { flex: unset; width: 100%; min-width: 0; align-items: stretch; }
+      .an-legend__title { display: block; font-size: 10px; line-height: 14px; }
+      .an-legend__rows  { gap: 0; border: 1px solid var(--border-general-default); border-radius: var(--corner-m); overflow: hidden; }
+      .an-legend__row   { width: 100%; padding: 6px 8px; border-bottom: 1px solid var(--border-general-default); margin: 0; }
+      .an-legend__row:last-child { border-bottom: none; }
+
+      /* ── Table: tablet-style layout scaled for mobile ── */
+      .an-table-outer { overflow-x: auto; }
+      .an-table       { min-width: unset; }
+
+      .an-col--chapter { width: 40px; }
+      .an-col--score   { width: 48px; }
+      .an-col--status  { width: 100px; }
+
+      .an-th {
+        padding: 8px;
+        font-size: 10px; line-height: 14px;
+        height: auto; min-height: 40px;
+      }
+      .an-td {
+        padding: 8px;
+        font-size: 10px; line-height: 14px;
+        height: auto; min-height: 40px;
+        word-break: break-word;
+      }
+      .an-status { flex-wrap: wrap; gap: 4px; }
+      .an-pills  { gap: var(--space-xs); }
+
+
+      /* Footer: stack vertically, center both groups */
+      body { padding-bottom: 102px; }
+      .footer__inner {
+        flex-direction: column;
+        justify-content: center;
+        align-items:     center;
+        gap:             var(--space-xs);
+        height:          auto;
+        padding:         var(--space-s) var(--space-2xl);
+      }
+      .footer__left  { justify-content: center; }
+      .footer__right { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     SVG SYMBOL DEFS — all icons (paths at origin, 1px buffer viewBox)
+     Sources: DS Iconography node 1898:16977 + Score Card icons
+═══════════════════════════════════════════════ -->
+<svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+
+    <!-- ── Topbar action icons (named symbols from achievement-report-card.html) ── -->
+    <symbol id="ic-search" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 11 19 C 15.418 19 19 15.418 19 11 C 19 6.582 15.418 3 11 3 C 6.582 3 3 6.582 3 11 C 3 15.418 6.582 19 11 19 Z"/><path d="M 21 21 L 16.65 16.65"/></symbol>
+    <symbol id="ic-maximize" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 3 16 L 3 19 C 3 19.53 3.211 20.039 3.586 20.414 C 3.961 20.789 4.47 21 5 21 L 8 21"/><path d="M 8 3 L 5 3 C 4.47 3 3.961 3.211 3.586 3.586 C 3.211 3.961 3 4.47 3 5 L 3 8 M 21 8 L 21 5 C 21 4.47 20.789 3.961 20.414 3.586 C 20.039 3.211 19.53 3 19 3 L 16 3 M 16 21 L 19 21 C 19.53 21 20.039 20.789 20.414 20.414 C 20.789 20.039 21 19.53 21 19 L 21 16"/></symbol>
+    <symbol id="ic-smartphone" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 17 2 L 7 2 C 5.895 2 5 2.895 5 4 L 5 20 C 5 21.105 5.895 22 7 22 L 17 22 C 18.105 22 19 21.105 19 20 L 19 4 C 19 2.895 18.105 2 17 2 Z"/><path d="M 12 18 L 12.01 18"/></symbol>
+    <symbol id="ic-bell" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 22 17 L 2 17 C 2.796 17 3.559 16.684 4.121 16.121 C 4.684 15.559 5 14.796 5 14 L 5 9 C 5 7.143 5.737 5.363 7.05 4.05 C 8.363 2.737 10.143 2 12 2 C 13.857 2 15.637 2.737 16.95 4.05 C 18.263 5.363 19 7.143 19 9 L 19 14 C 19 14.796 19.316 15.559 19.879 16.121 C 20.441 16.684 21.204 17 22 17 Z"/><path d="M 13.73 21 C 13.554 21.303 13.302 21.555 12.998 21.73 C 12.695 21.904 12.35 21.996 12 21.996 C 11.65 21.996 11.305 21.904 11.002 21.73 C 10.698 21.555 10.446 21.303 10.27 21"/></symbol>
+    <symbol id="ic-en" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 21.613 6 L 21.613 17.252 L 13.086 6 L 13.086 17.252"/><path d="M 9.129 6.05 L 3 6.05 L 3 11.651 L 3 17.252 L 9.129 17.252"/><path d="M 3 11.651 L 9.181 11.651"/></symbol>
+    <!-- ic-waffle = DS Filled/waffle-menu node 3075:61110 — exact DS export, fill="none" on symbol so stroke paths don't inherit fill -->
+    <symbol id="ic-waffle" viewBox="0 0 24 24" fill="none">
+      <path d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z" fill="currentColor"/>
+      <path d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z" fill="currentColor"/>
+      <path d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z" fill="currentColor"/>
+      <path d="M12 6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5C11 5.55228 11.4477 6 12 6Z" fill="currentColor"/>
+      <path d="M19 6C19.5523 6 20 5.55228 20 5C20 4.44772 19.5523 4 19 4C18.4477 4 18 4.44772 18 5C18 5.55228 18.4477 6 19 6Z" fill="currentColor"/>
+      <path d="M5 6C5.55228 6 6 5.55228 6 5C6 4.44772 5.55228 4 5 4C4.44772 4 4 4.44772 4 5C4 5.55228 4.44772 6 5 6Z" fill="currentColor"/>
+      <path d="M12 20C12.5523 20 13 19.5523 13 19C13 18.4477 12.5523 18 12 18C11.4477 18 11 18.4477 11 19C11 19.5523 11.4477 20 12 20Z" fill="currentColor"/>
+      <path d="M19 20C19.5523 20 20 19.5523 20 19C20 18.4477 19.5523 18 19 18C18.4477 18 18 18.4477 18 19C18 19.5523 18.4477 20 19 20Z" fill="currentColor"/>
+      <path d="M5 20C5.55228 20 6 19.5523 6 19C6 18.4477 5.55228 18 5 18C4.44772 18 4 18.4477 4 19C4 19.5523 4.44772 20 5 20Z" fill="currentColor"/>
+      <path d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5C11 5.55228 11.4477 6 12 6Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M19 6C19.5523 6 20 5.55228 20 5C20 4.44772 19.5523 4 19 4C18.4477 4 18 4.44772 18 5C18 5.55228 18.4477 6 19 6Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M5 6C5.55228 6 6 5.55228 6 5C6 4.44772 5.55228 4 5 4C4.44772 4 4 4.44772 4 5C4 5.55228 4.44772 6 5 6Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 20C12.5523 20 13 19.5523 13 19C13 18.4477 12.5523 18 12 18C11.4477 18 11 18.4477 11 19C11 19.5523 11.4477 20 12 20Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M19 20C19.5523 20 20 19.5523 20 19C20 18.4477 19.5523 18 19 18C18.4477 18 18 18.4477 18 19C18 19.5523 18.4477 20 19 20Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M5 20C5.55228 20 6 19.5523 6 19C6 18.4477 5.55228 18 5 18C4.44772 18 4 18.4477 4 19C4 19.5523 4.44772 20 5 20Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
+    <!-- ── Nav button icons ── -->
+    <symbol id="ic-home" viewBox="-1 -1 20 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 0 7 L 9 0 L 18 7 L 18 18 C 18 18.530 17.789 19.039 17.414 19.414 C 17.039 19.789 16.530 20 16 20 L 2 20 C 1.470 20 0.961 19.789 0.586 19.414 C 0.211 19.039 0 18.530 0 18 L 0 7 Z"/>
+      <path d="M 6 20 L 6 10 L 12 10 L 12 20"/>
+    </symbol>
+    <symbol id="ic-check-circle" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 20 9.086 L 20 10.006 C 19.999 12.162 19.301 14.260 18.009 15.988 C 16.718 17.715 14.903 18.978 12.835 19.590 C 10.767 20.201 8.557 20.128 6.534 19.380 C 4.512 18.633 2.785 17.252 1.611 15.443 C 0.437 13.634 -0.120 11.494 0.022 9.342 C 0.164 7.190 0.997 5.142 2.398 3.503 C 3.799 1.864 5.693 0.721 7.796 0.246 C 9.900 -0.229 12.100 -0.012 14.070 0.866"/>
+      <path d="M 20 2.006 L 10 12.016 L 7 9.016"/>
+    </symbol>
+    <symbol id="ic-battle" viewBox="-1 -1 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 18 0 L 18 5 L 7 14 L 3 18 L 0 15 L 4 11 L 13 0 L 18 0 Z"/>
+      <path d="M 2 10 L 8 16"/>
+      <path d="M 11.32 14.32 L 15 18 L 18 15 L 14.635 11.635"/>
+      <path d="M 7 2.5 L 5 0 L 0 0 L 0 5 L 3 7.5"/>
+    </symbol>
+    <symbol id="ic-book-open" viewBox="-1 -1 22 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 0 0 L 6 0 C 7.061 0 8.078 0.421 8.828 1.172 C 9.579 1.922 10 2.939 10 4 L 10 18 C 10 17.204 9.684 16.441 9.121 15.879 C 8.559 15.316 7.796 15 7 15 L 0 15 L 0 0 Z"/>
+      <path d="M 20 0 L 14 0 C 12.939 0 11.922 0.421 11.172 1.172 C 10.421 1.922 10 2.939 10 4 L 10 18 C 10 17.204 10.316 16.441 10.879 15.879 C 11.441 15.316 12.204 15 13 15 L 20 15 L 20 0 Z"/>
+    </symbol>
+    <symbol id="ic-users" viewBox="-1 -1 24 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 16 18 L 16 16 C 16 14.939 15.579 13.922 14.828 13.172 C 14.078 12.421 13.061 12 12 12 L 4 12 C 2.939 12 1.922 12.421 1.172 13.172 C 0.421 13.922 0 14.939 0 16 L 0 18"/>
+      <path d="M 8 8 C 10.209 8 12 6.209 12 4 C 12 1.791 10.209 0 8 0 C 5.791 0 4 1.791 4 4 C 4 6.209 5.791 8 8 8 Z"/>
+      <path d="M 22 18 L 22 16 C 21.999 15.114 21.704 14.253 21.161 13.552 C 20.618 12.852 19.858 12.352 19 12.130"/>
+      <path d="M 15 0.130 C 15.860 0.350 16.623 0.851 17.168 1.552 C 17.712 2.254 18.008 3.117 18.008 4.005 C 18.008 4.893 17.712 5.756 17.168 6.458 C 16.623 7.159 15.860 7.660 15 7.880"/>
+    </symbol>
+    <symbol id="ic-book" viewBox="-1 -1 18 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 0 17.5 C 0 16.837 0.263 16.201 0.732 15.732 C 1.201 15.263 1.837 15 2.5 15 L 16 15"/>
+      <path d="M 2.5 0 L 16 0 L 16 20 L 2.5 20 C 1.837 20 1.201 19.737 0.732 19.268 C 0.263 18.799 0 18.163 0 17.5 L 0 2.5 C 0 1.837 0.263 1.201 0.732 0.732 C 1.201 0.263 1.837 0 2.5 0 Z"/>
+    </symbol>
+    <symbol id="ic-achievement" viewBox="-1 -1 14 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 12 16 L 12 6 M 6 16 L 6 0 M 0 16 L 0 10"/>
+    </symbol>
+    <symbol id="ic-star" viewBox="-1 -1 22 21" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 10 0 L 13.090 6.260 L 20 7.270 L 15 12.140 L 16.180 19.020 L 10 15.770 L 3.820 19.020 L 5 12.140 L 0 7.270 L 6.910 6.260 L 10 0 Z"/>
+    </symbol>
+    <symbol id="ic-gift" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 18 10 L 18 20 L 2 20 L 2 10"/>
+      <path d="M 20 5 L 0 5 L 0 10 L 20 10 L 20 5 Z"/>
+      <path d="M 10 5 L 5.5 5 C 4.837 5 4.201 4.737 3.732 4.268 C 3.263 3.799 3 3.163 3 2.5 C 3 1.837 3.263 1.201 3.732 0.732 C 4.201 0.263 4.837 0 5.5 0 C 9 0 10 5 10 5 Z"/>
+      <path d="M 10 5 L 14.5 5 C 15.163 5 15.799 4.737 16.268 4.268 C 16.737 3.799 17 3.163 17 2.5 C 17 1.837 16.737 1.201 16.268 0.732 C 15.799 0.263 15.163 0 14.5 0 C 11 0 10 5 10 5 Z"/>
+      <path d="M 10 20 L 10 5"/>
+    </symbol>
+    <symbol id="ic-chevron-down-nav" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 7.5L10 12.5L15 7.5"/>
+    </symbol>
+    <symbol id="ic-menu" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12H21M3 6H21M3 18H21"/>
+    </symbol>
+    <symbol id="ic-heart" viewBox="0 0 22.4031 19.7318" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M 20.0413 2.36183 C 19.5305 1.85083 18.9241 1.44547 18.2566 1.16891 C 17.5892 0.892347 16.8738 0.75 16.1513 0.75 C 15.4288 0.75 14.7134 0.892347 14.0459 1.16891 C 13.3785 1.44547 12.772 1.85083 12.2613 2.36183 L 11.2013 3.42183 L 10.1413 2.36183 C 9.1096 1.33013 7.71032 0.750535 6.25129 0.750535 C 4.79226 0.750535 3.39298 1.33013 2.36129 2.36183 C 1.3296 3.39352 0.75 4.79279 0.75 6.25183 C 0.75 7.71086 1.3296 9.11013 2.36129 10.1418 L 3.42129 11.2018 L 11.2013 18.9818 L 18.9813 11.2018 L 20.0413 10.1418 C 20.5523 9.63107 20.9576 9.02464 21.2342 8.35718 C 21.5108 7.68972 21.6531 6.97431 21.6531 6.25183 C 21.6531 5.52934 21.5108 4.81393 21.2342 4.14647 C 20.9576 3.47901 20.5523 2.87258 20.0413 2.36183 Z"/>
+    </symbol>
+
+    <!-- ── Breadcrumb + panel chevron-right ── -->
+    <symbol id="ic-chevron-right-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18L15 12L9 6"/></symbol>
+    <symbol id="ic-chevron-right" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18L15 12L9 6"/></symbol>
+
+    <!-- ── Menu Bar + Panel icons — DS 3406:774 ── -->
+    <symbol id="ic-clipboard" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4H18C18.5304 4 19.0391 4.21071 19.4142 4.58579C19.7893 4.96086 20 5.46957 20 6V20C20 20.5304 19.7893 21.0391 19.4142 21.4142C19.0391 21.7893 18.5304 22 18 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V6C4 5.46957 4.21071 4.96086 4.58579 4.58579C4.96086 4.21071 5.46957 4 6 4H8M9 2H15C15.5523 2 16 2.44772 16 3V5C16 5.55228 15.5523 6 15 6H9C8.44772 6 8 5.55228 8 5V3C8 2.44772 8.44772 2 9 2Z"/></symbol>
+    <!-- ic-bar-chart-2 — DS Outline/bar-chart 2 node 1445:7814 (rectangular bars) -->
+    <symbol id="ic-bar-chart-2" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19V13C9 12.7348 8.89464 12.4804 8.70711 12.2929C8.51957 12.1054 8.26522 12 8 12H4C3.73478 12 3.48043 12.1054 3.29289 12.2929C3.10536 12.4804 3 12.7348 3 13V19C3 19.2652 3.10536 19.5196 3.29289 19.7071C3.48043 19.8946 3.73478 20 4 20M9 19C9 19.2652 8.89464 19.5196 8.70711 19.7071C8.51957 19.8946 8.26522 20 8 20H4M9 19C9 19.2652 9.10536 19.5196 9.29289 19.7071C9.48043 19.8946 9.73478 20 10 20H14C14.2652 20 14.5196 19.8946 14.7071 19.7071C14.8946 19.5196 15 19.2652 15 19M9 19V9C9 8.73478 9.10536 8.48043 9.29289 8.29289C9.48043 8.10536 9.73478 8 10 8H14C14.2652 8 14.5196 8.10536 14.7071 8.29289C14.8946 8.48043 15 8.73478 15 9V19M4 20H18M15 19C15 19.2652 15.1054 19.5196 15.2929 19.7071C15.4804 19.8946 15.7348 20 16 20H20C20.2652 20 20.5196 19.8946 20.7071 19.7071C20.8946 19.5196 21 19.2652 21 19V5C21 4.73478 20.8946 4.48043 20.7071 4.29289C20.5196 4.10536 20.2652 4 20 4H16C15.7348 4 15.4804 4.10536 15.2929 4.29289C15.1054 4.48043 15 4.73478 15 5V19Z"/></symbol>
+    <symbol id="ic-settings" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+    <symbol id="ic-x" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6L18 18"/></symbol>
+    <!-- DS Filled/check-circle node 3075:60981 — used for Quiz icon in mobile menu -->
+    <symbol id="ic-filled-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999"/>
+      <path d="M22 4L12 14.01L9 11.01"/>
+    </symbol>
+
+    <!-- logo-pandai-h = DS Logo/Pandai/Logo Horizontal node 1943:22622 — 116×28 — no clipPath (paths don't overflow viewBox) -->
+    <symbol id="logo-pandai-h" viewBox="0 0 116.479 28">
+        <path d="M22.3786 13.9871H26.8511L26.6861 14.2427C24.4175 17.7055 21.4078 20.7217 17.9353 23.0291C20.6343 20.9579 22.3786 17.6796 22.3786 13.9935V13.9871Z" fill="#95E3E6"/>
+        <path d="M26.6861 13.7346L26.8479 13.9871H22.3786C22.3786 10.0389 20.3689 6.55665 17.3366 4.53076C21.0841 6.93529 24.3042 10.1036 26.6731 13.7185L26.6861 13.7346Z" fill="#B4F3BF"/>
+        <path d="M15.6375 3.59547C14.2751 2.99353 12.7702 2.66019 11.1909 2.66019C9.23949 2.66019 7.40453 3.16828 5.80583 4.06149L3.49515 0L3.79612 0.00970874C8.38512 0.346278 12.4466 2.00647 15.6375 3.59547Z" fill="#CAFBDC"/>
+        <path d="M3.49515 0L5.80583 4.06149C2.58576 5.85761 0.330099 9.21359 0.0323639 13.1165C0.271846 8.39159 1.38511 4.07443 3.34304 0.271845L3.48544 0H3.49515Z" fill="#86D9AC"/>
+        <path d="M16.9644 23.6505C16.9223 23.6796 16.877 23.7055 16.835 23.7314L16.7476 23.7799C16.4401 23.9644 16.1295 24.1424 15.8188 24.3107C15.8091 24.3107 15.7994 24.3204 15.7896 24.3236C14.3851 24.9676 12.8285 25.3269 11.1909 25.3269C9.20712 25.3269 7.34305 24.8026 5.72492 23.8803L11.411 13.9871L16.9644 23.6505Z" fill="#76D59F"/>
+        <path d="M22.3786 13.9871V13.9935C22.3786 17.6796 20.6343 20.9579 17.9353 23.0291C17.6149 23.246 17.2913 23.4498 16.9644 23.6505L11.411 13.9871H22.3786Z" fill="#7CD988"/>
+        <path d="M22.3786 13.987H11.411L16.9029 4.25562C17.0485 4.34299 17.1909 4.43361 17.3333 4.5307C20.3657 6.55659 22.3722 10.0388 22.3754 13.987H22.3786Z" fill="#A5E695"/>
+        <path d="M16.8123 4.19737C16.8447 4.21679 16.8738 4.23621 16.9029 4.25563L11.411 13.987L5.80582 4.06145C7.40453 3.16825 9.23948 2.66016 11.1909 2.66016C12.7702 2.66016 14.2751 2.99349 15.6375 3.59543C16.0194 3.78637 16.3883 3.97407 16.7443 4.15854C16.7573 4.16501 16.7702 4.17148 16.7799 4.17796C16.7929 4.18443 16.8026 4.1909 16.8123 4.19737Z" fill="#99EBB2"/>
+        <path d="M11.411 13.9871H0V13.8835C0.00970874 13.6279 0.0194175 13.3754 0.0323625 13.123V13.1165C0.330097 9.21363 2.58576 5.85764 5.80583 4.06152L11.411 13.9871Z" fill="#66D59D"/>
+        <path d="M11.411 13.9871L5.72492 23.8803C2.50162 22.0453 0.262136 18.6408 0.0226537 14.699C0.012945 14.466 0.00647249 14.2298 0 13.9935V13.9871H11.411Z" fill="#4FBE88"/>
+        <path d="M5.72508 23.8802L3.3788 27.9935L3.23964 27.7249C1.28171 23.8414 0.200805 19.466 0.0228119 14.699C0.262294 18.6407 2.50178 22.0453 5.72508 23.8802Z" fill="#82D9DE"/>
+        <path d="M3.37864 27.9935L5.72492 23.8802C7.34304 24.8026 9.20712 25.3269 11.1909 25.3269C12.8285 25.3269 14.3851 24.9676 15.7896 24.3236C12.0453 26.3916 7.97734 27.6181 3.68932 27.9741L3.38188 28V27.9935H3.37864Z" fill="#9DE6F1"/>
+        <path d="M34.6408 23.5923V18.0227H38.9935C40.6667 18.0227 42.123 17.7476 43.3625 17.1942C44.6019 16.644 45.5534 15.8479 46.2136 14.8091C46.8738 13.7703 47.2071 12.5534 47.2071 11.1554C47.2071 9.75731 46.877 8.51783 46.2136 7.4887C45.5534 6.45957 44.6019 5.66993 43.3625 5.11653C42.123 4.56637 40.6667 4.28805 38.9935 4.28805H31.055V23.5826H34.6375L34.6408 23.5923ZM38.8285 14.9936H34.6408V7.33012H38.8285C40.3916 7.33012 41.576 7.66022 42.3851 8.32365C43.1942 8.98385 43.5987 9.93207 43.5987 11.1618C43.5987 12.3916 43.1942 13.3398 42.3851 14C41.576 14.6602 40.3916 14.9936 38.8285 14.9936Z" fill="#444A56"/>
+        <path d="M55.1974 23.7864C56.2071 23.7864 57.1327 23.6117 57.9676 23.2622C58.8026 22.9126 59.5048 22.3884 60.0744 21.6893V23.5923H63.3527V8.87381H59.9094V10.6667C59.3204 10.0227 58.6278 9.53724 57.8285 9.20715C57.0291 8.87705 56.1521 8.712 55.1974 8.712C53.7637 8.712 52.4822 9.02592 51.3527 9.65051C50.2233 10.2751 49.3398 11.1521 48.7055 12.2816C48.0712 13.411 47.754 14.7314 47.754 16.2363C47.754 17.7411 48.0712 19.0648 48.7055 20.2071C49.3398 21.3463 50.2201 22.2298 51.3527 22.8544C52.4822 23.479 53.7637 23.7929 55.1974 23.7929V23.7864ZM55.5825 20.8382C54.3139 20.8382 53.2718 20.4143 52.4531 19.5696C51.6343 18.7249 51.2265 17.6117 51.2265 16.233C51.2265 14.8544 51.6343 13.7444 52.4531 12.8965C53.2718 12.0486 54.3139 11.6279 55.5825 11.6279C56.8511 11.6279 57.8964 12.0518 58.7249 12.8965C59.5502 13.7411 59.9644 14.8544 59.9644 16.233C59.9644 17.6117 59.5502 18.7217 58.7249 19.5696C57.8997 20.4143 56.8511 20.8382 55.5825 20.8382Z" fill="#444A56"/>
+        <path d="M67.521 23.5923V16.1489C67.521 14.7152 67.89 13.6181 68.6246 12.8544C69.3592 12.0906 70.3592 11.712 71.6278 11.712C72.7476 11.712 73.6116 12.0389 74.2168 12.6893C74.822 13.3431 75.1262 14.3107 75.1262 15.5987V23.5923H78.5696V15.1586C78.5696 13.0259 78.0097 11.4175 76.89 10.3334C75.7702 9.24922 74.2815 8.70553 72.4239 8.70553C71.3398 8.70553 70.3657 8.88029 69.5016 9.2298C68.6375 9.57932 67.9223 10.0939 67.3527 10.7735V8.87058H64.0744V23.5923H67.5178H67.521Z" fill="#444A56"/>
+        <path d="M87.1003 23.7864C88.11 23.7864 89.0356 23.6117 89.8706 23.2622C90.7055 22.9126 91.4078 22.3884 91.9773 21.6893V23.5923H95.2848V4.22009H91.8414V10.6926C91.2718 10.0324 90.5825 9.53401 89.7735 9.20391C88.9644 8.87381 88.0744 8.70877 87.1003 8.70877C85.6861 8.70877 84.4142 9.02268 83.2848 9.64728C82.1553 10.2719 81.2686 11.1554 80.6246 12.2945C79.9806 13.4337 79.6602 14.7476 79.6602 16.2363C79.6602 17.7249 79.9806 19.0421 80.6246 20.191C81.2686 21.3398 82.1553 22.2266 83.2848 22.8512C84.4142 23.4758 85.6861 23.7897 87.1003 23.7897V23.7864ZM87.5113 20.8382C86.6861 20.8382 85.9417 20.6505 85.2783 20.2719C84.6181 19.8965 84.0938 19.356 83.7087 18.6602C83.3236 17.9612 83.1294 17.1521 83.1294 16.233C83.1294 15.3139 83.3236 14.5049 83.7087 13.8059C84.0938 13.1068 84.6181 12.5696 85.2783 12.1942C85.9385 11.8188 86.6828 11.6279 87.5113 11.6279C88.3398 11.6279 89.0809 11.8156 89.7443 12.1942C90.4045 12.5696 90.9288 13.1101 91.3139 13.8059C91.699 14.5049 91.8932 15.3139 91.8932 16.233C91.8932 17.1521 91.699 17.9612 91.3139 18.6602C90.9288 19.3592 90.4045 19.8965 89.7443 20.2719C89.0841 20.6473 88.3398 20.8382 87.5113 20.8382Z" fill="#444A56"/>
+        <path d="M103.809 23.7864C104.819 23.7864 105.744 23.6117 106.579 23.2622C107.414 22.9126 108.117 22.3884 108.686 21.6893V23.5923H111.964V8.87381H108.521V10.6667C107.932 10.0227 107.239 9.53724 106.44 9.20715C105.641 8.87705 104.764 8.712 103.809 8.712C102.375 8.712 101.094 9.02592 99.9644 9.65051C98.835 10.2751 97.9515 11.1521 97.3171 12.2816C96.6828 13.411 96.3657 14.7314 96.3657 16.2363C96.3657 17.7411 96.6828 19.0648 97.3171 20.2071C97.9515 21.3463 98.8317 22.2298 99.9644 22.8544C101.094 23.479 102.375 23.7929 103.809 23.7929V23.7864ZM104.194 20.8382C102.926 20.8382 101.883 20.4143 101.065 19.5696C100.246 18.7249 99.8382 17.6117 99.8382 16.233C99.8382 14.8544 100.246 13.7444 101.065 12.8965C101.883 12.0518 102.926 11.6279 104.194 11.6279C105.463 11.6279 106.508 12.0518 107.337 12.8965C108.162 13.7411 108.576 14.8544 108.576 16.233C108.576 17.6117 108.162 18.7217 107.337 19.5696C106.511 20.4143 105.463 20.8382 104.194 20.8382Z" fill="#444A56"/>
+        <path d="M114.725 7.68288C115.22 7.68288 115.625 7.51459 115.942 7.17478C116.259 6.83498 116.417 6.4175 116.417 5.92236C116.417 5.45634 116.256 5.06799 115.932 4.76055C115.608 4.4531 115.207 4.29776 114.725 4.29776C114.243 4.29776 113.845 4.45957 113.518 4.7832C113.194 5.10682 113.032 5.50812 113.032 5.99032C113.032 6.47252 113.194 6.87381 113.518 7.19744C113.841 7.52106 114.243 7.68288 114.725 7.68288Z" fill="#444A56"/>
+        <path d="M116.479 23.6635V8.94501H113.036V23.6635H116.479Z" fill="#444A56"/>
+    </symbol>
+
+    <!-- ── Language icons — DS Outline/BM 1524:3170, Outline/Mandarin 1524:3614 ── -->
+    <symbol id="ic-bm" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12C6.42826 12 7.3185 11.6839 7.97487 11.1213C8.63125 10.5587 9 9.79565 9 9C9 8.20435 8.63125 7.44129 7.97487 6.87868C7.3185 6.31607 6.42826 6 5.5 6H2V18H5.5C6.42826 18 7.3185 17.6839 7.97487 17.1213C8.63125 16.5587 9 15.7956 9 15C9 14.2044 8.63125 13.4413 7.97487 12.8787C7.3185 12.3161 6.42826 12 5.5 12ZM5.5 12H2M12 18V6L17 15L22 6V18"/></symbol>
+    <symbol id="ic-mandarin" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.1178H11.4117M9.29405 3V5.11762C9.29405 9.79545 6.92338 13.5881 4 13.5881M5.0578 9.35284C5.0578 11.6229 8.18341 13.4907 12.1518 13.5881M12.47 21L16.7052 11.4707L20.9405 21M19.9885 18.8821H13.4238"/></symbol>
+
+    <!-- ── Download icon — DS Filled/download node 3075:61036 ── -->
+    <symbol id="ic-download" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M17 10L12 15L7 10M12 15V3"/>
+    </symbol>
+    <!-- Profile Menu icons — DS Iconography page -->
+    <symbol id="ic-user" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"/></symbol>
+    <symbol id="ic-user-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20C18 18.4087 17.3679 16.8826 16.2426 15.7574C15.1174 14.6321 13.5913 14 12 14M12 14C10.4087 14 8.88258 14.6321 7.75736 15.7574C6.63214 16.8826 6 18.4087 6 20M12 14C14.2091 14 16 12.2091 16 10C16 7.79086 14.2091 6 12 6C9.79086 6 8 7.79086 8 10C8 12.2091 9.79086 14 12 14ZM22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
+    <symbol id="ic-user-check" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M17 11L19 13L23 9M12.5 7C12.5 9.20914 10.7091 11 8.5 11C6.29086 11 4.5 9.20914 4.5 7C4.5 4.79086 6.29086 3 8.5 3C10.7091 3 12.5 4.79086 12.5 7Z"/></symbol>
+    <symbol id="ic-credit-card" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 10H23M3 4H21C22.1046 4 23 4.89543 23 6V18C23 19.1046 22.1046 20 21 20H3C1.89543 20 1 19.1046 1 18V6C1 4.89543 1.89543 4 3 4Z"/></symbol>
+    <symbol id="ic-progress-mobile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12C7 12.9889 7.29331 13.9556 7.84271 14.7779C8.39212 15.6001 9.17301 16.241 10.0866 16.6194C11.0003 16.9978 12.0056 17.0969 12.9755 16.9039C13.9454 16.711 14.8363 16.2348 15.5356 15.5355C16.2349 14.8363 16.7111 13.9454 16.904 12.9755C17.0969 12.0055 16.9979 11.0002 16.6195 10.0866C16.241 9.17295 15.6002 8.39206 14.7779 7.84265C13.9557 7.29324 12.989 7 12 7M6.29 18.957C7.405 19.8723 8.724 20.506 10.136 20.8048C11.547 21.1036 13.01 21.0588 14.4 20.674C15.79 20.2893 17.068 19.5759 18.125 18.594C19.182 17.6122 19.987 16.3906 20.474 15.0322C20.96 13.6739 21.112 12.2186 20.918 10.789C20.724 9.35947 20.189 7.99752 19.358 6.81797C18.528 5.63842 17.425 4.67585 16.145 4.01139C14.864 3.34693 13.443 3 12 3M11 12C11 12.2652 11.1054 12.5196 11.293 12.7071C11.4805 12.8946 11.7348 13 12 13C12.2652 13 12.5196 12.8946 12.7071 12.7071C12.8946 12.5196 13 12.2652 13 12C13 11.7348 12.8946 11.4804 12.7071 11.2929C12.5196 11.1054 12.2652 11 12 11C11.7348 11 11.4805 11.1054 11.293 11.2929C11.1054 11.4804 11 11.7348 11 12Z"/></symbol>
+    <symbol id="ic-life-buoy" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.93 4.93L9.17 9.17M14.83 14.83L19.07 19.07M19.07 4.93L14.83 9.17L18.36 5.64M4.93 19.07L9.17 14.83M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z"/></symbol>
+    <symbol id="ic-power" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64C19.6184 7.89879 20.4753 9.50244 20.8223 11.2482C21.1693 12.9939 20.9909 14.8034 20.3096 16.4478C19.6284 18.0921 18.4748 19.4976 16.9948 20.4864C15.5148 21.4752 13.7749 22.0029 11.995 22.0029C10.2151 22.0029 8.47515 21.4752 6.99517 20.4864C5.51519 19.4976 4.36164 18.0921 3.68036 16.4478C2.99909 14.8034 2.82069 12.9939 3.16772 11.2482C3.51475 9.50244 4.37162 7.89879 5.63 6.64M12 2V12"/></symbol>
+    <symbol id="ic-check-sm" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17L4 12"/></symbol>
+    <symbol id="ic-filled-star" viewBox="-1 -1 26 26" fill="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <!-- Achievement subtopic icons -->
+    <symbol id="ic-pie-chart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(0.5,2)"><path d="M19.21 13.89C18.57 15.39 17.58 16.72 16.31 17.75C15.05 18.78 13.55 19.49 11.94 19.8C10.34 20.12 8.68 20.04 7.12 19.57C5.56 19.1 4.13 18.26 2.97 17.11C1.81 15.96 0.95 14.54 0.46 12.98C-0.03 11.43-0.13 9.77 0.17 8.16C0.47 6.56 1.16 5.05 2.17 3.77C3.19 2.49 4.5 1.48 6 0.83M20 10C20 8.69 19.74 7.39 19.24 6.17C18.74 4.96 18 3.86 17.07 2.93C16.14 2 15.04 1.26 13.83 0.76C12.61 0.26 11.31 0 10 0L10 10L20 10Z"/></g></symbol>
+    <symbol id="ic-calendar" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(3,2)"><path d="M16 2L2 2C0.9 2 0 2.9 0 4L0 18C0 19.1 0.9 20 2 20L16 20C17.1 20 18 19.1 18 18L18 4C18 2.9 17.1 2 16 2ZM13 0L13 4M5 0L5 4M0 8L18 8"/></g></symbol>
+    <symbol id="ic-shield" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(4,2)"><path d="M8 20C8 20 16 16 16 10L16 3L8 0L0 3L0 10C0 16 8 20 8 20Z"/></g></symbol>
+    <symbol id="ic-award" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(5,1)"><path d="M7 14C10.87 14 14 10.87 14 7C14 3.13 10.87 0 7 0C3.13 0 0 3.13 0 7C0 10.87 3.13 14 7 14ZM3.21 12.89L2 22L7 19L12 22L10.79 12.88"/></g></symbol>
+    <symbol id="ic-flag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(4,2)"><path d="M0 13C0 13 1 12 4 12C7 12 9 14 12 14C15 14 16 13 16 13L16 1C16 1 15 2 12 2C9 2 7 0 4 0C1 0 0 1 0 1L0 13ZM0 13L0 20"/></g></symbol>
+    <symbol id="ic-certificate" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(3,4)"><path d="M9 10C9 10.8 9.32 11.56 9.88 12.12C10.44 12.68 11.2 13 12 13C12.8 13 13.56 12.68 14.12 12.12C14.68 11.56 15 10.8 15 10C15 9.2 14.68 8.44 14.12 7.88C13.56 7.32 12.8 7 12 7C11.2 7 10.44 7.32 9.88 7.88C9.32 8.44 9 9.2 9 10ZM10 12.5L10 17L12 15.5L14 17L14 12.5M7 14L2 14C1.47 14 0.96 13.79 0.59 13.41C0.21 13.04 0 12.53 0 12L0 2C0 0.9 0.9 0 2 0L16 0C16.53 0 17.04 0.21 17.41 0.59C17.79 0.96 18 1.47 18 2L18 12C18 12.35 17.91 12.7 17.73 13C17.56 13.3 17.3 13.55 17 13.73M3 4L15 4M3 7L6 7M3 10L5 10"/></g></symbol>
+    <!-- Learn subtopic icons -->
+    <symbol id="ic-folder" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,3)"><path d="M20 16C20 16.53 19.79 17.04 19.41 17.41C19.04 17.79 18.53 18 18 18L2 18C1.47 18 0.96 17.79 0.59 17.41C0.21 17.04 0 16.53 0 16L0 2C0 1.47 0.21 0.96 0.59 0.59C0.96 0.21 1.47 0 2 0L7 0L9 3L18 3C18.53 3 19.04 3.21 19.41 3.59C19.79 3.96 20 4.47 20 5L20 16Z"/></g></symbol>
+    <symbol id="ic-file-text" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(4,2)"><path d="M10 0L2 0C1.47 0 0.96 0.21 0.59 0.59C0.21 0.96 0 1.47 0 2L0 18C0 18.53 0.21 19.04 0.59 19.41C0.96 19.79 1.47 20 2 20L14 20C14.53 20 15.04 19.79 15.41 19.41C15.79 19.04 16 18.53 16 18L16 6L10 0ZM10 0L10 6L16 6M6 7L4 7M12 11L4 11M12 15L4 15"/></g></symbol>
+    <symbol id="ic-film" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,2)"><path d="M17.82 0L2.18 0C0.98 0 0 0.98 0 2.18L0 17.82C0 19.02 0.98 20 2.18 20L17.82 20C19.02 20 20 19.02 20 17.82L20 2.18C20 0.98 19.02 0 17.82 0ZM5 0L5 20M15 0L15 20M0 10L20 10M0 5L5 5M0 15L5 15M15 15L20 15M15 5L20 5"/></g></symbol>
+    <symbol id="ic-experiment" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(5.93,3)"><path d="M3.07 0L9.07 0M4.07 6L8.07 6M4.07 0L4.07 6L0.07 17C0.02 17.1 0 17.2 0 17.31C0 17.42 0.03 17.53 0.07 17.62C0.12 17.72 0.19 17.81 0.28 17.87C0.37 17.94 0.47 17.98 0.57 18L11.57 18C11.68 17.98 11.78 17.94 11.87 17.87C11.95 17.81 12.02 17.72 12.07 17.62C12.12 17.53 12.15 17.42 12.15 17.31C12.15 17.2 12.12 17.1 12.07 17L8.07 6L8.07 0"/></g></symbol>
+    <symbol id="ic-bookmark" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(5,3)"><path d="M14 18L7 13L0 18L0 2C0 1.47 0.21 0.96 0.59 0.59C0.96 0.21 1.47 0 2 0L12 0C12.53 0 13.04 0.21 13.41 0.59C13.79 0.96 14 1.47 14 2L14 18Z"/></g></symbol>
+    <!-- Class subtopic icons -->
+    <symbol id="ic-airplay" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,3)"><path d="M3 14L2 14C1.47 14 0.96 13.79 0.59 13.41C0.21 13.04 0 12.53 0 12L0 2C0 1.47 0.21 0.96 0.59 0.59C0.96 0.21 1.47 0 2 0L18 0C18.53 0 19.04 0.21 19.41 0.59C19.79 0.96 20 1.47 20 2L20 12C20 12.53 19.79 13.04 19.41 13.41C19.04 13.79 18.53 14 18 14L17 14M10 12L15 18L5 18L10 12Z"/></g></symbol>
+    <symbol id="ic-globe" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,2)"><path d="M10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20ZM10 0C12.5 2.74 13.92 6.29 14 10C13.92 13.71 12.5 17.26 10 20C7.5 17.26 6.08 13.71 6 10C6.08 6.29 7.5 2.74 10 0ZM20 10L0 10"/></g></symbol>
+    <symbol id="ic-layout" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(3,3)"><path d="M16 0L2 0C0.9 0 0 0.9 0 2L0 16C0 17.1 0.9 18 2 18L16 18C17.1 18 18 17.1 18 16L18 2C18 0.9 17.1 0 16 0ZM0 6L18 6M6 18L6 6"/></g></symbol>
+    <symbol id="ic-edit" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,2)"><path d="M18 12.66L18 18C18 18.53 17.79 19.04 17.41 19.41C17.04 19.79 16.53 20 16 20L2 20C1.47 20 0.96 19.79 0.59 19.41C0.21 19.04 0 18.53 0 18L0 4C0 3.47 0.21 2.96 0.59 2.59C0.96 2.21 1.47 2 2 2L7.34 2M16 0L20 4L10 14L6 14L6 10L16 0Z"/></g></symbol>
+    <!-- Potential subtopic icons -->
+    <symbol id="ic-sun" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(1,1)"><path d="M11 16C13.76 16 16 13.76 16 11C16 8.24 13.76 6 11 6C8.24 6 6 8.24 6 11C6 13.76 8.24 16 11 16ZM11 0L11 2M11 20L11 22M3.22 3.22L4.64 4.64M17.36 17.36L18.78 18.78M0 11L2 11M20 11L22 11M3.22 18.78L4.64 17.36M17.36 4.64L18.78 3.22"/></g></symbol>
+    <symbol id="ic-bar-chart-3" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(3,4)"><path d="M0 9C0 8.73 0.11 8.48 0.29 8.29C0.48 8.11 0.73 8 1 8L5 8C5.27 8 5.52 8.11 5.71 8.29C5.89 8.48 6 8.73 6 9L6 15C6 15.27 5.89 15.52 5.71 15.71C5.52 15.89 5.27 16 5 16L1 16C0.73 16 0.48 15.89 0.29 15.71C0.11 15.52 0 15.27 0 15L0 9ZM12 5C12 4.73 12.11 4.48 12.29 4.29C12.48 4.11 12.73 4 13 4L17 4C17.27 4 17.52 4.11 17.71 4.29C17.89 4.48 18 4.73 18 5L18 15C18 15.27 17.89 15.52 17.71 15.71C17.52 15.89 17.27 16 17 16L13 16C12.73 16 12.48 15.89 12.29 15.71C12.11 15.52 12 15.27 12 15L12 5ZM6 1C6 0.73 6.11 0.48 6.29 0.29C6.48 0.11 6.73 0 7 0L11 0C11.27 0 11.52 0.11 11.71 0.29C11.89 0.48 12 0.73 12 1L12 15C12 15.27 11.89 15.52 11.71 15.71C11.52 15.89 11.27 16 11 16L7 16C6.73 16 6.48 15.89 6.29 15.71C6.11 15.52 6 15.27 6 15L6 1ZM1 16L15 16"/></g></symbol>
+    <symbol id="ic-mortar-board" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,5)"><path d="M20 4L10 0L0 4L10 8L20 4L20 10M4 5.6L4 11C4 11.8 4.63 12.56 5.76 13.12C6.88 13.68 8.41 14 10 14C11.59 14 13.12 13.68 14.24 13.12C15.37 12.56 16 11.8 16 11L16 5.6"/></g></symbol>
+    <!-- Rewards subtopic icons -->
+    <symbol id="ic-stop-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,2)"><path d="M10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20ZM13 7L7 7L7 13L13 13L13 7Z"/></g></symbol>
+    <symbol id="ic-package" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,1.24)"><path d="M10.89 0.21L18.89 4.21C19.22 4.37 19.5 4.63 19.7 4.95C19.9 5.26 20 5.63 20 6L20 15.53C20 15.9 19.9 16.27 19.7 16.58C19.5 16.9 19.22 17.15 18.89 17.32L10.89 21.32C10.61 21.46 10.31 21.53 10 21.53C9.68 21.53 9.38 21.46 9.1 21.32L1.1 17.32C0.77 17.15 0.49 16.89 0.29 16.58C0.1 16.26 0 15.89 0 15.52L0 6C0 5.63 0.1 5.26 0.3 4.95C0.5 4.63 0.78 4.37 1.11 4.21L9.11 0.21C9.39 0.07 9.69 0 10 0C10.31 0 10.61 0.07 10.89 0.21ZM0.32 4.92L10 9.76L19.68 4.92M10 9.76L10 21.52M5 2.26L15 7.26"/></g></symbol>
+    <symbol id="ic-shopping-bag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(3,2)"><path d="M3 0L0 4L0 18C0 18.53 0.21 19.04 0.59 19.41C0.96 19.79 1.47 20 2 20L16 20C16.53 20 17.04 19.79 17.41 19.41C17.79 19.04 18 18.53 18 18L18 4L15 0L3 0ZM13 8C13 9.06 12.58 10.08 11.83 10.83C11.08 11.58 10.06 12 9 12C7.94 12 6.92 11.58 6.17 10.83C5.42 10.08 5 9.06 5 8M0 4L18 4"/></g></symbol>
+    <symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(1,1)"><path d="M8 21C8.55 21 9 20.55 9 20C9 19.45 8.55 19 8 19C7.45 19 7 19.45 7 20C7 20.55 7.45 21 8 21ZM19 21C19.55 21 20 20.55 20 20C20 19.45 19.55 19 19 19C18.45 19 18 19.45 18 20C18 20.55 18.45 21 19 21ZM0 0L4 0L6.68 13.39C6.77 13.85 7.02 14.26 7.39 14.56C7.75 14.85 8.21 15.01 8.68 15L18.4 15C18.87 15.01 19.33 14.85 19.69 14.56C20.06 14.26 20.31 13.85 20.4 13.39L22 5L5 5"/></g></symbol>
+    <symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(2,2)"><path d="M10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20ZM6 12C6 12 7.5 14 10 14C12.5 14 14 12 14 12M7 7L7.01 7M13 7L13.01 7"/></g></symbol>
+
+  </defs>
+</svg>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 1 — NAVBAR  DS 2339:2443
+     Desktop (≥1320px): top bar — logo + action icons + avatar
+     Tablet/Mobile (<1320px): compact top bar — logo + hamburger
+═══════════════════════════════════════════════ -->
+
+<!-- Desktop Navbar top bar  DS node 866:5576 -->
+<section id="NavBar-Desktop">
+<nav class="navbar">
+  <div class="navbar-brand">
+    <a class="navbar-logo" href="#">
+      <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/logo-mark.svg" class="navbar-logo__mark" alt="Pandai mark">
+      <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/logo-text.svg" class="navbar-logo__text" alt="Pandai">
+    </a>
+    <div class="navbar-actions">
+      <div class="navbar-action-icons">
+        <div class="navbar-action-icon"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
+        <div class="navbar-action-icon" id="maximize-btn" title="Toggle fullscreen"><svg aria-hidden="true"><use href="#ic-maximize"/></svg></div>
+        <div class="navbar-action-icon" id="download-btn" aria-haspopup="true" aria-expanded="false"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
+        <div class="navbar-action-icon" id="notif-btn" aria-haspopup="true" aria-expanded="false"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+        <div class="navbar-action-icon" id="locale-btn" aria-haspopup="true" aria-expanded="false"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
+        <div class="navbar-action-icon" id="waffle-btn" aria-haspopup="true" aria-expanded="false"><svg aria-hidden="true"><use href="#ic-waffle"/></svg></div>
+      </div>
+      <div class="navbar-avatar-wrap" id="avatar-btn" role="button" aria-haspopup="true" aria-expanded="false">
+        <div class="navbar-avatar">
+          <img src="../src/image-repo/Achievement/score.card/assets/avatar-user.png" class="navbar-avatar__img" alt="Syakila">
+        </div>
+        <span class="navbar-badge">15</span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Learn Menu 1.5 popup  DS node 3908:2462 — 3×4 grid of 12 feature items -->
+<div class="learn-menu" id="learn-menu" role="menu" aria-hidden="true">
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-live-tuition.svg" alt="Live Tuition"></div><span class="learn-menu__label">Live Tuition</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-live-help.svg" alt="Live Help"></div><span class="learn-menu__label">Live Help</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-quiz.svg" alt="Quiz"></div><span class="learn-menu__label">Quiz</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-practice.svg" alt="Practice"></div><span class="learn-menu__label">Practice</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-chapters.svg" alt="Chapters"></div><span class="learn-menu__label">Chapters</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-textbook.svg" alt="Textbooks"></div><span class="learn-menu__label">Textbooks</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-quick-notes.svg" alt="Quick Notes"></div><span class="learn-menu__label">Quick Notes</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-videos.png" alt="Videos"></div><span class="learn-menu__label">Videos</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-experiments.svg" alt="Experiments"></div><span class="learn-menu__label">Experiments</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-personality.svg" alt="Personality"></div><span class="learn-menu__label">Personality</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-university.svg" alt="University"></div><span class="learn-menu__label">University</span></div>
+  <div class="learn-menu__item" role="menuitem"><div class="learn-menu__icon"><img src="../src/image-repo/Achievement/score.card/assets/feature-rewards.svg" alt="Rewards"></div><span class="learn-menu__label">Rewards</span></div>
+</div>
+
+<!-- Profile Menu popup  DS node 3908:4194 -->
+<div class="profile-menu" id="profile-menu" role="menu" aria-hidden="true">
+  <div class="profile-menu__header">
+    <div class="profile-menu__avatar-wrap">
+      <div class="profile-menu__avatar-circle"><svg aria-hidden="true"><use href="#ic-user"/></svg></div>
+      <span class="profile-menu__num-badge">15</span>
+    </div>
+    <div class="profile-menu__user-info">
+      <div class="profile-menu__name-row">
+        <span class="profile-menu__name">Diana Adam</span>
+        <span class="profile-menu__verified"><svg aria-hidden="true"><use href="#ic-check-sm"/></svg></span>
+      </div>
+      <span class="profile-menu__handle">@dianaadam26</span>
+      <span class="profile-menu__pill">Free</span>
+    </div>
+    <a class="profile-menu__upgrade" href="#">
+      <svg aria-hidden="true"><use href="#ic-filled-star"/></svg>
+      <span class="profile-menu__upgrade-text">Upgrade to Pandai Premium</span>
+    </a>
+  </div>
+  <div class="profile-menu__menu">
+    <div class="profile-menu__item is-active" role="menuitem"><svg aria-hidden="true"><use href="#ic-user-circle"/></svg><span class="profile-menu__item-label">My Profile</span></div>
+    <div class="profile-menu__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-user-check"/></svg><span class="profile-menu__item-label">Manage Account</span></div>
+    <div class="profile-menu__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-star"/></svg><span class="profile-menu__item-label">Subscribe Pandai Premium</span></div>
+    <div class="profile-menu__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-credit-card"/></svg><span class="profile-menu__item-label">Payment History</span></div>
+    <div class="profile-menu__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-progress-mobile"/></svg><span class="profile-menu__item-label">Share My Progress</span></div>
+    <div class="profile-menu__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-gift"/></svg><span class="profile-menu__item-label">Learn and Earn</span></div>
+    <div class="profile-menu__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-life-buoy"/></svg><span class="profile-menu__item-label">Online Support</span></div>
+    <div class="profile-menu__divider" role="separator"></div>
+    <div class="profile-menu__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-power"/></svg><span class="profile-menu__item-label">Log Out</span></div>
+  </div>
+</div>
+
+<!-- Language Dropdown  DS node 3928:3067 -->
+<div class="locale-dropdown" id="locale-dropdown" role="menu" aria-hidden="true">
+  <div class="locale-dropdown__item" role="menuitem">Bahasa Melayu</div>
+  <div class="locale-dropdown__item is-active" role="menuitem">English</div>
+  <div class="locale-dropdown__item" role="menuitem">Chinese</div>
+</div>
+
+<!-- Notification Dropdown  DS node 3908:13101 -->
+<div class="notif-dropdown" id="notif-dropdown" role="menu" aria-hidden="true">
+  <div class="notif-item" role="menuitem">
+    <div class="notif-item__inner">
+      <div class="notif-item__avatar"><svg aria-hidden="true"><use href="#ic-user-circle"/></svg></div>
+      <div class="notif-item__texts">
+        <p class="notif-item__text">This will be the reminder on this notification menu...</p>
+        <span class="notif-item__time">6 Days Ago...</span>
+      </div>
+      <div class="notif-item__dot"></div>
+    </div>
+  </div>
+  <div class="notif-item" role="menuitem">
+    <div class="notif-item__inner">
+      <div class="notif-item__avatar"><svg aria-hidden="true"><use href="#ic-user-circle"/></svg></div>
+      <div class="notif-item__texts">
+        <p class="notif-item__text">This will be the reminder on this notification menu...</p>
+        <span class="notif-item__time">6 Days Ago...</span>
+      </div>
+      <div class="notif-item__dot"></div>
+    </div>
+  </div>
+  <div class="notif-item" role="menuitem">
+    <div class="notif-item__inner">
+      <div class="notif-item__avatar"><svg aria-hidden="true"><use href="#ic-user-circle"/></svg></div>
+      <div class="notif-item__texts">
+        <p class="notif-item__text">This will be the reminder on this notification menu...</p>
+        <span class="notif-item__time">6 Days Ago...</span>
+      </div>
+      <div class="notif-item__dot"></div>
+    </div>
+  </div>
+  <div class="notif-item" role="menuitem">
+    <div class="notif-item__inner">
+      <div class="notif-item__avatar"><svg aria-hidden="true"><use href="#ic-user-circle"/></svg></div>
+      <div class="notif-item__texts">
+        <p class="notif-item__text">This will be the reminder on this notification menu...</p>
+        <span class="notif-item__time">6 Days Ago...</span>
+      </div>
+      <div class="notif-item__dot"></div>
+    </div>
+  </div>
+  <button class="notif-dropdown__cta" type="button">See all notification</button>
+</div>
+
+<!-- Download Apps Dropdown  DS node 3909:3059 -->
+<div class="download-dropdown" id="download-dropdown" role="menu" aria-hidden="true">
+  <a class="download-dropdown__item" href="#" role="menuitem">
+    <img src="../src/image-repo/Achievement/score.card/assets/icon-playstore.png" alt="Google Play" width="24" height="24">
+    <span class="download-dropdown__item-label">Google Android</span>
+  </a>
+  <a class="download-dropdown__item" href="#" role="menuitem">
+    <img src="../src/image-repo/Achievement/score.card/assets/icon-appstore.png" alt="App Store" width="24" height="24">
+    <span class="download-dropdown__item-label">Apple iOS</span>
+  </a>
+  <a class="download-dropdown__item" href="#" role="menuitem">
+    <img src="../src/image-repo/Achievement/score.card/assets/icon-appgallery.png" alt="Huawei AppGallery" width="24" height="24">
+    <span class="download-dropdown__item-label">Huawei</span>
+  </a>
+</div>
+
+</section><!-- end NavBar-Desktop -->
+
+<!-- Tablet/Mobile Navbar top bar  DS node 1943:22641 -->
+<section id="NavBar-Tablet">
+  <div class="navbar-mobile">
+    <a class="navbar-mobile__logo" href="#">
+      <svg aria-label="Pandai" role="img"><use href="#logo-pandai-h"/></svg>
+    </a>
+    <button class="navbar-mobile__menu-btn" id="hamburger-btn" aria-label="Open menu" aria-expanded="false" type="button">
+      <svg aria-hidden="true"><use href="#ic-menu"/></svg>
+    </button>
+  </div>
+</section><!-- end NavBar-Tablet -->
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 2 — MENU BAR  DS 3406:774
+     Desktop (≥1320px): pill nav row — all nav items
+     Tablet/Mobile (<1320px): slide-in panel (hamburger triggers)
+     Mobile (≤767px): + fixed bottom tab bar
+═══════════════════════════════════════════════ -->
+
+<!-- Desktop Menu Bar pill row  DS node 3406:789 — Achievement active -->
+<section id="MenuBar-Desktop">
+<nav class="navbar">
+  <div class="menubar-nav">
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="home"><svg aria-hidden="true"><use href="#ic-home"/></svg></div></div>
+        <span class="nav-btn__label">Home</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div></div>
+        <span class="nav-btn__label">Quiz</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="battle"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div></div>
+        <span class="nav-btn__label">Battle</span>
+      </div>
+    </div>
+
+    <div class="nav-btn">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="practice"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div></div>
+        <span class="nav-btn__label">Practice</span>
+      </div>
+    </div>
+
+    <div class="nav-btn" id="class-nav-btn" aria-haspopup="true" aria-expanded="false">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="class"><svg aria-hidden="true"><use href="#ic-users"/></svg></div></div>
+        <span class="nav-btn__label">Class</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <div class="nav-btn" id="learn-nav-btn" aria-haspopup="true" aria-expanded="false">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="learn"><svg aria-hidden="true"><use href="#ic-book"/></svg></div></div>
+        <span class="nav-btn__label">Learn</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <!-- Achievement — active (is-active) — DS node 3406:810 uses Outline/bar-chart-2 -->
+    <div class="nav-btn is-active" id="achievement-nav-btn" aria-haspopup="true" aria-expanded="false">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="achievement"><svg aria-hidden="true"><use href="#ic-bar-chart-2"/></svg></div></div>
+        <span class="nav-btn__label">Achievement</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <div class="nav-btn" id="potential-nav-btn" aria-haspopup="true" aria-expanded="false">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip" data-icon="potential"><svg aria-hidden="true"><use href="#ic-star"/></svg></div></div>
+        <span class="nav-btn__label">Potential</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+    <div class="nav-btn" id="rewards-nav-btn" aria-haspopup="true" aria-expanded="false">
+      <div class="nav-btn__inner">
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div></div>
+        <span class="nav-btn__label">Rewards</span>
+        <div class="nav-btn__icon-wrap"><div class="nav-btn__icon-clip nav-btn__chevron-clip"><svg aria-hidden="true"><use href="#ic-chevron-down-nav"/></svg></div></div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<!-- Class Subtopic dropdown  DS node 4753:69867 -->
+<div class="nav-subtopic-dropdown" id="class-dropdown" role="menu" aria-hidden="true">
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-airplay"/></svg><span class="nav-subtopic-dropdown__item-label">My Classes</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-globe"/></svg><span class="nav-subtopic-dropdown__item-label">Browse Classes</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-layout"/></svg><span class="nav-subtopic-dropdown__item-label">Timetable</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-edit"/></svg><span class="nav-subtopic-dropdown__item-label">Assignments</span></div>
+</div>
+
+<!-- Learn Subtopic dropdown  DS node 4753:69817 -->
+<div class="nav-subtopic-dropdown" id="learn-dropdown" role="menu" aria-hidden="true">
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-folder"/></svg><span class="nav-subtopic-dropdown__item-label">Learning Hub</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-file-text"/></svg><span class="nav-subtopic-dropdown__item-label">Quick Notes</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-film"/></svg><span class="nav-subtopic-dropdown__item-label">Videos</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-experiment"/></svg><span class="nav-subtopic-dropdown__item-label">Experiments</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-book"/></svg><span class="nav-subtopic-dropdown__item-label">Textbooks</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-bookmark"/></svg><span class="nav-subtopic-dropdown__item-label">Bookmarks</span></div>
+</div>
+
+<!-- Achievement Subtopic dropdown  DS node 4742:74267 -->
+<div class="nav-subtopic-dropdown" id="achievement-dropdown" role="menu" aria-hidden="true">
+  <a class="nav-subtopic-dropdown__item" href="achievement-score-card.html" role="menuitem"><svg aria-hidden="true"><use href="#ic-pie-chart"/></svg><span class="nav-subtopic-dropdown__item-label">Score Card</span></a>
+  <a class="nav-subtopic-dropdown__item" href="achievement-report-card.html" role="menuitem"><svg aria-hidden="true"><use href="#ic-filled-check-circle"/></svg><span class="nav-subtopic-dropdown__item-label">Report Card</span></a>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-calendar"/></svg><span class="nav-subtopic-dropdown__item-label">History</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-shield"/></svg><span class="nav-subtopic-dropdown__item-label">Badges</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-award"/></svg><span class="nav-subtopic-dropdown__item-label">Leaderboard</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-flag"/></svg><span class="nav-subtopic-dropdown__item-label">School Leaderboard</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-certificate"/></svg><span class="nav-subtopic-dropdown__item-label">Certificates</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-progress-mobile"/></svg><span class="nav-subtopic-dropdown__item-label">Goals &amp; Rewards</span></div>
+</div>
+
+<!-- Potential Subtopic dropdown  DS node 4753:69767 -->
+<div class="nav-subtopic-dropdown" id="potential-dropdown" role="menu" aria-hidden="true">
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-sun"/></svg><span class="nav-subtopic-dropdown__item-label">Personality Test</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-bar-chart-3"/></svg><span class="nav-subtopic-dropdown__item-label">Competition</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-mortar-board"/></svg><span class="nav-subtopic-dropdown__item-label">University Matching</span></div>
+</div>
+
+<!-- Rewards Subtopic dropdown  DS node 4753:70068 -->
+<div class="nav-subtopic-dropdown" id="rewards-dropdown" role="menu" aria-hidden="true">
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-stop-circle"/></svg><span class="nav-subtopic-dropdown__item-label">Coin Quests</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-package"/></svg><span class="nav-subtopic-dropdown__item-label">My Rewards</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-shopping-bag"/></svg><span class="nav-subtopic-dropdown__item-label">Merchandise</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-shopping-cart"/></svg><span class="nav-subtopic-dropdown__item-label">eVoucher</span></div>
+  <div class="nav-subtopic-dropdown__item" role="menuitem"><svg aria-hidden="true"><use href="#ic-smile"/></svg><span class="nav-subtopic-dropdown__item-label">Avatar</span></div>
+</div>
+
+</section><!-- end MenuBar-Desktop -->
+
+<!-- Slide-in panel — Tablet (3427:2184) + Mobile (3427:2442) -->
+<div id="MenuBar-Panel" class="menubar-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Navigation menu">
+  <div class="menubar-panel">
+
+    <!-- Header: Logo + Close -->
+    <div class="menubar-panel__header">
+      <svg class="menubar-panel__logo" aria-label="Pandai" role="img"><use href="#logo-pandai-h"/></svg>
+      <button class="menubar-panel__close" id="menubar-close-btn" aria-label="Close menu" type="button">
+        <svg aria-hidden="true"><use href="#ic-x"/></svg>
+      </button>
+    </div>
+
+    <!-- Search bar -->
+    <div class="menubar-panel__search" role="search">
+      <span style="flex:1;color:var(--text-disabled-default)">Search</span>
+      <svg aria-hidden="true"><use href="#ic-search"/></svg>
+    </div>
+
+    <!-- Nav items — 2 cols (tablet) / 1 col (mobile) -->
+    <div class="menubar-panel__menu">
+      <div class="menubar-panel__col">
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-home"/></svg>          <span class="panel-item__label">Home</span>        </div>
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-filled-check-circle"/></svg>          <span class="panel-item__label">Quiz</span>        </div>
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-battle"/></svg>          <span class="panel-item__label">Battle</span>        </div>
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-clipboard"/></svg>          <span class="panel-item__label">Practice</span>        </div>
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-users"/></svg>          <span class="panel-item__label">Class</span>
+          <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+        </div>
+      </div>
+      <div class="menubar-panel__divider" aria-hidden="true"></div>
+      <div class="menubar-panel__col">
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-book"/></svg>          <span class="panel-item__label">Learn</span>
+          <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+        </div>
+        <!-- Achievement — active on this page -->
+        <div class="panel-item is-active">
+          <svg aria-hidden="true"><use href="#ic-bar-chart-2"/></svg>          <span class="panel-item__label">Achievement</span>
+          <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+        </div>
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-star"/></svg>          <span class="panel-item__label">Potential</span>
+          <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+        </div>
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-gift"/></svg>          <span class="panel-item__label">Rewards</span>
+          <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+        </div>
+        <div class="panel-item">
+          <svg aria-hidden="true"><use href="#ic-settings"/></svg>          <span class="panel-item__label">My Account</span>
+          <svg class="panel-item__chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer CTA: Notification + Download App -->
+    <div class="menubar-panel__footer">
+      <div class="menubar-panel__cta">
+        <div class="panel-cta-notif">
+          <svg aria-hidden="true"><use href="#ic-bell"/></svg>
+          <span>Notification</span>
+        </div>
+        <button class="panel-cta-download" type="button">
+          <div class="panel-cta-download__content">
+            <div class="panel-cta-download__icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
+            <span class="panel-cta-download__label">Download App</span>
+          </div>
+          <div class="panel-cta-download__arrow">
+            <svg aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+          </div>
+        </button>
+      </div>
+      <!-- Localization row — DS Outline/EN 1104:2538, Outline/BM 1524:3170, Outline/Mandarin 1524:3614 -->
+      <div class="menubar-panel__localization">
+        <svg aria-hidden="true"><use href="#ic-en"/></svg>
+        <svg aria-hidden="true"><use href="#ic-bm"/></svg>
+        <svg aria-hidden="true"><use href="#ic-mandarin"/></svg>
+      </div>
+    </div>
+
+  </div>
+</div><!-- end MenuBar-Panel -->
+
+<!-- Mobile bottom tab bar  DS node 3406:734 — shown ≤767px -->
+<section id="NavBar-Mobile-Bottom">
+  <nav class="mobile-bottom-nav" aria-label="Bottom navigation">
+    <div class="mobile-nav-tab">
+      <svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+      Quiz
+    </div>
+    <div class="mobile-nav-tab">
+      <svg aria-hidden="true"><use href="#ic-clipboard"/></svg>
+      Practice
+    </div>
+    <div class="mobile-nav-tab is-active">
+      <svg aria-hidden="true"><use href="#ic-bar-chart-2"/></svg>
+      Score
+    </div>
+    <div class="mobile-nav-tab" id="account-tab-btn">
+      <svg aria-hidden="true"><use href="#ic-menu"/></svg>
+      Account
+    </div>
+  </nav>
+</section><!-- end NavBar-Mobile-Bottom -->
+
+
+<!-- ═══════════════════════════════════════════════
+     PAGE CONTENT
+═══════════════════════════════════════════════ -->
+<main class="pd-page">
+
+  <!-- ── BREADCRUMBS  DS 3282:68210 ── -->
+  <section id="Breadcrumbs-Desktop">
+    <div class="pd-breadcrumbs15">
+      <h1 id="an-breadcrumb-title" class="pd-breadcrumbs__title">Analysis for Bahasa Melayu Form 5</h1>
+      <div class="pd-breadcrumbs__sep"></div>
+      <div class="pd-breadcrumbs__links">
+
+        <!-- Level 1: Achievement — Icon Left=true (achievement icon) + text + Icon Right=true (chevron) -->
+        <button class="pd-link15" type="button">
+          <svg class="pd-link15__icon-home" aria-hidden="true"><use href="#ic-bar-chart-2"/></svg>
+          <span class="pd-link15__text pd-link15__text--parent">Achievement</span>
+          <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
+        </button>
+
+        <!-- Level 2: Report Card — Icon Left=false + text + Icon Right=true (chevron) -->
+        <button class="pd-link15" id="bc-report-card" type="button">
+          <span class="pd-link15__text pd-link15__text--parent">Report Card for Form 5</span>
+          <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
+        </button>
+
+        <!-- Level 3: Bahasa Melayu — State=Active, Icon Left=false, Icon Right=false -->
+        <span class="pd-link15" style="cursor:default">
+          <span id="an-breadcrumb-subject" class="pd-link15__text">Bahasa Melayu</span>
+        </span>
+
+      </div>
+    </div>
+  </section><!-- end Breadcrumbs -->
+
+
+  <!-- ═══════════════════════════════════════════════
+       ANALYSIS CARD  DS node 3282:68739
+       Outer: bg #e8fbe8, border green, r-24px, p-16px
+  ═══════════════════════════════════════════════ -->
+  <section id="AnalysisCard-Desktop">
+    <div class="an-outer">
+
+      <!-- ── HEADER: Subject badge + Download button ── -->
+      <div class="an-header">
+
+        <!-- Subject Badge BM — L size (32px)
+             DS: Subject Badge/Bahasa Melayu - L, border #2e4799 bg #4d77ff -->
+        <div id="an-badge" class="an-subject-badge">
+          <div class="an-subject-badge__icon">
+            <img id="an-badge-icon" src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-bmelayu.svg" alt="Bahasa Melayu" width="20" height="20">
+          </div>
+          <div id="an-badge-label" class="an-subject-badge__label">
+            <svg class="an-subject-badge__pointer" width="4" height="8" viewBox="0 0 4 8" fill="white" aria-hidden="true">
+              <path d="M 0 0 L 4 4 L 0 8 Z"/>
+            </svg>
+            Bahasa Melayu
+          </div>
+        </div>
+
+        <!-- Download button — Secondary style, 32px -->
+        <button class="an-download-btn" type="button">
+          <svg aria-hidden="true"><use href="#ic-download"/></svg>
+          Download
+        </button>
+
+      </div><!-- /an-header -->
+
+
+      <!-- ── CONTENT AREA: analytics + topics + table ── -->
+      <div class="an-content">
+
+        <!-- ══ ANALYTICS INNER CARD
+             DS: white bg, border #d9d9d9, r-18px, pt-28 px-60 pb-54
+        ══ -->
+        <div class="an-analytics-card">
+          <div class="an-analytics-row">
+
+            <!-- GRADE SECTION (195px, flex-col gap-16px) -->
+            <div class="an-grade">
+              <!-- "A 97%" — A is Bold 56px, 97% is Regular 56px, both #404040 -->
+              <div class="an-grade__title-row">
+                <span id="an-grade-letter" class="an-grade__letter">A</span>
+                <span id="an-grade-pct" class="an-grade__pct">97%</span>
+              </div>
+              <!-- Details: mastery pill + stats — grouped so mobile can flip to row layout -->
+              <div class="an-grade__details">
+                <span id="an-mastery-pill" class="an-mastery-pill">Mastery</span>
+                <p class="an-grade__stat">555 Questions Answered</p>
+                <p class="an-grade__stat">70 Set Submitted</p>
+              </div>
+            </div><!-- /an-grade -->
+
+            <!-- DONUT PAIRS (flex-1, 2 equal cols) -->
+            <div class="an-donut-pairs">
+
+              <!-- ── Difficulty Level: donut + legend ── -->
+              <div class="an-donut-col">
+
+                <!-- Progress Wheel — 3 concentric rings
+                     Outer(r=84) = Easy 100% green
+                     Middle(r=63) = Medium 82% orange
+                     Inner(r=42) = Hard 75% red
+                     Grey tracks beneath each colored arc
+                     All arcs rotate from -90° (12 o'clock)
+                -->
+                <div class="an-donut-wrap">
+                  <svg viewBox="0 0 210 210" width="210" height="210" aria-label="Result by Difficulty Level: Easy 100%, Medium 82%, Hard 75%">
+                    <!-- Grey tracks (full 360°) -->
+                    <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="63" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="42" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <!-- Easy  — outer ring, green, 90% — C=527.8, offset=52.8 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="84" fill="none" stroke="#00cc85" stroke-width="16"
+                      stroke-dasharray="527.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:527.8;--offset:52.8"/>
+                    <!-- Medium — middle ring, orange, 82% — C=395.8, offset=71.2 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="63" fill="none" stroke="#ff9f43" stroke-width="16"
+                      stroke-dasharray="395.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:395.8;--offset:71.2;animation-delay:0.1s"/>
+                    <!-- Hard   — inner ring, red, 75% — C=263.9, offset=66.0 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="42" fill="none" stroke="#ff4c51" stroke-width="16"
+                      stroke-dasharray="263.9" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:263.9;--offset:66.0;animation-delay:0.2s"/>
+                    <!-- Hit areas — transparent wide strokes, one per ring, no fill overlap -->
+                    <circle class="an-ring-hit" cx="105" cy="105" r="84" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="63" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="42" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <!-- Per-ring labels (JS shows one at a time) -->
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#00cc85">90%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff9f43">82%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff4c51">75%</text>
+                  </svg>
+                </div>
+
+                <!-- Legend for Difficulty Level -->
+                <div class="an-legend">
+                  <p class="an-legend__title">Result by Difficulty&nbsp;Level</p>
+                  <div class="an-legend__rows">
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill an-legend__pill--easy">Easy</span>
+                      <span class="an-legend__value">90%</span>
+                    </div>
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill an-legend__pill--medium">Medium</span>
+                      <span class="an-legend__value">82%</span>
+                    </div>
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill an-legend__pill--hard">Hard</span>
+                      <span class="an-legend__value">75%</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div><!-- /Difficulty Level col -->
+
+              <!-- ── Thinking Skills: donut + legend ── -->
+              <div class="an-donut-col">
+
+                <!-- Progress Wheel — 3 concentric rings
+                     Outer(r=84) = LOTS 80% green
+                     Middle(r=63) = MOTS 75% orange
+                     Inner(r=42) = HOTS 100% red
+                -->
+                <div class="an-donut-wrap">
+                  <svg viewBox="0 0 210 210" width="210" height="210" aria-label="Result by Thinking Skills: LOTS 80%, MOTS 75%, HOTS 100%">
+                    <!-- Grey tracks -->
+                    <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="63" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="42" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <!-- LOTS  — outer ring, green, 80% — C=527.8, offset=105.6 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="84" fill="none" stroke="#00cc85" stroke-width="16"
+                      stroke-dasharray="527.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:527.8;--offset:105.6"/>
+                    <!-- MOTS — middle ring, orange, 75% — C=395.8, offset=99.0 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="63" fill="none" stroke="#ff9f43" stroke-width="16"
+                      stroke-dasharray="395.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:395.8;--offset:99.0;animation-delay:0.1s"/>
+                    <!-- HOTS — inner ring, red, 90% — C=263.9, offset=26.4 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="42" fill="none" stroke="#ff4c51" stroke-width="16"
+                      stroke-dasharray="263.9" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:263.9;--offset:26.4;animation-delay:0.2s"/>
+                    <!-- Hit areas — transparent wide strokes, one per ring -->
+                    <circle class="an-ring-hit" cx="105" cy="105" r="84" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="63" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="42" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <!-- Per-ring labels (JS shows one at a time) -->
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#00cc85">80%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff9f43">75%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff4c51">90%</text>
+                  </svg>
+                </div>
+
+                <!-- Legend for Thinking Skills -->
+                <div class="an-legend">
+                  <p class="an-legend__title">Result by Thinking Skills</p>
+                  <div class="an-legend__rows">
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill-wrap">
+                        <span class="an-legend__pill an-legend__pill--easy">LOTS</span>
+                        <span class="an-tooltip" role="tooltip">Lower Order Thinking Skills</span>
+                      </span>
+                      <span class="an-legend__value">80%</span>
+                    </div>
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill-wrap">
+                        <span class="an-legend__pill an-legend__pill--medium">MOTS</span>
+                        <span class="an-tooltip" role="tooltip">Medium Order Thinking Skills</span>
+                      </span>
+                      <span class="an-legend__value">75%</span>
+                    </div>
+                    <div class="an-legend__row">
+                      <span class="an-legend__pill-wrap">
+                        <span class="an-legend__pill an-legend__pill--hard">HOTS</span>
+                        <span class="an-tooltip" role="tooltip">High Order Thinking Skills</span>
+                      </span>
+                      <span class="an-legend__value">90%</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div><!-- /Thinking Skills col -->
+
+            </div><!-- /an-donut-pairs -->
+
+          </div><!-- /an-analytics-row -->
+        </div><!-- /an-analytics-card -->
+
+
+        <!-- ══ TOPICS FOR IMPROVEMENT
+             SemiBold 18px, #00564c + green pills
+        ══ -->
+        <div class="an-section">
+          <p class="an-subheader">Topics for improvement</p>
+          <div class="an-pills">
+            <span class="an-pill">Kemahiran mendengar dan bertutur</span>
+            <span class="an-pill">Kemahiran membaca</span>
+            <span class="an-pill">Aspek tatabahasa</span>
+            <span class="an-pill">Kemahiran menulis</span>
+          </div>
+        </div>
+
+
+        <!-- ══ RESULT OF TOPICS
+             SemiBold 18px, #00564c + Table 1.5
+        ══ -->
+        <div class="an-section">
+          <p class="an-subheader">Result of topics</p>
+
+        <!-- Table — DS Table - 1.5
+             Outer: border #d9d9d9, r-18px, overflow-hidden
+             Cols: Chapter(100px) | Topic(flex-1) | Score(108px) | Status(242px)
+             Header: bg #f2f2f2, Medium 16px, #666
+             Body:   bg white,   Regular 14px, #666, h-56px each
+             Status: colored dot (12px) + label text
+        -->
+        <div class="an-table-outer">
+          <table class="an-table">
+            <colgroup>
+              <col class="an-col--chapter">
+              <col><!-- topic: auto-expand -->
+              <col class="an-col--score">
+              <col class="an-col--status">
+            </colgroup>
+            <thead>
+              <tr>
+                <th class="an-th an-th--chapter">Chapter</th>
+                <th class="an-th">Topic</th>
+                <th class="an-th">Score</th>
+                <th class="an-th">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1: Mastery (green dot) -->
+              <tr>
+                <td class="an-td an-td--chapter">1</td>
+                <td class="an-td">Kemahiran mendengar dan bertutur</td>
+                <td class="an-td">100%</td>
+                <td class="an-td">
+                  <div class="an-status">
+                    <span class="an-status-dot" style="background:#00cc85"></span>
+                    Mastery
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 2: Need Attention (red dot) -->
+              <tr>
+                <td class="an-td an-td--chapter">2</td>
+                <td class="an-td">Kemahiran menulis</td>
+                <td class="an-td">50%</td>
+                <td class="an-td">
+                  <div class="an-status">
+                    <span class="an-status-dot" style="background:#ff4c51"></span>
+                    Need Attention
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 3: Not Started (grey dot) -->
+              <tr>
+                <td class="an-td an-td--chapter">3</td>
+                <td class="an-td">Aspek Tatabahasa</td>
+                <td class="an-td">0%</td>
+                <td class="an-td">
+                  <div class="an-status">
+                    <span class="an-status-dot" style="background:#f2f2f2;border:1px solid #d9d9d9"></span>
+                    Not Started
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 4: Basic Understanding (orange dot) -->
+              <tr>
+                <td class="an-td an-td--chapter">4</td>
+                <td class="an-td">Aspek Seni dan Bahasa</td>
+                <td class="an-td">67%</td>
+                <td class="an-td">
+                  <div class="an-status">
+                    <span class="an-status-dot" style="background:#ff9f43"></span>
+                    Basic Understanding
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div><!-- /an-table-outer -->
+        </div><!-- /an-section result -->
+
+      </div><!-- /an-content -->
+
+    </div><!-- /an-outer -->
+  </section><!-- end AnalysisCard-Desktop -->
+
+</main>
+
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER 1.5  DS 2073:6579
+═══════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__left">
+      <span class="footer__text">&copy; 2026</span>
+      <a class="footer__link" href="#">Pandai.org</a>
+      <span class="footer__text">All Rights Reserved</span>
+    </div>
+    <div class="footer__right">
+      <span class="footer__text">Made with</span>
+      <svg class="footer__heart" aria-hidden="true"><use href="#ic-heart"/></svg>
+      <span class="footer__text">in Malaysia</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  /* ── Per-ring hover (desktop) + tap (mobile/tablet) interaction ── */
+  try {
+    document.querySelectorAll('.an-donut-wrap').forEach(wrap => {
+      const hits   = Array.from(wrap.querySelectorAll('.an-ring-hit'));
+      const labels = Array.from(wrap.querySelectorAll('.an-ring-label'));
+
+      const clearAll = () => labels.forEach(l => { l.style.opacity = '0'; });
+      const showRing = (i) => { clearAll(); labels[i].style.opacity = '1'; };
+
+      hits.forEach((hit, i) => {
+        /* Desktop: hover shows that ring's % */
+        hit.addEventListener('mouseenter', () => showRing(i));
+        hit.addEventListener('mouseleave', clearAll);
+
+        /* Mobile/tablet: tap toggles that ring's % */
+        hit.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const active = labels[i].style.opacity === '1';
+          clearAll();
+          if (!active) showRing(i);
+        });
+      });
+
+      /* Tap anywhere outside closes the label */
+      document.addEventListener('click', clearAll);
+    });
+  } catch(e) { console.warn('donut interaction error:', e); }
+
+  /* ── Action icon pressed state (Rule 39: JS mousedown, not CSS :active on div) ── */
+  document.querySelectorAll('.navbar-action-icon').forEach(icon => {
+    icon.addEventListener('mousedown',  () => icon.classList.add('is-pressed'));
+    icon.addEventListener('mouseup',    () => icon.classList.remove('is-pressed'));
+    icon.addEventListener('mouseleave', () => icon.classList.remove('is-pressed'));
+  });
+
+  /* ── Waffle button → Learn Menu popup ── */
+  (function() {
+    const waffleBtn = document.getElementById('waffle-btn');
+    const learnMenu = document.getElementById('learn-menu');
+    if (!waffleBtn || !learnMenu) return;
+
+    function openMenu() {
+      /* Right-align popup with the right edge of the waffle button */
+      const navSec  = document.getElementById('NavBar-Desktop');
+      const btnRect = waffleBtn.getBoundingClientRect();
+      const secRect = navSec.getBoundingClientRect();
+      learnMenu.style.right = Math.round(secRect.right - btnRect.right) + 'px';
+      const pm = document.getElementById('profile-menu');
+      if (pm) { pm.classList.remove('is-open'); pm.setAttribute('aria-hidden', 'true'); }
+      const ab = document.getElementById('avatar-btn');
+      if (ab) ab.setAttribute('aria-expanded', 'false');
+      const ld = document.getElementById('locale-dropdown');
+      const lb = document.getElementById('locale-btn');
+      if (ld) { ld.classList.remove('is-open'); ld.setAttribute('aria-hidden', 'true'); }
+      if (lb) { lb.classList.remove('is-active'); lb.setAttribute('aria-expanded', 'false'); }
+      const nd = document.getElementById('notif-dropdown');
+      const nb = document.getElementById('notif-btn');
+      if (nd) { nd.classList.remove('is-open'); nd.setAttribute('aria-hidden', 'true'); }
+      if (nb) { nb.classList.remove('is-active'); nb.setAttribute('aria-expanded', 'false'); }
+      const dd = document.getElementById('download-dropdown'); const db = document.getElementById('download-btn');
+      if (dd) { dd.classList.remove('is-open'); dd.setAttribute('aria-hidden', 'true'); }
+      if (db) { db.classList.remove('is-active'); db.setAttribute('aria-expanded', 'false'); }
+      learnMenu.classList.add('is-open');
+      learnMenu.setAttribute('aria-hidden', 'false');
+      waffleBtn.classList.add('is-active');
+      waffleBtn.setAttribute('aria-expanded', 'true');
+    }
+    function closeMenu() {
+      learnMenu.classList.remove('is-open');
+      learnMenu.setAttribute('aria-hidden', 'true');
+      waffleBtn.classList.remove('is-active');
+      waffleBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    waffleBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      learnMenu.classList.contains('is-open') ? closeMenu() : openMenu();
+    });
+    document.addEventListener('click', e => {
+      if (!learnMenu.contains(e.target) && e.target !== waffleBtn) closeMenu();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+    learnMenu.querySelectorAll('.learn-menu__item').forEach(item => {
+      item.addEventListener('click', () => {
+        learnMenu.querySelectorAll('.learn-menu__item').forEach(i => i.classList.remove('is-selected'));
+        item.classList.add('is-selected');
+      });
+    });
+  })();
+
+  /* ── Avatar → Profile Menu popup ── */
+  (function() {
+    const avatarBtn   = document.getElementById('avatar-btn');
+    const profileMenu = document.getElementById('profile-menu');
+    if (!avatarBtn || !profileMenu) return;
+
+    function openProfileMenu() {
+      const navSec  = document.getElementById('NavBar-Desktop');
+      const btnRect = avatarBtn.getBoundingClientRect();
+      const secRect = navSec.getBoundingClientRect();
+      profileMenu.style.right = Math.round(secRect.right - btnRect.right) + 'px';
+      const lm = document.getElementById('learn-menu');
+      const wb = document.getElementById('waffle-btn');
+      if (lm) { lm.classList.remove('is-open'); lm.setAttribute('aria-hidden', 'true'); }
+      if (wb) { wb.classList.remove('is-active'); wb.setAttribute('aria-expanded', 'false'); }
+      const ld2 = document.getElementById('locale-dropdown');
+      const lb2 = document.getElementById('locale-btn');
+      if (ld2) { ld2.classList.remove('is-open'); ld2.setAttribute('aria-hidden', 'true'); }
+      if (lb2) { lb2.classList.remove('is-active'); lb2.setAttribute('aria-expanded', 'false'); }
+      const nd2 = document.getElementById('notif-dropdown');
+      const nb2 = document.getElementById('notif-btn');
+      if (nd2) { nd2.classList.remove('is-open'); nd2.setAttribute('aria-hidden', 'true'); }
+      if (nb2) { nb2.classList.remove('is-active'); nb2.setAttribute('aria-expanded', 'false'); }
+      const dd2 = document.getElementById('download-dropdown'); const db2 = document.getElementById('download-btn');
+      if (dd2) { dd2.classList.remove('is-open'); dd2.setAttribute('aria-hidden', 'true'); }
+      if (db2) { db2.classList.remove('is-active'); db2.setAttribute('aria-expanded', 'false'); }
+      profileMenu.classList.add('is-open');
+      profileMenu.setAttribute('aria-hidden', 'false');
+      avatarBtn.setAttribute('aria-expanded', 'true');
+    }
+    function closeProfileMenu() {
+      profileMenu.classList.remove('is-open');
+      profileMenu.setAttribute('aria-hidden', 'true');
+      avatarBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    avatarBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      profileMenu.classList.contains('is-open') ? closeProfileMenu() : openProfileMenu();
+    });
+    document.addEventListener('click', e => {
+      if (!profileMenu.contains(e.target) && e.target !== avatarBtn) closeProfileMenu();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProfileMenu(); });
+
+    profileMenu.querySelectorAll('.profile-menu__item').forEach(item => {
+      item.addEventListener('click', () => {
+        profileMenu.querySelectorAll('.profile-menu__item').forEach(i => i.classList.remove('is-active'));
+        item.classList.add('is-active');
+      });
+    });
+  })();
+
+  /* ── Locale button → Language Dropdown ── */
+  (function() {
+    const localeBtn      = document.getElementById('locale-btn');
+    const localeDropdown = document.getElementById('locale-dropdown');
+    if (!localeBtn || !localeDropdown) return;
+
+    function openLocale() {
+      const navSec  = document.getElementById('NavBar-Desktop');
+      const btnRect = localeBtn.getBoundingClientRect();
+      const secRect = navSec.getBoundingClientRect();
+      localeDropdown.style.right = Math.round(secRect.right - btnRect.right) + 'px';
+      const lm = document.getElementById('learn-menu');
+      const wb = document.getElementById('waffle-btn');
+      const pm = document.getElementById('profile-menu');
+      const ab = document.getElementById('avatar-btn');
+      if (lm) { lm.classList.remove('is-open'); lm.setAttribute('aria-hidden', 'true'); }
+      if (wb) { wb.classList.remove('is-active'); wb.setAttribute('aria-expanded', 'false'); }
+      if (pm) { pm.classList.remove('is-open'); pm.setAttribute('aria-hidden', 'true'); }
+      if (ab) ab.setAttribute('aria-expanded', 'false');
+      const nd3 = document.getElementById('notif-dropdown');
+      const nb3 = document.getElementById('notif-btn');
+      if (nd3) { nd3.classList.remove('is-open'); nd3.setAttribute('aria-hidden', 'true'); }
+      if (nb3) { nb3.classList.remove('is-active'); nb3.setAttribute('aria-expanded', 'false'); }
+      const dd3 = document.getElementById('download-dropdown'); const db3 = document.getElementById('download-btn');
+      if (dd3) { dd3.classList.remove('is-open'); dd3.setAttribute('aria-hidden', 'true'); }
+      if (db3) { db3.classList.remove('is-active'); db3.setAttribute('aria-expanded', 'false'); }
+      localeDropdown.classList.add('is-open');
+      localeDropdown.setAttribute('aria-hidden', 'false');
+      localeBtn.classList.add('is-active');
+      localeBtn.setAttribute('aria-expanded', 'true');
+    }
+    function closeLocale() {
+      localeDropdown.classList.remove('is-open');
+      localeDropdown.setAttribute('aria-hidden', 'true');
+      localeBtn.classList.remove('is-active');
+      localeBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    localeBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      localeDropdown.classList.contains('is-open') ? closeLocale() : openLocale();
+    });
+    document.addEventListener('click', e => {
+      if (!localeDropdown.contains(e.target) && e.target !== localeBtn) closeLocale();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLocale(); });
+
+    localeDropdown.querySelectorAll('.locale-dropdown__item').forEach(item => {
+      item.addEventListener('click', () => {
+        localeDropdown.querySelectorAll('.locale-dropdown__item').forEach(i => i.classList.remove('is-active'));
+        item.classList.add('is-active');
+      });
+    });
+  })();
+
+  /* ── Bell button → Notification Dropdown ── */
+  (function() {
+    const notifBtn      = document.getElementById('notif-btn');
+    const notifDropdown = document.getElementById('notif-dropdown');
+    if (!notifBtn || !notifDropdown) return;
+
+    function openNotif() {
+      const navSec  = document.getElementById('NavBar-Desktop');
+      const btnRect = notifBtn.getBoundingClientRect();
+      const secRect = navSec.getBoundingClientRect();
+      notifDropdown.style.right = Math.round(secRect.right - btnRect.right) + 'px';
+      const lm = document.getElementById('learn-menu'); const wb = document.getElementById('waffle-btn');
+      const pm = document.getElementById('profile-menu'); const ab = document.getElementById('avatar-btn');
+      const ld = document.getElementById('locale-dropdown'); const lb = document.getElementById('locale-btn');
+      if (lm) { lm.classList.remove('is-open'); lm.setAttribute('aria-hidden', 'true'); }
+      if (wb) { wb.classList.remove('is-active'); wb.setAttribute('aria-expanded', 'false'); }
+      if (pm) { pm.classList.remove('is-open'); pm.setAttribute('aria-hidden', 'true'); }
+      if (ab) ab.setAttribute('aria-expanded', 'false');
+      if (ld) { ld.classList.remove('is-open'); ld.setAttribute('aria-hidden', 'true'); }
+      if (lb) { lb.classList.remove('is-active'); lb.setAttribute('aria-expanded', 'false'); }
+      const dd4 = document.getElementById('download-dropdown'); const db4 = document.getElementById('download-btn');
+      if (dd4) { dd4.classList.remove('is-open'); dd4.setAttribute('aria-hidden', 'true'); }
+      if (db4) { db4.classList.remove('is-active'); db4.setAttribute('aria-expanded', 'false'); }
+      notifDropdown.classList.add('is-open');
+      notifDropdown.setAttribute('aria-hidden', 'false');
+      notifBtn.classList.add('is-active');
+      notifBtn.setAttribute('aria-expanded', 'true');
+    }
+    function closeNotif() {
+      notifDropdown.classList.remove('is-open');
+      notifDropdown.setAttribute('aria-hidden', 'true');
+      notifBtn.classList.remove('is-active');
+      notifBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    notifBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      notifDropdown.classList.contains('is-open') ? closeNotif() : openNotif();
+    });
+    document.addEventListener('click', e => {
+      if (!notifDropdown.contains(e.target) && e.target !== notifBtn) closeNotif();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNotif(); });
+
+    /* Pressed state via mousedown/mouseup per Rule 39 */
+    notifDropdown.querySelectorAll('.notif-item').forEach(item => {
+      item.addEventListener('mousedown',  () => item.classList.add('is-pressed'));
+      item.addEventListener('mouseup',    () => item.classList.remove('is-pressed'));
+      item.addEventListener('mouseleave', () => item.classList.remove('is-pressed'));
+    });
+  })();
+
+  /* ── Smartphone button → Download Apps Dropdown  DS node 3909:3059 ── */
+  (function() {
+    const downloadBtn      = document.getElementById('download-btn');
+    const downloadDropdown = document.getElementById('download-dropdown');
+    if (!downloadBtn || !downloadDropdown) return;
+
+    function openDownload() {
+      const navSec  = document.getElementById('NavBar-Desktop');
+      const btnRect = downloadBtn.getBoundingClientRect();
+      const secRect = navSec.getBoundingClientRect();
+      downloadDropdown.style.right = Math.round(secRect.right - btnRect.right) + 'px';
+      const lm = document.getElementById('learn-menu');   const wb = document.getElementById('waffle-btn');
+      const pm = document.getElementById('profile-menu'); const ab = document.getElementById('avatar-btn');
+      const ld = document.getElementById('locale-dropdown'); const lb = document.getElementById('locale-btn');
+      const nd = document.getElementById('notif-dropdown'); const nb = document.getElementById('notif-btn');
+      if (lm) { lm.classList.remove('is-open'); lm.setAttribute('aria-hidden', 'true'); }
+      if (wb) { wb.classList.remove('is-active'); wb.setAttribute('aria-expanded', 'false'); }
+      if (pm) { pm.classList.remove('is-open'); pm.setAttribute('aria-hidden', 'true'); }
+      if (ab) ab.setAttribute('aria-expanded', 'false');
+      if (ld) { ld.classList.remove('is-open'); ld.setAttribute('aria-hidden', 'true'); }
+      if (lb) { lb.classList.remove('is-active'); lb.setAttribute('aria-expanded', 'false'); }
+      if (nd) { nd.classList.remove('is-open'); nd.setAttribute('aria-hidden', 'true'); }
+      if (nb) { nb.classList.remove('is-active'); nb.setAttribute('aria-expanded', 'false'); }
+      downloadDropdown.classList.add('is-open');
+      downloadDropdown.setAttribute('aria-hidden', 'false');
+      downloadBtn.classList.add('is-active');
+      downloadBtn.setAttribute('aria-expanded', 'true');
+    }
+    function closeDownload() {
+      downloadDropdown.classList.remove('is-open');
+      downloadDropdown.setAttribute('aria-hidden', 'true');
+      downloadBtn.classList.remove('is-active');
+      downloadBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    downloadBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      downloadDropdown.classList.contains('is-open') ? closeDownload() : openDownload();
+    });
+    document.addEventListener('click', e => {
+      if (!downloadDropdown.contains(e.target) && e.target !== downloadBtn) closeDownload();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDownload(); });
+  })();
+
+  /* ── Maximize button → Fullscreen API ── */
+  (function() {
+    const btn = document.getElementById('maximize-btn');
+    if (!btn) return;
+
+    function updateIcon() {
+      const isFs = !!document.fullscreenElement;
+      btn.classList.toggle('is-active', isFs);
+    }
+
+    btn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    document.addEventListener('fullscreenchange', updateIcon);
+  })();
+
+  /* ── Menu Bar panel toggle — hamburger (tablet) + account tab (mobile) ── */
+  (function() {
+    const overlay    = document.getElementById('MenuBar-Panel');
+    const hamburger  = document.getElementById('hamburger-btn');
+    const closeBtn   = document.getElementById('menubar-close-btn');
+    const accountTab = document.getElementById('account-tab-btn');
+
+    function openPanel() {
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      hamburger && hamburger.setAttribute('aria-expanded', 'true');
+      accountTab && accountTab.classList.add('is-active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closePanel() {
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      hamburger && hamburger.setAttribute('aria-expanded', 'false');
+      accountTab && accountTab.classList.remove('is-active');
+      document.body.style.overflow = '';
+    }
+
+    if (hamburger)  hamburger.addEventListener('click', openPanel);
+    if (accountTab) accountTab.addEventListener('click', () => {
+      overlay.classList.contains('is-open') ? closePanel() : openPanel();
+    });
+    if (closeBtn)   closeBtn.addEventListener('click', closePanel);
+    if (overlay)    overlay.addEventListener('click', e => { if (e.target === overlay) closePanel(); });
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+  })();
+
+  /* ── Subject-aware page init — reads ?subject= URL param and swaps all elements ── */
+  (function () {
+    function scoreToGrade(pct) {
+      if (pct > 90) return 'A+';
+      if (pct > 80) return 'A';
+      if (pct > 70) return 'A-';
+      if (pct > 65) return 'B+';
+      if (pct > 60) return 'B';
+      if (pct > 55) return 'C+';
+      if (pct > 50) return 'C';
+      if (pct > 45) return 'D';
+      if (pct > 40) return 'E';
+      return 'F';
+    }
+
+    var MASTERY = {
+      'A+': 'Mastery', 'A': 'Mastery', 'A-': 'Mastery',
+      'B+': 'Good',      'B': 'Good',
+      'C+': 'Satisfactory', 'C': 'Satisfactory',
+      'D':  'Minimal',
+      'E':  'Inadequate', 'F': 'Inadequate'
+    };
+
+    var MASTERY_CLASS = {
+      'Mastery':      'mastery--cemerlang',
+      'Good':         'mastery--good',
+      'Satisfactory': 'mastery--satisfactory',
+      'Minimal':      'mastery--minimal',
+      'Inadequate':   'mastery--inadequate'
+    };
+
+    var SUBJECTS = {
+      'Chinese Language': { score: 80, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chinese-lang.svg', alt: 'Chinese Language', bg: '#f94848', border: '#c73a3a', text: '#f2f2f2' },
+      'English':          { score: 90, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-english.svg',       alt: 'English',          bg: '#ff4d56', border: '#cc3e45', text: '#f2f2f2' },
+      'Bahasa Melayu':    { score: 76, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-bmelayu.svg',        alt: 'Bahasa Melayu',    bg: '#4d77ff', border: '#2e4799', text: '#f2f2f2' },
+      'Mathematics':      { score: 80, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-math.svg',           alt: 'Mathematics',      bg: '#42ac7b', border: '#358a62', text: '#f2f2f2' },
+      'Pendidikan Islam': { score: 84, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-islamic.svg',        alt: 'Pendidikan Islam', bg: '#de4d7f', border: '#b23e66', text: '#f2f2f2' },
+      'Pendidikan Moral': { score: 50, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-moral.svg',          alt: 'Pendidikan Moral', bg: '#0072ca', border: '#005ba2', text: '#f2f2f2' },
+      'Science':          { score: 85, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-science.svg',        alt: 'Science',          bg: '#ffd641', border: '#ccab34', text: '#998027' },
+      'Add Math':         { score: 72, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-add-math.svg',       alt: 'Add Math',         bg: '#283589', border: '#182052', text: '#f2f2f2' },
+      'Biology':          { score: 88, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-biology.svg',        alt: 'Biology',          bg: '#8431d8', border: '#6a27ad', text: '#f2f2f2' },
+      'Chemistry':        { score: 65, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chemistry.svg',      alt: 'Chemistry',        bg: '#e20082', border: '#b50068', text: '#f2f2f2' },
+      'Physics':          { score: 78, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-physics.svg',        alt: 'Physics',          bg: '#27a0d7', border: '#1f80ac', text: '#f2f2f2' },
+      'History':          { score: 91, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-history.svg',        alt: 'History',          bg: '#a97c50', border: '#876340', text: '#f2f2f2' },
+      'Geography':        { score: 60, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-geography.png',      alt: 'Geography',        bg: '#77d836', border: '#5fad2b', text: '#478220' },
+      'Economy':          { score: 55, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-economy.svg',        alt: 'Economy',          bg: '#ff5733', border: '#cc4629', text: '#f2f2f2' },
+      'Account':          { score: 83, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-account.svg',        alt: 'Account',          bg: '#0072ca', border: '#004479', text: '#f2f2f2' },
+      'Business':         { score: 70, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-business.svg',       alt: 'Business',         bg: '#efb42b', border: '#bf9022', text: '#f2f2f2' },
+      'Computer Science': { score: 95, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-comp-science.svg',  alt: 'Computer Science', bg: '#d10070', border: '#a7005a', text: '#f2f2f2' },
+      'KAFA':             { score: 77, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-kafa.svg',           alt: 'KAFA',             bg: '#8ae3a9', border: '#6eb687', text: '#538865' },
+      'RBT':              { score: 82, icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-rbt.svg',            alt: 'RBT',              bg: '#353535', border: '#2a2a2a', text: '#f2f2f2' }
+    };
+
+    var params  = new URLSearchParams(window.location.search);
+    var subject = params.get('subject') || 'Bahasa Melayu';
+    var d       = SUBJECTS[subject] || SUBJECTS['Bahasa Melayu'];
+    var grade   = scoreToGrade(d.score);
+    var mastery = MASTERY[grade] || 'Mastery';
+
+    // Breadcrumb
+    var titleEl   = document.getElementById('an-breadcrumb-title');
+    var subjectEl = document.getElementById('an-breadcrumb-subject');
+    if (titleEl)   titleEl.textContent = 'Analysis for ' + subject + ' Form 5';
+    if (subjectEl) subjectEl.textContent = subject;
+
+    var bcReportCard = document.getElementById('bc-report-card');
+    if (bcReportCard) bcReportCard.addEventListener('click', function() { window.location.href = 'achievement-report-card.html'; });
+
+    // Subject badge — update CSS vars + icon + label
+    var badgeEl      = document.getElementById('an-badge');
+    var badgeIconEl  = document.getElementById('an-badge-icon');
+    var badgeLabelEl = document.getElementById('an-badge-label');
+    if (badgeEl) {
+      badgeEl.style.setProperty('--badge-bg',     d.bg);
+      badgeEl.style.setProperty('--badge-border', d.border);
+      badgeEl.style.setProperty('--badge-text',   d.text || '#f2f2f2');
+    }
+    if (badgeIconEl)  { badgeIconEl.src = d.icon; badgeIconEl.alt = d.alt; }
+    if (badgeLabelEl) {
+      var ptr = badgeLabelEl.querySelector('.an-subject-badge__pointer');
+      badgeLabelEl.textContent = subject;
+      if (ptr) badgeLabelEl.insertBefore(ptr, badgeLabelEl.firstChild);
+    }
+
+    // Grade letter + percentage
+    var gradeLetterEl = document.getElementById('an-grade-letter');
+    var gradePctEl    = document.getElementById('an-grade-pct');
+    if (gradeLetterEl) gradeLetterEl.textContent = grade;
+    if (gradePctEl)    gradePctEl.textContent    = d.score + '%';
+
+    // Mastery pill — swap text + color class
+    var masteryEl = document.getElementById('an-mastery-pill');
+    if (masteryEl) {
+      masteryEl.textContent = mastery;
+      masteryEl.className   = 'an-mastery-pill ' + (MASTERY_CLASS[mastery] || '');
+    }
+  })();
+
+  /* Nav button handlers — registered before non-critical JS */
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      /* Close all subtopic dropdowns when switching nav buttons */
+      const subtopicIds = ['class-dropdown','learn-dropdown','achievement-dropdown','potential-dropdown','rewards-dropdown'];
+      const subtopicBtnIds = ['class-nav-btn','learn-nav-btn','achievement-nav-btn','potential-nav-btn','rewards-nav-btn'];
+      subtopicIds.forEach(id => { const d = document.getElementById(id); if (d) { d.classList.remove('is-open'); d.setAttribute('aria-hidden','true'); } });
+      subtopicBtnIds.forEach(id => { if (id !== btn.id) { const b = document.getElementById(id); if (b) b.setAttribute('aria-expanded','false'); } });
+    });
+    btn.addEventListener('mousedown',  () => btn.classList.add('is-pressed'));
+    btn.addEventListener('mouseup',    () => btn.classList.remove('is-pressed'));
+    btn.addEventListener('mouseleave', () => btn.classList.remove('is-pressed'));
+  });
+
+  /* ── Achievement nav btn → subtopic dropdown  DS node 4742:74267 ── */
+  (function() {
+    const achieveBtn = document.getElementById('achievement-nav-btn');
+    const dropdown   = document.getElementById('achievement-dropdown');
+    if (!achieveBtn || !dropdown) return;
+
+    function openAchieve() {
+      const navSec  = document.getElementById('MenuBar-Desktop');
+      const btnRect = achieveBtn.getBoundingClientRect();
+      const secRect = navSec.getBoundingClientRect();
+      dropdown.style.right = Math.round(secRect.right - btnRect.right) + 'px';
+      dropdown.style.left  = 'auto';
+      dropdown.style.top   = Math.round(btnRect.bottom - secRect.top + 16) + 'px';
+      dropdown.classList.add('is-open');
+      dropdown.setAttribute('aria-hidden', 'false');
+      achieveBtn.setAttribute('aria-expanded', 'true');
+    }
+    function closeAchieve() {
+      dropdown.classList.remove('is-open');
+      dropdown.setAttribute('aria-hidden', 'true');
+      achieveBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    achieveBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      dropdown.classList.contains('is-open') ? closeAchieve() : openAchieve();
+    });
+    document.addEventListener('click', e => {
+      if (!dropdown.contains(e.target) && e.target !== achieveBtn) closeAchieve();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAchieve(); });
+
+    dropdown.querySelectorAll('.nav-subtopic-dropdown__item').forEach(item => {
+      item.addEventListener('click', () => {
+        dropdown.querySelectorAll('.nav-subtopic-dropdown__item').forEach(i => i.classList.remove('is-active'));
+        item.classList.add('is-active');
+      });
+    });
+  })();
+
+  /* ── Generic helper for Class / Learn / Potential / Rewards subtopic dropdowns ── */
+  (function() {
+    const configs = [
+      { btnId: 'class-nav-btn',     ddId: 'class-dropdown'     },
+      { btnId: 'learn-nav-btn',     ddId: 'learn-dropdown'     },
+      { btnId: 'potential-nav-btn', ddId: 'potential-dropdown' },
+      { btnId: 'rewards-nav-btn',   ddId: 'rewards-dropdown'   },
+    ];
+    const allBtnIds = ['class-nav-btn','learn-nav-btn','achievement-nav-btn','potential-nav-btn','rewards-nav-btn'];
+    const allDdIds  = ['class-dropdown','learn-dropdown','achievement-dropdown','potential-dropdown','rewards-dropdown'];
+
+    function closeAll() {
+      allDdIds.forEach(id => { const d = document.getElementById(id); if (d) { d.classList.remove('is-open'); d.setAttribute('aria-hidden','true'); } });
+      allBtnIds.forEach(id => { const b = document.getElementById(id); if (b) b.setAttribute('aria-expanded','false'); });
+    }
+
+    configs.forEach(({ btnId, ddId }) => {
+      const btn = document.getElementById(btnId);
+      const dd  = document.getElementById(ddId);
+      if (!btn || !dd) return;
+
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const isOpen = dd.classList.contains('is-open');
+        closeAll();
+        if (!isOpen) {
+          const navSec  = document.getElementById('MenuBar-Desktop');
+          const btnRect = btn.getBoundingClientRect();
+          const secRect = navSec.getBoundingClientRect();
+          dd.style.right = Math.round(secRect.right - btnRect.right) + 'px';
+          dd.style.left  = 'auto';
+          dd.style.top   = Math.round(btnRect.bottom - secRect.top + 16) + 'px';
+          dd.classList.add('is-open');
+          dd.setAttribute('aria-hidden', 'false');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      dd.querySelectorAll('.nav-subtopic-dropdown__item').forEach(item => {
+        item.addEventListener('click', () => {
+          dd.querySelectorAll('.nav-subtopic-dropdown__item').forEach(i => i.classList.remove('is-active'));
+          item.classList.add('is-active');
+        });
+      });
+    });
+
+    document.addEventListener('click', e => {
+      const insideAny = allDdIds.some(id => { const d = document.getElementById(id); return d && d.contains(e.target); })
+                     || allBtnIds.some(id => document.getElementById(id) === e.target);
+      if (!insideAny) closeAll();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAll(); });
+  })();
+</script>
+
+<script>
+/* test.page.compiled — Top Menu Bar navigation + persistent active state (v5) */
+(function () {
+  var TOP_ROUTES = {
+    'Home':     'home.html',
+    'Practice': 'practice.html'
+  };
+  var SUB_ROUTES = {
+    'My Classes':       'class-my-classes.html',
+    'Browse Classes':   'class-browse-classes.html',
+    'Learning Hub':     'learn-learning-hub.html',
+    'Quick Notes':      'learn-quick-notes.html',
+    'Score Card':       'achievement-score-card.html',
+    'Report Card':      'achievement-report-card.html',
+    'Coin Quests':      'rewards-coin-quests.html',
+    'My Rewards':       'rewards-my-rewards.html',
+    'Merchandise':      'rewards-merchandise.html',
+    'eVoucher':         'rewards-evoucher.html',
+    'Avatar':           'rewards-avatar.html'
+  };
+  /* Page → parent main-menu label that should show active state */
+  var PAGE_ACTIVE_MAIN = {
+    'home.html':                          'Home',
+    'practice.html':                      'Practice',
+    'class-my-classes.html':              'Class',
+    'class-browse-classes.html':          'Class',
+    'learn-learning-hub.html':            'Learn',
+    'learn-quick-notes.html':             'Learn',
+    'learn-quick-notes-selections.html':  'Learn',
+    'learn-quick-notes-view.html':        'Learn',
+    'achievement-score-card.html':        'Achievement',
+    'achievement-report-card.html':       'Achievement',
+    'achievement-analysis-card.html':     'Achievement',
+    'rewards-coin-quests.html':           'Rewards',
+    'rewards-my-rewards.html':            'Rewards',
+    'rewards-merchandise.html':           'Rewards',
+    'rewards-evoucher.html':              'Rewards',
+    'rewards-avatar.html':                'Rewards'
+  };
+
+  var SEL_A_BTN  = '#NavTopMenu-Desktop .nav-menu-btn';
+  var SEL_A_ITEM = '#NavTopMenu-Desktop .nav-menu-dropdown__item';
+  var SEL_B_BTN  = '.navbar-nav .nav-btn, .menubar-nav .nav-btn';
+  var SEL_B_ITEM = '.nav-subtopic-dropdown__item';
+
+  function nav(href) { return function (e) { e.preventDefault(); e.stopPropagation(); window.location.href = href; }; }
+
+  function currentFile() {
+    var p = window.location.pathname.replace(/[?#].*$/, '');
+    if (p.charAt(p.length - 1) === '/') return 'home.html';
+    var f = p.substring(p.lastIndexOf('/') + 1).toLowerCase();
+    if (!f) return 'home.html';
+    if (f.indexOf('.html') < 0) f += '.html';
+    return f;
+  }
+
+  function wireLinks() {
+    document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
+      if (btn.hasAttribute('aria-haspopup')) return;
+      var href = TOP_ROUTES[(btn.getAttribute('aria-label') || '').trim()];
+      if (href && !btn.dataset.tpcWired) {
+        btn.addEventListener('click', nav(href), true);
+        btn.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_A_ITEM).forEach(function (item) {
+      var lbl = item.querySelector('.nav-menu-dropdown__label');
+      if (!lbl) return;
+      var href = SUB_ROUTES[lbl.textContent.trim()];
+      if (href && !item.dataset.tpcWired) {
+        item.addEventListener('click', nav(href), true);
+        item.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
+      if (btn.hasAttribute('aria-haspopup')) return;
+      var lbl = btn.querySelector('.nav-btn__label');
+      if (!lbl) return;
+      var href = TOP_ROUTES[lbl.textContent.trim()];
+      if (href && !btn.dataset.tpcWired) {
+        btn.addEventListener('click', nav(href), true);
+        btn.dataset.tpcWired = '1';
+      }
+    });
+    document.querySelectorAll(SEL_B_ITEM).forEach(function (item) {
+      var lbl = item.querySelector('.nav-subtopic-dropdown__item-label');
+      if (!lbl) return;
+      var href = SUB_ROUTES[lbl.textContent.trim()];
+      if (!href) return;
+      if (item.tagName === 'A') item.setAttribute('href', href);
+      if (!item.dataset.tpcWired) {
+        item.addEventListener('click', nav(href), true);
+        item.dataset.tpcWired = '1';
+      }
+    });
+  }
+
+  var applying = false;
+  function applyActive() {
+    if (applying) return;
+    applying = true;
+    try {
+      var label = PAGE_ACTIVE_MAIN[currentFile()];
+      document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
+        var match = !!(label && (btn.getAttribute('aria-label') || '').trim() === label);
+        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
+        if (match) {
+          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
+        } else if (btn.hasAttribute('aria-current')) {
+          btn.removeAttribute('aria-current');
+        }
+      });
+      document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
+        var lbl = btn.querySelector('.nav-btn__label');
+        var match = !!(label && lbl && lbl.textContent.trim() === label);
+        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
+        if (match) {
+          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
+        } else if (btn.hasAttribute('aria-current')) {
+          btn.removeAttribute('aria-current');
+        }
+      });
+    } finally {
+      applying = false;
+    }
+  }
+
+  var observing = false;
+  function startObserver() {
+    if (observing || typeof MutationObserver !== 'function') return;
+    var targets = [];
+    var a = document.getElementById('NavTopMenu-Desktop'); if (a) targets.push(a);
+    document.querySelectorAll('.navbar-nav, .menubar-nav').forEach(function (n) { targets.push(n); });
+    if (!targets.length) return;
+    /* Synchronous re-apply on every batch of mutations — runs as microtask, before paint */
+    var observer = new MutationObserver(applyActive);
+    targets.forEach(function (t) {
+      observer.observe(t, { attributes: true, subtree: true, attributeFilter: ['class', 'aria-current'] });
+    });
+    observing = true;
+  }
+
+  function init() {
+    wireLinks();
+    applyActive();
+    startObserver();
+    /* Defeat any deferred init code that re-asserts Home — multiple deferred passes */
+    [0, 50, 150, 400, 1000, 2500].forEach(function (d) { setTimeout(applyActive, d); });
+    /* 5s safety net: re-check every 250ms for 5s after load */
+    var ticks = 0;
+    var iv = setInterval(function () {
+      applyActive();
+      if (++ticks >= 20) clearInterval(iv);
+    }, 250);
+    /* Also re-apply on user interaction */
+    document.addEventListener('click',     function () { setTimeout(applyActive, 0); }, true);
+    document.addEventListener('mouseleave',function () { setTimeout(applyActive, 0); }, true);
+    document.addEventListener('mouseup',   function () { setTimeout(applyActive, 0); }, true);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+
+
+
+
+</body>
+</html>
