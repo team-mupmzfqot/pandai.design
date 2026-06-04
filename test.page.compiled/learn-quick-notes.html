@@ -93,24 +93,120 @@
       --scale-200: 8px;
 
       /* Subject Colors â€” ALL confirmed from DS get_variable_defs */
-      --subjects-b-melayu-default:   #4d77ff;   /* Subjects/b-melayu/default */
-      --subjects-english-default:    #ff4d56;   /* Subjects/english/default */
-      --subjects-math-default:       #42ac7b;   /* Subjects/math/default */
-      --subjects-science-default:    #ffd641;   /* Subjects/science/default */
-      --subjects-chemistry-default:  #e20082;   /* Subjects/chemistry/default */
-      --subjects-physics-default:    #27a0d7;   /* Subjects/physics/default */
-      --subjects-history-default:    #a97c50;   /* Subjects/history/default */
-      --subjects-geo-default:        #77d836;   /* Subjects/geo/default */
-      --subjects-islamic-default:    #de4d7f;   /* Subjects/islamic/default */
-      --subjects-moral-default:      #0072ca;   /* Subjects/moral/default */
-      --subjects-biology-default:    #8431d8;   /* Subjects/biology/default */
-      --subjects-add-math-default:   #283589;   /* Subjects/add-math/default */
-      --subjects-economy-default:    #ff5733;   /* Subjects/economy/default */
-      --subjects-account-default:    #0072ca;   /* Subjects/account/default */
-      --subjects-business-default:   #efb42b;   /* Subjects/business/default */
-      --subjects-cs-default:         #d10070;   /* Subjects/comp-science/default */
-      --subjects-kafa-default:       #8ae3a9;   /* Subjects/kafa/default */
-      --subjects-rbt-default:        #353535;   /* Subjects/rbt/default */
+      /* Subject Colors — all 5 tiers, all 19 subjects. Confirmed from DS (Subjects A–E, G–S collections) */
+      --subjects-account-default:                #0072ca;
+      --subjects-account-default-hover:          #005ba2;
+      --subjects-account-default-subtle:         #e6f1fa;
+      --subjects-account-default-subtle-hover:   #99c7ea;
+      --subjects-account-focus:                  #004479;
+
+      --subjects-add-math-default:               #283589;
+      --subjects-add-math-default-hover:         #202a6e;
+      --subjects-add-math-default-subtle:        #eaebf3;
+      --subjects-add-math-default-subtle-hover:  #a9aed0;
+      --subjects-add-math-focus:                 #182052;
+
+      --subjects-b-melayu-default:               #4d77ff;
+      --subjects-b-melayu-default-hover:         #3e5fcc;
+      --subjects-b-melayu-default-subtle:        #f6f9ff;
+      --subjects-b-melayu-default-subtle-hover:  #b8c9ff;
+      --subjects-b-melayu-focus:                 #2e4799;
+
+      --subjects-biology-default:                #8431d8;
+      --subjects-biology-default-hover:          #6a27ad;
+      --subjects-biology-default-subtle:         #f3ebfb;
+      --subjects-biology-default-subtle-hover:   #ceadef;
+      --subjects-biology-focus:                  #4f1d82;
+
+      --subjects-business-default:               #efb42b;
+      --subjects-business-default-hover:         #bf9022;
+      --subjects-business-default-subtle:        #fef8ea;
+      --subjects-business-default-subtle-hover:  #f9e1aa;
+      --subjects-business-focus:                 #8f6c1a;
+
+      --subjects-chemistry-default:              #e20082;
+      --subjects-chemistry-default-hover:        #b50068;
+      --subjects-chemistry-default-subtle:       #fce6f3;
+      --subjects-chemistry-default-subtle-hover: #ed99c6;
+      --subjects-chemistry-focus:                #88004e;
+
+      --subjects-chinese-default:                #f94848;
+      --subjects-chinese-default-hover:          #c73a3a;
+      --subjects-chinese-default-subtle:         #ffeded;
+      --subjects-chinese-default-subtle-hover:   #fdb6b6;
+      --subjects-chinese-focus:                  #952b2b;
+
+      --subjects-cs-default:                     #d10070;
+      --subjects-cs-default-hover:               #a7005a;
+      --subjects-cs-default-subtle:              #fbe6f1;
+      --subjects-cs-default-subtle-hover:        #ed99c6;
+      --subjects-cs-focus:                       #7d0043;
+
+      --subjects-economy-default:                #ff5733;
+      --subjects-economy-default-hover:          #cc4629;
+      --subjects-economy-default-subtle:         #ffeeeb;
+      --subjects-economy-default-subtle-hover:   #ffbcad;
+      --subjects-economy-focus:                  #99341f;
+
+      --subjects-english-default:                #ff4d56;
+      --subjects-english-default-hover:          #cc3e45;
+      --subjects-english-default-subtle:         #ffedee;
+      --subjects-english-default-subtle-hover:   #ffb8bb;
+      --subjects-english-focus:                  #992e34;
+
+      --subjects-geo-default:                    #77d836;
+      --subjects-geo-default-hover:              #5fad2b;
+      --subjects-geo-default-subtle:             #f2fbeb;
+      --subjects-geo-default-subtle-hover:       #c9efaf;
+      --subjects-geo-focus:                      #478220;
+
+      --subjects-history-default:                #a97c50;
+      --subjects-history-default-hover:          #876340;
+      --subjects-history-default-subtle:         #f7f2ee;
+      --subjects-history-default-subtle-hover:   #ddcbb9;
+      --subjects-history-focus:                  #654a30;
+
+      --subjects-islamic-default:                #de4d7f;
+      --subjects-islamic-default-hover:          #b23e66;
+      --subjects-islamic-default-subtle:         #fcedf2;
+      --subjects-islamic-default-subtle-hover:   #f2b8cc;
+      --subjects-islamic-focus:                  #852e4c;
+
+      --subjects-kafa-default:                   #8ae3a9;
+      --subjects-kafa-default-hover:             #6eb687;
+      --subjects-kafa-default-subtle:            #f4fcf7;
+      --subjects-kafa-default-subtle-hover:      #d0f4dd;
+      --subjects-kafa-focus:                     #538865;
+
+      --subjects-math-default:                   #42ac7b;
+      --subjects-math-default-hover:             #358a62;
+      --subjects-math-default-subtle:            #ecf7f2;
+      --subjects-math-default-subtle-hover:      #b3deca;
+      --subjects-math-focus:                     #28674a;
+
+      --subjects-moral-default:                  #0072ca;
+      --subjects-moral-default-hover:            #005ba2;
+      --subjects-moral-default-subtle:           #e6f1fa;
+      --subjects-moral-default-subtle-hover:     #99c7ea;
+      --subjects-moral-focus:                    #004479;
+
+      --subjects-physics-default:                #27a0d7;
+      --subjects-physics-default-hover:          #1f80ac;
+      --subjects-physics-default-subtle:         #eaf6fb;
+      --subjects-physics-default-subtle-hover:   #a9d9ef;
+      --subjects-physics-focus:                  #176081;
+
+      --subjects-rbt-default:                    #353535;
+      --subjects-rbt-default-hover:              #2a2a2a;
+      --subjects-rbt-default-subtle:             #d7d7d7;
+      --subjects-rbt-default-subtle-hover:       #aeaeae;
+      --subjects-rbt-focus:                      #202020;
+
+      --subjects-science-default:                #ffd641;
+      --subjects-science-default-hover:          #ccab34;
+      --subjects-science-default-subtle:         #fffbec;
+      --subjects-science-default-subtle-hover:   #ffefb3;
+      --subjects-science-focus:                  #998027;
 
       /* Typography */
       --font-family: 'Poppins', sans-serif;
@@ -2148,8 +2244,8 @@
 
     /* Header — subject colour set via inline CSS vars per card */
     .qn-card__header {
-      background:    var(--qn-subj-bg);
-      border:        1px solid var(--qn-subj-border);
+      background:    var(--qn-subj-default);
+      border:        1px solid var(--qn-subj-focus);
       border-radius: var(--corner-radius-corner-2xl);  /* 18px */
       height:        110px;
       max-height:    110px;
@@ -3447,7 +3543,7 @@
           <div class="qn-list">
 
             <!-- Quick Notes Card - 1.5 · Bahasa Melayu (DS node 3695:53094) -->
-            <div class="qn-card" style="--qn-subj-bg:#4d77ff; --qn-subj-border:#2e4799;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-b-melayu-default); --qn-subj-focus:var(--subjects-b-melayu-focus);" data-subject="Bahasa Melayu" data-icon="border-bmelayu.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3496,7 +3592,7 @@
             </div><!-- /.qn-card -->
 
             <!-- Quick Notes Card - 1.5 · Add Mathematics -->
-            <div class="qn-card" style="--qn-subj-bg:#283589; --qn-subj-border:#182052;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-add-math-default); --qn-subj-focus:var(--subjects-add-math-focus);" data-subject="Additional Mathematics" data-icon="border-addmath.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3526,7 +3622,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · Accounting -->
-            <div class="qn-card" style="--qn-subj-bg:#0072ca; --qn-subj-border:#004479;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-account-default); --qn-subj-focus:var(--subjects-account-focus);" data-subject="Accounting" data-icon="border-accounting.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3556,7 +3652,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · Biology -->
-            <div class="qn-card" style="--qn-subj-bg:#8431d8; --qn-subj-border:#6a27ad;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-biology-default); --qn-subj-focus:var(--subjects-biology-focus);" data-subject="Biology" data-icon="border-biology.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3586,7 +3682,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · Business Studies -->
-            <div class="qn-card" style="--qn-subj-bg:#efb42b; --qn-subj-border:#bf9022;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-business-default); --qn-subj-focus:var(--subjects-business-focus);" data-subject="Business Studies" data-icon="border-business.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3616,7 +3712,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · Chemistry -->
-            <div class="qn-card" style="--qn-subj-bg:#e20082; --qn-subj-border:#b50068;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-chemistry-default); --qn-subj-focus:var(--subjects-chemistry-focus);" data-subject="Chemistry" data-icon="border-chemistry.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3646,7 +3742,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · Chinese Language -->
-            <div class="qn-card" style="--qn-subj-bg:#f94848; --qn-subj-border:#c73a3a;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-chinese-default); --qn-subj-focus:var(--subjects-chinese-focus);" data-subject="Chinese Language" data-icon="border-chinese.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3676,7 +3772,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · Computer Science -->
-            <div class="qn-card" style="--qn-subj-bg:#d10070; --qn-subj-border:#a7005a;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-cs-default); --qn-subj-focus:var(--subjects-cs-focus);" data-subject="Computer Science" data-icon="border-computer-science.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3706,7 +3802,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · Economy -->
-            <div class="qn-card" style="--qn-subj-bg:#ff5733; --qn-subj-border:#cc4629;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-economy-default); --qn-subj-focus:var(--subjects-economy-focus);" data-subject="Economy" data-icon="border-economy.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3736,7 +3832,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · English -->
-            <div class="qn-card" style="--qn-subj-bg:#ff4d56; --qn-subj-border:#cc3e45;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-english-default); --qn-subj-focus:var(--subjects-english-focus);" data-subject="English" data-icon="border-english.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3766,7 +3862,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · Geography -->
-            <div class="qn-card" style="--qn-subj-bg:#77d836; --qn-subj-border:#5fad2b;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-geo-default); --qn-subj-focus:var(--subjects-geo-focus);" data-subject="Geography" data-icon="border-geography.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3796,7 +3892,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · History -->
-            <div class="qn-card" style="--qn-subj-bg:#a97c50; --qn-subj-border:#876340;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-history-default); --qn-subj-focus:var(--subjects-history-focus);" data-subject="History" data-icon="border-history.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3826,7 +3922,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · Islamic Studies -->
-            <div class="qn-card" style="--qn-subj-bg:#de4d7f; --qn-subj-border:#b23e66;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-islamic-default); --qn-subj-focus:var(--subjects-islamic-focus);" data-subject="Islamic Studies" data-icon="border-islamic.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3856,7 +3952,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · KAFA -->
-            <div class="qn-card" style="--qn-subj-bg:#8ae3a9; --qn-subj-border:#6eb687;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-kafa-default); --qn-subj-focus:var(--subjects-kafa-focus);" data-subject="KAFA" data-icon="border-kafa.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3886,7 +3982,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · Mathematics -->
-            <div class="qn-card" style="--qn-subj-bg:#42ac7b; --qn-subj-border:#358a62;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-math-default); --qn-subj-focus:var(--subjects-math-focus);" data-subject="Mathematics" data-icon="border-math.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3916,7 +4012,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · Moral Studies -->
-            <div class="qn-card" style="--qn-subj-bg:#0072ca; --qn-subj-border:#005ba2;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-moral-default); --qn-subj-focus:var(--subjects-moral-focus);" data-subject="Moral Studies" data-icon="border-moral.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3946,7 +4042,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · Physics -->
-            <div class="qn-card" style="--qn-subj-bg:#27a0d7; --qn-subj-border:#1f80ac;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-physics-default); --qn-subj-focus:var(--subjects-physics-focus);" data-subject="Physics" data-icon="border-physics.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -3976,7 +4072,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · RBT (Reka Bentuk & Teknologi) -->
-            <div class="qn-card" style="--qn-subj-bg:#353535; --qn-subj-border:#2a2a2a;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-rbt-default); --qn-subj-focus:var(--subjects-rbt-focus);" data-subject="Reka Bentuk &amp; Teknologi" data-icon="border-rbt.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -4006,7 +4102,7 @@
             </div>
 
             <!-- Quick Notes Card - 1.5 · Science -->
-            <div class="qn-card" style="--qn-subj-bg:#ffd641; --qn-subj-border:#ccab34;">
+            <div class="qn-card" style="--qn-subj-default:var(--subjects-science-default); --qn-subj-focus:var(--subjects-science-focus);" data-subject="Science" data-icon="border-science.svg">
               <div class="qn-card__header">
                 <img class="qn-card__fano" src="../src/image-repo/Learn/quick.notes/fano-wireframe.svg" alt="">
                 <div class="qn-card__icon-col">
@@ -4623,6 +4719,18 @@
       btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
       btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
       btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+    });
+
+    // Quick Notes rows — navigate to selections page with subject context
+    document.querySelectorAll('.qn-card__row').forEach(function (row) {
+      row.addEventListener('click', function () {
+        var card    = row.closest('.qn-card');
+        if (!card) { window.location.href = 'learn-quick-notes-selections.html'; return; }
+        var subject = card.dataset.subject || '';
+        var icon    = card.dataset.icon    || '';
+        var params  = new URLSearchParams({ subject: subject, icon: icon });
+        window.location.href = 'learn-quick-notes-selections.html?' + params.toString();
+      });
     });
 
     // Lives/Ruby badge flip — every 4s
@@ -5297,6 +5405,7 @@
     })();
   </script>
 
+
 <script>
 /* test.page.compiled — Top Menu Bar navigation + persistent active state (v5) */
 (function () {
@@ -5319,20 +5428,22 @@
   };
   /* Page → parent main-menu label that should show active state */
   var PAGE_ACTIVE_MAIN = {
-    'home.html':                       'Home',
-    'practice.html':                   'Practice',
-    'class-my-classes.html':           'Class',
-    'class-browse-classes.html':       'Class',
-    'learn-learning-hub.html':         'Learn',
-    'learn-quick-notes.html':          'Learn',
-    'achievement-score-card.html':     'Achievement',
-    'achievement-report-card.html':    'Achievement',
-    'achievement-analysis-card.html':  'Achievement',
-    'rewards-coin-quests.html':        'Rewards',
-    'rewards-my-rewards.html':         'Rewards',
-    'rewards-merchandise.html':        'Rewards',
-    'rewards-evoucher.html':           'Rewards',
-    'rewards-avatar.html':             'Rewards'
+    'home.html':                          'Home',
+    'practice.html':                      'Practice',
+    'class-my-classes.html':              'Class',
+    'class-browse-classes.html':          'Class',
+    'learn-learning-hub.html':            'Learn',
+    'learn-quick-notes.html':             'Learn',
+    'learn-quick-notes-selections.html':  'Learn',
+    'learn-quick-notes-view.html':        'Learn',
+    'achievement-score-card.html':        'Achievement',
+    'achievement-report-card.html':       'Achievement',
+    'achievement-analysis-card.html':     'Achievement',
+    'rewards-coin-quests.html':           'Rewards',
+    'rewards-my-rewards.html':            'Rewards',
+    'rewards-merchandise.html':           'Rewards',
+    'rewards-evoucher.html':              'Rewards',
+    'rewards-avatar.html':                'Rewards'
   };
 
   var SEL_A_BTN  = '#NavTopMenu-Desktop .nav-menu-btn';
@@ -5462,8 +5573,6 @@
   }
 })();
 </script>
-
-
 
 
 </body>
