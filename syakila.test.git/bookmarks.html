@@ -2158,6 +2158,9 @@
     /* Delete button — DS: Button Icon-1.5, 32×32, #ff4c51 bg, #b23539 stroke INSIDE, radius:108 (pill) */
     .qnc__delete-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; min-width: 32px; background: #ff4c51; box-shadow: inset 0 0 0 1px #b23539; border-radius: 108px; border: none; cursor: pointer; flex-shrink: 0; }
     .qnc__delete-btn svg { width: 16px; height: 16px; display: block; color: #ffffff; }
+    /* Row delete animation */
+    .qnc__row { overflow: hidden; transition: max-height 0.25s ease, opacity 0.2s ease; }
+    .qnc__row.is-deleting { max-height: 0 !important; opacity: 0; }
 
     /* Per-card subject colors (DS confirmed from header node fills) */
     .qnc--addmath   { --qnc-header-bg: #283589; --qnc-header-border: #182052; --qnc-cell-bg: #eaebf3; }
@@ -3531,6 +3534,23 @@
 
 
   <script>
+
+    // Delete bookmark row — critical handler first (Rule 14)
+    document.querySelectorAll('.qnc__delete-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var row = btn.closest('.qnc__row');
+        if (!row) return;
+        // Lock current height before collapsing
+        row.style.maxHeight = row.offsetHeight + 'px';
+        // Force reflow so transition fires from the locked height
+        row.getBoundingClientRect();
+        row.classList.add('is-deleting');
+        row.addEventListener('transitionend', function onDone() {
+          row.removeEventListener('transitionend', onDone);
+          row.remove();
+        });
+      });
+    });
 
     // Search bar — btn click → open + focus + start 3s timer; inactivity → close + reset btn (Rule 14: critical first)
     (function () {
