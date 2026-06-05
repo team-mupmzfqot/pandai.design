@@ -94,25 +94,25 @@
       --scale-50:  2px;
       --scale-200: 8px;
 
-      /* Subject Colors â€” ALL confirmed from DS get_variable_defs */
-      --subjects-b-melayu-default:   #4d77ff;   /* Subjects/b-melayu/default */
-      --subjects-english-default:    #ff4d56;   /* Subjects/english/default */
-      --subjects-math-default:       #42ac7b;   /* Subjects/math/default */
-      --subjects-science-default:    #ffd641;   /* Subjects/science/default */
-      --subjects-chemistry-default:  #e20082;   /* Subjects/chemistry/default */
-      --subjects-physics-default:    #27a0d7;   /* Subjects/physics/default */
-      --subjects-history-default:    #a97c50;   /* Subjects/history/default */
-      --subjects-geo-default:        #77d836;   /* Subjects/geo/default */
-      --subjects-islamic-default:    #de4d7f;   /* Subjects/islamic/default */
-      --subjects-moral-default:      #0072ca;   /* Subjects/moral/default */
-      --subjects-biology-default:    #8431d8;   /* Subjects/biology/default */
-      --subjects-add-math-default:   #283589;   /* Subjects/add-math/default */
-      --subjects-economy-default:    #ff5733;   /* Subjects/economy/default */
-      --subjects-account-default:    #0072ca;   /* Subjects/account/default */
-      --subjects-business-default:   #efb42b;   /* Subjects/business/default */
-      --subjects-cs-default:         #d10070;   /* Subjects/comp-science/default */
-      --subjects-kafa-default:       #8ae3a9;   /* Subjects/kafa/default */
-      --subjects-rbt-default:        #353535;   /* Subjects/rbt/default */
+      /* Subject Colors — ALL confirmed from DS variable collections (A–E + G–S, Rule 234) */
+      --subjects-b-melayu-default:          #4d77ff;   --subjects-b-melayu-subtle:          #f6f9ff;   --subjects-b-melayu-subtle-hover:          #b8c9ff;
+      --subjects-english-default:           #ff4d56;   --subjects-english-subtle:           #ffedee;   --subjects-english-subtle-hover:           #ffb8bb;
+      --subjects-math-default:              #42ac7b;   --subjects-math-subtle:              #ecf7f2;   --subjects-math-subtle-hover:              #b3deca;
+      --subjects-science-default:           #ffd641;   --subjects-science-subtle:           #fffbec;   --subjects-science-subtle-hover:           #ffefb3;
+      --subjects-chemistry-default:         #e20082;   --subjects-chemistry-subtle:         #fce6f3;   --subjects-chemistry-subtle-hover:         #ed99c6;
+      --subjects-physics-default:           #27a0d7;   --subjects-physics-subtle:           #eaf6fb;   --subjects-physics-subtle-hover:           #a9d9ef;
+      --subjects-history-default:           #a97c50;   --subjects-history-subtle:           #f7f2ee;   --subjects-history-subtle-hover:           #ddcbb9;
+      --subjects-geo-default:               #77d836;   --subjects-geo-subtle:               #f2fbeb;   --subjects-geo-subtle-hover:               #c9efaf;
+      --subjects-islamic-default:           #de4d7f;   --subjects-islamic-subtle:           #fcedf2;   --subjects-islamic-subtle-hover:           #f2b8cc;
+      --subjects-moral-default:             #0072ca;   --subjects-moral-subtle:             #e6f1fa;   --subjects-moral-subtle-hover:             #99c7ea;
+      --subjects-biology-default:           #8431d8;   --subjects-biology-subtle:           #f3ebfb;   --subjects-biology-subtle-hover:           #ceadef;
+      --subjects-add-math-default:          #283589;   --subjects-add-math-subtle:          #eaebf3;   --subjects-add-math-subtle-hover:          #a9aed0;
+      --subjects-economy-default:           #ff5733;   --subjects-economy-subtle:           #ffeeeb;   --subjects-economy-subtle-hover:           #ffbcad;
+      --subjects-account-default:           #0072ca;   --subjects-account-subtle:           #e6f1fa;   --subjects-account-subtle-hover:           #99c7ea;
+      --subjects-business-default:          #efb42b;   --subjects-business-subtle:          #fef8ea;   --subjects-business-subtle-hover:          #f9e1aa;
+      --subjects-cs-default:                #d10070;   --subjects-cs-subtle:                #fbe6f1;   --subjects-cs-subtle-hover:                #ed99c6;
+      --subjects-kafa-default:              #8ae3a9;   --subjects-kafa-subtle:              #f4fcf7;   --subjects-kafa-subtle-hover:              #d0f4dd;
+      --subjects-rbt-default:               #353535;   --subjects-rbt-subtle:               #d7d7d7;   --subjects-rbt-subtle-hover:               #aeaeae;
 
       /* Typography */
       --font-family: 'Poppins', sans-serif;
@@ -1724,17 +1724,33 @@
       cursor:         default;
       position:       relative;
     }
-    /* DS strokeAlign:INSIDE — ::after overlays the border on top of image children
-       box-shadow:inset paints behind content and gets covered by the image div.
-       ::after + pointer-events:none renders the border above all children (Rule 118). */
+    /* DS strokeAlign:INSIDE + image overlay — ::after renders above image children.
+       Direct box-shadow:inset on article is painted behind children and covered by the image.
+       ::after z-index:1 renders the border above all children (Rules 118/235). */
     .quiz-card::after {
       content:        '';
       position:       absolute;
       inset:          0;
-      border:         1px solid var(--card-subject-color, var(--border-default));
       border-radius:  var(--corner-radius-corner-2xl);
       pointer-events: none;
       z-index:        1;
+      box-shadow:     inset 0 0 0 1px var(--card-subject-color, var(--border-default));
+    }
+    .quiz-card:hover {
+      background: var(--card-subject-subtle, var(--surface-general-default));
+    }
+    .quiz-card:hover::after {
+      box-shadow: inset 0 0 0 4px var(--card-subject-subtle-hover, var(--border-default));
+    }
+    .quiz-card:hover .quiz-card__content {
+      box-shadow: inset 1px 0 0 0 #ffffff;
+    }
+    .quiz-card:hover .pill-badge-sm {
+      background: var(--card-subject-subtle-hover);
+      color:      var(--card-subject-color);
+    }
+    .quiz-card:hover .quiz-card__subtitle {
+      color: var(--card-subject-color);
     }
 
     /* Image — explicit 148×148px square, grey bg placeholder (DS: aspect-[128/128] self-stretch) */
@@ -1750,22 +1766,24 @@
       overflow:            hidden;
     }
 
-    /* Content right column */
+    /* Content right column — left border via box-shadow (DS: 1px Subject/default-subtle) */
     .quiz-card__content {
       flex:           1;
       min-width:      0;
       display:        flex;
       flex-direction: column;
-      gap:            var(--spacing-space-xxs);  /* 4px */
+      gap:            var(--spacing-space-xxs);  /* 4px — header/main/cta gap */
       padding:        var(--spacing-space-m);    /* 16px */
       align-self:     stretch;
+      box-shadow:     inset 1px 0 0 0 var(--card-subject-subtle, transparent);
     }
 
     .quiz-card__main {
       display:        flex;
       flex-direction: column;
-      gap:            var(--spacing-space-xs);   /* 8px */
-      height:         88px;
+      gap:            0;   /* DS: Main Content itemSpacing=0 (Rule 237) */
+      flex:           1;
+      min-height:     0;
     }
 
     /* Header: Subject badge + pill badges */
@@ -1879,11 +1897,12 @@
       overflow:      hidden;
     }
 
-    /* Quiz card text */
+    /* Quiz card text — DS: Texts frame primaryAxisAlign=CENTER in both default+hover (Rule 237) */
     .quiz-card__texts {
-      flex:    1;
-      display: flex;
-      flex-direction: column;
+      flex:            1;
+      display:         flex;
+      flex-direction:  column;
+      justify-content: center;
     }
 
     .quiz-card__subtitle {
@@ -1983,24 +2002,24 @@
     .btn-quiz-cta__arrow-clip svg { display: block; width: 100%; height: 100%; }
 
     /* â”€â”€ Subject class â€” sets local CSS vars â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-    .subject-bm       { --card-subject-color: var(--subjects-b-melayu-default); }
-    .subject-english  { --card-subject-color: var(--subjects-english-default); }
-    .subject-math     { --card-subject-color: var(--subjects-math-default); }
-    .subject-science  { --card-subject-color: var(--subjects-science-default); }
-    .subject-chemistry{ --card-subject-color: var(--subjects-chemistry-default); }
-    .subject-physics  { --card-subject-color: var(--subjects-physics-default); }
-    .subject-history  { --card-subject-color: var(--subjects-history-default); }
-    .subject-geo      { --card-subject-color: var(--subjects-geo-default); }
-    .subject-islamic  { --card-subject-color: var(--subjects-islamic-default); }
-    .subject-moral    { --card-subject-color: var(--subjects-moral-default); }
-    .subject-biology  { --card-subject-color: var(--subjects-biology-default); }
-    .subject-add-math { --card-subject-color: var(--subjects-add-math-default); }
-    .subject-economy  { --card-subject-color: var(--subjects-economy-default); }
-    .subject-account  { --card-subject-color: var(--subjects-account-default); }
-    .subject-business { --card-subject-color: var(--subjects-business-default); }
-    .subject-cs       { --card-subject-color: var(--subjects-cs-default); }
-    .subject-kafa     { --card-subject-color: var(--subjects-kafa-default); }
-    .subject-rbt      { --card-subject-color: var(--subjects-rbt-default); }
+    .subject-bm       { --card-subject-color: var(--subjects-b-melayu-default);  --card-subject-subtle: var(--subjects-b-melayu-subtle);  --card-subject-subtle-hover: var(--subjects-b-melayu-subtle-hover); }
+    .subject-english  { --card-subject-color: var(--subjects-english-default);   --card-subject-subtle: var(--subjects-english-subtle);   --card-subject-subtle-hover: var(--subjects-english-subtle-hover); }
+    .subject-math     { --card-subject-color: var(--subjects-math-default);      --card-subject-subtle: var(--subjects-math-subtle);      --card-subject-subtle-hover: var(--subjects-math-subtle-hover); }
+    .subject-science  { --card-subject-color: var(--subjects-science-default);   --card-subject-subtle: var(--subjects-science-subtle);   --card-subject-subtle-hover: var(--subjects-science-subtle-hover); }
+    .subject-chemistry{ --card-subject-color: var(--subjects-chemistry-default); --card-subject-subtle: var(--subjects-chemistry-subtle); --card-subject-subtle-hover: var(--subjects-chemistry-subtle-hover); }
+    .subject-physics  { --card-subject-color: var(--subjects-physics-default);   --card-subject-subtle: var(--subjects-physics-subtle);   --card-subject-subtle-hover: var(--subjects-physics-subtle-hover); }
+    .subject-history  { --card-subject-color: var(--subjects-history-default);   --card-subject-subtle: var(--subjects-history-subtle);   --card-subject-subtle-hover: var(--subjects-history-subtle-hover); }
+    .subject-geo      { --card-subject-color: var(--subjects-geo-default);       --card-subject-subtle: var(--subjects-geo-subtle);       --card-subject-subtle-hover: var(--subjects-geo-subtle-hover); }
+    .subject-islamic  { --card-subject-color: var(--subjects-islamic-default);   --card-subject-subtle: var(--subjects-islamic-subtle);   --card-subject-subtle-hover: var(--subjects-islamic-subtle-hover); }
+    .subject-moral    { --card-subject-color: var(--subjects-moral-default);     --card-subject-subtle: var(--subjects-moral-subtle);     --card-subject-subtle-hover: var(--subjects-moral-subtle-hover); }
+    .subject-biology  { --card-subject-color: var(--subjects-biology-default);   --card-subject-subtle: var(--subjects-biology-subtle);   --card-subject-subtle-hover: var(--subjects-biology-subtle-hover); }
+    .subject-add-math { --card-subject-color: var(--subjects-add-math-default);  --card-subject-subtle: var(--subjects-add-math-subtle);  --card-subject-subtle-hover: var(--subjects-add-math-subtle-hover); }
+    .subject-economy  { --card-subject-color: var(--subjects-economy-default);   --card-subject-subtle: var(--subjects-economy-subtle);   --card-subject-subtle-hover: var(--subjects-economy-subtle-hover); }
+    .subject-account  { --card-subject-color: var(--subjects-account-default);   --card-subject-subtle: var(--subjects-account-subtle);   --card-subject-subtle-hover: var(--subjects-account-subtle-hover); }
+    .subject-business { --card-subject-color: var(--subjects-business-default);  --card-subject-subtle: var(--subjects-business-subtle);  --card-subject-subtle-hover: var(--subjects-business-subtle-hover); }
+    .subject-cs       { --card-subject-color: var(--subjects-cs-default);        --card-subject-subtle: var(--subjects-cs-subtle);        --card-subject-subtle-hover: var(--subjects-cs-subtle-hover); }
+    .subject-kafa     { --card-subject-color: var(--subjects-kafa-default);      --card-subject-subtle: var(--subjects-kafa-subtle);      --card-subject-subtle-hover: var(--subjects-kafa-subtle-hover); }
+    .subject-rbt      { --card-subject-color: var(--subjects-rbt-default);       --card-subject-subtle: var(--subjects-rbt-subtle);       --card-subject-subtle-hover: var(--subjects-rbt-subtle-hover); }
 
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        FOOTER â€” Footer - 1.5  (node 2338:10430)
