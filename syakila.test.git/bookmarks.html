@@ -3536,18 +3536,35 @@
   <script>
 
     // Delete bookmark row — critical handler first (Rule 14)
+    // When last row deleted → collapse and remove the whole QNC card
     document.querySelectorAll('.qnc__delete-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var row = btn.closest('.qnc__row');
+        var row     = btn.closest('.qnc__row');
+        var content = btn.closest('.qnc__content');
+        var card    = btn.closest('section');
         if (!row) return;
-        // Lock current height before collapsing
+
         row.style.maxHeight = row.offsetHeight + 'px';
-        // Force reflow so transition fires from the locked height
         row.getBoundingClientRect();
         row.classList.add('is-deleting');
+
         row.addEventListener('transitionend', function onDone() {
           row.removeEventListener('transitionend', onDone);
           row.remove();
+
+          // If no rows remain, collapse and remove the whole card
+          if (content && content.querySelectorAll('.qnc__row').length === 0) {
+            card.style.maxHeight = card.offsetHeight + 'px';
+            card.style.overflow  = 'hidden';
+            card.style.transition = 'max-height 0.3s ease, opacity 0.25s ease';
+            card.getBoundingClientRect();
+            card.style.maxHeight = '0';
+            card.style.opacity   = '0';
+            card.addEventListener('transitionend', function onCardDone() {
+              card.removeEventListener('transitionend', onCardDone);
+              card.remove();
+            });
+          }
         });
       });
     });
