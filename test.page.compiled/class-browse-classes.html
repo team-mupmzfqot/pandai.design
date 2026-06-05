@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pandai — Browse Classes</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
     /* ═══════════════════════════════════════════════════════════════
        Pandai DS 1.5 — Page Template
        Navigation Shell (Desktop/Tablet/Mobile) + PageViewport placeholder
@@ -2085,52 +2083,359 @@
       color:  var(--text-disabled-default);
     }
 
-  
+/* ════════════════════════════════════════════════════════════════
+       Nadia — Browse Classes page-specific CSS
+       Integrated with page-template.html (2026-05-26)
+    ════════════════════════════════════════════════════════════════ */
 
-body           { padding-bottom: 56px; }   /* bottom navbar height */
+    /* ── Additional subject palette tokens ─────────────────────── */
+    :root {
+      --og-50:  #e9fbf5;
+      --og-500: #00cc85;  --og-600: #00a36a;
+      /* B-Melayu */
+      --bm-50:  #f6f9ff;  --bm-100: #dbe4ff;  --bm-500: #4d77ff;
+      /* English */
+      --en-50:  #ffedee;  --en-100: #ffdbdd;  --en-500: #ff4d56;
+      /* Math */
+      --mt-50:  #ecf7f2;  --mt-100: #d9eee5;  --mt-500: #42ac7b;
+      /* Science */
+      --sc-50:  #fffbec;  --sc-100: #fff7d9;  --sc-500: #ffd641;  --sc-700: #998027;
+      /* Biology */
+      --bi-50:  #f3ebfb;  --bi-100: #e6d6f7;  --bi-500: #8431d8;
+      /* History */
+      --hs-50:  #f7f2ee;  --hs-100: #eee5dc;  --hs-500: #a97c50;
+      /* Shared shorthands */
+      --r-rounded: 60px;  --r-4xl: 24px;  --r-2xl: 18px;
+      --sp-xxxs: 2px;  --sp-xxs: 4px;  --sp-xs: 8px;  --sp-s: 12px;  --sp-m: 16px;
+      --text-heading:  #404040;
+      --text-body:     #666666;
     }
 
-    /* ═══════════════════════════════════════════════════════════════
-       PAGE VIEWPORT — placeholder zone for DS component instances
-       Drop Figma DS components here to build page content.
-    ═══════════════════════════════════════════════════════════════ */
-
-    .page-viewport {
-      display:         flex;
-      flex-direction:  column;
-      align-items:     center;
-      justify-content: center;
-      flex:            1;
-      min-height:      0;
-      background:      var(--surface-general-default);
-      box-shadow:      inset 0 0 0 1px var(--border-general-default);
-      border-radius:   var(--corner-radius-corner-4xl);
+    /* ── Browse Classes viewport — replaces page-viewport card ─── */
+    .viewport-browseclasses {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-m);   /* 16px between breadcrumb and cards */
+      width:          100%;
+      /* no border-radius, no box-shadow — plain flow section */
+    }
+    /* bc-row left-aligned: flex row, items at start, fills width */
+    .viewport-browseclasses .bc-row {
+      align-items: flex-start;
+      width:       100%;
     }
 
-    .page-viewport__placeholder {
-      display:         flex;
-      flex-direction:  column;
-      align-items:     center;
-      justify-content: center;
-      gap:             var(--spacing-space-xs);
-      padding:         var(--spacing-space-xl);
-      color:           var(--text-disabled-default);
-      font-size:       14px;
-      font-weight:     500;
-      text-align:      center;
-      pointer-events:  none;
-      user-select:     none;
+    /* ── DS Avatar 1.5 — node 3065:40786 ───────────────────────── */
+    .ds-avatar {
+      border-radius: var(--r-rounded);
+      background: var(--surface-general-default, #fff);
+      border: 1px solid var(--og-500);
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .ds-avatar--xl { width: 64px; height: 64px; }
+    .ds-avatar--xl img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+      pointer-events: none; display: block;
     }
 
-    .page-viewport__placeholder svg {
-      width:  24px;
-      height: 24px;
-      color:  var(--text-disabled-default);
+    /* ── Breadcrumb 1.5 — DS node 1777:18856 ───────────────────── */
+    .bc-row {
+      display: flex; align-items: center; gap: 12px; min-height: 36px;
     }
+    .bc-left {
+      flex: 1; width: 100%; min-width: 0;
+      display: flex; align-items: center; gap: var(--sp-m);
+    }
+    .bc-title {
+      font-size: 24px; font-weight: 500; line-height: 36px;
+      color: #00564c;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .bc-sep {
+      width: 1px; height: 20px; background: #d9d9d9; flex-shrink: 0;
+    }
+    .bc-trail {
+      display: flex; align-items: center; gap: var(--sp-xs); flex-wrap: wrap;
+    }
+    .bc-link {
+      display: inline-flex; align-items: center; gap: var(--sp-xs);
+      font-size: 14px; font-weight: 400; line-height: 20px;
+      color: var(--og-500); text-decoration: none; white-space: nowrap;
+    }
+    .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .bc-chevron {
+      width: 16px; height: 16px;
+      stroke: #bfbfbf; fill: none; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0;
+    }
+    .bc-link--current { color: #666; }
+    .bc-actions {
+      display: flex; align-items: center; gap: var(--sp-xs); flex-shrink: 0;
+    }
+
+    /* ── Breadcrumb buttons ──────────────────────────────────────── */
+    .btn-secondary, .btn-primary {
+      display: inline-flex; align-items: center; gap: 0;
+      border-radius: var(--r-rounded);
+      padding: 8px 12px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px; font-weight: 600; line-height: 20px;
+      cursor: pointer; text-decoration: none; white-space: nowrap;
+      border: 1px solid;
+    }
+    .btn-icon-wrap { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .btn-icon-clip { width: 24px; height: 24px; overflow: hidden; flex-shrink: 0; }
+    .btn-icon-clip svg { display: block; width: 100%; height: 100%; }
+    .btn-label { padding: 0 var(--sp-xs); white-space: nowrap; }
+    .btn-secondary {
+      background: #fff;
+      border-color: var(--og-500);
+      color: var(--og-500);
+    }
+    .btn-secondary svg { stroke: var(--og-500); }
+    .btn-primary {
+      background: var(--og-500);
+      border-color: var(--og-600);
+      color: #f6fdfb;
+    }
+    .btn-primary svg { stroke: #f6fdfb; }
+
+    /* ── Class Cards grid ────────────────────────────────────────── */
+    .cards-grid { display: grid; gap: 20px; width: 100%; grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 1279px) {
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .bc-row     { flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+      .bc-left    { align-items: flex-start; width: 100%; }
+    }
+    @media (max-width: 767px) {
+      .cards-grid   { grid-template-columns: 1fr; }
+      .bc-row       { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .bc-left      { flex-wrap: wrap; }
+      .bc-actions   { width: 100%; }
+      .btn-secondary, .btn-primary { flex: 1; justify-content: center; }
+    }
+
+    /* ── Class Card 1.5 ──────────────────────────────────────────── */
+    .cc {
+      border-radius: var(--r-4xl);
+      border: 1px solid var(--og-500);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      background: #fff;
+      cursor: default;
+    }
+    .cc__cover { width: 100%; display: block; overflow: hidden; }
+    .cc__cover img { width: 100%; aspect-ratio: 1000/435; object-fit: cover; display: block; }
+    .cc__body { padding: var(--sp-m); background: #e8fbe8; }
+    .cc__inner {
+      border-radius: var(--r-2xl);
+      border: 1px solid var(--og-500);
+      overflow: hidden; background: #fff;
+      display: flex; flex-direction: column;
+    }
+    .cc__hdr {
+      background: var(--og-500);
+      padding: var(--sp-xs) var(--sp-m);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: var(--sp-m); min-height: 44px;
+    }
+    .cc__hdr-title {
+      font-size: 18px; font-weight: 600; line-height: 28px;
+      color: #fff;
+      flex: 1; min-width: 0;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .dlp-badge { width: 57px; height: 24px; overflow: hidden; flex-shrink: 0; display: block; }
+    .dlp-badge img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+    .cc__main { background: #fff; padding: var(--sp-m); display: flex; align-items: flex-start; gap: var(--sp-m); height: 96px; }
+    .cc__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--sp-xxxs); height: 100%; }
+    .cc__teacher { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-heading); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cc__schedule { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-body); display: flex; flex-wrap: wrap; gap: var(--sp-xxxs); align-items: center; }
+    .cc__schedule strong { font-weight: 600; color: var(--text-heading); }
+    .live-badge {
+      display: inline-flex; align-items: center; gap: var(--sp-xxs);
+      border-radius: var(--r-rounded);
+      padding: var(--sp-xxxs) var(--sp-xs);
+      background: #ccf5e7; border: 1px solid var(--og-500);
+      align-self: flex-start;
+      font-size: 10px; font-weight: 500; line-height: 12px;
+      color: var(--og-500); white-space: nowrap;
+    }
+    .live-badge svg { width: 10px; height: 10px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke: var(--og-500); }
+    .cc__divider { height: 1px; background: #ccf5e7; }
+    .cc__cta { background: #fff; padding: var(--sp-m); display: flex; justify-content: space-between; align-items: center; }
+    .cc-premium-tag { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--og-500); white-space: nowrap; }
+
+    /* Preview — Button-1.5 Secondary/S Student (Rule 31) */
+    .btn-preview {
+      display: inline-flex; align-items: center;
+      border-radius: var(--r-rounded); padding: 2px 8px;
+      background: #fff; border: 1px solid var(--og-500);
+      cursor: pointer; text-decoration: none;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .btn-preview__label {
+      font-size: 12px; font-weight: 600; line-height: 18px;
+      color: var(--og-500); white-space: nowrap;
+      padding: 0 var(--sp-xxs);
+      transition: color 0.15s ease;
+    }
+    .btn-preview__arrow {
+      width: 16px; height: 16px;
+      border-radius: var(--r-rounded); background: #fff;
+      box-shadow: inset 0 0 0 1px var(--og-500);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      padding: 2px;
+      transition: background 0.15s ease, box-shadow 0.15s ease;
+    }
+    .btn-preview__arrow svg {
+      width: 12px; height: 12px; display: block;
+      fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+      stroke: var(--og-500);
+      transition: stroke 0.15s ease;
+    }
+    .btn-preview:hover                         { background: #b5f291; border-color: #70bc6f; }
+    .btn-preview:hover .btn-preview__label     { color: #70bc6f; }
+    .btn-preview:hover .btn-preview__arrow     { background: #b5f291; box-shadow: inset 0 0 0 1px #70bc6f; }
+    .btn-preview:hover .btn-preview__arrow svg { stroke: #70bc6f; }
+    .btn-preview:active                        { background: #00564c; border-color: #00453d; }
+    .btn-preview:active .btn-preview__label    { color: var(--og-500); }
+    .btn-preview:active .btn-preview__arrow    { background: var(--og-500); box-shadow: none; }
+    .btn-preview:active .btn-preview__arrow svg{ stroke: #00564c; }
+
+    /* Avatar inside cards */
+    .cc .ds-avatar { border-color: var(--og-500); }
+
+    /* ── Subject colour overrides ────────────────────────────────── */
+    .cc--bm { border-color: var(--bm-500); }
+    .cc--bm .cc__body { background: var(--bm-50); }
+    .cc--bm .cc__inner, .cc--bm .cc__hdr, .cc--bm .ds-avatar { border-color: var(--bm-500); }
+    .cc--bm .cc__hdr  { background: var(--bm-500); }
+    .cc--bm .cc__divider { background: var(--bm-100); }
+    .cc--bm .ds-avatar { border-color: var(--bm-500); }
+
+    .cc--en { border-color: var(--en-500); }
+    .cc--en .cc__body { background: var(--en-50); }
+    .cc--en .cc__inner, .cc--en .ds-avatar { border-color: var(--en-500); }
+    .cc--en .cc__hdr  { background: var(--en-500); }
+    .cc--en .cc__divider { background: var(--en-100); }
+
+    .cc--mt { border-color: var(--mt-500); }
+    .cc--mt .cc__body { background: var(--mt-50); }
+    .cc--mt .cc__inner, .cc--mt .ds-avatar { border-color: var(--mt-500); }
+    .cc--mt .cc__hdr  { background: var(--mt-500); }
+    .cc--mt .cc__divider { background: var(--mt-100); }
+
+    .cc--sc { border-color: var(--sc-500); }
+    .cc--sc .cc__body { background: var(--sc-50); }
+    .cc--sc .cc__inner, .cc--sc .ds-avatar { border-color: var(--sc-500); }
+    .cc--sc .cc__hdr  { background: var(--sc-500); }
+    .cc--sc .cc__hdr-title { color: var(--sc-700); }
+    .cc--sc .cc__divider { background: var(--sc-100); }
+
+    .cc--bio { border-color: var(--bi-500); }
+    .cc--bio .cc__body { background: var(--bi-50); }
+    .cc--bio .cc__inner, .cc--bio .ds-avatar { border-color: var(--bi-500); }
+    .cc--bio .cc__hdr  { background: var(--bi-500); }
+    .cc--bio .cc__divider { background: var(--bi-100); }
+
+    .cc--hs { border-color: var(--hs-500); }
+    .cc--hs .cc__body { background: var(--hs-50); }
+    .cc--hs .cc__inner, .cc--hs .ds-avatar { border-color: var(--hs-500); }
+    .cc--hs .cc__hdr  { background: var(--hs-500); }
+    .cc--hs .cc__divider { background: var(--hs-100); }
+
+    .cc--enrichment { border-color: #00cc85; }
+    .cc--enrichment .cc__body { background: #e8fbe8; }
+    .cc--enrichment .cc__inner, .cc--enrichment .ds-avatar { border-color: #00cc85; }
+    .cc--enrichment .cc__hdr  { background: #00cc85; }
+    .cc--enrichment .cc__divider { background: #b3f0dc; }
+
+    .cc--acc { border-color: #0072ca; }
+    .cc--acc .cc__body { background: #e6f1fa; }
+    .cc--acc .cc__inner, .cc--acc .ds-avatar { border-color: #0072ca; }
+    .cc--acc .cc__hdr  { background: #0072ca; }
+    .cc--acc .cc__divider { background: #b3d9f4; }
+
+    .cc--add-math { border-color: #283589; }
+    .cc--add-math .cc__body { background: #eaebf3; }
+    .cc--add-math .cc__inner, .cc--add-math .ds-avatar { border-color: #283589; }
+    .cc--add-math .cc__hdr  { background: #283589; }
+    .cc--add-math .cc__divider { background: #c0c5e8; }
+
+    .cc--biz { border-color: #efb42b; }
+    .cc--biz .cc__body { background: #fef8ea; }
+    .cc--biz .cc__inner, .cc--biz .ds-avatar { border-color: #efb42b; }
+    .cc--biz .cc__hdr  { background: #efb42b; }
+    .cc--biz .cc__divider { background: #fce4a8; }
+
+    .cc--chem { border-color: #e20082; }
+    .cc--chem .cc__body { background: #fce6f3; }
+    .cc--chem .cc__inner, .cc--chem .ds-avatar { border-color: #e20082; }
+    .cc--chem .cc__hdr  { background: #e20082; }
+    .cc--chem .cc__divider { background: #f5b3d9; }
+
+    .cc--chi { border-color: #f94848; }
+    .cc--chi .cc__body { background: #ffeded; }
+    .cc--chi .cc__inner, .cc--chi .ds-avatar { border-color: #f94848; }
+    .cc--chi .cc__hdr  { background: #f94848; }
+    .cc--chi .cc__divider { background: #fdb8b8; }
+
+    .cc--cs { border-color: #d10070; }
+    .cc--cs .cc__body { background: #fbe6f1; }
+    .cc--cs .cc__inner, .cc--cs .ds-avatar { border-color: #d10070; }
+    .cc--cs .cc__hdr  { background: #d10070; }
+    .cc--cs .cc__divider { background: #f2b3d8; }
+
+    .cc--eco { border-color: #ff5733; }
+    .cc--eco .cc__body { background: #ffeeeb; }
+    .cc--eco .cc__inner, .cc--eco .ds-avatar { border-color: #ff5733; }
+    .cc--eco .cc__hdr  { background: #ff5733; }
+    .cc--eco .cc__divider { background: #ffbfb3; }
+
+    .cc--geo { border-color: #77d836; }
+    .cc--geo .cc__body { background: #f2fbeb; }
+    .cc--geo .cc__inner, .cc--geo .ds-avatar { border-color: #77d836; }
+    .cc--geo .cc__hdr  { background: #77d836; }
+    .cc--geo .cc__divider { background: #d1f4b0; }
+
+    .cc--isl { border-color: #de4d7f; }
+    .cc--isl .cc__body { background: #fcedf2; }
+    .cc--isl .cc__inner, .cc--isl .ds-avatar { border-color: #de4d7f; }
+    .cc--isl .cc__hdr  { background: #de4d7f; }
+    .cc--isl .cc__divider { background: #f4bcd0; }
+
+    .cc--kafa { border-color: #8ae3a9; }
+    .cc--kafa .cc__body { background: #f4fcf7; }
+    .cc--kafa .cc__inner, .cc--kafa .ds-avatar { border-color: #8ae3a9; }
+    .cc--kafa .cc__hdr  { background: #8ae3a9; }
+    .cc--kafa .cc__hdr-title { color: #1a6b3a; }
+    .cc--kafa .cc__divider { background: #d6f4e3; }
+
+    .cc--moral { border-color: #0072ca; }
+    .cc--moral .cc__body { background: #e6f1fa; }
+    .cc--moral .cc__inner, .cc--moral .ds-avatar { border-color: #0072ca; }
+    .cc--moral .cc__hdr  { background: #0072ca; }
+    .cc--moral .cc__divider { background: #b3d9f4; }
+
+    .cc--phy { border-color: #27a0d7; }
+    .cc--phy .cc__body { background: #eaf6fb; }
+    .cc--phy .cc__inner, .cc--phy .ds-avatar { border-color: #27a0d7; }
+    .cc--phy .cc__hdr  { background: #27a0d7; }
+    .cc--phy .cc__divider { background: #b8e3f4; }
+
+    .cc--rbt { border-color: #353535; }
+    .cc--rbt .cc__body { background: #d7d7d7; }
+    .cc--rbt .cc__inner, .cc--rbt .ds-avatar { border-color: #353535; }
+    .cc--rbt .cc__hdr  { background: #353535; }
+    .cc--rbt .cc__divider { background: #c0c0c0; }
   </style>
 </head>
 <body>
-
 <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <!-- Outline/image (611:3075) --><symbol id="ic-image" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="18" height="18" rx="2" ry="2"/><circle cx="6.5" cy="6.5" r="1.5"/><polyline points="19 13.5 14 8.5 3 19.5"/></symbol>
@@ -2311,8 +2616,7 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
     </defs>
   </svg>
 
-<section id="Navigation-Shell">
-  <section id="NavbarPrimary-Desktop">
+<section id="NavbarPrimary-Desktop">
     <div class="navbar-primary">
 
       <!-- Logo/Pandai/Logo Horizontal (node 1898:6965): 116×28px overflow-clip container -->
@@ -3192,10 +3496,9 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
   <!-- Tablet overlay — Overlay/Overlay-Dark rgba(26,26,26,0.5) · z-index 250
        Behind navbar (300) and dropdown (300), in front of page content (0).
        Click closes the dropdown. -->
-  <div id="tablet-overlay" class="tablet-overlay" aria-hidden="true"></div>
+  <div id="tablet-overlay" class="tablet-overlay" aria-hidden="true">
 
-  <main>
-
+<main>
     <div class="page-container">
       <div class="main-content">
 
@@ -3669,7 +3972,6 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
 
       </div>
     </div>
-  
   </main>
 
 <footer class="footer">
@@ -3693,10 +3995,7 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
     </div>
   </footer>
 
-
-
-
-  <script>
+<script>
 
     // Search bar — btn click → open + focus + start 3s timer; inactivity → close + reset btn (Rule 14: critical first)
     (function () {
@@ -4521,7 +4820,6 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
       console.warn('Recent activities carousel error:', e);
     }
   </script>
-  
 
 <nav id="NavBar-Bottom" class="navbar-bottom" aria-label="Mobile navigation">
     <button class="navbar-bottom__btn" type="button" aria-label="Quiz">
@@ -4757,8 +5055,7 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
 
   </div><!-- end NavMenu-Mobile -->
 
-
-  <script>
+<script>
     (function () {
       var accountBtn    = document.getElementById('account-btn');
       var mobilePanel   = document.getElementById('NavMenu-Mobile');
@@ -5078,6 +5375,7 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
     var a = document.getElementById('NavTopMenu-Desktop'); if (a) targets.push(a);
     document.querySelectorAll('.navbar-nav, .menubar-nav').forEach(function (n) { targets.push(n); });
     if (!targets.length) return;
+    /* Synchronous re-apply on every batch of mutations — runs as microtask, before paint */
     var observer = new MutationObserver(applyActive);
     targets.forEach(function (t) {
       observer.observe(t, { attributes: true, subtree: true, attributeFilter: ['class', 'aria-current'] });
@@ -5089,15 +5387,18 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
     wireLinks();
     applyActive();
     startObserver();
+    /* Defeat any deferred init code that re-asserts Home — multiple deferred passes */
     [0, 50, 150, 400, 1000, 2500].forEach(function (d) { setTimeout(applyActive, d); });
+    /* 5s safety net: re-check every 250ms for 5s after load */
     var ticks = 0;
     var iv = setInterval(function () {
       applyActive();
       if (++ticks >= 20) clearInterval(iv);
     }, 250);
-    document.addEventListener('click',      function () { setTimeout(applyActive, 0); }, true);
-    document.addEventListener('mouseleave', function () { setTimeout(applyActive, 0); }, true);
-    document.addEventListener('mouseup',    function () { setTimeout(applyActive, 0); }, true);
+    /* Also re-apply on user interaction */
+    document.addEventListener('click',     function () { setTimeout(applyActive, 0); }, true);
+    document.addEventListener('mouseleave',function () { setTimeout(applyActive, 0); }, true);
+    document.addEventListener('mouseup',   function () { setTimeout(applyActive, 0); }, true);
   }
 
   if (document.readyState === 'loading') {
@@ -5107,6 +5408,5 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
   }
 })();
 </script>
-
 </body>
 </html>

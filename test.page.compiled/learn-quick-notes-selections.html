@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pandai — Quick Notes Selections</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
     /* ═══════════════════════════════════════════════════════════════
        Pandai DS 1.5 — Page Template
        Navigation Shell (Desktop/Tablet/Mobile) + PageViewport placeholder
@@ -2085,9 +2083,270 @@
       color:  var(--text-disabled-default);
     }
 
-  
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+       NAVBAR MOBILE BOTTOM â€” Navbar Mobile - 1.5 (DS node 3406:735)
+       Fixed bottom Â· height 56px Â· top border #00cc85
+       4 buttons: Quiz / Practice / Score / Account
+       Shown only at mobile (â‰¤767px)
+    â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    .navbar-bottom {
+      position:        fixed;
+      bottom:          0;
+      left:            0;
+      right:           0;
+      z-index:         400;
+      height:          56px;
+      background:      var(--surface-general-default);
+      border-top:      1px solid var(--border-primary-default);
+      display:         none;
+      align-items:     center;
+      justify-content: center;
+      gap:             var(--spacing-space-xxs);
+      padding:         var(--spacing-space-m);
+    }
+    /* Button - 1.5 Tertiary/S/Student â€” all states confirmed from DS nodes
+       1452:8381 Default Â· 1452:8373 Hover Â· 3029:20042 Pressed Â· 1452:8365 Active Â· 1452:8357 Disabled
+       strokeAlign: INSIDE â†’ box-shadow:inset, never border (Rule 60)
+       Dimensions: h:24px, padding:2px 4px, border-radius:60px (pill) */
+    .navbar-bottom__btn {
+      display:       flex;
+      align-items:   center;
+      height:        24px;
+      max-height:    24px;
+      padding:       2px 4px;             /* DS: paddingTop:2 paddingRight:4 paddingBottom:2 paddingLeft:4 */
+      background:    var(--surface-general-default);   /* Default: Surface/general/default #ffffff */
+      border-radius: var(--corner-radius-corner-rounded);   /* 60px pill */
+      box-shadow:    none;                /* Default: no stroke */
+      border:        none;
+      cursor:        pointer;
+      user-select:   none;
+      white-space:   nowrap;
+      transition:    background 0.12s ease, box-shadow 0.12s ease;
+    }
+    /* Hover: Surface/secondary/default #b5f291 Â· Border/secondary/focus inset 1px #70bc6f */
+    .navbar-bottom__btn:hover {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    /* Pressed (mousedown): Surface/primary/focus #00a36a Â· Border/primary/default inset 1px #00cc85 */
+    .navbar-bottom__btn:active {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    /* Active (currently selected / menu open): Surface/primary/default #00cc85 Â· Border/primary/focus inset 1px #00a36a */
+    .navbar-bottom__btn.is-active {
+      background: var(--surface-primary-default);
+      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+    }
 
-body           { padding-bottom: 56px; }   /* bottom navbar height */
+    /* Icon slot: 20Ã—20 wrapper, 16Ã—16 SVG â€” separate color per state */
+    .navbar-bottom__icon {
+      display: flex; align-items: center; justify-content: center;
+      width: 20px; height: 20px; flex-shrink: 0;
+      color: var(--icon-primary-default);          /* Default: Icon/primary/default #00cc85 */
+      transition: color 0.12s ease;
+    }
+    .navbar-bottom__icon svg { width: 16px; height: 16px; display: block; }
+    .navbar-bottom__btn:hover  .navbar-bottom__icon { color: var(--icon-secondary-hover); }    /* Hover  â€” Icon/secondary/hover  #70bc6f */
+    .navbar-bottom__btn:active .navbar-bottom__icon { color: var(--icon-primary-default); }   /* Pressed â€” Icon/primary/default #00cc85 (Arrow vis=false, leading icon confirmed) */
+    .navbar-bottom__btn.is-active .navbar-bottom__icon { color: var(--icon-primary-on-color); } /* Active  â€” Icon/primary/on-color #e1f9ea */
+
+    /* Label: 12px SemiBold Â· px:4px â€” separate color per state */
+    .navbar-bottom__label {
+      font-family: var(--font-family);
+      font-size:   12px;
+      font-weight: 600;
+      line-height: 18px;
+      color:       var(--text-default-body);        /* Default: Text/default/body #666666 */
+      padding:     0 var(--spacing-space-xxs);
+      transition:  color 0.12s ease;
+    }
+    .navbar-bottom__btn:hover  .navbar-bottom__label { color: var(--text-secondary-focus); }  /* #70bc6f */
+    .navbar-bottom__btn:active .navbar-bottom__label { color: var(--text-primary-default); }  /* #00cc85 */
+    .navbar-bottom__btn.is-active .navbar-bottom__label { color: var(--text-primary-on-color); } /* #e1f9ea */
+
+    /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+       RESPONSIVE LAYOUT
+       Desktop : â‰¥ 1440px â†’ desktop navbar, 3-col quiz grid, 60px padding
+       < 1440px           â†’ mobile navbar
+       Tablet  : 768px â€“ 1279px  â†’ 2-col quiz grid, 32px padding
+       Mobile  : < 768px         â†’ 1-col quiz grid, 16px padding
+    â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+    #NavBar-Mobile { display: none; padding: 0 var(--page-padding-x); position: relative; z-index: 300;
+                     transition: opacity 0.15s ease; }
+    /* Hamburger click hides the navbar bar while dropdown slides in over the same space */
+    #NavBar-Mobile.is-hidden-for-menu { opacity: 0; pointer-events: none; }
+
+    /* Navbar breakpoint: â‰¤1319px â†’ show mobile bar, hide desktop navbars */
+    @media (max-width: 1319px) {
+      #NavbarPrimary-Desktop { display: none; }
+      #NavTopMenu-Desktop    { display: none; }
+      #NavBar-Mobile         { display: block; }
+      .pd-breadcrumbs15      { display: none; }
+    }
+
+    /* RECENT ACTIVITIES CAROUSEL â€” Section 6
+       Flex layout: [btn-side] [viewport overflow:hidden] [btn-side]
+       16px padding all around each button â€” cards never overlap buttons. */
+    #YourRecentActivities-Desktop .primary-card__content {
+      display:     flex;
+      align-items: center;
+      gap:         var(--spacing-space-m);
+      padding:     var(--spacing-space-m);
+      overflow:    hidden;
+    }
+    .recent-carousel__btn-side {
+      flex-shrink: 0;
+      align-self:  stretch;
+      display:     flex;
+      align-items: center;
+    }
+    .recent-carousel__btn-side .carousel__btn { height: 100%; }
+    .recent-carousel__viewport {
+      flex:      1;
+      min-width: 0;
+      overflow:  hidden;
+    }
+    .recent-carousel__track {
+      display:     flex;
+      gap:         var(--spacing-space-m);
+      flex-shrink: 0;
+      transition:  transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    /* min/max enforced; JS sets exact width per viewport */
+    .recent-carousel__track .quiz-card {
+      flex-shrink: 0;
+      min-width:   300px;
+      max-width:   370px;
+    }
+
+    /* Tablet */
+    @media (max-width: 1279px) {
+      :root {
+        --page-padding-x:          32px;
+        --check-in-card-max-width: none;
+      }
+      .primary-card__content {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      /* DS Responsives: H1 28px â†’ 24px at tablet */
+      .welcome-text__name { font-size: 24px; line-height: 36px; }
+
+
+      /* Avatar - 1.5 Size=XL on tablet (64Ã—64, node 684:627) */
+      .welcome-avatar { width: 64px; height: 64px; min-width: 64px; min-height: 64px; }
+
+      /* Welcome section â€” Tablet + Mobile: welcome-row flex-wrap layout
+         Row 1: welcome-text (flex:1) + Avatar-Mobile
+         Row 2: status-badges (full-width)
+         Row 3: check-in-card (full-width)
+         #Welcome-Desktop â†’ display:contents so its children join .welcome-row directly */
+      .welcome-row     { display: flex; flex-wrap: wrap; gap: var(--spacing-space-m); }
+      #Welcome-Desktop { display: contents; }
+      .welcome-text    { order: 1; flex: 1; min-width: 0; text-align: left; }
+      #Avatar-Mobile   { display: flex; flex-shrink: 0; order: 2; }
+      .status-badges   { order: 3; flex-basis: 100%; }
+      .check-in-card   { order: 4; flex-basis: 100%; width: 100%; }
+
+      /* Status badges â€” each pill fills equal share of the full-width row */
+      .status-pill             { flex: 1; min-width: 0; }
+      .status-pill-flipper     { flex: 1; min-width: 0; }
+      .status-pill-flipper__inner { width: 100%; }
+      .status-pill-face--front { width: 100%; }
+    }
+
+    /* Mobile */
+    @media (max-width: 767px) {
+      :root {
+        --page-padding-x: var(--spacing-space-m);   /* 16px */
+      }
+      /* DS Responsives: H1â†’20px, T1/T2â†’16px, T3/T4/T5â†’14px at mobile */
+      .welcome-text__name    { font-size: 20px; line-height: 32px; }
+      .static-card__title    { font-size: 16px; line-height: 24px; }
+      .section-header__title { font-size: 16px; line-height: 24px; }
+      /* Status Badge Size=M mobile â€” each pill fills equal share of the full-width .status-badges row.
+         Icon ellipse, corners, padding, gap all untouched â€” only text frame fills the pill width. */
+      .status-pill              { height: 32px; max-height: 32px; min-height: unset; min-width: 0; padding: 4px 2px 4px 4px; flex: 1; }
+      .status-pill-flipper      { flex: 1; min-width: 0; }
+      .status-pill-flipper__inner { width: 100%; }
+      .status-pill-face--front  { width: 100%; }
+      .status-pill__label       { display: none; }
+      .status-pill__value       { font-size: 14px; font-weight: 600; line-height: 20px; }
+      .status-pill__icon        { width: 24px; height: 24px; padding: 4px 2px; flex-shrink: 0; }
+      .status-pill__icon svg    { height: 16px; }
+
+      /* Single-column quiz grid */
+      .primary-card__content {
+        grid-template-columns: 1fr;
+      }
+
+      /* Wrap static cards downward â€” each card full width, wraps to next row, height hugs content */
+      .static-cards-row { flex-wrap: wrap; }
+      .static-cards-row .static-card { flex-basis: 100%; height: auto; }
+      .static-cards-row .static-card .static-card__content { height: auto; }
+
+      /* Carousel â€” Mobile variant (DS Type=Mobile, node 3060:869)
+         Full-width bleed (no page padding), no nav buttons, no rounded frame, 152px height */
+      #Carousel-Desktop {
+        width:       100vw;
+        min-width:   390px;
+        margin-left: calc(-1 * var(--page-padding-x));
+      }
+      .carousel__content {
+        border-radius: 0;
+      }
+      .carousel__btn-wrap {
+        display: none;
+      }
+      .carousel__card {
+        height:        152px;
+        width:         auto;
+        aspect-ratio:  428 / 186;
+        max-width:     calc(100vw - 32px);
+      }
+      .carousel__track {
+        gap: var(--spacing-space-xs);   /* 8px â€” DS mobile gap */
+      }
+      /* Indicator â€” Mobile variant (DS node 3060:881): 88Ã—12px, 8Ã—8px dots, gap 10px, h-padding 4px */
+      .carousel__indicator {
+        padding:     0 4px;   /* horizontal only â€” dots at y:0 in 12px frame */
+        gap:         10px;
+        height:      12px;
+        align-items: center;
+      }
+      .carousel__dot {
+        width:  8px;
+        height: 8px;
+      }
+
+      /* Quiz card: floor at 300px on mobile */
+      .quiz-card {
+        min-width: 300px;
+      }
+
+
+      /* Subject Badge M variant at mobile â€” switch Section 4 back to M (16px icon, 24px badge).
+         M badge = 24px tall: 4px top + 16px icon + 4px bottom = 24px. */
+      #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge      { height: 24px; max-height: 24px; }
+      #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__text { font-size: 12px; line-height: 12px; }
+      #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon svg,
+      #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon img { height: 16px; width: auto; }
+
+      /* Status badges: allow wrapping when pills don't fit in a single row */
+      .status-badges { flex-wrap: wrap; }
+
+      /* Avatar - 1.5 Size=L on mobile (48Ã—48) â€” tablet uses XXL (100Ã—100) */
+      .welcome-avatar { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
+
+      /* Mobile: hide top hamburger navbar â†’ replaced by bottom Navbar Mobile - 1.5 */
+      #NavBar-Mobile { display: none; }
+      body { padding-top: var(--spacing-space-m); }
+
+      /* Mobile bottom navbar visible; desktop footer hidden */
+      .navbar-bottom { display: flex; }
+      .footer        { display: none; }
+      body           { padding-bottom: 56px; }   /* bottom navbar height */
     }
 
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -2274,7 +2533,6 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
   </style>
 </head>
 <body>
-
 <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <!-- Outline/image (611:3075) --><symbol id="ic-image" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="18" height="18" rx="2" ry="2"/><circle cx="6.5" cy="6.5" r="1.5"/><polyline points="19 13.5 14 8.5 3 19.5"/></symbol>
@@ -2455,8 +2713,7 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
     </defs>
   </svg>
 
-<section id="Navigation-Shell">
-  <section id="NavbarPrimary-Desktop">
+<section id="NavbarPrimary-Desktop">
     <div class="navbar-primary">
 
       <!-- Logo/Pandai/Logo Horizontal (node 1898:6965): 116×28px overflow-clip container -->
@@ -3336,10 +3593,9 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
   <!-- Tablet overlay — Overlay/Overlay-Dark rgba(26,26,26,0.5) · z-index 250
        Behind navbar (300) and dropdown (300), in front of page content (0).
        Click closes the dropdown. -->
-  <div id="tablet-overlay" class="tablet-overlay" aria-hidden="true"></div>
+  <div id="tablet-overlay" class="tablet-overlay" aria-hidden="true">
 
-  <main>
-
+<main>
     <div class="page-container">
       <div class="main-content">
 
@@ -3516,7 +3772,6 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
 
       </div>
     </div>
-  
   </main>
 
 <footer class="footer">
@@ -3540,10 +3795,7 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
     </div>
   </footer>
 
-
-
-
-  <script>
+<script>
 
     // Search bar — btn click → open + focus + start 3s timer; inactivity → close + reset btn (Rule 14: critical first)
     (function () {
@@ -4368,7 +4620,6 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
       console.warn('Recent activities carousel error:', e);
     }
   </script>
-  
 
 <nav id="NavBar-Bottom" class="navbar-bottom" aria-label="Mobile navigation">
     <button class="navbar-bottom__btn" type="button" aria-label="Quiz">
@@ -4604,8 +4855,7 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
 
   </div><!-- end NavMenu-Mobile -->
 
-
-  <script>
+<script>
     (function () {
       var accountBtn    = document.getElementById('account-btn');
       var mobilePanel   = document.getElementById('NavMenu-Mobile');
@@ -4925,6 +5175,7 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
     var a = document.getElementById('NavTopMenu-Desktop'); if (a) targets.push(a);
     document.querySelectorAll('.navbar-nav, .menubar-nav').forEach(function (n) { targets.push(n); });
     if (!targets.length) return;
+    /* Synchronous re-apply on every batch of mutations — runs as microtask, before paint */
     var observer = new MutationObserver(applyActive);
     targets.forEach(function (t) {
       observer.observe(t, { attributes: true, subtree: true, attributeFilter: ['class', 'aria-current'] });
@@ -4936,15 +5187,18 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
     wireLinks();
     applyActive();
     startObserver();
+    /* Defeat any deferred init code that re-asserts Home — multiple deferred passes */
     [0, 50, 150, 400, 1000, 2500].forEach(function (d) { setTimeout(applyActive, d); });
+    /* 5s safety net: re-check every 250ms for 5s after load */
     var ticks = 0;
     var iv = setInterval(function () {
       applyActive();
       if (++ticks >= 20) clearInterval(iv);
     }, 250);
-    document.addEventListener('click',      function () { setTimeout(applyActive, 0); }, true);
-    document.addEventListener('mouseleave', function () { setTimeout(applyActive, 0); }, true);
-    document.addEventListener('mouseup',    function () { setTimeout(applyActive, 0); }, true);
+    /* Also re-apply on user interaction */
+    document.addEventListener('click',     function () { setTimeout(applyActive, 0); }, true);
+    document.addEventListener('mouseleave',function () { setTimeout(applyActive, 0); }, true);
+    document.addEventListener('mouseup',   function () { setTimeout(applyActive, 0); }, true);
   }
 
   if (document.readyState === 'loading') {
@@ -4954,6 +5208,5 @@ body           { padding-bottom: 56px; }   /* bottom navbar height */
   }
 })();
 </script>
-
 </body>
 </html>
