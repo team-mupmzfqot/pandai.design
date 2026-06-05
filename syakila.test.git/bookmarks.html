@@ -2129,12 +2129,12 @@
        fills:none on outer frame — white bg comes from cells directly
        3 columns per row: label (290px tinted) | notes (flex) | actions (146px)
        Each cell: strokeRightWeight:1 strokeBottomWeight:1 #d9d9d9 (last clipped by overflow:hidden) */
-    .qnc__content { background: transparent; border: 1px solid var(--border-general-default); border-radius: var(--corner-radius-corner-xl); overflow: hidden; width: 100%; }
+    .qnc__content { background: var(--surface-general-default); border: 1px solid var(--border-general-default); border-radius: var(--corner-radius-corner-xl); overflow: hidden; align-self: stretch; }
     .qnc__row { display: flex; flex-direction: row; min-height: 56px; }
     /* Cell 1 — 290px, tinted, border-right + border-bottom */
     .qnc__cell--label { width: 290px; min-width: 290px; flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: 16px; background: var(--qnc-cell-bg); border-right: 1px solid var(--border-general-default); border-bottom: 1px solid var(--border-general-default); }
-    /* Cell 2 — flex, white, column layout for note + question count */
-    .qnc__cell--body { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; padding: 16px; background: var(--surface-general-default); border-right: 1px solid var(--border-general-default); border-bottom: 1px solid var(--border-general-default); }
+    /* Cell 2 — flex, white, VERTICAL: topic name on top, question count below (B1) */
+    .qnc__cell--body { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; padding: 16px; background: var(--surface-general-default); border-right: 1px solid var(--border-general-default); border-bottom: 1px solid var(--border-general-default); }
     /* Cell 3 — 146px, white */
     .qnc__cell--actions { width: 146px; min-width: 146px; flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: 16px; background: var(--surface-general-default); border-bottom: 1px solid var(--border-general-default); }
     /* Last row: remove bottom border */
@@ -2145,12 +2145,16 @@
     .qnc__badge { display: inline-flex; align-items: center; padding: 2px 8px; height: 24px; background: #e1f9ea; box-shadow: inset 0 0 0 1px #66e0b6; border-radius: var(--corner-radius-corner-rounded); font-size: 12px; font-weight: 500; line-height: 16px; color: var(--text-primary-default); white-space: nowrap; flex-shrink: 0; }
     .qnc__topic-name { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); }
     .qnc__note-text { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); }
-    .qnc__q-count { font-size: 12px; font-weight: 400; line-height: 18px; color: var(--text-default-caption); }
-    /* Practice button — DS: Button-1.5 Primary/M, h:32, pad t:2 r:8 b:2 l:8, radius:60 */
-    .qnc__practice-btn { display: inline-flex; align-items: center; gap: 0; height: 32px; padding: 2px 8px; background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border-radius: var(--corner-radius-corner-rounded); border: none; cursor: pointer; flex-shrink: 0; }
-    .qnc__practice-btn__label { font-family: var(--font-family); font-size: 12px; font-weight: 600; line-height: 18px; color: #ffffff; padding: 0 4px; white-space: nowrap; }
-    .qnc__practice-btn__arrow { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; background: #99ebce; border-radius: var(--corner-radius-corner-rounded); flex-shrink: 0; }
-    .qnc__practice-btn__arrow svg { width: 16px; height: 16px; display: block; color: var(--border-primary-focus); }
+    .qnc__q-count { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); }
+    /* View button — DS: Button-1.5 Primary/M, h:32, pad t:2 r:8 b:2 l:8, radius:60, label "View" (DS confirmed node I5171:142578;2339:5079;5171:142573;2251:39430) */
+    .qnc__view-btn { display: inline-flex; align-items: center; gap: 0; height: 32px; padding: 2px 8px; background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border-radius: var(--corner-radius-corner-rounded); border: none; cursor: pointer; flex-shrink: 0; }
+    .qnc__view-btn__label { font-family: var(--font-family); font-size: 12px; font-weight: 600; line-height: 18px; color: var(--text-primary-on-color); padding: 0 4px; white-space: nowrap; }
+    .qnc__view-btn__arrow { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; background: #99ebce; border-radius: var(--corner-radius-corner-rounded); flex-shrink: 0; }
+    .qnc__view-btn__arrow svg { width: 16px; height: 16px; display: block; color: var(--border-primary-focus); }
+    /* Body cell topic — 14px/400, Text/default/body */
+    .qnc__body-text { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); }
+    /* Body cell question count — B1: 14px SemiBold, Text/default/body */
+    .qnc__q-count { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-default-body); }
     /* Delete button — DS: Button Icon-1.5, 32×32, #ff4c51 bg, #b23539 stroke INSIDE, radius:108 (pill) */
     .qnc__delete-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; min-width: 32px; background: #ff4c51; box-shadow: inset 0 0 0 1px #b23539; border-radius: 108px; border: none; cursor: pointer; flex-shrink: 0; }
     .qnc__delete-btn svg { width: 16px; height: 16px; display: block; color: #ffffff; }
@@ -3337,12 +3341,10 @@
               </div>
               <div class="qnc__header-content">
                 <div class="qnc__label">
-                  <span class="qnc__title">Topics</span>
-                  <span class="qnc__desc">Add Mathematics</span>
+                  <span class="qnc__title">Additional Mathematics</span>
                 </div>
               </div>
             </div>
-            <!-- Table: 2 rows × 3 cols (label | notes | actions) -->
             <div class="qnc__content">
               <div class="qnc__row">
                 <div class="qnc__cell--label">
@@ -3350,39 +3352,35 @@
                   <span class="qnc__topic-name">Functions</span>
                 </div>
                 <div class="qnc__cell--body">
-                  <span class="qnc__note-text">Types of relations: one-to-one, many-to-one, one-to-many, many-to-many. Function notation f(x).</span>
-                  <span class="qnc__q-count">25 questions</span>
+                  <span class="qnc__body-text">Functions</span>
+                  <span class="qnc__q-count">25 Questions</span>
                 </div>
                 <div class="qnc__cell--actions">
-                  <button class="qnc__practice-btn" aria-label="Practice Functions">
-                    <span class="qnc__practice-btn__label">Practice</span>
-                    <span class="qnc__practice-btn__arrow" aria-hidden="true">
-                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                    </span>
+                  <button class="qnc__view-btn" type="button" aria-label="View">
+                    <span class="qnc__view-btn__label">View</span>
+                    <span class="qnc__view-btn__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
                   </button>
-                  <button class="qnc__delete-btn" aria-label="Remove bookmark">
-                    <svg width="16" height="16" aria-hidden="true"><use href="#ic-trash-2"/></svg>
+                  <button class="qnc__delete-btn" type="button" aria-label="Remove bookmark">
+                    <svg aria-hidden="true"><use href="#ic-trash-2"/></svg>
                   </button>
                 </div>
               </div>
               <div class="qnc__row">
                 <div class="qnc__cell--label">
                   <span class="qnc__badge">Set 2</span>
-                  <span class="qnc__topic-name">Quadratic Functions</span>
+                  <span class="qnc__topic-name">Sequences &amp; Series</span>
                 </div>
                 <div class="qnc__cell--body">
-                  <span class="qnc__note-text">Completing the square, discriminant b²-4ac, axis of symmetry x = -b/2a.</span>
-                  <span class="qnc__q-count">30 questions</span>
+                  <span class="qnc__body-text">Sequences &amp; Series</span>
+                  <span class="qnc__q-count">18 Questions</span>
                 </div>
                 <div class="qnc__cell--actions">
-                  <button class="qnc__practice-btn" aria-label="Practice Quadratic Functions">
-                    <span class="qnc__practice-btn__label">Practice</span>
-                    <span class="qnc__practice-btn__arrow" aria-hidden="true">
-                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                    </span>
+                  <button class="qnc__view-btn" type="button" aria-label="View">
+                    <span class="qnc__view-btn__label">View</span>
+                    <span class="qnc__view-btn__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
                   </button>
-                  <button class="qnc__delete-btn" aria-label="Remove bookmark">
-                    <svg width="16" height="16" aria-hidden="true"><use href="#ic-trash-2"/></svg>
+                  <button class="qnc__delete-btn" type="button" aria-label="Remove bookmark">
+                    <svg aria-hidden="true"><use href="#ic-trash-2"/></svg>
                   </button>
                 </div>
               </div>
@@ -3400,8 +3398,7 @@
               </div>
               <div class="qnc__header-content">
                 <div class="qnc__label">
-                  <span class="qnc__title">Topics</span>
-                  <span class="qnc__desc">Chemistry</span>
+                  <span class="qnc__title">Chemistry</span>
                 </div>
               </div>
             </div>
@@ -3412,39 +3409,35 @@
                   <span class="qnc__topic-name">Beneficial Microorganisms</span>
                 </div>
                 <div class="qnc__cell--body">
-                  <span class="qnc__note-text">Bacteria used in food production: Lactobacillus for yogurt, yeast for fermentation processes.</span>
-                  <span class="qnc__q-count">18 questions</span>
+                  <span class="qnc__body-text">Beneficial Microorganisms</span>
+                  <span class="qnc__q-count">5 Questions</span>
                 </div>
                 <div class="qnc__cell--actions">
-                  <button class="qnc__practice-btn" aria-label="Practice Microorganisms">
-                    <span class="qnc__practice-btn__label">Practice</span>
-                    <span class="qnc__practice-btn__arrow" aria-hidden="true">
-                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                    </span>
+                  <button class="qnc__view-btn" type="button" aria-label="View">
+                    <span class="qnc__view-btn__label">View</span>
+                    <span class="qnc__view-btn__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
                   </button>
-                  <button class="qnc__delete-btn" aria-label="Remove bookmark">
-                    <svg width="16" height="16" aria-hidden="true"><use href="#ic-trash-2"/></svg>
+                  <button class="qnc__delete-btn" type="button" aria-label="Remove bookmark">
+                    <svg aria-hidden="true"><use href="#ic-trash-2"/></svg>
                   </button>
                 </div>
               </div>
               <div class="qnc__row">
                 <div class="qnc__cell--label">
                   <span class="qnc__badge">Set 2</span>
-                  <span class="qnc__topic-name">Electrochemistry</span>
+                  <span class="qnc__topic-name">Atomic Structure</span>
                 </div>
                 <div class="qnc__cell--body">
-                  <span class="qnc__note-text">Electrolysis, electroplating, Faraday's laws, standard electrode potential.</span>
-                  <span class="qnc__q-count">22 questions</span>
+                  <span class="qnc__body-text">Atomic Structure</span>
+                  <span class="qnc__q-count">32 Questions</span>
                 </div>
                 <div class="qnc__cell--actions">
-                  <button class="qnc__practice-btn" aria-label="Practice Electrochemistry">
-                    <span class="qnc__practice-btn__label">Practice</span>
-                    <span class="qnc__practice-btn__arrow" aria-hidden="true">
-                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                    </span>
+                  <button class="qnc__view-btn" type="button" aria-label="View">
+                    <span class="qnc__view-btn__label">View</span>
+                    <span class="qnc__view-btn__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
                   </button>
-                  <button class="qnc__delete-btn" aria-label="Remove bookmark">
-                    <svg width="16" height="16" aria-hidden="true"><use href="#ic-trash-2"/></svg>
+                  <button class="qnc__delete-btn" type="button" aria-label="Remove bookmark">
+                    <svg aria-hidden="true"><use href="#ic-trash-2"/></svg>
                   </button>
                 </div>
               </div>
@@ -3462,8 +3455,7 @@
               </div>
               <div class="qnc__header-content">
                 <div class="qnc__label">
-                  <span class="qnc__title">Topics</span>
-                  <span class="qnc__desc">Business Studies</span>
+                  <span class="qnc__title">Business Studies</span>
                 </div>
               </div>
             </div>
@@ -3471,42 +3463,38 @@
               <div class="qnc__row">
                 <div class="qnc__cell--label">
                   <span class="qnc__badge">Set 1</span>
-                  <span class="qnc__topic-name">Marketing Mix</span>
+                  <span class="qnc__topic-name">Supply &amp; Demand</span>
                 </div>
                 <div class="qnc__cell--body">
-                  <span class="qnc__note-text">The 4Ps: Product, Price, Place, Promotion. How each element drives customer value.</span>
-                  <span class="qnc__q-count">28 questions</span>
+                  <span class="qnc__body-text">Supply &amp; Demand</span>
+                  <span class="qnc__q-count">15 Questions</span>
                 </div>
                 <div class="qnc__cell--actions">
-                  <button class="qnc__practice-btn" aria-label="Practice Marketing Mix">
-                    <span class="qnc__practice-btn__label">Practice</span>
-                    <span class="qnc__practice-btn__arrow" aria-hidden="true">
-                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                    </span>
+                  <button class="qnc__view-btn" type="button" aria-label="View">
+                    <span class="qnc__view-btn__label">View</span>
+                    <span class="qnc__view-btn__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
                   </button>
-                  <button class="qnc__delete-btn" aria-label="Remove bookmark">
-                    <svg width="16" height="16" aria-hidden="true"><use href="#ic-trash-2"/></svg>
+                  <button class="qnc__delete-btn" type="button" aria-label="Remove bookmark">
+                    <svg aria-hidden="true"><use href="#ic-trash-2"/></svg>
                   </button>
                 </div>
               </div>
               <div class="qnc__row">
                 <div class="qnc__cell--label">
                   <span class="qnc__badge">Set 2</span>
-                  <span class="qnc__topic-name">Financial Statements</span>
+                  <span class="qnc__topic-name">Cost &amp; Revenue</span>
                 </div>
                 <div class="qnc__cell--body">
-                  <span class="qnc__note-text">Income statement, balance sheet, cash flow — reading and interpreting financial data.</span>
-                  <span class="qnc__q-count">20 questions</span>
+                  <span class="qnc__body-text">Cost &amp; Revenue</span>
+                  <span class="qnc__q-count">21 Questions</span>
                 </div>
                 <div class="qnc__cell--actions">
-                  <button class="qnc__practice-btn" aria-label="Practice Financial Statements">
-                    <span class="qnc__practice-btn__label">Practice</span>
-                    <span class="qnc__practice-btn__arrow" aria-hidden="true">
-                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                    </span>
+                  <button class="qnc__view-btn" type="button" aria-label="View">
+                    <span class="qnc__view-btn__label">View</span>
+                    <span class="qnc__view-btn__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
                   </button>
-                  <button class="qnc__delete-btn" aria-label="Remove bookmark">
-                    <svg width="16" height="16" aria-hidden="true"><use href="#ic-trash-2"/></svg>
+                  <button class="qnc__delete-btn" type="button" aria-label="Remove bookmark">
+                    <svg aria-hidden="true"><use href="#ic-trash-2"/></svg>
                   </button>
                 </div>
               </div>
@@ -3515,43 +3503,6 @@
         </section>
 
         <!-- === STATS CARDS ROW ======================================= -->
-        <!-- DS: "Stat 2" frame 5171:142601, HORIZONTAL gap:32
-             Stats Card: 672×304, radius:24, 1px #00cc85 OUTSIDE
-             Panel: VERTICAL pad t:30 r:10 b:30 l:10, gap:10, bg rgba(255,255,255,0.5) -->
-        <section id="StatsCards-Desktop">
-          <div class="stats-row">
-
-            <!-- Stats Card 1 — Report Card CTA (DS node 5171:142602) -->
-            <div class="stats-card">
-              <div class="stats-card__bg" style="background-image:url('../src/image-repo/Learn/bookmarks/myBookmarks/stats-card-1-bg.png');" aria-hidden="true"></div>
-              <div class="stats-card__panel">
-                <p class="stats-card__text">Have you checked the report card to monitor your progress?</p>
-                <button class="stats-btn" aria-label="View your report card now">
-                  <span class="stats-btn__label">View your report card now!</span>
-                  <span class="stats-btn__arrow" aria-hidden="true">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Stats Card 2 — Goals CTA (DS node 5171:142609) -->
-            <div class="stats-card">
-              <div class="stats-card__bg" style="background-image:url('../src/image-repo/Learn/bookmarks/myBookmarks/stats-card-2-bg.png');" aria-hidden="true"></div>
-              <div class="stats-card__panel">
-                <p class="stats-card__title">Goal set by your parents</p>
-                <p class="stats-card__subtitle">There are goals and rewards waiting!</p>
-                <button class="stats-btn" aria-label="View goals">
-                  <span class="stats-btn__label">10 Goals Set to you!</span>
-                  <span class="stats-btn__arrow" aria-hidden="true">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
-                  </span>
-                </button>
-              </div>
-            </div>
-
-          </div>
-        </section>
 
       </div>
     </div>
