@@ -2089,84 +2089,90 @@
       color:  var(--text-disabled-default);
     }
 
-    /* ═══════════════════════════════════════════════════════════════
     /* ===================================================================
-       BOOKMARKS PAGE -- DS node 5171:142563
-       Outer frame: 1441x944, VERTICAL, bg white, pad r:60 b:30 l:60, gap 16
+       BOOKMARKS PAGE — DS node 5171:142563
        Source: TLVKe3bgJTdVvuPAzgDq2f
     =================================================================== */
 
-    /* Breadcrumb - 1.5 (same pattern as textbook page) */
-    .bm-breadcrumb { display: flex; align-items: center; gap: var(--spacing-space-m); min-height: 36px; }
-    .bm-breadcrumb__title-group { display: flex; align-items: center; gap: var(--spacing-space-m); flex-shrink: 0; }
-    .bm-breadcrumb__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
-    .bm-breadcrumb__sep { width: 1px; height: 24px; background: var(--border-general-default); flex-shrink: 0; }
-    .bm-breadcrumb__trail { display: flex; align-items: center; gap: var(--spacing-space-xs); }
+    /* ── Breadcrumb - 1.5 (DS node 5171:142567 — same pd-breadcrumbs15 pattern as quickNotes.html) */
+    .pd-breadcrumbs15  { display: flex; align-items: center; gap: var(--spacing-space-m); min-height: 36px; }
+    .pd-breadcrumbs__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
+    .pd-breadcrumbs__sep   { width: 1px; align-self: stretch; background: var(--border-general-default); flex-shrink: 0; }
+    .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--spacing-space-xs); flex-wrap: wrap; }
+    .pd-link15 { display: flex; align-items: center; gap: 4px; background: none; border: none; padding: 0; cursor: pointer; }
+    .pd-link15__icon { display: block; width: 20px; height: 20px; flex-shrink: 0; color: var(--text-primary-default); }
+    .pd-link15__text { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary-default); white-space: nowrap; }
+    .pd-breadcrumbs__chevron { width: 16px; height: 16px; color: var(--text-primary-default); flex-shrink: 0; }
+    .pd-breadcrumbs__current { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
 
-    /* Breadcrumb link -- icon + text + optional chevron */
-    .bm-bc-link { display: flex; align-items: center; gap: var(--spacing-space-xs); flex-shrink: 0; cursor: pointer; text-decoration: none; }
-    .bm-bc-link svg { width: 20px; height: 20px; display: block; flex-shrink: 0; color: var(--text-primary-default); }
-    .bm-bc-link__text { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary-default); white-space: nowrap; }
-    .bm-bc-link:hover .bm-bc-link__text { text-decoration: underline; }
-    .bm-bc-link--current { cursor: default; }
-    .bm-bc-link--current svg { color: var(--text-default-body); }
-    .bm-bc-link--current .bm-bc-link__text { color: var(--text-default-body); }
-    .bm-bc-link--current:hover .bm-bc-link__text { text-decoration: none; }
-    .bm-bc-sep { display: flex; align-items: center; color: var(--text-default-caption); }
-    .bm-bc-sep svg { width: 16px; height: 16px; display: block; }
-
-    /* Quick Notes Card - 1.5
-       DS: 1321x270, VERTICAL, pad 16, gap 16
-       bg: Surface/secondary/default-subtle #e8fbe8
-       border: 1px #00cc85 INSIDE -> box-shadow:inset
-       radius: 24px (Corner-4XL) */
+    /* ── Quick Notes Card - 1.5
+       DS outer: 1321×270, VERTICAL pad:16 gap:16
+       bg: Surface/secondary/default-subtle #e8fbe8, stroke:1px #00cc85 INSIDE, radius:24 */
     .qnc { background: var(--surface-secondary-default-subtle); box-shadow: inset 0 0 0 1px var(--border-primary-default); border-radius: var(--corner-radius-corner-4xl); padding: var(--spacing-space-m); display: flex; flex-direction: column; gap: var(--spacing-space-m); }
 
-    /* Card header -- DS: HORIZONTAL, 110px height, subject-specific bg, radius 18, border INSIDE */
-    .qnc__header { display: flex; flex-direction: row; height: 110px; border-radius: var(--corner-radius-corner-2xl); box-shadow: inset 0 0 0 1px var(--qnc-header-border); background: var(--qnc-header-bg); overflow: hidden; }
-
-    /* Icon area -- DS: 110x110, CENTER content, two 60x60 items, gap 10 */
-    .qnc__icon-area { width: 110px; min-width: 110px; height: 110px; display: flex; align-items: center; justify-content: center; gap: 10px; flex-shrink: 0; }
-    .qnc__subject-icon { width: 60px; height: 60px; object-fit: contain; flex-shrink: 0; }
-    .qnc__thumbnail { width: 60px; height: 60px; border-radius: 8px; box-shadow: inset 0 0 0 1px #eaebf3; overflow: hidden; flex-shrink: 0; background: var(--surface-general-default-secondary); object-fit: cover; }
-
-    /* Header content -- DS: HORIZONTAL, flex:1, pad t:16 r:16 b:16 l:0 */
-    .qnc__header-content { flex: 1 0 0; display: flex; align-items: center; padding: var(--spacing-space-m) var(--spacing-space-m) var(--spacing-space-m) 0; }
-    .qnc__label { display: flex; flex-direction: column; gap: 2px; padding-left: 24px; }
+    /* Header — matches quickNotes.html qn-card__header pattern exactly */
+    .qnc__header { background: var(--qnc-header-bg); border: 1px solid var(--qnc-header-border); border-radius: var(--corner-radius-corner-2xl); height: 110px; max-height: 110px; overflow: hidden; display: flex; align-items: center; position: relative; }
+    /* Fano — absolute overlay (matches quickNotes.html qn-card__fano) */
+    .qnc__fano { position: absolute; top: 0; right: -25px; height: 110px; width: auto; mix-blend-mode: overlay; pointer-events: none; }
+    /* Icon col — matches quickNotes.html qn-card__icon-col */
+    .qnc__icon-area { flex-shrink: 0; max-width: 110px; width: 110px; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 12px 0 0 12px; }
+    .qnc__subject-badge { width: 60px; height: 60px; display: block; flex-shrink: 0; object-fit: contain; }
+    /* Right content — matches quickNotes.html qn-card__header-content */
+    .qnc__header-content { flex: 1 0 0; min-width: 0; height: 110px; display: flex; align-items: center; padding: 16px 16px 16px 0; gap: 2px; border-radius: 0 12px 12px 0; }
+    /* Label — border-left separator: DS Subject/default-subtle (same tint as cell bg, appears light/white on dark header) */
+    .qnc__label { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 2px; justify-content: center; border-left: 1px solid var(--qnc-cell-bg); padding-left: var(--spacing-space-xl); }
     .qnc__title { font-size: 24px; font-weight: 700; line-height: 36px; color: #ffffff; }
     .qnc__desc { font-size: 14px; font-weight: 500; line-height: 20px; color: #ffffff; }
 
-    /* Card content table -- DS: white bg, radius 16, border 1px #d9d9d9 INSIDE */
-    .qnc__content { background: var(--surface-general-default); box-shadow: inset 0 0 0 1px var(--border-general-default); border-radius: var(--corner-radius-corner-xl); overflow: hidden; }
+    /* ── Table (Content SLOT)
+       DS: VERTICAL gap:0, radius:16, stroke:1px #d9d9d9 INSIDE, overflow:hidden
+       fills:none on outer frame — white bg comes from cells directly
+       3 columns per row: label (290px tinted) | notes (flex) | actions (146px)
+       Each cell: strokeRightWeight:1 strokeBottomWeight:1 #d9d9d9 (last clipped by overflow:hidden) */
+    .qnc__content { background: transparent; border: 1px solid var(--border-general-default); border-radius: var(--corner-radius-corner-xl); overflow: hidden; width: 100%; }
     .qnc__row { display: flex; flex-direction: row; min-height: 56px; }
-    .qnc__row + .qnc__row { border-top: 1px solid var(--border-general-default); }
-    .qnc__cell-label { width: 290px; min-width: 290px; display: flex; align-items: center; gap: var(--spacing-space-xs); padding: var(--spacing-space-m); background: var(--qnc-cell-bg); border-right: 1px solid var(--border-general-default); flex-shrink: 0; }
-    .qnc__cell-body { flex: 1 0 0; display: flex; align-items: center; padding: var(--spacing-space-m); gap: var(--spacing-space-xs); }
-    .qnc__topic-name { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    /* Cell 1 — 290px, tinted, border-right + border-bottom */
+    .qnc__cell--label { width: 290px; min-width: 290px; flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: 16px; background: var(--qnc-cell-bg); border-right: 1px solid var(--border-general-default); border-bottom: 1px solid var(--border-general-default); }
+    /* Cell 2 — flex, white, column layout for note + question count */
+    .qnc__cell--body { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; padding: 16px; background: var(--surface-general-default); border-right: 1px solid var(--border-general-default); border-bottom: 1px solid var(--border-general-default); }
+    /* Cell 3 — 146px, white */
+    .qnc__cell--actions { width: 146px; min-width: 146px; flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: 16px; background: var(--surface-general-default); border-bottom: 1px solid var(--border-general-default); }
+    /* Last row: remove bottom border */
+    .qnc__row:last-child .qnc__cell--label,
+    .qnc__row:last-child .qnc__cell--body,
+    .qnc__row:last-child .qnc__cell--actions { border-bottom: none; }
+    /* Set badge — DS: Label Badge 1.5 (node 843:667), #e1f9ea bg, #66e0b6 stroke INSIDE, radius:60 (pill), 12px Medium, Text/primary/default */
+    .qnc__badge { display: inline-flex; align-items: center; padding: 2px 8px; height: 24px; background: #e1f9ea; box-shadow: inset 0 0 0 1px #66e0b6; border-radius: var(--corner-radius-corner-rounded); font-size: 12px; font-weight: 500; line-height: 16px; color: var(--text-primary-default); white-space: nowrap; flex-shrink: 0; }
+    .qnc__topic-name { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); }
     .qnc__note-text { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); }
-    .qnc__badge { display: inline-flex; align-items: center; padding: 2px 8px; background: #e1f9ea; box-shadow: inset 0 0 0 1px #66e0b6; border-radius: var(--corner-radius-corner-rounded); font-size: 10px; font-weight: 600; line-height: 16px; color: var(--text-tertiary-default); white-space: nowrap; flex-shrink: 0; }
+    .qnc__q-count { font-size: 12px; font-weight: 400; line-height: 18px; color: var(--text-default-caption); }
+    /* Practice button — DS: Button-1.5 Primary/M, h:32, pad t:2 r:8 b:2 l:8, radius:60 */
+    .qnc__practice-btn { display: inline-flex; align-items: center; gap: 0; height: 32px; padding: 2px 8px; background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border-radius: var(--corner-radius-corner-rounded); border: none; cursor: pointer; flex-shrink: 0; }
+    .qnc__practice-btn__label { font-family: var(--font-family); font-size: 12px; font-weight: 600; line-height: 18px; color: #ffffff; padding: 0 4px; white-space: nowrap; }
+    .qnc__practice-btn__arrow { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; background: #99ebce; border-radius: var(--corner-radius-corner-rounded); flex-shrink: 0; }
+    .qnc__practice-btn__arrow svg { width: 16px; height: 16px; display: block; color: var(--border-primary-focus); }
+    /* Delete button — DS: Button Icon-1.5, 32×32, #ff4c51 bg, #b23539 stroke INSIDE, radius:108 (pill) */
+    .qnc__delete-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; min-width: 32px; background: #ff4c51; box-shadow: inset 0 0 0 1px #b23539; border-radius: 108px; border: none; cursor: pointer; flex-shrink: 0; }
+    .qnc__delete-btn svg { width: 16px; height: 16px; display: block; color: #ffffff; }
 
-    /* Per-card subject colors */
+    /* Per-card subject colors (DS confirmed from header node fills) */
     .qnc--addmath   { --qnc-header-bg: #283589; --qnc-header-border: #182052; --qnc-cell-bg: #eaebf3; }
-    .qnc--chemistry { --qnc-header-bg: #e20082; --qnc-header-border: #88004e; --qnc-cell-bg: #fce6f3; }
-    .qnc--business  { --qnc-header-bg: #efb42b; --qnc-header-border: #8f6c1a; --qnc-cell-bg: #fef6e2; }
+    .qnc--chemistry { --qnc-header-bg: #e20082; --qnc-header-border: #880050; --qnc-cell-bg: #fce6f3; }
+    .qnc--business  { --qnc-header-bg: #efb42b; --qnc-header-border: #8f6c1a; --qnc-cell-bg: #fef8ea; }
 
-    /* Stats Cards Row -- DS: 1376x304, HORIZONTAL, gap 32px */
+    /* ── Stats Cards Row — DS: 1376×304, HORIZONTAL gap:32 */
     .stats-row { display: flex; flex-direction: row; gap: 32px; }
-
-    /* Stats Card -- DS: 672x304, radius 24, 1px #00cc85 OUTSIDE border */
+    /* Stats Card — DS: 672×304, radius:24, stroke:1px #00cc85 OUTSIDE → box-shadow no inset */
     .stats-card { flex: 1 0 0; height: 304px; border-radius: var(--corner-radius-corner-4xl); box-shadow: 0 0 0 1px var(--border-primary-default); overflow: hidden; position: relative; display: flex; flex-direction: column; justify-content: flex-end; }
-    .stats-card__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: var(--surface-secondary-default-subtle); }
-
-    /* Bottom content panel -- DS: pad t:30 r:10 b:30 l:10, gap 10, bg white, 1px #00cc85 INSIDE */
-    .stats-card__panel { position: relative; background: var(--surface-general-default); box-shadow: inset 0 0 0 1px var(--border-primary-default); padding: 30px 10px; display: flex; flex-direction: column; gap: 10px; }
-    .stats-card__text { font-size: 16px; font-weight: 500; line-height: 24px; color: var(--text-default-heading); max-width: 355px; }
-    .stats-card__title { font-size: 24px; font-weight: 700; line-height: 36px; color: var(--text-default-heading); max-width: 355px; }
-    .stats-card__subtitle { font-size: 16px; font-weight: 500; line-height: 24px; color: var(--text-default-heading); max-width: 355px; }
-
+    .stats-card__bg { position: absolute; inset: 0; background: var(--surface-secondary-default-subtle); background-size: cover; background-position: center; }
+    /* Panel — DS: VERTICAL gap:10, pad t:30 r:10 b:30 l:10, fill rgba(255,255,255,0.5) — semi-transparent */
+    .stats-card__panel { position: relative; background: rgba(255,255,255,0.5); padding: 30px 10px; display: flex; flex-direction: column; gap: 10px; }
+    .stats-card__text { font-size: 16px; font-weight: 500; line-height: 24px; color: var(--text-default-heading); }
+    .stats-card__title { font-size: 24px; font-weight: 700; line-height: 36px; color: var(--text-default-heading); }
+    .stats-card__subtitle { font-size: 16px; font-weight: 500; line-height: 24px; color: var(--text-default-heading); }
     /* Primary/M button inside stats card */
-    .stats-btn { display: inline-flex; align-items: center; gap: var(--spacing-space-xxs); height: 32px; max-height: 32px; padding: 2px 8px; background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border-radius: var(--corner-radius-corner-rounded); border: none; cursor: pointer; flex-shrink: 0; align-self: flex-start; }
-    .stats-btn__label { font-family: var(--font-family); font-size: 12px; font-weight: 600; line-height: 18px; color: var(--text-primary-on-color); white-space: nowrap; }
+    .stats-btn { display: inline-flex; align-items: center; gap: 0; height: 32px; max-height: 32px; padding: 2px 8px; background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border-radius: var(--corner-radius-corner-rounded); border: none; cursor: pointer; flex-shrink: 0; align-self: flex-start; }
+    .stats-btn__label { font-family: var(--font-family); font-size: 12px; font-weight: 600; line-height: 18px; color: var(--text-primary-on-color); padding: 0 4px; white-space: nowrap; }
     .stats-btn__arrow { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; background: #99ebce; border-radius: var(--corner-radius-corner-rounded); flex-shrink: 0; }
     .stats-btn__arrow svg { width: 16px; height: 16px; display: block; color: var(--border-primary-focus); }
     .stats-btn:hover { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
@@ -2214,6 +2220,7 @@
       <!-- Outline/info (260:832) — vec x:2 y:2 +2+2 → vb -1 -1 26 26 --><symbol id="ic-info" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 12 22 C 17.523 22 22 17.523 22 12 C 22 6.477 22 2 12 2 C 6.477 2 2 6.477 2 12 C 2 17.523 6.477 22 12 22 Z"/><path d="M 12 16 L 12 12 M 12 8 L 12.01 8"/></symbol>
       <!-- Outline/heart (260:815) --><symbol id="ic-heart" viewBox="0 0 22.4031 19.7318" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 20.0413 2.36183 C 19.5305 1.85083 18.9241 1.44547 18.2566 1.16891 C 17.5892 0.892347 16.8738 0.75 16.1513 0.75 C 15.4288 0.75 14.7134 0.892347 14.0459 1.16891 C 13.3785 1.44547 12.772 1.85083 12.2613 2.36183 L 11.2013 3.42183 L 10.1413 2.36183 C 9.1096 1.33013 7.71032 0.750535 6.25129 0.750535 C 4.79226 0.750535 3.39298 1.33013 2.36129 2.36183 C 1.3296 3.39352 0.75 4.79279 0.75 6.25183 C 0.75 7.71086 1.3296 9.11013 2.36129 10.1418 L 3.42129 11.2018 L 11.2013 18.9818 L 18.9813 11.2018 L 20.0413 10.1418 C 20.5523 9.63107 20.9576 9.02464 21.2342 8.35718 C 21.5108 7.68972 21.6531 6.97431 21.6531 6.25183 C 21.6531 5.52934 21.5108 4.81393 21.2342 4.14647 C 20.9576 3.47901 20.5523 2.87258 20.0413 2.36183 Z"/></symbol>
       <!-- Outline/menu (260:922) — DS 24×24, 3 horizontal lines --><symbol id="ic-menu" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12H21M3 6H21M3 18H21"/></symbol>
+      <!-- Outline/trash-2 — Button Icon-1.5 Delete clip (DS node 2270:12783): 18×18 coord space at x:-1 y:-1 inside 16×16 clip --><symbol id="ic-trash-2" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 4.5H3.75M3.75 4.5H15.75M3.75 4.5V15C3.75 15.3978 3.90804 15.7794 4.18934 16.0607C4.47064 16.342 4.85218 16.5 5.25 16.5H12.75C13.1478 16.5 13.5294 16.342 13.8107 16.0607C14.092 15.7794 14.25 15.3978 14.25 15V4.5H3.75ZM6 4.5V3C6 2.60218 6.15804 2.22064 6.43934 1.93934C6.72064 1.65804 7.10218 1.5 7.5 1.5H10.5C10.8978 1.5 11.2794 1.65804 11.5607 1.93934C11.842 2.22064 12 2.60218 12 3V4.5M7.5 8.25V12.75M10.5 8.25V12.75"/></symbol>
       <!-- Outline/user — avatar placeholder, standard Feather single-person --><symbol id="ic-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
       <!-- Outline/home — DS export vb 0 0 20 20 (node I3406:804;538:2070, May 2026) --><symbol id="ic-home" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 18.3334V10H12.5V18.3334M2.5 7.50002L10 1.66669L17.5 7.50002V16.6667C17.5 17.1087 17.3244 17.5326 17.0118 17.8452C16.6993 18.1578 16.2754 18.3334 15.8333 18.3334H4.16667C3.72464 18.3334 3.30072 18.1578 2.98816 17.8452C2.67559 17.5326 2.5 17.1087 2.5 16.6667V7.50002Z"/></symbol>
       <!-- Outline/check-circle — DS export vb 0 0 20 20 (node I3406:805;538:2070, May 2026) --><symbol id="ic-check-circle" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.3334 9.23336V10C18.3323 11.797 17.7504 13.5456 16.6745 14.9849C15.5985 16.4242 14.0861 17.4771 12.3628 17.9866C10.6395 18.4961 8.79774 18.4349 7.11208 17.8122C5.42642 17.1894 3.98723 16.0384 3.00915 14.5309C2.03108 13.0234 1.56651 11.2401 1.68475 9.44696C1.80299 7.65383 2.49769 5.94697 3.66525 4.58092C4.83281 3.21488 6.41068 2.26285 8.16351 1.86682C9.91635 1.47079 11.7502 1.65198 13.3917 2.38336M18.3334 3.33336L10 11.675L7.50003 9.17503"/></symbol>
@@ -2368,6 +2375,9 @@
       <!-- P.Premium (6352:41216) — clipPath in defs (Rule 57: url() resolves from document root, not <use> shadow) -->
       <clipPath id="clip-premium"><rect width="20" height="20" fill="white"/></clipPath>
       <symbol id="ic-premium" viewBox="0 0 20 20" fill="none"><g clip-path="url(#clip-premium)"><path d="M8.18945 2.68805C8.90941 1.15493 11.0906 1.15493 11.8105 2.68805L13.4287 6.13629L17.1924 6.71539C18.8009 6.96261 19.4562 8.92502 18.3193 10.0894L15.5332 12.942L16.1758 16.8785C16.4446 18.5264 14.6955 19.7587 13.2344 18.9507L10 17.1627L6.76562 18.9507C5.3045 19.7587 3.55544 18.5264 3.82422 16.8785L4.46582 12.942L1.68066 10.0894C0.543759 8.92502 1.19912 6.96261 2.80762 6.71539L6.57031 6.13629L8.18945 2.68805Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.09473 3.11383C9.45466 2.34708 10.5453 2.34707 10.9053 3.11383L12.6377 6.80328C12.7084 6.95396 12.8492 7.06012 13.0137 7.08551L17.041 7.70367C17.845 7.82751 18.1728 8.80905 17.6045 9.39117L14.6426 12.4244C14.5317 12.5379 14.4814 12.6975 14.5068 12.8541L15.1895 17.0396C15.3238 17.8634 14.4492 18.4793 13.7188 18.0757L10.2422 16.1529C10.0916 16.0696 9.90837 16.0696 9.75781 16.1529L6.28125 18.0757C5.55077 18.4793 4.67621 17.8634 4.81055 17.0396L5.49316 12.8541C5.51863 12.6975 5.46828 12.5379 5.35742 12.4244L2.39551 9.39117C1.82719 8.80905 2.15501 7.82751 2.95898 7.70367L6.98633 7.08551C7.15083 7.06012 7.29156 6.95396 7.3623 6.80328L9.09473 3.11383Z" fill="#FFF200" stroke="#F2B839" stroke-linecap="round" stroke-linejoin="round"/></g></symbol>
+
+      <!-- Outline/printer (from DS TLVKe3bgJTdVvuPAzgDq2f Iconography page) -->
+      <symbol id="ic-printer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2H18V9M6 18H4C3.46957 18 2.96086 17.7893 2.58579 17.4142C2.21071 17.0391 2 16.5304 2 16V11C2 10.4696 2.21071 9.96086 2.58579 9.58579C2.96086 9.21071 3.46957 9 4 9H20C20.5304 9 21.0391 9.21071 21.4142 9.58579C21.7893 9.96086 22 10.4696 22 11V16C22 16.5304 21.7893 17.0391 21.4142 17.4142C21.0391 17.7893 20.5304 18 20 18H18M6 14H18V22H6V14Z"/></symbol>
 
     </defs>
   </svg>
@@ -3285,43 +3295,45 @@
       <div class="main-content">
 
         <!-- === BREADCRUMB ============================================ -->
-        <!-- DS: Breadcrumb - 1.5, node 5171:142567 -- Title "Bookmarks" + path: Learn > Bookmarks -->
-        <section id="Breadcrumb-Desktop">
-          <nav class="bm-breadcrumb" aria-label="Breadcrumb">
-            <div class="bm-breadcrumb__title-group">
-              <span class="bm-breadcrumb__title">Bookmarks</span>
-              <div class="bm-breadcrumb__sep" aria-hidden="true"></div>
+        <!-- DS: Breadcrumb-1.5 node 5171:142567
+             Title "Bookmarks" (24px med #00564c) | 1px divider | Trail gap:8
+             Each Link-1.5: [icon 20×20] [text 14px] [chevron-right 16×16]
+             "Learn" = green (#00cc85), "Bookmarks" = grey (#666666) current -->
+        <section id="Breadcrumb-Desktop" aria-label="Breadcrumb">
+          <div class="pd-breadcrumbs15">
+            <h1 class="pd-breadcrumbs__title">Bookmarks</h1>
+            <div class="pd-breadcrumbs__sep" aria-hidden="true"></div>
+            <div class="pd-breadcrumbs__links">
+              <button class="pd-link15" type="button" aria-label="Go to Learn">
+                <svg class="pd-link15__icon" aria-hidden="true" viewBox="0 0 20 20"><use href="#ic-book"/></svg>
+                <span class="pd-link15__text">Learn</span>
+              </button>
+              <svg class="pd-breadcrumbs__chevron" aria-hidden="true" viewBox="0 0 24 24"><use href="#ic-chevron-right"/></svg>
+              <span class="pd-breadcrumbs__current" aria-current="page">Bookmarks</span>
             </div>
-            <div class="bm-breadcrumb__trail">
-              <!-- "Learn" link -- Outline/book icon + text (DS: #00cc85) -->
-              <a href="#" class="bm-bc-link">
-                <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-book"/></svg>
-                <span class="bm-bc-link__text">Learn</span>
-              </a>
-              <!-- Chevron separator -->
-              <span class="bm-bc-sep" aria-hidden="true">
-                <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-right"/></svg>
-              </span>
-              <!-- "Bookmarks" -- current page (DS: #666666) -->
-              <span class="bm-bc-link bm-bc-link--current" aria-current="page">
-                <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-info"/></svg>
-                <span class="bm-bc-link__text">Bookmarks</span>
-              </span>
-            </div>
-          </nav>
+          </div>
         </section>
 
-        <!-- === QUICK NOTES CARDS (x3) =============================== -->
+        <!-- === QUICK NOTES CARDS (×3) =============================== -->
+        <!-- DS: Quick Notes Card-1.5, nodes 5171:142578 / 142589 / 142600
+             Outer: 1321×270, VERTICAL pad:16 gap:16, #e8fbe8 bg, 1px #00cc85 INSIDE, radius:24
+             Header: HORIZONTAL h:110, radius:18, subject bg, 1px INSIDE
+               Left icon area (110×110 HORIZONTAL gap:10): subject badge 60×60 ONLY
+                 (Image Thumbnail visible:false — not rendered)
+               Right content (flex:1, HORIZONTAL gap:2, pad t:16 r:16 b:16 l:0):
+                 Label (VERTICAL gap:2, pl:24): "Topics" (24px Bold white) + subject (14px Med white)
+                 (Icon/print button visible:false — not rendered)
+                 Fano wireframe (512×512, absolute, decorative)
+             Table (Content SLOT): VERTICAL gap:0, radius:16, 1px #d9d9d9 INSIDE
+               Row: 3 cells — label 290px tinted | notes flex | actions 146px -->
 
-        <!-- Card 1 -- Add Maths -->
+        <!-- Card 1 — Add Mathematics (header bg #283589) -->
         <section id="QuickNotesCard-AddMath">
           <div class="qnc qnc--addmath">
             <div class="qnc__header">
+              <img class="qnc__fano" src="../src/image-repo/Learn/bookmarks/myBookmarks/fano-wireframe.svg" alt="" aria-hidden="true">
               <div class="qnc__icon-area">
-                <div class="qnc__subject-icon" style="display:flex;align-items:center;justify-content:center;">
-                  <img src="../src/image-repo/Learn/bookmarks/myBookmarks/icon-addmath.png" alt="Add Mathematics" width="60" height="60" style="width:60px;height:60px;object-fit:contain;" onerror="this.style.display='none'">
-                </div>
-                <div class="qnc__thumbnail"></div>
+                <img class="qnc__subject-badge" src="../src/image-repo/Learn/bookmarks/myBookmarks/border-addmath.svg" alt="Add Mathematics" width="60" height="60">
               </div>
               <div class="qnc__header-content">
                 <div class="qnc__label">
@@ -3330,38 +3342,61 @@
                 </div>
               </div>
             </div>
+            <!-- Table: 2 rows × 3 cols (label | notes | actions) -->
             <div class="qnc__content">
               <div class="qnc__row">
-                <div class="qnc__cell-label">
-                  <span class="qnc__badge">Ch 1</span>
+                <div class="qnc__cell--label">
+                  <span class="qnc__badge">Set 1</span>
                   <span class="qnc__topic-name">Functions</span>
                 </div>
-                <div class="qnc__cell-body">
+                <div class="qnc__cell--body">
                   <span class="qnc__note-text">Types of relations: one-to-one, many-to-one, one-to-many, many-to-many. Function notation f(x).</span>
+                  <span class="qnc__q-count">25 questions</span>
+                </div>
+                <div class="qnc__cell--actions">
+                  <button class="qnc__practice-btn" aria-label="Practice Functions">
+                    <span class="qnc__practice-btn__label">Practice</span>
+                    <span class="qnc__practice-btn__arrow" aria-hidden="true">
+                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
+                    </span>
+                  </button>
+                  <button class="qnc__delete-btn" aria-label="Remove bookmark">
+                    <svg width="16" height="16" aria-hidden="true"><use href="#ic-trash-2"/></svg>
+                  </button>
                 </div>
               </div>
               <div class="qnc__row">
-                <div class="qnc__cell-label">
-                  <span class="qnc__badge">Ch 2</span>
+                <div class="qnc__cell--label">
+                  <span class="qnc__badge">Set 2</span>
                   <span class="qnc__topic-name">Quadratic Functions</span>
                 </div>
-                <div class="qnc__cell-body">
-                  <span class="qnc__note-text">Completing the square, discriminant b&#178;-4ac, axis of symmetry x = -b/2a.</span>
+                <div class="qnc__cell--body">
+                  <span class="qnc__note-text">Completing the square, discriminant b²-4ac, axis of symmetry x = -b/2a.</span>
+                  <span class="qnc__q-count">30 questions</span>
+                </div>
+                <div class="qnc__cell--actions">
+                  <button class="qnc__practice-btn" aria-label="Practice Quadratic Functions">
+                    <span class="qnc__practice-btn__label">Practice</span>
+                    <span class="qnc__practice-btn__arrow" aria-hidden="true">
+                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
+                    </span>
+                  </button>
+                  <button class="qnc__delete-btn" aria-label="Remove bookmark">
+                    <svg width="16" height="16" aria-hidden="true"><use href="#ic-trash-2"/></svg>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- Card 2 -- Chemistry -->
+        <!-- Card 2 — Chemistry (header bg #e20082) -->
         <section id="QuickNotesCard-Chemistry">
           <div class="qnc qnc--chemistry">
             <div class="qnc__header">
+              <img class="qnc__fano" src="../src/image-repo/Learn/bookmarks/myBookmarks/fano-wireframe.svg" alt="" aria-hidden="true">
               <div class="qnc__icon-area">
-                <div class="qnc__subject-icon" style="display:flex;align-items:center;justify-content:center;">
-                  <img src="../src/image-repo/Learn/bookmarks/myBookmarks/icon-chemistry.png" alt="Chemistry" width="60" height="60" style="width:60px;height:60px;object-fit:contain;" onerror="this.style.display='none'">
-                </div>
-                <div class="qnc__thumbnail"></div>
+                <img class="qnc__subject-badge" src="../src/image-repo/Learn/bookmarks/myBookmarks/border-chemistry.svg" alt="Chemistry" width="60" height="60">
               </div>
               <div class="qnc__header-content">
                 <div class="qnc__label">
@@ -3372,36 +3407,58 @@
             </div>
             <div class="qnc__content">
               <div class="qnc__row">
-                <div class="qnc__cell-label">
-                  <span class="qnc__badge">Ch 3</span>
+                <div class="qnc__cell--label">
+                  <span class="qnc__badge">Set 1</span>
                   <span class="qnc__topic-name">Beneficial Microorganisms</span>
                 </div>
-                <div class="qnc__cell-body">
+                <div class="qnc__cell--body">
                   <span class="qnc__note-text">Bacteria used in food production: Lactobacillus for yogurt, yeast for fermentation processes.</span>
+                  <span class="qnc__q-count">18 questions</span>
+                </div>
+                <div class="qnc__cell--actions">
+                  <button class="qnc__practice-btn" aria-label="Practice Microorganisms">
+                    <span class="qnc__practice-btn__label">Practice</span>
+                    <span class="qnc__practice-btn__arrow" aria-hidden="true">
+                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
+                    </span>
+                  </button>
+                  <button class="qnc__delete-btn" aria-label="Remove bookmark">
+                    <svg width="16" height="16" aria-hidden="true"><use href="#ic-trash-2"/></svg>
+                  </button>
                 </div>
               </div>
               <div class="qnc__row">
-                <div class="qnc__cell-label">
-                  <span class="qnc__badge">Ch 5</span>
+                <div class="qnc__cell--label">
+                  <span class="qnc__badge">Set 2</span>
                   <span class="qnc__topic-name">Electrochemistry</span>
                 </div>
-                <div class="qnc__cell-body">
+                <div class="qnc__cell--body">
                   <span class="qnc__note-text">Electrolysis, electroplating, Faraday's laws, standard electrode potential.</span>
+                  <span class="qnc__q-count">22 questions</span>
+                </div>
+                <div class="qnc__cell--actions">
+                  <button class="qnc__practice-btn" aria-label="Practice Electrochemistry">
+                    <span class="qnc__practice-btn__label">Practice</span>
+                    <span class="qnc__practice-btn__arrow" aria-hidden="true">
+                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
+                    </span>
+                  </button>
+                  <button class="qnc__delete-btn" aria-label="Remove bookmark">
+                    <svg width="16" height="16" aria-hidden="true"><use href="#ic-trash-2"/></svg>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- Card 3 -- Business -->
+        <!-- Card 3 — Business (header bg #efb42b) -->
         <section id="QuickNotesCard-Business">
           <div class="qnc qnc--business">
             <div class="qnc__header">
+              <img class="qnc__fano" src="../src/image-repo/Learn/bookmarks/myBookmarks/fano-wireframe.svg" alt="" aria-hidden="true">
               <div class="qnc__icon-area">
-                <div class="qnc__subject-icon" style="display:flex;align-items:center;justify-content:center;">
-                  <img src="../src/image-repo/Learn/bookmarks/myBookmarks/icon-business.png" alt="Business" width="60" height="60" style="width:60px;height:60px;object-fit:contain;" onerror="this.style.display='none'">
-                </div>
-                <div class="qnc__thumbnail"></div>
+                <img class="qnc__subject-badge" src="../src/image-repo/Learn/bookmarks/myBookmarks/border-business.svg" alt="Business Studies" width="60" height="60">
               </div>
               <div class="qnc__header-content">
                 <div class="qnc__label">
@@ -3412,21 +3469,45 @@
             </div>
             <div class="qnc__content">
               <div class="qnc__row">
-                <div class="qnc__cell-label">
-                  <span class="qnc__badge">Ch 4</span>
+                <div class="qnc__cell--label">
+                  <span class="qnc__badge">Set 1</span>
                   <span class="qnc__topic-name">Marketing Mix</span>
                 </div>
-                <div class="qnc__cell-body">
+                <div class="qnc__cell--body">
                   <span class="qnc__note-text">The 4Ps: Product, Price, Place, Promotion. How each element drives customer value.</span>
+                  <span class="qnc__q-count">28 questions</span>
+                </div>
+                <div class="qnc__cell--actions">
+                  <button class="qnc__practice-btn" aria-label="Practice Marketing Mix">
+                    <span class="qnc__practice-btn__label">Practice</span>
+                    <span class="qnc__practice-btn__arrow" aria-hidden="true">
+                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
+                    </span>
+                  </button>
+                  <button class="qnc__delete-btn" aria-label="Remove bookmark">
+                    <svg width="16" height="16" aria-hidden="true"><use href="#ic-trash-2"/></svg>
+                  </button>
                 </div>
               </div>
               <div class="qnc__row">
-                <div class="qnc__cell-label">
-                  <span class="qnc__badge">Ch 6</span>
+                <div class="qnc__cell--label">
+                  <span class="qnc__badge">Set 2</span>
                   <span class="qnc__topic-name">Financial Statements</span>
                 </div>
-                <div class="qnc__cell-body">
-                  <span class="qnc__note-text">Income statement, balance sheet, cash flow &#8212; reading and interpreting financial data.</span>
+                <div class="qnc__cell--body">
+                  <span class="qnc__note-text">Income statement, balance sheet, cash flow — reading and interpreting financial data.</span>
+                  <span class="qnc__q-count">20 questions</span>
+                </div>
+                <div class="qnc__cell--actions">
+                  <button class="qnc__practice-btn" aria-label="Practice Financial Statements">
+                    <span class="qnc__practice-btn__label">Practice</span>
+                    <span class="qnc__practice-btn__arrow" aria-hidden="true">
+                      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
+                    </span>
+                  </button>
+                  <button class="qnc__delete-btn" aria-label="Remove bookmark">
+                    <svg width="16" height="16" aria-hidden="true"><use href="#ic-trash-2"/></svg>
+                  </button>
                 </div>
               </div>
             </div>
@@ -3434,39 +3515,36 @@
         </section>
 
         <!-- === STATS CARDS ROW ======================================= -->
+        <!-- DS: "Stat 2" frame 5171:142601, HORIZONTAL gap:32
+             Stats Card: 672×304, radius:24, 1px #00cc85 OUTSIDE
+             Panel: VERTICAL pad t:30 r:10 b:30 l:10, gap:10, bg rgba(255,255,255,0.5) -->
         <section id="StatsCards-Desktop">
           <div class="stats-row">
 
-            <!-- Stats Card 1 -- Report Card CTA -->
+            <!-- Stats Card 1 — Report Card CTA (DS node 5171:142602) -->
             <div class="stats-card">
-              <div class="stats-card__bg" aria-hidden="true"
-                style="background-image:url('../src/image-repo/Learn/bookmarks/myBookmarks/stats-card-1-bg.png'); background-size:cover; background-position:center;">
-              </div>
+              <div class="stats-card__bg" style="background-image:url('../src/image-repo/Learn/bookmarks/myBookmarks/stats-card-1-bg.png');" aria-hidden="true"></div>
               <div class="stats-card__panel">
                 <p class="stats-card__text">Have you checked the report card to monitor your progress?</p>
                 <button class="stats-btn" aria-label="View your report card now">
                   <span class="stats-btn__label">View your report card now!</span>
                   <span class="stats-btn__arrow" aria-hidden="true">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
                   </span>
                 </button>
               </div>
             </div>
 
-            <!-- Stats Card 2 -- Goals CTA -->
+            <!-- Stats Card 2 — Goals CTA (DS node 5171:142609) -->
             <div class="stats-card">
-              <div class="stats-card__bg" aria-hidden="true"
-                style="background-image:url('../src/image-repo/Learn/bookmarks/myBookmarks/stats-card-2-bg.png'); background-size:cover; background-position:center;">
-              </div>
+              <div class="stats-card__bg" style="background-image:url('../src/image-repo/Learn/bookmarks/myBookmarks/stats-card-2-bg.png');" aria-hidden="true"></div>
               <div class="stats-card__panel">
-                <div style="display:flex;flex-direction:column;gap:0;">
-                  <p class="stats-card__title">Goal set by your parents</p>
-                  <p class="stats-card__subtitle">There are goals and rewards waiting!</p>
-                </div>
+                <p class="stats-card__title">Goal set by your parents</p>
+                <p class="stats-card__subtitle">There are goals and rewards waiting!</p>
                 <button class="stats-btn" aria-label="View goals">
                   <span class="stats-btn__label">10 Goals Set to you!</span>
                   <span class="stats-btn__arrow" aria-hidden="true">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-btn-m"/></svg>
                   </span>
                 </button>
               </div>

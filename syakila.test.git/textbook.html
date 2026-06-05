@@ -112,6 +112,28 @@
       --subjects-kafa-default:       #8ae3a9;   /* Subjects/kafa/default */
       --subjects-rbt-default:        #353535;   /* Subjects/rbt/default */
 
+      /* Subject /50 (row tint) — DS Subject/*/50 primitives */
+      --subjects-b-melayu-50:        #f6f9ff;
+      --subjects-english-50:         #ffedee;
+      --subjects-math-50:            #ecf7f2;
+      --subjects-add-math-50:        #eaebf3;
+      --subjects-science-50:         #fffbec;
+      --subjects-physics-50:         #eaf6fb;
+      --subjects-chemistry-50:       #fce6f3;
+      --subjects-biology-50:         #f3ebfb;
+      --subjects-history-50:         #f7f2ee;
+      --subjects-geo-50:             #f2fbeb;
+      --subjects-economy-50:         #ffeeeb;
+      --subjects-account-50:         #e6f1fa;
+      --subjects-business-50:        #fef8ea;
+      --subjects-cs-50:              #fbe6f1;
+      --subjects-islamic-50:         #fcedf2;
+      --subjects-moral-50:           #e6f1fa;
+      --subjects-kafa-50:            #f4fcf7;
+      --subjects-rbt-50:             #ebebeb;
+
+      /* Subject badge colors — bg / border / text (DS CLAUDE.md Rule 17b) */
+
       /* Typography */
       --font-family: 'Poppins', sans-serif;
 
@@ -2094,30 +2116,16 @@
        Breadcrumb - 1.5, Alert - 1.5, Primary Card - 1.5 (Secondary)
     ═══════════════════════════════════════════════════════════════ */
 
-    /* Breadcrumb - 1.5 (DS node 5057:96806) — confirmed get_design_context 2026-06-05 */
-    /* Container: HORIZONTAL, CENTER, gap:16px, h:40px, no padding */
-    .tb-breadcrumb { display: flex; align-items: center; gap: var(--spacing-space-m); height: 40px; }
-    /* Title group: HORIZONTAL, CENTER, gap:16px — title + vertical separator */
-    .tb-breadcrumb__title-wrap { display: flex; align-items: center; gap: var(--spacing-space-m); height: 100%; flex-shrink: 0; }
-    /* Title: 24px / Medium(500) / lh:36 / #00564c (--text-tertiary-default) */
-    .tb-breadcrumb__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
-    /* Separator: LINE rotated -90° → 1px × 40px, stroke Border/general/default-secondary #bfbfbf */
-    .tb-breadcrumb__sep { width: 1px; height: 40px; background: var(--border-disabled-disabled); flex-shrink: 0; }
-    /* Content: HORIZONTAL, CENTER, gap:8px — all Link-1.5 items */
-    .tb-breadcrumb__trail { display: flex; align-items: center; gap: var(--spacing-space-xs); list-style: none; padding: 0; margin: 0; }
-    /* Link-1.5: HORIZONTAL, CENTER, gap:8px — [icon clip?] + [text] + [chevron clip] */
-    .tb-bc-link { display: inline-flex; align-items: center; gap: var(--spacing-space-xs); text-decoration: none; cursor: pointer; }
-    /* Icon clip 20×20, overflow:hidden — book icon inset: 8.33% top/bottom, 16.67% left/right = 1.67px / 3.33px */
-    .tb-bc-icon-clip { width: 20px; height: 20px; overflow: hidden; flex-shrink: 0; padding: 1.67px 3.33px; box-sizing: border-box; color: var(--text-primary-default); }
-    .tb-bc-icon-clip svg { width: 100%; height: 100%; display: block; }
-    /* Chevron clip 20×20, overflow:hidden — inset: 25% top/bottom, 37.5% left/right = 5px / 7.5px */
-    .tb-bc-chevron-clip { width: 20px; height: 20px; overflow: hidden; flex-shrink: 0; padding: 5px 7.5px; box-sizing: border-box; color: var(--border-disabled-disabled); }
-    .tb-bc-chevron-clip svg { width: 100%; height: 100%; display: block; }
-    /* Link text: 14px / Regular(400) / lh:20 / green #00cc85 */
-    .tb-bc-text { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary-default); white-space: nowrap; }
-    /* Current page: grey #666666 (--text-default-body), no chevron, cursor default */
-    .tb-bc-link--current { cursor: default; }
-    .tb-bc-link--current .tb-bc-text { color: var(--text-default-body); }
+    /* Breadcrumb - 1.5 (DS node 5057:96806) — standard pd-breadcrumbs15 pattern */
+    .pd-breadcrumbs15   { display: flex; align-items: center; gap: var(--spacing-space-m); min-height: 40px; }
+    .pd-breadcrumbs__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
+    .pd-breadcrumbs__sep   { width: 1px; align-self: stretch; background: var(--border-disabled-disabled); flex-shrink: 0; }
+    .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--spacing-space-xs); flex-wrap: wrap; }
+    .pd-link15 { display: flex; align-items: center; gap: 4px; background: none; border: none; padding: 0; cursor: pointer; }
+    .pd-link15__icon { display: block; width: 20px; height: 20px; flex-shrink: 0; color: var(--text-primary-default); }
+    .pd-link15__text { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary-default); white-space: nowrap; }
+    .pd-breadcrumbs__chevron { width: 16px; height: 16px; color: var(--text-primary-default); flex-shrink: 0; display: block; }
+    .pd-breadcrumbs__current { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
 
     /* Alert - 1.5 (DS node 5057:96807) — Warning variant */
     .tb-alert { display: flex; flex-direction: column; background: var(--surface-warning-default-subtle); border: 1px solid var(--border-warning-default); border-radius: 12px; padding: var(--spacing-space-s) var(--spacing-space-m); }
@@ -2129,16 +2137,12 @@
     .tb-alert__close { background: none; border: none; padding: 0; cursor: pointer; width: 20px; height: 20px; color: var(--text-warning-default); flex-shrink: 0; display: flex; align-items: center; }
     .tb-alert__close svg { width: 20px; height: 20px; display: block; }
 
-    /* Breadcrumb link hover */
-    .tb-bc-link:hover .tb-bc-text { text-decoration: underline; }
-    .tb-bc-link--current:hover .tb-bc-text { text-decoration: none; }
-
     /* Alert layout fix — inline icon + text + close */
     .tb-alert-box { display: flex; align-items: flex-start; gap: var(--spacing-space-xs); background: var(--surface-warning-default-subtle); border: 1px solid var(--border-warning-default); border-radius: 12px; padding: var(--spacing-space-s) var(--spacing-space-m); }
 
     /* Primary Card - 1.5 Secondary variant (DS node 5057:96903 / main 2881:36272) */
     .tb-card { background: var(--surface-secondary-default-subtle); box-shadow: inset 0 0 0 1px var(--border-primary-default); border-radius: var(--corner-radius-corner-4xl); padding: var(--spacing-space-m); display: flex; flex-direction: column; gap: var(--spacing-space-xs); }
-    .tb-card__inner { background: var(--surface-general-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border-radius: var(--corner-radius-corner-2xl); overflow: hidden; }
+    .tb-card__inner { background: var(--surface-general-default); border: 1px solid var(--border-general-default); border-radius: var(--corner-radius-corner-2xl); overflow: hidden; }
     .tb-card__header { display: flex; align-items: center; justify-content: space-between; padding: 0 var(--spacing-space-xs) var(--spacing-space-xs); }
     .tb-card__header-left { display: flex; align-items: center; gap: var(--spacing-space-xs); }
     .tb-card__title { font-size: 18px; font-weight: 600; line-height: 28px; color: var(--text-tertiary-default); }
@@ -2149,7 +2153,7 @@
     /* Table rows */
     .tb-row { display: flex; }
     .tb-row--head { min-height: 56px; }
-    .tb-row--body { min-height: 120px; }
+    .tb-row--body { min-height: 0; }
     .tb-row + .tb-row { border-top: 1px solid var(--border-general-default); }
 
     /* Cells — INSIDE stroke per DS strokeAlign:INSIDE on each cell */
@@ -2159,11 +2163,28 @@
     .tb-cell--sub { width: 360px; }
     .tb-cell--dl { flex: 1; flex-wrap: wrap; align-content: flex-start; gap: var(--spacing-space-xs); padding: var(--spacing-space-m); }
 
-    /* Subject row tint backgrounds (DS confirmed: subjectFill per row) */
-    .tb-cell--sub[data-subject="english"]  { background: #FFEDEE; }
-    .tb-cell--sub[data-subject="geo"]      { background: #F2FBEB; }
-    .tb-cell--sub[data-subject="islamic"]  { background: #FCEDF2; }
-    .tb-cell--sub[data-subject="moral"]    { background: #E6F1FA; }
+    /* Subject row tint backgrounds — DS Subject/*/50 primitives */
+    .tb-cell--sub[data-subject="bm"]        { background: var(--subjects-b-melayu-50); }
+    .tb-cell--sub[data-subject="english"]   { background: var(--subjects-english-50); }
+    .tb-cell--sub[data-subject="math"]      { background: var(--subjects-math-50); }
+    .tb-cell--sub[data-subject="add-math"]  { background: var(--subjects-add-math-50); }
+    .tb-cell--sub[data-subject="science"]   { background: var(--subjects-science-50); }
+    .tb-cell--sub[data-subject="physics"]   { background: var(--subjects-physics-50); }
+    .tb-cell--sub[data-subject="chemistry"] { background: var(--subjects-chemistry-50); }
+    .tb-cell--sub[data-subject="biology"]   { background: var(--subjects-biology-50); }
+    .tb-cell--sub[data-subject="history"]   { background: var(--subjects-history-50); }
+    .tb-cell--sub[data-subject="geo"]       { background: var(--subjects-geo-50); }
+    .tb-cell--sub[data-subject="economy"]   { background: var(--subjects-economy-50); }
+    .tb-cell--sub[data-subject="account"]   { background: var(--subjects-account-50); }
+    .tb-cell--sub[data-subject="business"]  { background: var(--subjects-business-50); }
+    .tb-cell--sub[data-subject="cs"]        { background: var(--subjects-cs-50); }
+    .tb-cell--sub[data-subject="islamic"]   { background: var(--subjects-islamic-50); }
+    .tb-cell--sub[data-subject="moral"]     { background: var(--subjects-moral-50); }
+    .tb-cell--sub[data-subject="kafa"]      { background: var(--subjects-kafa-50); }
+    .tb-cell--sub[data-subject="rbt"]       { background: var(--subjects-rbt-50); }
+
+    /* Header row fill — DS Heading Cell: Surface/general/default-secondary (#f2f2f2) */
+    .tb-row--head .tb-cell { background: var(--surface-general-default-secondary); }
 
     /* Header labels */
     .tb-head-label { font-size: 16px; font-weight: 500; line-height: 24px; color: var(--text-default-body); }
@@ -2171,33 +2192,50 @@
     .tb-head-icon { width: 20px; height: 20px; display: block; color: var(--icon-default-default); flex-shrink: 0; }
     .tb-num { font-size: 14px; line-height: 20px; color: var(--text-default-heading); }
 
-    /* Subject Badge — Size=M (24px) inside table cell (DS Rule 17b / Rule 20) */
-    .tb-badge { display: flex; height: 24px; border-radius: 60px; overflow: hidden; flex-shrink: 0; position: relative; }
-    .tb-badge__icon { display: flex; align-items: center; justify-content: center; padding: 4px 8px 4px 12px; background: var(--surface-general-default); flex-shrink: 0; }
-    .tb-badge__icon svg { width: 16px; height: 16px; display: block; }
-    .tb-badge__label { display: flex; align-items: center; padding: 0 16px 0 12px; font-size: 12px; font-weight: 500; line-height: 12px; white-space: nowrap; }
-    .tb-badge--english .tb-badge__label  { background: #ff4d56; color: #f2f2f2; }
-    .tb-badge--geo     .tb-badge__label  { background: #77d836; color: #478220; }
-    .tb-badge--islamic .tb-badge__label  { background: #de4d7f; color: #f2f2f2; }
-    .tb-badge--moral   .tb-badge__label  { background: #0072ca; color: #f2f2f2; }
+    /* Subject Badge — DS component pd-subject-badge, Size=L 32px (DS node 2002:26587 / CLAUDE.md Rule 17b) */
+    .pd-subject-badge { display: inline-flex; align-items: center; height: 32px; border-radius: var(--corner-radius-corner-rounded); border: 1px solid var(--badge-border, #ccc); overflow: hidden; flex-shrink: 0; }
+    .pd-subject-badge__icon { display: flex; align-items: center; justify-content: center; width: 40px; height: 32px; background: #fff; padding: 4px 8px 4px 12px; flex-shrink: 0; }
+    .pd-subject-badge__icon svg, .pd-subject-badge__icon img { display: block; width: 20px; height: 20px; object-fit: contain; }
+    .pd-subject-badge__label { display: flex; align-items: center; height: 32px; padding: 4px 16px 4px 12px; background: var(--badge-bg, #00cc85); font-size: 14px; font-weight: 500; line-height: 20px; color: var(--badge-text, #f2f2f2); white-space: nowrap; font-family: var(--font-family); position: relative; }
+    .pd-subject-badge__label::before { content: ''; position: absolute; left: 0; top: 12px; bottom: 12px; width: 4px; background: white; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+    .pd-badge--bm        { --badge-bg: var(--subjects-b-melayu-default); --badge-border: var(--subjects-b-melayu-default); }
+    .pd-badge--english   { --badge-bg: var(--subjects-english-default);  --badge-border: var(--subjects-english-default); }
+    .pd-badge--math      { --badge-bg: var(--subjects-math-default);     --badge-border: var(--subjects-math-default); }
+    .pd-badge--add-math  { --badge-bg: var(--subjects-add-math-default); --badge-border: var(--subjects-add-math-default); }
+    .pd-badge--science   { --badge-bg: var(--subjects-science-default);  --badge-border: var(--subjects-science-default);  --badge-text: #998027; }
+    .pd-badge--physics   { --badge-bg: var(--subjects-physics-default);  --badge-border: var(--subjects-physics-default); }
+    .pd-badge--chemistry { --badge-bg: var(--subjects-chemistry-default); --badge-border: var(--subjects-chemistry-default); }
+    .pd-badge--biology   { --badge-bg: var(--subjects-biology-default);  --badge-border: var(--subjects-biology-default); }
+    .pd-badge--history   { --badge-bg: var(--subjects-history-default);  --badge-border: var(--subjects-history-default); }
+    .pd-badge--geography { --badge-bg: var(--subjects-geo-default);      --badge-border: var(--subjects-geo-default);      --badge-text: #478220; }
+    .pd-badge--economy   { --badge-bg: var(--subjects-economy-default);  --badge-border: var(--subjects-economy-default); }
+    .pd-badge--account   { --badge-bg: var(--subjects-account-default);  --badge-border: var(--subjects-account-default); }
+    .pd-badge--business  { --badge-bg: var(--subjects-business-default); --badge-border: var(--subjects-business-default); }
+    .pd-badge--cs        { --badge-bg: var(--subjects-cs-default);       --badge-border: var(--subjects-cs-default); }
+    .pd-badge--islamic   { --badge-bg: var(--subjects-islamic-default);  --badge-border: var(--subjects-islamic-default); }
+    .pd-badge--moral     { --badge-bg: var(--subjects-moral-default);    --badge-border: var(--subjects-moral-default); }
+    .pd-badge--kafa      { --badge-bg: var(--subjects-kafa-default);     --badge-border: var(--subjects-kafa-default);     --badge-text: #538865; }
+    .pd-badge--rbt       { --badge-bg: var(--subjects-rbt-default);      --badge-border: var(--subjects-rbt-default); }
 
     /* Download buttons — Button - 1.5 Primary/S (DS node 1437:8154) */
-    .tb-btn-dl { display: inline-flex; align-items: center; justify-content: center; height: 24px; padding: 2px 4px; background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border-radius: 60px; border: none; cursor: pointer; font-family: var(--font-family); font-size: 12px; font-weight: 600; line-height: 18px; color: var(--text-primary-on-color); white-space: nowrap; user-select: none; }
+    .tb-btn-dl { display: inline-flex; align-items: center; justify-content: center; height: 24px; padding: 2px 8px; background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border-radius: var(--corner-radius-corner-rounded); border: none; cursor: pointer; font-family: var(--font-family); font-size: 12px; font-weight: 600; line-height: 18px; color: var(--text-primary-on-color); white-space: nowrap; user-select: none; }
     .tb-btn-dl:hover { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); color: var(--text-secondary-focus); }
     .tb-btn-dl.is-pressing,
     .tb-btn-dl:active { background: var(--surface-tertiary-default); box-shadow: inset 0 0 0 1px var(--border-tertiary-focus); color: var(--text-primary-default); }
 
     /* Other years section (DS node 5057:96904) — border: 1px solid #d9d9d9 (not inset), gap:12px */
     .tb-other-years { background: var(--surface-general-default); border: 1px solid var(--border-general-default); border-radius: var(--corner-radius-corner-4xl); padding: 12px; display: flex; flex-direction: column; gap: var(--spacing-space-s); }
-    .tb-other-years__label { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-heading); padding: 0 10px; }
+    .tb-other-years__label { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-default-heading); padding: 0 10px; }
     .tb-other-years__buttons { display: flex; flex-wrap: wrap; gap: var(--spacing-space-xs); padding: 0 10px 10px; }
 
-    /* Year buttons — Button - 1.5 Secondary/M (DS node 538:1923) */
-    .tb-btn-year { display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 2px 8px; background: var(--surface-general-default); box-shadow: inset 0 0 0 1px var(--border-primary-default); border-radius: 60px; border: none; cursor: pointer; font-family: var(--font-family); font-size: 12px; font-weight: 600; line-height: 18px; color: var(--text-primary-default); white-space: nowrap; user-select: none; }
-    .tb-btn-year:hover { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); color: var(--text-secondary-focus); }
-    .tb-btn-year.is-pressing,
-    .tb-btn-year:active { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); color: var(--text-primary-default); }
-    .tb-btn-year.is-current { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); color: var(--text-primary-on-color); cursor: default; }
+    /* Year buttons — Button - 1.5 Secondary/M (DS node 538:1923) — pd-btn15-secondary component */
+    .pd-btn15-secondary { display: inline-flex; align-items: center; justify-content: center; height: 32px; max-height: 32px; padding: 2px var(--spacing-space-xs); background: var(--surface-general-default); box-shadow: inset 0 0 0 1px var(--border-primary-default); border-radius: var(--corner-radius-corner-rounded); border: none; cursor: pointer; font-family: var(--font-family); color: var(--text-primary-default); white-space: nowrap; user-select: none; }
+    .pd-btn15-secondary:hover { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); color: var(--text-secondary-focus); }
+    .pd-btn15-secondary:active,
+    .pd-btn15-secondary.is-pressing { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); color: var(--text-primary-default); }
+    .pd-btn15-secondary.is-active { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); color: var(--text-primary-on-color); cursor: default; }
+    .pd-btn15-secondary__text-wrap { display: flex; align-items: center; padding: 0 var(--spacing-space-xxs); }
+    .pd-btn15-secondary__label { font-size: 12px; font-weight: 600; line-height: 18px; white-space: nowrap; }
 
   </style>
 </head>
@@ -3307,62 +3345,31 @@
       <div class="main-content">
 
         <!-- ═══ BREADCRUMB ════════════════════════════════════════════ -->
-        <!-- DS node 5057:96806 — Breadcrumb - 1.5, confirmed get_design_context 2026-06-05 -->
-        <!-- Trail from DS: Learn (book icon + chevron) → Textbooks (chevron) → current page (grey, no chevron) -->
-        <section id="Breadcrumb-Desktop">
-          <nav class="tb-breadcrumb" aria-label="Breadcrumb">
-
-            <!-- Title group: 24px title + 1px vertical separator -->
-            <div class="tb-breadcrumb__title-wrap">
-              <span class="tb-breadcrumb__title">Textbooks</span>
-              <div class="tb-breadcrumb__sep" aria-hidden="true"></div>
+        <!-- DS node 5057:96806 — Breadcrumb - 1.5 -->
+        <section id="Breadcrumb-Desktop" aria-label="Breadcrumb">
+          <div class="pd-breadcrumbs15">
+            <h1 class="pd-breadcrumbs__title">Textbooks</h1>
+            <div class="pd-breadcrumbs__sep" aria-hidden="true"></div>
+            <div class="pd-breadcrumbs__links">
+              <button class="pd-link15" type="button" aria-label="Go to Learn">
+                <svg class="pd-link15__icon" aria-hidden="true" viewBox="0 0 20 20"><use href="#ic-book"/></svg>
+                <span class="pd-link15__text">Learn</span>
+              </button>
+              <svg class="pd-breadcrumbs__chevron" aria-hidden="true" viewBox="0 0 24 24"><use href="#ic-chevron-right"/></svg>
+              <button class="pd-link15" type="button" aria-label="Go to Textbooks">
+                <span class="pd-link15__text">Textbooks</span>
+              </button>
+              <svg class="pd-breadcrumbs__chevron" aria-hidden="true" viewBox="0 0 24 24"><use href="#ic-chevron-right"/></svg>
+              <span class="pd-breadcrumbs__current" aria-current="page">All books for &nbsp;Year 1</span>
             </div>
-
-            <!-- Content: gap:8px between Link-1.5 items -->
-            <ol class="tb-breadcrumb__trail">
-
-              <!-- Link 1 — "Learn" — Outline/book clip (8.33%/16.67%) + text + chevron clip (25%/37.5%) -->
-              <li>
-                <a href="#" class="tb-bc-link">
-                  <div class="tb-bc-icon-clip" aria-hidden="true">
-                    <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-book"/></svg>
-                  </div>
-                  <span class="tb-bc-text">Learn</span>
-                  <div class="tb-bc-chevron-clip" aria-hidden="true">
-                    <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-right"/></svg>
-                  </div>
-                </a>
-              </li>
-
-              <!-- Link 2 — "Textbooks" — text + chevron clip (parent link, green) -->
-              <li>
-                <a href="#" class="tb-bc-link">
-                  <span class="tb-bc-text">Textbooks</span>
-                  <div class="tb-bc-chevron-clip" aria-hidden="true">
-                    <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-chevron-right"/></svg>
-                  </div>
-                </a>
-              </li>
-
-              <!-- Link 3 — current page — text only, grey, no chevron (DS: "All books for Year 1") -->
-              <li>
-                <span class="tb-bc-link tb-bc-link--current" aria-current="page">
-                  <span class="tb-bc-text">All books</span>
-                </span>
-              </li>
-
-            </ol>
-          </nav>
+          </div>
         </section>
 
         <!-- ═══ ALERT ════════════════════════════════════════════════ -->
         <section id="Alert-Desktop">
           <div class="tb-alert-box" id="tb-alert-box" role="alert">
-            <svg class="tb-alert__icon" width="24" height="24" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-alert-circle"/></svg>
-            <div class="tb-alert__text">
-              <p>List of all digital textbooks provided free of charge by the <span class="txt-grey">Ministry of Education Malaysia</span> through the <span class="txt-grey">Google Drive platform.</span></p>
-              <p style="margin-top:4px;">Please log in to your Google Classroom account <a href="#" class="txt-link">@moe-dl.edu.my</a> <span class="txt-grey">( get from your school teacher )</span> first before downloading a book.</p>
-            </div>
+            <svg class="tb-alert__icon" width="20" height="20" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-alert-circle"/></svg>
+            <div class="tb-alert__text">List of all digital textbooks provided free of charge by the <span class="txt-grey">Ministry of Education Malaysia</span> through the <span class="txt-grey">Google Drive platform.</span> Please log in to your Google Classroom account <a href="#" class="txt-link">@moe-dl.edu.my</a> <span class="txt-grey">( get from your school teacher )</span> first before downloading a book.</div>
             <button class="tb-alert__close" id="tb-alert-close" aria-label="Dismiss alert">
               <svg width="20" height="20" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-x"/></svg>
             </button>
@@ -3388,136 +3395,220 @@
                 </div>
               </div>
 
-              <!-- Row 1 — English -->
+              <!-- Row 1 — Bahasa Melayu -->
               <div class="tb-row tb-row--body">
                 <div class="tb-cell tb-cell--num">1</div>
-                <div class="tb-cell tb-cell--sub" data-subject="english">
-                  <div class="tb-badge tb-badge--english">
-                    <div class="tb-badge__icon" style="background:#fff;padding:4px 8px 4px 12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                      <svg width="16" height="16" aria-hidden="true"><use href="#ic-subj-english"/></svg>
-                    </div>
-                    <div class="tb-badge__label" style="padding:0 16px 0 12px;display:flex;align-items:center;font-size:12px;font-weight:500;line-height:12px;white-space:nowrap;">English</div>
+                <div class="tb-cell tb-cell--sub" data-subject="bm">
+                  <div class="pd-subject-badge pd-badge--bm">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-bm"/></svg></div>
+                    <div class="pd-subject-badge__label">Bahasa Melayu</div>
                   </div>
                 </div>
-                <div class="tb-cell tb-cell--dl">
-                  <button class="tb-btn-dl" type="button"><span>Form 1</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 2</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 3</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 4</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 5</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 1</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 2</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 3</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 4</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 5</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 6</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 1 Ans</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 2 Ans</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 3 Ans</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 4 Ans</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 5 Ans</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 1–3 Ans</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 4–6 Ans</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Vocabulary</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Writing Guide</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Grammar Ref</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Literature</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Oral Guide</span></button>
-                </div>
+                <div class="tb-cell tb-cell--dl"></div>
               </div>
 
-              <!-- Row 2 — Geography -->
+              <!-- Row 2 — English -->
               <div class="tb-row tb-row--body">
                 <div class="tb-cell tb-cell--num">2</div>
-                <div class="tb-cell tb-cell--sub" data-subject="geo">
-                  <div class="tb-badge tb-badge--geo">
-                    <div class="tb-badge__icon" style="background:#fff;padding:4px 8px 4px 12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                      <svg width="16" height="16" aria-hidden="true"><use href="#ic-subj-geo"/></svg>
-                    </div>
-                    <div class="tb-badge__label" style="padding:0 16px 0 12px;display:flex;align-items:center;font-size:12px;font-weight:500;line-height:12px;white-space:nowrap;">Geography</div>
+                <div class="tb-cell tb-cell--sub" data-subject="english">
+                  <div class="pd-subject-badge pd-badge--english">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-english"/></svg></div>
+                    <div class="pd-subject-badge__label">English</div>
                   </div>
                 </div>
-                <div class="tb-cell tb-cell--dl">
-                  <button class="tb-btn-dl" type="button"><span>Form 1</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 2</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 3</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 4</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 5</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 4</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 5</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 6</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 1 Ans</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 2 Ans</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 3 Ans</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 4 Ans</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 5 Ans</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 4–6 Ans</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Atlas Form 1</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Atlas Form 2</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Atlas Form 3</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Map Skills</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Fieldwork Guide</span></button>
-                </div>
+                <div class="tb-cell tb-cell--dl"></div>
               </div>
 
-              <!-- Row 3 — Islamic Studies -->
+              <!-- Row 3 — Mathematics -->
               <div class="tb-row tb-row--body">
                 <div class="tb-cell tb-cell--num">3</div>
-                <div class="tb-cell tb-cell--sub" data-subject="islamic">
-                  <div class="tb-badge tb-badge--islamic">
-                    <div class="tb-badge__icon" style="background:#fff;padding:4px 8px 4px 12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                      <svg width="16" height="16" aria-hidden="true"><use href="#ic-subj-islamic"/></svg>
-                    </div>
-                    <div class="tb-badge__label" style="padding:0 16px 0 12px;display:flex;align-items:center;font-size:12px;font-weight:500;line-height:12px;white-space:nowrap;">Islamic Studies</div>
+                <div class="tb-cell tb-cell--sub" data-subject="math">
+                  <div class="pd-subject-badge pd-badge--math">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-math"/></svg></div>
+                    <div class="pd-subject-badge__label">Mathematics</div>
                   </div>
                 </div>
-                <div class="tb-cell tb-cell--dl">
-                  <button class="tb-btn-dl" type="button"><span>Form 1</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 2</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 3</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 4</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 5</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 1</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 2</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 3</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 4</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 5</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 6</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Al-Quran F1</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Al-Quran F2</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Al-Quran F3</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Hadith Guide</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Fiqh Ref</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Sirah Guide</span></button>
-                </div>
+                <div class="tb-cell tb-cell--dl"></div>
               </div>
 
-              <!-- Row 4 — Moral Studies -->
+              <!-- Row 4 — Additional Mathematics -->
               <div class="tb-row tb-row--body">
                 <div class="tb-cell tb-cell--num">4</div>
-                <div class="tb-cell tb-cell--sub" data-subject="moral">
-                  <div class="tb-badge tb-badge--moral">
-                    <div class="tb-badge__icon" style="background:#fff;padding:4px 8px 4px 12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                      <svg width="16" height="16" aria-hidden="true"><use href="#ic-subj-moral"/></svg>
-                    </div>
-                    <div class="tb-badge__label" style="padding:0 16px 0 12px;display:flex;align-items:center;font-size:12px;font-weight:500;line-height:12px;white-space:nowrap;">Moral Studies</div>
+                <div class="tb-cell tb-cell--sub" data-subject="add-math">
+                  <div class="pd-subject-badge pd-badge--add-math">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-add-math"/></svg></div>
+                    <div class="pd-subject-badge__label">Add. Mathematics</div>
                   </div>
                 </div>
-                <div class="tb-cell tb-cell--dl">
-                  <button class="tb-btn-dl" type="button"><span>Form 1</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 2</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 3</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 4</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Form 5</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 4</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 5</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Year 6</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Values Handbook</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Case Studies F4</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Case Studies F5</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Activity Book</span></button>
-                  <button class="tb-btn-dl" type="button"><span>Educator Guide</span></button>
+                <div class="tb-cell tb-cell--dl"></div>
+              </div>
+
+              <!-- Row 5 — Science -->
+              <div class="tb-row tb-row--body">
+                <div class="tb-cell tb-cell--num">5</div>
+                <div class="tb-cell tb-cell--sub" data-subject="science">
+                  <div class="pd-subject-badge pd-badge--science">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-science"/></svg></div>
+                    <div class="pd-subject-badge__label">Science</div>
+                  </div>
                 </div>
+                <div class="tb-cell tb-cell--dl"></div>
+              </div>
+
+              <!-- Row 6 — Physics -->
+              <div class="tb-row tb-row--body">
+                <div class="tb-cell tb-cell--num">6</div>
+                <div class="tb-cell tb-cell--sub" data-subject="physics">
+                  <div class="pd-subject-badge pd-badge--physics">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-physics"/></svg></div>
+                    <div class="pd-subject-badge__label">Physics</div>
+                  </div>
+                </div>
+                <div class="tb-cell tb-cell--dl"></div>
+              </div>
+
+              <!-- Row 7 — Chemistry -->
+              <div class="tb-row tb-row--body">
+                <div class="tb-cell tb-cell--num">7</div>
+                <div class="tb-cell tb-cell--sub" data-subject="chemistry">
+                  <div class="pd-subject-badge pd-badge--chemistry">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-chemistry"/></svg></div>
+                    <div class="pd-subject-badge__label">Chemistry</div>
+                  </div>
+                </div>
+                <div class="tb-cell tb-cell--dl"></div>
+              </div>
+
+              <!-- Row 8 — Biology -->
+              <div class="tb-row tb-row--body">
+                <div class="tb-cell tb-cell--num">8</div>
+                <div class="tb-cell tb-cell--sub" data-subject="biology">
+                  <div class="pd-subject-badge pd-badge--biology">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-biology"/></svg></div>
+                    <div class="pd-subject-badge__label">Biology</div>
+                  </div>
+                </div>
+                <div class="tb-cell tb-cell--dl"></div>
+              </div>
+
+              <!-- Row 9 — History -->
+              <div class="tb-row tb-row--body">
+                <div class="tb-cell tb-cell--num">9</div>
+                <div class="tb-cell tb-cell--sub" data-subject="history">
+                  <div class="pd-subject-badge pd-badge--history">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-history"/></svg></div>
+                    <div class="pd-subject-badge__label">History</div>
+                  </div>
+                </div>
+                <div class="tb-cell tb-cell--dl"></div>
+              </div>
+
+              <!-- Row 10 — Geography -->
+              <div class="tb-row tb-row--body">
+                <div class="tb-cell tb-cell--num">10</div>
+                <div class="tb-cell tb-cell--sub" data-subject="geo">
+                  <div class="pd-subject-badge pd-badge--geography">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-geo"/></svg></div>
+                    <div class="pd-subject-badge__label">Geography</div>
+                  </div>
+                </div>
+                <div class="tb-cell tb-cell--dl"></div>
+              </div>
+
+              <!-- Row 11 — Economy -->
+              <div class="tb-row tb-row--body">
+                <div class="tb-cell tb-cell--num">11</div>
+                <div class="tb-cell tb-cell--sub" data-subject="economy">
+                  <div class="pd-subject-badge pd-badge--economy">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-economy"/></svg></div>
+                    <div class="pd-subject-badge__label">Economy</div>
+                  </div>
+                </div>
+                <div class="tb-cell tb-cell--dl"></div>
+              </div>
+
+              <!-- Row 12 — Accounting -->
+              <div class="tb-row tb-row--body">
+                <div class="tb-cell tb-cell--num">12</div>
+                <div class="tb-cell tb-cell--sub" data-subject="account">
+                  <div class="pd-subject-badge pd-badge--account">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-account"/></svg></div>
+                    <div class="pd-subject-badge__label">Accounting</div>
+                  </div>
+                </div>
+                <div class="tb-cell tb-cell--dl"></div>
+              </div>
+
+              <!-- Row 13 — Business -->
+              <div class="tb-row tb-row--body">
+                <div class="tb-cell tb-cell--num">13</div>
+                <div class="tb-cell tb-cell--sub" data-subject="business">
+                  <div class="pd-subject-badge pd-badge--business">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-business"/></svg></div>
+                    <div class="pd-subject-badge__label">Business</div>
+                  </div>
+                </div>
+                <div class="tb-cell tb-cell--dl"></div>
+              </div>
+
+              <!-- Row 14 — Computer Science -->
+              <div class="tb-row tb-row--body">
+                <div class="tb-cell tb-cell--num">14</div>
+                <div class="tb-cell tb-cell--sub" data-subject="cs">
+                  <div class="pd-subject-badge pd-badge--cs">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-cs"/></svg></div>
+                    <div class="pd-subject-badge__label">Computer Science</div>
+                  </div>
+                </div>
+                <div class="tb-cell tb-cell--dl"></div>
+              </div>
+
+              <!-- Row 15 — Islamic Studies -->
+              <div class="tb-row tb-row--body">
+                <div class="tb-cell tb-cell--num">15</div>
+                <div class="tb-cell tb-cell--sub" data-subject="islamic">
+                  <div class="pd-subject-badge pd-badge--islamic">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-islamic"/></svg></div>
+                    <div class="pd-subject-badge__label">Islamic Studies</div>
+                  </div>
+                </div>
+                <div class="tb-cell tb-cell--dl"></div>
+              </div>
+
+              <!-- Row 16 — Moral Studies -->
+              <div class="tb-row tb-row--body">
+                <div class="tb-cell tb-cell--num">16</div>
+                <div class="tb-cell tb-cell--sub" data-subject="moral">
+                  <div class="pd-subject-badge pd-badge--moral">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-moral"/></svg></div>
+                    <div class="pd-subject-badge__label">Moral Studies</div>
+                  </div>
+                </div>
+                <div class="tb-cell tb-cell--dl"></div>
+              </div>
+
+              <!-- Row 17 — KAFA -->
+              <div class="tb-row tb-row--body">
+                <div class="tb-cell tb-cell--num">17</div>
+                <div class="tb-cell tb-cell--sub" data-subject="kafa">
+                  <div class="pd-subject-badge pd-badge--kafa">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-kafa"/></svg></div>
+                    <div class="pd-subject-badge__label">KAFA</div>
+                  </div>
+                </div>
+                <div class="tb-cell tb-cell--dl"></div>
+              </div>
+
+              <!-- Row 18 — RBT -->
+              <div class="tb-row tb-row--body">
+                <div class="tb-cell tb-cell--num">18</div>
+                <div class="tb-cell tb-cell--sub" data-subject="rbt">
+                  <div class="pd-subject-badge pd-badge--rbt">
+                    <div class="pd-subject-badge__icon"><svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-rbt"/></svg></div>
+                    <div class="pd-subject-badge__label">RBT</div>
+                  </div>
+                </div>
+                <div class="tb-cell tb-cell--dl"></div>
               </div>
 
             </div><!-- /.tb-card__inner -->
@@ -3530,17 +3621,17 @@
           <div class="tb-other-years">
             <p class="tb-other-years__label">Books for other years are available via the following link:</p>
             <div class="tb-other-years__buttons">
-              <button class="tb-btn-year is-current" type="button">Form 1</button>
-              <button class="tb-btn-year" type="button">Form 2</button>
-              <button class="tb-btn-year" type="button">Form 3</button>
-              <button class="tb-btn-year" type="button">Form 4</button>
-              <button class="tb-btn-year" type="button">Form 5</button>
-              <button class="tb-btn-year" type="button">Year 1</button>
-              <button class="tb-btn-year" type="button">Year 2</button>
-              <button class="tb-btn-year" type="button">Year 3</button>
-              <button class="tb-btn-year" type="button">Year 4</button>
-              <button class="tb-btn-year" type="button">Year 5</button>
-              <button class="tb-btn-year" type="button">Year 6</button>
+              <button class="pd-btn15-secondary" type="button"><div class="pd-btn15-secondary__text-wrap"><span class="pd-btn15-secondary__label">Form 1</span></div></button>
+              <button class="pd-btn15-secondary" type="button"><div class="pd-btn15-secondary__text-wrap"><span class="pd-btn15-secondary__label">Form 2</span></div></button>
+              <button class="pd-btn15-secondary" type="button"><div class="pd-btn15-secondary__text-wrap"><span class="pd-btn15-secondary__label">Form 3</span></div></button>
+              <button class="pd-btn15-secondary" type="button"><div class="pd-btn15-secondary__text-wrap"><span class="pd-btn15-secondary__label">Form 4</span></div></button>
+              <button class="pd-btn15-secondary" type="button"><div class="pd-btn15-secondary__text-wrap"><span class="pd-btn15-secondary__label">Form 5</span></div></button>
+              <button class="pd-btn15-secondary" type="button"><div class="pd-btn15-secondary__text-wrap"><span class="pd-btn15-secondary__label">Year 1</span></div></button>
+              <button class="pd-btn15-secondary" type="button"><div class="pd-btn15-secondary__text-wrap"><span class="pd-btn15-secondary__label">Year 2</span></div></button>
+              <button class="pd-btn15-secondary" type="button"><div class="pd-btn15-secondary__text-wrap"><span class="pd-btn15-secondary__label">Year 3</span></div></button>
+              <button class="pd-btn15-secondary" type="button"><div class="pd-btn15-secondary__text-wrap"><span class="pd-btn15-secondary__label">Year 4</span></div></button>
+              <button class="pd-btn15-secondary" type="button"><div class="pd-btn15-secondary__text-wrap"><span class="pd-btn15-secondary__label">Year 5</span></div></button>
+              <button class="pd-btn15-secondary" type="button"><div class="pd-btn15-secondary__text-wrap"><span class="pd-btn15-secondary__label">Year 6</span></div></button>
             </div>
           </div>
         </section>
@@ -4828,19 +4919,31 @@
       }
     })();
 
+    // Random download buttons per subject row — min 2 rows (10–20, always even KSSM/KSSR pairs)
+    (function () {
+      document.querySelectorAll('.tb-row--body .tb-cell--dl').forEach(function (cell) {
+        var count = (Math.floor(Math.random() * 6) + 5) * 2; // 10, 12, 14, 16, 18, or 20
+        var html = '';
+        for (var i = 0; i < count; i++) {
+          html += '<button class="tb-btn-dl" type="button"><span>' + (i % 2 === 0 ? 'KSSM' : 'KSSR') + '</span></button>';
+        }
+        cell.innerHTML = html;
+      });
+    })();
+
     // is-pressing handlers for download + year buttons (Rule 83)
     (function () {
-      document.querySelectorAll('.tb-btn-dl, .tb-btn-year').forEach(function (btn) {
+      document.querySelectorAll('.tb-btn-dl, .pd-btn15-secondary').forEach(function (btn) {
         btn.addEventListener('mousedown', function () { btn.classList.add('is-pressing'); });
         btn.addEventListener('mouseup',   function () { btn.classList.remove('is-pressing'); });
         btn.addEventListener('mouseleave',function () { btn.classList.remove('is-pressing'); });
       });
 
       // Year button active toggle
-      document.querySelectorAll('.tb-btn-year').forEach(function (btn) {
+      document.querySelectorAll('.tb-other-years__buttons .pd-btn15-secondary').forEach(function (btn) {
         btn.addEventListener('click', function () {
-          document.querySelectorAll('.tb-btn-year').forEach(function (b) { b.classList.remove('is-current'); });
-          btn.classList.add('is-current');
+          document.querySelectorAll('.tb-other-years__buttons .pd-btn15-secondary').forEach(function (b) { b.classList.remove('is-active'); });
+          btn.classList.add('is-active');
         });
       });
     })();
