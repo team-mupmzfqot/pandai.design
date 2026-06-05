@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pandai — Merchandise</title>
+  <title>Pandai â€” Home</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Pandai — Merchandise</title>
 
   <style>
+
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        Pandai DS 1.5 â€” Token Map (Light / Student)
        All values pulled live from DS file TLVKe3bgJTdVvuPAzgDq2f
@@ -177,12 +179,13 @@
     .main-content {
       display:        flex;
       flex-direction: column;
-      flex:           1;
       gap:            var(--section-gap);    /* 16px between every section */
       padding-top:    var(--section-gap);    /* 16px space at top of page */
       padding-bottom: var(--section-gap);    /* 16px space above footer */
     }
-    .footer {
+
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+.footer {
       position:   fixed;
       bottom:     0;
       left:       0;
@@ -2343,19 +2346,10 @@
       /* Main content fills full width below the pill bar */
       .rewards-main { width: 100%; }
     }
-
   </style>
 </head>
-<body data-active-nav="Rewards">
-
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       NAVBAR â€” Navbar 1.5  (DS node 2339:2617)
-       2-row structure sourced from get_design_context
-  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-    <!-- DS ICON SYMBOLS - Pandai DS 1.5 Iconography page (TLVKe3bgJTdVvuPAzgDq2f)
-       All paths extracted via use_figma. Stroke icons inherit currentColor.
-       Waffle uses fill="currentColor" (filled dots, not stroked). -->
-  <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+<body>
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <!-- Outline/image (611:3075) --><symbol id="ic-image" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="18" height="18" rx="2" ry="2"/><circle cx="6.5" cy="6.5" r="1.5"/><polyline points="19 13.5 14 8.5 3 19.5"/></symbol>
       <!-- Outline/chevron-down (260:535) — 16×16 clip-space: active area 37.5%/25% inset → M4,6 L8,10 L12,6 --><symbol id="ic-chevron-down" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 4 6 L 8 10 L 12 6"/></symbol>
@@ -2534,25 +2528,7 @@
 
     </defs>
   </svg>
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       NAVBAR PRIMARY DESKTOP — Navbar Primary Desktop - 1.5
-       Navbar Primary Desktop - 1.5 / Type=Desktop (node 866:5576)
-       COMPONENT_SET: Navbar Primary Desktop - 1.5 (2337:21975) · only variant: Type=Desktop
-       Logo left · 6 action icons + avatar + notification badge right
-  ═══════════════════════════════════════════════════════════════ -->
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       NAVIGATION SHELL
-       All nav variants wrapped in one section. Fixed elements
-       (NavMenu-Tablet, NavMenu-Mobile, NavBar-Bottom) escape DOM
-       stacking — this section is semantic grouping only.
-       Desktop: NavbarPrimary-Desktop + NavTopMenu-Desktop
-       Tablet:  NavBar-Mobile + NavMenu-Tablet
-       Mobile:  NavBar-Mobile + NavBar-Bottom + NavMenu-Mobile
-  ═══════════════════════════════════════════════════════════════ -->
-  <section id="Navigation-Shell">
-  <section id="NavbarPrimary-Desktop">
+<section id="NavbarPrimary-Desktop">
     <div class="navbar-primary">
 
       <!-- Logo/Pandai/Logo Horizontal (node 1898:6965): 116×28px overflow-clip container -->
@@ -2832,6 +2808,90 @@
     </div><!-- end download-dropdown -->
 
   </section><!-- end NavbarPrimary-Desktop -->
+
+  <!-- Navbar Notification - 1.5 (DS node 3908:13057, Type=Default)
+       320px panel · 4 items · "See all notification" button
+       Shared by desktop #notif-btn AND tablet #tablet-notif-btn · position:fixed, top+right set by JS -->
+  <div class="notif-dropdown" id="notif-dropdown" aria-label="Notifications" role="menu">
+    <!-- Notifications List — DS node 6305:45076: gap 8px between items -->
+    <div class="notif-list">
+      <!-- Navbar Notification Button - Parts ×4 (DS 3908:13427) -->
+      <div class="notif-item" role="menuitem" tabindex="0">
+        <div class="notif-item__content">
+          <div class="notif-item__body">
+            <div class="notif-item__avatar" aria-hidden="true">
+              <svg><use href="#ic-user-circle"/></svg>
+            </div>
+            <div class="notif-item__texts">
+              <div class="notif-item__texts-inner">
+                <p class="notif-item__text">Your quiz result for Chapter 3 is ready. Check your score now!</p>
+                <span class="notif-item__time">2 Hours Ago...</span>
+              </div>
+            </div>
+            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notif-item" role="menuitem" tabindex="0">
+        <div class="notif-item__content">
+          <div class="notif-item__body">
+            <div class="notif-item__avatar" aria-hidden="true">
+              <svg><use href="#ic-user-circle"/></svg>
+            </div>
+            <div class="notif-item__texts">
+              <div class="notif-item__texts-inner">
+                <p class="notif-item__text">Live Tuition for Add Maths starts in 30 minutes. Join now!</p>
+                <span class="notif-item__time">5 Hours Ago...</span>
+              </div>
+            </div>
+            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notif-item" role="menuitem" tabindex="0">
+        <div class="notif-item__content">
+          <div class="notif-item__body">
+            <div class="notif-item__avatar" aria-hidden="true">
+              <svg><use href="#ic-user-circle"/></svg>
+            </div>
+            <div class="notif-item__texts">
+              <div class="notif-item__texts-inner">
+                <p class="notif-item__text">You earned 50 coins from completing today's daily challenge.</p>
+                <span class="notif-item__time">1 Day Ago...</span>
+              </div>
+            </div>
+            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notif-item" role="menuitem" tabindex="0">
+        <div class="notif-item__content">
+          <div class="notif-item__body">
+            <div class="notif-item__avatar" aria-hidden="true">
+              <svg><use href="#ic-user-circle"/></svg>
+            </div>
+            <div class="notif-item__texts">
+              <div class="notif-item__texts-inner">
+                <p class="notif-item__text">New Quick Notes for Physics Chapter 5 are now available.</p>
+                <span class="notif-item__time">6 Days Ago...</span>
+              </div>
+            </div>
+            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end notif-list -->
+
+    <!-- "See all notification" — Primary/L Button - 1.5, no arrow, full-width -->
+    <div class="notif-dropdown__footer">
+      <button class="notif-see-all" type="button">See all notification</button>
+    </div>
+
+  </div><!-- end notif-dropdown -->
 
   <!-- ═══════════════════════════════════════════════════════════════
        NAV TOP MENU DESKTOP — Nav Top Menu Desktop - 1.5
@@ -3351,16 +3411,7 @@
        Click closes the dropdown. -->
   <div id="tablet-overlay" class="tablet-overlay" aria-hidden="true"></div>
 
-  </section><!-- end Navigation-Shell -->
-
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       PAGE VIEWPORT
-       Drop DS component instances inside PageViewport.
-       Replace the placeholder <div> with real content sections.
-       Use <section id="SectionName-Desktop"> per Rule 10.
-  ═══════════════════════════════════════════════════════════════ -->
-  <main>
+<main>
     <div class="page-container">
       <div class="main-content">
 
@@ -3586,6 +3637,7 @@
 
               </div><!-- /.merch-grid -->
             </main>
+
 
 
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -5008,6 +5060,7 @@
 
   </div><!-- end NavMenu-Mobile -->
 
+
   <!-- Mobile menu script placed AFTER its DOM elements so getElementById finds them -->
   <script>
     (function () {
@@ -5358,218 +5411,5 @@
   }
 })();
 </script>
-
-</body>
-</html>
-<script>
-/* test.page.compiled — Rewards left sidebar navigation (v2) */
-(function () {
-  var ROUTES = {
-    'Coin Quest':  'rewards-coin-quests.html',
-    'My Reward':   'rewards-my-rewards.html',
-    'Merchandise': 'rewards-merchandise.html',
-    'eVoucher':    'rewards-evoucher.html',
-    'Avatar':      'rewards-avatar.html'
-  };
-  /* Snapshot the originally-active button at load. The page's own JS toggles
-     sidebar-btn--active on click before navigation, so we can't trust the
-     class at click time. */
-  var initialActive = document.querySelector('.sidebar-btn.sidebar-btn--active');
-  var initialLabel  = initialActive ? (initialActive.querySelector('.sidebar-btn__label') || {}).textContent : '';
-  initialLabel = (initialLabel || '').trim();
-
-  document.querySelectorAll('.sidebar-btn').forEach(function (btn) {
-    if (btn.dataset.tpcSidebarWired === '1') return;
-    var lbl = btn.querySelector('.sidebar-btn__label');
-    if (!lbl) return;
-    var label = lbl.textContent.trim();
-    var href = ROUTES[label];
-    if (!href) return;
-    btn.dataset.tpcSidebarWired = '1';
-    btn.style.cursor = 'pointer';
-    /* Capture phase so we fire BEFORE the page's bubble-phase active-toggle handler */
-    btn.addEventListener('click', function (e) {
-      if (label === initialLabel) return; /* already on this page — let other handlers run */
-      e.preventDefault();
-      e.stopPropagation();
-      window.location.href = href;
-    }, true);
-  });
-})();
-</script>
-
-
-<script>
-/* test.page.compiled — Top Menu Bar navigation + persistent active state (v5) */
-(function () {
-  var TOP_ROUTES = {
-    'Home':     'home.html',
-    'Practice': 'practice.html'
-  };
-  var SUB_ROUTES = {
-    'My Classes':       'class-my-classes.html',
-    'Browse Classes':   'class-browse-classes.html',
-    'Learning Hub':     'learn-learning-hub.html',
-    'Quick Notes':      'learn-quick-notes.html',
-    'Score Card':       'achievement-score-card.html',
-    'Report Card':      'achievement-report-card.html',
-    'Coin Quests':      'rewards-coin-quests.html',
-    'My Rewards':       'rewards-my-rewards.html',
-    'Merchandise':      'rewards-merchandise.html',
-    'eVoucher':         'rewards-evoucher.html',
-    'Avatar':           'rewards-avatar.html'
-  };
-  /* Page → parent main-menu label that should show active state */
-  var PAGE_ACTIVE_MAIN = {
-    'home.html':                          'Home',
-    'practice.html':                      'Practice',
-    'class-my-classes.html':              'Class',
-    'class-browse-classes.html':          'Class',
-    'learn-learning-hub.html':            'Learn',
-    'learn-quick-notes.html':             'Learn',
-    'learn-quick-notes-selections.html':  'Learn',
-    'learn-quick-notes-view.html':        'Learn',
-    'achievement-score-card.html':        'Achievement',
-    'achievement-report-card.html':       'Achievement',
-    'achievement-analysis-card.html':     'Achievement',
-    'rewards-coin-quests.html':           'Rewards',
-    'rewards-my-rewards.html':            'Rewards',
-    'rewards-merchandise.html':           'Rewards',
-    'rewards-evoucher.html':              'Rewards',
-    'rewards-avatar.html':                'Rewards'
-  };
-
-  var SEL_A_BTN  = '#NavTopMenu-Desktop .nav-menu-btn';
-  var SEL_A_ITEM = '#NavTopMenu-Desktop .nav-menu-dropdown__item';
-  var SEL_B_BTN  = '.navbar-nav .nav-btn, .menubar-nav .nav-btn';
-  var SEL_B_ITEM = '.nav-subtopic-dropdown__item';
-
-  function nav(href) { return function (e) { e.preventDefault(); e.stopPropagation(); window.location.href = href; }; }
-
-  function currentFile() {
-    var p = window.location.pathname.replace(/[?#].*$/, '');
-    if (p.charAt(p.length - 1) === '/') return 'home.html';
-    var f = p.substring(p.lastIndexOf('/') + 1).toLowerCase();
-    if (!f) return 'home.html';
-    if (f.indexOf('.html') < 0) f += '.html';
-    return f;
-  }
-
-  function wireLinks() {
-    document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
-      if (btn.hasAttribute('aria-haspopup')) return;
-      var href = TOP_ROUTES[(btn.getAttribute('aria-label') || '').trim()];
-      if (href && !btn.dataset.tpcWired) {
-        btn.addEventListener('click', nav(href), true);
-        btn.dataset.tpcWired = '1';
-      }
-    });
-    document.querySelectorAll(SEL_A_ITEM).forEach(function (item) {
-      var lbl = item.querySelector('.nav-menu-dropdown__label');
-      if (!lbl) return;
-      var href = SUB_ROUTES[lbl.textContent.trim()];
-      if (href && !item.dataset.tpcWired) {
-        item.addEventListener('click', nav(href), true);
-        item.dataset.tpcWired = '1';
-      }
-    });
-    document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
-      if (btn.hasAttribute('aria-haspopup')) return;
-      var lbl = btn.querySelector('.nav-btn__label');
-      if (!lbl) return;
-      var href = TOP_ROUTES[lbl.textContent.trim()];
-      if (href && !btn.dataset.tpcWired) {
-        btn.addEventListener('click', nav(href), true);
-        btn.dataset.tpcWired = '1';
-      }
-    });
-    document.querySelectorAll(SEL_B_ITEM).forEach(function (item) {
-      var lbl = item.querySelector('.nav-subtopic-dropdown__item-label');
-      if (!lbl) return;
-      var href = SUB_ROUTES[lbl.textContent.trim()];
-      if (!href) return;
-      if (item.tagName === 'A') item.setAttribute('href', href);
-      if (!item.dataset.tpcWired) {
-        item.addEventListener('click', nav(href), true);
-        item.dataset.tpcWired = '1';
-      }
-    });
-  }
-
-  var applying = false;
-  function applyActive() {
-    if (applying) return;
-    applying = true;
-    try {
-      var label = PAGE_ACTIVE_MAIN[currentFile()];
-      document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
-        var match = !!(label && (btn.getAttribute('aria-label') || '').trim() === label);
-        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
-        if (match) {
-          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
-        } else if (btn.hasAttribute('aria-current')) {
-          btn.removeAttribute('aria-current');
-        }
-      });
-      document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
-        var lbl = btn.querySelector('.nav-btn__label');
-        var match = !!(label && lbl && lbl.textContent.trim() === label);
-        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
-        if (match) {
-          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
-        } else if (btn.hasAttribute('aria-current')) {
-          btn.removeAttribute('aria-current');
-        }
-      });
-    } finally {
-      applying = false;
-    }
-  }
-
-  var observing = false;
-  function startObserver() {
-    if (observing || typeof MutationObserver !== 'function') return;
-    var targets = [];
-    var a = document.getElementById('NavTopMenu-Desktop'); if (a) targets.push(a);
-    document.querySelectorAll('.navbar-nav, .menubar-nav').forEach(function (n) { targets.push(n); });
-    if (!targets.length) return;
-    /* Synchronous re-apply on every batch of mutations — runs as microtask, before paint */
-    var observer = new MutationObserver(applyActive);
-    targets.forEach(function (t) {
-      observer.observe(t, { attributes: true, subtree: true, attributeFilter: ['class', 'aria-current'] });
-    });
-    observing = true;
-  }
-
-  function init() {
-    wireLinks();
-    applyActive();
-    startObserver();
-    /* Defeat any deferred init code that re-asserts Home — multiple deferred passes */
-    [0, 50, 150, 400, 1000, 2500].forEach(function (d) { setTimeout(applyActive, d); });
-    /* 5s safety net: re-check every 250ms for 5s after load */
-    var ticks = 0;
-    var iv = setInterval(function () {
-      applyActive();
-      if (++ticks >= 20) clearInterval(iv);
-    }, 250);
-    /* Also re-apply on user interaction */
-    document.addEventListener('click',     function () { setTimeout(applyActive, 0); }, true);
-    document.addEventListener('mouseleave',function () { setTimeout(applyActive, 0); }, true);
-    document.addEventListener('mouseup',   function () { setTimeout(applyActive, 0); }, true);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
-</script>
-
-
-
-
-
 </body>
 </html>
