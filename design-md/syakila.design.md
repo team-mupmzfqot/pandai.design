@@ -4139,4 +4139,74 @@ var gradeMatch = noGradeFilter || grades.indexOf(card.dataset.grade) !== -1;
 
 ---
 
-*Last updated: 2026-06-05 (Session 17 — Rule 103 corrected: no pill badge; Rule 104 added: 1-card-per-grade pattern + single stat; mandatory pre-flight added)*
+---
+
+### Rule 105. Textbooks page — DS node 5057:96802 confirmed specs (2026-06-05)
+
+**Source:** `get_design_context` + `use_figma` on DS node `5057:96802` (Textbooks page frame, file `TLVKe3bgJTdVvuPAzgDq2f`).
+
+**Sections (top to bottom):**
+
+#### Breadcrumb - 1.5 (node 5057:96806)
+- Container: HORIZONTAL, CENTER, `gap:16px`, `h:40px`
+- Title group: "Textbooks" · `font-size:24px / weight:500 / lh:36 / #00564c` (`--text-tertiary-default`)
+- Separator: `1px × 40px` div · `background: #bfbfbf` (`--border-disabled-disabled`)
+- Trail items: 3 links — gap:8px between each
+  - Link 1 "Learn": `Outline/book` clip (20×20, `padding:1.67px 3.33px`) + text + `Outline/chevron-right` clip (20×20, `padding:5px 7.5px`)
+  - Link 2 "Textbooks": text + chevron clip
+  - Link 3 "All books" (current): text only, `color: --text-default-body #666666`, no chevron, `cursor:default`
+- Link text: `font-size:14px / weight:400 / lh:20 / #00cc85` (`--text-primary-default`)
+- Current page text: `color: --text-default-body` (#666666), `cursor:default`
+
+**Mistakes made:**
+- Chevron placed as separate `<li>` between links. Correct: chevron is INSIDE each `Link-1.5` item as last child.
+- Used `border-general-default` (#d9d9d9) for separator. Correct: `#bfbfbf` (`Border/general/default-secondary` = `--border-disabled-disabled`).
+- Missing book icon on "Learn" link. DS Link-1.5 for "Learn" has icon clip as first child.
+- Only 2 trail items. DS has 3: Learn → Textbooks → current.
+- Used CSS `%` padding for clips — `top/bottom %` resolves from width in flex, unreliable. Use explicit `px` values.
+
+#### Alert - 1.5 (node 5057:96807) — Warning variant
+- Layout: `display:flex; align-items:flex-start; gap:8px; padding:12px 16px`
+- Background: `--surface-warning-default-subtle: #ffeeee`
+- Border: `1px solid --border-warning-default: #ff4c51`
+- Border-radius: `12px`
+- Children: alert-circle icon (24×24, red) + text div (`flex:1`) + X close button (20×20, red)
+- **Alert text content (DS confirmed):**
+  - Para 1: `"List of all digital textbooks provided free of charge by the "` + `<span class="txt-grey">Ministry of Education Malaysia</span>` + `" through the "` + `<span class="txt-grey">Google Drive platform.</span>`
+  - Para 2: `"Please log in to your Google Classroom account "` + `<a class="txt-link">@moe-dl.edu.my</a>` + `" "` + `<span class="txt-grey">( get from your school teacher )</span>` + `" first before downloading a book."`
+- Base text color: `--text-warning-default: #ff4c51`
+- `.txt-grey` = `color: --text-default-body (#666666); font-weight: 600` (bold grey for institution names)
+- `.txt-link` = `color: --text-primary-default (#00cc85); font-weight: 600; text-decoration: underline` (green for email link)
+
+#### Primary Card - 1.5 / Secondary variant (node 5057:96903 → main 2881:36272)
+- **Header: `visible:false`** — NO card header, NO title, NO icon. Never add a fabricated header.
+- Outer card: `background: --surface-secondary-default-subtle (#e8fbe8)`, `box-shadow: inset 0 0 0 1px #00cc85`, `border-radius: 24px`, `padding: 16px`, `gap: 8px`
+- Inner content placeholder: `background: white`, `box-shadow: inset 0 0 0 1px #00a36a`, `border-radius: 18px`, `overflow: hidden`
+- Table header row: `min-height: 56px`; columns: `#` (46px) · `Subject` (360px) · `Download Textbook` (flex:1 with download icon in header)
+- Table body rows: `min-height: 120px`
+- Header cell text: `font-size:16px / weight:500 / lh:24 / #666666` (`--text-default-body`)
+- Download header cell: `display:flex; align-items:center; gap:8px` with `Outline/download` icon (20×20, `#808080`) + "Download Textbook" label
+- Cell separators: `border-left: 1px solid #d9d9d9` (between cells) + `border-top: 1px solid #d9d9d9` (between rows)
+- Download buttons: **Button - 1.5 Primary/S** — text labels only, **NO icon inside button**. DS has only Label frame (text node) — no leading/trailing icons.
+- Subject row tint: English `#FFEDEE`, Geography `#F2FBEB`, Islamic `#FCEDF2`, Moral `#E6F1FA`
+
+**Mistakes made:**
+- Added fabricated `.tb-card__header` with title + icon. DS explicitly has `visible:false`.
+- Included `<svg><use href="#ic-download"/>` inside every download button. DS Primary/S has text-only Label frame.
+- Header column label was "Download" not "Download Textbook".
+- Header text was `14px/600/#404040` not `16px/500/#666666`.
+
+#### Other Years (node 5057:96904)
+- Container: `background: white`, **`border: 1px solid #d9d9d9`** (NOT `box-shadow:inset`), `border-radius: 24px`, `padding: 12px`, `display:flex; flex-direction:column; gap: 12px`
+- Label text: `"Books for other years are available via the following link:"` · `font-size:14px / weight:400 / lh:20 / #404040`
+- Buttons: **Button - 1.5 Secondary/M** (h:32, `box-shadow:inset 0 0 0 1px #00cc85`, white bg, green text) — Form 1–5, Year 1–6
+- Button row: `display:flex; flex-wrap:wrap; gap:8px`
+
+**Mistakes made:**
+- Used `.tb-card` (primary card wrapper with green inset border) — wrong component entirely.
+- Had fabricated `.tb-card__header` with title and icon.
+- Used `gap: var(--spacing-space-m)` (16px) instead of 12px.
+
+---
+
+*Last updated: 2026-06-05 (Session 18 — Rule 105: Textbooks page DS node 5057:96802, all 4 sections confirmed; fixes: breadcrumb structure, alert rich text, card header removal, table header labels, button SVG removal, other-years border/structure)*

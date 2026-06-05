@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pandai — Quick Notes · View</title>
+  <title>Pandai — Videos · View</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -109,6 +109,7 @@
       --subjects-b-melayu-default-subtle:        #f6f9ff;
       --subjects-b-melayu-default-subtle-hover:  #b8c9ff;
       --subjects-b-melayu-focus:                 #2e4799;
+      --subjects-b-melayu-400:                   #7192ff;
 
       --subjects-biology-default:                #8431d8;
       --subjects-biology-default-hover:          #6a27ad;
@@ -205,6 +206,34 @@
       --subjects-science-default-subtle:         #fffbec;
       --subjects-science-default-subtle-hover:   #ffefb3;
       --subjects-science-focus:                  #998027;
+
+      /* Account (Accounting) — missing from original, added from DS Subjects/account/* */
+      --subjects-account-default:               #0072ca;
+      --subjects-account-default-hover:         #005ba2;
+      --subjects-account-default-subtle:        #e6f1fa;
+      --subjects-account-default-subtle-hover:  #99c7ea;
+      --subjects-account-focus:                 #004479;
+
+      /* Subject/X/400 shades — DS Primitives, all confirmed via use_figma 2026-06-04 */
+      --subjects-account-400:                   #338ed5;
+      --subjects-add-math-400:                  #535da1;
+      --subjects-biology-400:                   #9d5ae0;
+      /* --subjects-b-melayu-400 already defined above as #7192ff */
+      --subjects-business-400:                  #f2c355;
+      --subjects-chemistry-400:                 #e8339b;
+      --subjects-chinese-400:                   #fa6d6d;
+      --subjects-cs-400:                        #da338d;
+      --subjects-economy-400:                   #ff795c;
+      --subjects-english-400:                   #ff7178;
+      --subjects-geo-400:                       #92e05e;
+      --subjects-history-400:                   #ba9673;
+      --subjects-islamic-400:                   #e57199;
+      --subjects-kafa-400:                      #a1e9ba;
+      --subjects-math-400:                      #68bd95;
+      --subjects-moral-400:                     #338ed5;
+      --subjects-physics-400:                   #52b3df;
+      --subjects-rbt-400:                       #5d5d5d;
+      --subjects-science-400:                   #ffde67;
 
       /* Typography */
       --font-family: 'Poppins', sans-serif;
@@ -2143,655 +2172,293 @@
     }
 
 
-    /* ═══════════════════════════════════════════════════════════════
-       QUICK NOTES — VIEW PAGE
-       DS: TLVKe3bgJTdVvuPAzgDq2f, node 5165:82857
-       Bahasa Melayu subject palette, confirmed 2026-06-03
-    ═══════════════════════════════════════════════════════════════ */
+    /* VIDEOS VIEW - Section styles · DS node 4506:116366 */
 
-    /* Two-column layout wrapper */
-    .qn-view-layout {
-      display:        flex;
-      flex-direction: row;
-      gap:            var(--spacing-space-m);
-      align-items:    flex-start;
-      width:          100%;
+    #VideosView-Viewport {
+      display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
+      flex: 1; min-height: 0; background: transparent; box-shadow: none; border-radius: 0;
+      gap: var(--spacing-space-m);
     }
 
-    /* ── LEFT: Quick Notes Card ── */
+    /* Breadcrumb - 1.5 */
+    .pd-breadcrumbs15 { display: flex; align-items: center; gap: var(--spacing-space-m); min-height: 36px; }
+    .pd-breadcrumbs__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
+    .pd-breadcrumbs__sep { width: 1px; align-self: stretch; background: var(--border-general-default); flex-shrink: 0; }
+    .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--spacing-space-xs); flex-wrap: wrap; }
+    .pd-link15 { display: flex; align-items: center; gap: 4px; border: none; background: none; padding: 0; font-family: var(--font-family); cursor: pointer; }
+    .pd-link15__icon { width: 20px; height: 20px; flex-shrink: 0; color: var(--text-primary-default); }
+    .pd-link15__text { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary-default); white-space: nowrap; }
+    .pd-link15__text--current { color: var(--text-default-body); }
+    .pd-breadcrumbs__chevron { width: 16px; height: 16px; flex-shrink: 0; color: var(--text-primary-default); }
+
+    /* Two-column layout (DS node 4506:116370) */
+    #Videos-View-Desktop { width: 100%; }
+    .vd-view-row { display: flex; gap: var(--spacing-space-m); align-items: flex-start; width: 100%; }
+
+    /* Quick Notes Card - 1.5 base (DS node 5137:81251) */
     .qn-card {
-      background:     var(--surface-secondary-default-subtle);
-      border:         1px solid var(--border-primary-default);
-      border-radius:  var(--corner-radius-corner-4xl);        /* 24px */
-      padding:        var(--spacing-space-m);
-      display:        flex;
-      flex-direction: column;
-      gap:            var(--spacing-space-m);
-      width:          875px;
-      flex-shrink:    1;
-      min-width:      0;
+      background: var(--surface-secondary-default-subtle);
+      border: 1px solid var(--border-primary-default);
+      border-radius: var(--corner-radius-corner-4xl);
+      padding: var(--spacing-space-m);
+      display: flex; flex-direction: column;
+      gap: var(--spacing-space-m);
     }
+    .vd-main-card { width: 843px; flex-shrink: 0; }
 
     .qn-card__header {
-      background:     var(--qn-subj-default, var(--subjects-b-melayu-default));
-      border:         1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
-      border-radius:  var(--corner-radius-corner-2xl);        /* 18px */
-      height:         110px;
-      max-height:     110px;
-      overflow:       hidden;
-      display:        flex;
-      flex-direction: row;
-      position:       relative;
+      background: var(--qn-subj-default, var(--subjects-b-melayu-default));
+      border: 1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
+      border-radius: var(--corner-radius-corner-2xl);
+      height: 110px; max-height: 110px;
+      overflow: hidden; display: flex; align-items: center; position: relative;
+      flex-shrink: 0; width: 100%;
     }
-
-    .qn-card__header-fano {
-      position:        absolute;
-      right:           0;
-      top:             0;
-      height:          110px;
-      width:           auto;
-      pointer-events:  none;
-      display:         block;
-      mix-blend-mode:  overlay;
-      opacity:         0.5;
+    .qn-card__fano {
+      position: absolute; top: 0; right: -25px;
+      height: 110px; width: auto;
+      mix-blend-mode: overlay; opacity: 0.5; pointer-events: none;
     }
-
-    .qn-card__header-icon {
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      flex:            1 0 0;
-      max-width:       110px;
-      gap:             10px;
-      height:          100%;
+    .qn-card__icon-col {
+      flex: 1 0 0; max-width: 110px; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 12px 0 0 12px;
     }
-
-    .qn-card__header-icon img {
-      width:       60px;
-      height:      60px;
-      flex-shrink: 0;
-    }
-
+    .qn-card__subject-icon { width: 60px; height: 60px; display: block; flex-shrink: 0; object-fit: contain; }
     .qn-card__header-content {
-      display:        flex;
-      flex:           1 0 0;
-      align-items:    center;
-      gap:            2px;
-      height:         110px;
-      padding:        var(--spacing-space-m) var(--spacing-space-m) var(--spacing-space-m) 0;
-      min-width:      0;
+      flex: 1 0 0; min-width: 0; height: 110px;
+      display: flex; align-items: center;
+      padding: var(--spacing-space-m) var(--spacing-space-m) var(--spacing-space-m) 0;
+      gap: 2px;
+    }
+    .qn-card__label { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 2px; justify-content: center; border-left: 1px solid var(--qn-subj-default-subtle, #e6f1fa); padding-left: var(--spacing-space-xl); }
+    .qn-card__topics { font-size: 24px; font-weight: 700; line-height: 36px; color: #ffffff; white-space: nowrap; }
+    .qn-card__topic-desc { font-size: 14px; font-weight: 500; line-height: 20px; color: #ffffff; white-space: nowrap; }
+
+    /* Card body — outer grey container (DS node I5137:81251;2339:5079) */
+    .vd-card-body {
+      display: flex; flex-direction: column; gap: var(--spacing-space-m); width: 100%;
     }
 
-    .qn-card__header-label {
-      display:         flex;
-      flex:            1 0 0;
-      flex-direction:  column;
-      gap:             2px;
-      align-items:     flex-start;
-      justify-content: center;
-      min-width:       0;
-      border-left:     1px solid var(--qn-subj-default-subtle, #e6f1fa);
-      padding-left:    var(--spacing-space-xl);
-    }
-
-    .qn-card__header-title {
-      font-family:  var(--font-family);
-      font-weight:  700;
-      font-size:    24px;
-      line-height:  36px;
-      color:        var(--text-on-color-heading);  /* white */
-      margin:       0;
-      white-space:  nowrap;
-    }
-
-    .qn-card__header-desc {
-      font-family:  var(--font-family);
-      font-weight:  500;
-      font-size:    14px;
-      line-height:  20px;
-      color:        var(--text-on-color-heading);  /* white */
-      margin:       0;
-      white-space:  nowrap;
-    }
-
-    /* Print button (Button Icon - 1.5, outlined) */
-    .qn-print-btn {
-      background:      var(--surface-general-default);
-      border:          1px solid var(--border-primary-default);
-      border-radius:   108px;
-      padding:         8px;
-      min-height:      40px;
-      min-width:       40px;
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      cursor:          pointer;
-      flex-shrink:     0;
-    }
-
-    .qn-print-btn:hover {
-      background: var(--surface-secondary-default-subtle);
-    }
-
-    .qn-print-btn__icon {
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      width:           24px;
-      height:          24px;
-    }
-
-    .qn-print-btn__icon svg {
-      width:  20px;
-      height: 20px;
-      color:  var(--icon-primary-default);
-    }
-
-    /* Content area */
-    .qn-card__content {
-      display:        flex;
-      flex-direction: column;
-      gap:            var(--spacing-space-m);
-      align-items:    flex-start;
-      width:          100%;
-    }
-
-    /* Topic block — header (rounded-top) + body (rounded-bottom) */
-    .qn-topic-block {
-      display:        flex;
-      flex-direction: column;
-      align-items:    flex-end;
-      overflow:       hidden;
-      width:          100%;
-    }
-
-    .qn-topic-header {
-      background:     var(--qn-subj-default-subtle, var(--subjects-b-melayu-default-subtle));
-      border-top:     1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
-      border-left:    1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
-      border-right:   1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
-      border-radius:  18px 18px 0 0;
-      display:        flex;
-      align-items:    center;
-      min-height:     56px;
-      width:          100%;
-    }
-
-    .qn-topic-row {
-      display:     flex;
-      align-items: center;
-      gap:         8px;
-      padding:     var(--spacing-space-m);
-      width:       100%;
-    }
-
-    /* Topic number pill */
-    .qn-topic-pill {
-      display:         flex;
-      align-items:     center;
-      gap:             4px;
-      background:      var(--qn-subj-default-subtle, var(--subjects-b-melayu-default-subtle));
-      border:          1px solid var(--qn-subj-default, var(--subjects-b-melayu-default));
-      border-radius:   60px;
-      padding:         2px 8px;
-      min-height:      24px;
-      flex-shrink:     0;
-    }
-
-    .qn-topic-pill svg {
-      width:       14px;
-      height:      14px;
-      color:       var(--qn-subj-default, var(--subjects-b-melayu-default));
+    /* Video player — 16:9 aspect ratio fills iframe without letterboxing */
+    .vd-player {
+      position: relative; overflow: hidden;
+      width: 100%; aspect-ratio: 16 / 9;
+      border: 1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
+      border-radius: 18px;
       flex-shrink: 0;
     }
-
-    .qn-topic-pill__num {
-      font-family:  var(--font-family);
-      font-weight:  500;
-      font-size:    12px;
-      line-height:  12px;
-      color:        var(--qn-subj-default, var(--subjects-b-melayu-default));
-      white-space:  nowrap;
+    .vd-player__iframe {
+      position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
+    }
+    .vd-player__bg {
+      position: absolute; inset: 0;
+      background-color: #e8e8e8;
+      background-image: linear-gradient(45deg,#ccc 25%,transparent 25%),
+                        linear-gradient(-45deg,#ccc 25%,transparent 25%),
+                        linear-gradient(45deg,transparent 75%,#ccc 75%),
+                        linear-gradient(-45deg,transparent 75%,#ccc 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0;
     }
 
-    .qn-topic-title {
-      font-family:  var(--font-family);
-      font-weight:  600;
-      font-size:    16px;
-      line-height:  24px;
-      color:        var(--text-default-heading);
-      white-space:  nowrap;
+    /* Content below player (DS node 5137:81238) */
+    .vd-content-wrap {
+      border: 1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
+      border-radius: 18px; overflow: hidden;
     }
 
-    /* Topic body */
-    .qn-topic-body {
-      background:     var(--surface-general-default);
-      border-bottom:  1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
-      border-left:    1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
-      border-right:   1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
-      border-radius:  0 0 18px 18px;
-      overflow:       hidden;
-      padding:        var(--spacing-space-m);
-      display:        flex;
-      flex-direction: column;
-      gap:            var(--spacing-space-m);
-      align-items:    center;
-      width:          100%;
-    }
-
-    /* Bullet list */
-    .qn-body-textblock {
-      width:          100%;
-      display:        flex;
-      flex-direction: column;
-    }
-
-    .qn-body-text {
-      font-family:  var(--font-family);
-      font-weight:  400;
-      font-size:    14px;
-      line-height:  20px;
-      color:        var(--text-default-body);
-      width:        100%;
-      margin:       0;
-      padding-left: 20px;
-    }
-
-    .qn-body-text strong { font-weight: 600; }
-
-    .qn-body-spacer {
-      margin:      0;
-      padding:     0;
-      font-size:   14px;
-      line-height: 20px;
-      white-space: pre-wrap;
-    }
-
-    /* Diftong table */
-    .qn-table {
-      border:        1px solid var(--qn-subj-default-subtle-hover, var(--subjects-b-melayu-default-subtle-hover));
-      border-radius: 16px;
-      overflow:      hidden;
-      width:         100%;
-    }
-
-    .qn-table__row {
-      display:     flex;
-      align-items: center;
-      width:       100%;
-    }
-
-    .qn-table__cell {
-      display:     flex;
-      align-items: center;
-      min-height:  56px;
-      padding:     var(--spacing-space-m);
-      border-bottom: 1px solid var(--qn-subj-default-subtle-hover, var(--subjects-b-melayu-default-subtle-hover));
-      border-right:  1px solid var(--qn-subj-default-subtle-hover, var(--subjects-b-melayu-default-subtle-hover));
-    }
-
-    .qn-table__row:last-child .qn-table__cell { border-bottom: none; }
-
-    .qn-table__head .qn-table__cell {
-      background:   var(--qn-subj-default-subtle, var(--subjects-b-melayu-default-subtle));
-      font-family:  var(--font-family);
-      font-weight:  500;
-      font-size:    16px;
-      line-height:  24px;
-      color:        var(--text-default-body);
-    }
-
-    .qn-table__cell--body {
-      background:  var(--surface-general-default);
-      font-family: var(--font-family);
-      font-weight: 400;
-      font-size:   14px;
-      line-height: 20px;
-      color:       var(--text-default-body);
-    }
-
-    .qn-table__cell--key { width: 160px; flex-shrink: 0; }
-    .qn-table__cell--val { flex: 1 0 0; min-width: 0; }
-
-    /* Report button row */
-    .qn-report-row {
-      display:         flex;
-      align-items:     center;
-      justify-content: flex-end;
-      height:          32px;
-      width:           100%;
-    }
-
-    /* Report button (Secondary/M, leading icon) */
-    .qn-report-btn {
-      display:      flex;
-      align-items:  center;
-      gap:          0;
-      background:   var(--surface-general-default);
-      border:       none;
-      box-shadow:   inset 0 0 0 1px var(--border-primary-default); /* INSIDE per Rule 60/85 */
-      border-radius: 60px;
-      height:       32px;
-      max-height:   32px;
-      padding:      2px 8px;
-      cursor:       pointer;
-    }
-
-    .qn-report-btn:hover {
-      background:  var(--surface-secondary-default);        /* #b5f291 per Rule 88 */
-      box-shadow:  inset 0 0 0 1px var(--border-secondary-focus);
-    }
-
-    .qn-report-btn__icon {
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      overflow:        hidden;
-      width:           16px;
-      height:          16px;
-      flex-shrink:     0;
-    }
-
-    .qn-report-btn__icon svg {
-      width:  24px;
-      height: 24px;
-      color:  var(--icon-primary-default);
-    }
-
-    .qn-report-btn:hover .qn-report-btn__icon svg { color: var(--icon-secondary-hover); }
-
-    .qn-report-btn__label {
-      font-family:  var(--font-family);
-      font-weight:  600;
-      font-size:    12px;
-      line-height:  18px;
-      color:        var(--text-primary-default);
-      padding:      0 4px;
-      white-space:  nowrap;
-    }
-
-    .qn-report-btn:hover .qn-report-btn__label { color: var(--text-secondary-focus); }
-
-    /* ── RIGHT: Sidebar ── */
-    .qn-sidebar {
-      flex:           1 0 0;
-      display:        flex;
-      flex-direction: column;
-      gap:            var(--spacing-space-m);
-      align-items:    flex-end;
-      min-width:      0;
-    }
-
-    /* Context card */
-    .qn-context-card {
-      background:     var(--surface-secondary-default-subtle);
-      border:         1px solid var(--border-primary-default);
-      border-radius:  24px;
-      padding:        var(--spacing-space-m);
-      display:        flex;
-      flex-direction: column;
-      gap:            var(--spacing-space-m);
-      overflow:       hidden;
-      width:          100%;
-    }
-
-    /* Info table */
-    .qn-info-table {
-      border:        1px solid var(--qn-subj-default-hover, var(--subjects-b-melayu-default-hover));
-      border-radius: 18px;
-      overflow:      hidden;
-      width:         100%;
-    }
-
-    .qn-info-row {
-      display:     flex;
-      align-items: stretch;
-      width:       100%;
-    }
-
-    .qn-info-cell {
-      display:     flex;
-      align-items: center;
-      min-height:  56px;
-      padding:     var(--spacing-space-m);
-    }
-
-    .qn-info-cell--label {
-      background:   var(--qn-subj-default, var(--subjects-b-melayu-default));
-      width:        91px;
-      flex-shrink:  0;
-      font-family:  var(--font-family);
-      font-weight:  600;
-      font-size:    14px;
-      line-height:  20px;
-      color:        var(--text-on-color-heading);
-      white-space:  nowrap;
-      border-bottom: 1px solid var(--qn-subj-default-subtle-hover, var(--subjects-b-melayu-default-subtle-hover));
-    }
-
-    .qn-info-cell--value {
-      flex:         1 0 0;
-      min-width:    0;
-      border-bottom: 1px solid var(--qn-subj-default-subtle-hover, var(--subjects-b-melayu-default-subtle-hover));
-      font-family:  var(--font-family);
-      font-weight:  500;
-      font-size:    12px;
-      line-height:  12px;
-      color:        var(--text-default-body);
-    }
-
-    .qn-info-cell--chapter { background: var(--qn-subj-default-subtle, var(--subjects-b-melayu-default-subtle)); }
-
-    /* Topic row — no bottom border, white bg */
-    .qn-info-row--topic .qn-info-cell--label  { border-bottom: none; }
-    .qn-info-row--topic .qn-info-cell--value  {
-      background:  var(--surface-general-default);
-      border-bottom: none;
-    }
-
-    /* Pills row */
-    .qn-info-row--pills .qn-info-cell--label  { border-bottom: none; }
-    .qn-info-row--pills .qn-info-cell--value  {
-      background:      var(--surface-general-default);
-      border-bottom:   none;
-      justify-content: flex-end;
-      align-items:     flex-end;
-      padding:         8px 16px 16px 8px;
-      gap:             8px;
-      flex-wrap:       wrap;
-    }
-
-    /* Disabled pills */
-    .qn-pill-disabled {
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      background:      var(--surface-disabled-primary);    /* #f2f2f2 */
-      border-radius:   60px;
-      padding:         2px 8px;
-      font-family:     var(--font-family);
-      font-weight:     500;
-      font-size:       10px;
-      line-height:     12px;
-      color:           var(--text-disabled-default);       /* #bfbfbf */
-      white-space:     nowrap;
-    }
-
-    /* Context card buttons */
-    .qn-context-btns {
-      display:         flex;
-      align-items:     center;
-      justify-content: space-between;
-      width:           100%;
-    }
-
-    /* Back to List — Secondary/M with L arrow */
-    .qn-btn-back {
-      display:      flex;
-      align-items:  center;
-      background:   var(--surface-general-default);
-      border:       none;
-      box-shadow:   inset 0 0 0 1px var(--border-primary-default); /* INSIDE per Rule 85 */
-      border-radius: 60px;
-      height:       32px;
-      max-height:   32px;
-      padding:      2px 8px;
-      cursor:       pointer;
-      gap:          0;
-    }
-
-    .qn-btn-back:hover {
-      background:  var(--surface-secondary-default);       /* #b5f291 */
-      box-shadow:  inset 0 0 0 1px var(--border-secondary-focus);
-    }
-
-    .qn-btn-back__arrow {
-      display:         flex;
-      align-items:     center;
-      justify-content: flex-end;
-      background:      var(--surface-general-default);
-      border:          1px solid var(--border-primary-default); /* L arrow uses border per DS ctx */
-      border-radius:   60px;
-      padding:         1px;
-      flex-shrink:     0;
-    }
-
-    .qn-btn-back__arrow-clip {
-      overflow: hidden;
-      width:    16px;
-      height:   16px;
-    }
-
-    .qn-btn-back__arrow-clip svg {
-      width:  16px;
-      height: 16px;
-      color:  var(--icon-primary-default);
-    }
-
-    .qn-btn-back__label {
-      font-family:  var(--font-family);
-      font-weight:  600;
-      font-size:    12px;
-      line-height:  18px;
-      color:        var(--text-primary-default);
-      padding:      0 4px;
-      white-space:  nowrap;
-    }
-
-    .qn-btn-back:hover .qn-btn-back__arrow        { background: var(--surface-secondary-default); border-color: var(--border-secondary-focus); }
-    .qn-btn-back:hover .qn-btn-back__arrow-clip svg { color: var(--text-secondary-focus); }
-    .qn-btn-back:hover .qn-btn-back__label          { color: var(--text-secondary-focus); }
-
-    /* View all notes — Primary/M with R arrow */
-    .qn-btn-view {
-      display:      flex;
-      align-items:  center;
-      background:   var(--surface-primary-default);        /* #00cc85 */
-      border:       none;
-      box-shadow:   inset 0 0 0 1px var(--border-primary-focus); /* INSIDE #00a36a */
-      border-radius: 60px;
-      height:       32px;
-      max-height:   32px;
-      padding:      2px 8px;
-      cursor:       pointer;
-      gap:          0;
-    }
-
-    .qn-btn-view:hover {
-      background:  var(--surface-secondary-default);
-      box-shadow:  inset 0 0 0 1px var(--border-secondary-focus);
-    }
-
-    .qn-btn-view__label {
-      font-family:  var(--font-family);
-      font-weight:  600;
-      font-size:    12px;
-      line-height:  18px;
-      color:        var(--text-primary-on-color);          /* white */
-      padding:      0 4px;
-      white-space:  nowrap;
-    }
-
-    .qn-btn-view__arrow {
-      display:         flex;
-      align-items:     center;
-      justify-content: flex-end;
-      background:      var(--surface-primary-default-subtle-hover); /* #99ebce */
-      border-radius:   60px;
-      padding:         2px;
-      flex-shrink:     0;
-    }
-
-    .qn-btn-view__arrow-clip {
-      overflow: hidden;
-      width:    16px;
-      height:   16px;
-    }
-
-    .qn-btn-view__arrow-clip svg {
-      width:  16px;
-      height: 16px;
-      color:  var(--border-primary-focus);                 /* #00a36a — arrow chevron */
-    }
-
-    .qn-btn-view:hover .qn-btn-view__label          { color: var(--text-secondary-focus); }
-    .qn-btn-view:hover .qn-btn-view__arrow           { background: var(--surface-secondary-default); }
-    .qn-btn-view:hover .qn-btn-view__arrow-clip svg  { color: var(--text-secondary-focus); }
-
-    /* Related Notes card */
-    .qn-related-card {
-      border:        1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
-      border-radius: 18px;
-      overflow:      hidden;
-      width:         100%;
-    }
-
-    .qn-related-header {
-      background:   var(--qn-subj-default, var(--subjects-b-melayu-default));
-      border-bottom: 1px solid var(--border-general-default); /* #d9d9d9 */
-      display:      flex;
-      align-items:  center;
-      min-height:   56px;
-      padding:      var(--spacing-space-m);
-      font-family:  var(--font-family);
-      font-weight:  400;
-      font-size:    14px;
-      line-height:  20px;
-      color:        var(--text-on-color-heading);
-      width:        100%;
-    }
-
-    .qn-related-item {
-      background:   var(--surface-general-default);
+    /* Header bar (DS node 5137:81239 — h:57px) */
+    .vd-content-header {
+      height: 57px; min-height: 57px;
+      background: var(--qn-subj-default-subtle, var(--subjects-b-melayu-default-subtle));
+      padding: 12px; display: flex; align-items: center;
+      justify-content: space-between; gap: 8px;
       border-bottom: 1px solid var(--border-general-default);
-      display:      flex;
-      align-items:  center;
-      min-height:   56px;
-      padding:      var(--spacing-space-m);
-      font-family:  var(--font-family);
-      font-weight:  500;
-      font-size:    12px;
-      line-height:  12px;
-      color:        var(--text-default-body);
+    }
+    .vd-content-header-left  { display: flex; align-items: center; gap: 7px; min-width: 0; }
+    .vd-content-header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+    /* "1.1" label badge (DS node 5137:81241) */
+    .vd-label-badge {
+      display: flex; align-items: center; gap: 4px;
+      height: 24px; padding: 2px 8px;
+      background: var(--qn-subj-default-subtle, var(--subjects-b-melayu-default-subtle));
+      border: 1px solid var(--qn-subj-default, var(--subjects-b-melayu-default));
+      border-radius: 60px; overflow: hidden; flex-shrink: 0;
+    }
+    .vd-label-badge__icon { width: 14px; height: 14px; flex-shrink: 0; color: var(--qn-subj-default, var(--subjects-b-melayu-default)); }
+    .vd-label-badge__text { font-size: 12px; font-weight: 500; line-height: 12px; color: var(--qn-subj-default, var(--subjects-b-melayu-default)); white-space: nowrap; }
+
+    .vd-content-heading { font-size: 16px; font-weight: 600; line-height: 24px; color: var(--text-default-heading); white-space: nowrap; }
+
+    /* "language" pill (DS node 5137:81244) */
+    .vd-lang-pill {
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface-primary-default);
+      border-radius: 60px; height: 32px; padding: 2px 16px; overflow: hidden; flex-shrink: 0;
+    }
+    .vd-lang-pill__text { font-size: 14px; font-weight: 500; line-height: 20px; color: #ffffff; }
+
+    /* "Report this Video" button (DS node 5137:81245 — Secondary/M no arrow) */
+    .vd-report-btn {
+      display: flex; align-items: center; height: 32px; padding: 2px 8px;
+      background: var(--surface-general-default);
+      border: none; box-shadow: inset 0 0 0 1px var(--border-primary-default);
+      border-radius: 60px; cursor: pointer; font-family: var(--font-family); flex-shrink: 0;
+    }
+    .vd-report-btn__icon { width: 16px; height: 16px; flex-shrink: 0; color: var(--text-primary-default); }
+    .vd-report-btn__label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--text-primary-default); padding: 0 4px; }
+    .vd-report-btn:hover { background: var(--surface-secondary-default-subtle); }
+
+    /* Description (DS node 5137:81246) */
+    .vd-description { background: var(--surface-general-default); padding: 16px; }
+    .vd-description p { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); margin: 0; }
+    .vd-description p + p { margin-top: 4px; }
+    .vd-description strong { font-weight: 600; }
+    .vd-description a { color: var(--text-default-body); text-decoration: underline; cursor: pointer; }
+
+    /* ── Sidebar (DS node 4506:116372) ── */
+    .vd-sidebar { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: var(--spacing-space-m); }
+
+    /* Chapter/Topic meta card (DS node 4506:116373) */
+    .vd-meta-card {
+      background: var(--surface-secondary-default-subtle);
+      border: 1px solid var(--border-primary-default);
+      border-radius: 24px; padding: 16px;
+      display: flex; flex-direction: column; gap: 16px;
     }
 
-    .qn-related-item:last-child { border-bottom: none; }
+    /* Chapter/Topic table (DS node 4506:116374) */
+    .vd-meta-table {
+      border: 1px solid var(--qn-subj-default-hover, var(--subjects-b-melayu-default-hover));
+      border-radius: 18px; overflow: hidden; width: 100%;
+    }
+    .vd-meta-row { display: flex; align-items: stretch; }
 
-    .qn-related-item:hover { background: var(--subject-bm-50); cursor: pointer; }
+    .vd-meta-cell-hd {
+      background: var(--qn-subj-400, var(--qn-subj-default, var(--subjects-b-melayu-400)));
+      width: 91px; flex-shrink: 0; display: flex; align-items: center; padding: 16px;
+    }
+    .vd-meta-cell-hd--sep { border-bottom: 1px solid var(--qn-subj-default-subtle-hover, var(--subjects-b-melayu-default-subtle-hover)); }
+    .vd-meta-cell-hd--empty { height: 30px; align-items: flex-start; padding: 0; }
+    .vd-meta-cell-hd__text { font-size: 14px; font-weight: 600; line-height: 20px; color: #ffffff; white-space: nowrap; }
 
-    /* ── QN Responsive ── */
+    .vd-meta-cell-bd {
+      flex: 1 0 0; min-width: 0; display: flex; align-items: center; padding: 16px;
+    }
+    .vd-meta-cell-bd--light { background: var(--qn-subj-default-subtle, var(--subjects-b-melayu-default-subtle)); border-bottom: 1px solid var(--qn-subj-default-subtle-hover, var(--subjects-b-melayu-default-subtle-hover)); }
+    .vd-meta-cell-bd--white { background: var(--surface-general-default); }
+    .vd-meta-cell-bd__text { font-size: 12px; font-weight: 500; line-height: 12px; color: var(--text-default-body); }
 
-    /* Tablet + mobile: stacked — sidebar fills at bottom */
+    .vd-meta-pills { flex: 1 0 0; display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 0 16px 8px 8px; background: var(--surface-general-default); }
+    .vd-meta-pill { display: inline-flex; align-items: center; justify-content: center; background: var(--surface-disabled-primary); border-radius: 60px; padding: 2px 8px; }
+    .vd-meta-pill__text { font-size: 10px; font-weight: 500; line-height: 12px; color: var(--text-disabled-default); }
+
+    /* Nav buttons row (DS node 4506:116386) */
+    .vd-nav-btns { display: flex; align-items: center; justify-content: space-between; }
+
+    /* "Back to List" — Secondary/M with L-arrow (DS node 4506:116387) */
+    .btn-back-list {
+      display: flex; align-items: center; height: 32px; padding: 2px 8px;
+      background: var(--surface-general-default);
+      border: none; box-shadow: inset 0 0 0 1px var(--border-primary-default);
+      border-radius: 60px; cursor: pointer; font-family: var(--font-family);
+    }
+    .btn-back-list__arrow {
+      width: 18px; height: 18px; padding: 1px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface-general-default);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+      border-radius: 60px; flex-shrink: 0;
+    }
+    .btn-back-list__clip { width: 16px; height: 16px; overflow: hidden; flex-shrink: 0; }
+    .btn-back-list__clip svg { display: block; width: 16px; height: 16px; color: var(--border-primary-default); }
+    .btn-back-list__label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--text-primary-default); padding: 0 4px; }
+    .btn-back-list:hover { background: var(--surface-secondary-default-subtle); }
+
+    /* "View all videos" — Primary/M with R-arrow (DS node 4506:116388) */
+    .btn-view-all {
+      display: flex; align-items: center; height: 32px; padding: 2px 8px;
+      background: var(--surface-primary-default);
+      border: 1px solid var(--border-primary-focus);
+      border-radius: 60px; cursor: pointer; font-family: var(--font-family);
+    }
+    .btn-view-all__label { font-size: 12px; font-weight: 600; line-height: 18px; color: #ffffff; padding: 0 4px; }
+    .btn-view-all__arrow {
+      width: 20px; height: 20px; padding: 2px;
+      background: var(--surface-primary-default-subtle-hover);
+      border-radius: 60px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .btn-view-all__clip { width: 16px; height: 16px; overflow: hidden; flex-shrink: 0; }
+    .btn-view-all__clip svg { display: block; width: 16px; height: 16px; color: var(--border-primary-focus); }
+    .btn-view-all:hover { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); border-color: transparent; }
+    .btn-view-all:hover .btn-view-all__label { color: var(--text-secondary-focus); }
+
+    /* Related Videos card (DS node 4506:116389) */
+    .vd-related-card { border: 1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus)); border-radius: 18px; overflow: hidden; }
+    .vd-related-header {
+      background: var(--qn-subj-400, var(--qn-subj-default, var(--subjects-b-melayu-400)));
+      border-bottom: 1px solid var(--border-general-default);
+      min-height: 56px; display: flex; align-items: center; padding: 16px;
+    }
+    .vd-related-header__text { font-size: 14px; font-weight: 600; line-height: 20px; color: #ffffff; }
+
+    .vd-related-row {
+      display: flex; align-items: stretch; gap: var(--spacing-space-m);
+      background: var(--surface-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+    }
+    .vd-related-row:last-child { border-bottom: none; }
+
+    .vd-related-thumb {
+      width: 167px; flex-shrink: 0; min-height: 104px;
+      border-right: 1px solid var(--border-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+      position: relative; overflow: hidden;
+    }
+    .vd-related-row:last-child .vd-related-thumb { border-bottom: none; }
+    .vd-related-thumb-bg {
+      position: absolute; inset: 0;
+      background-color: #e8e8e8;
+      background-image: linear-gradient(45deg,#ccc 25%,transparent 25%),
+                        linear-gradient(-45deg,#ccc 25%,transparent 25%),
+                        linear-gradient(45deg,transparent 75%,#ccc 75%),
+                        linear-gradient(-45deg,transparent 75%,#ccc 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+    }
+
+    .vd-related-info {
+      flex: 1 0 0; min-width: 0;
+      display: flex; flex-direction: column; gap: 12px;
+      padding: 12px 16px 12px 0;
+    }
+    .vd-related-title {
+      font-size: 12px; font-weight: 500; line-height: 18px;
+      color: var(--text-default-body);
+    }
+    .vd-related-pill { display: inline-flex; align-items: center; justify-content: center; background: var(--surface-disabled-primary); border-radius: 60px; padding: 2px 8px; align-self: flex-start; }
+    .vd-related-pill__text { font-size: 10px; font-weight: 500; line-height: 12px; color: var(--text-disabled-default); }
+    .vd-related-contributor { display: flex; align-items: center; justify-content: flex-end; gap: 2px; }
+    .vd-related-contributor__icon { width: 16px; height: 16px; flex-shrink: 0; color: var(--text-primary-default); }
+    .vd-related-contributor__text { font-size: 10px; font-weight: 500; line-height: 12px; color: var(--text-primary-default); }
+
     @media (max-width: 1279px) {
-      .qn-view-layout { flex-direction: column; }
-      .qn-card        { width: 100%; }
-      .qn-sidebar     { width: 100%; min-width: 0; }
+      .vd-view-row { flex-wrap: wrap; }
+      .vd-main-card { width: 100%; }
+      .qn-card__topics { font-size: 20px; line-height: 32px; }
     }
-
     @media (max-width: 767px) {
-      .qn-card__header-title { font-size: 20px; line-height: 32px; }
+      .qn-card__header { height: auto; min-height: 80px; }
+      .qn-card__topics { font-size: 18px; line-height: 28px; }
+      .qn-card__header-content { padding: var(--spacing-space-m); }
+      .qn-card__icon-col { max-width: 72px; width: 72px; }
+      .qn-card__subject-icon { width: 44px; height: 44px; }
+      .vd-player { aspect-ratio: 16 / 9; height: auto; }
+      .vd-content-header { height: auto; min-height: 57px; flex-wrap: wrap; }
+      .vd-related-thumb { width: 100px; }
     }
-
   </style>
 </head>
 <body>
@@ -2981,6 +2648,9 @@
 
       <!-- Outline/printer (260:1060) --><symbol id="ic-printer" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2H18V9M6 18H4C3.46957 18 2.96086 17.7893 2.58579 17.4142C2.21071 17.0391 2 16.5304 2 16V11C2 10.4696 2.21071 9.96086 2.58579 9.58579C2.96086 9.21071 3.46957 9 4 9H20C20.5304 9 21.0391 9.21071 21.4142 9.58579C21.7893 9.96086 22 10.4696 22 11V16C22 16.5304 21.7893 17.0391 21.4142 17.4142C21.0391 17.7893 20.5304 18 20 18H18M6 14H18V22H6V14Z"/></symbol>
       <!-- Outline/alert-triangle (260:386) --><symbol id="ic-alert-triangle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17H12.01M12 9.00002V13M10.29 3.86002L1.82002 18C1.64539 18.3024 1.55299 18.6453 1.55201 18.9945C1.55103 19.3438 1.64151 19.6872 1.81445 19.9905C1.98738 20.2939 2.23675 20.5468 2.53773 20.7239C2.83871 20.901 3.18082 20.9962 3.53002 21H20.47C20.8192 20.9962 21.1613 20.901 21.4623 20.7239C21.7633 20.5468 22.0127 20.2939 22.1856 19.9905C22.3585 19.6872 22.449 19.3438 22.448 18.9945C22.4471 18.6453 22.3547 18.3024 22.18 18L13.71 3.86002C13.5318 3.56613 13.2807 3.32314 12.9812 3.15451C12.6817 2.98587 12.3438 2.89728 12 2.89728C11.6563 2.89728 11.3184 2.98587 11.0188 3.15451C10.7193 3.32314 10.4683 3.56613 10.29 3.86002Z"/></symbol>
+
+      <!-- Outline/video (843:668) — 14×14 clip at inset 20.83%/4.17% in 24×24 DS frame → viewBox -1 -1 26 26 --><symbol id="ic-video" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23,7 16,12 23,17"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></symbol>
+      <!-- Outline/chevron-right small — 20×20, for breadcrumb separator --><symbol id="ic-chevron-right-sm" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5L13 10L8 15"/></symbol>
 
     </defs>
   </svg>
@@ -3896,214 +3566,210 @@
              QUICK NOTES — VIEW
              DS node 5165:82857 · Bahasa Melayu · Topic 1.1 Diftong
         ════════════════════════════════════════════════════════ -->
-        <section id="QuickNotes-View-Desktop" class="qn-view-layout" aria-label="Quick Notes — Diftong">
+        <!-- ════════════════════════════════════════════════════════
+             VIDEOS — VIEW
+             DS node 3695:58993 · Bahasa Melayu · Form 4
+        ════════════════════════════════════════════════════════ -->
+        <section id="VideosView-Viewport" aria-label="Videos View" style="display:flex;flex-direction:column;gap:var(--spacing-space-m);align-items:stretch;background:transparent;box-shadow:none;border-radius:0;flex:1;min-height:0;">
 
-          <!-- ── LEFT: Quick Notes Card ── -->
-          <div class="qn-card">
-
-            <!-- Header (BM blue) -->
-            <div class="qn-card__header">
-              <div class="qn-card__header-icon">
-                <img src="../src/image-repo/Learn/quick.notes/view/icons/border-bmelayu.svg" alt="Bahasa Melayu" width="60" height="60">
-              </div>
-              <!-- P.Fano-Wireframe — DS node I5165:82858;5173:77576, mix-blend-mode:overlay, opacity:0.5 -->
-              <img class="qn-card__header-fano" src="../src/image-repo/Learn/quick.notes/view/fano-wireframe.svg" alt="" aria-hidden="true">
-
-              <div class="qn-card__header-content">
-                <div class="qn-card__header-label">
-                  <h2 class="qn-card__header-title">Topics</h2>
-                  <p class="qn-card__header-desc">Topic Descriptions</p>
-                </div>
-                <button class="qn-print-btn" aria-label="Print notes">
-                  <span class="qn-print-btn__icon">
-                    <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-printer"/></svg>
-                  </span>
+          <!-- Breadcrumb - 1.5 (DS node 3695:58997) -->
+          <section id="Breadcrumb-Desktop" aria-label="Breadcrumb navigation">
+            <div class="pd-breadcrumbs15">
+              <h1 class="pd-breadcrumbs__title">Videos</h1>
+              <div class="pd-breadcrumbs__sep" aria-hidden="true"></div>
+              <div class="pd-breadcrumbs__links">
+                <button class="pd-link15" type="button">
+                  <svg class="pd-link15__icon" aria-hidden="true"><use href="#ic-home"/></svg>
+                  <span class="pd-link15__text">Learn</span>
+                  <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
                 </button>
+                <button class="pd-link15" type="button">
+                  <span class="pd-link15__text">Videos</span>
+                  <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
+                </button>
+                <span class="pd-link15" style="cursor:default">
+                  <span class="pd-link15__text pd-link15__text--current">All videos for Form 4</span>
+                </span>
               </div>
             </div>
+          </section>
 
-            <!-- Content -->
-            <div class="qn-card__content">
+          <!-- Videos - View (DS node 4506:116366) — two-column layout: player + sidebar -->
+          <section id="Videos-View-Desktop" aria-label="Videos content">
+            <div class="vd-view-row">
 
-              <!-- Topic block: header row + body -->
-              <div class="qn-topic-block">
+              <!-- LEFT: Main card (843px fixed) — DS node 5137:81251 -->
+              <div class="qn-card vd-main-card">
 
-                <!-- Topic header (rounded-top) -->
-                <div class="qn-topic-header">
-                  <div class="qn-topic-row">
-                    <span class="qn-topic-pill">
-                      <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-file-text"/></svg>
-                      <span class="qn-topic-pill__num">1.1</span>
-                    </span>
-                    <span class="qn-topic-title">Diftong</span>
+                <!-- Subject header — Bahasa Melayu -->
+                <div class="qn-card__header">
+                  <img class="qn-card__fano" src="../src/image-repo/Learn/videos/fano-wireframe.svg" alt="">
+                  <div class="qn-card__icon-col">
+                    <img class="qn-card__subject-icon" src="../src/image-repo/Learn/videos/icons/border-bmelayu.svg" alt="Bahasa Melayu" width="60" height="60">
+                  </div>
+                  <div class="qn-card__header-content">
+                    <div class="qn-card__label">
+                      <p class="qn-card__topics">Topics</p>
+                      <p class="qn-card__topic-desc">Topic Descriptions</p>
+                    </div>
                   </div>
                 </div>
 
-                <!-- Topic body (rounded-bottom) -->
-                <div class="qn-topic-body">
-
-                  <div class="qn-body-textblock">
-                    <ul class="qn-body-text"><li><strong>Diftong</strong> bermaksud dua huruf vokal yang disebut dalam satu perkataan.</li></ul>
-                    <p class="qn-body-spacer">&#8203;</p>
-                    <ul class="qn-body-text"><li>Dua huruf vokal (a,e,i,o,u) yang duduk bersebelahan dalam perkataan dan disebut dalam satu suku kata atau satu sebutan bunyi.</li></ul>
-                    <p class="qn-body-spacer">&#8203;</p>
-                    <ul class="qn-body-text"><li><strong>Diftong</strong> dieja dengan gabungan dua huruf vokal yang dilafazkan sebagai <strong>bunyi luncuran iaitu bunyi vokal yang pertama menggeluncur ke bunyi vokal yang kedua.</strong></li></ul>
-                    <p class="qn-body-spacer">&#8203;</p>
-                    <ul class="qn-body-text"><li>Sebutan bunyi vokal yang pertama adalah lebih kuat berbanding bunyi yang kedua.</li></ul>
-                    <p class="qn-body-spacer">&#8203;</p>
-                    <ul class="qn-body-text"><li>Contoh <strong>tiga jenis Diftong:</strong></li></ul>
+                <!-- Video player + content info -->
+                <div class="vd-card-body">
+                  <!-- Video player -->
+                  <div class="vd-player">
+                    <iframe class="vd-player__iframe"
+                      src="https://www.youtube.com/embed/bmUzoRhONro"
+                      title="YouTube video player"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowfullscreen>
+                    </iframe>
                   </div>
-
-                  <div class="qn-table">
-                    <div class="qn-table__row qn-table__head">
-                      <div class="qn-table__cell qn-table__cell--key">Diftong</div>
-                      <div class="qn-table__cell qn-table__cell--val">Contoh</div>
+                  <!-- Content header + description -->
+                  <div class="vd-content-wrap">
+                    <div class="vd-content-header">
+                      <div class="vd-content-header-left">
+                        <div class="vd-label-badge">
+                          <svg class="vd-label-badge__icon" width="16" height="16" aria-hidden="true"><use href="#ic-video"/></svg>
+                          <span class="vd-label-badge__text">1.1</span>
+                        </div>
+                        <span class="vd-content-heading">Short Summary</span>
+                      </div>
+                      <div class="vd-content-header-right">
+                        <div class="vd-lang-pill">
+                          <span class="vd-lang-pill__text">Language</span>
+                        </div>
+                        <button class="vd-report-btn" type="button">
+                          <svg class="vd-report-btn__icon" width="16" height="16" aria-hidden="true"><use href="#ic-alert-triangle"/></svg>
+                          <span class="vd-report-btn__label">Report this Video</span>
+                        </button>
+                      </div>
                     </div>
-                    <div class="qn-table__row">
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--key">ai</div>
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--val">gulai, balai, tapai, tembikai</div>
+                    <div class="vd-description">
+                      <p><strong>Lesson by <a href="#" class="vd-description__link">Educator OmniTube</a></strong></p>
+                      <p>The views expressed in the videos here are those of the contributor and don't necessarily represent the views of Pandai. Thanks to the video owner for the effort in making this video. You can go to their youtube channel for more of their video content. View <a href="#" class="vd-description__link">here</a> to see many others pandai contributors.</p>
                     </div>
-                    <div class="qn-table__row">
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--key">au</div>
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--val">aurat, saudara, harimau, wau</div>
-                    </div>
-                    <div class="qn-table__row">
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--key">oi</div>
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--val">boikot, sekoi, koboi, kaloi</div>
-                    </div>
-                  </div>
-
-                </div><!-- end qn-topic-body -->
-              </div><!-- end qn-topic-block -->
-
-              <!-- Topic block 1.2: Digraf -->
-              <div class="qn-topic-block">
-
-                <div class="qn-topic-header">
-                  <div class="qn-topic-row">
-                    <span class="qn-topic-pill">
-                      <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-file-text"/></svg>
-                      <span class="qn-topic-pill__num">1.2</span>
-                    </span>
-                    <span class="qn-topic-title">Digraf</span>
                   </div>
                 </div>
 
-                <div class="qn-topic-body">
+              </div><!-- end vd-main-card -->
 
-                  <div class="qn-body-textblock">
-                    <ul class="qn-body-text"><li><strong>Digraf</strong> ialah dua huruf konsonan yang hadir secara berturut-turut yang menghasilkan satu bunyi dalam perkataan.</li></ul>
-                    <p class="qn-body-spacer">&#8203;</p>
-                    <ul class="qn-body-text"><li><strong>Digraf</strong> sama dengan konsonan berganding, iaitu dua huruf berturut-turut yang mewakili satu bunyi seperti <strong>ng</strong>, <strong>ny</strong> dan <strong>sy</strong>, atau disebut juga dwihuruf, dwilambang dan huruf rangkap.</li></ul>
-                    <p class="qn-body-spacer">&#8203;</p>
-                    <ul class="qn-body-text"><li>Dalam Bahasa Melayu, terdapat lima dwihuruf berbeza untuk konsonan:</li></ul>
+              <!-- RIGHT: Sidebar — DS node 4506:116372 -->
+              <div class="vd-sidebar">
+
+                <!-- Meta card: chapter/topic table + nav buttons -->
+                <div class="vd-meta-card">
+                  <div class="vd-meta-table">
+                    <!-- Row: Chapter -->
+                    <div class="vd-meta-row">
+                      <div class="vd-meta-cell-hd vd-meta-cell-hd--sep">
+                        <span class="vd-meta-cell-hd__text">Chapter</span>
+                      </div>
+                      <div class="vd-meta-cell-bd vd-meta-cell-bd--light">
+                        <span class="vd-meta-cell-bd__text">Listening Skills</span>
+                      </div>
+                    </div>
+                    <!-- Row: Topic -->
+                    <div class="vd-meta-row">
+                      <div class="vd-meta-cell-hd">
+                        <span class="vd-meta-cell-hd__text">Topic</span>
+                      </div>
+                      <div class="vd-meta-cell-bd vd-meta-cell-bd--white">
+                        <span class="vd-meta-cell-bd__text">Understand meaning in a variety of familiar contexts</span>
+                      </div>
+                    </div>
+                    <!-- Row: Pills -->
+                    <div class="vd-meta-row">
+                      <div class="vd-meta-cell-hd vd-meta-cell-hd--empty"></div>
+                      <div class="vd-meta-pills">
+                        <span class="vd-meta-pill"><span class="vd-meta-pill__text">Form 4</span></span>
+                        <span class="vd-meta-pill"><span class="vd-meta-pill__text">Bahasa Melayu</span></span>
+                      </div>
+                    </div>
                   </div>
 
-                  <div class="qn-table">
-                    <div class="qn-table__row qn-table__head">
-                      <div class="qn-table__cell qn-table__cell--key">Digraf</div>
-                      <div class="qn-table__cell qn-table__cell--val">Contoh</div>
+                  <!-- Navigation buttons: Back to List + View all videos -->
+                  <div class="vd-nav-btns">
+                    <button class="btn-back-list" type="button">
+                      <div class="btn-back-list__arrow">
+                        <div class="btn-back-list__clip">
+                          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 3L4.5 6L7.5 9"/></svg>
+                        </div>
+                      </div>
+                      <span class="btn-back-list__label">Back to List</span>
+                    </button>
+                    <button class="btn-view-all" type="button">
+                      <span class="btn-view-all__label">View all videos</span>
+                      <div class="btn-view-all__arrow">
+                        <div class="btn-view-all__clip">
+                          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12L10 8L6 4"/></svg>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                </div><!-- end vd-meta-card -->
+
+                <!-- Related Videos card -->
+                <div class="vd-related-card">
+                  <div class="vd-related-header">
+                    <span class="vd-related-header__text">Related Videos</span>
+                  </div>
+
+                  <!-- Related row 1 -->
+                  <div class="vd-related-row">
+                    <div class="vd-related-thumb">
+                      <div class="vd-related-thumb-bg"></div>
                     </div>
-                    <div class="qn-table__row">
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--key">gh</div>
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--val">ghazal, ghairah, ghaib</div>
-                    </div>
-                    <div class="qn-table__row">
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--key">ng</div>
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--val">nganga, bunga, singa</div>
-                    </div>
-                    <div class="qn-table__row">
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--key">ny</div>
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--val">nyamuk, nyanyi, nyala</div>
-                    </div>
-                    <div class="qn-table__row">
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--key">kh</div>
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--val">khabar, khas, khamis</div>
-                    </div>
-                    <div class="qn-table__row">
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--key">sy</div>
-                      <div class="qn-table__cell qn-table__cell--body qn-table__cell--val">syampu, syabas, syarikat</div>
+                    <div class="vd-related-info">
+                      <span class="vd-related-title">How to improve your English speaking skills (by yourself)</span>
+                      <div class="vd-related-pill"><span class="vd-related-pill__text">Language</span></div>
+                      <div class="vd-related-contributor">
+                        <svg class="vd-related-contributor__icon" width="12" height="12" aria-hidden="true"><use href="#ic-user"/></svg>
+                        <span class="vd-related-contributor__text">EngFluent</span>
+                      </div>
                     </div>
                   </div>
 
-                </div><!-- end qn-topic-body -->
-              </div><!-- end qn-topic-block 1.2 -->
-
-              <!-- Report button -->
-              <div class="qn-report-row">
-                <button class="qn-report-btn">
-                  <span class="qn-report-btn__icon">
-                    <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-alert-triangle"/></svg>
-                  </span>
-                  <span class="qn-report-btn__label">Report this Notes</span>
-                </button>
-              </div>
-
-            </div><!-- end qn-card__content -->
-          </div><!-- end qn-card -->
-
-          <!-- ── RIGHT: Sidebar ── -->
-          <div class="qn-sidebar">
-
-            <!-- Context card (chapter/topic info + nav buttons) -->
-            <div class="qn-context-card">
-
-              <div class="qn-info-table">
-                <!-- Chapter row -->
-                <div class="qn-info-row">
-                  <div class="qn-info-cell qn-info-cell--label">Chapter</div>
-                  <div class="qn-info-cell qn-info-cell--value qn-info-cell--chapter">Listening Skills</div>
-                </div>
-                <!-- Topic row -->
-                <div class="qn-info-row qn-info-row--topic">
-                  <div class="qn-info-cell qn-info-cell--label">Topic</div>
-                  <div class="qn-info-cell qn-info-cell--value">Understand meaning in a variety of familiar contexts</div>
-                </div>
-                <!-- Pills row -->
-                <div class="qn-info-row qn-info-row--pills">
-                  <div class="qn-info-cell qn-info-cell--label"></div>
-                  <div class="qn-info-cell qn-info-cell--value">
-                    <span class="qn-pill-disabled">Form 4</span>
-                    <span class="qn-pill-disabled">Bahasa Melayu</span>
+                  <!-- Related row 2 -->
+                  <div class="vd-related-row">
+                    <div class="vd-related-thumb">
+                      <div class="vd-related-thumb-bg"></div>
+                    </div>
+                    <div class="vd-related-info">
+                      <span class="vd-related-title">Bahasa Melayu — Teknik Menjawab Soalan KBAT</span>
+                      <div class="vd-related-pill"><span class="vd-related-pill__text">Language</span></div>
+                      <div class="vd-related-contributor">
+                        <svg class="vd-related-contributor__icon" width="12" height="12" aria-hidden="true"><use href="#ic-user"/></svg>
+                        <span class="vd-related-contributor__text">CikguHafiz</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              <!-- Navigation buttons -->
-              <div class="qn-context-btns">
-                <button class="qn-btn-back">
-                  <span class="qn-btn-back__arrow">
-                    <span class="qn-btn-back__arrow-clip">
-                      <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform:scaleX(-1)"><use href="#ic-chevron-btn-m"/></svg>
-                    </span>
-                  </span>
-                  <span class="qn-btn-back__label">Back to List</span>
-                </button>
-                <button class="qn-btn-view">
-                  <span class="qn-btn-view__label">View all notes</span>
-                  <span class="qn-btn-view__arrow">
-                    <span class="qn-btn-view__arrow-clip">
-                      <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
-                    </span>
-                  </span>
-                </button>
-              </div>
+                  <!-- Related row 3 -->
+                  <div class="vd-related-row">
+                    <div class="vd-related-thumb">
+                      <div class="vd-related-thumb-bg"></div>
+                    </div>
+                    <div class="vd-related-info">
+                      <span class="vd-related-title">Penulisan Karangan SPM — Cara Mudah Dapat A</span>
+                      <div class="vd-related-pill"><span class="vd-related-pill__text">Language</span></div>
+                      <div class="vd-related-contributor">
+                        <svg class="vd-related-contributor__icon" width="12" height="12" aria-hidden="true"><use href="#ic-user"/></svg>
+                        <span class="vd-related-contributor__text">PandaiTV</span>
+                      </div>
+                    </div>
+                  </div>
 
-            </div><!-- end qn-context-card -->
+                </div><!-- end vd-related-card -->
 
-            <!-- Related Notes card -->
-            <div class="qn-related-card">
-              <div class="qn-related-header">Related Notes</div>
-              <div class="qn-related-item">How to improve your English speaking skills (by yourself)</div>
-              <div class="qn-related-item">How to improve your English speaking skills (by yourself)</div>
-              <div class="qn-related-item">How to improve your English speaking skills (by yourself)</div>
-              <div class="qn-related-item">How to improve your English speaking skills (by yourself)</div>
-            </div>
+              </div><!-- end vd-sidebar -->
 
-          </div><!-- end qn-sidebar -->
+            </div><!-- end vd-view-row -->
+          </section><!-- end Videos-View-Desktop -->
 
-        </section>
-
+        </section><!-- end VideosView-Viewport -->
       </div>
     </div>
   </main>
@@ -4701,6 +4367,9 @@
     // Navbar action buttons — pressed feedback via JS (Rule 39: CSS :active unreliable in Electron webview)
     document.querySelectorAll('.navbar-action-btn').forEach(function (btn) {
       btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+      btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+      btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+    });
       btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
       btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
     });
@@ -5378,7 +5047,16 @@
   </script>
 
   <script>
-    /* Apply subject context from URL params passed by quickNotes.selections.html */
+    /* Watch buttons — is-pressing handler (Rule 83) */
+    document.querySelectorAll('.btn-learn').forEach(function (btn) {
+      btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+      btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+      btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+    });
+  </script>
+
+  <script>
+    /* Subject color tokens — driven by ?subject= URL param (mirrors quickNotes.view.html) */
     (function () {
       var params  = new URLSearchParams(window.location.search);
       var subject = params.get('subject');
@@ -5402,29 +5080,29 @@
       var key = SUBJ_KEY[subject];
       if (!key) return;
 
-      /* Set DS token references on the section — cascades to both left card and right sidebar */
-      var section = document.querySelector('#QuickNotes-View-Desktop');
+      /* Set DS token references on the section — cascades to card and sidebar */
+      var section = document.querySelector('#Videos-View-Desktop');
       if (section) {
         section.style.setProperty('--qn-subj-default',              'var(--subjects-' + key + '-default)');
         section.style.setProperty('--qn-subj-default-hover',        'var(--subjects-' + key + '-default-hover)');
         section.style.setProperty('--qn-subj-default-subtle',       'var(--subjects-' + key + '-default-subtle)');
         section.style.setProperty('--qn-subj-default-subtle-hover', 'var(--subjects-' + key + '-default-subtle-hover)');
         section.style.setProperty('--qn-subj-focus',                'var(--subjects-' + key + '-focus)');
+        section.style.setProperty('--qn-subj-400',                  'var(--subjects-' + key + '-400, var(--subjects-' + key + '-default))');
       }
 
-      /* Update subject icon — use the shared icons/ folder */
+      /* Update subject icon */
       if (icon) {
-        var iconEl = document.querySelector('#QuickNotes-View-Desktop .qn-card__header-icon img');
+        var iconEl = document.querySelector('#Videos-View-Desktop .qn-card__subject-icon');
         if (iconEl) {
-          iconEl.src = '../src/image-repo/Learn/quick.notes/view/icons/' + icon;
+          iconEl.src = '../src/image-repo/Learn/videos/icons/' + icon;
           iconEl.alt = subject;
         }
       }
 
       /* Update page title */
-      document.title = 'Pandai — Quick Notes: ' + subject;
+      document.title = 'Pandai — Videos: ' + subject;
     })();
   </script>
 
 </body>
-</html>
