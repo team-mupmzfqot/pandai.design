@@ -3669,4 +3669,474 @@ chipsRow.querySelectorAll('.sc-subject-chip').forEach(function(chip) {
 
 ---
 
-*Last updated: 2026-06-04 (Session 13 — scoreCard.html: SVG graph DS update, curve chart spec, chip states, is-pressing; Rules 88–91)*
+### 92. Videos View page — confirmed structure (Session 14 — 2026-06-04)
+
+**File:** `syakila.test.git/videos.view.html` (4830 lines)
+**DS node:** `3695:58993` ("Videos - Selections" frame in `TLVKe3bgJTdVvuPAzgDq2f`)
+**Assembly base:** `quickNotes.view.html` (nav shell, shared CSS, footer, scripts) — same as all Syakila pages
+
+#### Section structure (Rule 10 compliance)
+
+| Section ID | DS node | Content |
+|---|---|---|
+| `VideosView-Viewport` | `3695:58993` | Outer flex wrapper — `display:flex; flex-direction:column; gap:var(--spacing-space-m); background:transparent; box-shadow:none; border-radius:0; flex:1; min-height:0` |
+| `Breadcrumb-Desktop` | `3695:58997` | Breadcrumb - 1.5 — "Videos" title + sep + links (Learn → Videos → All videos for Form 4) |
+| `Videos-View-Desktop` | `3695:58998` | Videos Card - 1.5 — qn-card with header + qn-table |
+
+#### Videos Card structure
+
+- Outer: `.qn-card` — same class as Quick Notes card (green border, `#e8fbe8` subtle bg, 24px radius)
+- Subject theming via inline CSS vars: `--qn-subj-default`, `--qn-subj-focus`, etc. on the `.qn-card` element
+- Header: `.qn-card__header` (110px, subject bg, 18px radius, `overflow:hidden`) — fano SVG + subject icon (60×60) + label col
+- Table: `.qn-table` inside `.qn-card__content` — heading row + body rows
+
+#### Table body row structure (per video item)
+
+```
+.qn-table__body-row (align-items: stretch)
+├── .vd-table__thumbnail-cell  (148px wide, 100px height, thumbnail placeholder)
+├── .qn-table__topic-cell      (flex:1, min-height:100px, topic text)
+└── .qn-table__btn-cell        (117px wide, min-height:100px)
+    └── .qn-table__btn-inner   (centered)
+        └── <button class="btn-learn"> (Primary/M, 32px, green)
+```
+
+#### `btn-learn` — Button - 1.5 Primary/M
+
+- Class: `btn-learn` (32px height, green bg `#00cc85`, border `#00a36a`, pill `60px` radius)
+- Arrow circle: 20px, `#99ebce` fill, 2px padding → 16×16 clip → `ic-chevron-btn-m` symbol
+- JS: `mousedown`/`mouseup`/`mouseleave` is-pressing handlers (Rule 91)
+- NO CSS transitions (Rule 82)
+
+#### Asset folders
+
+- **Shared assets (from parent folder):** `../src/image-repo/Learn/videos/` — fano-wireframe.svg, icons/border-bmelayu.svg
+- **View-specific assets:** `src/image-repo/Learn/videos/view/` (created, empty — for future view-specific images)
+
+#### Breadcrumb CSS (DS node 3695:58997)
+
+Same pattern as Quick Notes breadcrumb — `.pd-breadcrumbs15`, `.pd-link15`, `.pd-breadcrumbs__sep`, `.pd-breadcrumbs__chevron`.
+- Title: 24px/500/lh:36, `var(--text-tertiary-default)` (#00564c)
+- Sep: 1px vertical bar, `var(--border-general-default)` (#d9d9d9)
+- Links: 14px/400/lh:20, `var(--text-primary-default)` (#00cc85); current = `var(--text-default-body)` (#666)
+
+---
+
+---
+
+### Rule 93. Wrapper card with multiple sub-cards — no border/radius on the wrapper
+
+When a container wraps two or more visually distinct sub-cards (e.g. a video player card + a content-info card), the **wrapper** must be a plain flex column with `gap` only. Never add `border`, `border-radius`, or `overflow: hidden` to the wrapper — each child card carries its own border and radius.
+
+```css
+/* Wrong — outer border conflicts with child borders */
+.vd-card-body { border: 1px solid; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+
+/* Correct — wrapper is just a gap container */
+.vd-card-body { display: flex; flex-direction: column; gap: var(--spacing-space-m); width: 100%; }
+```
+
+**Confirmed instance (2026-06-04):** `.vd-card-body` in `videos.view.html` wraps `.vd-player` + `.vd-content-wrap`. Each has its own `border + border-radius`. The wrapper had a redundant outer border that was removed.
+
+---
+
+### Rule 94. Transparent flex items inside a colored card — always explicitly set background on each child
+
+When a card has a non-white background (e.g. `--surface-secondary-default-subtle` = `#e8fbe8`), any flex child without an explicit `background:` will show that card color, not white. Never assume a child will appear white — always explicitly declare `background: var(--surface-general-default)` on each child that should be white.
+
+**Confirmed instance (2026-06-04):** `.vd-meta-pills` (pills row in the meta table) was transparent — the green from `.vd-meta-card` bled through. Fix: `background: var(--surface-general-default)` added directly to `.vd-meta-pills`.
+
+**Rule:** In any DS table or card with colored rows, check every row/cell div. If the DS shows `bg: white` on that element, declare it explicitly in CSS. Do not rely on inheritance from the browser default.
+
+---
+
+### Rule 95. L-Arrow vs R-Arrow — different outer sizes (confirmed DS 2026-06-04)
+
+Button - 1.5 Secondary has two arrow variants. They have different outer sizes:
+
+| Arrow | Outer size | Padding | Clip |
+|---|---|---|---|
+| R-Arrow (`showRArrow: true`) | 20×20px | 2px | 16×16 |
+| L-Arrow (`showLArrow: true`) | 18×18px | 1px | 16×16 |
+
+**Always verify which arrow the button uses before setting CSS.** Do not default both to 20×20/2px.
+
+```css
+/* R-Arrow (e.g. "View all videos") */
+.btn__arrow--r { width: 20px; height: 20px; padding: 2px; }
+
+/* L-Arrow (e.g. "Back to List") */
+.btn__arrow--l { width: 18px; height: 18px; padding: 1px; }
+```
+
+Both arrows: `background: white`, `box-shadow: inset 0 0 0 1px var(--border-primary-default)`, `border-radius: 60px` (Rule 60 — strokeAlign: INSIDE).
+
+**Confirmed from DS node `4506:116387` (Back to List, Secondary/M L-Arrow), 2026-06-04.**
+
+---
+
+### Rule 96. Truncating text vs wrapping text — never assume; follow product intent
+
+Do not apply `white-space: nowrap` + `text-overflow: ellipsis` + fixed `height` by default for card titles. Always ask: does the DS truncate or wrap?
+
+- **Truncate** (DS shows fixed height, `overflow: hidden`, single line): keep `white-space: nowrap; text-overflow: ellipsis; height: Npx; overflow: hidden`
+- **Wrap** (DS shows `[word-break:break-word]` or multi-line text): remove all truncation properties; use `line-height` for readable wrapped lines
+
+**Confirmed instance (2026-06-04):** Related video titles in `videos.view.html` were incorrectly truncated. DS shows `[word-break:break-word]` — titles should wrap. Fixed: removed `white-space: nowrap`, `text-overflow: ellipsis`, fixed `height: 24px`; set `line-height: 18px`.
+
+---
+
+### Rule 97. Thumbnail in variable-height rows — use `min-height`, never fixed `height`
+
+When a row uses `align-items: stretch` and the row height can grow (e.g. due to wrapping text in the adjacent column), a thumbnail with `height: Npx` will NOT stretch — it stays at Npx and leaves a white gap below it inside the row.
+
+**Fix:** Use `min-height: Npx` on the thumbnail instead of `height: Npx`. With `align-items: stretch` on the row, the thumbnail stretches to fill the full row height. A `position: absolute; inset: 0` background element (checkerboard or image) inside the thumbnail fills it completely.
+
+```css
+/* Wrong — leaves white gap when adjacent text wraps */
+.vd-related-thumb { height: 104px; }
+
+/* Correct — thumbnail fills the row regardless of text height */
+.vd-related-row   { display: flex; align-items: stretch; }
+.vd-related-thumb { min-height: 104px; flex-shrink: 0; position: relative; overflow: hidden; }
+```
+
+**Confirmed instance (2026-06-04):** `videos.view.html` related video thumbnails left white gaps below when titles wrapped to two lines.
+
+---
+
+### Rule 98. YouTube iframe embed — always use `aspect-ratio: 16/9` on the player container, never a fixed height
+
+A fixed `height` (e.g. 460px) on the player container causes letterboxing because the container's aspect ratio doesn't match YouTube's 16:9 output. The iframe fills the container's dimensions but YouTube's player renders with black bars to maintain its internal ratio.
+
+**Correct pattern:**
+```css
+.vd-player {
+  position: relative; overflow: hidden;
+  width: 100%; aspect-ratio: 16 / 9;
+  border-radius: 18px;
+}
+.vd-player__iframe {
+  position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
+}
+```
+
+This makes the container always exactly 16:9 regardless of its width, and the iframe fills it edge-to-edge with no black bars or letterboxing.
+
+**Applies to:** Any video embed (YouTube, Vimeo, etc.) inside a card. Responsive: `height: auto` + `aspect-ratio: 16/9` at mobile breakpoint overrides any fixed height set for desktop.
+
+**Confirmed (2026-06-04):** `videos.view.html` player changed from `height: 460px` → `aspect-ratio: 16/9`. Mobile override also changed from `height: 220px` → `aspect-ratio: 16/9; height: auto`.
+
+---
+
+### Rule 99. Always re-fetch DS node when user points to a different Figma URL
+
+If the user shares a Figma URL that differs from the node used in the current implementation, treat it as a correction. Stop all implementation work, re-fetch `get_design_context` on the new node, and re-audit the full component anatomy before touching any code.
+
+**Never carry forward the old implementation's structure** — the DS design may be completely different (different layout, different component variants, different token bindings).
+
+**Confirmed instance (2026-06-04):** `videos.view.html` was originally built from node `3695:58993` (Videos - Selections, a list view). User pointed to `4506:116366` (Videos - View, a two-column player layout) — a completely different page with different structure. Required full CSS and HTML replacement.
+
+---
+
+### Rule 100. Experiments selections page — DS node `5171:140878`, confirmed 2026-06-05
+
+**File:** `syakila.test.git/experiments.selections.html`
+**DS node:** `5171:140878` — "All experiments for Form 4" view (Learn > Experiments > Form 4)
+**Asset path:** `../src/image-repo/Learn/experiments/` (shared icons + fano-wireframe)
+
+> **Corrected 2026-06-05:** Original implementation used node `5171:140808` (3 subject cards, icon-only pill button). Correct node is `5171:140878` — 1 card (RBT), heading row + data rows, "Simulate" button (Primary/M with label).
+
+#### Breadcrumb — DS node `5171:140899` — 3 levels
+
+- Page title: `"Experiments"` — `Header/H3` (24px Medium), `var(--text-tertiary-default)` (#00564c)
+- Separator: 1px vertical line
+- Links (left to right):
+  1. **"Learn"** — green (`var(--text-primary-default)`), book icon, chevron-right after — clickable
+  2. **"Experiments"** — green, no icon, chevron-right after — clickable
+  3. **"All experiments for Form 4"** — grey (`var(--text-default-body)`), no trailing chevron — current page (not a button)
+
+#### Component anatomy — 1 Quick Notes Card - 1.5 (RBT)
+
+**Card outer** — `qn-card` class, inline CSS variables:
+```html
+<div class="qn-card" style="--qn-subj-default:#353535; --qn-subj-focus:#202020; --qn-subj-default-subtle:#e6f1fa; --qn-subj-50:#ebebeb;">
+```
+
+| Variable | Value | Usage |
+|---|---|---|
+| `--qn-subj-default` | `#353535` | Card header bg |
+| `--qn-subj-focus` | `#202020` | Card header border |
+| `--qn-subj-default-subtle` | `#e6f1fa` | `qn-card__label` border-left color |
+| `--qn-subj-50` | `#ebebeb` | Heading row tinted bg (`subject/rbt/50`) |
+
+**Card header** — same structure as quickNotes cards (icon-col + header-content + label). Card title text is **"Topics"** (not the subject name) — from DS node.
+
+**qn-card__content** — the inner white box:
+```css
+.qn-card__content {
+  background: var(--surface-general-default);
+  border: 1px solid var(--border-general-default); /* #d9d9d9 */
+  border-radius: var(--corner-radius-corner-xl);   /* 16px */
+  overflow: hidden;
+}
+```
+
+#### `exp-table` — confirmed DS spec (node `5171:140918`)
+
+Two row types: **heading row** (chapter group name) + **data rows** (thumb | topic | button).
+
+**Heading row** — spans full width, tinted bg:
+```css
+.exp-table__heading-cell {
+  flex: 1 0 0; height: 56px; min-height: 56px;
+  background: var(--qn-subj-50, #ebebeb);   /* subject/rbt/50 */
+  border-bottom: 1px solid var(--border-general-default);
+}
+.exp-table__heading-text { font-size: 16px; font-weight: 500; line-height: 24px; color: var(--text-default-body); }
+```
+
+**Data rows** — confirmed DS column widths:
+
+| Cell | Width | Notes |
+|---|---|---|
+| Thumbnail | 148px | Height 100px fixed; checkerboard placeholder div |
+| Topic name | flex-1 | 14px Regular `#666`; `border-right: 1px` separator |
+| Button cell | 131px | Centers `.btn-simulate` |
+
+Last data row removes `border-bottom` via `:last-child` selector.
+
+#### `btn-simulate` — Button - 1.5 Primary/M (DS node `I5171:140918;...;2251:40188`)
+
+Label text: **"Simulate"** — 12px SemiBold, `var(--text-primary-on-color)` (#ffffff).  
+Arrow: `#99ebce` bg circle (`var(--surface-primary-default-subtle-hover, #99ebce)`), 16×16 clip, `M6 12L10 8L6 4` chevron.
+
+```css
+.btn-simulate { height: 32px; padding: 2px 8px; background: var(--surface-primary-default); border: 1px solid var(--border-primary-focus); border-radius: 60px; }
+```
+
+No CSS `transition` (Rule 82). JS `is-pressing` required (Rule 83).
+
+**Hover:** bg `#b5f291`, border `#70bc6f`, text `#70bc6f`, arrow bg `#e8fbe8`  
+**Pressed:** bg `#00564c`, border `#00453d`, text `#00cc85`, arrow bg `#00cc85`
+
+---
+
+### Rule 101. `qn-card__label` separator uses `border-left`, not `border-right`
+
+The visual separator between the subject icon column and the text label area is a `border-left` on `.qn-card__label` — **not** a `border-right` on `.qn-card__icon-col`. This matches the DS Figma stroke placement exactly.
+
+```css
+.qn-card__label {
+  border-left: 1px solid var(--qn-subj-default-subtle, #ffeded);
+  padding-left: var(--spacing-space-xl);   /* 24px */
+}
+```
+
+Never add `border-right` to `.qn-card__icon-col` — the DS places the stroke on the receiving element.
+
+---
+
+### Rule 102. New page creation from quickNotes.selections.html — PowerShell assembly pattern
+
+When creating a new selections page based on `quickNotes.selections.html` as template:
+
+1. Identify line ranges in `quickNotes.selections.html`:
+   - Lines 1–2132: shared CSS (title on line 6 only needs updating)
+   - Lines 2133–2276: page-specific CSS block (REPLACE entirely)
+   - Lines 2277–3375: `</style>` + `</head>` + `<body>` + SVG defs + full navbar HTML (COPY unchanged)
+   - Lines 3376–3545: previous page's viewport section (REPLACE with new viewport HTML)
+   - Lines 3545+: footer + JS (COPY unchanged)
+
+2. Build with PowerShell array slicing:
+```powershell
+$src = Get-Content "quickNotes.selections.html"
+$out  = @()
+$out += ($src[0..2131] | ForEach-Object { $_ -replace '<title>.*</title>', '<title>New Page Title</title>' })
+$out += @('/* NEW PAGE CSS HERE */')
+$out += $src[2276..3374]
+$out += @('<section id="NewViewport" ...>', '<!-- viewport HTML -->', '</section>')
+$out += $src[3544..($src.Length - 1)]
+$out | Set-Content "new-page.html" -Encoding UTF8
+```
+
+3. File size reference: `quickNotes.selections.html` = 5126 lines / 451KB. Output for experiments = 455KB.
+
+---
+
+### Updated mandatory pre-flight (post Session 16 — experiments.selections)
+
+**ALWAYS before starting any design work, making any change, or making any decision — refer to DS and syakila.design.md first. No exceptions.**
+
+```
+□ 0a. Read design-md/syakila.design.md   → ALL rules 1–102, confirmed specs, known mistakes
+□ 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT prior notes
+□ 0c. Verify file location               → Syakila files ONLY in syakila.test.git/ (Rule 78)
+□ 0d. Verify ALL <img src=> paths        → ls/Get-ChildItem each referenced folder (Rules 84–85)
+□ 0e. get_design_context on COMPONENT SET → list ALL variant names
+□ 0f. get_design_context on EACH state   → extract every token BEFORE writing CSS
+□ 0g. use_figma raw node inspection      → padding, strokeAlign, width, height, radius
+□ 0h. get_variable_defs on sub-nodes     → confirm Semantic tokens
+□ 0i. For SVG graphs: remove preserveAspectRatio="none" if viewBox is dynamic (Rule 88)
+□ 0j. For chart/graph elements: fetch DS node, confirm line color + dot fill before any CSS (Rule 89)
+□ 0k. For button/chip states: fetch DS node, confirm padding + all state colors before any CSS (Rule 90)
+□ 0l. For every interactive element: add JS is-pressing handlers in same loop as click (Rule 91)
+□ 0m. After any fix — grep both HTML files for same class and sync (Rule 63)
+□ 0n. For subject colors: use --subjects-*-{tier} tokens (Rule 87), never hex math
+□ 0o. For new page creation: use quickNotes.selections.html as base template (Rule 102)
+□ 0p. For table rows with thumbnails: use min-height (not fixed height) + align-items:stretch (Rule 97)
+□ 0q. For video embeds: use aspect-ratio:16/9 on container, not fixed height (Rule 98)
+□ 0r. For wrapper containers with multiple sub-cards: no border/radius on wrapper, gap only (Rule 93)
+□ 0s. For colored cards: explicitly set background on every child that should be white (Rule 94)
+□ 0t. If user points to a different Figma URL: re-fetch DS node before any code changes (Rule 99)
+□ 0u. For exp-table / qn-card__label separator: border-left on label, never border-right on icon-col (Rule 101)
+□ 0v. For btn-nav-pill: chevron-only, no text label, no transition, add JS is-pressing (Rules 82, 100)
+```
+
+---
+
+---
+
+## Session 16 — Practice Card - 1.5 DS update (2026-06-05)
+
+### 103. Practice Card - 1.5 — DS update 2026-06-04: inner content structure
+
+**Source:** `get_design_context` on DS node `2339:4823`, COMPONENT_SET updated 2026-06-04.
+
+> ⚠️ **CORRECTED 2026-06-05** — Original Rule 103 incorrectly documented a Pill Badge and 3 stats. User confirmed: **no pill badge**, **1 stat only** (`Outline/user` + grade label). See Rule 104 for the final confirmed implementation.
+
+#### What actually changed (confirmed correct)
+
+1. **No pill badge** — the pill badge element does NOT appear in the prototype. Remove any `.practice-card__badge` / `.practice-card__pill` HTML and CSS.
+
+2. **Content outer frame** — `padding: 16px 16px 16px 0` (DS: `pl:0, pr:16, py:16`). Left padding removed; inner div handles the gap.
+
+3. **Inner content div** — `border-left: 1px solid rgba(255,255,255,0.25)` + `padding-left: 24px`. Visible divider between image and text.
+
+4. **On hover** — inner border dims to `rgba(255,255,255,0.15)`.
+
+5. **1 stat only** — `Outline/user` (`ic-user`) icon + grade label. See Rule 104 for single-grade-per-card pattern.
+
+#### Confirmed CSS
+
+```css
+.practice-card__content {
+  flex: 1; min-width: 0;
+  padding: 16px 16px 16px 0;
+  display: flex; flex-direction: column; justify-content: center; gap: 0;
+}
+.practice-card__inner {
+  display: flex; flex-direction: column; gap: 4px; width: 100%;
+  border-left: 1px solid rgba(255,255,255,0.25);
+  padding-left: 24px;
+}
+.practice-card:hover .practice-card__inner { border-left-color: rgba(255,255,255,0.15); }
+```
+
+**Mistake made (initial implementation):** Read DS React component props (`showBadge`, `showInfo1/2/3`) and assumed all were active → added pill badge + 3 stats. User corrected: badge is absent, only 1 stat. Always confirm visible/hidden state from `get_design_context` on the actual DS variant, not from prop names.
+
+---
+
+### 104. Practice Card — 1 card per grade, single stat pattern (confirmed 2026-06-05)
+
+**Context:** Each Practice Card represents one subject at one grade level. A subject available in multiple grades (e.g., Bahasa Melayu in Year 1–6 + Form 1–5) produces one card per grade, not one card with a range label.
+
+#### Card rendering rule
+
+```
+practiceSubjects → for each subject → for each grade → one card
+```
+
+- `data-grade` = single grade value (e.g., `"form-4"`, `"year-1"`)
+- Stat label = formatted single grade: `"Year 1"`, `"Form 4"` — never a range like `"Year 1-6 Form 1-5"`
+- Filter matching = simple `indexOf(card.dataset.grade)` — no `split(' ')`, no `.some()`
+- Search checks `.practice-card__stat-label` (the grade label text)
+
+#### `gradeLabel(grade)` — single grade formatter
+
+```js
+function gradeLabel(grade) {
+  if (grade.indexOf('year-') === 0) return 'Year ' + grade.slice(5);
+  if (grade.indexOf('form-') === 0) return 'Form ' + grade.slice(5);
+  return grade;
+}
+```
+
+#### `renderPracticeCards()` — one card per grade
+
+```js
+function renderPracticeCards() {
+  var container = document.querySelector('.practice-cards-content');
+  if (!container) return;
+  container.innerHTML = '';
+  practiceSubjects.forEach(function(s) {
+    s.grades.forEach(function(g) {
+      container.appendChild(buildCard({ subject:s.subject, title:s.title, img:s.img, style:s.style, grade:g }));
+    });
+  });
+}
+```
+
+#### `buildCard(d)` — `d.grade` is a single string
+
+```js
+function buildCard(d) {
+  var art = document.createElement('article');
+  art.className = 'practice-card';
+  art.setAttribute('role', 'listitem');
+  art.setAttribute('data-grade', d.grade);        // single value, e.g. "form-4"
+  art.setAttribute('data-subject', d.subject);
+  art.setAttribute('style', d.style);
+  art.innerHTML =
+    '<div class="practice-card__circles" aria-hidden="true">…</div>' +
+    '<div class="practice-card__image"><div class="practice-card__icon-wrap">' +
+      '<img src="' + IMG_BASE + d.img + '" alt="" width="100" height="100" class="practice-card__icon-img">' +
+    '</div></div>' +
+    '<div class="practice-card__content"><div class="practice-card__inner">' +
+      '<h3 class="practice-card__title">' + d.title + '</h3>' +
+      '<div class="practice-card__stats"><div class="practice-card__stat">' +
+        '<span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-user"/></svg></span>' +
+        '<span class="practice-card__stat-label">' + gradeLabel(d.grade) + '</span>' +
+      '</div></div>' +
+    '</div></div>';
+  return art;
+}
+```
+
+#### `applyFilters()` — grade matching (simple single-value)
+
+```js
+var gradeMatch = noGradeFilter || grades.indexOf(card.dataset.grade) !== -1;
+```
+
+#### Mistake history
+
+| Wrong | Correct |
+|---|---|
+| 1 card per subject with range label "Year 1-6 Form 1-5" | 1 card per grade — "Year 1", "Form 4" |
+| `data-grade` space-separated for multi-grade matching | `data-grade` = single grade, simple `indexOf` |
+| Search on `.practice-card__pill-text` | Search on `.practice-card__stat-label` |
+| `gradeRangeLabel(grades[])` range formatter | `gradeLabel(grade)` single grade formatter |
+
+---
+
+### Mandatory pre-flight — BEFORE every session, change, or decision (Syakila pages)
+
+> **Always before starting any design, making any changes, or making any decisions — refer to DS (`TLVKe3bgJTdVvuPAzgDq2f`) AND `design-md/syakila.design.md` first. No exceptions.**
+
+```
+□ Read syakila.design.md        → ALL rules top-to-bottom
+□ Open DS: TLVKe3bgJTdVvuPAzgDq2f → re-verify every token value live (never trust memory)
+□ get_design_context on COMPONENT_SET → list ALL variants before writing any CSS or HTML
+□ get_design_context on EACH state → extract tokens BEFORE writing any state CSS
+□ use_figma raw inspection → confirm padding, strokeAlign, visible, width, height
+□ Check `visible` on every child node → visible:false = no HTML, no CSS (Rule 41)
+□ For icons: confirm viewBox + path translation (Rule 27) before writing any symbol
+□ Post-implementation: grep BOTH html files and sync any shared-component fixes
+□ All files in syakila.test.git/ only — NEVER create Syakila files in zul.test.git/ (Rule 78)
+□ Sync from zul.page.template.html FIRST if shared components (navbar, footer, tokens) changed (Rule 61)
+```
+
+---
+
+*Last updated: 2026-06-05 (Session 17 — Rule 103 corrected: no pill badge; Rule 104 added: 1-card-per-grade pattern + single stat; mandatory pre-flight added)*
