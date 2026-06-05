@@ -98,25 +98,25 @@
       --scale-50:  2px;
       --scale-200: 8px;
 
-      /* Subject Colors — ALL confirmed from DS variable collections (A–E + G–S, Rule 234) */
-      --subjects-b-melayu-default:          #4d77ff;   --subjects-b-melayu-subtle:          #f6f9ff;   --subjects-b-melayu-subtle-hover:          #b8c9ff;
-      --subjects-english-default:           #ff4d56;   --subjects-english-subtle:           #ffedee;   --subjects-english-subtle-hover:           #ffb8bb;
-      --subjects-math-default:              #42ac7b;   --subjects-math-subtle:              #ecf7f2;   --subjects-math-subtle-hover:              #b3deca;
-      --subjects-science-default:           #ffd641;   --subjects-science-subtle:           #fffbec;   --subjects-science-subtle-hover:           #ffefb3;
-      --subjects-chemistry-default:         #e20082;   --subjects-chemistry-subtle:         #fce6f3;   --subjects-chemistry-subtle-hover:         #ed99c6;
-      --subjects-physics-default:           #27a0d7;   --subjects-physics-subtle:           #eaf6fb;   --subjects-physics-subtle-hover:           #a9d9ef;
-      --subjects-history-default:           #a97c50;   --subjects-history-subtle:           #f7f2ee;   --subjects-history-subtle-hover:           #ddcbb9;
-      --subjects-geo-default:               #77d836;   --subjects-geo-subtle:               #f2fbeb;   --subjects-geo-subtle-hover:               #c9efaf;
-      --subjects-islamic-default:           #de4d7f;   --subjects-islamic-subtle:           #fcedf2;   --subjects-islamic-subtle-hover:           #f2b8cc;
-      --subjects-moral-default:             #0072ca;   --subjects-moral-subtle:             #e6f1fa;   --subjects-moral-subtle-hover:             #99c7ea;
-      --subjects-biology-default:           #8431d8;   --subjects-biology-subtle:           #f3ebfb;   --subjects-biology-subtle-hover:           #ceadef;
-      --subjects-add-math-default:          #283589;   --subjects-add-math-subtle:          #eaebf3;   --subjects-add-math-subtle-hover:          #a9aed0;
-      --subjects-economy-default:           #ff5733;   --subjects-economy-subtle:           #ffeeeb;   --subjects-economy-subtle-hover:           #ffbcad;
-      --subjects-account-default:           #0072ca;   --subjects-account-subtle:           #e6f1fa;   --subjects-account-subtle-hover:           #99c7ea;
-      --subjects-business-default:          #efb42b;   --subjects-business-subtle:          #fef8ea;   --subjects-business-subtle-hover:          #f9e1aa;
-      --subjects-cs-default:                #d10070;   --subjects-cs-subtle:                #fbe6f1;   --subjects-cs-subtle-hover:                #ed99c6;
-      --subjects-kafa-default:              #8ae3a9;   --subjects-kafa-subtle:              #f4fcf7;   --subjects-kafa-subtle-hover:              #d0f4dd;
-      --subjects-rbt-default:               #353535;   --subjects-rbt-subtle:               #d7d7d7;   --subjects-rbt-subtle-hover:               #aeaeae;
+      /* Subject Colors â€” ALL confirmed from DS get_variable_defs */
+      --subjects-b-melayu-default:   #4d77ff;   /* Subjects/b-melayu/default */
+      --subjects-english-default:    #ff4d56;   /* Subjects/english/default */
+      --subjects-math-default:       #42ac7b;   /* Subjects/math/default */
+      --subjects-science-default:    #ffd641;   /* Subjects/science/default */
+      --subjects-chemistry-default:  #e20082;   /* Subjects/chemistry/default */
+      --subjects-physics-default:    #27a0d7;   /* Subjects/physics/default */
+      --subjects-history-default:    #a97c50;   /* Subjects/history/default */
+      --subjects-geo-default:        #77d836;   /* Subjects/geo/default */
+      --subjects-islamic-default:    #de4d7f;   /* Subjects/islamic/default */
+      --subjects-moral-default:      #0072ca;   /* Subjects/moral/default */
+      --subjects-biology-default:    #8431d8;   /* Subjects/biology/default */
+      --subjects-add-math-default:   #283589;   /* Subjects/add-math/default */
+      --subjects-economy-default:    #ff5733;   /* Subjects/economy/default */
+      --subjects-account-default:    #0072ca;   /* Subjects/account/default */
+      --subjects-business-default:   #efb42b;   /* Subjects/business/default */
+      --subjects-cs-default:         #d10070;   /* Subjects/comp-science/default */
+      --subjects-kafa-default:       #8ae3a9;   /* Subjects/kafa/default */
+      --subjects-rbt-default:        #353535;   /* Subjects/rbt/default */
 
       /* Typography */
       --font-family: 'Poppins', sans-serif;
@@ -1071,7 +1071,7 @@
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        SECTION 2 â€” Carousel - 1.5  (node 1200:1789)
        5 image cards (428Ã—186px), gap 16px, corner-xl (16px)
-       Prev/Next buttons: Surface/primary/default, pill-shaped
+       Prev/Next buttons: Pill Button - 1.5 (node 5721:493) — Left=24px default, Right=108px, Hover=#d1f7d1, Pressed=#00cc85
        Indicator dots at bottom
     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     /* Carousel - 1.5  (node 1200:1789) */
@@ -1131,7 +1131,7 @@
       object-fit: cover;
     }
 
-    /* Button wrapper — absolute at left/right edges, padding 16px creates inset */
+    /* Button wrapper — absolute at left/right edges, padding 16px (DS node 1200:1837/1861) */
     .carousel__btn-wrap {
       position:    absolute;
       top:         0;
@@ -1201,7 +1201,59 @@
     .carousel__btn__icon { width: 24px; height: 24px; color: var(--icon-primary-default-hover); flex-shrink: 0; }
     .carousel__btn__icon svg { display: block; flex-shrink: 0; }
 
-    /* Indicator (node 1376:2406): 5 dots, 12×12, gap:10, padding:4 */
+    /* Side Button - 1.5 (COMPONENT_SET 5627:47996) — strokeAlign INSIDE → box-shadow:inset only. No transitions (Rule 82). */
+    .side-btn {
+      width:        36px;
+      align-self:   stretch;       /* fills wrapper height via Rule 232 — never height:100% */
+      display:      flex;
+      align-items:  center;
+      justify-content: center;
+      cursor:       pointer;
+      user-select:  none;
+      border:       none;
+      flex-shrink:  0;
+    }
+    /* Default — Left: rounded on left exterior (24px), flat on right interior */
+    .side-btn--left {
+      background:    var(--surface-secondary-default);              /* #b5f291 */
+      box-shadow:    inset 0 0 0 1px var(--border-primary-default); /* #00cc85 INSIDE */
+      padding:       8px 8px 8px 4px;
+      border-radius: 16px 0 0 16px;
+      color:         var(--icon-primary-focus);                     /* #00a36a */
+    }
+    /* Default — Right: flat on left interior, rounded on right exterior (16px) */
+    .side-btn--right {
+      background:    var(--surface-secondary-default);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+      padding:       8px 4px 8px 8px;
+      border-radius: 0 16px 16px 0;
+      color:         var(--icon-primary-focus);                     /* #00a36a */
+    }
+    /* Hover — bg lightens; icon nudges towards content (padding swaps) */
+    .side-btn--left:hover {
+      background: var(--surface-secondary-default-subtle);          /* #e8fbe8 */
+      padding:    8px 4px 8px 8px;
+      color:      var(--icon-primary-default);                      /* #00cc85 */
+    }
+    .side-btn--right:hover {
+      background: var(--surface-secondary-default-subtle);
+      padding:    8px 8px 8px 4px;
+      color:      var(--icon-primary-default);
+    }
+    /* Pressed — bg = primary green, stroke darkens; both types use pl:4 pr:8 (Rule 83) */
+    .side-btn--left:active,
+    .side-btn--left.is-pressing,
+    .side-btn--right:active,
+    .side-btn--right.is-pressing {
+      background: var(--surface-primary-default);                   /* #00cc85 */
+      box-shadow: inset 0 0 0 1px var(--border-primary-focus);      /* #00a36a */
+      padding:    8px 8px 8px 4px;
+      color:      var(--icon-primary-on-color);                     /* #ffffff */
+    }
+    .side-btn__icon { width: 24px; height: 24px; display: flex; flex-shrink: 0; }
+    .side-btn__icon svg { display: block; }
+
+    /* Indicator (node 1376:2406): 12×12 dots gap:10 padding:4; active = 49×12px elongated pill */
     .carousel__indicator {
       display:     flex;
       flex-shrink: 0;
@@ -1753,9 +1805,9 @@
       cursor:         default;
       position:       relative;
     }
-    /* DS strokeAlign:INSIDE + image overlay — ::after renders above image children.
-       Direct box-shadow:inset on article is painted behind children and covered by the image.
-       ::after z-index:1 renders the border above all children (Rules 118/235). */
+    /* DS strokeAlign:INSIDE — ::after overlays border above image child.
+       box-shadow:inset on the ::after (not the article) renders above all children (z-index:1).
+       Hover state: 4px ring (Subject/default-subtle-hover). Rule 60. */
     .quiz-card::after {
       content:        '';
       position:       absolute;
@@ -1767,6 +1819,7 @@
     }
     .quiz-card:hover {
       background: var(--card-subject-subtle, var(--surface-general-default));
+      cursor:     pointer;
     }
     .quiz-card:hover::after {
       box-shadow: inset 0 0 0 4px var(--card-subject-subtle-hover, var(--border-default));
@@ -1795,13 +1848,13 @@
       overflow:            hidden;
     }
 
-    /* Content right column — left border via box-shadow (DS: 1px Subject/default-subtle) */
+    /* Content right column — DS: strokeWeights l:1, strokeAlign INSIDE, Subject/default-subtle */
     .quiz-card__content {
       flex:           1;
       min-width:      0;
       display:        flex;
       flex-direction: column;
-      gap:            var(--spacing-space-xxs);  /* 4px — header/main/cta gap */
+      gap:            var(--spacing-space-xxs);  /* 4px */
       padding:        var(--spacing-space-m);    /* 16px */
       align-self:     stretch;
       box-shadow:     inset 1px 0 0 0 var(--card-subject-subtle, transparent);
@@ -1810,7 +1863,7 @@
     .quiz-card__main {
       display:        flex;
       flex-direction: column;
-      gap:            0;   /* DS: Main Content itemSpacing=0 (Rule 237) */
+      gap:            0;    /* DS Main Content frame gap=0 */
       flex:           1;
       min-height:     0;
     }
@@ -1926,7 +1979,7 @@
       overflow:      hidden;
     }
 
-    /* Quiz card text — DS: Texts frame primaryAxisAlign=CENTER in both default+hover (Rule 237) */
+    /* Quiz card text — DS: Texts frame primaryAxisAlign=CENTER (vertical center in 64px area) */
     .quiz-card__texts {
       flex:            1;
       display:         flex;
@@ -2031,24 +2084,24 @@
     .btn-quiz-cta__arrow-clip svg { display: block; width: 100%; height: 100%; }
 
     /* â”€â”€ Subject class â€” sets local CSS vars â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-    .subject-bm       { --card-subject-color: var(--subjects-b-melayu-default);  --card-subject-subtle: var(--subjects-b-melayu-subtle);  --card-subject-subtle-hover: var(--subjects-b-melayu-subtle-hover); }
-    .subject-english  { --card-subject-color: var(--subjects-english-default);   --card-subject-subtle: var(--subjects-english-subtle);   --card-subject-subtle-hover: var(--subjects-english-subtle-hover); }
-    .subject-math     { --card-subject-color: var(--subjects-math-default);      --card-subject-subtle: var(--subjects-math-subtle);      --card-subject-subtle-hover: var(--subjects-math-subtle-hover); }
-    .subject-science  { --card-subject-color: var(--subjects-science-default);   --card-subject-subtle: var(--subjects-science-subtle);   --card-subject-subtle-hover: var(--subjects-science-subtle-hover); }
-    .subject-chemistry{ --card-subject-color: var(--subjects-chemistry-default); --card-subject-subtle: var(--subjects-chemistry-subtle); --card-subject-subtle-hover: var(--subjects-chemistry-subtle-hover); }
-    .subject-physics  { --card-subject-color: var(--subjects-physics-default);   --card-subject-subtle: var(--subjects-physics-subtle);   --card-subject-subtle-hover: var(--subjects-physics-subtle-hover); }
-    .subject-history  { --card-subject-color: var(--subjects-history-default);   --card-subject-subtle: var(--subjects-history-subtle);   --card-subject-subtle-hover: var(--subjects-history-subtle-hover); }
-    .subject-geo      { --card-subject-color: var(--subjects-geo-default);       --card-subject-subtle: var(--subjects-geo-subtle);       --card-subject-subtle-hover: var(--subjects-geo-subtle-hover); }
-    .subject-islamic  { --card-subject-color: var(--subjects-islamic-default);   --card-subject-subtle: var(--subjects-islamic-subtle);   --card-subject-subtle-hover: var(--subjects-islamic-subtle-hover); }
-    .subject-moral    { --card-subject-color: var(--subjects-moral-default);     --card-subject-subtle: var(--subjects-moral-subtle);     --card-subject-subtle-hover: var(--subjects-moral-subtle-hover); }
-    .subject-biology  { --card-subject-color: var(--subjects-biology-default);   --card-subject-subtle: var(--subjects-biology-subtle);   --card-subject-subtle-hover: var(--subjects-biology-subtle-hover); }
-    .subject-add-math { --card-subject-color: var(--subjects-add-math-default);  --card-subject-subtle: var(--subjects-add-math-subtle);  --card-subject-subtle-hover: var(--subjects-add-math-subtle-hover); }
-    .subject-economy  { --card-subject-color: var(--subjects-economy-default);   --card-subject-subtle: var(--subjects-economy-subtle);   --card-subject-subtle-hover: var(--subjects-economy-subtle-hover); }
-    .subject-account  { --card-subject-color: var(--subjects-account-default);   --card-subject-subtle: var(--subjects-account-subtle);   --card-subject-subtle-hover: var(--subjects-account-subtle-hover); }
-    .subject-business { --card-subject-color: var(--subjects-business-default);  --card-subject-subtle: var(--subjects-business-subtle);  --card-subject-subtle-hover: var(--subjects-business-subtle-hover); }
-    .subject-cs       { --card-subject-color: var(--subjects-cs-default);        --card-subject-subtle: var(--subjects-cs-subtle);        --card-subject-subtle-hover: var(--subjects-cs-subtle-hover); }
-    .subject-kafa     { --card-subject-color: var(--subjects-kafa-default);      --card-subject-subtle: var(--subjects-kafa-subtle);      --card-subject-subtle-hover: var(--subjects-kafa-subtle-hover); }
-    .subject-rbt      { --card-subject-color: var(--subjects-rbt-default);       --card-subject-subtle: var(--subjects-rbt-subtle);       --card-subject-subtle-hover: var(--subjects-rbt-subtle-hover); }
+    .subject-bm       { --card-subject-color: var(--subjects-b-melayu-default); }
+    .subject-english  { --card-subject-color: var(--subjects-english-default); }
+    .subject-math     { --card-subject-color: var(--subjects-math-default); }
+    .subject-science  { --card-subject-color: var(--subjects-science-default); }
+    .subject-chemistry{ --card-subject-color: var(--subjects-chemistry-default); }
+    .subject-physics  { --card-subject-color: var(--subjects-physics-default); }
+    .subject-history  { --card-subject-color: var(--subjects-history-default); }
+    .subject-geo      { --card-subject-color: var(--subjects-geo-default); }
+    .subject-islamic  { --card-subject-color: var(--subjects-islamic-default); }
+    .subject-moral    { --card-subject-color: var(--subjects-moral-default); }
+    .subject-biology  { --card-subject-color: var(--subjects-biology-default); }
+    .subject-add-math { --card-subject-color: var(--subjects-add-math-default); }
+    .subject-economy  { --card-subject-color: var(--subjects-economy-default); }
+    .subject-account  { --card-subject-color: var(--subjects-account-default); }
+    .subject-business { --card-subject-color: var(--subjects-business-default); }
+    .subject-cs       { --card-subject-color: var(--subjects-cs-default); }
+    .subject-kafa     { --card-subject-color: var(--subjects-kafa-default); }
+    .subject-rbt      { --card-subject-color: var(--subjects-rbt-default); }
 
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        FOOTER â€” Footer - 1.5  (node 2338:10430)
@@ -2131,7 +2184,7 @@
       align-items:   center;
       gap:           var(--spacing-space-2xl);   /* 28px — Spacing/space-2xl */
       padding:       var(--spacing-space-xs) var(--spacing-space-xl);   /* 8px · 24px — DS px-[Spacing/space-xl] */
-      height:        64px;
+      height:        72px;   /* DS Navbar Top = 72px (t:8 + 56px content + b:8) */
       overflow:      visible;   /* must be visible so Union tail (44×52) clears the navbar bottom edge */
     }
 
@@ -2340,16 +2393,17 @@
       color:      var(--text-primary-on-color);            /* #ffffff */
       box-shadow: 0 0 0 1px var(--border-on-color);        /* 1px white border OUTSIDE (strokeAlign:OUTSIDE) */
     }
-    #notif-btn.is-active .num-badge { opacity: 0; }
+    #notif-btn.is-active .num-badge,
+    #tablet-notif-btn.is-active .num-badge { opacity: 0; }
 
     /* Avatar - 1.5 (node 684:621): flex items-start · 48×48 · border · overflow-clip */
     .navbar-avatar {
       display:       flex;
       align-items:   flex-start;
-      width:         48px;
-      height:        48px;
-      min-width:     48px;
-      min-height:    48px;
+      width:         56px;
+      height:        56px;
+      min-width:     56px;
+      min-height:    56px;
       border-radius: var(--corner-radius-corner-rounded);   /* 60px */
       border:        1px solid var(--border-default);
       background:    var(--surface-general-default);
@@ -2372,27 +2426,39 @@
       display:         block;
     }
 
-    /* Number Badge - 1.5 (node 1084:1826): absolute right-[-0.48px] top-0 within Avatar group */
+    /* DS Avatar - 1.5, Size=L Type=Image = 56×56 frame (includes space for badge) */
+    .navbar-avatar-group {
+      position:    relative;
+      width:       56px;
+      height:      56px;
+      flex-shrink: 0;
+    }
+    /* Wrapper for welcome avatar — moves badge outside overflow:hidden circle */
+    .welcome-avatar-group {
+      position:    relative;
+      width:       100px;
+      height:      100px;
+      min-width:   100px;
+      min-height:  100px;
+      flex-shrink: 0;
+    }
+    /* P.Premium badge — absolutely positioned top:0 right:0 of avatar frame.
+       Size matches DS: L/Image=16px, XL/Image=20px, XXL/Image=28px */
     .navbar-badge {
       position:        absolute;
       top:             0;
-      right:           -0.48px;   /* DS: right-[-0.48px] relative to Avatar group */
-      background:      var(--surface-primary-default);
-      border-radius:   var(--corner-radius-corner-rounded);
-      box-shadow:      0 0 0 1px var(--border-on-color);          /* 1px white border OUTSIDE (strokeAlign:OUTSIDE) */
-      min-width:       20px;
+      right:           0;
+      width:           20px;   /* DS navbar Content frame: P.Premium = 20×20 */
       height:          20px;
-      padding:         var(--spacing-space-xxs);   /* 4px */
       display:         flex;
       align-items:     center;
       justify-content: center;
-      font-size:       10px;
-      font-weight:     600;
-      line-height:     1;          /* Rule 146: never DS line-height in fixed-height flex badge */
-      color:           var(--text-primary-on-color);
-      overflow:        hidden;
       pointer-events:  none;
     }
+    .navbar-badge svg { width: 100%; height: 100%; }
+    /* XXL/Image (profile dropdown, welcome desktop) */
+    .profile-dropdown__avatar-wrap .navbar-badge,
+    .welcome-avatar-group .navbar-badge            { width: 28px; height: 28px; }
 
     /* ─── Profile Menu - 1.5 (DS node 3908:3679)
        320px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding · 8px gap
@@ -2458,10 +2524,11 @@
       transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
     }
 
-    /* 3×4 grid — DS: grid-cols:3, min-h per cell 114px */
+    /* 3×4 grid — DS node 3908:2463: grid-cols:3, gap:8px both axes, min-h per cell 114px */
     .learn-dropdown__grid {
       display:               grid;
       grid-template-columns: repeat(3, 1fr);
+      gap:                   var(--spacing-space-xs);
     }
 
     /* Cell — DS State=Default: transparent bg, no border, 12px radius, flex-col, gap 4px, p-8px */
@@ -2509,13 +2576,13 @@
       flex-shrink: 0;
     }
 
-    /* Label — DS State=Default: 14px SemiBold, #404040 (Text/default/heading, varName 106:34) */
+    /* Label — DS node 3908:2464: 14px SemiBold, Text/default/body #666 */
     .learn-dropdown__label {
       font-family: var(--font-family);
       font-size:   14px;
       font-weight: 600;
       line-height: 20px;
-      color:       var(--text-default-heading);
+      color:       var(--text-default-body);
       text-align:  center;
       transition:  color 0.12s ease;
     }
@@ -2748,13 +2815,13 @@
 
     /* ─── Notification dropdown (DS node 3908:13057, Navbar Notification - 1.5)
        320px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
-       Right-aligned to bell button via JS · top: var(--nav-dropdown-top) · same animation as all other dropdowns
+       Right-aligned to bell button via JS · top: --nav-dropdown-top (72px) · same gap as all other dropdowns
     ──────────────────────────────────────────────────────────────────────────────────────── */
     .notif-dropdown {
-      position:       absolute;
-      top:            var(--nav-dropdown-top);
-      right:          0;
-      left:           auto;
+      position:       fixed;
+      top:            0;
+      left:           0;
+      right:          auto;
       z-index:        500;
       width:          320px;
       background:     var(--surface-general-default);
@@ -2776,6 +2843,13 @@
       pointer-events: auto;
       visibility:     visible;
       transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
+    }
+
+    /* Notifications List — DS node 6305:45076: flex-col, gap 8px between items */
+    .notif-list {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xs);
     }
 
     /* Navbar Notification Button - Parts (DS 3908:13427/13443/13456) */
@@ -2815,11 +2889,11 @@
       padding-bottom:      0;
     }
     .notif-item:hover .notif-item__text { color: var(--text-tertiary-default); }
-    /* Focus — Surface/secondary/default-subtle #e8fbe8 · 1px #00cc85 inset · 16px radius */
+    /* Focus — DS node 3908:13456: Surface/secondary/default #b5f291 · 1px Border/secondary/focus #70bc6f · 16px radius */
     .notif-item:active .notif-item__content,
     .notif-item:focus-visible .notif-item__content {
-      background:    var(--surface-secondary-default-subtle);
-      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+      background:    var(--surface-secondary-default);
+      box-shadow:    inset 0 0 0 1px var(--border-secondary-focus);
       border-radius: var(--corner-radius-corner-xl);
       padding:       var(--spacing-space-s);
     }
@@ -2829,7 +2903,11 @@
       padding-bottom:      0;
     }
     .notif-item:active .notif-item__text,
-    .notif-item:focus-visible .notif-item__text { color: var(--text-primary-default); }
+    .notif-item:focus-visible .notif-item__text { color: var(--text-tertiary-default); }
+    .notif-item:active .notif-item__time,
+    .notif-item:focus-visible .notif-item__time { color: var(--text-secondary-focus); }
+    .notif-item:active .notif-item__dot,
+    .notif-item:focus-visible .notif-item__dot  { box-shadow: 0 0 0 1px var(--border-secondary-default); }
 
     /* Avatar — 60×60 clip, user-circle at 50px (DS inset 8.33% = 5px each side) */
     .notif-item__avatar {
@@ -3208,25 +3286,14 @@
     .navbar-mobile__logo-mark { display: block; height: 28px;     width: auto; }
     .navbar-mobile__logo-text { display: block; height: 19.573px; width: auto; }
 
-    .navbar-mobile__menu-btn {
-      width:            40px;
-      height:           40px;
-      display:          flex;
-      align-items:      center;
-      justify-content:  center;
-      cursor:           pointer;
-      user-select:      none;
-      flex-shrink:      0;
-      color:            var(--icon-primary-default);
-      background:       none;
-      border:           none;
-      padding:          0;
+    /* DS Menu Icon frame (1943:22623): HORIZONTAL, gap=8px — bell + hamburger */
+    .navbar-mobile__buttons {
+      display:     flex;
+      align-items: center;
+      gap:         8px;
     }
-    .navbar-mobile__menu-btn svg {
-      display: block;
-      width:   24px;
-      height:  24px;
-    }
+
+    /* .navbar-mobile__menu-btn removed — button now uses .navbar-action-btn (Nav Button - 1.5, 44×44) */
 
     /* ─────────────────────────────────────────────────────
        HAMBURGER → X ANIMATION
@@ -3244,9 +3311,9 @@
     .ham-mid { transform-box: view-box; transform-origin: 50% 50%; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.2s ease; }
     .ham-bot { transform-box: view-box; transform-origin: 50% 75%; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
     /* 50% 25% = (12,6) · 50% 50% = (12,12) · 50% 75% = (12,18) in 24×24 viewport */
-    .navbar-mobile__menu-btn.is-open .ham-top { transform: translateY(6px)  rotate(45deg);  }
-    .navbar-mobile__menu-btn.is-open .ham-mid { opacity: 0; transform: scaleX(0); }
-    .navbar-mobile__menu-btn.is-open .ham-bot { transform: translateY(-6px) rotate(-45deg); }
+    #tablet-menu-btn.is-open .ham-top { transform: translateY(6px)  rotate(45deg);  }
+    #tablet-menu-btn.is-open .ham-mid { opacity: 0; transform: scaleX(0); }
+    #tablet-menu-btn.is-open .ham-bot { transform: translateY(-6px) rotate(-45deg); }
 
     /* ─────────────────────────────────────────────────────
        NAV MENU TABLET — Nav Menu Tablet - 1.5 (DS node 3427:4590)
@@ -3739,39 +3806,38 @@
       #NavBar-Mobile         { display: block; }
     }
 
-    /* RECENT ACTIVITIES CAROUSEL — Section 6
-       Flex layout: [btn-side] [viewport overflow:hidden] [btn-side]
-       16px padding all around each button — cards never overlap buttons. */
-    #YourRecentActivities-Desktop .primary-card__content {
-      display:     flex;
-      align-items: center;
-      gap:         var(--spacing-space-m);
-      padding:     var(--spacing-space-m);
-      overflow:    hidden;
+    /* RECENT ACTIVITIES CAROUSEL — Section 2 (DS node 4629:104565, Tertiary Card)
+       DS: Frame 427320914 has NO outer border.
+       Border composed per child:
+         Left btn:  box-shadow inset all 4 sides, radius 16px TL+BL
+         Slot:      box-shadow inset top+bottom only (strokeWeights t:1 r:0 b:1 l:0)
+         Right btn: box-shadow inset all 4 sides, radius 16px TR+BR */
+    .recent-activities-frame {
+      display:        flex;
+      flex-direction: row;
+      align-items:    stretch;
     }
-    .recent-carousel__btn-side {
+    /* White content slot — DS: SLOT, fill #ffffff, strokeWeights top+bottom INSIDE only */
+    .recent-activities-slot {
+      flex:       1;
+      min-width:  0;
+      background: var(--surface-general-default);
+      padding:    var(--spacing-space-m);
+      overflow:   hidden;
+      box-shadow: inset 0 1px 0 0 var(--border-primary-default),
+                  inset 0 -1px 0 0 var(--border-primary-default);
+    }
+    .recent-activities-track {
+      display:    flex;
+      gap:        var(--spacing-space-m);
       flex-shrink: 0;
-      align-self:  stretch;
-      display:     flex;
-      align-items: center;
+      transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-    .recent-carousel__btn-side .carousel__btn { height: 100%; }
-    .recent-carousel__viewport {
-      flex:      1;
-      min-width: 0;
-      overflow:  hidden;
-    }
-    .recent-carousel__track {
-      display:     flex;
-      gap:         var(--spacing-space-m);
+    /* JS sets exact width per viewport */
+    .recent-activities-track .quiz-card {
       flex-shrink: 0;
-      transition:  transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    /* min/max enforced; JS sets exact width per viewport */
-    .recent-carousel__track .quiz-card {
-      flex-shrink: 0;
-      min-width:   300px;
-      max-width:   370px;
+      min-width:   280px;
+      max-width:   400px;
     }
 
     /* Tablet */
@@ -3789,6 +3855,8 @@
 
       /* Avatar - 1.5 Size=XL on tablet (64×64, node 684:627) */
       .welcome-avatar { width: 64px; height: 64px; min-width: 64px; min-height: 64px; }
+      .welcome-avatar-group { width: 64px; height: 64px; min-width: 64px; min-height: 64px; }
+      .welcome-avatar-group .navbar-badge { width: 20px; height: 20px; }
 
       /* Welcome section — Tablet + Mobile: welcome-row flex-wrap layout
          Row 1: welcome-text (flex:1) + Avatar-Mobile
@@ -3882,6 +3950,7 @@
         width:  8px;
         height: 8px;
       }
+      .carousel__dot.is-active { width: 8px; }   /* mobile: round, not elongated */
 
       /* Quiz card: floor at 300px on mobile */
       .quiz-card {
@@ -3899,8 +3968,10 @@
       /* Status badges: allow wrapping when pills don't fit in a single row */
       .status-badges { flex-wrap: wrap; }
 
-      /* Avatar - 1.5 Size=L on mobile (48×48) — tablet uses XXL (100×100) */
-      .welcome-avatar { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
+      /* Avatar - 1.5 Size=L on mobile (56×56 Type=Image, node 684:621) */
+      .welcome-avatar { width: 56px; height: 56px; min-width: 56px; min-height: 56px; }
+      .welcome-avatar-group { width: 56px; height: 56px; min-width: 56px; min-height: 56px; }
+      .welcome-avatar-group .navbar-badge { width: 16px; height: 16px; }
 
       /* Mobile: hide top hamburger navbar → replaced by bottom Navbar Mobile - 1.5 */
       #NavBar-Mobile { display: none; }
@@ -3999,8 +4070,8 @@
 </g></symbol>
 
       <!-- Profile Menu icons — all DS exports, viewBox -1 -1 26 26 (1px stroke buffer per Rule 27) -->
-      <!-- Outline/user-circle (1942:23330) — My Profile -->
-      <symbol id="ic-user-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20C18 18.4087 17.3679 16.8826 16.2426 15.7574C15.1174 14.6321 13.5913 14 12 14M12 14C10.4087 14 8.88258 14.6321 7.75736 15.7574C6.63214 16.8826 6 18.4087 6 20M12 14C14.2091 14 16 12.2091 16 10C16 7.79086 14.2091 6 12 6C9.79086 6 8 7.79086 8 10C8 12.2091 9.79086 14 12 14ZM22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
+      <!-- Outline/user-circle (3908:13415 60×60 DS export) — My Profile / Notif avatar -->
+      <symbol id="ic-user-circle" viewBox="-1 -1 62 62" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M45 50C45 46.0218 43.4196 42.2064 40.6066 39.3934C37.7936 36.5804 33.9782 35 30 35M30 35C26.0218 35 22.2064 36.5804 19.3934 39.3934C16.5804 42.2064 15 46.0218 15 50M30 35C35.5228 35 40 30.5228 40 25C40 19.4772 35.5228 15 30 15C24.4772 15 20 19.4772 20 25C20 30.5228 24.4772 35 30 35ZM55 30C55 43.8071 43.8071 55 30 55C16.1929 55 5 43.8071 5 30C5 16.1929 16.1929 5 30 5C43.8071 5 55 16.1929 55 30Z"/></symbol>
       <!-- Outline/user-check (260:1300) — Manage Account -->
       <symbol id="ic-user-check" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M17 11L19 13L23 9M12.5 7C12.5 9.20914 10.7091 11 8.5 11C6.29086 11 4.5 9.20914 4.5 7C4.5 4.79086 6.29086 3 8.5 3C10.7091 3 12.5 4.79086 12.5 7Z"/></symbol>
       <!-- Outline/star 24px (260:1192) — Subscribe Pandai Premium -->
@@ -4095,6 +4166,9 @@
       <!-- Outline/shopping-bag (260:1133) --><symbol id="ic-shopping-bag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 6V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V6L6 2H18L21 6ZM3 6H21M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10"/></symbol>
       <!-- Outline/shopping-cart (260:1137) --><symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6M10 21C10 21.5523 9.55228 22 9 22C8.44772 22 8 21.5523 8 21C8 20.4477 8.44772 20 9 20C9.55228 20 10 20.4477 10 21ZM21 21C21 21.5523 20.5523 22 20 22C19.4477 22 19 21.5523 19 21C19 20.4477 19.4477 20 20 20C20.5523 20 21 20.4477 21 21Z"/></symbol>
       <!-- Outline/smile (260:1181) --><symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14M9 9H9.01M15 9H15.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
+      <!-- P.Premium (6352:41216) — clipPath in defs (Rule 57: url() resolves from document root, not <use> shadow) -->
+      <clipPath id="clip-premium"><rect width="20" height="20" fill="white"/></clipPath>
+      <symbol id="ic-premium" viewBox="0 0 20 20" fill="none"><g clip-path="url(#clip-premium)"><path d="M8.18945 2.68805C8.90941 1.15493 11.0906 1.15493 11.8105 2.68805L13.4287 6.13629L17.1924 6.71539C18.8009 6.96261 19.4562 8.92502 18.3193 10.0894L15.5332 12.942L16.1758 16.8785C16.4446 18.5264 14.6955 19.7587 13.2344 18.9507L10 17.1627L6.76562 18.9507C5.3045 19.7587 3.55544 18.5264 3.82422 16.8785L4.46582 12.942L1.68066 10.0894C0.543759 8.92502 1.19912 6.96261 2.80762 6.71539L6.57031 6.13629L8.18945 2.68805Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.09473 3.11383C9.45466 2.34708 10.5453 2.34707 10.9053 3.11383L12.6377 6.80328C12.7084 6.95396 12.8492 7.06012 13.0137 7.08551L17.041 7.70367C17.845 7.82751 18.1728 8.80905 17.6045 9.39117L14.6426 12.4244C14.5317 12.5379 14.4814 12.6975 14.5068 12.8541L15.1895 17.0396C15.3238 17.8634 14.4492 18.4793 13.7188 18.0757L10.2422 16.1529C10.0916 16.0696 9.90837 16.0696 9.75781 16.1529L6.28125 18.0757C5.55077 18.4793 4.67621 17.8634 4.81055 17.0396L5.49316 12.8541C5.51863 12.6975 5.46828 12.5379 5.35742 12.4244L2.39551 9.39117C1.82719 8.80905 2.15501 7.82751 2.95898 7.70367L6.98633 7.08551C7.15083 7.06012 7.29156 6.95396 7.3623 6.80328L9.09473 3.11383Z" fill="#FFF200" stroke="#F2B839" stroke-linecap="round" stroke-linejoin="round"/></g></symbol>
 
     </defs>
   </svg>
@@ -4155,7 +4229,7 @@
               <div class="nav-btn-content">
                 <div class="nav-btn-rect" aria-hidden="true"></div>
                 <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
-                <div class="num-badge num-badge--primary" aria-label="5 notifications" aria-live="polite">5</div>
+                <div class="num-badge num-badge--primary" aria-label="4 notifications" aria-live="polite">4</div>
               </div>
             </button>
             <button class="navbar-action-btn" aria-label="Language" id="locale-btn" type="button" aria-haspopup="true">
@@ -4173,13 +4247,15 @@
           </div>
         </div>
 
-        <!-- Avatar - 1.5 Size=L Type=Image (node 684:621): 48×48 circle · image fill 60×60 at x:-6 y:0 -->
-        <div class="navbar-avatar" aria-label="Profile">
-          <img class="navbar-avatar__image" src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
+        <!-- Avatar group: 48×48 position:relative wrapper so badge anchors to avatar bounds -->
+        <div class="navbar-avatar-group">
+          <!-- Avatar - 1.5 Size=L Type=Image (node 684:621): 48×48 circle · image fill 60×60 at x:-6 y:0 -->
+          <div class="navbar-avatar" aria-label="Profile">
+            <img class="navbar-avatar__image" src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
+          </div>
+          <!-- P.Premium badge (node 1084:1826): 20×20 gold star, top:0 right:0 of Avatar group -->
+          <span class="navbar-badge" aria-label="Premium member"><svg aria-hidden="true"><use href="#ic-premium"/></svg></span>
         </div>
-
-        <!-- Number Badge - 1.5 (node 1084:1826): absolute right:-0.48px top:0 of Avatar group -->
-        <span class="navbar-badge" aria-label="15 notifications">15</span>
 
       </div>
 
@@ -4197,6 +4273,7 @@
           <div class="profile-dropdown__avatar">
             <img src="../src/image-repo/page.home/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
           </div>
+          <span class="navbar-badge" aria-label="Premium member"><svg aria-hidden="true"><use href="#ic-premium"/></svg></span>
         </div>
 
         <!-- Name / username / plan pill -->
@@ -4359,11 +4436,36 @@
 
     </div><!-- end locale-dropdown -->
 
-    <!-- Navbar Notification - 1.5 (DS node 3908:13057, Type=Default)
-         320px panel · 4 items · "See all notification" button
-         Triggered by bell button · right-aligned to bell button right edge via JS -->
-    <div class="notif-dropdown" id="notif-dropdown" aria-label="Notifications" role="menu">
+    <!-- Download Apps dropdown (DS node 3909:3405, Navbar Download Apps - 1.5)
+         238px panel · 3 items with app store icons
+         Triggered by smartphone button · right-aligned to button right edge via JS -->
+    <div class="download-dropdown" id="download-dropdown" aria-label="Download app" role="menu">
 
+      <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Google Android">
+        <svg class="download-dropdown__icon" aria-hidden="true" focusable="false"><use href="#ic-store-google-play"/></svg>
+        <span class="download-dropdown__label">Google Android</span>
+      </a>
+
+      <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Apple iOS">
+        <svg class="download-dropdown__icon" aria-hidden="true" focusable="false"><use href="#ic-store-apple"/></svg>
+        <span class="download-dropdown__label">Apple iOS</span>
+      </a>
+
+      <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Huawei AppGallery">
+        <svg class="download-dropdown__icon" aria-hidden="true" focusable="false"><use href="#ic-store-huawei"/></svg>
+        <span class="download-dropdown__label">Huawei</span>
+      </a>
+
+    </div><!-- end download-dropdown -->
+
+  </section><!-- end NavbarPrimary-Desktop -->
+
+  <!-- Navbar Notification - 1.5 (DS node 3908:13057, Type=Default)
+       320px panel · 4 items · "See all notification" button
+       Shared by desktop #notif-btn AND tablet #tablet-notif-btn · position:fixed, top+right set by JS -->
+  <div class="notif-dropdown" id="notif-dropdown" aria-label="Notifications" role="menu">
+    <!-- Notifications List — DS node 6305:45076: gap 8px between items -->
+    <div class="notif-list">
       <!-- Navbar Notification Button - Parts ×4 (DS 3908:13427) -->
       <div class="notif-item" role="menuitem" tabindex="0">
         <div class="notif-item__content">
@@ -4433,36 +4535,14 @@
         </div>
       </div>
 
-      <!-- "See all notification" — Primary/L Button - 1.5, no arrow, full-width -->
-      <div class="notif-dropdown__footer">
-        <button class="notif-see-all" type="button">See all notification</button>
-      </div>
+    </div><!-- end notif-list -->
 
-    </div><!-- end notif-dropdown -->
+    <!-- "See all notification" — Primary/L Button - 1.5, no arrow, full-width -->
+    <div class="notif-dropdown__footer">
+      <button class="notif-see-all" type="button">See all notification</button>
+    </div>
 
-    <!-- Download Apps dropdown (DS node 3909:3405, Navbar Download Apps - 1.5)
-         238px panel · 3 items with app store icons
-         Triggered by smartphone button · right-aligned to button right edge via JS -->
-    <div class="download-dropdown" id="download-dropdown" aria-label="Download app" role="menu">
-
-      <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Google Android">
-        <svg class="download-dropdown__icon" aria-hidden="true" focusable="false"><use href="#ic-store-google-play"/></svg>
-        <span class="download-dropdown__label">Google Android</span>
-      </a>
-
-      <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Apple iOS">
-        <svg class="download-dropdown__icon" aria-hidden="true" focusable="false"><use href="#ic-store-apple"/></svg>
-        <span class="download-dropdown__label">Apple iOS</span>
-      </a>
-
-      <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Huawei AppGallery">
-        <svg class="download-dropdown__icon" aria-hidden="true" focusable="false"><use href="#ic-store-huawei"/></svg>
-        <span class="download-dropdown__label">Huawei</span>
-      </a>
-
-    </div><!-- end download-dropdown -->
-
-  </section><!-- end NavbarPrimary-Desktop -->
+  </div><!-- end notif-dropdown -->
 
   <!-- ═══════════════════════════════════════════════════════════════
        NAV TOP MENU DESKTOP — Nav Top Menu Desktop - 1.5
@@ -4716,13 +4796,30 @@
         <img src="../src/image-repo/page.home/assets/main/NavBar-Mobile/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
         <img src="../src/image-repo/page.home/assets/main/NavBar-Mobile/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
       </a>
-      <button class="navbar-mobile__menu-btn" id="tablet-menu-btn" aria-label="Open menu" type="button">
-        <svg class="ham-svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-          <path class="ham-top" d="M3 6H21"/>
-          <path class="ham-mid" d="M3 12H21"/>
-          <path class="ham-bot" d="M3 18H21"/>
-        </svg>
-      </button>
+      <div class="navbar-mobile__buttons">
+        <!-- DS: Outline/bell (node 260:491) — Nav Button L, Size=L, 44×44 -->
+        <button class="navbar-action-btn" id="tablet-notif-btn" aria-label="Notifications" type="button" aria-haspopup="true">
+          <div class="nav-btn-content">
+            <div class="nav-btn-rect"></div>
+            <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
+            <div class="num-badge num-badge--primary" aria-label="4 notifications" aria-live="polite">4</div>
+          </div>
+        </button>
+        <!-- DS: Outline/menu (node 260:922) — Nav Button L, Size=L, 44×44 -->
+        <!-- DS: Outline/menu — Nav Button - 1.5, 44×44, same structure as bell -->
+        <button class="navbar-action-btn" id="tablet-menu-btn" aria-label="Open menu" type="button">
+          <div class="nav-btn-content">
+            <div class="nav-btn-rect" aria-hidden="true"></div>
+            <div class="nav-btn-icon-clip">
+              <svg class="ham-svg" viewBox="-1 -1 26 26" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <path class="ham-top" d="M3 6H21"/>
+                <path class="ham-mid" d="M3 12H21"/>
+                <path class="ham-bot" d="M3 18H21"/>
+              </svg>
+            </div>
+          </div>
+        </button>
+      </div>
     </div>
   </section><!-- end NavBar-Mobile -->
 
@@ -5069,8 +5166,12 @@
           <!-- Avatar-Mobile — Avatar - 1.5 Size=L Type=Image (node 684:621)
                Mobile-only: visible at ≤767px, sits right of #Welcome-Desktop -->
           <section id="Avatar-Mobile" aria-label="User profile">
-            <div class="welcome-avatar">
-              <img class="welcome-avatar__image" src="../src/image-repo/page.home/assets/main/Welcome-Desktop/Avatar-Aidan.png" alt="User avatar">
+            <!-- welcome-avatar-group: badge outside overflow:hidden circle, still constrained to avatar size -->
+            <div class="welcome-avatar-group">
+              <div class="welcome-avatar">
+                <img class="welcome-avatar__image" src="../src/image-repo/page.home/assets/main/Welcome-Desktop/Avatar-Aidan.png" alt="User avatar">
+              </div>
+              <span class="navbar-badge" aria-label="Premium member"><svg aria-hidden="true"><use href="#ic-premium"/></svg></span>
             </div>
           </section>
 
@@ -5110,20 +5211,24 @@
               </div>
             </div>
 
-            <!-- Left Button (node 1200:1837): Outline/chevron-left (260:537) -->
+            <!-- Left Button: Pill Button - 1.5 Type=Left (node 1200:1816) -->
             <div class="carousel__btn-wrap carousel__btn-wrap--prev">
-              <button class="carousel__btn" id="carouselPrev" aria-label="Previous">
-                <span class="carousel__btn__icon">
-                  <svg width="20" height="20" aria-hidden="true"><use href="#ic-chevron-left"/></svg>
+              <button class="carousel__btn carousel__btn--left" id="carouselPrev" aria-label="Previous">
+                <span class="carousel__btn__content">
+                  <span class="carousel__btn__icon">
+                    <svg width="24" height="24" aria-hidden="true"><use href="#ic-chevron-left"/></svg>
+                  </span>
                 </span>
               </button>
             </div>
 
-            <!-- Right Button (node 1200:1861): Outline/chevron-right (260:539) -->
+            <!-- Right Button: Pill Button - 1.5 Type=Right (node 1200:1862) -->
             <div class="carousel__btn-wrap carousel__btn-wrap--next">
-              <button class="carousel__btn" id="carouselNext" aria-label="Next">
-                <span class="carousel__btn__icon">
-                  <svg width="20" height="20" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+              <button class="carousel__btn carousel__btn--right" id="carouselNext" aria-label="Next">
+                <span class="carousel__btn__content">
+                  <span class="carousel__btn__icon">
+                    <svg width="24" height="24" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+                  </span>
                 </span>
               </button>
             </div>
@@ -5148,11 +5253,11 @@
             <div class="static-card__content">
               <!-- Decorative circles: green palette (DS node 5176:77368) -->
               <div class="static-card__deco">
-                <img src="../zul.test.git/assets/static-card/deco-secondary.svg" alt="">
+                <img src="assets/static-card/deco-secondary.svg" alt="">
               </div>
               <div class="static-card__img-col">
                 <div class="static-card__illustration">
-                  <img src="../zul.test.git/assets/static-card/illustration-target.svg" alt="Graphic/P.Target">
+                  <img src="assets/static-card/illustration-target.svg" alt="Graphic/P.Target">
                 </div>
               </div>
               <div class="static-card__right">
@@ -5175,11 +5280,11 @@
             <div class="static-card__content">
               <!-- Decorative circles: warm palette — orange/yellow/blue (DS node 5176:77352) -->
               <div class="static-card__deco">
-                <img src="../zul.test.git/assets/static-card/deco-primary.svg" alt="">
+                <img src="assets/static-card/deco-primary.svg" alt="">
               </div>
               <div class="static-card__img-col">
                 <div class="static-card__illustration">
-                  <img src="../zul.test.git/assets/static-card/illustration.svg" alt="">
+                  <img src="assets/static-card/illustration.svg" alt="">
                 </div>
               </div>
               <div class="static-card__right">
@@ -5202,11 +5307,11 @@
             <div class="static-card__content">
               <!-- Decorative circles: azure/blue palette (DS node 5351:6457) -->
               <div class="static-card__deco">
-                <img src="../zul.test.git/assets/static-card/deco-fortiary.svg" alt="">
+                <img src="assets/static-card/deco-fortiary.svg" alt="">
               </div>
               <div class="static-card__img-col">
                 <div class="static-card__illustration">
-                  <img src="../zul.test.git/assets/static-card/illustration-livetuition.png" alt="Graphic/P.LiveTuition">
+                  <img src="assets/static-card/illustration-livetuition.png" alt="Graphic/P.LiveTuition">
                 </div>
               </div>
               <div class="static-card__right">
@@ -5231,24 +5336,25 @@
              SECTION 5 — Your Selected Subjects
              Primary Card - 1.5 / Secondary Card variant (node 2881:36272)
         ──────────────────────────────────────────────────────────────── -->
+        <!-- SECTION 5 — Your Selected Subjects
+             Primary Card - 1.5 / Secondary Card variant (DS node 4629:104559)
+             18 Quiz Cards in 3-col grid. Each card border = badge bg color (DS confirmed).
+             CTA visible:false in DS — not rendered. -->
         <section id="YourSelectedSubjects-Desktop" class="section-frame" aria-label="Your Selected Subjects">
 
-          <!-- Header: bookmark icon · title · Add Classes button -->
           <div class="section-header">
             <div class="section-header__left">
               <span class="section-header__bookmark">
                 <svg class="icon-ds" aria-hidden="true"><use href="#ic-bookmark"/></svg>
               </span>
-              <h2 class="section-header__title">Your Selected Quiz</h2>
+              <h2 class="section-header__title">Your Selected Subjects</h2>
             </div>
-
-            <!-- Button - 1.5  Variants=Secondary, Size=M (node 2881:36280) -->
             <button class="btn-add-classes" type="button">
               <span class="btn-add-classes__inner">
                 <span class="btn-add-classes__icon">
                   <svg class="icon-ds-16" aria-hidden="true"><use href="#ic-plus"/></svg>
                 </span>
-                <span class="btn-add-classes__text">Modify List</span>
+                <span class="btn-add-classes__text">Add Subjects</span>
                 <span class="btn-add-classes__arrow">
                   <span class="btn-add-classes__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
                 </span>
@@ -5256,11 +5362,11 @@
             </button>
           </div>
 
-          <!-- Primary Card content placeholder (node 2881:36281) — 18 Quiz Cards, 3-col grid -->
+          <!-- Inner white card (DS node 2881:36281) — grid 3-col, gap 16px -->
           <div class="primary-card__content">
 
-            <!-- 1 — Additional Mathematics -->
-            <article class="quiz-card subject-add-math">
+            <!-- 1 — Additional Mathematics (#283589 = Add Math badge bg) -->
+            <article class="quiz-card subject-add-math" style="--card-subject-color: #283589; --card-subject-subtle: #eaebf3; --card-subject-subtle-hover: #a9aed0">
               <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/916-image-918.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
@@ -5270,12 +5376,11 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Trigonometric Functions and Graphs</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 2 — Biology -->
-            <article class="quiz-card subject-biology">
+            <!-- 2 — Biology (#8431d8) -->
+            <article class="quiz-card subject-biology" style="--card-subject-color: #8431d8; --card-subject-subtle: #f3ebfb; --card-subject-subtle-hover: #ceadef">
               <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/BG-10-05-02-09-Q01-01.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
@@ -5285,13 +5390,12 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Human Circulatory System</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 3 — Economy -->
-            <article class="quiz-card subject-economy">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/CH-11-02-02-02-ALKA-W03-Q2002-A.png');"></div>
+            <!-- 3 — Economy (#ff5733) -->
+            <article class="quiz-card subject-economy" style="--card-subject-color: #ff5733; --card-subject-subtle: #ffeeeb; --card-subject-subtle-hover: #ffbcad">
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/PI-04-04-03-01-S24-Q006-01.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5300,13 +5404,12 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Theory of Production and Cost</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 4 — Chemistry -->
-            <article class="quiz-card subject-chemistry">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/GF-09-04-01-01-R04-Q238.png');"></div>
+            <!-- 4 — Chemistry (#e20082) -->
+            <article class="quiz-card subject-chemistry" style="--card-subject-color: #e20082; --card-subject-subtle: #fce6f3; --card-subject-subtle-hover: #ed99c6">
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/CH-11-02-02-02-ALKA-W03-Q2002-A.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5315,13 +5418,12 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Rate of Chemical Reactions</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 5 — English -->
-            <article class="quiz-card subject-english">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/Kafa.png');"></div>
+            <!-- 5 — English (#ff4d56) -->
+            <article class="quiz-card subject-english" style="--card-subject-color: #ff4d56; --card-subject-subtle: #ffedee; --card-subject-subtle-hover: #ffb8bb">
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/english.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5330,13 +5432,12 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Reading Comprehension: Narrative Text</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 6 — Moral Studies -->
-            <article class="quiz-card subject-moral">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/PI-04-04-03-01-S24-Q006-01.png');"></div>
+            <!-- 6 — Moral Studies (#0072ca) -->
+            <article class="quiz-card subject-moral" style="--card-subject-color: #0072ca; --card-subject-subtle: #e6f1fa; --card-subject-subtle-hover: #99c7ea">
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/moral.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5345,13 +5446,12 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Human Rights and Responsibilities</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 7 — Islamic Studies -->
-            <article class="quiz-card subject-islamic">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/PSR-SC-06-03-02-H04-Q466.png');"></div>
+            <!-- 7 — Islamic Studies (#de4d7f) -->
+            <article class="quiz-card subject-islamic" style="--card-subject-color: #de4d7f; --card-subject-subtle: #fcedf2; --card-subject-subtle-hover: #f2b8cc">
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/SC-06-2022-03-01-B06-Q77.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5360,13 +5460,12 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Noble Character in Daily Life</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 8 — Mathematics -->
-            <article class="quiz-card subject-math">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/SC-06-2022-03-01-B06-Q77.png');"></div>
+            <!-- 8 — Mathematics (#42ac7b) -->
+            <article class="quiz-card subject-math" style="--card-subject-color: #42ac7b; --card-subject-subtle: #ecf7f2; --card-subject-subtle-hover: #b3deca">
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/math.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5375,13 +5474,12 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Arithmetic and Geometric Progressions</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 9 — Account -->
-            <article class="quiz-card subject-account">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/SJ-04-03-01-S16-Q653-01.png');"></div>
+            <!-- 9 — Account (#0072ca) -->
+            <article class="quiz-card subject-account" style="--card-subject-color: #0072ca; --card-subject-subtle: #e6f1fa; --card-subject-subtle-hover: #99c7ea">
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/account.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5390,13 +5488,12 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Financial Statements of Listed Companies</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 10 — Physics -->
-            <article class="quiz-card subject-physics">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/account.png');"></div>
+            <!-- 10 — Physics (#27a0d7) -->
+            <article class="quiz-card subject-physics" style="--card-subject-color: #27a0d7; --card-subject-subtle: #eaf6fb; --card-subject-subtle-hover: #a9d9ef">
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/physics.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5405,12 +5502,11 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Electromagnetic Force and Induction</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 11 — Business -->
-            <article class="quiz-card subject-business">
+            <!-- 11 — Business (#efb42b) -->
+            <article class="quiz-card subject-business" style="--card-subject-color: #efb42b; --card-subject-subtle: #fef8ea; --card-subject-subtle-hover: #f9e1aa">
               <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/business.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
@@ -5420,12 +5516,11 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Marketing and Promotion Strategies</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 12 — Computer Science -->
-            <article class="quiz-card subject-cs">
+            <!-- 12 — Computer Science (#d10070) -->
+            <article class="quiz-card subject-cs" style="--card-subject-color: #d10070; --card-subject-subtle: #fbe6f1; --card-subject-subtle-hover: #ed99c6">
               <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/comp.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
@@ -5435,13 +5530,12 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Algorithms and Data Structures</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 13 — Science -->
-            <article class="quiz-card subject-science">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/english.png');"></div>
+            <!-- 13 — Science (#ffd641) -->
+            <article class="quiz-card subject-science" style="--card-subject-color: #ffd641; --card-subject-subtle: #fffbec; --card-subject-subtle-hover: #ffefb3">
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/PSR-SC-06-03-02-H04-Q466.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5450,13 +5544,12 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Photosynthesis and Plant Respiration</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 14 — History -->
-            <article class="quiz-card subject-history">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/math.png');"></div>
+            <!-- 14 — History (#a97c50) -->
+            <article class="quiz-card subject-history" style="--card-subject-color: #a97c50; --card-subject-subtle: #f7f2ee; --card-subject-subtle-hover: #ddcbb9">
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/SJ-04-03-01-S16-Q653-01.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5465,13 +5558,12 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Malaysia and World War II</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 15 — KAFA -->
-            <article class="quiz-card subject-kafa">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/moral.png');"></div>
+            <!-- 15 — KAFA (#8ae3a9) -->
+            <article class="quiz-card subject-kafa" style="--card-subject-color: #8ae3a9; --card-subject-subtle: #f4fcf7; --card-subject-subtle-hover: #d0f4dd">
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/Kafa.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5480,13 +5572,12 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Life of Prophet Muhammad SAW</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 16 — Geography -->
-            <article class="quiz-card subject-geo">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/physics.png');"></div>
+            <!-- 16 — Geography (#77d836) -->
+            <article class="quiz-card subject-geo" style="--card-subject-color: #77d836; --card-subject-subtle: #f2fbeb; --card-subject-subtle-hover: #c9efaf">
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/GF-09-04-01-01-R04-Q238.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5495,12 +5586,11 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Sustainable Development and Environment</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 17 — RBT -->
-            <article class="quiz-card subject-rbt">
+            <!-- 17 — RBT (#353535) -->
+            <article class="quiz-card subject-rbt" style="--card-subject-color: #353535; --card-subject-subtle: #d7d7d7; --card-subject-subtle-hover: #aeaeae">
               <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/rbt.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
@@ -5510,13 +5600,12 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Innovative Product Design</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
-            <!-- 18 — Bahasa Melayu -->
-            <article class="quiz-card subject-bm">
-              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/BG-10-05-02-09-Q01-01.png');"></div>
+            <!-- 18 — Bahasa Melayu (#4d77ff) -->
+            <article class="quiz-card subject-bm" style="--card-subject-color: #4d77ff; --card-subject-subtle: #f6f9ff; --card-subject-subtle-hover: #b8c9ff">
+              <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/bm.png');"></div>
               <div class="quiz-card__content">
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
@@ -5525,7 +5614,6 @@
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Argumentative Text and Debate</p></div>
                 </div>
-                <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
               </div>
             </article>
 
@@ -5538,9 +5626,13 @@
              SECTION 6 — Your Recent Activities
              Primary Card - 1.5 / Secondary Card variant — 3 Quiz Cards
         ──────────────────────────────────────────────────────────────── -->
+        <!-- SECTION 6 — Your Recent Activities
+             DS node 4629:104565. Direct carousel frame — no inner white card wrapper.
+             Outer: .recent-activities-frame (border+radius+overflow on container).
+             Side buttons sit flush inside the frame.
+             3 cards: English, Business, Biology. CTA visible:false in DS — not rendered. -->
         <section id="YourRecentActivities-Desktop" class="section-frame" aria-label="Your Recent Activities">
 
-          <!-- Header: clock icon · title · Modify List button -->
           <div class="section-header">
             <div class="section-header__left">
               <span class="section-header__bookmark">
@@ -5548,8 +5640,6 @@
               </span>
               <h2 class="section-header__title">Your Recent Activities</h2>
             </div>
-
-            <!-- Button - 1.5  Secondary/M, showLeadingIcon:false, showRArrow:true -->
             <button class="btn-secondary-arrow" type="button">
               <span class="btn-secondary-arrow__text">View Activity History</span>
               <span class="btn-secondary-arrow__circle">
@@ -5558,95 +5648,70 @@
             </button>
           </div>
 
-          <!-- Primary Card content — Quiz Card Carousel (4 cards, 3 visible, left/right nav) -->
-          <div class="primary-card__content">
+          <!-- Carousel frame: side buttons + white slot — DS node 4629:104565 -->
+          <div class="recent-activities-frame">
 
-            <!-- Left Button — 16px clear gap via flex layout, no card overlap -->
-            <div class="recent-carousel__btn-side">
-              <button class="carousel__btn" id="recentPrev" aria-label="Previous">
-                <span class="carousel__btn__icon">
-                  <svg width="20" height="20" aria-hidden="true"><use href="#ic-chevron-left"/></svg>
-                </span>
-              </button>
-            </div>
+            <button class="side-btn side-btn--left" id="recentPrev" aria-label="Previous">
+              <span class="side-btn__icon">
+                <svg width="24" height="24" aria-hidden="true"><use href="#ic-chevron-left"/></svg>
+              </span>
+            </button>
 
-            <!-- Viewport — clips the scrolling track -->
-            <div class="recent-carousel__viewport">
-            <div class="recent-carousel__track" id="recentTrack">
+            <div class="recent-activities-slot">
+              <div class="recent-activities-track" id="recentTrack">
 
-              <!-- 1 — Additional Mathematics -->
-              <article class="quiz-card subject-add-math">
-                <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/bm.png');"></div>
-                <div class="quiz-card__content">
-                  <div class="quiz-card__main">
-                    <div class="quiz-card__header">
-                      <span class="subject-badge subject-badge--add-math"><span class="subject-badge__icon"><svg width="21" height="24" viewBox="0 0 21 24" aria-hidden="true"><use href="#ic-subj-add-math"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Add. Math</span></span></span>
-                      <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.3</span>
+                <!-- 1 — English (#ff4d56) -->
+                <article class="quiz-card subject-english" style="--card-subject-color: #ff4d56; --card-subject-subtle: #ffedee; --card-subject-subtle-hover: #ffb8bb">
+                  <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/english.png');"></div>
+                  <div class="quiz-card__content">
+                    <div class="quiz-card__main">
+                      <div class="quiz-card__header">
+                        <span class="subject-badge subject-badge--english"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-english"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">English</span></span></span>
+                        <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.2</span>
+                      </div>
+                      <div class="quiz-card__texts"><p class="quiz-card__subtitle">Reading Comprehension: Narrative Text</p></div>
                     </div>
-                    <div class="quiz-card__texts"><p class="quiz-card__subtitle">Trigonometric Functions and Graphs</p></div>
                   </div>
-                  <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
-                </div>
-              </article>
+                </article>
 
-              <!-- 2 — Biology -->
-              <article class="quiz-card subject-biology">
-                <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/bm.png');"></div>
-                <div class="quiz-card__content">
-                  <div class="quiz-card__main">
-                    <div class="quiz-card__header">
-                      <span class="subject-badge subject-badge--biology"><span class="subject-badge__icon"><svg width="17" height="24" viewBox="0 0 17 24" aria-hidden="true"><use href="#ic-subj-biology"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Biology</span></span></span>
-                      <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.2</span>
+                <!-- 2 — Business (#efb42b) -->
+                <article class="quiz-card subject-business" style="--card-subject-color: #efb42b; --card-subject-subtle: #fef8ea; --card-subject-subtle-hover: #f9e1aa">
+                  <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/business.png');"></div>
+                  <div class="quiz-card__content">
+                    <div class="quiz-card__main">
+                      <div class="quiz-card__header">
+                        <span class="subject-badge subject-badge--business"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-business"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Business</span></span></span>
+                        <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.7</span>
+                      </div>
+                      <div class="quiz-card__texts"><p class="quiz-card__subtitle">Marketing and Promotion Strategies</p></div>
                     </div>
-                    <div class="quiz-card__texts"><p class="quiz-card__subtitle">Human Circulatory System</p></div>
                   </div>
-                  <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
-                </div>
-              </article>
+                </article>
 
-              <!-- 3 — Economy -->
-              <article class="quiz-card subject-economy">
-                <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/bm.png');"></div>
-                <div class="quiz-card__content">
-                  <div class="quiz-card__main">
-                    <div class="quiz-card__header">
-                      <span class="subject-badge subject-badge--economy"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-economy"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Economy</span></span></span>
-                      <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.5</span>
+                <!-- 3 — Biology (#8431d8) -->
+                <article class="quiz-card subject-biology" style="--card-subject-color: #8431d8; --card-subject-subtle: #f3ebfb; --card-subject-subtle-hover: #ceadef">
+                  <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/BG-10-05-02-09-Q01-01.png');"></div>
+                  <div class="quiz-card__content">
+                    <div class="quiz-card__main">
+                      <div class="quiz-card__header">
+                        <span class="subject-badge subject-badge--biology"><span class="subject-badge__icon"><svg width="17" height="24" viewBox="0 0 17 24" aria-hidden="true"><use href="#ic-subj-biology"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Biology</span></span></span>
+                        <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.2</span>
+                      </div>
+                      <div class="quiz-card__texts"><p class="quiz-card__subtitle">Human Circulatory System</p></div>
                     </div>
-                    <div class="quiz-card__texts"><p class="quiz-card__subtitle">Theory of Production and Cost</p></div>
                   </div>
-                  <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
-                </div>
-              </article>
+                </article>
 
-              <!-- 4 — Physics (new) -->
-              <article class="quiz-card subject-physics">
-                <div class="quiz-card__image" style="background-image: url('../src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/bm.png');"></div>
-                <div class="quiz-card__content">
-                  <div class="quiz-card__main">
-                    <div class="quiz-card__header">
-                      <span class="subject-badge subject-badge--physics"><span class="subject-badge__icon"><svg width="22" height="24" viewBox="0 0 22 24" aria-hidden="true"><use href="#ic-subj-physics"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Physics</span></span></span>
-                      <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.7</span>
-                    </div>
-                    <div class="quiz-card__texts"><p class="quiz-card__subtitle">Electromagnetic Induction</p></div>
-                  </div>
-                  <div class="quiz-card__cta"><button class="btn-quiz-cta"><span class="btn-quiz-cta__text">Start</span><span class="btn-quiz-cta__arrow"><span class="btn-quiz-cta__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span></span></button></div>
-                </div>
-              </article>
+              </div><!-- end recentTrack -->
+            </div><!-- end recent-activities-slot -->
 
-            </div><!-- end recentTrack -->
-            </div><!-- end recent-carousel__viewport -->
+            <button class="side-btn side-btn--right" id="recentNext" aria-label="Next">
+              <span class="side-btn__icon">
+                <svg width="24" height="24" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+              </span>
+            </button>
 
-            <!-- Right Button -->
-            <div class="recent-carousel__btn-side">
-              <button class="carousel__btn" id="recentNext" aria-label="Next">
-                <span class="carousel__btn__icon">
-                  <svg width="20" height="20" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
-                </span>
-              </button>
-            </div>
-
-          </div><!-- end primary-card__content -->
+          </div><!-- end recent-activities-frame -->
 
         </section><!-- end YourRecentActivities-Desktop -->
 
@@ -5757,18 +5822,20 @@
         var waffleBtn    = document.getElementById('waffle-btn');
         var localeDd     = document.getElementById('locale-dropdown');
         var localeBtn    = document.getElementById('locale-btn');
-        var notifDd      = document.getElementById('notif-dropdown');
-        var notifBtn     = document.getElementById('notif-btn');
-        var downloadDd   = document.getElementById('download-dropdown');
-        var downloadBtn  = document.getElementById('download-btn');
-        if (learnDd)     learnDd.classList.remove('is-open');
-        if (waffleBtn)   waffleBtn.classList.remove('is-active');
-        if (localeDd)    localeDd.classList.remove('is-open');
-        if (localeBtn)   localeBtn.classList.remove('is-active');
-        if (notifDd)     notifDd.classList.remove('is-open');
-        if (notifBtn)    notifBtn.classList.remove('is-active');
-        if (downloadDd)  downloadDd.classList.remove('is-open');
-        if (downloadBtn) downloadBtn.classList.remove('is-active');
+        var notifDd         = document.getElementById('notif-dropdown');
+        var notifBtn        = document.getElementById('notif-btn');
+        var tabletNotifBtn  = document.getElementById('tablet-notif-btn');
+        var downloadDd      = document.getElementById('download-dropdown');
+        var downloadBtn     = document.getElementById('download-btn');
+        if (learnDd)        learnDd.classList.remove('is-open');
+        if (waffleBtn)      waffleBtn.classList.remove('is-active');
+        if (localeDd)       localeDd.classList.remove('is-open');
+        if (localeBtn)      localeBtn.classList.remove('is-active');
+        if (notifDd)        notifDd.classList.remove('is-open');
+        if (notifBtn)       notifBtn.classList.remove('is-active');
+        if (tabletNotifBtn) tabletNotifBtn.classList.remove('is-active');
+        if (downloadDd)     downloadDd.classList.remove('is-open');
+        if (downloadBtn)    downloadBtn.classList.remove('is-active');
         dropdown.classList.toggle('is-open');
       });
 
@@ -5802,17 +5869,19 @@
         var profileDd   = document.getElementById('profile-dropdown');
         var localeDd    = document.getElementById('locale-dropdown');
         var localeBtn   = document.getElementById('locale-btn');
-        var notifDd     = document.getElementById('notif-dropdown');
-        var notifBtn    = document.getElementById('notif-btn');
-        var downloadDd  = document.getElementById('download-dropdown');
-        var downloadBtn = document.getElementById('download-btn');
-        if (profileDd)  profileDd.classList.remove('is-open');
-        if (localeDd)   localeDd.classList.remove('is-open');
-        if (localeBtn)  localeBtn.classList.remove('is-active');
-        if (notifDd)    notifDd.classList.remove('is-open');
-        if (notifBtn)   notifBtn.classList.remove('is-active');
-        if (downloadDd)  downloadDd.classList.remove('is-open');
-        if (downloadBtn) downloadBtn.classList.remove('is-active');
+        var notifDd        = document.getElementById('notif-dropdown');
+        var notifBtn       = document.getElementById('notif-btn');
+        var tabletNotifBtn = document.getElementById('tablet-notif-btn');
+        var downloadDd     = document.getElementById('download-dropdown');
+        var downloadBtn    = document.getElementById('download-btn');
+        if (profileDd)      profileDd.classList.remove('is-open');
+        if (localeDd)       localeDd.classList.remove('is-open');
+        if (localeBtn)      localeBtn.classList.remove('is-active');
+        if (notifDd)        notifDd.classList.remove('is-open');
+        if (notifBtn)       notifBtn.classList.remove('is-active');
+        if (tabletNotifBtn) tabletNotifBtn.classList.remove('is-active');
+        if (downloadDd)     downloadDd.classList.remove('is-open');
+        if (downloadBtn)    downloadBtn.classList.remove('is-active');
         if (willOpen) positionDropdown();
         dropdown.classList.toggle('is-open');
         waffleBtn.classList.toggle('is-active', willOpen);
@@ -5869,17 +5938,19 @@
         var profileDd   = document.getElementById('profile-dropdown');
         var learnDd     = document.getElementById('learn-dropdown');
         var waffleBtn   = document.getElementById('waffle-btn');
-        var notifDd     = document.getElementById('notif-dropdown');
-        var notifBtn    = document.getElementById('notif-btn');
-        var downloadDd  = document.getElementById('download-dropdown');
-        var downloadBtn = document.getElementById('download-btn');
-        if (profileDd)  profileDd.classList.remove('is-open');
-        if (learnDd)    learnDd.classList.remove('is-open');
-        if (waffleBtn)  waffleBtn.classList.remove('is-active');
-        if (notifDd)    notifDd.classList.remove('is-open');
-        if (notifBtn)   notifBtn.classList.remove('is-active');
-        if (downloadDd)  downloadDd.classList.remove('is-open');
-        if (downloadBtn) downloadBtn.classList.remove('is-active');
+        var notifDd        = document.getElementById('notif-dropdown');
+        var notifBtn       = document.getElementById('notif-btn');
+        var tabletNotifBtn = document.getElementById('tablet-notif-btn');
+        var downloadDd     = document.getElementById('download-dropdown');
+        var downloadBtn    = document.getElementById('download-btn');
+        if (profileDd)      profileDd.classList.remove('is-open');
+        if (learnDd)        learnDd.classList.remove('is-open');
+        if (waffleBtn)      waffleBtn.classList.remove('is-active');
+        if (notifDd)        notifDd.classList.remove('is-open');
+        if (notifBtn)       notifBtn.classList.remove('is-active');
+        if (tabletNotifBtn) tabletNotifBtn.classList.remove('is-active');
+        if (downloadDd)     downloadDd.classList.remove('is-open');
+        if (downloadBtn)    downloadBtn.classList.remove('is-active');
         if (willOpen) positionDropdown();
         dropdown.classList.toggle('is-open');
         localeBtn.classList.toggle('is-active', willOpen);
@@ -5941,15 +6012,17 @@
         var waffleBtn   = document.getElementById('waffle-btn');
         var localeDd    = document.getElementById('locale-dropdown');
         var localeBtn   = document.getElementById('locale-btn');
-        var notifDd     = document.getElementById('notif-dropdown');
-        var notifBtn    = document.getElementById('notif-btn');
-        if (profileDd)  profileDd.classList.remove('is-open');
-        if (learnDd)    learnDd.classList.remove('is-open');
-        if (waffleBtn)  waffleBtn.classList.remove('is-active');
-        if (localeDd)   localeDd.classList.remove('is-open');
-        if (localeBtn)  localeBtn.classList.remove('is-active');
-        if (notifDd)    notifDd.classList.remove('is-open');
-        if (notifBtn)   notifBtn.classList.remove('is-active');
+        var notifDd        = document.getElementById('notif-dropdown');
+        var notifBtn       = document.getElementById('notif-btn');
+        var tabletNotifBtn = document.getElementById('tablet-notif-btn');
+        if (profileDd)      profileDd.classList.remove('is-open');
+        if (learnDd)        learnDd.classList.remove('is-open');
+        if (waffleBtn)      waffleBtn.classList.remove('is-active');
+        if (localeDd)       localeDd.classList.remove('is-open');
+        if (localeBtn)      localeBtn.classList.remove('is-active');
+        if (notifDd)        notifDd.classList.remove('is-open');
+        if (notifBtn)       notifBtn.classList.remove('is-active');
+        if (tabletNotifBtn) tabletNotifBtn.classList.remove('is-active');
         if (willOpen) positionDropdown();
         dropdown.classList.toggle('is-open');
         downloadBtn.classList.toggle('is-active', willOpen);
@@ -6012,11 +6085,21 @@
       }
 
       function handleBellClick(activeBtn) {
-        var allDropdowns = document.querySelectorAll('.nav-dropdown');
-        allDropdowns.forEach(function (dd) { dd.classList.remove('is-open'); });
-        var allBtns = document.querySelectorAll('.nav-btn, .action-btn');
-        allBtns.forEach(function (b) { b.classList.remove('is-active'); });
-        var willOpen = !dropdown.classList.contains('is-open');
+        var willOpen    = !dropdown.classList.contains('is-open');
+        var profileDd   = document.getElementById('profile-dropdown');
+        var learnDd     = document.getElementById('learn-dropdown');
+        var waffleBtn   = document.getElementById('waffle-btn');
+        var localeDd    = document.getElementById('locale-dropdown');
+        var localeBtn   = document.getElementById('locale-btn');
+        var downloadDd  = document.getElementById('download-dropdown');
+        var downloadBtn = document.getElementById('download-btn');
+        if (profileDd)  profileDd.classList.remove('is-open');
+        if (learnDd)    learnDd.classList.remove('is-open');
+        if (waffleBtn)  waffleBtn.classList.remove('is-active');
+        if (localeDd)   localeDd.classList.remove('is-open');
+        if (localeBtn)  localeBtn.classList.remove('is-active');
+        if (downloadDd)  downloadDd.classList.remove('is-open');
+        if (downloadBtn) downloadBtn.classList.remove('is-active');
         if (notifBtn)       notifBtn.classList.remove('is-active');
         if (tabletNotifBtn) tabletNotifBtn.classList.remove('is-active');
         if (willOpen) positionDropdown(activeBtn);
@@ -6037,19 +6120,19 @@
 
       // Notification item interaction — click 1: mark read · click 2: dismiss (collapse)
       notifItems.forEach(function (item) {
+        item.dataset.clicks = '0';
         item.addEventListener('click', function () {
           var n = (parseInt(item.dataset.clicks, 10) || 0) + 1;
           item.dataset.clicks = String(n);
           if (n === 1) {
             item.classList.add('is-read');
-          } else if (n >= 2) {
-            item.style.maxHeight     = item.offsetHeight + 'px';
-            item.style.opacity       = '1';
-            item.style.pointerEvents = 'none';
+          } else if (n === 2) {
+            item.style.transition    = 'max-height 0.3s ease, opacity 0.2s ease';
+            item.style.maxHeight     = item.scrollHeight + 'px';
             item.getBoundingClientRect();
-            item.style.transition = 'max-height 0.25s ease, opacity 0.2s ease';
-            item.style.maxHeight  = '0px';
-            item.style.opacity    = '0';
+            item.style.maxHeight     = '0';
+            item.style.opacity       = '0';
+            item.style.pointerEvents = 'none';
             item.addEventListener('transitionend', function onCollapsed() {
               item.removeEventListener('transitionend', onCollapsed);
               if (item.style.maxHeight === '0px') item.style.display = 'none';
@@ -6066,7 +6149,7 @@
         var clickedBtn = (notifBtn && notifBtn.contains(e.target)) ||
                          (tabletNotifBtn && tabletNotifBtn.contains(e.target));
         if (!dropdown.contains(e.target) && !clickedBtn) closeNotif();
-      });
+      }, true);
 
       window.addEventListener('resize', function () {
         if (dropdown.classList.contains('is-open')) {
@@ -6342,6 +6425,8 @@
         if (window.innerWidth <= 767) return;
         menuPanel.classList.contains('is-open') ? closeTabletMenu() : openTabletMenu();
       });
+
+      // is-pressing feedback — Rule 83 (CSS :active unreliable on divs/buttons in Electron)
       menuBtn.addEventListener('mousedown',  function () { menuBtn.classList.add('is-pressing'); });
       menuBtn.addEventListener('mouseup',    function () { menuBtn.classList.remove('is-pressing'); });
       menuBtn.addEventListener('mouseleave', function () { menuBtn.classList.remove('is-pressing'); });
@@ -6420,6 +6505,12 @@
         btnPrev.addEventListener('click', () => { slide(idx - 1); resetAuto(); });
         btnNext.addEventListener('click', () => { slide(idx + 1); resetAuto(); });
 
+        [btnPrev, btnNext].forEach(function(btn) {
+          btn.addEventListener('mousedown',  function() { btn.classList.add('is-pressing'); });
+          btn.addEventListener('mouseup',    function() { btn.classList.remove('is-pressing'); });
+          btn.addEventListener('mouseleave', function() { btn.classList.remove('is-pressing'); });
+        });
+
         startAuto();
       })();
     } catch (e) {
@@ -6427,16 +6518,16 @@
     }
 
     /* Recent Activities Carousel — Section 6
-       4 cards, wrap-around prev/next. visibleCount() computed live from card size. */
+       3 cards (English, Business, Biology). Shows 2.2 cards via peek formula. */
     try {
       (function () {
-        const viewport = document.querySelector('#YourRecentActivities-Desktop .recent-carousel__viewport');
+        const viewport = document.querySelector('#YourRecentActivities-Desktop .recent-activities-slot');
         const track    = document.getElementById('recentTrack');
         const btnPrev  = document.getElementById('recentPrev');
         const btnNext  = document.getElementById('recentNext');
         if (!viewport || !track || !btnPrev || !btnNext) return;
 
-        const TOTAL = 4;
+        const TOTAL = 3;
         let idx = 0;
 
         function gap() { return parseFloat(getComputedStyle(track).columnGap) || 16; }
@@ -6492,6 +6583,12 @@
         });
         btnPrev.addEventListener('click', () => { slide(idx - 1); resetAuto(); });
         btnNext.addEventListener('click', () => { slide(idx + 1); resetAuto(); });
+
+        [btnPrev, btnNext].forEach(function(btn) {
+          btn.addEventListener('mousedown',  function() { btn.classList.add('is-pressing'); });
+          btn.addEventListener('mouseup',    function() { btn.classList.remove('is-pressing'); });
+          btn.addEventListener('mouseleave', function() { btn.classList.remove('is-pressing'); });
+        });
 
         startAuto();
       })();
@@ -7230,178 +7327,6 @@
       /* ESC is handled natively by the browser — fullscreenchange fires on exit */
     })();
   </script>
-
-<script>
-/* test.page.compiled — Top Menu Bar navigation + persistent active state (v5) */
-(function () {
-  var TOP_ROUTES = {
-    'Home':     'home.html',
-    'Practice': 'practice.html'
-  };
-  var SUB_ROUTES = {
-    'My Classes':       'class-my-classes.html',
-    'Browse Classes':   'class-browse-classes.html',
-    'Learning Hub':     'learn-learning-hub.html',
-    'Quick Notes':      'learn-quick-notes.html',
-    'Score Card':       'achievement-score-card.html',
-    'Report Card':      'achievement-report-card.html',
-    'Coin Quests':      'rewards-coin-quests.html',
-    'My Rewards':       'rewards-my-rewards.html',
-    'Merchandise':      'rewards-merchandise.html',
-    'eVoucher':         'rewards-evoucher.html',
-    'Avatar':           'rewards-avatar.html'
-  };
-  /* Page → parent main-menu label that should show active state */
-  var PAGE_ACTIVE_MAIN = {
-    'home.html':                          'Home',
-    'practice.html':                      'Practice',
-    'class-my-classes.html':              'Class',
-    'class-browse-classes.html':          'Class',
-    'learn-learning-hub.html':            'Learn',
-    'learn-quick-notes.html':             'Learn',
-    'learn-quick-notes-selections.html':  'Learn',
-    'learn-quick-notes-view.html':        'Learn',
-    'achievement-score-card.html':        'Achievement',
-    'achievement-report-card.html':       'Achievement',
-    'achievement-analysis-card.html':     'Achievement',
-    'rewards-coin-quests.html':           'Rewards',
-    'rewards-my-rewards.html':            'Rewards',
-    'rewards-merchandise.html':           'Rewards',
-    'rewards-evoucher.html':              'Rewards',
-    'rewards-avatar.html':                'Rewards'
-  };
-
-  var SEL_A_BTN  = '#NavTopMenu-Desktop .nav-menu-btn';
-  var SEL_A_ITEM = '#NavTopMenu-Desktop .nav-menu-dropdown__item';
-  var SEL_B_BTN  = '.navbar-nav .nav-btn, .menubar-nav .nav-btn';
-  var SEL_B_ITEM = '.nav-subtopic-dropdown__item';
-
-  function nav(href) { return function (e) { e.preventDefault(); e.stopPropagation(); window.location.href = href; }; }
-
-  function currentFile() {
-    var p = window.location.pathname.replace(/[?#].*$/, '');
-    if (p.charAt(p.length - 1) === '/') return 'home.html';
-    var f = p.substring(p.lastIndexOf('/') + 1).toLowerCase();
-    if (!f) return 'home.html';
-    if (f.indexOf('.html') < 0) f += '.html';
-    return f;
-  }
-
-  function wireLinks() {
-    document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
-      if (btn.hasAttribute('aria-haspopup')) return;
-      var href = TOP_ROUTES[(btn.getAttribute('aria-label') || '').trim()];
-      if (href && !btn.dataset.tpcWired) {
-        btn.addEventListener('click', nav(href), true);
-        btn.dataset.tpcWired = '1';
-      }
-    });
-    document.querySelectorAll(SEL_A_ITEM).forEach(function (item) {
-      var lbl = item.querySelector('.nav-menu-dropdown__label');
-      if (!lbl) return;
-      var href = SUB_ROUTES[lbl.textContent.trim()];
-      if (href && !item.dataset.tpcWired) {
-        item.addEventListener('click', nav(href), true);
-        item.dataset.tpcWired = '1';
-      }
-    });
-    document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
-      if (btn.hasAttribute('aria-haspopup')) return;
-      var lbl = btn.querySelector('.nav-btn__label');
-      if (!lbl) return;
-      var href = TOP_ROUTES[lbl.textContent.trim()];
-      if (href && !btn.dataset.tpcWired) {
-        btn.addEventListener('click', nav(href), true);
-        btn.dataset.tpcWired = '1';
-      }
-    });
-    document.querySelectorAll(SEL_B_ITEM).forEach(function (item) {
-      var lbl = item.querySelector('.nav-subtopic-dropdown__item-label');
-      if (!lbl) return;
-      var href = SUB_ROUTES[lbl.textContent.trim()];
-      if (!href) return;
-      if (item.tagName === 'A') item.setAttribute('href', href);
-      if (!item.dataset.tpcWired) {
-        item.addEventListener('click', nav(href), true);
-        item.dataset.tpcWired = '1';
-      }
-    });
-  }
-
-  var applying = false;
-  function applyActive() {
-    if (applying) return;
-    applying = true;
-    try {
-      var label = PAGE_ACTIVE_MAIN[currentFile()];
-      document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
-        var match = !!(label && (btn.getAttribute('aria-label') || '').trim() === label);
-        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
-        if (match) {
-          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
-        } else if (btn.hasAttribute('aria-current')) {
-          btn.removeAttribute('aria-current');
-        }
-      });
-      document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
-        var lbl = btn.querySelector('.nav-btn__label');
-        var match = !!(label && lbl && lbl.textContent.trim() === label);
-        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
-        if (match) {
-          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
-        } else if (btn.hasAttribute('aria-current')) {
-          btn.removeAttribute('aria-current');
-        }
-      });
-    } finally {
-      applying = false;
-    }
-  }
-
-  var observing = false;
-  function startObserver() {
-    if (observing || typeof MutationObserver !== 'function') return;
-    var targets = [];
-    var a = document.getElementById('NavTopMenu-Desktop'); if (a) targets.push(a);
-    document.querySelectorAll('.navbar-nav, .menubar-nav').forEach(function (n) { targets.push(n); });
-    if (!targets.length) return;
-    /* Synchronous re-apply on every batch of mutations — runs as microtask, before paint */
-    var observer = new MutationObserver(applyActive);
-    targets.forEach(function (t) {
-      observer.observe(t, { attributes: true, subtree: true, attributeFilter: ['class', 'aria-current'] });
-    });
-    observing = true;
-  }
-
-  function init() {
-    wireLinks();
-    applyActive();
-    startObserver();
-    /* Defeat any deferred init code that re-asserts Home — multiple deferred passes */
-    [0, 50, 150, 400, 1000, 2500].forEach(function (d) { setTimeout(applyActive, d); });
-    /* 5s safety net: re-check every 250ms for 5s after load */
-    var ticks = 0;
-    var iv = setInterval(function () {
-      applyActive();
-      if (++ticks >= 20) clearInterval(iv);
-    }, 250);
-    /* Also re-apply on user interaction */
-    document.addEventListener('click',     function () { setTimeout(applyActive, 0); }, true);
-    document.addEventListener('mouseleave',function () { setTimeout(applyActive, 0); }, true);
-    document.addEventListener('mouseup',   function () { setTimeout(applyActive, 0); }, true);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
-</script>
-
-
-
-
 
 </body>
 </html>
