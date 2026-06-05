@@ -9317,7 +9317,7 @@ Single stroke only (`strokeAlign: INSIDE`, 1px green, `box-shadow: inset`). No o
 |---|---|---|
 | Width | `36px` | `36px` |
 | Height | `align-self: stretch` | `align-self: stretch` |
-| Border-radius | `24px 0 0 24px` | `0 24px 24px 0` |
+| Border-radius | `16px 0 0 16px` | `0 16px 16px 0` |
 | Padding default | `8px 8px 8px 4px` | `8px 4px 8px 8px` |
 | Padding hover | `8px 4px 8px 8px` (swapped) | `8px 8px 8px 4px` (swapped) |
 | Padding pressed | `8px 8px 8px 4px` (both) | `8px 8px 8px 4px` (both) |
@@ -9339,8 +9339,8 @@ No transitions (Rule 82). JS `is-pressing` (Rule 83).
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; user-select: none; border: none; flex-shrink: 0;
 }
-.side-btn--left  { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-primary-default); padding: 8px 8px 8px 4px; border-radius: 24px 0 0 24px; color: var(--icon-primary-focus); }
-.side-btn--right { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-primary-default); padding: 8px 4px 8px 8px; border-radius: 0 24px 24px 0; color: var(--icon-primary-focus); }
+.side-btn--left  { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-primary-default); padding: 8px 8px 8px 4px; border-radius: 16px 0 0 16px; color: var(--icon-primary-focus); }
+.side-btn--right { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-primary-default); padding: 8px 4px 8px 8px; border-radius: 0 16px 16px 0; color: var(--icon-primary-focus); }
 .side-btn--left:hover  { background: var(--surface-secondary-default-subtle); padding: 8px 4px 8px 8px; color: var(--icon-primary-default); }
 .side-btn--right:hover { background: var(--surface-secondary-default-subtle); padding: 8px 8px 8px 4px; color: var(--icon-primary-default); }
 .side-btn--left:active,  .side-btn--left.is-pressing,
@@ -9363,4 +9363,242 @@ No transitions (Rule 82). JS `is-pressing` (Rule 83).
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-05 (Rules 231–233 — Pill Button two-element structure corrects Rule 227; align-self:stretch vs height:100%; Side Button - 1.5 confirmed specs; mandatory workflow steps 0t/0u added) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+### 234. DS Subject variable collections — two collections, 5 variables each, all 18 subjects confirmed (2026-06-06)
+
+**Source:** Live DS fetch, `VariableCollectionId:4899:2` (Subjects A–E, 10 modes) and `VariableCollectionId:4899:8` (Subjects G–S, 9 modes). Each collection has 5 variables:
+
+| Variable name | CSS custom property | Usage |
+|---|---|---|
+| `Subject/default` | `--card-subject-color` | Border, active text, pill text |
+| `Subject/default-hover` | (not directly used) | — |
+| `Subject/default-subtle` | `--card-subject-subtle` | Card bg on hover, content left border default |
+| `Subject/default-subtle-hover` | `--card-subject-subtle-hover` | 4px border on hover, pill bg on hover |
+| `Subject/focus` | (not directly used) | — |
+
+**Confirmed hex values — all 18 subjects (A–E collection + G–S collection):**
+
+| Subject | `Subject/default` | `Subject/default-subtle` | `Subject/default-subtle-hover` |
+|---|---|---|---|
+| Add Math | `#283589` | `#eaebf3` | `#a9aed0` |
+| Biology | `#8431d8` | `#f3ebfb` | `#ceadef` |
+| Economy | `#ff5733` | `#ffeeeb` | `#ffbcad` |
+| Chemistry | `#e20082` | `#fce6f3` | `#ed99c6` |
+| English | `#ff4d56` | `#ffedee` | `#ffb8bb` |
+| Moral Studies | `#0072ca` | `#e6f1fa` | `#99c7ea` |
+| Islamic Studies | `#de4d7f` | `#fcedf2` | `#f2b8cc` |
+| Mathematics | `#42ac7b` | `#ecf7f2` | `#b3deca` |
+| Accounting | `#0072ca` | `#e6f1fa` | `#99c7ea` |
+| Physics | `#27a0d7` | `#eaf6fb` | `#a9d9ef` |
+| Business | `#efb42b` | `#fef8ea` | `#f9e1aa` |
+| Computer Science | `#d10070` | `#fbe6f1` | `#ed99c6` |
+| Science | `#ffd641` | `#fffbec` | `#ffefb3` |
+| History | `#a97c50` | `#f7f2ee` | `#ddcbb9` |
+| KAFA | `#8ae3a9` | `#f4fcf7` | `#d0f4dd` |
+| Geography | `#77d836` | `#f2fbeb` | `#c9efaf` |
+| RBT | `#353535` | `#d7d7d7` | `#aeaeae` |
+| Bahasa Melayu | `#4d77ff` | `#f6f9ff` | `#b8c9ff` |
+
+**Implementation pattern — inline CSS custom properties per card article:**
+```html
+<article class="quiz-card subject-add-math"
+  style="--card-subject-color:#283589;--card-subject-subtle:#eaebf3;--card-subject-subtle-hover:#a9aed0">
+```
+
+These 3 inline custom properties are the only mechanism for subject-specific coloring. Base CSS references them via `var(--card-subject-color, fallback)`. Never hardcode subject hex values in the stylesheet — always inject via inline style.
+
+**Note:** Accounting and Moral Studies share the same `Subject/default` hex (`#0072ca`) — different subjects, same primary color.
+
+---
+
+### 235. `::after` border for cards with image children — renders above image overlay
+
+**Source:** Quiz Card - 1.5 border fix, 2026-06-06.
+
+When a card (`<article>`) has an image child that spans the full card edge (e.g. `position: absolute; inset: -1px` image overlay), a plain `box-shadow: inset` on the `<article>` is painted BEHIND all children — the image overlay covers it, making the border invisible.
+
+**Fix:** Use `::after { position: absolute; inset: 0; z-index: 1; box-shadow: inset 0 0 0 Npx }` — pseudo-elements render above normal flow children and absolutely positioned children of the same element.
+
+```css
+/* WRONG — border covered by image overlay */
+.quiz-card { box-shadow: inset 0 0 0 1px var(--card-subject-color); }
+
+/* CORRECT — ::after renders above image */
+.quiz-card { position: relative; }   /* required for ::after to position against */
+.quiz-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: var(--corner-radius-corner-2xl);
+  pointer-events: none; z-index: 1;
+  box-shadow: inset 0 0 0 1px var(--card-subject-color, var(--border-default));
+}
+```
+
+**Rule:** Any card where an absolutely positioned child (image, background, overlay) covers the card boundary must use `::after` for its border. Direct `box-shadow: inset` on the element works only when no child covers the boundary.
+
+**Also applies to hover state border-width changes.** The `::after` approach makes it trivial to change border thickness on hover without touching the card's own box-shadow (which may carry other shadows):
+```css
+.quiz-card:hover::after { box-shadow: inset 0 0 0 4px var(--card-subject-subtle-hover, var(--border-default)); }
+```
+
+---
+
+### 236. Quiz Card - 1.5 hover state — full confirmed spec (DS node `6658:117768`, 2026-06-06)
+
+**Source:** `use_figma` + `get_variable_defs` on node `6658:117768` (Hover state). Both Subjects (A–E) and (G–S) collections confirmed.
+
+| Element | Default state | Hover state | DS token |
+|---|---|---|---|
+| Card bg | transparent | `Subject/default-subtle` | `VariableID:4899:13` (A–E) / `VariableID:4899:68` (G–S) |
+| Card border | `1px Subject/default` via `::after` | `4px Subject/default-subtle-hover` via `::after` | `VariableID:4899:14` |
+| Content left border | `1px Subject/default-subtle` inset | white (`#ffffff`) | n/a (white hardcoded) |
+| Pill badge fill | transparent | `Subject/default-subtle-hover` | `VariableID:4899:14` |
+| Pill badge text | `Subject/default` | `Subject/default` | `VariableID:4899:3` |
+| Subtitle text | `Text/default/body` `#666666` | `Subject/default` | `VariableID:4899:3` |
+| Image tint | none | none | — |
+
+**Complete CSS for Quiz Card hover:**
+```css
+.quiz-card {
+  position: relative;     /* required for ::after */
+  cursor: default;        /* Rule 21: cursor on card only, not pointer */
+}
+.quiz-card::after {
+  content: ''; position: absolute; inset: 0;
+  border-radius: var(--corner-radius-corner-2xl);
+  pointer-events: none; z-index: 1;
+  box-shadow: inset 0 0 0 1px var(--card-subject-color, var(--border-default));
+}
+.quiz-card__content {
+  /* ... */
+  box-shadow: inset 1px 0 0 0 var(--card-subject-subtle, transparent);
+}
+.quiz-card:hover {
+  background: var(--card-subject-subtle, var(--surface-general-default));
+}
+.quiz-card:hover::after {
+  box-shadow: inset 0 0 0 4px var(--card-subject-subtle-hover, var(--border-default));
+}
+.quiz-card:hover .quiz-card__content {
+  box-shadow: inset 1px 0 0 0 #ffffff;
+}
+.quiz-card:hover .pill-badge-sm {
+  background: var(--card-subject-subtle-hover);
+  color: var(--card-subject-color);
+}
+.quiz-card:hover .quiz-card__subtitle {
+  color: var(--card-subject-color);
+}
+```
+
+**Mistake made (2026-06-06):** Initially applied `box-shadow: inset` directly on `.quiz-card` — invisible because the image overlay (`position:absolute; inset:-1px`) covered it. Fixed by switching to `::after`.
+
+**See also:** Rule 235 (`::after` border pattern), Rule 21 (cursor on card vs button).
+
+---
+
+### 237. Quiz Card Texts frame — `justify-content: center` + Main Content gap = 0
+
+**Source:** `use_figma` on DS nodes `6658:117768` (Hover) and `2339:5346` (Default). Confirmed 2026-06-06.
+
+The `Texts` frame inside Quiz Card has `primaryAxisAlign: CENTER` in **both** default and hover states. This maps to `justify-content: center` in CSS. Without it, title + subtitle align at the top of their flex column, leaving empty space below.
+
+The `Main Content` frame (parent of `Texts` + button) has `itemSpacing: 0` — **not** `8px` or any spacing value. Gap between Texts and the button comes from the button's own `margin-top: auto` (flex push-to-bottom), not from gap.
+
+```css
+.quiz-card__texts {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;    /* DS: Texts frame primaryAxisAlign=CENTER */
+  /* no gap needed — title and subtitle are flex items that hug content */
+}
+
+.quiz-card__main {
+  display: flex;
+  flex-direction: column;
+  gap: 0;                     /* DS: Main Content frame itemSpacing=0 */
+  flex: 1;
+  min-height: 0;
+}
+```
+
+**Mistake made:** `gap: 8px` was applied to `.quiz-card__main` and `justify-content: flex-start` (default) on `.quiz-card__texts`. Result: texts were top-aligned with phantom gap between them and the button. Fixed after confirming DS values via `use_figma`.
+
+---
+
+### 238. Tertiary Card carousel — border is per-child, NOT a single outer frame border
+
+**Source:** `use_figma` inspection of DS Tertiary Card frame (`427320914`, Recent Activities). Confirmed 2026-06-06.
+
+The outer frame (`.recent-activities-frame`) has **no stroke**. The visible rounded border comes from each child element owning its own partial border. Never use a single `border: 1px solid` + `border-radius` + `overflow: hidden` on the outer container.
+
+**Confirmed DS stroke anatomy:**
+- **Side Button containers** (`left` and `right`): all 4 sides, `strokeAlign: INSIDE`, `strokeWeight: 1px`, `border-radius: 16px 0 0 16px` / `0 16px 16px 0`
+- **Content Placeholder SLOT** (center): `strokeWeights: {top: 1, right: 0, bottom: 1, left: 0}` — top + bottom borders only; no left or right border
+- **No stroke on the outer container at all**
+
+**CSS pattern:**
+```css
+.recent-activities-frame {
+  display: flex; flex-direction: row; align-items: stretch;
+  /* NO border, NO border-radius, NO overflow:hidden */
+}
+
+.recent-activities-slot {
+  flex: 1; min-width: 0;
+  background: var(--surface-general-default);
+  padding: var(--spacing-space-m);
+  overflow: hidden;
+  /* Top + bottom INSIDE strokes only: */
+  box-shadow:
+    inset 0 1px 0 0 var(--border-primary-default),
+    inset 0 -1px 0 0 var(--border-primary-default);
+}
+```
+
+Side buttons (`.side-btn--left` / `.side-btn--right`) carry the full `box-shadow: inset 0 0 0 1px` — this provides their left, top, bottom sides (left button) and right, top, bottom (right button). Combined with the content slot's top+bottom strokes, the result looks like one continuous rounded rectangular frame.
+
+**Why the single-outer-border approach fails:**
+1. Setting `border: 1px solid` on the outer container AND `box-shadow: inset` on side buttons creates double borders at the sides
+2. `overflow: hidden` on the outer container clips the side button border-radius, producing square corners instead of rounded ones
+3. DS-confirmed structure has no outer frame stroke — every border is internal to its child
+
+**Mistake made (2026-06-06):** Added `border: 1px solid; border-radius: 16px; overflow: hidden` to `.recent-activities-frame`, then had to suppress `box-shadow` on side buttons. The correct approach removes all styles from the outer frame and restores per-child borders.
+
+**See also:** Rule 42 (composite borders — carousel 1.5), Rule 60 (`strokeAlign: INSIDE` → `box-shadow: inset`), Rule 233 (Side Button confirmed specs, border-radius = 16px).
+
+---
+
+### Mandatory workflow — BEFORE every session, every design action, every change, every decision (updated 2026-06-06)
+
+> **Always before starting any design, making any changes, or making any decisions — refer to DS, zul.design.md, AND load related memory/skills first. No exceptions.**
+
+```
+□ 0a. Read design-md/zul.design.md       → ALL rules 1–238, confirmed specs, known mistakes
+□ 0b. Open DS: TLVKe3bgJTdVvuPAzgDq2f   → single source of truth — NOT memory, NOT docs, NOT prior notes
+□ 0c. Load related memory files          → check MEMORY.md index, load any relevant project/feedback memories
+□ 0d. Load related Figma skills          → /figma-use before use_figma; /figma-generate-design for page layouts
+□ 0e. get_design_context on COMPONENT SET → list ALL variant names before any CSS
+□ 0f. Confirm which variant the prototype follows (Rule 226) — ask designer if uncertain; never assume
+□ 0g. get_design_context on EACH state   → extract every token BEFORE writing CSS
+□ 0h. use_figma raw inspection           → confirm padding, strokeAlign, clipsContent, width, height, radius
+□ 0i. get_variable_defs on sub-nodes     → confirm Semantic token per fill/stroke/spacing
+□ 0j. Cross-check CSS var against :root  → never guess px from token name
+□ 0k. exportAsync for icons — confirm DS frame w/h → viewBox = `-1 -1 [w+2] [h+2]`
+□ 0l. Post-implementation QA — get_screenshot ONLY after coding; NEVER for spec extraction
+□ 0m. After any fix — grep BOTH html files and sync (Rule 184)
+□ 0n. DS variants may be added/changed between sessions — always list COMPONENT_SET children before building
+□ 0o. Prior rules can become obsolete — if a component was last audited > 3 days ago, re-audit live DS before implementing
+□ 0p. Multi-value box-shadow — any state override must re-declare ALL values (Rule 227); partial override silently drops rings
+□ 0q. Profile dropdown = CSS-only exception (Rule 228/98) — never add positionDropdown() to its IIFE
+□ 0r. position:fixed dropdowns → left-based formula: dropLeft = btnRect.right - dropW (Rule 229/99)
+□ 0s. Subject-specific colors — inject as inline style custom properties per card; never hardcode in stylesheet (Rule 234)
+□ 0t. Cards with image overlays — border must use ::after (Rule 235); direct box-shadow:inset is covered by image
+□ 0u. Tertiary Card carousel — per-child borders, NOT outer frame border (Rule 238)
+```
+
+**Every mistake in this project came from skipping Step 0.** Wrong colors, wrong states, wrong hover styles, wrong icon sizes, wrong padding, wrong border composition — all traceable to not reading zul.design.md, not loading memory/skills, and not auditing DS first.
+
+---
+
+*Generated: May 2026 | Last updated: 2026-06-06 (Rule 233 corrected — Side Button border-radius 24px → 16px; Rules 234–238 added — Subject variable collections, ::after border pattern, Quiz Card hover spec, Texts centering, Tertiary Card per-child border; workflow steps 0s/0t/0u added) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
