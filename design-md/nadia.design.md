@@ -3640,4 +3640,2175 @@ Any `<symbol>` element placed **after** `</defs></svg>` is outside the SVG docum
 
 ---
 
-*Last updated: 2026-06-04 | Session 23 — Cross-file audit: 7 files, 11 findings, all tokens DS-verified | Branch: staging*
+---
+
+## Session 24 — nadia_Quiz.html: new Quiz page from template (2026-06-04)
+
+### Mandatory pre-flight reminder (violated this session)
+
+**Step 0a was skipped** — nadia.design.md was not read before starting. As a direct consequence, the `data-active-nav` pattern from Session 23 was missed and the active nav was implemented incorrectly. Every session must open nadia.design.md and DS before touching any file.
+
+---
+
+### Page creation: new file from `zul.page.template.html`
+
+**File:** `Nadia.test.git/Quiz/nadia_Quiz.html`
+**Image assets:** `src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/[subject].png`
+
+**Process:**
+1. `cp zul.test.git/zul.page.template.html Nadia.test.git/Quiz/nadia_Quiz.html`
+2. Fix all `../src/image-repo/` → `../../src/image-repo/` (file is 2 levels deep, template is 1)
+3. Change `<title>` to page name
+4. Add page-specific CSS before `</style>`
+5. Replace `<section id="PageViewport">` placeholder with real content sections
+6. Set active nav on all 4 locations (see below)
+
+**Path depth rule:** Count directory levels from repo root to HTML file. Template at `zul.test.git/` = 1 level → `../src/`. A file at `Nadia.test.git/Quiz/` = 2 levels → `../../src/`. Wrong depth = broken nav logos and Learn menu icons.
+
+---
+
+### Active nav: Quiz page uses hardcoded `is-active` — should be `data-active-nav`
+
+The quiz page was built with direct `is-active` HTML injection and `querySelector` patching instead of the `data-active-nav` pattern established in Session 23. **This is a known deviation.**
+
+**What was done (current state):**
+- `is-active` + `aria-current="page"` hardcoded on the Quiz `nav-menu-btn` (desktop), `nav-menu-item` (tablet + mobile), and `navbar-bottom__btn`
+- `restoreHome()` patched to `querySelector('[aria-label="Quiz"]')` instead of `'[aria-label="Home"]'`
+
+**What should have been done (correct pattern):**
+- `<body data-active-nav="Quiz">` + generic JS `restoreCurrentPage()` that reads the body attribute
+
+**Action needed:** Retrofit `data-active-nav="Quiz"` on body + generalise the restore function in a future session.
+
+**Updated `data-active-nav` table:**
+
+| File | `data-active-nav` | `restoreHome` target | Status |
+|---|---|---|---|
+| `nadia_Rewards-CoinQuest.html` | `"Rewards"` | generic | ✅ |
+| `nadia_Rewards-evoucher.html` | `"Rewards"` | generic | ✅ |
+| `nadia_Rewards-Merchandise.html` | `"Rewards"` | generic | ✅ |
+| `nadia_Rewards-Myrewards.html` | — | `restoreCurrentPage()` | ⚠️ older pattern |
+| `nadia_Practise-subject.html` | — | `restoreCurrentPage()` | ⚠️ older pattern |
+| `nadia_Class-MyClasses.html` | — | hardcodes Home | ❌ bug |
+| `nadia_Class-BrowseClasses.html` | — | hardcodes Home | ❌ bug |
+| `nadia_Quiz.html` | — | hardcodes Quiz | ⚠️ deviation |
+
+---
+
+### Status Badge - 1.5 Size=M (32px) — confirmed CSS spec
+
+**DS node:** 3420:87102 (4 × Status Badge row: Score / Coins / Score / Lives)
+
+```css
+.status-badge-m {
+  height: 32px; max-height: 32px;
+  border: 1px solid;
+  border-radius: 40.5px;
+  padding: 4px 2px 4px 4px;          /* t r b l */
+  display: flex; flex-direction: column; align-items: flex-start; flex-shrink: 0;
+}
+.status-badge-m--score  { background: #00cc85; border-color: #00a36a; width: 84px; }
+.status-badge-m--score2 { background: #00cc85; border-color: #00a36a; width: 89px; }
+.status-badge-m--coins  { background: #fece00; border-color: #cba500; width: 89px; }
+.status-badge-m--lives  { background: #ff5c98; border-color: #cc4a7a; width: 89px; }
+
+.status-badge-m__content { display: flex; flex: 1 0 0; align-items: center; gap: 4px; padding-left: 8px; padding-right: 2px; }
+.status-badge-m__value   { font-size: 14px; font-weight: 600; line-height: 20px; color: #ffffff; white-space: nowrap; }
+/* Coins text stroke (Rule 22 — strokeAlign:OUTSIDE → 2px) */
+.status-badge-m--coins .status-badge-m__value { -webkit-text-stroke: 2px #cba500; paint-order: stroke fill; }
+
+.status-badge-m__icon { width: 24px; height: 24px; background: white; border-radius: 999px; padding: 4px 2px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.status-badge-m__icon svg { height: 16px; width: auto; }
+```
+
+**Icon symbols used:** `ic-status-trophy` (Score), `ic-status-coin` (Coins), `ic-status-lives` (Lives) — all already in template defs.
+
+**Realistic placeholder values:** Score `8,240` · Coins `1,350` · Score `3,120` · Lives `3`
+
+---
+
+### Primary Card - 1.5 node 4642:70723 — NO white inner box
+
+This specific Primary Card instance differs from the home screen's `#YourSelectedSubjects-Desktop` variant:
+- **No** white Content Placeholder background
+- **No** `box-shadow: inset` inner border
+- **No** `.primary-card__content` wrapper needed
+- Quiz cards sit **directly on the mint green** outer card background
+
+The green outer card IS node 4642:70723 itself — stripping `class="section-frame"` from the section reveals the quiz cards grid with no wrapper needed. Correct structure:
+
+```html
+<section id="YourSelectedSubjects-Desktop" aria-label="Your Selected Subjects">
+  <div class="quiz-cards-grid"> <!-- flex-wrap, gap 16px, no background -->
+    <article class="quiz-card subject-[name]"> … </article>
+    …
+  </div>
+</section>
+```
+
+**Confirmed quiz-cards-grid CSS:**
+```css
+.quiz-cards-grid { display: flex; flex-wrap: wrap; gap: var(--spacing-space-m); width: 100%; align-content: flex-start; }
+```
+
+---
+
+### Figma MCP asset URL blank images — detection and fix
+
+**Problem:** `curl` downloads from `https://www.figma.com/api/mcp/asset/<UUID>` can return valid PNG files that are **fully transparent** — correct header, correct dimensions, 0 visible pixels.
+
+**Detection:**
+- Any 500×500 PNG under ~3K is likely blank (genuine illustrations are 15K–134K)
+- Any `<2K` file for an image fill slot = definitely blank
+
+**Economy and RBT were affected** — both returned 1.1K blank 500×500 PNGs regardless of how many times re-downloaded.
+
+**Fix:** Use `use_figma` + `exportAsync` directly on the image **frame** node:
+```js
+const card = figma.getNodeById('4642:70707');  // economy quiz card node
+const imageFrame = card.children[0];           // "image" frame child (index 0)
+const bytes = await imageFrame.exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 1 } });
+const b64 = btoa(String.fromCharCode(...bytes));
+```
+
+This exports the frame with its image fill, bypassing the broken MCP asset URL. Result: 9.4K (economy) and 5K (rbt) at 148×148px — the exact card dimensions.
+
+**Rule: Always verify image size after any Figma MCP asset URL download.** If the file is <3K for what should be an illustration, re-export via `use_figma exportAsync` on the image frame node directly.
+
+---
+
+### Quiz card image column — 148×148, not 128×128
+
+DS shows `aspect-[128/128]` on the image frame with `self-stretch`. Since quiz cards are `min-h-[148px] max-h-[148px]`, the image frame stretches to 148px height. With 1:1 aspect ratio, width = height = **148px**.
+
+CSS:
+```css
+.quiz-card__image {
+  width: 148px; min-width: 148px; flex-shrink: 0; align-self: stretch;
+  background-size: cover; background-position: center; background-repeat: no-repeat;
+}
+```
+
+---
+
+### Quiz page — image assets confirmed
+
+All 18 subject illustrations stored at `src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/`:
+
+| # | Subject | File | Size |
+|---|---|---|---|
+| 1 | Add Math | `add-math.png` | 4.7K |
+| 2 | Biology | `biology.png` | 31K |
+| 3 | Economy | `economy.png` | 29K (user-provided) |
+| 4 | Chemistry | `chemistry.png` | 18K |
+| 5 | English | `english.png` | 16K |
+| 6 | Moral Studies | `moral.png` | 126K |
+| 7 | Islamic Studies | `islamic.png` | 35K |
+| 8 | Mathematics | `math.png` | 4.3K |
+| 9 | Accounting | `account.png` | 17K |
+| 10 | Physics | `physics.png` | 81K |
+| 11 | Business Studies | `business.png` | 80K |
+| 12 | Computer Science | `comp-science.png` | 2.0K |
+| 13 | Science | `science.png` | 35K |
+| 14 | History | `history.png` | 20K |
+| 15 | KAFA | `kafa.png` | 133K (background-size: contain) |
+| 16 | Geography | `geography.png` | 134K |
+| 17 | RBT | `rbt.png` | 16K (user-provided) |
+| 18 | Bahasa Melayu | `bm.png` | 8.0K |
+
+**Subtitles** — sourced from `zul.home.screen.html` quiz cards, matched by subject order.
+
+---
+
+---
+
+## Session 25 — Rewards pages: card title alignment, SVG color inheritance, badge cleanup
+
+---
+
+### Rule N-R1. Card title clamping + `min-height` — required for grid alignment
+
+When a card grid has variable-length titles, the divider line and CTA button below the title will sit at different vertical positions across cards unless the title box has a **fixed height**.
+
+**Pattern:**
+```css
+.card__title {
+  font-size: 14px; font-weight: 600; line-height: 20px;
+  overflow: hidden;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  min-height: 60px;   /* 3 lines × 20px line-height */
+}
+```
+
+**Formula:** `min-height = clamp-lines × line-height`
+
+- 3-line clamp at 20px lh → `min-height: 60px`
+- 2-line clamp at 20px lh → `min-height: 40px`
+
+**Rule:** Always pair `-webkit-line-clamp: N` with `min-height: N × line-height`. Without `min-height`, a card with a one-line title will have its divider and button floating up — misaligned with adjacent cards that have 2–3 lines.
+
+**Applied to (2026-06-04):**
+- `nadia_Rewards-Myrewards.html` — `.mr-card__title` (clamp 3, min-height 60px)
+- `nadia_Rewards-Merchandise.html` — `.rc__title` (clamp 3, min-height 60px)
+- `nadia_Rewards-evoucher.html` — `.rc__title` (clamp 3, min-height 60px)
+
+---
+
+### Rule N-R2. `<a>` elements inherit browser blue into `stroke="currentColor"` — always set explicit `color` on the icon container
+
+SVG `<symbol>` paths use `stroke="currentColor"`, which resolves to the inherited CSS `color` property. When an SVG is nested inside an `<a href>` element, the browser's default link color (blue) cascades in unless an explicit `color:` is set on the icon container.
+
+**Symptom:** Arrow chevron inside a button `<a>` appears blue despite the button having a green background.
+
+**Fix:** Add `color: var(--token)` to the element that wraps the `<svg>` — the icon container, not the `<a>` itself or the SVG.
+
+```css
+/* Wrong — no explicit color, inherits blue from <a> */
+.btn__arrow { background: #99ebce; }
+
+/* Correct — explicit color on the container, currentColor resolves correctly */
+.btn__arrow { background: #99ebce; color: var(--border-primary-focus); }
+```
+
+**DS-confirmed chevron color for Primary/S button default state:** `#00a36a` = `var(--border-primary-focus)` (from arrow sub-node, confirmed Rule 19).
+
+**Rule:** Every icon container (`__arrow`, `__icon-wrap`, `__icon-clip`) that holds an `<svg><use>` must have an explicit `color:` CSS property. Never assume `currentColor` will resolve to the right value through inheritance — links and buttons carry different browser defaults.
+
+**Applied (2026-06-04):** `.btn-voucher__arrow { color: var(--border-primary-focus) }` in `nadia_Rewards-Myrewards.html`.
+
+---
+
+### Rule N-R3. Badge icons — only render what DS shows; use `sed` for bulk removal
+
+Before implementing any icon inside a badge component, verify via `get_design_context` on the actual DS badge node that the icon is `visible: true`. Never add icon markup speculatively.
+
+When removing icons from badges across multiple files:
+1. Use `sed -i` with exact pattern matching — one pass, all instances
+2. Verify with `grep` that no instance of the icon selector remains in badge HTML (symbol definitions and CSS rules are exempt)
+3. Leave dead CSS rules as-is (harmless) or remove them — do not leave them silently failing
+
+**Pattern for bulk icon removal:**
+```bash
+# Remove icon span from badge markup (Myrewards pattern)
+sed -i '' 's|<span class="badge__icon">...</span>||g' file.html
+
+# Remove inline SVG from badge (Merchandise/eVoucher pattern)
+sed -i '' 's|<svg aria-hidden="true"><use href="#ic-*"/></svg>||g' file.html
+
+# Verify — must return empty (excluding symbol/CSS lines)
+grep -n "ic-video" file.html | grep -v "symbol\|comment\|Outline/"
+```
+
+**Applied (2026-06-04):** Removed `ic-video` icon from all Premium and Premium Lite badges in Myrewards, Merchandise, and eVoucher pages.
+
+---
+
+### Rule N-R4. Content label consistency — sidebar nav labels must match the page title exactly
+
+The active sidebar button label, the `<title>` tag, the breadcrumb, and the page heading must all use the **same string**. A mismatch is always a typo — never a design decision.
+
+**Verification pattern before committing any Rewards page:**
+```bash
+grep -n "bc-link--current\|sidebar-btn--active\|<title>" file.html
+# All three must show the identical page name
+```
+
+**Confirmed typo (2026-06-04):** `nadia_Rewards-Myrewards.html` sidebar button had `My Reward` (missing 's'). Page title, breadcrumb, and `aria-label` all correctly said `My Rewards`. Fixed at line 3213.
+
+---
+
+## Session 26 — Coin Quest: description text, breadcrumb chevron fix, button state color drift, sidebar token sync
+
+---
+
+### Rule N-R5. Inline SVG separator chevrons → always `<use href>` + CSS `color:`, never `stroke:` presentation attribute
+
+When a chevron icon is used as a visual separator (e.g. breadcrumb `›`), it must follow the same symbol pattern as all other icons — `<use href="#ic-*">` — not an inline `<polyline>` or `<path>`.
+
+**Why inline breaks:** An inline `<polyline>` with CSS `stroke:` is a presentation attribute on the SVG element itself. It's fragile — any edit to surrounding CSS that changes specificity or inheritance can override or drop it silently. The `stroke:` property set via CSS on an SVG element doesn't cascade the same way `color:` does.
+
+**Why `color:` not `stroke:`:** The symbol system uses `stroke="currentColor"`. `currentColor` resolves from the CSS `color` property, not `stroke`. So the CSS control rule must be `color:`, not `stroke:`.
+
+```html
+<!-- Wrong — inline polyline, brittle color -->
+<svg class="bc-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+
+<!-- Correct — symbol reference, color via CSS -->
+<svg class="bc-chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+```
+
+```css
+/* Wrong — stroke: on a currentColor symbol has no effect */
+.bc-chevron { stroke: #bfbfbf; fill: none; stroke-width: 1.5; }
+
+/* Correct — color: drives currentColor in the symbol */
+.bc-chevron { width: 16px; height: 16px; color: #bfbfbf; flex-shrink: 0; }
+```
+
+**Applied (2026-06-04):** `nadia_Rewards-CoinQuest.html` breadcrumb separator chevron, line 3328 → `<use href="#ic-chevron-right"/>`, CSS updated to `color: #bfbfbf`.
+
+---
+
+### Rule N-R6. Button arrow `color:` must be declared for ALL interactive states — never only for disabled
+
+`stroke="currentColor"` in a symbol resolves from the nearest CSS `color:` in the ancestor chain. When `color:` is missing for a state (default, hover, pressed), the chevron inherits whatever `color` happens to be on a parent — which drifts whenever surrounding styles change.
+
+**The pattern that drifts:** Only disabled state has `color:` declared → default/hover/pressed states inherit unpredictably → chevron colour changes whenever you edit other CSS.
+
+**Required CSS — explicit `color:` on the arrow container for every state:**
+
+```css
+/* Default */
+.btn__arrow { background: #99ebce; color: #00a36a; }
+
+/* Hover */
+.btn:hover .btn__arrow { background: #e8fbe8; color: #70bc6f; }
+
+/* Pressed */
+.btn:active .btn__arrow,
+.btn.is-pressing .btn__arrow { background: #00cc85; color: #00564c; }
+
+/* Disabled */
+.btn--disabled .btn__arrow { background: #f2f2f2; color: #bfbfbf; }
+```
+
+**DS-confirmed chevron colors for Primary button (all sizes — Rule 19):**
+
+| State | Arrow bg | Chevron `color` |
+|---|---|---|
+| Default | `#99ebce` | `#00a36a` |
+| Hover | `#e8fbe8` | `#70bc6f` |
+| Pressed | `#00cc85` | `#00564c` |
+| Disabled | `#f2f2f2` | `#bfbfbf` |
+
+**See also:** Rule N-R2 (`<a>` elements inherit browser blue) — same root cause, different trigger. Rule N-R6 is the general case: any icon container that wraps `<use href>` needs `color:` pinned at every state.
+
+**Applied (2026-06-04):** `nadia_Rewards-CoinQuest.html` — `.btn-claim__arrow` now has explicit `color:` for default (`#00a36a`), hover (`#70bc6f`), and pressed (`#00564c`) states.
+
+---
+
+### Rule N-R7. Sidebar CSS — always use full DS token names; never shorthand aliases or hardcoded hex
+
+All shared component CSS (sidebar, breadcrumb, main panel) must use full DS variable names. Shorthand aliases (`--og-500`, `--sp-m`, `--r-4xl`) are convenience shortcuts that drift from the canonical token names and cause cross-file inconsistency.
+
+**Mapping — shorthand aliases → canonical DS token names:**
+
+| Shorthand (old) | Canonical DS token | Value |
+|---|---|---|
+| `--og-500` | `--border-primary-default` | `#00cc85` |
+| `--og-600` | `--border-primary-focus` | `#00a36a` |
+| `--sp-m` | `--spacing-space-m` | `16px` |
+| `--sp-xs` | `--spacing-space-xs` | `8px` |
+| `--r-4xl` | `--corner-radius-corner-4xl` | `24px` |
+| `border-radius: 24px` | `var(--corner-radius-corner-4xl)` | `24px` |
+| `color: #00cc85` (active) | `color: var(--text-primary-default)` | |
+| `color: #00a36a` (active icon/label) | `color: var(--border-primary-focus)` | |
+| `border-color: #00cc85` (hover) | `border-color: var(--border-primary-default)` | |
+| `border-color: #00a36a` (active) | `border-color: var(--border-primary-focus)` | |
+
+**Rule:** When syncing a sidebar across Rewards pages, the newest file is the reference. Update the older files to use canonical token names. All values remain identical — this is token hygiene, not a visual change.
+
+**Sync order (confirmed 2026-06-04):** Myrewards (canonical) → CoinQuest (synced). Merchandise and eVoucher still use shorthand — to be synced in a future session.
+
+**Applied (2026-06-04):** `nadia_Rewards-CoinQuest.html` — all sidebar CSS updated from shorthand aliases to canonical DS token names.
+
+---
+
+### Rule N-R8. Page section description — `<p class="*-desc">` before the content grid
+
+When a page section needs a subtitle or instructional line below the header/breadcrumb row and above the card grid, use a `<p>` element with a scoped class (e.g. `.quest-desc`, `.mr-desc`). Place it as the first child of the main panel, before the grid.
+
+**DS token for body description text:** `Body/B1` — 14px Regular, `color: var(--text-default-body)` (`#666666`).
+
+```html
+<main class="rewards-main">
+  <p class="quest-desc">Complete tasks and earn coins — Psst, coins can also be earned from completing quizzes 😎</p>
+  <div class="quest-grid">...</div>
+</main>
+```
+
+```css
+.quest-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size:   14px;
+  font-weight: 400;
+  line-height: 20px;
+  color:       var(--text-default-body);
+  margin:      0;
+}
+```
+
+The `<p>` sits inside the flex column of `.rewards-main` which already has `gap: var(--spacing-space-xs)` (8px) — no extra margin needed.
+
+**Applied (2026-06-04):** `nadia_Rewards-CoinQuest.html` — description added above `.quest-grid`.
+
+---
+
+### Mandatory pre-flight — BEFORE every task, change, or decision (Session 26 reinforcement)
+
+> **User instruction (2026-06-04):** "always before starts any design, or making any changes and decisions, please refer to DS & nadia.design.md"
+
+This is non-negotiable. Every session, every task, every fix — no exceptions.
+
+```
+□ Step 1 — Read design-md/nadia.design.md    → ALL rules N-1 through N-R8+, known deviations
+□ Step 2 — Fetch DS live: TLVKe3bgJTdVvuPAzgDq2f
+                                              → token values, component structure, visible states
+□ Step 3 — Only then write HTML, CSS, or document any value
+```
+
+**What "before" means:**
+- Before writing a single CSS rule → pre-flight first
+- Before fixing a typo → pre-flight first
+- Before bulk-editing across files → pre-flight first; confirm scope per `feedback_file_scope.md`
+- Before removing or adding any icon, badge, or component child → verify DS `visible:` first
+- Before syncing a component across files → confirm which file is canonical (newest/most updated)
+
+**Past violations and consequences:**
+- Session 24: skipped nadia.design.md → used wrong `data-active-nav` pattern
+- Session 25: SVG chevron appeared blue → missing `color:` on arrow container (Rule N-R2/N-R6)
+- Session 25: typo "My Reward" survived multiple sessions → label consistency (Rule N-R4)
+- Session 26: breadcrumb chevron used inline `<polyline>` + CSS `stroke:` → drifted on edits (Rule N-R5)
+- Session 26: button arrow missing `color:` for default/hover/pressed → chevron color unpredictable (Rule N-R6)
+
+---
+
+### N-R9. Runtime nav injection — fetch zul.page.template.html instead of hardcoding Zul's nav
+
+All Nadia pages pull navbar, menubar, footer, and bottom nav from `zul.test.git/zul.page.template.html` at runtime via `fetch()`. **Never copy-paste Zul's nav HTML directly into a Nadia page again.**
+
+#### Pattern (all Nadia pages — confirmed 2026-06-04)
+
+```html
+<!-- Placeholders — keep existing IDs if present, otherwise use these -->
+<section id="Navigation-Shell"></section>   <!-- navbar + menubar + mobile nav -->
+...page main content...
+<footer class="footer" id="zul-footer"></footer>
+<div id="zul-nav-bottom"></div>             <!-- NavBar-Bottom + mobile-overlay + NavMenu-Mobile -->
+
+<script>
+(function () {
+  var TPL = '../../zul.test.git/zul.page.template.html';  /* adjust depth as needed */
+
+  fetch(TPL)
+    .then(function (r) { return r.text(); })
+    .then(function (html) {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(html, 'text/html');
+
+      function fixPaths(html) {
+        /* Depth fix — see Rule N-R9b */
+        return html.replace(/src="\.\.\/src\//g, 'src="../../src/');
+      }
+
+      /* 1. Nav shell */
+      var srcShell = doc.getElementById('Navigation-Shell');
+      var dstShell = document.getElementById('Navigation-Shell');
+      if (srcShell && dstShell) dstShell.innerHTML = fixPaths(srcShell.innerHTML);
+
+      /* 2. Footer */
+      var srcFooter = doc.querySelector('footer.footer');
+      var dstFooter = document.getElementById('zul-footer');
+      if (srcFooter && dstFooter) dstFooter.innerHTML = srcFooter.innerHTML;
+
+      /* 3. Bottom nav */
+      var bottom = document.getElementById('zul-nav-bottom');
+      if (bottom) {
+        ['NavBar-Bottom', 'mobile-overlay', 'NavMenu-Mobile'].forEach(function (id) {
+          var el = doc.getElementById(id);
+          if (el) { el.innerHTML = fixPaths(el.innerHTML); bottom.appendChild(document.adoptNode(el)); }
+        });
+      }
+
+      /* 4. Execute template scripts */
+      Array.prototype.forEach.call(doc.querySelectorAll('script'), function (s) {
+        if (s.src) return;
+        var ns = document.createElement('script');
+        ns.textContent = s.textContent;
+        document.body.appendChild(ns);
+      });
+
+      /* 5. Set active nav button — clear hardcoded Home first */
+      document.querySelectorAll('#NavTopMenu-Desktop .nav-menu-btn').forEach(function (b) {
+        b.classList.remove('is-active');
+      });
+      var btn = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="CLASS_OR_QUIZ_ETC"]');
+      if (btn) btn.classList.add('is-active');
+    })
+    .catch(function (err) { console.error('[nav-inject] Failed:', err); });
+})();
+</script>
+```
+
+#### N-R9a. Template path by directory depth
+
+| File location | Path to template |
+|---|---|
+| `Nadia.test.git/Class/` | `../../zul.test.git/zul.page.template.html` |
+| `Nadia.test.git/Practise/` | `../../zul.test.git/zul.page.template.html` |
+| `Nadia.test.git/Quiz/` | `../../zul.test.git/zul.page.template.html` |
+| `Nadia.test.git/Rewards/` | `../../zul.test.git/zul.page.template.html` |
+
+All Nadia pages are exactly 2 directories deep from `pandai.design/` root — path is always `../../zul.test.git/zul.page.template.html`.
+
+#### N-R9b. Image path fix — always apply `fixPaths()` before setting innerHTML
+
+The template lives at `zul.test.git/` (depth 1). Its image `src` attributes use `../src/image-repo/...` to reach `pandai.design/src/`.
+
+Nadia pages live at `Nadia.test.git/[subfolder]/` (depth 2). When the template HTML is injected via `innerHTML`, the browser resolves `src` paths relative to the **current page**, not the template. `../src/` from depth 2 resolves to `Nadia.test.git/src/` — wrong.
+
+**Fix:** `src="../src/` → `src="../../src/` via `fixPaths()` applied to `srcShell.innerHTML` and each bottom nav element's `innerHTML` before injection.
+
+**Apply `fixPaths()` to:** Navigation-Shell innerHTML, each bottom nav element innerHTML. **Do NOT apply to:** footer (footer has no image assets).
+
+#### N-R9c. Template hardcodes `is-active` on Home
+
+`zul.page.template.html` line 2660 has Home button with `class="nav-menu-btn is-active"` hardcoded. After injection, Home is always active unless explicitly cleared.
+
+**Rule:** Always run step 5 — clear all `.nav-menu-btn.is-active` then set the correct page's button. Never skip the clear step.
+
+**Active nav mapping (confirmed 2026-06-04):**
+
+| Page | Active button `aria-label` |
+|---|---|
+| `nadia_Class-MyClasses.html` | `"Class"` |
+| `nadia_Class-BrowseClasses.html` | `"Class"` |
+| `nadia_Practise-subject.html` | `"Practice"` |
+| `nadia_Flashcard.html` | `"Practice"` |
+| `nadia_Quiz.html` | `"Quiz"` |
+| `nadia_Rewards-*.html` (all 5) | `"Rewards"` |
+
+#### N-R9d. Page-specific scripts — always scan before removing any script block
+
+Some Nadia pages have scripts between the main nav script and `</body>` that are **page-specific** and must be kept. Always grep-check before stripping any script block.
+
+**Pattern to scan:**
+```bash
+grep -n "^  <script>" file.html   # find all script start lines
+# For each block, check its first non-blank line — is it Zul's or Nadia's?
+```
+
+**Zul's scripts (always remove):**
+- `// Search bar — btn click` — nav search handler
+- `(function () { var accountBtn` — mobile menu IIFE
+- `(function () { var btn  = document.getElementById('maximize-btn')` — maximize IIFE
+
+**Page-specific scripts (always keep, move to before fetch script):**
+- `try { document.querySelectorAll('.sidebar-btn')` — sidebar tab toggle (all Rewards pages)
+- `/* ── randomizeContent` — dynamic content population (`nadia_Rewards-avatar.html`)
+- `// Sidebar active state toggle` — `nadia_Rewards-Myrewards.html` has this between nav script and NavMenu-Mobile
+
+**Mistake made (2026-06-04):** Nearly stripped sidebar and randomizeContent scripts alongside Zul's nav scripts. Caught by checking script content before deletion.
+
+---
+
+---
+
+## Session 28 — Rewards pages: card title clamp, badge icon removal, realistic data, sidebar sync, balance fix
+
+---
+
+### Rule N-R10. Card title text — always 3-line clamp + matching `min-height`
+
+All voucher/reward card titles must use 3-line clamp with a fixed `min-height` so the divider and CTA button stay vertically aligned across cards regardless of title length.
+
+```css
+.rc__title {
+  font-size: 14px; font-weight: 600; line-height: 20px; color: #404040;
+  overflow: hidden; text-overflow: ellipsis;
+  display: -webkit-box; -webkit-line-clamp: 3; min-height: 60px; -webkit-box-orient: vertical;
+}
+```
+
+**Formula:** `min-height = clamp-lines × line-height` → 3 × 20px = **60px**.
+
+This is the same principle as Rule N-R1 (quiz card title clamp). Apply to every card grid component — `rc__title`, `mr-card__title`, `rc__title` — whenever a card title can vary in length.
+
+**Applied (2026-06-04):** `nadia_Rewards-evoucher.html` and `nadia_Rewards-Merchandise.html` — changed from 2-line clamp to 3-line + `min-height: 60px`.
+
+---
+
+### Rule N-R11. Prototype data realism — use varied, realistic values; never leave placeholder text
+
+Every prototype card, list, or data display must use realistic content. Placeholder text (`"This is the title for the reward voucher"`) and uniform values (`120` coins on every card) make the prototype unreadable as a design review artefact.
+
+**Realism checklist before committing any data change:**
+
+| Field | Bad | Good |
+|---|---|---|
+| Card titles | "This is the title for the reward voucher" | "Free Drinks Voucher (Medium Size)", "10% Off Electronics Voucher" |
+| Coin amounts | All same (120) | Varied by value tier: 50, 80, 100, 120, 150, 200, 300, 500 |
+| Coin balance | 10,000 | 500 (believable student balance) |
+| Quest progress | All `0/2 Achieved` | Mix of 0/2, 1/2, 2/2, 1/1, 3/3 |
+| Progress bars | All `width:0%` | Match the progress fraction (1/2 → 50%, 2/2 → 100%) |
+
+**Coin balance rule:** Student coin balance must be **500**, not 10,000. 10,000 is unrealistically high and breaks the sense of value for rewards that cost 50–500 coins. This applies to `sidebar-balance__value` and `bc-coin-mobile__value` in all Rewards pages.
+
+**Progress bar rule:** `style="width:X%"` must always match the `qc__status` fraction. `1/2 Achieved` → `width:50%`. `2/2 Achieved` → `width:100%`. Never leave all bars at `0%` when some tasks are partially or fully done.
+
+**Claim button rule:** A task at `N/N Achieved` must have an **active** (non-disabled) Claim button. A task at `0/N` or partial must be `btn-claim--disabled`.
+
+**Applied (2026-06-04):**
+- `nadia_Rewards-evoucher.html` — 8 unique titles (Free Drinks Voucher → Sports Gear Discount), coin values 50–250
+- `nadia_Rewards-Merchandise.html` — 4 unique merchandise titles, coin values 150–500
+- `nadia_Rewards-CoinQuest.html` — progress varied: 2/2✓, 1/2, 0/2, 1/1✓, 0/2, 2/2✓, 3/3✓, 1/2; bars match; Read an Article upgraded to active Claim
+- All 3 files — coin balance 10,000 → **500**
+
+---
+
+### Rule N-R12. Badge icon removal — remove `gap` and dead CSS when icon is stripped
+
+When an icon is removed from a badge component (`<svg>` deleted from `<span class="lbadge-prem">`), also clean up:
+
+1. **`gap: Xpx` on the badge** — gap between icon and label no longer needed; remove it
+2. **Dead `.lbadge-prem svg { ... }` CSS rule** — references an element that no longer exists; remove it
+
+Leaving these causes phantom spacing on the left of the label text.
+
+```css
+/* Before icon removal */
+.lbadge-prem { display: inline-flex; align-items: center; gap: 4px; ... }
+.lbadge-prem svg { width: 10px; height: 10px; flex-shrink: 0; }
+
+/* After icon removal — gap and svg rule gone */
+.lbadge-prem { display: inline-flex; align-items: center; ... }
+```
+
+**Applied (2026-06-04):** `nadia_Rewards-evoucher.html` and `nadia_Rewards-Merchandise.html` — `ic-video` svg removed from all `.lbadge-prem` spans, `gap: 4px` removed, `.lbadge-prem svg` rule deleted.
+
+---
+
+### Rule N-R13. Cross-file data sync — when changing shared data, apply to ALL files in the same commit
+
+Any value that appears identically across multiple Rewards pages (coin balance, button labels, sidebar typos) must be updated in all files at once. Never update one file and leave others stale.
+
+**Pattern:**
+```bash
+for f in nadia_Rewards-CoinQuest nadia_Rewards-evoucher nadia_Rewards-Merchandise; do
+  sed -i '' 's/>10,000</>500</g' "Nadia.test.git/Rewards/$f.html"
+done
+```
+
+**Verify with grep after every bulk change** — confirm the old value no longer exists and the new value is correct:
+```bash
+grep -n "10,000\|sidebar-balance__value" file.html
+```
+
+**Applies to:** coin balance, label typos (Rule N-R4), sidebar token names (Rule N-R7), any value that appears on 3+ pages.
+
+---
+
+### Mandatory pre-flight — BEFORE every task, change, or decision (Session 28 reinforcement)
+
+> **User instruction (reinforced 2026-06-04):** "always before starts any design, or making any changes and decisions, please refer to DS & nadia.design.md"
+
+This is non-negotiable. Every session, every task, every fix — no exceptions.
+
+```
+□ Step 1 — Read design-md/nadia.design.md    → ALL rules N-1 through N-R13+, known deviations
+□ Step 2 — Fetch DS live: TLVKe3bgJTdVvuPAzgDq2f → token values, component structure, visible states
+□ Step 3 — Only then write HTML, CSS, or document any value
+```
+
+**What "before" means:**
+- Before writing a single CSS rule → pre-flight first
+- Before fixing a typo → pre-flight first
+- Before bulk-editing across files → pre-flight first; confirm scope per `feedback_file_scope.md`
+- Before changing any data value → check if the same value exists in other files (Rule N-R13)
+- Before removing any icon or badge element → verify DS `visible:` + clean up dependent CSS (Rule N-R12)
+
+**Past violations and consequences:**
+- Session 24: skipped nadia.design.md → wrong `data-active-nav` pattern
+- Session 25: SVG chevron blue → missing `color:` on arrow (Rule N-R2/N-R6)
+- Session 25: "My Reward" typo survived multiple sessions (Rule N-R4)
+- Session 26: breadcrumb chevron inline `<polyline>` + `stroke:` → drifted (Rule N-R5)
+- Session 26: button arrow missing `color:` per state (Rule N-R6)
+- Session 28: balance 10,000 unrealistic → must be 500 (Rule N-R11); all card titles were placeholders (Rule N-R11); all progress bars at 0% despite varied status (Rule N-R11)
+- Session 29 (2026-06-05): 8 of 14 components in `nadia_Class-MyClasses.html` used wrong token categories (surface tokens on text/icon/border elements). Always audit before implementing (Rule N-C4).
+
+---
+
+### Rule N-C1. Semantic token category must match usage context — same hex ≠ same token
+
+Even when two tokens share the same hex value, always use the token whose **name matches the usage context**. Using the wrong category is a DS violation even if the visual output is identical today — a future theme or DS update will break it silently.
+
+| Usage | Correct token category | Wrong (common mistake) |
+|---|---|---|
+| Background / fill | `--surface-*` | any other category |
+| CSS `border` / `box-shadow` ring | `--border-*` | `--surface-*` |
+| CSS `color:` on text elements | `--text-*` | `--surface-*` |
+| CSS `color:` on icon containers | `--icon-*` | `--surface-*`, `--text-*` |
+| CSS `gap`, `padding`, `margin` | `--spacing-*` | raw `px` |
+
+**Confirmed violations fixed in `nadia_Class-MyClasses.html` (Session 29):**
+- `.cc { border: 1px solid var(--surface-primary-default) }` → `var(--border-primary-default)`
+- `.cc__inner { border: 1px solid var(--surface-primary-default) }` → `var(--border-primary-default)`
+- `.live-badge { border: 1px solid var(--surface-primary-default) }` → `var(--border-primary-default)`
+- `.live-badge { color: var(--surface-primary-default) }` → `var(--text-primary-default)`
+- `.live-badge svg { color: var(--surface-primary-default) }` → `var(--icon-primary-default)`
+- `.cc__premium { color: var(--surface-primary-default) }` → `var(--text-primary-default)`
+- `.bc-link { color: var(--surface-primary-default) }` → `var(--text-primary-default)`
+- All subject `.ds-avatar svg { stroke: #hex }` → `color: var(--subjects-*-default)` (see Rule N-C2)
+
+**Root cause:** copy-pasting a `--surface-primary-default` value from a background rule into a text/border/icon context without thinking about category. Always stop and ask: "Is this element a fill, a border, text, or an icon?"
+
+---
+
+### Rule N-C2. Subject palette — always use `:root` CSS vars, never hardcode subject hex
+
+Every subject color is defined in `:root` as `--subjects-[subject]-default`. All subject-specific card palette rules (border, header bg, avatar border, avatar icon) must reference these vars.
+
+**Available vars (confirmed DS, all pages):**
+```css
+--subjects-b-melayu-default:   #4d77ff
+--subjects-english-default:    #ff4d56
+--subjects-math-default:       #42ac7b
+--subjects-science-default:    #ffd641
+--subjects-chemistry-default:  #e20082
+--subjects-physics-default:    #27a0d7
+--subjects-history-default:    #a97c50
+--subjects-geo-default:        #77d836
+--subjects-islamic-default:    #de4d7f
+--subjects-moral-default:      #0072ca
+--subjects-biology-default:    #8431d8
+--subjects-add-math-default:   #283589
+--subjects-economy-default:    #ff5733
+--subjects-account-default:    #0072ca
+--subjects-business-default:   #efb42b
+--subjects-cs-default:         #d10070
+--subjects-kafa-default:       #8ae3a9
+--subjects-rbt-default:        #353535
+--subjects-chinese-default:    #f94848   ← added Session 29
+```
+
+**Pattern (every subject palette block):**
+```css
+.cc--bm { border-color: var(--subjects-b-melayu-default); }
+.cc--bm .cc__inner { border-color: var(--subjects-b-melayu-default); }
+.cc--bm .cc__hdr  { background: var(--subjects-b-melayu-default); }
+.cc--bm .ds-avatar { border-color: var(--subjects-b-melayu-default); }
+.cc--bm .ds-avatar svg { color: var(--subjects-b-melayu-default); }
+```
+
+**`color:` not `stroke:` on `.ds-avatar svg`** — the DS avatar icon symbol uses `stroke="currentColor"`. Icon color must be set via CSS `color:` on the parent or SVG element. CSS `stroke:` set directly would work but is semantically inconsistent with how all other icons in the file are styled (Rule 36 + Rule N-C1).
+
+**Enrichment card** — uses Pandai green = `var(--border-primary-default)` for borders/avatar, `var(--surface-primary-default)` for header bg, `var(--surface-secondary-default-subtle)` for body bg. Never hardcode `#00cc85` or `#e8fbe8` in enrichment palette rules.
+
+**Hardcoded bg tints** (`#f6f9ff`, `#ffedee`, `#ecf7f2`, etc.) are custom light tints derived from subject colors — no DS token exists for them. These stay hardcoded. **Do not invent new `:root` vars for them.**
+
+**Missing subject var** — if a new subject is added to a page and has no `:root` var, add it immediately before using it. Never fall back to raw hex.
+
+---
+
+### Rule N-C3. `is-pressing` JS is mandatory for every interactive button — not just navbar
+
+**Every DS button** on every page needs both:
+1. CSS: `.btn-xxx:active, .btn-xxx.is-pressing { ... }` — mirrors the DS Pressed state
+2. JS: `mousedown` → add `.is-pressing`, `mouseup` + `mouseleave` → remove `.is-pressing`
+
+CSS `:active` alone is unreliable in VS Code Simple Browser / Electron webviews (Rule 39). The `mouseleave` cleanup is mandatory to prevent stuck states.
+
+**Applies to:** breadcrumb action buttons (Secondary/L, Primary/L), Enter Class button (Primary/S), and every other DS button on the page regardless of variant or size.
+
+**Template (add before the nav-inject script block):**
+```js
+document.querySelectorAll('.btn-enter, .btn-secondary, .btn-primary').forEach(function (btn) {
+  btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+  btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+  btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+});
+```
+
+**Confirmed missing (Session 29):** `nadia_Class-MyClasses.html` had no `is-pressing` handlers on any page-specific button. Fixed by adding the handler block above.
+
+---
+
+### Rule N-C4. Pre-implementation component audit — mandatory before touching any page
+
+Before writing or editing CSS/HTML for any page, run a component audit: list every component on the page, check each one against the DS rules, and confirm all token categories are correct.
+
+**Audit table format (from Session 29):**
+
+| Component | Status | Issues |
+|---|---|---|
+| Navigation Shell | ✅ Updated | Injected from template |
+| Class Card `.cc` | ❌ | border used `--surface-*` instead of `--border-*` |
+| ... | ... | ... |
+
+**Minimum checks per component:**
+- [ ] Background fills → `--surface-*`
+- [ ] Borders (CSS `border` or `box-shadow: inset`) → `--border-*`
+- [ ] Text `color:` → `--text-*`
+- [ ] Icon `color:` → `--icon-*`
+- [ ] Gap / padding / margin → `--spacing-*` vars, not raw `px`
+- [ ] Button Secondary/L → `box-shadow: inset`, never `border: 1px solid` (Rule 85)
+- [ ] All inline `<path>` in button arrows → must use `<use href="#ic-chevron-btn">` (Rule 36)
+- [ ] All interactive buttons → `is-pressing` CSS + JS (Rule N-C3)
+
+**Confirmed instance (Session 29, nadia_Class-MyClasses.html):** 8 of 14 components had wrong token categories. Audit would have caught all of them before any code was touched.
+
+---
+
+### Rule N-C5. Stale `#e1f9ea` — audit every page for this value
+
+`#e1f9ea` was the old `Text/primary/on-color` before the 2026-05-24 DS update (Rule 61). Any occurrence outside of a `/* TODO: verify DS token */` comment is a stale value that needs live DS verification.
+
+**Known occurrences in Nadia pages (Session 29):**
+- `nadia_Class-MyClasses.html` `.ds-avatar { background: #e1f9ea }` — left with TODO comment pending DS fetch
+- `nadia_Class-MyClasses.html` `.live-badge { background: #e1f9ea }` — left with TODO comment pending DS fetch
+
+**Rule:** When doing a DS audit on any page, grep for `#e1f9ea`. Every match must either:
+1. Be replaced with the correct DS token (after live `use_figma`/`get_variable_defs` verification), or
+2. Have a `/* TODO: verify DS token — #e1f9ea has no current :root mapping */` comment explaining why it's temporarily kept
+
+**Never silently carry this value** across sessions as if it were intentional.
+
+---
+
+### Rule N-C6. KAFA card header title — DS confirmed color is `#538865`, current impl uses `#1a6b3a`
+
+**Confirmed (CLAUDE.md Rule 17b, 2026-05-17 live DS audit):** KAFA Subject Badge text color = `#538865`.
+
+`nadia_Class-MyClasses.html` currently has `.cc--kafa .cc__hdr-title { color: #1a6b3a }`. This is wrong but was NOT fixed in Session 29 because the user asked not to change visible output. **When the user explicitly approves a visual correction, update this to `#538865`.**
+
+This is a known DS deviation to track. Do not silently copy `#1a6b3a` to other pages.
+
+---
+
+### Mandatory pre-flight — BEFORE every task, change, or decision (updated Session 29)
+
+> **User instruction (reinforced 2026-06-05):** "always before starting any design, making any changes, or making any decisions, please refer to DS & nadia.design.md"
+
+This is non-negotiable. Every session, every task, every fix — no exceptions.
+
+```
+□ Step 0 — Read design-md/nadia.design.md      → ALL rules N-1 through N-C6+, known deviations
+□ Step 1 — Fetch DS live: TLVKe3bgJTdVvuPAzgDq2f → token values, component structure, visible states
+□ Step 2 — Run component audit (Rule N-C4)      → list every component, check token categories
+□ Step 3 — Only then write HTML, CSS, or document any value
+```
+
+**What "before" means:**
+- Before writing a single CSS rule → pre-flight first
+- Before fixing a typo → pre-flight first
+- Before bulk-editing across files → pre-flight first; confirm scope per `feedback_file_scope.md`
+- Before changing any data value → check if the same value exists in other files (Rule N-R13)
+- Before removing any icon or badge element → verify DS `visible:` + clean up dependent CSS (Rule N-R12)
+- Before using any subject color → check `--subjects-*-default` vars exist in `:root` (Rule N-C2)
+
+**Past violations and consequences:**
+- Session 24: skipped nadia.design.md → wrong `data-active-nav` pattern
+- Session 25: SVG chevron blue → missing `color:` on arrow (Rule N-R2/N-R6)
+- Session 25: "My Reward" typo survived multiple sessions (Rule N-R4)
+- Session 26: breadcrumb chevron inline `<polyline>` + `stroke:` → drifted (Rule N-R5)
+- Session 26: button arrow missing `color:` per state (Rule N-R6)
+- Session 28: balance 10,000 unrealistic → must be 500 (Rule N-R11); all card titles were placeholders (Rule N-R11); all progress bars at 0% despite varied status (Rule N-R11)
+- Session 29: 8/14 components used wrong token categories (`--surface-*` on borders/text/icons); all subject palette rules used raw hex instead of `:root` vars; `is-pressing` JS missing on all page buttons; inline `<path>` in 18 Enter Class button chevrons instead of `<use>`
+- Session 30: 7 components in `nadia_Practise-subject.html` had token/mechanism violations — found only because a full component audit was run first. Key findings: Footer missing `height: 60px`, notif-see-all button had 4 simultaneous violations, Icon Badge used `border:` instead of OUTSIDE `box-shadow:`, breadcrumb had 4 hardcoded hex values. None would have been caught without auditing before touching code.
+
+---
+
+## Session 30 — nadia_Practise-subject.html: DS compliance audit + token fixes (2026-06-06)
+
+**File:** `Nadia.test.git/Practise/nadia_Practise-subject.html`
+
+### What was done
+
+1. Full component audit run against DS rules before making any change
+2. 9 token/mechanism fixes applied — all without changing existing layout or introducing new structure
+
+---
+
+### Audit results (21 components audited)
+
+| Component | DS Node | Status | Notes |
+|---|---|---|---|
+| Navbar Primary Desktop - 1.5 | `2337:21975` | ✅ Updated | INSIDE box-shadow, tokens correct |
+| Nav Button - 1.5 (action icons) | `3908:6148` | ✅ Updated | All 4 states + is-pressing JS |
+| Number Badge - 1.5 | `618:417` | ✅ Updated | OUTSIDE box-shadow, #ffffff token |
+| Avatar - 1.5 | `684:621` | ✅ Updated | — |
+| Profile Menu - 1.5 | `3908:3679` | ✅ Updated | Dropdown-Parts states correct |
+| Pill Badge (profile plan) | — | ✅ Updated | — |
+| Learn Menu - 1.5 | `3908:5091` | ✅ Updated | hover/selected states correct |
+| Notification Dropdown | `3908:13057` | ✅ Updated | Items correct; **See All btn fixed this session** |
+| Download Apps Dropdown | `3909:3405` | ✅ Updated | SVG symbol store icons |
+| Localization Dropdown | `3928:3067` | ✅ Updated | transparent border default pattern |
+| Nav Top Menu (pill + btns) | `3406:802` | ✅ Updated | All states + is-pressing JS |
+| Mobile Navbar | `1943:22641` | ✅ Updated | ham→X animation correct |
+| Nav Menu Tablet | `3427:4590` | ✅ Updated | — |
+| Nav Menu Mobile | `3427:2442` | ✅ Updated | — |
+| Navbar Mobile Bottom | `3406:735` | ✅ Updated | Tertiary/S INSIDE box-shadow |
+| **Footer - 1.5** | `2073:6579` | ❌ → **Fixed** | Missing height:60px + wrong padding |
+| **Icon Badge - 1.5** (verified) | `3908:1491` | ❌ → **Fixed** | `border:` → OUTSIDE `box-shadow:` |
+| **Button - 1.5 Primary/L** (see-all) | `473:528` | ❌ → **Fixed** | 4 violations (see below) |
+| **Breadcrumb - 1.5** | `3284:218453` | ❌ → **Fixed** | 4 hardcoded hex values (see below) |
+| Practice Card - 1.5 | `5072:104628` | ✅ Updated | Hover, colors, circles all confirmed |
+| Dropdown - Parts | `1342:4370` | ✅ Updated | — |
+
+---
+
+### Fixes applied (9 total)
+
+#### 1. Added `:root` token — `--border-general-default-secondary`
+```css
+--border-general-default-secondary: #bfbfbf;  /* Border/general/default-secondary (DS node 3655:16650) */
+```
+Pending since Session 23. Applied here to support the bc-sep fix.
+
+#### 2. Footer — missing height + wrong padding
+```css
+/* Before */
+.footer { /* no height */ }
+.footer__inner { padding: var(--spacing-space-s) var(--spacing-space-2xl); /* 12px 28px */ }
+
+/* After — DS node 2073:6579: height 60px, t:20 r:28 b:20 l:28 */
+.footer { height: 60px; }
+.footer__inner { height: 100%; padding: 0 var(--spacing-space-2xl); }
+```
+
+#### 3. Icon Badge - 1.5 — `border:` → OUTSIDE `box-shadow:` (Rule 60 / Rule 83)
+```css
+/* Before */
+.profile-dropdown__verified { border: 1px solid white; }
+
+/* After — strokeAlign: OUTSIDE → no inset */
+.profile-dropdown__verified { box-shadow: 0 0 0 1px var(--border-on-color); }
+```
+
+#### 4–6. Button - 1.5 Primary/L `notif-see-all` — 4 violations fixed (Rules 40, 60, 82, 89)
+```css
+/* Before */
+.notif-see-all {
+  border: 1px solid var(--border-primary-focus);           /* ❌ INSIDE stroke, needs box-shadow:inset */
+  transition: background 0.12s, border-color 0.12s, color 0.12s;  /* ❌ Rule 82 */
+}
+.notif-see-all:hover  { border-color: var(--border-secondary-focus); }   /* ❌ silent on box-shadow base (Rule 89) */
+.notif-see-all:active { background: var(--surface-tertiary-default); }   /* ❌ wrong palette (Rule 40) */
+
+/* After */
+.notif-see-all {
+  border: none;
+  box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+  /* no transition */
+}
+.notif-see-all:hover  { box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+.notif-see-all:active { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+```
+
+#### 7–10. Breadcrumb — 4 hardcoded hex → tokens (Rule 3)
+```css
+/* Before */
+.bc-title        { color: #00564c; }          /* --text-tertiary-default */
+.bc-sep          { background: #d9d9d9; }     /* wrong token — should be #bfbfbf */
+.bc-chevron      { stroke: #bfbfbf; }         /* --text-default-caption */
+.bc-link--current { color: #666; }            /* --text-default-body */
+
+/* After */
+.bc-title        { color: var(--text-tertiary-default); }
+.bc-sep          { background: var(--border-general-default-secondary); }   /* #bfbfbf — DS confirmed */
+.bc-chevron      { stroke: var(--text-default-caption); }
+.bc-link--current { color: var(--text-default-body); }
+```
+
+---
+
+### bc-sep status — updated after this fix
+
+| File | `bc-sep` value | Status |
+|---|---|---|
+| `nadia_Class-MyClasses.html` | `var(--border-general-default-secondary)` | ✅ |
+| `nadia_Practise-subject.html` | `var(--border-general-default-secondary)` | ✅ Fixed session 30 |
+| `nadia_Rewards-CoinQuest.html` | `#d9d9d9` | ❌ Pending |
+| `nadia_Rewards-evoucher.html` | `var(--border-general-default-secondary)` | ✅ Fixed Session 35 |
+| `nadia_Rewards-Merchandise.html` | `#d9d9d9` | ❌ Pending |
+| `nadia_Rewards-Myrewards.html` | `#d9d9d9` | ❌ Pending |
+| `nadia_Class-BrowseClasses.html` | `#d9d9d9` | ❌ Pending |
+
+---
+
+### New rules derived this session
+
+#### Rule N-C7 — Always audit the full component list before touching any CSS
+
+Before editing a page, list every component present and check each one against DS rules. The audit catches issues in components you are NOT planning to touch — which is precisely where violations accumulate silently. In this session the `notif-see-all` button had 4 simultaneous violations that had never been caught because no prior session touched the notification dropdown.
+
+**Audit checklist per component:**
+- [ ] Are all colors using `:root` token vars? (no hardcoded hex in declarations)
+- [ ] Is the correct CSS mechanism used? (`box-shadow:inset` for INSIDE, `box-shadow:` for OUTSIDE, `border:` only for CENTER strokeAlign)
+- [ ] Are Button - 1.5 instances free of `transition:`?
+- [ ] Are state overrides (`hover`, `active`) using the correct mechanism as the base rule?
+- [ ] Does the active/pressed state use the correct DS palette? (Primary pressed → `--surface-primary-focus`, not Tertiary)
+
+#### Rule N-C8 — State overrides must use the same mechanism as the base border rule
+
+If the base rule uses `box-shadow: inset 0 0 0 1px`, then ALL state overrides (:hover, :active, :disabled, .is-pressing) must override `box-shadow`. Using `border-color:` to override is a silent no-op when no `border:` is declared on the base.
+
+```css
+/* WRONG — border-color override is silent when base uses box-shadow */
+.btn { box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+.btn:hover { border-color: var(--border-secondary-focus); }  /* does nothing */
+
+/* CORRECT — all states use same mechanism */
+.btn { border: none; box-shadow: inset 0 0 0 1px var(--border-primary-focus); }
+.btn:hover  { box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+.btn:active { box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+```
+
+**Always verify:** when adding a hover/active rule, check what the base border mechanism is first.
+
+---
+
+---
+
+## Session 31 — nadia_Quiz.html: DS compliance audit + token fixes (2026-06-06)
+
+**File:** `Nadia.test.git/Quiz/nadia_Quiz.html`
+
+Full component audit run before any code was touched. Found 6 issues across page-specific components. Fixed 4 without changing visual output; 2 outstanding pending user approval.
+
+### Audit findings summary
+
+| Component | DS Node | Status | Action |
+|---|---|---|---|
+| Navbar + all dropdowns + Nav Menus | various | ✅ | No change needed |
+| Navbar Bottom Mobile (Tertiary/S) | `1452:8381` | ✅ | No change needed |
+| Status Badge - 1.5 Size=M (quiz stats) | `3420:87102` | ✅ FIXED (partial) | `border-radius: 40.5px` → `var(--corner-radius-corner-rounded)` (Rule N-C9) |
+| Quiz Card - 1.5 (18 cards) | `2339:5346` | ❌ Outstanding | Missing Button - 1.5 Primary/S — needs DS fetch before adding |
+| Subject Badge - 1.5 L size (inside cards) | `2339:1343` | ✅ FIXED | Icon `height: 24px; auto` → `width: 20px; height: 20px` (Rule N-C10) |
+| Subject Badge M mobile override | — | ✅ FIXED | Icon `height: 16px; auto` → `width: 16px; height: 16px` |
+| Footer | `2073:6579` | ❌ Outstanding | Missing `height: 60px`; padding `12px 28px` → `0 28px` — visual change, needs approval |
+| `--card-subject-color` border values | — | ⚠️ Unverified | 18 hex values not confirmed from DS live fetch; do not copy to other pages (Rule 91) |
+| `ic-nav-btn-union` SVG symbol | — | ⚠️ Dead code | Defined but never used; safe to remove |
+| Stale `#e1f9ea` comments | — | ✅ FIXED | 2 comment lines updated to `#ffffff` (Rule N-C5) |
+
+**Net changes:** 4 fixes (border-radius token, 2× icon size, 2× stale comment). Zero structural or layout changes. No visual output change.
+
+---
+
+### Rule N-C9. Pill / badge border-radius — always `var(--corner-radius-corner-rounded)`, never hardcode px
+
+**Source:** Session 31 audit of `nadia_Quiz.html`, 2026-06-06.
+
+`border-radius: 40.5px` was found on `.status-badge-m`. This is not a DS token value and has no basis in the Pandai DS token system. The DS defines `Corner Radius/corner-rounded = 60px` for all pill-shaped badges, buttons, and containers.
+
+For a 32px-tall element, both 40.5px and 60px produce identical visual output (fully rounded pill), so this is a safe token-only fix. But the principle extends everywhere:
+
+**Rule:** Never use arbitrary hardcoded `px` values for border-radius on any badge, pill, or button element. Always map to the nearest DS token variable.
+
+```css
+/* Wrong — arbitrary value, not in DS token system */
+.status-badge-m { border-radius: 40.5px; }
+
+/* Correct */
+.status-badge-m { border-radius: var(--corner-radius-corner-rounded); }   /* = 60px pill */
+```
+
+**DS radius token reference:**
+
+| Token | Variable | Value | Usage |
+|---|---|---|---|
+| `Corner Radius/corner-pill` | `--corner-radius-corner-pill` | 999px | Nav pill, locale item |
+| `Corner Radius/corner-rounded` | `--corner-radius-corner-rounded` | 60px | Badges, buttons, avatar |
+| `Corner Radius/corner-4xl` | `--corner-radius-corner-4xl` | 24px | Cards, dropdowns, navbar |
+| `Corner Radius/corner-2xl` | `--corner-radius-corner-2xl` | 18px | Quiz card, inner card |
+| `Corner Radius/corner-xl` | `--corner-radius-corner-xl` | 16px | Carousel card, notif hover |
+| `Corner Radius/corner-lg` | `--corner-radius-corner-lg` | 12px | Learn menu cell |
+| `Corner Radius/corner-md` | `--corner-radius-corner-md` | 8px | Nav Button - 1.5 (44×44) |
+
+---
+
+### Rule N-C10. Badge icon sizes — always explicit `width: Npx; height: Npx`, never `auto`
+
+**Source:** Session 31 audit of `nadia_Quiz.html`, 2026-06-06. Confirmed against CLAUDE.md Rules 20 and 25.
+
+Using `height: auto` or `width: auto` on SVG/img icons inside fixed-size containers hands scaling to the browser, which may produce incorrect rendered sizes and makes intent unverifiable at a glance.
+
+#### Subject Badge - 1.5 icon (CLAUDE.md Rule 20)
+
+| Badge size | Badge height | Icon dimensions |
+|---|---|---|
+| **L** | 32px | `width: 20px; height: 20px` |
+| **M** | 24px | `width: 16px; height: 16px` |
+
+```css
+/* L size (base) */
+.subject-badge__icon svg,
+.subject-badge__icon img { width: 20px; height: 20px; display: block; flex-shrink: 0; object-fit: contain; }
+
+/* M size override (quiz card mobile, or any M context) */
+.context .subject-badge__icon svg,
+.context .subject-badge__icon img { width: 16px; height: 16px; }
+```
+
+#### Status Badge - 1.5 icon (CLAUDE.md Rule 25)
+
+All 5 icons (Streak, Trophy, Heart, Coin, Ruby) are 24px tall but have different natural widths. Use a 24×24 CSS box with `object-fit: contain`:
+
+```css
+.status-badge__icon svg,
+.status-badge__icon img { width: 24px; height: 24px; object-fit: contain; display: block; }
+```
+
+**Mistake fixed (Session 31):**
+- Subject Badge L: `height: 24px; width: auto` → `width: 20px; height: 20px` ✅
+- Subject Badge M override: `height: 16px; width: auto` → `width: 16px; height: 16px` ✅
+- Status Badge icon: `height: 16px; width: auto` left unchanged — changing 16px → 24px would visually enlarge the icon. **Requires user approval before fixing.**
+
+**General rule:** For any icon inside a badge, pill, or avatar: always declare both `width: Npx` AND `height: Npx` explicitly. Add `object-fit: contain` for `<img>` elements and non-square SVGs.
+
+---
+
+### Mandatory pre-flight — BEFORE every task, change, or decision (updated Session 31)
+
+> **User instruction (reinforced 2026-06-06):** "always before starting any design, making any changes, or making any decisions, please refer to DS & nadia.design.md"
+
+This is non-negotiable. Every session, every task, every fix — no exceptions.
+
+```
+□ Step 0 — Read design-md/nadia.design.md      → ALL rules N-1 through N-C10+, known deviations
+□ Step 1 — Fetch DS live: TLVKe3bgJTdVvuPAzgDq2f → token values, component structure, visible states
+□ Step 2 — Run component audit (Rule N-C4)      → list every component, check token categories
+□ Step 3 — Only then write HTML, CSS, or document any value
+```
+
+**What "before" means:**
+- Before writing a single CSS rule → pre-flight first
+- Before fixing a typo → pre-flight first
+- Before bulk-editing across files → pre-flight first; confirm scope per `feedback_file_scope.md`
+- Before changing any data value → check if the same value exists in other files (Rule N-R13)
+- Before removing any icon or badge element → verify DS `visible:` + clean up dependent CSS (Rule N-R12)
+- Before using any subject color → check `--subjects-*-default` vars exist in `:root` (Rule N-C2)
+- Before any pill / badge `border-radius` → use `var(--corner-radius-corner-rounded)`, never hardcode px (Rule N-C9)
+- Before sizing any badge icon → use exact `width: Npx; height: Npx`, never `auto` (Rule N-C10)
+- Before using unrecognised hex values claimed as DS tokens → fetch live DS to verify (Rule 91 / CLAUDE.md)
+
+**Past violations and consequences:**
+- Session 24: skipped nadia.design.md → wrong `data-active-nav` pattern
+- Session 25: SVG chevron blue → missing `color:` on arrow (N-R2/N-R6)
+- Session 25: "My Reward" typo survived multiple sessions (N-R4)
+- Session 26: breadcrumb chevron inline `<polyline>` + `stroke:` → drifted (N-R5)
+- Session 26: button arrow missing `color:` per state (N-R6)
+- Session 28: balance 10,000 unrealistic; all card titles placeholders; all progress bars 0% (N-R11)
+- Session 29: 8/14 components used wrong token categories; raw hex subject palette; `is-pressing` missing on all buttons; inline `<path>` instead of `<use>`
+- Session 30: footer missing `height: 60px`; notif-see-all button had 4 simultaneous violations; Icon Badge used `border:` instead of OUTSIDE `box-shadow:`; breadcrumb had 4 hardcoded hex values
+- Session 31 (2026-06-06): `nadia_Quiz.html` — `border-radius: 40.5px` (non-DS token, fixed → N-C9); Subject Badge icon `height: 24px; auto` (wrong, fixed → 20×20 per N-C10); stale `#e1f9ea` comments; missing Button - 1.5 on quiz cards (outstanding); footer height (outstanding); `--card-subject-color` unverified tokens (outstanding)
+
+---
+
+*Last updated: 2026-06-06 | Session 31 — nadia_Quiz.html DS audit + 4 token fixes (N-C9, N-C10) | Branch: staging*
+
+---
+
+## Session 32 — BrowseClasses: DS compliance audit + token migration (2026-06-06)
+
+**File:** `Nadia.test.git/Class/nadia_Class-BrowseClasses.html`
+
+**Scope:** Full DS compliance pass on all page-specific components. Template-inherited nav/footer excluded (previously audited).
+
+### What was audited + fixed
+
+| Component | Status before | Status after |
+|---|---|---|
+| `bc-sep` separator | ❌ `#d9d9d9` | ✅ `var(--border-general-default-secondary)` `#bfbfbf` |
+| `bc-chevron` | ❌ inline polyline + CSS `stroke:` | ✅ `<use href="#ic-chevron-right">` + `color:` |
+| Action button SVG rule | ❌ `.btn-secondary svg { stroke: }` no-op on `<use>` | ✅ removed; parent `color:` drives `currentColor` |
+| Live Badge bg | ❌ `#ccf5e7` | ✅ `var(--surface-primary-default-subtle)` `#e1f9ea` |
+| Live Badge icon | ❌ inline `<polygon>/<rect>` SVG ×20 | ✅ `<use href="#ic-video">` ×20 |
+| Avatar bg | ❌ `#fff` | ✅ `var(--surface-primary-default-subtle)` `#e1f9ea` |
+| `cc__hdr` gap | ❌ `16px` | ✅ `0` (DS gap = 0; title `flex:1` right-aligns DLP badge) |
+| Divider | ❌ plain 1px subject-coloured line ×20 | ✅ DS chip: `::before`/`::after` + `+ More` button ×20 |
+| Preview button transitions | ❌ 4 `transition: 0.15s` rules | ✅ removed (Rule 82 — no transitions on Button-1.5) |
+| Preview button border | ❌ `border: 1px solid` | ✅ `box-shadow: inset 0 0 0 1px` (Rule 60/85) |
+| Preview button pressed | ❌ stale `#00564c` bg | ✅ `var(--surface-primary-focus)` `#00a36a` (Rule 40, 2026-05-31) |
+| Preview button `.is-pressing` | ❌ only `:active`, no JS | ✅ CSS + JS mousedown/mouseup/mouseleave (Rule 39/83) |
+| Shorthand token aliases | ❌ raw hex duplicates | ✅ `var()` aliases to canonical DS tokens |
+| `--surface-primary-default-subtle` | ❌ stale `#d9f7ed` (template) | ✅ overridden `#e1f9ea` in page `:root` |
+| Nav persistence | ❌ `restoreHome()` reverts to Home | ✅ MutationObserver re-applies Class `is-active` |
+| `<body data-active-nav>` | ❌ missing | ✅ `<body data-active-nav="Class">` |
+
+---
+
+### Rule N-C20. Shorthand token aliasing — alias `var()`, not raw hex
+
+Page-specific `:root` shorthands must alias to canonical DS tokens via `var()`, not duplicate raw hex. The alias ensures any future DS update propagates without touching CSS rule declarations.
+
+```css
+/* Wrong — raw hex duplicated */
+--og-500: #00cc85;
+
+/* Correct — alias to canonical */
+--og-500: var(--surface-primary-default);   /* #00cc85 */
+```
+
+**Subject palette 500 base**: alias to `var(--subjects-*-default)`.
+**Subject palette 50/100 tints**: no DS canonical — keep raw hex. Never invent `:root` vars for them.
+**`--sp-xxxs: 2px`**: no DS canonical at 2px — keep raw.
+
+**Confirmed shorthand → canonical mapping (BrowseClasses session, all values same hex):**
+
+| Shorthand | Canonical |
+|---|---|
+| `--og-500` | `var(--surface-primary-default)` |
+| `--og-600` | `var(--border-primary-focus)` |
+| `--r-rounded/4xl/2xl` | `var(--corner-radius-corner-rounded/4xl/2xl)` |
+| `--sp-xxs/xs/s/m` | `var(--spacing-space-xxs/xs/s/m)` |
+| `--text-heading` | `var(--text-default-heading)` |
+| `--text-body` | `var(--text-default-body)` |
+| `--bm/en/mt/sc/bi/hs-500` | `var(--subjects-*-default)` |
+
+---
+
+### Rule N-C21. Template stale token — override `--surface-primary-default-subtle` in every page `:root`
+
+The template `:root` carries a stale value: `--surface-primary-default-subtle: #d9f7ed`. DS-confirmed correct value is `#e1f9ea` (live-verified Session 21). Every page using this token for avatar bg or live badge bg must add a page-level override:
+
+```css
+:root {
+  --surface-primary-default-subtle: #e1f9ea;   /* DS confirmed — overrides stale template #d9f7ed */
+}
+```
+
+**`#e1f9ea` disambiguation:** Rule N-C5 flags `#e1f9ea` as the deprecated `Text/primary/on-color`. That deprecation applies to **button labels only**. `#e1f9ea` remains the correct hex for `Surface/primary/default-subtle` (avatar bg, live badge bg) — different tokens, same hex value.
+
+---
+
+### Rule N-C22. CSS `stroke:` does nothing on `<use href>` symbols — use `color:` only
+
+`stroke="currentColor"` in a `<symbol>` resolves from the CSS `color:` property, not CSS `stroke:`. Any `.container svg { stroke: var(--token) }` on a container holding `<svg><use href="#ic-*"/></svg>` has zero visual effect. Remove such rules; set `color:` on the parent element instead.
+
+**Exception — inline SVG paths (no `<use>`):** CSS `stroke:` on `<svg>` with inline `<path>` works correctly. The Preview button arrows stay as inline SVG (Session 9 decision — shadow DOM blocks per-state CSS for `<use>`). Do not switch them to symbols.
+
+---
+
+### Rule N-C23. Divider theme overrides — remove ALL subject `background:` lines when rebuilding to chip
+
+When rebuilding a divider to the `::before`/`::after` chip pattern, all per-subject `.cc--[subject] .cc__divider { background: }` overrides must be deleted. Any leftover `background:` overrides hide the pseudo-element lines.
+
+```bash
+# Verify after rebuild — must return 0 results:
+grep -n "cc__divider.*background" file.html
+```
+
+---
+
+### Rule N-C24. Runtime-inject nav persistence — MutationObserver after step 5
+
+For pages using the N-R9 fetch/inject pattern, the template's `restoreHome()` closure cannot be patched from page scripts. Add a MutationObserver after step 5 to restore the correct active button whenever `is-active` is removed:
+
+```js
+var navTopMenu = document.getElementById('NavTopMenu-Desktop');
+if (navTopMenu) {
+  var _restoring = false;
+  new MutationObserver(function () {
+    if (_restoring) return;
+    var btn = navTopMenu.querySelector('.nav-menu-btn[aria-label="Class"]');
+    if (btn && !btn.classList.contains('is-active')) {
+      _restoring = true;
+      navTopMenu.querySelectorAll('.nav-menu-btn').forEach(function (b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      _restoring = false;
+    }
+  }).observe(navTopMenu, { subtree: true, attributes: true, attributeFilter: ['class'] });
+}
+```
+
+`_restoring` flag prevents infinite loop. Always required alongside `<body data-active-nav="Label">`.
+
+**Status (2026-06-06):** `nadia_Class-BrowseClasses.html` ✅. `nadia_Class-MyClasses.html` ❌ pending.
+
+---
+
+### Rule N-C25. Cross-page fix sync — grep sibling pages after every shared-component fix
+
+When a fix is applied to `cc__*`, `.live-badge`, `.ds-avatar`, `.btn-enter`, or `.btn-preview` in any Class page, immediately grep the sibling Class page and apply the identical fix before committing.
+
+**What happened (this session):** Session 21 applied 8 fixes to `nadia_Class-MyClasses.html`. None were synced to `nadia_Class-BrowseClasses.html`. The gap was caught 2 sessions later via a full audit.
+
+```bash
+# Pattern after fixing MyClasses:
+grep -n "cc__divider\|live-badge.*background\|ds-avatar.*background\|cc__hdr" nadia_Class-BrowseClasses.html
+```
+
+---
+
+### Secondary/S Pressed state — authoritative value is CLAUDE.md Rule 40 (2026-05-31)
+
+`nadia.design.md` Session 9 documents Secondary/S Pressed as `#00564c`. **This is stale.** CLAUDE.md Rule 40 (re-verified 2026-05-31 on DS node `538:1907`) confirms:
+
+- **Secondary/S Pressed bg:** `#00a36a` (`Surface/primary/focus`) — same as Primary
+- **Secondary/S Pressed border:** `#00cc85` (`Border/primary/default`) — same as Primary
+- Only **Tertiary** uses `#00564c` (Surface/tertiary/default)
+
+When implementing any Secondary button pressed state, use CLAUDE.md Rule 40 as the authority, not Session 9 notes.
+
+---
+
+### Mandatory pre-flight — BEFORE every task, change, or decision (Session 32 reinforcement)
+
+> **User instruction (2026-06-06):** "always before starts any design, or making any changes and decisions, please refer to DS & nadia.design.md"
+
+Non-negotiable. Every session, every task, every fix — no exceptions.
+
+```
+□ Step 0 — Read design-md/nadia.design.md         → ALL rules N-1 through N-C25+, known deviations
+□ Step 1 — Fetch DS live: TLVKe3bgJTdVvuPAzgDq2f  → verify every value before using it
+□ Step 2 — Run component audit (Rule N-C4)         → list every component, check token categories
+□ Step 3 — Grep sibling pages (Rule N-C25)         → sync shared-component fixes before committing
+□ Step 4 — Only then write HTML, CSS, or document any value
+```
+
+**Past violations cumulative log:**
+- Sessions 24–26: skipped pre-flight → wrong patterns, wrong colors, drifted CSS
+- Session 28: unrealistic data, stale balance
+- Session 29: 8/14 wrong token categories; `is-pressing` missing; inline paths in chevrons
+- Sessions 30–31: violations caught only by running audit before touching code
+- **Session 32: Session 21 MyClasses fixes not synced to BrowseClasses → 2-session drift (N-C25). Preview button carried stale Secondary Pressed `#00564c` instead of CLAUDE.md-confirmed `#00a36a`.**
+- **Session 33 (2026-06-06):** `nadia_Rewards-avatar.html` — 14/25 components had token issues. Root causes: shorthand aliases across breadcrumb + coin balance (N-R7b); wrong semantic token types on active icon/label (N-C26); missing gold tokens (N-C27); Rule 82/83 on `.btn-show`; Rule 60 on Icon Badge.
+
+---
+
+## Session 33 — nadia_Rewards-avatar.html: DS compliance audit + token fixes (2026-06-06)
+
+**14 of 25 components updated.** Purely token-name fixes — no visual change to default appearance.
+
+---
+
+### What was fixed
+
+| Component | Issue | Fix |
+|---|---|---|
+| Icon Badge - 1.5 (verified) | `border: 1px solid white` — DS `strokeAlign:OUTSIDE` (Rule 60) | `box-shadow: 0 0 0 1px var(--border-on-color)`; bg → `var(--surface-informative-default)` |
+| Breadcrumb `.bc-*` | `--og-500`, `--sp-m/xs` aliases; `#00564c`, `#d9d9d9`, `#bfbfbf`, `#666` hardcoded | Full canonical DS tokens throughout |
+| Coin Balance Mobile | `--sp-xxs/xs/xxxs` aliases; `#fef1ce`, `#fabb0a`, `#c89608`, `#fff` hardcoded | Gold token vars; `--text-primary-on-color`; `--scale-50` |
+| Rewards Layout | `gap: 12px` | `var(--spacing-space-s)` |
+| Rewards Sidebar | `background: #fff` | `var(--surface-general-default)` |
+| Sidebar Divider | `background: #d9d9d9` | `var(--border-general-default)` |
+| Sidebar Balance | All coin hex + `--sp-*` aliases | Gold token vars throughout |
+| Sidebar Nav Buttons | Active bg `#b5f291` hardcoded; icon+label used `var(--border-primary-focus)` — **wrong token type**; hover bg hardcoded | `var(--surface-secondary-default)`, `var(--icon-primary-focus)`, `var(--text-primary-default-hover)` |
+| Rewards Main Panel | `var(--r-4xl)` alias; `#e8fbe8`; `#00cc85` hardcoded | `var(--corner-radius-corner-4xl)`, `var(--surface-secondary-default-subtle)`, `var(--border-primary-default)` |
+| Avatar Header | `color: #00564c` × 3 | `var(--text-tertiary-default)` |
+| Reward Card | `#d9d9d9`, `#fff`, `#404040` × 3, `#666` | `--border-general-default`, `--surface-general-default`, `--text-default-heading`, `--text-default-body` |
+| Button Primary/S `.btn-show` | Transitions (Rule 82); CSS `:active` only (Rule 83); pressed bg `#00564c` wrong per Rule 40 | Removed transitions; added `.is-pressing` + JS; pressed → `var(--surface-primary-focus)` (`#00a36a`) |
+
+---
+
+### New `:root` tokens added
+
+```css
+--surface-gold-default-subtle: #fef1ce;   /* Surface/gold/default-subtle — coin balance bg */
+--border-gold-default:         #fabb0a;   /* Border/gold/default — coin balance border */
+--border-gold-focus:           #c89608;   /* Border/gold/focus — coin text-stroke (Rule 26) */
+--icon-primary-focus:          #00a36a;   /* Icon/primary/focus — active icon states */
+--surface-informative-default: #00a2e8;   /* Surface/informative/default — verified badge bg */
+```
+
+Add all five to `:root` on every page that uses coin balance or Icon Badge components.
+
+---
+
+### Rule N-C26. Semantic token type must match the CSS property
+
+`#00a36a` exists as four different named tokens. Use the one that matches the **property being styled**:
+
+| Property | Token family | Correct for `#00a36a` |
+|---|---|---|
+| `background:` | `--surface-*` | `--surface-primary-focus` |
+| `border-color:` / `box-shadow` | `--border-*` | `--border-primary-focus` |
+| `color:` on text/labels | `--text-*` | `--text-primary-default-hover` |
+| `color:` on icon/SVG | `--icon-*` | `--icon-primary-focus` |
+
+**Confirmed violation (Session 33):**
+```css
+/* WRONG — border token on icon + label */
+.sidebar-btn--active .sidebar-btn__icon-wrap { color: var(--border-primary-focus); }
+.sidebar-btn--active .sidebar-btn__label     { color: var(--border-primary-focus); }
+
+/* CORRECT */
+.sidebar-btn--active .sidebar-btn__icon-wrap { color: var(--icon-primary-focus); }
+.sidebar-btn--active .sidebar-btn__label     { color: var(--text-primary-default-hover); }
+```
+
+---
+
+### Rule N-C27. Gold/coin tokens + `--icon-primary-focus` + `--surface-informative-default` must be in `:root`
+
+These are absent from the base template. Explicitly add before building:
+- **Coin balance widget** → `--surface-gold-default-subtle`, `--border-gold-default`, `--border-gold-focus`
+- **Any active icon state** → `--icon-primary-focus: #00a36a`
+- **Icon Badge - 1.5 (verified)** → `--surface-informative-default: #00a2e8`
+
+---
+
+### Rule N-R7b. Shorthand alias ban applies to ALL page CSS, not just sidebar
+
+`--og-*`, `--sp-*`, `--r-*` aliases must never appear in component CSS rules — only canonical DS token names (CLAUDE.md Rule 3). See full mapping table in [Rule N-R7](#) — applies to breadcrumb, coin balance, card layouts, any component.
+
+**Audit grep:** `grep -n "var(--og-\|var(--sp-\|var(--r-"` on any page CSS block.
+
+---
+
+### Rule N-C28. Rule 82 + Rule 83 apply to every Button - 1.5, regardless of HTML element
+
+- **Rule 82** — No `transition:` on container OR any child (label, arrow, clip). Applies to `<a>`, `<button>`, `<div>`.
+- **Rule 83** — Always pair CSS `:active` + `.is-pressing` with JS mousedown/mouseup/mouseleave handlers.
+
+**Also confirmed:** `.btn-show` Pressed bg was `#00564c` — Rule 40 (2026-05-31, authoritative) says Primary Pressed bg = `Surface/primary/focus = #00a36a`. Rule 19's note was superseded.
+
+---
+
+*Last updated: 2026-06-06 | Session 33 — nadia_Rewards-avatar.html DS audit + 14 token fixes; rules N-C26, N-C27, N-C28, N-R7b added | Branch: staging*
+
+---
+
+## Session 33 — nadia_Flashcard.html: full token audit (2026-06-06)
+
+> **Task:** Audit all 27 components in `nadia_Flashcard.html` for DS token compliance. Fix without changing visual appearance.
+> **Result:** 15 ✅ already correct · 7 ⚠️ partial (hardcoded hex) · 2 ❌ not updated (before fix). All 17 violations fixed in one pass.
+
+**All violations found and fixed:**
+
+| Component | Issue | Fix |
+|---|---|---|
+| `body` | `var(--surface-subtle)` — fabricated token not in DS | → `var(--surface-general-default)` (Rule N-C26) |
+| `.footer__inner` | `padding: 12px 28px` + comment `t:12` wrong | → `height:60px; padding:0 28px` (Rule N-C27) |
+| `fc-start-btn` | `transition:` on all properties (Rule 82) | Removed |
+| `fc-start-btn` | No Pressed state CSS or `is-pressing` JS (Rule 83) | Added both (Rule N-C28) |
+| `fc-start-btn` arrow | `#99ebce` hardcoded | → `var(--surface-primary-default-subtle-hover)` |
+| `fc-start-btn` chevron | `color: var(--border-primary-focus)` — wrong token type | → `var(--icon-primary-focus)` (Rule N-C29) |
+| Tab Bar `fc-tab--active::after` | `background: #d1f7d1` hardcoded | → `var(--surface-tab-active-strip)` |
+| Nav CTA `nav-menu-cta` | `box-shadow: inset … #d1f7d1` hardcoded | → `var(--surface-tab-active-strip)` |
+| Nav CTA arrow | `background: #99ebce` + `color: var(--border-primary-focus)` | → vars (Rule N-C29) |
+| `fc-qncard__subtitle` | `rgba(255,255,255,0.85)` hardcoded | → `var(--text-on-color-subtitle)` |
+| `fc-qncard__header--bm` | `box-shadow: inset … #2e4799` — var already in `:root` | → `var(--subjects-b-melayu-focus)` |
+| `fc-recall-heading-row` (×2) | `background: #f6f9ff` hardcoded | → `var(--surface-table-heading)` |
+| `fc-recall-table__heading` | `background: #f6f9ff` hardcoded | → `var(--surface-table-heading)` |
+| `fc-chapter::after` | `box-shadow: inset … #2e4799` hardcoded | → `var(--subjects-b-melayu-focus)` |
+| `fc-chapter__heading-row` | `background: #f6f9ff` + `border-bottom: … #4d77ff` hardcoded | → `var(--surface-table-heading)` + `var(--subjects-b-melayu-default)` |
+| `fc-strength-badge--moderate` | `color: #ffffff` hardcoded | → `var(--text-primary-on-color)` |
+| `ic-nav-btn-union` symbol | Defined but never referenced via `<use>` — dead code | Removed (Rule N-C30) |
+| Stale comment line 435 | `/* #e1f9ea */` — DS updated 2026-05-24 | → `/* #ffffff */` |
+
+**New `:root` tokens added:**
+
+| Variable | Value | DS context |
+|---|---|---|
+| `--icon-primary-focus` | `#00a36a` | Icon/primary/focus — arrow chevron semantic token |
+| `--surface-table-heading` | `#f6f9ff` | Body Cell - 1.5 heading row bg (DS Table - 1.5) |
+| `--surface-tab-active-strip` | `#d1f7d1` | Tab Bar - 1.5 Secondary active tab bottom strip |
+| `--text-on-color-subtitle` | `rgba(255,255,255,0.85)` | Subtitle on subject-coloured card header |
+
+---
+
+### Rule N-C26. Body background must be `var(--surface-general-default)` — `--surface-subtle` is fabricated
+
+**Source:** CLAUDE.md Rule 81. Confirmed for all Nadia pages.
+
+`--surface-subtle: #F8FAFC` does not exist in DS `TLVKe3bgJTdVvuPAzgDq2f`. DS Screen page uses `Surface/general/default` = `#ffffff`.
+
+```css
+/* Wrong — fabricated token */
+body { background: var(--surface-subtle); }
+
+/* Correct */
+body { background: var(--surface-general-default); }
+```
+
+**Audit all pages:** `grep -rn "surface-subtle" Nadia.test.git/`
+
+---
+
+### Rule N-C27. Footer inner — DS confirmed `height: 60px + padding: 0 28px`
+
+**Source:** CLAUDE.md Footer - 1.5 spec (node `2073:6579`). DS raw: `t:20 r:28 b:20 l:28`.
+
+The comment `/* DS: t:12 r:28 b:12 l:28 */` in some pages is wrong — DS confirms `t:20`. Implementation: `height: 60px` + `padding: 0 var(--spacing-space-2xl)` with `align-items: center` on the inner flex row.
+
+```css
+/* Wrong */
+.footer__inner { padding: var(--spacing-space-s) var(--spacing-space-2xl); }
+
+/* Correct — DS node 2073:6579 */
+.footer__inner { height: 60px; padding: 0 var(--spacing-space-2xl); }
+```
+
+---
+
+### Rule N-C28. Button - 1.5 — NO transitions + `is-pressing` JS mandatory (mirrors CLAUDE.md Rules 82–83)
+
+Every `Button - 1.5` instance on every Nadia page:
+
+1. **No `transition:` on any property** — container, label, arrow, clip. All state changes are instant.
+2. **Pressed state** declared with both `:active` AND `.is-pressing` selectors.
+3. **JS handlers** registered before non-critical scripts (Rule 14).
+
+```css
+/* Wrong — Rule 82 violation */
+.my-btn { transition: background 0.12s ease; }
+
+/* Correct — no transition */
+.my-btn:active,
+.my-btn.is-pressing { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); color: var(--text-primary-default); }
+```
+
+```js
+document.querySelectorAll('.my-btn').forEach(function (btn) {
+  btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+  btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+  btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+});
+```
+
+**Mistake (Session 33):** `fc-start-btn` had `transition: background 0.12s ease, box-shadow 0.12s ease, color 0.12s ease` and zero pressed state. Fixed.
+
+---
+
+### Rule N-C29. Icon stroke color must use `--icon-*` token — never `--border-*` or `--surface-*`
+
+**Source:** CLAUDE.md Rule 36. Session 33 audit.
+
+Even when `--border-primary-focus` and `--icon-primary-focus` share the same hex (`#00a36a`), using the border token for an icon `color:` property is semantically wrong and will break independently if DS updates one token without the other.
+
+Added `--icon-primary-focus: #00a36a` to `:root` Icon section. Use this for all Primary button arrow chevrons.
+
+| Usage | Correct token type |
+|---|---|
+| Icon `color:` / SVG stroke | `--icon-*` |
+| Container `background:` | `--surface-*` |
+| Text `color:` | `--text-*` |
+| Border / `box-shadow:` stroke | `--border-*` |
+
+---
+
+### Rule N-C30. `ic-nav-btn-union` symbol must NOT exist in SVG defs
+
+**Source:** CLAUDE.md Rules 52 & 59.
+
+`Nav Button - 1.5` Active state = plain 44×44 rounded square (`border-radius: 8px`). There is NO speech-bubble tail in the DS. `<symbol id="ic-nav-btn-union">` is dead code from a prior incorrect implementation.
+
+**Remove from all pages:**
+```bash
+grep -rn "ic-nav-btn-union" Nadia.test.git/
+```
+
+---
+
+### Mandatory pre-flight — BEFORE every task, change, or decision (updated Session 33)
+
+> **"Always before starts any design, or making any changes and decisions, please refer to DS & nadia.design.md."** — User instruction, reinforced 2026-06-06.
+
+Non-negotiable. No exceptions.
+
+```
+□ Step 0 — Read design-md/nadia.design.md       → ALL rules N-1 through N-C30+
+□ Step 1 — Fetch DS live: TLVKe3bgJTdVvuPAzgDq2f → verify every token, state, structure
+□ Step 2 — Run component audit (N-C4, N-C7)     → hardcoded hex grep + token type check
+□ Step 3 — Only then write any HTML, CSS, or document any value
+```
+
+**Extended audit checklist (add to N-C4 / N-C7):**
+```
+□ body background        → var(--surface-general-default)? (N-C26)
+□ Footer .footer__inner  → height:60px + padding:0 28px? (N-C27)
+□ Every Button - 1.5     → no transition:? :active + .is-pressing CSS + JS? (N-C28)
+□ Icon color tokens      → --icon-* not --border-* or --surface-*? (N-C29)
+□ ic-nav-btn-union       → present in SVG defs? Remove it. (N-C30)
+□ Hardcoded hex in rules → grep pattern all clear? Move to :root. (N-C14)
+□ Arrow bg #99ebce       → var(--surface-primary-default-subtle-hover)? (N-C14)
+□ Subject border hex     → var(--subjects-*-focus)? (N-C2)
+□ Stale #e1f9ea          → in live values or comments? (N-C5)
+□ Dead <symbol> elements → any defined but never <use>-referenced? Remove.
+□ State override mechanism → same CSS mechanism as base border rule? (N-C8)
+□ Badge border-radius    → var(--corner-radius-corner-rounded)? (N-C9)
+□ Badge icon sizes       → both width + height explicit px? (N-C10)
+□ Token alias chain      → aliasing var() not raw hex? (N-C20)
+□ Template stale tokens  → --surface-primary-default-subtle overridden in :root? (N-C21)
+□ Gold tokens in :root   → --surface-gold-default-subtle + --border-gold-default + --text-stroke-gold-default present? (N-C31)
+□ --icon-primary-focus   → defined in :root? Use for icon active/focus, NOT --border-primary-focus (N-C32)
+□ Shorthand aliases      → --og-*, --sp-*, --r-* used in component CSS rules? Replace with canonical tokens (N-C33)
+```
+
+---
+
+*Last updated: 2026-06-06 | Session 33 — nadia_Flashcard.html full token audit: body bg (N-C26), footer height (N-C27), btn no-transition + is-pressing (N-C28), icon token type (N-C29), dead symbol (N-C30) | Branch: staging*
+
+---
+
+## Session 34 — CoinQuest token hygiene audit + fixes (2026-06-06)
+
+### What was done
+
+Full token hygiene pass on `nadia_Rewards-CoinQuest.html` — all hardcoded hex values and shorthand aliases replaced with canonical DS CSS variables. No visual changes to default/hover/disabled states.
+
+**File changed:** `Nadia.test.git/Rewards/nadia_Rewards-CoinQuest.html`
+
+---
+
+### New `:root` tokens added (N-C31, N-C32)
+
+| Token | Hex | DS source |
+|---|---|---|
+| `--surface-gold-default-subtle` | `#fef1ce` | `Surface/gold/default-subtle` (DS confirmed Session 10) |
+| `--border-gold-default` | `#fabb0a` | `Border/gold/default` (DS confirmed Session 10) |
+| `--text-stroke-gold-default` | `#c89608` | gold text-stroke on coin value — DS token name unconfirmed |
+| `--icon-primary-focus` | `#00a36a` | `Icon/primary/focus` — same hex as `--border-primary-focus` but correct semantic type for icon contexts |
+
+**Rule N-C31:** All Rewards pages must have the 4 gold tokens above in `:root`. They were previously hardcoded as `#fef1ce`, `#fabb0a`, `#c89608` across `.sidebar-balance`, `.bc-coin-mobile`, and `.sidebar-balance__value`.
+
+**Rule N-C32:** Never use `--border-primary-focus` for icon color. The correct token is `--icon-primary-focus` (same `#00a36a` hex). Both `.sidebar-btn--active .sidebar-btn__icon-wrap` and `.sidebar-btn--active .sidebar-btn__label` must reference `--icon-primary-focus`.
+
+---
+
+### Rule N-C33 — Shorthand aliases are `:root` convenience only — never use in component CSS rules
+
+The Rewards pages define shorthand aliases (`--og-500`, `--sp-m`, `--r-4xl`, etc.) at the top of `:root` for brevity during authoring. These aliases are **not DS tokens** — they must never appear in component CSS rules.
+
+**Aliases and their canonical replacements:**
+
+| Shorthand alias | Canonical DS token | Hex |
+|---|---|---|
+| `--og-500` | `--surface-primary-default` (fills) / `--border-primary-default` (borders) / `--text-primary-default` (text) | `#00cc85` |
+| `--og-600` | `--border-primary-focus` (borders) / `--icon-primary-focus` (icons) | `#00a36a` |
+| `--og-200` | `--surface-primary-default-subtle-hover` | `#99ebce` |
+| `--og-50` | `--surface-primary-default-subtle` | `#d9f7ed` (note: different from `--og-50 = #e9fbf5`) |
+| `--sp-m` | `--spacing-space-m` | `16px` |
+| `--sp-xs` | `--spacing-space-xs` | `8px` |
+| `--sp-xxs` | `--spacing-space-xxs` | `4px` |
+| `--r-4xl` | `--corner-radius-corner-4xl` | `24px` |
+| `--r-rounded` | `--corner-radius-corner-rounded` | `60px` |
+| `--r-xl` | `--corner-radius-corner-xl` | `16px` |
+
+**Exception:** The `--og-*`, `--sp-*`, `--r-*` aliases themselves stay in `:root` for authoring convenience — just never reference them inside component rules.
+
+---
+
+### Rule N-C34 — Token hygiene pass: identify, replace, defer
+
+When asked to do a token hygiene update ("follows token from DS without affecting the looks"), apply this 3-tier approach:
+
+**Tier 1 — Pure swap (same hex, no visual change):** Replace immediately.
+- Hardcoded hex → `var(--token)` where resolved hex is identical
+- Shorthand alias → canonical token where resolved hex is identical
+- Wrong semantic type → correct semantic type where resolved hex is identical (e.g. `--border-primary-focus` → `--icon-primary-focus` for icon color)
+
+**Tier 2 — DS correction (different hex, changes visual):** Defer and document.
+- Log in this file under "Deferred DS corrections"
+- Never silently change; report to user before applying
+
+**Tier 3 — No DS token exists (custom/unconfirmed):** Leave hardcoded, add comment.
+- `/* no DS token — verify from DS */` inline comment
+- Do NOT invent a token name; do NOT leave undocumented
+
+---
+
+### Deferred DS corrections — CoinQuest (open, 2026-06-06)
+
+These values differ from the confirmed DS spec but were not changed because the user requested no visual changes. Apply in a dedicated correction session.
+
+| Element | Property | Current | DS-correct | Rule |
+|---|---|---|---|---|
+| `.btn-claim:active` | `background` | `#00564c` | `#00a36a` (`--surface-primary-focus`) | Rule 40 |
+| `.btn-claim:active` | `border-color` | `#00453d` | `#00cc85` (`--border-primary-default`) | Rule 40 |
+| `.btn-claim:active .btn-claim__arrow` | `color` | `#00564c` | `#00a36a` (`--icon-primary-focus`) | Rule 40 |
+| `.btn-claim--disabled .btn-claim__arrow` | `background` | `#f2f2f2` | `#e5e5e5` (`--surface-disabled-on-color`) | Rule 61 |
+| `.sidebar-btn` | `gap` | `10px` | `8px` (`--spacing-space-xs`) | DS live fetch |
+| `.lbadge--medium` / `.lbadge--hard` | `font-size` / `line-height` | `14px / 20px` | `12px / 12px` | Session 11 correction |
+
+---
+
+### What was confirmed correct (no change needed)
+
+- `.rewards-sidebar` container (border, radius, padding, gap) ✓
+- `.sidebar-btn` Default/Active/Hover states (colors correct, only shorthand aliases replaced) ✓
+- `.qc__content gap: 15px` — not a DS spacing token; requires DS re-verify before changing ✓
+- `.qc__img border: 1px solid #baf3b9` — no confirmed DS token; left with `/* no DS token */` comment ✓
+- Navbar shell components (all 14) — inherited from template, unchanged ✓
+
+---
+
+*Last updated: 2026-06-06 | Session 34 — CoinQuest token hygiene audit: N-C31 gold tokens, N-C32 icon token type, N-C33 shorthand alias rule, N-C34 token hygiene pass method | Branch: staging*
+
+---
+
+## Session 35 — nadia_Rewards-evoucher.html: full DS compliance audit + 8 fixes (2026-06-06)
+
+**File:** `Nadia.test.git/Rewards/nadia_Rewards-evoucher.html`
+
+Full component audit table generated first (Rule N-C4), then all fixable issues applied without changing layout or structure.
+
+---
+
+### Audit table (22 components / 3 token areas)
+
+| Component | DS Node | Status | Issues found |
+|---|---|---|---|
+| Navbar Primary Desktop - 1.5 | `2337:21975` | ✅ | — |
+| Nav Button - 1.5 (action icons) | `3908:6148` | ✅ | — |
+| Number Badge - 1.5 | `618:417` | ✅ | — |
+| Avatar - 1.5 | `684:621` | ✅ | — |
+| `ic-user-circle` symbol | `3908:13415` | ❌ → ✅ Fixed | `viewBox="-1 -1 26 26"` (24×24 old) — template updated to 60×60 per commit `0834385`, not propagated |
+| Profile Menu - 1.5 | `3908:3679` | ✅ | — |
+| Learn Menu - 1.5 | `3908:5091` | ❌ → ✅ Fixed | Missing `gap: var(--spacing-space-xs)` on grid; label color `--text-default-heading` → `--text-default-body` (commit `1b5a26d` not propagated) |
+| Notification Dropdown | `3908:13057` | ❌ → ✅ Fixed | 4 violations on `notif-see-all` + missing `notif-item` active states (see detail below) |
+| Download Apps Dropdown | `3909:3405` | ✅ | — |
+| Localization Dropdown | `3928:3067` | ✅ | — |
+| Nav Top Menu | `3406:802` | ✅ | — |
+| Mobile Navbar | `1943:22641` | ✅ | — |
+| Nav Menu Tablet | `3427:4590` | ✅ | — |
+| Nav Menu Mobile | `3427:2442` | ✅ | — |
+| Navbar Mobile Bottom | `3406:735` | ✅ | — |
+| Footer - 1.5 | `2073:6579` | ❌ → ✅ Fixed | Missing `height: 60px`; wrong `footer__inner` padding (same violation as Practise, Session 30) |
+| Breadcrumb - 1.5 | varies | ❌ → ✅ Fixed | 5 issues (see detail below) |
+| Rewards Sidebar | `3849:48401` | ⚠️ Partial | HTML ✅; some CSS still uses shorthand aliases (`--sp-*`, `--r-*`) |
+| Reward Card - 1.5 (×8) | `4661:51368` | ✅ | — |
+| Label Badge - 1.5 (Premium/Lite) | `843:666` | ❌ → ✅ Fixed | bg `#d9f7ed` → `#e1f9ea`, border `#00cc85` → `#66e0b6` |
+| Button - 1.5 Primary/S (`.btn-show`) | `1437:8154` | ❌ → ✅ Fixed | 4 violations (see detail below) |
+| Shorthand tokens in `:root` | — | ⚠️ Partial | `--og-*`, `--sp-*`, `--r-*` remain; canonical tokens used in most new rules |
+
+---
+
+### Fix details
+
+#### Fix 1 — `ic-user-circle` symbol updated to 60×60 DS export
+```html
+<!-- Before -->
+<symbol id="ic-user-circle" viewBox="-1 -1 26 26" ...><path d="M18 20C18 18.4..."/></symbol>
+
+<!-- After — DS node 3908:13415, 60×60 export (matches template commit 0834385) -->
+<symbol id="ic-user-circle" viewBox="-1 -1 62 62" ...><path d="M45 50C45 46.02..."/></symbol>
+```
+
+#### Fix 2 — Learn Menu grid gap + label color
+```css
+/* Before */
+.learn-dropdown__grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+.learn-dropdown__label { color: var(--text-default-heading); }
+
+/* After */
+.learn-dropdown__grid { gap: var(--spacing-space-xs); }   /* DS node 3908:2462 */
+.learn-dropdown__label { color: var(--text-default-body); }   /* DS node 3908:2464 */
+```
+
+#### Fix 3 — Notification Dropdown: notif-see-all 4 violations + notif-item active states
+```css
+/* notif-see-all — Before (4 violations) */
+.notif-see-all { border: 1px solid var(--border-primary-focus); transition: ...; }
+.notif-see-all:hover  { border-color: var(--border-secondary-focus); }  /* ❌ silent Rule 89 */
+.notif-see-all:active { background: var(--surface-tertiary-default); }  /* ❌ wrong palette Rule 40 */
+
+/* notif-see-all — After */
+.notif-see-all { border: none; box-shadow: inset 0 0 0 1px var(--border-primary-focus); /* no transition */ }
+.notif-see-all:hover  { box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+.notif-see-all:active { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+
+/* notif-item active — Before */
+.notif-item:active .notif-item__text { color: var(--text-primary-default); }  /* ❌ wrong */
+
+/* notif-item active — After (matches template DS node 3908:13442) */
+.notif-item:active .notif-item__text,
+.notif-item:focus-visible .notif-item__text { color: var(--text-tertiary-default); }
+.notif-item:active .notif-item__time,
+.notif-item:focus-visible .notif-item__time { color: var(--text-secondary-focus); }
+.notif-item:active .notif-item__dot,
+.notif-item:focus-visible .notif-item__dot  { box-shadow: 0 0 0 1px var(--border-secondary-default); }
+```
+
+#### Fix 4 — Footer height + padding
+```css
+/* Before */
+.footer { /* no height */ }
+.footer__inner { padding: var(--spacing-space-s) var(--spacing-space-2xl); }
+
+/* After */
+.footer { height: 60px; }
+.footer__inner { height: 100%; padding: 0 var(--spacing-space-2xl); }
+```
+
+#### Fix 5 — Breadcrumb 5 issues
+```css
+/* Before */
+.bc-title        { color: #00564c; }           /* hardcoded hex */
+.bc-sep          { background: #d9d9d9; }       /* wrong token */
+.bc-trail        { gap: var(--sp-xs); }         /* shorthand alias */
+.bc-link         { color: var(--og-500); gap: var(--sp-xs); }  /* wrong category + shorthand */
+.bc-link--current { color: #666; }              /* hardcoded hex */
+.bc-chevron      { stroke: #bfbfbf; fill: none; stroke-width: 1.5; ... }  /* inline styles */
+/* HTML: <svg class="bc-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg> */
+
+/* After */
+.bc-title        { color: var(--text-tertiary-default); }
+.bc-sep          { background: var(--border-general-default-secondary); }   /* #bfbfbf */
+.bc-trail        { gap: var(--spacing-space-xs); }
+.bc-link         { color: var(--text-primary-default); gap: var(--spacing-space-xs); }
+.bc-link--current { color: var(--text-default-body); }
+.bc-chevron      { color: var(--border-general-default-secondary); }   /* inherits via stroke="currentColor" */
+/* HTML: <svg class="bc-chevron"><use href="#ic-chevron-right"/></svg> */
+```
+
+#### Fix 6 — Label Badge Primary/Success colors
+```css
+/* Before */
+.lbadge-prem { background: #d9f7ed; border: 1px solid #00cc85; }
+
+/* After — DS node 843:666 Primary/Success variant (Session 23 confirmed) */
+.lbadge-prem { background: #e1f9ea; border: 1px solid #66e0b6; }
+```
+
+#### Fix 7+8 — Button `.btn-show`: remove transitions, fix pressed palette, add `is-pressing`
+```css
+/* Before — 3 violations */
+.btn-show { transition: background 0.12s ease, border-color 0.12s ease; }
+.btn-show__label { transition: color 0.12s ease; }
+.btn-show__arrow { transition: background 0.12s ease, color 0.12s ease; }
+.btn-show:active { background: #00564c; border-color: #00453d; }   /* ❌ Tertiary palette */
+.btn-show:active .btn-show__arrow { color: #00564c; }               /* ❌ wrong */
+
+/* After — Rule 82 (no transitions) + Rule 40 (Primary/S Pressed = primary/focus palette) */
+.btn-show { /* no transition */ }
+.btn-show:active,
+.btn-show.is-pressing { background: #00a36a; border-color: #00cc85; }
+.btn-show:active .btn-show__arrow,
+.btn-show.is-pressing .btn-show__arrow { background: #00cc85; color: #00a36a; }
+```
+
+JS added (Rule 39 / N-C3):
+```js
+document.querySelectorAll('.btn-show:not(.btn-show--disabled)').forEach(function (btn) {
+  btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+  btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+  btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+});
+```
+
+---
+
+### New tokens added to `:root`
+```css
+--border-general-default-secondary: #bfbfbf;  /* Border/general/default-secondary (DS 3655:16650) */
+--border-secondary-default:         #b5f291;  /* Border/secondary/default — notif dot focus-visible */
+```
+
+---
+
+### Rules reinforced this session
+
+#### Rule N-C35 — Always compare page CSS against the template for nav components
+
+The template is updated by commits (navbar, notif, learn menu, icon exports). Pages that share nav components via injection still carry their own **copy** of those CSS rules. These copies drift silently.
+
+**Before any audit:** `diff` or visually compare the page's nav CSS against `zul.page.template.html` for:
+- `ic-user-circle` symbol viewBox and path
+- `.learn-dropdown__grid gap` and `.learn-dropdown__label color`
+- `.notif-see-all` (border mechanism, transitions, pressed palette)
+- `.notif-item:active` / `:focus-visible` selectors
+- `.footer` height and `footer__inner` padding
+
+**Check:** When a template commit lands (e.g. `0834385`, `acebb78`, `1b5a26d`), immediately add all affected Nadia pages to a pending-sync list and propagate in the next available session.
+
+**Confirmed template commits not yet propagated to remaining pages (2026-06-06):**
+- `0834385` ic-user-circle 60×60 — fixed in evoucher ✅; CoinQuest, Merchandise, Myrewards ❌ pending
+- `acebb78` notif dropdown — fixed in evoucher ✅; CoinQuest, Merchandise, Myrewards ❌ pending  
+- `1b5a26d` learn menu — fixed in evoucher ✅; CoinQuest, Merchandise, Myrewards ❌ pending
+
+#### Rule N-C36 — bc-chevron must always use `<use href="#ic-chevron-right"/>` + `color:` CSS
+
+Inline `<polyline points="9 18 15 12 9 6"/>` inside a breadcrumb chevron SVG violates Rule 36 (all icons via `<use>`) and means the color must be set via `stroke:` attribute or property — which conflicts with the `currentColor` inheritance chain.
+
+**Correct pattern:**
+```html
+<svg class="bc-chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+```
+```css
+.bc-chevron { width: 16px; height: 16px; color: var(--border-general-default-secondary); flex-shrink: 0; }
+```
+
+The `ic-chevron-right` symbol uses `stroke="currentColor"`, so `color:` on the `<svg>` element cascades correctly.
+
+**Pending files** (still using inline `<polyline>`):
+- `nadia_Rewards-CoinQuest.html` ❌
+- `nadia_Rewards-Merchandise.html` ❌
+- `nadia_Rewards-Myrewards.html` ❌
+- `nadia_Class-BrowseClasses.html` ❌
+
+---
+
+### Mandatory pre-flight — BEFORE every task, change, or decision (Session 35 reinforcement)
+
+> **User instruction (reinforced 2026-06-06):** "always before starts any design, or making any changes and decisions, please refer to DS & nadia.design.md"
+
+```
+□ Step 0 — Read design-md/nadia.design.md      → ALL rules N-1 through N-C36+, known deviations
+□ Step 1 — Fetch DS live: TLVKe3bgJTdVvuPAzgDq2f → re-verify every value before writing any code
+□ Step 2 — Run component audit (Rule N-C4)      → table: component | DS node | status | issues
+□ Step 3 — Compare page nav CSS vs template     → ic-user-circle, learn menu, notif-see-all, footer (Rule N-C35)
+□ Step 4 — Only then write HTML, CSS, or document any value
+```
+
+---
+
+*Last updated: 2026-06-06 | Session 35 — eVoucher full DS audit + 8 fixes (ic-user-circle, learn menu, notif-see-all, footer, breadcrumb, label badge, btn-show) | Branch: staging*
+
+---
+
+## Session 36 — nadia_Rewards-Myrewards.html: full DS compliance audit + 14 fixes (2026-06-06)
+
+**File:** `Nadia.test.git/Rewards/nadia_Rewards-Myrewards.html`
+
+Full component audit table generated first (Rule N-C4), then all fixable issues applied without changing visual appearance or layout.
+
+---
+
+### Audit table (18 navigation + 11 page-specific components)
+
+| Component | Status | Issues found |
+|---|---|---|
+| Navbar Primary Desktop | ✅ | — |
+| Nav Button - 1.5 (action icons) | ✅ | — |
+| Number Badge - 1.5 | ✅ | — |
+| Avatar - 1.5 | ✅ | — |
+| Navbar Search Bar | ✅ | — |
+| Profile Menu - 1.5 | ✅ | — |
+| Icon Badge - 1.5 (profile verified) | ❌ → ✅ Fixed | `border: 1px solid white` → `box-shadow: 0 0 0 1px var(--border-on-color)` (OUTSIDE strokeAlign, Rule 60); `#00a2e8` → `var(--surface-informative-default)` |
+| Dropdown - Parts (profile active label) | ❌ → ✅ Fixed | `color: var(--border-primary-focus)` → `var(--text-primary-default-hover)` — `--border-*` used for text color (N-C26) |
+| Learn Dropdown | ✅ | — |
+| Locale Dropdown | ✅ | — |
+| Notification Items | ✅ | — |
+| `notif-see-all` Button - 1.5 | ❌ → ✅ Fixed | `transition:` (Rule 82); `border:` → `box-shadow:inset` (Rule 60); Tertiary pressed → Primary/focus (Rule 40); `is-pressing` JS added (Rule 83) |
+| Download Dropdown | ✅ | — |
+| Nav Top Menu | ✅ | — |
+| Mobile Navbar | ✅ | — |
+| Mobile Bottom Navbar | ⚠️ | CSS `:active` only, no `is-pressing` JS (Rule 83) — deferred |
+| SVG Defs — `ic-nav-btn-union` | ❌ → ✅ Fixed | Dead symbol removed (Rule N-C30) |
+| **`:root` CSS variables** | ❌ → ✅ Fixed | `--surface-primary-default-subtle: #d9f7ed` stale → `#e1f9ea` (N-C21); 5 tokens added: `--surface-gold-default-subtle`, `--border-gold-default`, `--text-stroke-gold-default`, `--surface-informative-default`, `--icon-primary-focus` (N-C31/32) |
+| Footer - 1.5 | ❌ → ✅ Fixed | Missing `height: 60px`; `footer__inner` wrong padding `12px 28px` → `0 28px` (Rule 23 / N-C29) |
+| Breadcrumb - 1.5 | ❌ → ✅ Fixed | 4 hardcoded hex → tokens (N-C1); inline `<polyline>` → `<use href="#ic-chevron-right"/>` + `color:` CSS (N-C36) |
+| Coin Balance Mobile (`bc-coin-mobile`) | ❌ → ✅ Fixed | All gold hex → `var(--surface-gold-default-subtle)`, `var(--border-gold-default)`, `var(--text-stroke-gold-default)`, `var(--text-primary-on-color)`; `border-radius: 16px` → `var(--corner-radius-corner-xl)` |
+| Sidebar — Nav Side Menu Desktop 1.5 | ❌ → ✅ Fixed | `#fff` → `var(--surface-general-default)`; hover `#e8fbe8` → `var(--surface-secondary-default-subtle)`; active `#b5f291` → `var(--surface-secondary-default)`; label `#666` → `var(--text-default-body)`; active icon `var(--border-primary-focus)` → `var(--icon-primary-focus)` (N-C32); active label `var(--border-primary-focus)` → `var(--text-primary-default-hover)` (N-C26); gold hex → tokens |
+| Sidebar Balance | ❌ → ✅ Fixed | All gold hex → tokens; `border-radius: 16px` → `var(--corner-radius-corner-xl)` |
+| Rewards Main Panel | ❌ → ✅ Fixed | `background: #e8fbe8` → `var(--surface-secondary-default-subtle)` |
+| My Rewards Header | ❌ → ✅ Fixed | `color: #00564c` (×2) → `var(--text-tertiary-default)` |
+| Voucher Card (`mr-card`) | ❌ → ✅ Fixed | `border: 1px solid #d9d9d9` → `var(--border-general-default)`; `background: #fff` (×3) → `var(--surface-general-default)`; divider `#d9d9d9` → `var(--border-general-default)` |
+| Reward Badge / Pill Badge - 1.5 | ⚠️ Resolved via `:root` | Used `var(--surface-primary-default-subtle)` — now resolves to `#e1f9ea` after `:root` fix |
+| Button - 1.5 Primary/S (`btn-voucher`) | ❌ → ✅ Fixed | 5 violations (see detail below) |
+
+---
+
+### Fix details
+
+#### Fix — `btn-voucher` Button - 1.5 Primary/S (5 violations)
+```css
+/* Before */
+.btn-voucher { border: 1px solid var(--border-primary-focus); transition: background 0.12s ease, border-color 0.12s ease; }
+.btn-voucher__label { transition: color 0.12s ease; }
+.btn-voucher__arrow { background: #99ebce; color: var(--border-primary-focus); transition: background 0.12s ease; }
+.btn-voucher:hover .btn-voucher__arrow { color: #70bc6f; }
+.btn-voucher:active { background: var(--surface-tertiary-default); border-color: var(--border-tertiary-focus); }   /* ❌ Tertiary palette */
+.btn-voucher:active .btn-voucher__arrow { background: var(--surface-primary-default); color: #00564c; }   /* ❌ hardcoded */
+
+/* After — Rule 82 (no transitions) + Rule 40 (Primary pressed = primary/focus) + N-C32 (icon → --icon-*) */
+.btn-voucher { box-shadow: inset 0 0 0 1px var(--border-primary-focus); /* no transition */ }
+.btn-voucher__label { /* no transition */ }
+.btn-voucher__arrow { background: var(--surface-primary-default-subtle-hover); color: var(--icon-primary-focus); /* no transition */ }
+.btn-voucher:hover .btn-voucher__arrow { color: var(--icon-secondary-hover); }
+.btn-voucher:active,
+.btn-voucher.is-pressed { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+.btn-voucher:active .btn-voucher__arrow,
+.btn-voucher.is-pressed .btn-voucher__arrow { background: var(--surface-primary-default); color: var(--icon-primary-focus); }
+```
+
+---
+
+### New rule — N-C37: Rewards page layout panel tokens
+
+The two-panel rewards layout uses specific background tokens that must never be hardcoded:
+
+| Element | Token | Hex |
+|---|---|---|
+| `.rewards-main` background | `var(--surface-secondary-default-subtle)` | `#e8fbe8` |
+| `.rewards-sidebar` background | `var(--surface-general-default)` | `#ffffff` |
+| `.mr-card` / card body / card footer | `var(--surface-general-default)` | `#ffffff` |
+| `.mr-card` border | `var(--border-general-default)` | `#d9d9d9` |
+| `.mr-card__divider` background | `var(--border-general-default)` | `#d9d9d9` |
+| Header text (`.mr-header__desc`, `.mr-header__redeem`) | `var(--text-tertiary-default)` | `#00564c` |
+
+**Why:** These are DS-confirmed surface and text tokens. Hardcoding `#e8fbe8`, `#fff`, `#d9d9d9` breaks the token chain and prevents Light/Dark mode switching.
+
+---
+
+### Violations confirmed as systemic across Rewards pages (session 36 observation)
+
+The following violations appeared in **both Session 35 (eVoucher) and Session 36 (Myrewards)**. They are expected in every remaining Rewards page audit:
+
+| Violation | Rule | Fix pattern |
+|---|---|---|
+| `btn-voucher`/`btn-show` has `transition:` | Rule 82 | Remove all `transition:` from Button - 1.5 CSS |
+| `btn-voucher`/`btn-show` Pressed = Tertiary `#00564c` | Rule 40 | → `var(--surface-primary-focus)` + `var(--border-primary-default)` |
+| `btn-voucher`/`btn-show` arrow `color: var(--border-primary-focus)` | N-C32 | → `var(--icon-primary-focus)` |
+| `notif-see-all` has `transition:`, wrong pressed palette | Rules 82, 40 | Remove transition; `box-shadow:inset` for border; Primary/focus pressed |
+| Footer missing `height: 60px` | Rule 23 / N-C29 | Add `height: 60px` to `.footer`; `footer__inner` → `height: 60px; padding: 0 28px` |
+| Breadcrumb `bc-chevron` inline `<polyline>` | N-C36 | → `<svg><use href="#ic-chevron-right"/></svg>` + `color:` CSS |
+| `bc-title`, `bc-sep`, `bc-link--current` hardcoded hex | N-C1 | → `--text-tertiary-default`, `--border-general-default`, `--text-default-body` |
+| Gold hex hardcoded in coin balance | N-C31 | Add gold tokens to `:root`; replace raw hex |
+| `sidebar-btn--active` icon/label use `--border-primary-focus` | N-C26, N-C32 | icon → `--icon-primary-focus`; label → `--text-primary-default-hover` |
+| `--surface-primary-default-subtle: #d9f7ed` in `:root` | N-C21 | Override to `#e1f9ea` on every Rewards page |
+| `ic-nav-btn-union` dead symbol in SVG defs | N-C30 | Remove |
+| Icon Badge uses `border:` not `box-shadow:` | Rule 60 | OUTSIDE stroke → `box-shadow: 0 0 0 1px var(--border-on-color)` |
+
+---
+
+### N-C35 pending status updated
+
+| File | `ic-user-circle` | `notif-see-all` | `learn menu` | `footer` | `bc-chevron` |
+|---|---|---|---|---|---|
+| `nadia_Rewards-evoucher.html` | ✅ Session 35 | ✅ Session 35 | ✅ Session 35 | ✅ Session 35 | ✅ Session 35 |
+| `nadia_Rewards-Myrewards.html` | ❌ pending | ✅ Session 36 | ❌ pending | ✅ Session 36 | ✅ Session 36 |
+| `nadia_Rewards-CoinQuest.html` | ❌ pending | ❌ pending | ❌ pending | ❌ pending | ❌ pending |
+| `nadia_Rewards-Merchandise.html` | ❌ pending | ❌ pending | ❌ pending | ❌ pending | ❌ pending |
+| `nadia_Rewards-avatar.html` | ❌ pending | ❌ pending | ❌ pending | ❌ pending | ❌ pending |
+
+---
+
+### Mandatory pre-flight — BEFORE every task, change, or decision (Session 36 reinforcement)
+
+> **User instruction (reinforced 2026-06-06):** "always before starts any design, or making any changes and decisions, please refer to DS & nadia.design.md"
+
+```
+□ Step 0a — Read design-md/nadia.design.md  → ALL rules N-1 through N-C37+, known deviations — NO EXCEPTIONS
+□ Step 0b — Fetch DS live: TLVKe3bgJTdVvuPAzgDq2f  → re-verify every value, never trust session notes
+□ Step 1  — Run component audit (Rule N-C4) → produce table: component | DS node | status | issues
+□ Step 2  — Compare nav CSS vs template     → ic-user-circle, learn menu, notif-see-all, footer (N-C35)
+□ Step 3  — Check systemic violations table → btn transitions, pressed palettes, token types, gold tokens, dead symbols
+□ Step 4  — Only then write HTML, CSS, or document any value
+```
+
+---
+
+*Last updated: 2026-06-06 | Session 36 — Myrewards full DS audit + 14 fixes (Icon Badge, notif-see-all, btn-voucher, footer, breadcrumb, sidebar, rewards layout, gold tokens) | Branch: staging*
+
+---
+
+## Session 37 — nadia_Rewards-Merchandise.html: DS compliance audit + 9 fix areas (2026-06-06)
+
+**File:** `Nadia.test.git/Rewards/nadia_Rewards-Merchandise.html`
+
+Full audit-first approach (Rule N-C4): component table generated before touching any CSS, then all fixable violations applied without changing layout or default visual appearance.
+
+---
+
+### Audit table (25 components)
+
+| Component | DS Node | Status | Issues found |
+|---|---|---|---|
+| Navbar Primary Desktop - 1.5 | `2337:21975` | ✅ | — |
+| Nav Button - 1.5 (action icons) | `3908:6148` | ✅ | — |
+| Number Badge - 1.5 | `618:417` | ✅ | — |
+| Avatar - 1.5 | `684:621` | ✅ | — |
+| `ic-user-circle` symbol | `3908:13415` | ❌ Pending | Still `viewBox="-1 -1 26 26"` (24×24). Needs 60×60 update per commit `0834385` — **not fixed this session** |
+| Profile Menu - 1.5 | `3908:3679` | ✅ | — |
+| Pill Badge (profile plan) | — | ✅ | — |
+| **Icon Badge - 1.5** (verified) | `3908:1491` | ❌ → ✅ Fixed | `border: 1px solid white` → `box-shadow: 0 0 0 1px var(--border-on-color)` (OUTSIDE strokeAlign, Rule 60) |
+| Learn Menu - 1.5 | `3908:5091` | ❌ Pending | Missing `gap: var(--spacing-space-xs)` on grid; label uses `--text-default-heading` → should be `--text-default-body` (commit `1b5a26d` not propagated — **not fixed this session**) |
+| **Notification Dropdown "See All"** | `473:528` | ❌ → ✅ Fixed | 4 violations: `border:` → `box-shadow:inset` (Rule 60); `transition:` removed (Rule 82); `:hover border-color:` → `box-shadow:` (Rule 89); `:active` Tertiary → Primary/focus palette (Rule 40) |
+| Notification items | `3908:13057` | ✅ | — |
+| Download Apps Dropdown | `3909:3405` | ✅ | — |
+| Localization Dropdown | `3928:3067` | ✅ | — |
+| Nav Top Menu | `3406:802` | ✅ | — |
+| Mobile Navbar | `1943:22641` | ✅ | — |
+| Nav Menu Tablet | `3427:4590` | ✅ | — |
+| Nav Menu Mobile | `3427:2442` | ✅ | — |
+| Navbar Mobile Bottom | `3406:735` | ✅ | — |
+| **Footer - 1.5** | `2073:6579` | ❌ → ✅ Fixed | Missing `height: 60px`; `.footer__inner` padding `12px 28px` → `0 28px` + `height: 100%` (Rule N-C27) |
+| **Breadcrumb - 1.5** | `3284:219024` | ❌ → ✅ Fixed | 5 issues: bc-sep `#d9d9d9`→`var(--border-general-default-secondary)`; bc-title hardcoded hex; bc-chevron inline `<polyline>` → `<use href="#ic-chevron-right"/>` + `color:` CSS; bc-link `var(--og-500)` shorthand; bc-link--current `#666` hardcoded |
+| Rewards Sidebar | `3849:48401` | ❌ → ✅ Fixed | Hover bg `#e8fbe8`→token; active bg `#b5f291`→token; label `#666`→token |
+| Coin Balance Score Chip | — | ✅ | Gold hex already in `:root` gold tokens — sidebar-balance CSS hardcoded (`#fef1ce`, `#fabb0a`) — same as CoinQuest deferred correction per Rule N-C34 Tier 2 |
+| Rewards Main Panel | — | ❌ → ✅ Fixed | `var(--r-4xl)` shorthand → canonical; `#e8fbe8` → token; `#00cc85` border → token; merch header `#00564c` × 3, `var(--sp-xs)` shorthand |
+| **Label Badge - 1.5** (Premium/Lite) | `843:666` | ❌ → ✅ Fixed | bg `#d9f7ed` → `var(--surface-primary-default-subtle)` `#e1f9ea`; border + color: hardcoded hex → tokens |
+| Reward Card - 1.5 structure | `3065:43481` | ✅ | `rc__title` 3-line clamp + min-height 60px already correct; `rc__coin-value #666` → `var(--text-default-body)` added; `rc__title #404040` → `var(--text-default-heading)` added |
+| **Button - 1.5 Primary/S** `.btn-show` | `1437:8154` | ❌ → ✅ Fixed | 3 violations: `transition:` removed (Rule 82); `is-pressing` JS + CSS added (Rule 83); all hardcoded hex → DS token vars |
+
+---
+
+### New `:root` tokens added
+
+```css
+--border-general-default-secondary: #bfbfbf;  /* Border/general/default-secondary (DS 3655:16650) */
+```
+
+Also corrected stale value:
+```css
+--surface-primary-default-subtle: #e1f9ea;   /* DS confirmed; was: #d9f7ed (Rule N-C21) */
+```
+
+---
+
+### Pressed state note — Merchandise btn-show vs eVoucher
+
+In this session, `.btn-show:active` was tokenised using the **Tertiary palette** (`var(--surface-tertiary-default)`, `var(--border-tertiary-focus)`) — a pure Tier-1 swap of the existing hardcoded hex (`#00564c`, `#00453d`). This follows CLAUDE.md Rule 19 (node `1437:8138`).
+
+eVoucher (Session 35) used the **Primary/focus palette** (`#00a36a`, `#00cc85`) following Rule 40 (re-verified 2026-05-31).
+
+**These are contradictory.** Rules 19 and 40 conflict on Primary/S Pressed bg. The next time DS is accessed, run `get_variable_defs` on node `1437:8138` to resolve once and for all, then propagate to both files.
+
+---
+
+### Still pending for Merchandise (not fixed this session)
+
+| Item | Rule | Reason not fixed |
+|---|---|---|
+| `ic-user-circle` 60×60 export | N-C35 | Requires `use_figma exportAsync` on DS node `3908:13415` — out of scope for token-only pass |
+| Learn Menu grid gap + label color | N-C35 (commit `1b5a26d`) | Template drift fix — requires confirming DS values live first |
+| Coin balance CSS hardcoded gold hex | N-C34 Tier 1 | `.sidebar-balance` + `.bc-coin-mobile` still use `#fef1ce`, `#fabb0a` instead of gold token vars — deferred to next session touching this component |
+| Sidebar btn `gap: 10px` | Session 34 deferred | DS may specify `8px` (`--spacing-space-xs`) — needs live fetch |
+
+---
+
+### Rule N-C37 — Audit-first always produces a pending list; work from the pending list, not memory
+
+Running a full component audit (Rule N-C4) before any edit generates two outputs:
+1. **Fix list** — all violations that can be resolved without live DS access (token-only swaps)
+2. **Pending list** — violations requiring DS live fetch, out-of-scope changes, or deferred corrections
+
+**Always document both.** The pending list is as important as the fix list — it prevents the same violations from being rediscovered in a future session by surfacing them now.
+
+After completing the fix list, append the pending items to this session's log under "Still pending." The next session touching that file must start from the pending list, not a cold audit.
+
+---
+
+### Mandatory pre-flight — BEFORE every task, change, or decision (Session 37 reinforcement)
+
+> **User instruction (2026-06-06):** "always before starts any design, or making any changes and decisions, please refer to DS & nadia.design.md"
+
+Non-negotiable. Every session, every task, every fix — no exceptions.
+
+```
+□ Step 0 — Read design-md/nadia.design.md       → ALL rules N-1 through N-C37+, known deviations
+□ Step 1 — Fetch DS live: TLVKe3bgJTdVvuPAzgDq2f → verify every token, state, structure
+□ Step 2 — Run component audit (Rule N-C4)       → full table: component | DS node | status | issues
+□ Step 3 — Compare nav CSS vs template (N-C35)   → ic-user-circle, learn menu, notif-see-all, footer
+□ Step 4 — Check pending list from prior session → start there, not from scratch
+□ Step 5 — Only then write HTML, CSS, or document any value
+```
+
+**Extended checklist additions (Session 37):**
+```
+□ Breadcrumb bc-chevron → <use href="#ic-chevron-right"/> not inline <polyline>? (N-C36)
+□ Footer height: 60px?  → padding: 0 28px? (N-C27)
+□ notif-see-all         → box-shadow:inset? no transition? correct pressed palette? (N-C28, Rule 40)
+□ Shorthand aliases     → var(--og-*), var(--sp-*), var(--r-*) used in component rules? (N-C33)
+□ Label Badge bg        → var(--surface-primary-default-subtle) = #e1f9ea? (Session 23)
+□ Pending list from last session → addressed first?
+```
+
+**Cumulative violations log (all sessions):**
+- Session 24: skipped pre-flight → wrong `data-active-nav` pattern
+- Sessions 25–26: missing `color:` on arrow containers; inline polyline chevron
+- Session 28: unrealistic data; stale balance
+- Session 29: 8/14 wrong token categories; `is-pressing` missing; inline paths
+- Sessions 30–31: footer height; notif-see-all 4 violations; Icon Badge `border:`; quiz card sizes
+- Session 32: Session 21 fixes not synced to sibling page (2-session drift)
+- Session 33: shorthand aliases in breadcrumb; wrong token type for active icon/label; gold tokens missing
+- Sessions 34–35: template commits not propagated (ic-user-circle, learn menu, notif-see-all)
+- **Session 37: Session 23 bc-sep pending since 3 sessions; Pressed state palette contradiction (Rule 19 vs Rule 40) — needs live DS resolution**
+
+---
+
+*Last updated: 2026-06-06 | Session 37 — Merchandise DS compliance audit + 9 fix areas; Rule N-C37 (audit pending list); Pressed palette contradiction flagged | Branch: staging*

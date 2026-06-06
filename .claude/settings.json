@@ -4,7 +4,8 @@
       "Bash(start \"c:\\\\Users\\\\zulfa\\\\OneDrive\\\\Desktop\\\\pandai.design\\\\zul.test.git\\\\zul.home.screen.html\")",
       "mcp__claude_ai_Figma__get_screenshot",
       "PowerShell(Get-Content \"c:\\\\Users\\\\zulfa\\\\OneDrive\\\\Desktop\\\\pandai.design\\\\zul.test.git\\\\icons\\\\ic-bookmark.svg\" -Raw | Select-String -Pattern \"^.{0,200}\" | ForEach-Object { $_.Matches[0].Value })",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(git restore *)"
     ]
   }
 }
