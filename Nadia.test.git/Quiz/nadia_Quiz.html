@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pandai — Practice: Subjects</title>
+  <title>Pandai — Quiz</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,6 +31,7 @@
       --surface-disabled-on-color:       #e5e5e5;   /* Surface/disabled/on color — disabled button arrow bg (DS confirmed 2026-05-24) */
       --surface-general-default-secondary: #f2f2f2;  /* Surface/general/default-secondary — carousel indicator inactive dot */
       --surface-tertiary-default:        #00564c;   /* Surface/tertiary/default — pressed state bg */
+      --surface-informative-default:     #00a2e8;   /* Surface/informative/default — Icon Badge - 1.5 (DS node 3908:1491) */
 
       /* Border */
 
@@ -60,8 +61,7 @@
       --border-primary-focus:     #00a36a;   /* Border/primary/focus */
       --border-secondary-focus:   #70bc6f;   /* Border/secondary/focus — hover border on all buttons */
       --border-default:           #00cc85;   /* Border/default â€” navbar, footer, quiz card */
-      --border-general-default:          #d9d9d9;   /* Border/general/default — carousel cards */
-      --border-general-default-secondary: #bfbfbf;   /* Border/general/default-secondary — breadcrumb separator (DS node 3655:16650, confirmed Session 23) */
+      --border-general-default:   #d9d9d9;   /* Border/general/default — carousel cards */
       --border-tertiary-focus:    #00453d;   /* Border/tertiary/focus — pressed state border */
       --border-disabled-disabled: #bfbfbf;   /* Border/disabled/disabled */
       --border-on-color:          #ffffff;   /* Border/on-color — white border on Number Badge (DS 618:417 updated 2026-05-26) */
@@ -74,7 +74,7 @@
       --corner-radius-corner-xl:      16px;   /* Corner Radius/corner-xl â€” carousel cards */
       --corner-radius-corner-lg:      12px;
       --corner-radius-corner-md:      8px;
-      --radius-xl:                    8px;   /* Radius/xl (Semantic) — Primary Card content placeholder */
+      --radius-xl:                    8px;   /* Radius/xl (Semantic) — Nav Button - 1.5 (44×44 square) */
 
       /* Spacing (Semantic) */
       --spacing-space-xxs:  4px;
@@ -184,7 +184,6 @@
       right:      0;
       min-width:  390px;
       z-index:    100;
-      height:     60px;   /* DS node 2073:6579 — fixed height 60px */
       background: var(--surface-general-default);
       border-top: 1px solid var(--border-default);
     }
@@ -193,8 +192,7 @@
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      height:          100%;   /* fill the 60px footer frame */
-      padding:         0 var(--spacing-space-2xl); /* DS: t:20 r:28 b:20 l:28 → padding:0 + align-items:center */
+      padding:         var(--spacing-space-s) var(--spacing-space-2xl); /* DS: t:12 r:28 b:12 l:28 */
     }
 
     .footer__left {
@@ -457,12 +455,14 @@
       text-align:      center;
       white-space:     nowrap;
       pointer-events:  none;
+      transition:      opacity 0.15s ease;
     }
     .num-badge--primary {
       background: var(--surface-primary-default);          /* #00cc85 */
       color:      var(--text-primary-on-color);            /* #ffffff */
       box-shadow: 0 0 0 1px var(--border-on-color);        /* 1px white border OUTSIDE (strokeAlign:OUTSIDE) */
     }
+    #notif-btn.is-active .num-badge { opacity: 0; }
 
     /* Avatar - 1.5 (node 684:621): flex items-start · 48×48 · border · overflow-clip */
     .navbar-avatar {
@@ -698,14 +698,16 @@
       color:       var(--text-tertiary-default);
       white-space: nowrap;
     }
-    /* Icon Badge - 1.5: 12×12, blue, 1px white border, 2px padding */
+    /* Icon Badge - 1.5: 12×12, blue, 1px white OUTSIDE stroke, 2px padding
+       strokeAlign:OUTSIDE → box-shadow NO inset (Rule 60).
+       border-box: 12px − 4px padding = 8px icon area. Stroke renders outside bounds. */
     .profile-dropdown__verified {
       width:           12px;
       height:          12px;
-      background:      #00a2e8;
-      box-shadow:      0 0 0 1px var(--border-on-color);   /* strokeAlign: OUTSIDE → no inset (Rule 60 / Rule 83) */
+      background:      var(--surface-informative-default);
+      box-shadow:      0 0 0 1px var(--border-on-color);
       border-radius:   var(--corner-radius-corner-rounded);
-      display:         flex;
+      display:         inline-flex;
       align-items:     center;
       justify-content: center;
       flex-shrink:     0;
@@ -902,12 +904,13 @@
     .notif-item {
       cursor:      pointer;
       user-select: none;
+      overflow:    hidden;                                    /* needed for max-height collapse */
     }
     /* Content frame — Default: white, pt-12 px-12 pb-0, no border */
     .notif-item__content {
       display:       flex;
       background:    var(--surface-general-default);
-      padding:       12px 12px 0;
+      padding:       var(--spacing-space-s) var(--spacing-space-s) 0;
       border-radius: 0;
       transition:    background 0.12s ease, box-shadow 0.12s ease, border-radius 0.12s ease, padding 0.12s ease;
     }
@@ -916,9 +919,9 @@
       display:        flex;
       flex:           1 0 0;
       min-width:      0;
-      gap:            8px;
+      gap:            var(--spacing-space-xs);
       align-items:    flex-start;
-      padding-bottom: 12px;
+      padding-bottom: var(--spacing-space-s);
       border-bottom:  1px solid var(--border-general-default);
       transition:     border-color 0.12s ease, padding-bottom 0.12s ease;
     }
@@ -927,25 +930,28 @@
       background:    var(--surface-secondary-default-hover);
       box-shadow:    inset 0 0 0 1px var(--border-primary-default);
       border-radius: var(--corner-radius-corner-xl);
-      padding:       12px;
+      padding:       var(--spacing-space-s);
     }
     .notif-item:hover .notif-item__body {
       border-bottom-color: transparent;
       padding-bottom:      0;
     }
     .notif-item:hover .notif-item__text { color: var(--text-tertiary-default); }
-    /* Pressed — Surface/primary/focus #00a36a · 1px #00cc85 inset · 16px radius */
-    .notif-item:active .notif-item__content {
-      background:    var(--surface-primary-focus);
+    /* Focus — Surface/secondary/default-subtle #e8fbe8 · 1px #00cc85 inset · 16px radius */
+    .notif-item:active .notif-item__content,
+    .notif-item:focus-visible .notif-item__content {
+      background:    var(--surface-secondary-default-subtle);
       box-shadow:    inset 0 0 0 1px var(--border-primary-default);
       border-radius: var(--corner-radius-corner-xl);
-      padding:       12px;
+      padding:       var(--spacing-space-s);
     }
-    .notif-item:active .notif-item__body {
+    .notif-item:active .notif-item__body,
+    .notif-item:focus-visible .notif-item__body {
       border-bottom-color: transparent;
       padding-bottom:      0;
     }
-    .notif-item:active .notif-item__text { color: var(--text-primary-default); }
+    .notif-item:active .notif-item__text,
+    .notif-item:focus-visible .notif-item__text { color: var(--text-primary-default); }
 
     /* Avatar — 60×60 clip, user-circle at 50px (DS inset 8.33% = 5px each side) */
     .notif-item__avatar {
@@ -980,28 +986,38 @@
       color:       var(--text-primary-default);
       white-space: nowrap;
     }
-    /* Unread indicator — 8×8 dot, pt-4 from top, Surface/primary/default #00cc85 */
+    /* Unread indicator — Indicator Badge - 1.5: 8×8, #00cc85 bg, 1px white OUTSIDE stroke (DS strokeAlign:OUTSIDE) */
     .notif-item__indicator { display: flex; align-items: flex-start; padding-top: 4px; flex-shrink: 0; }
     .notif-item__dot {
       width:         8px;
       height:        8px;
       border-radius: var(--corner-radius-corner-rounded);
       background:    var(--surface-primary-default);
+      box-shadow:    0 0 0 1px var(--border-on-color);   /* strokeAlign:OUTSIDE → no inset; #ffffff */
       flex-shrink:   0;
     }
 
+    /* Read state (click 1): fade out indicator dot */
+    .notif-item__indicator           { transition: opacity 0.2s ease; }
+    .notif-item.is-read .notif-item__indicator { opacity: 0; pointer-events: none; }
+
     /* "See all notification" — Primary/L Button - 1.5, no arrow, full-width */
-    .notif-dropdown__footer { padding-top: var(--spacing-space-m); width: 100%; }
+    .notif-dropdown__footer {
+      padding-top: var(--spacing-space-m);
+      width:       100%;
+      transition:  padding-top 0.3s ease;
+    }
+    /* When all items are dismissed, drop footer padding (dropdown's own 16px padding is enough) */
+    .notif-dropdown.is-empty .notif-dropdown__footer { padding-top: 0; }
     .notif-see-all {
       display:         flex;
       align-items:     center;
       justify-content: center;
       width:           100%;
-      max-height:      48px;
+      height:          40px;
       padding:         8px var(--spacing-space-s);
       background:      var(--surface-primary-default);
-      border:          none;
-      box-shadow:      inset 0 0 0 1px var(--border-primary-focus);   /* strokeAlign: INSIDE (Rule 60) */
+      border:          1px solid var(--border-primary-focus);
       border-radius:   var(--corner-radius-corner-rounded);
       cursor:          pointer;
       user-select:     none;
@@ -1010,10 +1026,10 @@
       font-weight:     600;
       line-height:     20px;
       color:           var(--text-primary-on-color);
-      /* no transition — Rule 82: Button - 1.5 uses instant state changes */
+      transition:      background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
     }
-    .notif-see-all:hover  { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); color: var(--text-secondary-focus); }
-    .notif-see-all:active { background: var(--surface-primary-focus);     box-shadow: inset 0 0 0 1px var(--border-primary-default);  color: var(--text-primary-default); }
+    .notif-see-all:hover  { background: var(--surface-secondary-default); border-color: var(--border-secondary-focus); color: var(--text-secondary-focus); }
+    .notif-see-all:active { background: var(--surface-primary-focus);    border-color: var(--border-primary-default); color: var(--text-primary-default); }
 
     /* ─── Download Apps dropdown (DS node 3909:3405, Navbar Download Apps - 1.5)
        238px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
@@ -1397,7 +1413,7 @@
       border-right:   1px solid var(--border-primary-default);
       border-radius:  0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl);
       overflow:       hidden;
-      padding:        16px;
+      padding:        var(--spacing-space-m);
       box-sizing:     border-box;
       display:        flex;
       flex-direction: column;
@@ -1420,7 +1436,7 @@
       align-items:     center;
       justify-content: space-between;
       gap:             10px;
-      padding:         0 16px 16px;
+      padding:         0 var(--spacing-space-m) var(--spacing-space-m);
       background:      var(--surface-general-default);
     }
     .nav-menu-tablet__logo { display: flex; align-items: center; }
@@ -1433,7 +1449,7 @@
     }
     .nav-menu-tablet__close:hover { color: var(--icon-primary-default); }
 
-    .nav-menu-tablet__search { padding: 0 16px; }
+    .nav-menu-tablet__search { padding: 0 var(--spacing-space-m); }
     .nav-menu-tablet__search-btn {
       display:       flex;
       align-items:   center;
@@ -1462,11 +1478,11 @@
 
     .nav-menu-tablet__menu {
       display:    flex;
-      gap:        8px;
-      padding:    16px;
+      gap:        var(--spacing-space-xs);
+      padding:    var(--spacing-space-m);
       background: var(--surface-general-default);
     }
-    .nav-menu-tablet__col { display: flex; flex-direction: column; gap: 8px; flex: 1 0 0; min-width: 0; }
+    .nav-menu-tablet__col { display: flex; flex-direction: column; gap: var(--spacing-space-xs); flex: 1 0 0; min-width: 0; }
     /* 32px-wide spacer with a centred 1px divider line */
     .nav-menu-tablet__divider { width: 32px; flex-shrink: 0; position: relative; align-self: stretch; }
     .nav-menu-tablet__divider::after {
@@ -1513,13 +1529,58 @@
     /* DS nav menu items have no checkbox indicator — active state uses pill background only */
     .nav-menu-check { display: none; }
 
+.nav-menu-item.has-submenu.is-open {
+      background:    var(--surface-secondary-default);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-focus);
+      border-radius: 108px;
+    }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__label { color: var(--text-primary-default-hover); }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__icon  { color: var(--icon-primary-default); }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__arrow { color: var(--icon-primary-default); }
+    .nav-menu-item.has-submenu .nav-menu-item__arrow svg { transition: transform 0.15s ease; }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__arrow svg { transform: rotate(90deg); }
+
+    /* DS Sub-topic: gap=8px, pl=16px, pr=16px, pt=0, pb=0 (tablet) / pb=16px (mobile).
+       DS nodes: tablet 5283:118410 (pt:0 pb:0), mobile 5283:122098 (pt:0 pb:16).
+       margin-top:-8px cancels the flex column's phantom gap when height=0 (flat layout).
+       Tablet open: margin stays -8px; sub-item py:8px provides the trigger→sub-item gap.
+       Mobile open: margin restores to 0; flex gap provides the trigger→sub-item gap. */
+    .nav-menu-submenu {
+      display:         flex;
+      flex-direction:  column;
+      gap:             0;
+      padding-top:     0;
+      padding-right:   var(--spacing-space-m);
+      padding-left:    var(--spacing-space-m);
+      box-sizing:      border-box;
+      max-height:      0;
+      overflow:        hidden;
+      /* Flat layout: negative margin cancels the flex column's phantom 8px gap when height is 0. */
+      margin-top:      calc(-1 * var(--spacing-space-xs));
+      transition:      max-height 0.2s ease, margin-top 0.2s ease;
+    }
+    /* Both tablet and mobile: restore margin-top to 0 when open so the 8px column gap
+       reappears between the trigger and the first sub-item. */
+    .nav-menu-submenu.is-open { max-height: 500px; margin-top: 0; }
+    /* Use margin instead of gap — flex gap can be unreliable inside overflow:hidden max-height containers. */
+    .nav-menu-submenu .nav-menu-item + .nav-menu-item {
+      margin-top: var(--spacing-space-xs);
+    }
+    /* Mobile: DS node 5283:122098 — pt:0, pb:16, pl:16, pr:16, border-radius:24px. */
+    #NavMenu-Mobile .nav-menu-submenu {
+      border-radius: 24px;
+      margin-top:    calc(-1 * var(--spacing-space-xs));
+      transition:    max-height 0.2s ease, margin-top 0.2s ease;
+    }
+    #NavMenu-Mobile .nav-menu-submenu.is-open { max-height: 800px; margin-top: 0; padding-bottom: var(--spacing-space-m); }
+
     /* CTA row: Notification + Download App button */
     .nav-menu-tablet__footer { padding: 0; display: flex; flex-direction: column; }
     .nav-menu-cta {
       display:       flex;
-      gap:           8px;
+      gap:           var(--spacing-space-xs);
       align-items:   center;
-      padding:       8px;
+      padding:       var(--spacing-space-xs);
       background:    var(--surface-secondary-default-subtle);
       box-shadow:    inset 0 0 0 1px #d1f7d1;
       border-radius: 28px;
@@ -1549,7 +1610,7 @@
       flex:           1 0 0;
       min-width:      0;
       height:         40px;
-      padding:        8px 12px;
+      padding:        var(--spacing-space-xs) var(--spacing-space-s);
       background:     var(--surface-primary-default);
       border:         none;
       box-shadow:     inset 0 0 0 1px var(--border-primary-focus);
@@ -1560,7 +1621,6 @@
       font-size:      14px;
       font-weight:    600;
       gap:            0;
-      transition:     background 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
     }
     .nav-menu-cta__btn:hover  { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); color: var(--text-secondary-focus); }
     .nav-menu-cta__btn:active { background: var(--surface-primary-focus);     box-shadow: inset 0 0 0 1px var(--border-primary-default); color: var(--text-primary-default); }
@@ -1568,7 +1628,7 @@
     .nav-menu-cta__btn-icon     { display: flex; flex-shrink: 0; width: 24px; height: 24px; align-items: center; justify-content: center; }
     .nav-menu-cta__btn-icon svg { width: 20px; height: 20px; display: block; }
     /* Label: DS pad l:8 r:8 — no flex:1, no growing */
-    .nav-menu-cta__btn-text     { padding: 0 8px; white-space: nowrap; }
+    .nav-menu-cta__btn-text     { padding: 0 var(--spacing-space-xs); white-space: nowrap; }
     /* R Arrow: 24×24 pill, #99ebce bg, 4px pad → 16px clip, chevron #00a36a */
     .nav-menu-cta__btn-arrow    {
       display: flex; align-items: center; justify-content: center;
@@ -1576,7 +1636,7 @@
       background:    #99ebce;
       border-radius: var(--corner-radius-corner-rounded);
       flex-shrink:   0;
-      padding:       4px;
+      padding:       var(--spacing-space-xxs);
       color:         var(--border-primary-focus);  /* chevron stroke #00a36a */
     }
     .nav-menu-cta__btn:hover  .nav-menu-cta__btn-arrow { background: var(--surface-secondary-default-subtle); }
@@ -1588,14 +1648,14 @@
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      gap:             8px;
-      padding:         16px 60px 0;
+      gap:             var(--spacing-space-xs);
+      padding:         var(--spacing-space-m) var(--page-padding-x) 0;
     }
     .nav-menu-locale__btn {
       display: flex; align-items: center;
       cursor: pointer;
       color:      var(--text-primary-default);  /* #00cc85 — BM and Mandarin */
-      background: none; border: none; padding: 4px;
+      background: none; border: none; padding: var(--spacing-space-xxs);
     }
     /* EN is the active locale — DS uses #00564C (Surface/tertiary/default) for selected locale stroke */
     .nav-menu-locale__btn:first-child { color: var(--surface-tertiary-default, #00564c); }
@@ -1664,7 +1724,7 @@
       align-items:     center;
       justify-content: space-between;
       gap:             10px;
-      padding:         16px;
+      padding:         var(--spacing-space-m);
       flex-shrink:     0;
       background:      var(--surface-general-default);
     }
@@ -1681,8 +1741,8 @@
     .nav-menu-mobile__content {
       display:     flex;
       flex-direction: column;
-      gap:         8px;
-      padding:     0 16px 16px;
+      gap:         var(--spacing-space-xs);
+      padding:     0 var(--spacing-space-m) var(--spacing-space-m);
       flex-shrink: 0;
     }
 
@@ -1697,8 +1757,8 @@
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      gap:             8px;
-      padding:         0 60px;
+      gap:             var(--spacing-space-xs);
+      padding:         0 var(--page-padding-x);
       flex-shrink:     0;
     }
 
@@ -1768,7 +1828,7 @@
     .navbar-bottom__icon svg { width: 16px; height: 16px; display: block; }
     .navbar-bottom__btn:hover  .navbar-bottom__icon { color: var(--icon-secondary-hover); }    /* Hover  — Icon/secondary/hover  #70bc6f */
     .navbar-bottom__btn:active .navbar-bottom__icon { color: var(--icon-primary-default); }   /* Pressed — Icon/primary/default #00cc85 (Arrow vis=false, leading icon confirmed) */
-    .navbar-bottom__btn.is-active .navbar-bottom__icon { color: var(--icon-primary-on-color); } /* Active  — Icon/primary/on-color #e1f9ea */
+    .navbar-bottom__btn.is-active .navbar-bottom__icon { color: var(--icon-primary-on-color); } /* Active  — Icon/primary/on-color #ffffff (DS updated 2026-05-24, Rule 61) */
 
     /* Label: 12px SemiBold · px:4px — separate color per state */
     .navbar-bottom__label {
@@ -1777,12 +1837,12 @@
       font-weight: 600;
       line-height: 18px;
       color:       var(--text-default-body);        /* Default: Text/default/body #666666 */
-      padding:     0 4px;
+      padding:     0 var(--spacing-space-xxs);
       transition:  color 0.12s ease;
     }
     .navbar-bottom__btn:hover  .navbar-bottom__label { color: var(--text-secondary-focus); }  /* #70bc6f */
     .navbar-bottom__btn:active .navbar-bottom__label { color: var(--text-primary-default); }  /* #00cc85 */
-    .navbar-bottom__btn.is-active .navbar-bottom__label { color: var(--text-primary-on-color); } /* #e1f9ea */
+    .navbar-bottom__btn.is-active .navbar-bottom__label { color: var(--text-primary-on-color); } /* #ffffff (DS updated 2026-05-24, Rule 61) */
 
     /* ─────────────────────────────────────────────────────
        RESPONSIVE LAYOUT
@@ -1949,7 +2009,7 @@
       #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge      { height: 24px; max-height: 24px; }
       #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__text { font-size: 12px; line-height: 12px; }
       #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon svg,
-      #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon img { height: 16px; width: auto; }
+      #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon img { width: 16px; height: 16px; }   /* DS Rule 20: M size exact 16×16px */
 
       /* Status badges: allow wrapping when pills don't fit in a single row */
       .status-badges { flex-wrap: wrap; }
@@ -1959,7 +2019,7 @@
 
       /* Mobile: hide top hamburger navbar → replaced by bottom Navbar Mobile - 1.5 */
       #NavBar-Mobile { display: none; }
-      body { padding-top: 16px; }
+      body { padding-top: var(--spacing-space-m); }
 
       /* Mobile bottom navbar visible; desktop footer hidden */
       .navbar-bottom { display: flex; }
@@ -2005,240 +2065,289 @@
       color:  var(--text-disabled-default);
     }
 
-
-
     /* ═══════════════════════════════════════════════════════════════
-       PAGE — Practice: My Subjects
-       Breadcrumb · 2-column Practice Card Grid (DS node 5072:104627)
-       Practice Card - 1.5 (DS node 5072:104628): 652×160px
+       QUIZ PAGE — nadia_Quiz.html
+       Status badges (node 3420:87102) + Primary Card quiz grid (node 4642:70723)
     ═══════════════════════════════════════════════════════════════ */
 
-    /* ── Breadcrumb 1.5 (DS node 3284:218453) ──────────────────── */
-    .bc-row { display: flex; align-items: center; gap: 12px; min-height: 36px; }
-    .bc-left { flex: 1; width: 100%; min-width: 0; display: flex; align-items: center; gap: var(--spacing-space-m); }
-    .bc-title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; flex-shrink: 0; }
-    .bc-sep { width: 1px; height: 20px; background: var(--border-general-default-secondary); flex-shrink: 0; }
-    .bc-trail { display: flex; align-items: center; gap: var(--spacing-space-xs); flex-wrap: wrap; }
-    .bc-link { display: inline-flex; align-items: center; gap: var(--spacing-space-xs); font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary-default); text-decoration: none; white-space: nowrap; }
-    .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
-    .bc-chevron { width: 16px; height: 16px; stroke: var(--text-default-caption); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
-    .bc-link--current { color: var(--text-default-body); }
-
-    /* ── Practice Card Grid ─────────────────────────────────────── */
-    .practice-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--spacing-space-m);
-    }
-
-    /* ── Practice Card - 1.5 (DS 5072:104628) ──────────────────────
-       Per-card colours via inline style on <article>:
-         --subj-bg      card background (subject/default)
-         --subj-border  outer card border (subject/focus)
-         --subj-title   title text (default white; override for light-bg subjects)
-         --subj-text    stat label/icon colour (default white; override for light-bg subjects)
-         (circles use rgba(255,255,255,0.12) — no per-card variable needed)
-    ──────────────────────────────────────────────────────────────── */
-
-    /* Outer card shell */
-    .practice-card {
-      display: flex;
-      align-items: stretch;
-      position: relative;           /* anchor for absolutely-positioned circles */
-      border: none;
-      box-shadow: inset 0 0 0 1px var(--subj-border); /* DS strokeAlign:INSIDE → box-shadow:inset */
-      border-radius: 24px;          /* corner-4xl */
-      overflow: hidden;
-      background: var(--subj-bg);
-      height: 160px;                /* DS confirmed 160px */
-      cursor: default;
-      transition: background 0.18s ease, box-shadow 0.18s ease;
-    }
-    .practice-card:hover {
-      background: var(--subj-bg-hover);
-      box-shadow: inset 0 0 0 8px var(--subj-bg); /* DS hover: border-l (8px) in subject/default */
-      cursor: pointer;
-    }
-    .practice-card:hover .practice-card__content {
-      border-left: none; /* DS: no separator on hover */
-    }
-
-    /* Left image panel — 160×160 */
-    .practice-card__image {
-      width: 160px;
-      min-width: 160px;
-      flex-shrink: 0;
-      display: flex;
+    /* Status Badge - 1.5 Size=M (32px) — DS node 3420:87102
+       4 pills: Score (green, 84px), Coins (yellow, 89px), Score (green, 89px), Lives (pink, 89px) */
+    .quiz-stats-row {
+      display:     flex;
       align-items: center;
-      justify-content: center;
-      position: relative;
+      gap:         5px;
+      flex-wrap:   wrap;
     }
-
-    /* Decorative circles — pure CSS, positioned to match DS blob geometry */
-    .practice-card__circles {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      transform-origin: left center;
-      transition: transform 0.3s ease;
+    .status-badge-m {
+      height:          32px;
+      max-height:      32px;
+      border:          1px solid;
+      border-radius:   var(--corner-radius-corner-rounded);   /* Corner Radius/corner-rounded = 60px — pill (Rule 3) */
+      padding:         4px 2px 4px 4px;
+      display:         flex;
+      flex-direction:  column;
+      align-items:     flex-start;
+      flex-shrink:     0;
     }
-    .practice-card:hover .practice-card__circles {
-      transform: scale(1.4);
+    .status-badge-m--score  { background: var(--surface-primary-default); border-color: var(--border-primary-focus); width: 84px; }
+    .status-badge-m--score2 { background: var(--surface-primary-default); border-color: var(--border-primary-focus); width: 89px; }
+    .status-badge-m--coins  { background: #fece00; border-color: #cba500; width: 89px; }
+    .status-badge-m--lives  { background: #ff5c98; border-color: #cc4a7a; width: 89px; }
+    .status-badge-m__content {
+      display:       flex;
+      flex:          1 0 0;
+      align-items:   center;
+      gap:           4px;
+      padding-left:  8px;
+      padding-right: 2px;
+      min-height:    0;
+      width:         100%;
     }
-    .practice-card__circle {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.12);
-    }
-    .practice-card__circle--1 { width: 50px;  height: 50px;  top: -17px; left: -11px; }
-    .practice-card__circle--2 { width: 85px;  height: 85px;  top:  14px; left:  64px; }
-    .practice-card__circle--3 { width: 184px; height: 184px; top:  68px; left: -92px; }
-
-    /* Icon placeholder — 100×100, corner-l (12px) */
-    .practice-card__icon-placeholder {
-      width: 100px;
-      height: 100px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.28);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-family);
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--subj-title, white);
-      text-align: center;
-      line-height: 1;
-      user-select: none;
-      flex-shrink: 0;
-      letter-spacing: -0.5px;
-    }
-
-    /* Icon wrap — 100×100 clip container, sits above circles */
-    .practice-card__icon-wrap {
-      position: relative;
-      width: 100px;
-      height: 100px;
-      overflow: hidden;
-      z-index: 1;
-      flex-shrink: 0;
-    }
-
-    .practice-card__icon-img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: contain;
-    }
-
-    /* Right content panel — fills remaining width, padding 16px */
-    .practice-card__content {
-      flex: 1;
-      min-width: 0;
-      /* no background — card's own background shows through; circles render freely behind */
-      /* same-color left border = subtle separator against image panel */
-      border-left: 1px solid var(--subj-bg);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 0;
-    }
-
-    /* Inner group: title + stats (gap 4px — DS confirmed space-xxs) */
-    .practice-card__inner {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      width: 100%;
-    }
-
-    /* Subject title — 24px Bold, DS text color (white on dark, dark on light bg) */
-    .practice-card__title {
-      font-family: var(--font-family);
-      font-size: 24px;
-      font-weight: 700;
-      line-height: 36px;
-      color: var(--subj-title, white);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      width: 100%;
-      margin: 0;
-    }
-
-    /* Stats row — HORIZONTAL, flex-wrap, 8px col-gap, 0 row-gap (DS confirmed) */
-    .practice-card__stats {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 0 8px;
-      align-items: flex-start;
-      width: 100%;
-    }
-
-    /* Single stat item: Icon(24px) + Label(h:24) — gap 2px (DS confirmed) */
-    .practice-card__stat {
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-      min-height: 24px;
-      flex-shrink: 0;
-    }
-
-    /* Stat icon outer container — 24×24 (DS confirmed) */
-    .practice-card__stat-icon {
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    /* Stat icon inner — 20×20 (DS confirmed) */
-    .practice-card__stat-icon svg {
-      width: 20px;
-      height: 20px;
-      display: block;
-      color: var(--subj-text, white);
-    }
-
-    /* Stat label — 14px Regular, h:24, no-wrap */
-    .practice-card__stat-label {
-      height: 24px;
-      display: flex;
-      align-items: center;
-      font-family: var(--font-family);
-      font-size: 14px;
-      font-weight: 400;
+    .status-badge-m__value {
+      flex:        1 0 0;
+      min-width:   0;
+      font-size:   14px;
+      font-weight: 600;
       line-height: 20px;
-      color: var(--subj-text, white);
+      color:       #ffffff;
+      white-space: nowrap;
+    }
+    /* Coins text stroke — DS node 2312:10654 (CLAUDE.md Rule 22): strokeAlign OUTSIDE → 2px (Rule 26) */
+    .status-badge-m--coins .status-badge-m__value {
+      -webkit-text-stroke: 2px #cba500;
+      paint-order:         stroke fill;
+    }
+    .status-badge-m__icon {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      background:      var(--surface-general-default);
+      border-radius:   999px;
+      padding:         4px 2px;
+      width:           24px;
+      height:          24px;
+      flex-shrink:     0;
+    }
+    .status-badge-m__icon svg { display: block; height: 16px; width: auto; }
+
+    /* Primary Card - 1.5 / Secondary Card outer (DS node 2881:36272)
+       Mint green bg, green inset border, 24px radius */
+    .section-frame {
+      background:     var(--surface-secondary-default-subtle);
+      box-shadow:     inset 0 0 0 1px var(--border-default);
+      border-radius:  var(--corner-radius-corner-4xl);
+      padding:        var(--spacing-space-m);
+      display:        flex;
+      flex-direction: column;
+      align-items:    stretch;
+      gap:            var(--spacing-space-xs);
+      overflow:       hidden;
+    }
+    .section-header {
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+    }
+    .section-header__left {
+      display:     flex;
+      align-items: center;
+      gap:         var(--spacing-space-xs);
+    }
+    .section-header__bookmark {
+      display:     flex;
+      align-items: center;
+      color:       var(--text-tertiary-default);
+    }
+    .section-header__title {
+      font-size:   18px;
+      font-weight: 600;
+      line-height: 28px;
+      color:       var(--text-tertiary-default);
+    }
+
+    /* Content Placeholder — flex-wrap grid, no white box (per DS node 4642:70723) */
+    .quiz-cards-grid {
+      display:       flex;
+      flex-wrap:     wrap;
+      gap:           var(--spacing-space-m);
+      width:         100%;
+      align-content: flex-start;
+    }
+
+    /* Quiz Card - 1.5 (DS node 2339:5346) — 148px tall, image-left + content-right */
+    .quiz-card {
+      height:         148px;
+      min-height:     148px;
+      max-height:     148px;
+      flex:           1 0 0;
+      min-width:      400px;
+      background:     var(--surface-general-default);
+      border-radius:  var(--corner-radius-corner-2xl);
+      display:        flex;
+      flex-direction: row;
+      align-items:    flex-start;
+      overflow:       hidden;
+      cursor:         default;
+      position:       relative;
+    }
+    /* Border on top of image children via ::after (strokeAlign:INSIDE, Rule 60 + Rule 118) */
+    .quiz-card::after {
+      content:       '';
+      position:      absolute;
+      inset:         0;
+      border:        1px solid var(--card-subject-color, var(--border-default));
+      border-radius: var(--corner-radius-corner-2xl);
+      pointer-events: none;
+      z-index:       1;
+    }
+    /* Image column — full card height, cover fill; KAFA uses contain */
+    .quiz-card__image {
+      width:               148px;
+      min-width:           148px;
+      flex-shrink:         0;
+      align-self:          stretch;
+      background-size:     cover;
+      background-position: center;
+      background-repeat:   no-repeat;
+      overflow:            hidden;
+    }
+    .quiz-card.kafa .quiz-card__image {
+      background-size:  contain;
+      background-color: var(--surface-general-default);
+    }
+    /* Content right column */
+    .quiz-card__content {
+      flex:           1;
+      min-width:      0;
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xxs);
+      padding:        var(--spacing-space-m);
+      align-self:     stretch;
+    }
+    .quiz-card__main {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xs);
+      flex:           1;
+      min-height:     0;
+    }
+    .quiz-card__header {
+      display:     flex;
+      flex-wrap:   wrap;
+      align-items: center;
+      gap:         var(--spacing-space-xxs);
+    }
+    .quiz-card__texts {
+      flex:           1;
+      min-height:     0;
+      display:        flex;
+      flex-direction: column;
+    }
+    .quiz-card__subtitle {
+      font-size:              12px;
+      font-weight:            600;
+      line-height:            18px;
+      color:                  var(--text-default-body);
+      overflow:               hidden;
+      text-overflow:          ellipsis;
+      display:                -webkit-box;
+      -webkit-line-clamp:     2;
+      -webkit-box-orient:     vertical;
+    }
+
+    /* Subject Badge - 1.5 Size=L (32px) — DS confirmed (CLAUDE.md Rules 17, 20) */
+    .subject-badge {
+      display:       inline-flex;
+      align-items:   stretch;
+      height:        32px;
+      border-radius: var(--corner-radius-corner-rounded);
+      overflow:      hidden;
+      border:        1px solid var(--badge-border);
+      flex-shrink:   0;
+    }
+    .subject-badge__icon {
+      background:      var(--surface-general-default);
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      padding:         var(--spacing-space-xxs) var(--spacing-space-xs) var(--spacing-space-xxs) var(--spacing-space-s);
+      flex-shrink:     0;
+    }
+    .subject-badge__icon svg,
+    .subject-badge__icon img { width: 20px; height: 20px; display: block; flex-shrink: 0; object-fit: contain; }   /* DS Rule 20: L size exact 20×20px */
+    .subject-badge__label-panel {
+      background:  var(--badge-bg);
+      display:     flex;
+      align-items: center;
+      padding:     0 var(--spacing-space-m) 0 var(--spacing-space-s);
+      position:    relative;
+    }
+    .subject-badge__pointer { position: absolute; left: 0; top: 50%; transform: translateY(-50%); display: flex; }
+    .subject-badge__text {
+      font-size:   14px;
+      font-weight: 500;
+      line-height: 20px;
+      color:       var(--badge-text, #f2f2f2);
       white-space: nowrap;
     }
 
+    /* Subject badge colors — DS confirmed (CLAUDE.md Rule 17b) */
+    .subject-badge--bm        { --badge-border: #2e4799; --badge-bg: #4d77ff; }
+    .subject-badge--english   { --badge-border: #cc3e45; --badge-bg: #ff4d56; }
+    .subject-badge--math      { --badge-border: #358a62; --badge-bg: #42ac7b; }
+    .subject-badge--science   { --badge-border: #ccab34; --badge-bg: #ffd641; --badge-text: #998027; }
+    .subject-badge--chemistry { --badge-border: #b50068; --badge-bg: #e20082; }
+    .subject-badge--physics   { --badge-border: #1f80ac; --badge-bg: #27a0d7; }
+    .subject-badge--history   { --badge-border: #876340; --badge-bg: #a97c50; }
+    .subject-badge--geo       { --badge-border: #5fad2b; --badge-bg: #77d836; --badge-text: #478220; }
+    .subject-badge--islamic   { --badge-border: #b23e66; --badge-bg: #de4d7f; }
+    .subject-badge--moral     { --badge-border: #005ba2; --badge-bg: #0072ca; }
+    .subject-badge--biology   { --badge-border: #6a27ad; --badge-bg: #8431d8; }
+    .subject-badge--add-math  { --badge-border: #182052; --badge-bg: #283589; }
+    .subject-badge--economy   { --badge-border: #cc4629; --badge-bg: #ff5733; }
+    .subject-badge--account   { --badge-border: #004479; --badge-bg: #0072ca; }
+    .subject-badge--business  { --badge-border: #bf9022; --badge-bg: #efb42b; }
+    .subject-badge--cs        { --badge-border: #a7005a; --badge-bg: #d10070; }
+    .subject-badge--kafa      { --badge-border: #6eb687; --badge-bg: #8ae3a9; --badge-text: #538865; }
+    .subject-badge--rbt       { --badge-border: #2a2a2a; --badge-bg: #353535; }
 
-    /* Responsive */
+    /* Card border color per subject — DS Subjects/*/default-subtle-hover values */
+    .subject-add-math  { --card-subject-color: #a9aed0; }
+    .subject-biology   { --card-subject-color: #ceadef; }
+    .subject-economy   { --card-subject-color: #ffbcad; }
+    .subject-chemistry { --card-subject-color: #ed99c6; }
+    .subject-english   { --card-subject-color: #ffb8bb; }
+    .subject-moral     { --card-subject-color: #99c7ea; }
+    .subject-islamic   { --card-subject-color: #f2b8cc; }
+    .subject-math      { --card-subject-color: #b3deca; }
+    .subject-account   { --card-subject-color: #99c7ea; }
+    .subject-physics   { --card-subject-color: #a9d9ef; }
+    .subject-business  { --card-subject-color: #f9e1aa; }
+    .subject-cs        { --card-subject-color: #ed99c6; }
+    .subject-science   { --card-subject-color: #ffefb3; }
+    .subject-history   { --card-subject-color: #ddcbb9; }
+    .subject-kafa      { --card-subject-color: #d0f4dd; }
+    .subject-geo       { --card-subject-color: #c9efaf; }
+    .subject-rbt       { --card-subject-color: #aeaeae; }
+    .subject-bm        { --card-subject-color: #b8c9ff; }
+
+    /* Responsive — tablet */
     @media (max-width: 1279px) {
-      .practice-grid { grid-template-columns: repeat(2, 1fr); }
-      .practice-card { height: 160px; }
-      .practice-card__image { width: 120px; min-width: 120px; }
-      .practice-card__icon-placeholder { width: 80px; height: 80px; font-size: 22px; }
-      .practice-card__icon-wrap { width: 80px; height: 80px; }
-      .practice-card__title { font-size: 20px; line-height: 30px; }
+      .quiz-cards-grid { gap: var(--spacing-space-s); }
+      .quiz-card       { min-width: 340px; }
+      .section-header__title { font-size: 16px; line-height: 24px; }
     }
+    /* Responsive — mobile */
     @media (max-width: 767px) {
-      .practice-grid { grid-template-columns: 1fr; }
-      .practice-card__image { width: 100px; min-width: 100px; }
-      .practice-card__icon-placeholder { width: 68px; height: 68px; font-size: 18px; }
-      .practice-card__icon-wrap { width: 68px; height: 68px; }
-      .practice-card__title { font-size: 18px; line-height: 28px; }
+      .quiz-cards-grid { gap: var(--spacing-space-xs); }
+      .quiz-card       { min-width: 300px; flex-basis: 100%; flex: none; width: 100%; }
+      .quiz-stats-row  { flex-wrap: wrap; }
     }
 
   </style>
 </head>
 <body>
-
 
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        NAVBAR â€” Navbar 1.5  (DS node 2339:2617)
@@ -2421,676 +2530,323 @@
       <!-- Outline/shopping-cart (260:1137) --><symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6M10 21C10 21.5523 9.55228 22 9 22C8.44772 22 8 21.5523 8 21C8 20.4477 8.44772 20 9 20C9.55228 20 10 20.4477 10 21ZM21 21C21 21.5523 20.5523 22 20 22C19.4477 22 19 21.5523 19 21C19 20.4477 19.4477 20 20 20C20.5523 20 21 20.4477 21 21Z"/></symbol>
       <!-- Outline/smile (260:1181) --><symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14M9 9H9.01M15 9H15.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
 
-      <!-- Outline/video (used in Premium badge icon) -->
-      <symbol id="ic-video" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></symbol>
-      <!-- Outline/corner-down-right (breadcrumb sub-nav link indicator) -->
-      <symbol id="ic-corner-down-right" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></symbol>
-      <!-- Outline/file (DS node 260:718) — plain file/document icon -->
-      <symbol id="ic-file" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 8L14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8ZM14 2V8H20"/></symbol>
     </defs>
   </svg>
 
+  <!-- ═══════════════════════════════════════════════════════════════
+       NAVBAR PRIMARY DESKTOP — Navbar Primary Desktop - 1.5
+       Navbar Primary Desktop - 1.5 / Type=Desktop (node 866:5576)
+       COMPONENT_SET: Navbar Primary Desktop - 1.5 (2337:21975) · only variant: Type=Desktop
+       Logo left · 6 action icons + avatar + notification badge right
+  ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       NAVIGATION SHELL
+       All nav variants wrapped in one section. Fixed elements
+       (NavMenu-Tablet, NavMenu-Mobile, NavBar-Bottom) escape DOM
+       stacking — this section is semantic grouping only.
+       Desktop: NavbarPrimary-Desktop + NavTopMenu-Desktop
+       Tablet:  NavBar-Mobile + NavMenu-Tablet
+       Mobile:  NavBar-Mobile + NavBar-Bottom + NavMenu-Mobile
+  ═══════════════════════════════════════════════════════════════ -->
   <section id="Navigation-Shell"></section>
 
 
   <!-- ═══════════════════════════════════════════════════════════════
-       PAGE VIEWPORT — Practice: My Subjects
+       PAGE VIEWPORT
+       Drop DS component instances inside PageViewport.
+       Replace the placeholder <div> with real content sections.
+       Use <section id="SectionName-Desktop"> per Rule 10.
   ═══════════════════════════════════════════════════════════════ -->
   <main>
     <div class="page-container">
       <div class="main-content">
 
-        <!-- Breadcrumb — Practice > My Subjects (DS node 3284:218453) -->
-        <section class="bc-row" aria-label="Breadcrumb">
-          <div class="bc-left">
-            <span class="bc-title">Practice</span>
-            <div class="bc-sep" aria-hidden="true"></div>
-            <nav class="bc-trail" aria-label="breadcrumb trail">
-              <a href="#" class="bc-link">
-                <svg aria-hidden="true"><use href="#ic-home"/></svg>
-                Home
-              </a>
-              <svg class="bc-chevron" aria-hidden="true" viewBox="0 0 16 16"><path d="M6 4L10 8L6 12" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <a href="#" class="bc-link bc-link--current" aria-current="page">My Subjects</a>
-            </nav>
+        <!-- ═══════════════════════════════════════════════════════════════
+             QUIZ STATS — DS node 3420:87102
+             4 × Status Badge - 1.5 Size=M: Score / Coins / Score / Lives
+        ═══════════════════════════════════════════════════════════════ -->
+        <section id="QuizStats-Desktop" aria-label="Quiz Statistics">
+          <div class="quiz-stats-row">
+            <!-- Score: 8,240 -->
+            <div class="status-badge-m status-badge-m--score">
+              <div class="status-badge-m__content">
+                <span class="status-badge-m__value">8,240</span>
+                <span class="status-badge-m__icon"><svg width="14" height="16" aria-label="Score" role="img"><use href="#ic-status-trophy"/></svg></span>
+              </div>
+            </div>
+            <!-- Coins: 1,350 -->
+            <div class="status-badge-m status-badge-m--coins">
+              <div class="status-badge-m__content">
+                <span class="status-badge-m__value">1,350</span>
+                <span class="status-badge-m__icon"><svg width="16" height="16" aria-label="Coins" role="img"><use href="#ic-status-coin"/></svg></span>
+              </div>
+            </div>
+            <!-- Score: 3,120 -->
+            <div class="status-badge-m status-badge-m--score2">
+              <div class="status-badge-m__content">
+                <span class="status-badge-m__value">3,120</span>
+                <span class="status-badge-m__icon"><svg width="14" height="16" aria-label="Score" role="img"><use href="#ic-status-trophy"/></svg></span>
+              </div>
+            </div>
+            <!-- Lives: 3 -->
+            <div class="status-badge-m status-badge-m--lives">
+              <div class="status-badge-m__content">
+                <span class="status-badge-m__value">3</span>
+                <span class="status-badge-m__icon"><svg width="15" height="16" aria-label="Lives" role="img"><use href="#ic-status-lives"/></svg></span>
+              </div>
+            </div>
           </div>
         </section>
 
-        <!-- Practice Card Grid — 19 subjects (DS node 5072:104627) -->
-        <section class="practice-grid" aria-label="Practice subjects">
+        <!-- ═══════════════════════════════════════════════════════════════
+             YOUR SELECTED SUBJECTS — DS node 4642:70723
+             Primary Card - 1.5 containing 18 Quiz Cards - 1.5
+        ═══════════════════════════════════════════════════════════════ -->
+        <section id="YourSelectedSubjects-Desktop" aria-label="Your Selected Subjects">
 
-          <!-- 1 · Add Mathematics (DS 5072:104629) — bg #283589 / border #182052 / text white -->
-          <article class="practice-card" style="--subj-bg:#283589;--subj-border:#182052;--subj-bg-hover:#202a6e">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/add-math.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Additional Mathematics</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+          <!-- 18 Quiz Cards — DS node 4642:70723 (no outer green card, no header) -->
+          <div class="quiz-cards-grid">
+
+            <!-- 1 — Additional Mathematics -->
+            <article class="quiz-card subject-add-math">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/add-math.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--add-math"><span class="subject-badge__icon"><svg width="21" height="24" viewBox="0 0 21 24" aria-hidden="true"><use href="#ic-subj-add-math"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Add. Math</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Trigonometric Functions and Graphs</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 2 · Accounting (DS 5072:104628) — bg #0072ca / border #004479 / title #e6f1fa / stats white -->
-          <article class="practice-card" style="--subj-bg:#0072ca;--subj-border:#004479;--subj-title:#e6f1fa;--subj-bg-hover:#005ba2">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/accounting.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Accounting</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 2 — Biology -->
+            <article class="quiz-card subject-biology">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/biology.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--biology"><span class="subject-badge__icon"><svg width="17" height="24" viewBox="0 0 17 24" aria-hidden="true"><use href="#ic-subj-biology"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Biology</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Human Circulatory System</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 3 · Bahasa Melayu (DS 5072:104630) — bg #4d77ff / border #2e4799 / text white -->
-          <article class="practice-card" style="--subj-bg:#4d77ff;--subj-border:#2e4799;--subj-bg-hover:#3e5fcc">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/bahasa-melayu.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Bahasa Melayu</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 3 — Economy -->
+            <article class="quiz-card subject-economy">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/economy.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--economy"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-economy"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Economy</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Theory of Production and Cost</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 4 · Biology (DS 5072:104631) — bg #8431d8 / border #4f1d82 / text white -->
-          <article class="practice-card" style="--subj-bg:#8431d8;--subj-border:#4f1d82;--subj-bg-hover:#6a27ad">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/biology.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Biology</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 4 — Chemistry -->
+            <article class="quiz-card subject-chemistry">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/chemistry.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--chemistry"><span class="subject-badge__icon"><svg width="15" height="24" viewBox="0 0 15 24" aria-hidden="true"><use href="#ic-subj-chemistry"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Chemistry</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Rate of Chemical Reactions</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 5 · Business (DS 5072:104632) — bg #efb42b / border #8f6c1a / title+stats #604811 -->
-          <article class="practice-card" style="--subj-bg:#efb42b;--subj-border:#8f6c1a;--subj-title:#604811;--subj-text:#604811;--subj-bg-hover:#bf9022">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/business.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Business</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 5 — English -->
+            <article class="quiz-card subject-english">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/english.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--english"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-english"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">English</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Reading Comprehension: Narrative Text</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 6 · Chemistry (DS 5072:104633) — bg #e20082 / border #88004e / text white -->
-          <article class="practice-card" style="--subj-bg:#e20082;--subj-border:#88004e;--subj-bg-hover:#b50068">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/chemistry.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Chemistry</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 6 — Moral Studies -->
+            <article class="quiz-card subject-moral">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/moral.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--moral"><span class="subject-badge__icon"><svg width="20" height="24" viewBox="0 0 20 24" aria-hidden="true"><use href="#ic-subj-moral"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Moral Studies</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Human Rights and Responsibilities</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 7 · Chinese Language (DS 5072:104634) — bg #f94848 / border #952b2b / text white -->
-          <article class="practice-card" style="--subj-bg:#f94848;--subj-border:#952b2b;--subj-bg-hover:#c73a3a">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/chinese-language.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Chinese Language</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 7 — Islamic Studies -->
+            <article class="quiz-card subject-islamic">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/islamic.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--islamic"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-islamic"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Islamic Studies</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Noble Character in Daily Life</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 8 · Computer Science (DS 5072:104635) — bg #d10070 / border #7d0043 / text white -->
-          <article class="practice-card" style="--subj-bg:#d10070;--subj-border:#7d0043;--subj-bg-hover:#a7005a">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/computer-science.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Computer Science</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 8 — Mathematics -->
+            <article class="quiz-card subject-math">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/math.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--math"><span class="subject-badge__icon"><svg width="19" height="24" viewBox="0 0 19 24" aria-hidden="true"><use href="#ic-subj-math"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Mathematics</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Arithmetic and Geometric Progressions</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 9 · Economy (DS 5072:104636) — bg #ff5733 / border #99341f / text white -->
-          <article class="practice-card" style="--subj-bg:#ff5733;--subj-border:#99341f;--subj-bg-hover:#cc4629">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/economy.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Economy</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 9 — Accounting -->
+            <article class="quiz-card subject-account">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/account.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--account"><span class="subject-badge__icon"><svg width="17" height="24" viewBox="0 0 17 24" aria-hidden="true"><use href="#ic-subj-account"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Accounting</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Financial Statements of Listed Companies</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 10 · English (DS 5072:104637) — bg #ff4d56 / border #992e34 / text white -->
-          <article class="practice-card" style="--subj-bg:#ff4d56;--subj-border:#992e34;--subj-bg-hover:#cc3e45">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/english.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">English</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 10 — Physics -->
+            <article class="quiz-card subject-physics">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/physics.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--physics"><span class="subject-badge__icon"><svg width="22" height="24" viewBox="0 0 22 24" aria-hidden="true"><use href="#ic-subj-physics"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Physics</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Electromagnetic Force and Induction</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 11 · Geography (DS 5072:104638) — bg #77d836 / border #478220 / text white -->
-          <article class="practice-card" style="--subj-bg:#77d836;--subj-border:#478220;--subj-bg-hover:#5fad2b">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/geography.png" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Geography</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 11 — Business Studies -->
+            <article class="quiz-card subject-business">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/business.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--business"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-business"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Business Studies</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Marketing and Promotion Strategies</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 12 · History (DS 5072:104639) — bg #a97c50 / border #654a30 / text white -->
-          <article class="practice-card" style="--subj-bg:#a97c50;--subj-border:#654a30;--subj-bg-hover:#876340">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/history.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">History</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 12 — Computer Science -->
+            <article class="quiz-card subject-cs">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/comp-science.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--cs"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-cs"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Computer Science</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Algorithms and Data Structures</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 13 · Islamic Studies (DS 5072:104640) — bg #de4d7f / border #852e4c / text white -->
-          <article class="practice-card" style="--subj-bg:#de4d7f;--subj-border:#852e4c;--subj-bg-hover:#b23e66">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/islamic-studies.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Islamic Studies</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 13 — Science -->
+            <article class="quiz-card subject-science">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/science.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--science"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-science"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Science</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Photosynthesis and Plant Respiration</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 14 · KAFA (DS 5072:104641) — bg #8ae3a9 / border #538865 / title+stats #375b44 -->
-          <article class="practice-card" style="--subj-bg:#8ae3a9;--subj-border:#538865;--subj-title:#375b44;--subj-text:#375b44;--subj-bg-hover:#6eb687">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/kafa.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">KAFA</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 14 — History -->
+            <article class="quiz-card subject-history">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/history.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--history"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-history"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">History</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Malaysia and World War II</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 15 · Mathematics (DS 5072:104642) — bg #42ac7b / border #28674a / text white -->
-          <article class="practice-card" style="--subj-bg:#42ac7b;--subj-border:#28674a;--subj-bg-hover:#358a62">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/mathematics.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Mathematics</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 15 — KAFA (background-size: contain — DS node uses object-contain) -->
+            <article class="quiz-card subject-kafa kafa">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/kafa.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--kafa"><span class="subject-badge__icon"><svg width="25" height="24" viewBox="0 0 24.32 24" aria-hidden="true"><use href="#ic-subj-kafa"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">KAFA</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Life of Prophet Muhammad SAW</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 16 · Moral Studies (DS 5072:104643) — bg #0072ca / border #004479 / text white -->
-          <article class="practice-card" style="--subj-bg:#0072ca;--subj-border:#004479;--subj-bg-hover:#005ba2">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/moral-studies.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Moral Studies</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 16 — Geography -->
+            <article class="quiz-card subject-geo">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/geography.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--geo"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-geo"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Geography</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Sustainable Development and Environment</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 17 · Physics (DS 5072:104644) — bg #27a0d7 / border #176081 / text white -->
-          <article class="practice-card" style="--subj-bg:#27a0d7;--subj-border:#176081;--subj-bg-hover:#1f80ac">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/physics.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Physics</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 17 — RBT (Reka Bentuk & Teknologi) -->
+            <article class="quiz-card subject-rbt">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/rbt.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--rbt"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-rbt"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">RBT</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Innovative Product Design</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 18 · RBT (DS 5072:104645) — bg #353535 / border #202020 / text white -->
-          <article class="practice-card" style="--subj-bg:#353535;--subj-border:#202020;--subj-bg-hover:#2a2a2a">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/rbt.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Reka Bentuk &amp; Teknologi</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            <!-- 18 — Bahasa Melayu -->
+            <article class="quiz-card subject-bm">
+              <div class="quiz-card__image" style="background-image: url('../../src/image-repo/page.quiz/assets/main/YourSelectedSubjects-Desktop/bm.png');"></div>
+              <div class="quiz-card__content">
+                <div class="quiz-card__main">
+                  <div class="quiz-card__header">
+                    <span class="subject-badge subject-badge--bm"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-bm"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Bahasa Melayu</span></span></span>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
+                  <div class="quiz-card__texts"><p class="quiz-card__subtitle">Argumentative Text and Debate</p></div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <!-- 19 · Science (DS 5072:104646) — bg #ffd641 / border #998027 / title+stats #66561a -->
-          <article class="practice-card" style="--subj-bg:#ffd641;--subj-border:#998027;--subj-title:#66561a;--subj-text:#66561a;--subj-bg-hover:#ccab34">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/science.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Science</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
+          </div><!-- end quiz-cards-grid -->
+        </section><!-- end YourSelectedSubjects-Desktop -->
 
-
-        </section><!-- /.practice-grid -->
-
-      </div><!-- /.main-content -->
-    </div><!-- /.page-container -->
+      </div>
+    </div>
   </main>
 
   <footer class="footer" id="zul-footer"></footer>
@@ -3108,7 +2864,7 @@
         var doc = parser.parseFromString(html, 'text/html');
 
         // Fix image paths: template is one level deep (zul.test.git/),
-        // nadia is two levels deep (Nadia.test.git/Practise/). ../src/ → ../../src/
+        // nadia is two levels deep (Nadia.test.git/Quiz/). ../src/ → ../../src/
         function fixPaths(html) {
           return html.replace(/src="\.\.\/src\//g, 'src="../../src/');
         }
@@ -3143,12 +2899,12 @@
           document.body.appendChild(ns);
         });
 
-        // 5. Set active nav state — clear template's hardcoded Home active, then set Practice
+        // 5. Set active nav state — clear template's hardcoded Home active, then set Quiz
         document.querySelectorAll('#NavTopMenu-Desktop .nav-menu-btn').forEach(function (b) {
           b.classList.remove('is-active');
         });
-        var practiceBtn = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="Practice"]');
-        if (practiceBtn) practiceBtn.classList.add('is-active');
+        var quizBtn = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="Quiz"]');
+        if (quizBtn) quizBtn.classList.add('is-active');
       })
       .catch(function (err) {
         console.error('[nav-inject] Failed to load navigation:', err);

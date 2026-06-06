@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pandai — Practice: Subjects</title>
+  <title>Pandai — Flashcards</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,6 +19,7 @@
     :root {
       /* Surface */
       --surface-general-default:         #FFFFFF;
+      --surface-subtle:                  #F8FAFC;
       --surface-primary-default:         #00cc85;
       --surface-primary-focus:           #00a36a;   /* Surface/primary/focus — pressed state bg */
       --surface-primary-default-subtle:        #d9f7ed;
@@ -31,6 +32,7 @@
       --surface-disabled-on-color:       #e5e5e5;   /* Surface/disabled/on color — disabled button arrow bg (DS confirmed 2026-05-24) */
       --surface-general-default-secondary: #f2f2f2;  /* Surface/general/default-secondary — carousel indicator inactive dot */
       --surface-tertiary-default:        #00564c;   /* Surface/tertiary/default — pressed state bg */
+      --surface-informative-default:     #00a2e8;   /* Surface/informative/default — Icon Badge - 1.5 (DS node 3908:1491) */
 
       /* Border */
 
@@ -54,14 +56,15 @@
       --icon-secondary-hover:     #70bc6f;   /* Icon/secondary/hover — nav button icons, hover state */
       --icon-primary-on-color:    #ffffff;   /* Icon/primary/on-color — Foundation/white (DS updated 2026-05-24, was #e1f9ea) */
       --icon-tertiary-default:    #00564c;   /* Icon/tertiary/default — pressed arrow chevron */
+      --icon-primary-focus:       #00a36a;   /* Icon/primary/focus — Primary button arrow chevron default */
+      --icon-alert-default:       #ff9f43;   /* Icon/alert/default — DS VariableID:119:14, Feather info icon in Upcoming rows */
 
       /* Border */
       --border-primary-default:   #00cc85;   /* Border/primary/default */
       --border-primary-focus:     #00a36a;   /* Border/primary/focus */
       --border-secondary-focus:   #70bc6f;   /* Border/secondary/focus — hover border on all buttons */
       --border-default:           #00cc85;   /* Border/default â€” navbar, footer, quiz card */
-      --border-general-default:          #d9d9d9;   /* Border/general/default — carousel cards */
-      --border-general-default-secondary: #bfbfbf;   /* Border/general/default-secondary — breadcrumb separator (DS node 3655:16650, confirmed Session 23) */
+      --border-general-default:   #d9d9d9;   /* Border/general/default — carousel cards */
       --border-tertiary-focus:    #00453d;   /* Border/tertiary/focus — pressed state border */
       --border-disabled-disabled: #bfbfbf;   /* Border/disabled/disabled */
       --border-on-color:          #ffffff;   /* Border/on-color — white border on Number Badge (DS 618:417 updated 2026-05-26) */
@@ -74,7 +77,7 @@
       --corner-radius-corner-xl:      16px;   /* Corner Radius/corner-xl â€” carousel cards */
       --corner-radius-corner-lg:      12px;
       --corner-radius-corner-md:      8px;
-      --radius-xl:                    8px;   /* Radius/xl (Semantic) — Primary Card content placeholder */
+      --radius-xl:                    8px;   /* Radius/xl (Semantic) — Nav Button - 1.5 (44×44 square) */
 
       /* Spacing (Semantic) */
       --spacing-space-xxs:  4px;
@@ -92,7 +95,9 @@
       --scale-200: 8px;
 
       /* Subject Colors â€” ALL confirmed from DS get_variable_defs */
+      --subjects-b-melayu-100:       #dbe4ff;   /* Subject/b-melayu/100 — DS Primitives (confirmed) */
       --subjects-b-melayu-default:   #4d77ff;   /* Subjects/b-melayu/default */
+      --subjects-b-melayu-focus:     #2e4799;   /* Subjects/b-melayu/focus — VariableID:1753:5923, DS confirmed */
       --subjects-english-default:    #ff4d56;   /* Subjects/english/default */
       --subjects-math-default:       #42ac7b;   /* Subjects/math/default */
       --subjects-science-default:    #ffd641;   /* Subjects/science/default */
@@ -121,6 +126,11 @@
       --section-gap:             var(--spacing-space-m);   /* Spacing/space-m = 16px */
       --overlay-dark:            rgba(26, 26, 26, 0.5);    /* Overlay/Overlay-Dark → Foundation/black 50 (DS confirmed) */
       --check-in-card-max-width: 390px;
+
+      /* Component-specific tokens — values confirmed from DS but not yet exported as named Semantic tokens */
+      --surface-table-heading:    #f6f9ff;              /* Body Cell - 1.5 heading row bg (DS Table - 1.5 pattern) */
+      --surface-tab-active-strip: #d1f7d1;              /* Tab Bar active tab bottom strip (Tab Bar - 1.5 Secondary) */
+      --text-on-color-subtitle:   rgba(255,255,255,0.85); /* Subtitle text on subject-coloured card header bg */
     }
 
     /* â”€â”€ Reset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -184,7 +194,6 @@
       right:      0;
       min-width:  390px;
       z-index:    100;
-      height:     60px;   /* DS node 2073:6579 — fixed height 60px */
       background: var(--surface-general-default);
       border-top: 1px solid var(--border-default);
     }
@@ -193,8 +202,8 @@
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      height:          100%;   /* fill the 60px footer frame */
-      padding:         0 var(--spacing-space-2xl); /* DS: t:20 r:28 b:20 l:28 → padding:0 + align-items:center */
+      height:          60px;                       /* DS: h:60px (node 2073:6579) */
+      padding:         0 var(--spacing-space-2xl); /* DS: t:20 r:28 b:20 l:28 → align-items:center handles vertical */
     }
 
     .footer__left {
@@ -430,7 +439,7 @@
     .navbar-action-btn:hover     .nav-btn-icon-clip svg { color: var(--icon-primary-default); }
     .navbar-action-btn:active    .nav-btn-icon-clip svg { color: var(--icon-primary-default); }
     .navbar-action-btn.is-pressing .nav-btn-icon-clip svg { color: var(--icon-primary-default); }
-    .navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--icon-primary-on-color); }   /* Icon/primary/on-color #e1f9ea — DS node 3908:6148 Active */
+    .navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--icon-primary-on-color); }   /* Icon/primary/on-color #ffffff — DS node 3908:6148 Active (DS updated 2026-05-24) */
 
     /* Number Badge - 1.5 (DS node 618:417, Type=Primary/M)
        20px circle · #00cc85 bg · #ffffff text · 1px white border · 60px radius · 4px padding
@@ -457,12 +466,14 @@
       text-align:      center;
       white-space:     nowrap;
       pointer-events:  none;
+      transition:      opacity 0.15s ease;
     }
     .num-badge--primary {
       background: var(--surface-primary-default);          /* #00cc85 */
       color:      var(--text-primary-on-color);            /* #ffffff */
       box-shadow: 0 0 0 1px var(--border-on-color);        /* 1px white border OUTSIDE (strokeAlign:OUTSIDE) */
     }
+    #notif-btn.is-active .num-badge { opacity: 0; }
 
     /* Avatar - 1.5 (node 684:621): flex items-start · 48×48 · border · overflow-clip */
     .navbar-avatar {
@@ -698,14 +709,16 @@
       color:       var(--text-tertiary-default);
       white-space: nowrap;
     }
-    /* Icon Badge - 1.5: 12×12, blue, 1px white border, 2px padding */
+    /* Icon Badge - 1.5: 12×12, blue, 1px white OUTSIDE stroke, 2px padding
+       strokeAlign:OUTSIDE → box-shadow NO inset (Rule 60).
+       border-box: 12px − 4px padding = 8px icon area. Stroke renders outside bounds. */
     .profile-dropdown__verified {
       width:           12px;
       height:          12px;
-      background:      #00a2e8;
-      box-shadow:      0 0 0 1px var(--border-on-color);   /* strokeAlign: OUTSIDE → no inset (Rule 60 / Rule 83) */
+      background:      var(--surface-informative-default);
+      box-shadow:      0 0 0 1px var(--border-on-color);
       border-radius:   var(--corner-radius-corner-rounded);
-      display:         flex;
+      display:         inline-flex;
       align-items:     center;
       justify-content: center;
       flex-shrink:     0;
@@ -902,12 +915,13 @@
     .notif-item {
       cursor:      pointer;
       user-select: none;
+      overflow:    hidden;                                    /* needed for max-height collapse */
     }
     /* Content frame — Default: white, pt-12 px-12 pb-0, no border */
     .notif-item__content {
       display:       flex;
       background:    var(--surface-general-default);
-      padding:       12px 12px 0;
+      padding:       var(--spacing-space-s) var(--spacing-space-s) 0;
       border-radius: 0;
       transition:    background 0.12s ease, box-shadow 0.12s ease, border-radius 0.12s ease, padding 0.12s ease;
     }
@@ -916,9 +930,9 @@
       display:        flex;
       flex:           1 0 0;
       min-width:      0;
-      gap:            8px;
+      gap:            var(--spacing-space-xs);
       align-items:    flex-start;
-      padding-bottom: 12px;
+      padding-bottom: var(--spacing-space-s);
       border-bottom:  1px solid var(--border-general-default);
       transition:     border-color 0.12s ease, padding-bottom 0.12s ease;
     }
@@ -927,25 +941,28 @@
       background:    var(--surface-secondary-default-hover);
       box-shadow:    inset 0 0 0 1px var(--border-primary-default);
       border-radius: var(--corner-radius-corner-xl);
-      padding:       12px;
+      padding:       var(--spacing-space-s);
     }
     .notif-item:hover .notif-item__body {
       border-bottom-color: transparent;
       padding-bottom:      0;
     }
     .notif-item:hover .notif-item__text { color: var(--text-tertiary-default); }
-    /* Pressed — Surface/primary/focus #00a36a · 1px #00cc85 inset · 16px radius */
-    .notif-item:active .notif-item__content {
-      background:    var(--surface-primary-focus);
+    /* Focus — Surface/secondary/default-subtle #e8fbe8 · 1px #00cc85 inset · 16px radius */
+    .notif-item:active .notif-item__content,
+    .notif-item:focus-visible .notif-item__content {
+      background:    var(--surface-secondary-default-subtle);
       box-shadow:    inset 0 0 0 1px var(--border-primary-default);
       border-radius: var(--corner-radius-corner-xl);
-      padding:       12px;
+      padding:       var(--spacing-space-s);
     }
-    .notif-item:active .notif-item__body {
+    .notif-item:active .notif-item__body,
+    .notif-item:focus-visible .notif-item__body {
       border-bottom-color: transparent;
       padding-bottom:      0;
     }
-    .notif-item:active .notif-item__text { color: var(--text-primary-default); }
+    .notif-item:active .notif-item__text,
+    .notif-item:focus-visible .notif-item__text { color: var(--text-primary-default); }
 
     /* Avatar — 60×60 clip, user-circle at 50px (DS inset 8.33% = 5px each side) */
     .notif-item__avatar {
@@ -980,28 +997,38 @@
       color:       var(--text-primary-default);
       white-space: nowrap;
     }
-    /* Unread indicator — 8×8 dot, pt-4 from top, Surface/primary/default #00cc85 */
+    /* Unread indicator — Indicator Badge - 1.5: 8×8, #00cc85 bg, 1px white OUTSIDE stroke (DS strokeAlign:OUTSIDE) */
     .notif-item__indicator { display: flex; align-items: flex-start; padding-top: 4px; flex-shrink: 0; }
     .notif-item__dot {
       width:         8px;
       height:        8px;
       border-radius: var(--corner-radius-corner-rounded);
       background:    var(--surface-primary-default);
+      box-shadow:    0 0 0 1px var(--border-on-color);   /* strokeAlign:OUTSIDE → no inset; #ffffff */
       flex-shrink:   0;
     }
 
+    /* Read state (click 1): fade out indicator dot */
+    .notif-item__indicator           { transition: opacity 0.2s ease; }
+    .notif-item.is-read .notif-item__indicator { opacity: 0; pointer-events: none; }
+
     /* "See all notification" — Primary/L Button - 1.5, no arrow, full-width */
-    .notif-dropdown__footer { padding-top: var(--spacing-space-m); width: 100%; }
+    .notif-dropdown__footer {
+      padding-top: var(--spacing-space-m);
+      width:       100%;
+      transition:  padding-top 0.3s ease;
+    }
+    /* When all items are dismissed, drop footer padding (dropdown's own 16px padding is enough) */
+    .notif-dropdown.is-empty .notif-dropdown__footer { padding-top: 0; }
     .notif-see-all {
       display:         flex;
       align-items:     center;
       justify-content: center;
       width:           100%;
-      max-height:      48px;
+      height:          40px;
       padding:         8px var(--spacing-space-s);
       background:      var(--surface-primary-default);
-      border:          none;
-      box-shadow:      inset 0 0 0 1px var(--border-primary-focus);   /* strokeAlign: INSIDE (Rule 60) */
+      border:          1px solid var(--border-primary-focus);
       border-radius:   var(--corner-radius-corner-rounded);
       cursor:          pointer;
       user-select:     none;
@@ -1010,10 +1037,10 @@
       font-weight:     600;
       line-height:     20px;
       color:           var(--text-primary-on-color);
-      /* no transition — Rule 82: Button - 1.5 uses instant state changes */
+      transition:      background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
     }
-    .notif-see-all:hover  { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); color: var(--text-secondary-focus); }
-    .notif-see-all:active { background: var(--surface-primary-focus);     box-shadow: inset 0 0 0 1px var(--border-primary-default);  color: var(--text-primary-default); }
+    .notif-see-all:hover  { background: var(--surface-secondary-default); border-color: var(--border-secondary-focus); color: var(--text-secondary-focus); }
+    .notif-see-all:active { background: var(--surface-primary-focus);    border-color: var(--border-primary-default); color: var(--text-primary-default); }
 
     /* ─── Download Apps dropdown (DS node 3909:3405, Navbar Download Apps - 1.5)
        238px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
@@ -1397,7 +1424,7 @@
       border-right:   1px solid var(--border-primary-default);
       border-radius:  0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl);
       overflow:       hidden;
-      padding:        16px;
+      padding:        var(--spacing-space-m);
       box-sizing:     border-box;
       display:        flex;
       flex-direction: column;
@@ -1420,7 +1447,7 @@
       align-items:     center;
       justify-content: space-between;
       gap:             10px;
-      padding:         0 16px 16px;
+      padding:         0 var(--spacing-space-m) var(--spacing-space-m);
       background:      var(--surface-general-default);
     }
     .nav-menu-tablet__logo { display: flex; align-items: center; }
@@ -1433,7 +1460,7 @@
     }
     .nav-menu-tablet__close:hover { color: var(--icon-primary-default); }
 
-    .nav-menu-tablet__search { padding: 0 16px; }
+    .nav-menu-tablet__search { padding: 0 var(--spacing-space-m); }
     .nav-menu-tablet__search-btn {
       display:       flex;
       align-items:   center;
@@ -1462,11 +1489,11 @@
 
     .nav-menu-tablet__menu {
       display:    flex;
-      gap:        8px;
-      padding:    16px;
+      gap:        var(--spacing-space-xs);
+      padding:    var(--spacing-space-m);
       background: var(--surface-general-default);
     }
-    .nav-menu-tablet__col { display: flex; flex-direction: column; gap: 8px; flex: 1 0 0; min-width: 0; }
+    .nav-menu-tablet__col { display: flex; flex-direction: column; gap: var(--spacing-space-xs); flex: 1 0 0; min-width: 0; }
     /* 32px-wide spacer with a centred 1px divider line */
     .nav-menu-tablet__divider { width: 32px; flex-shrink: 0; position: relative; align-self: stretch; }
     .nav-menu-tablet__divider::after {
@@ -1513,15 +1540,60 @@
     /* DS nav menu items have no checkbox indicator — active state uses pill background only */
     .nav-menu-check { display: none; }
 
+.nav-menu-item.has-submenu.is-open {
+      background:    var(--surface-secondary-default);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-focus);
+      border-radius: 108px;
+    }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__label { color: var(--text-primary-default-hover); }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__icon  { color: var(--icon-primary-default); }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__arrow { color: var(--icon-primary-default); }
+    .nav-menu-item.has-submenu .nav-menu-item__arrow svg { transition: transform 0.15s ease; }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__arrow svg { transform: rotate(90deg); }
+
+    /* DS Sub-topic: gap=8px, pl=16px, pr=16px, pt=0, pb=0 (tablet) / pb=16px (mobile).
+       DS nodes: tablet 5283:118410 (pt:0 pb:0), mobile 5283:122098 (pt:0 pb:16).
+       margin-top:-8px cancels the flex column's phantom gap when height=0 (flat layout).
+       Tablet open: margin stays -8px; sub-item py:8px provides the trigger→sub-item gap.
+       Mobile open: margin restores to 0; flex gap provides the trigger→sub-item gap. */
+    .nav-menu-submenu {
+      display:         flex;
+      flex-direction:  column;
+      gap:             0;
+      padding-top:     0;
+      padding-right:   var(--spacing-space-m);
+      padding-left:    var(--spacing-space-m);
+      box-sizing:      border-box;
+      max-height:      0;
+      overflow:        hidden;
+      /* Flat layout: negative margin cancels the flex column's phantom 8px gap when height is 0. */
+      margin-top:      calc(-1 * var(--spacing-space-xs));
+      transition:      max-height 0.2s ease, margin-top 0.2s ease;
+    }
+    /* Both tablet and mobile: restore margin-top to 0 when open so the 8px column gap
+       reappears between the trigger and the first sub-item. */
+    .nav-menu-submenu.is-open { max-height: 500px; margin-top: 0; }
+    /* Use margin instead of gap — flex gap can be unreliable inside overflow:hidden max-height containers. */
+    .nav-menu-submenu .nav-menu-item + .nav-menu-item {
+      margin-top: var(--spacing-space-xs);
+    }
+    /* Mobile: DS node 5283:122098 — pt:0, pb:16, pl:16, pr:16, border-radius:24px. */
+    #NavMenu-Mobile .nav-menu-submenu {
+      border-radius: 24px;
+      margin-top:    calc(-1 * var(--spacing-space-xs));
+      transition:    max-height 0.2s ease, margin-top 0.2s ease;
+    }
+    #NavMenu-Mobile .nav-menu-submenu.is-open { max-height: 800px; margin-top: 0; padding-bottom: var(--spacing-space-m); }
+
     /* CTA row: Notification + Download App button */
     .nav-menu-tablet__footer { padding: 0; display: flex; flex-direction: column; }
     .nav-menu-cta {
       display:       flex;
-      gap:           8px;
+      gap:           var(--spacing-space-xs);
       align-items:   center;
-      padding:       8px;
+      padding:       var(--spacing-space-xs);
       background:    var(--surface-secondary-default-subtle);
-      box-shadow:    inset 0 0 0 1px #d1f7d1;
+      box-shadow:    inset 0 0 0 1px var(--surface-tab-active-strip);
       border-radius: 28px;
     }
     .nav-menu-cta__notif {
@@ -1549,7 +1621,7 @@
       flex:           1 0 0;
       min-width:      0;
       height:         40px;
-      padding:        8px 12px;
+      padding:        var(--spacing-space-xs) var(--spacing-space-s);
       background:     var(--surface-primary-default);
       border:         none;
       box-shadow:     inset 0 0 0 1px var(--border-primary-focus);
@@ -1568,16 +1640,16 @@
     .nav-menu-cta__btn-icon     { display: flex; flex-shrink: 0; width: 24px; height: 24px; align-items: center; justify-content: center; }
     .nav-menu-cta__btn-icon svg { width: 20px; height: 20px; display: block; }
     /* Label: DS pad l:8 r:8 — no flex:1, no growing */
-    .nav-menu-cta__btn-text     { padding: 0 8px; white-space: nowrap; }
+    .nav-menu-cta__btn-text     { padding: 0 var(--spacing-space-xs); white-space: nowrap; }
     /* R Arrow: 24×24 pill, #99ebce bg, 4px pad → 16px clip, chevron #00a36a */
     .nav-menu-cta__btn-arrow    {
       display: flex; align-items: center; justify-content: center;
       width: 24px; height: 24px;
-      background:    #99ebce;
+      background:    var(--surface-primary-default-subtle-hover);   /* #99ebce — Primary arrow bg */
       border-radius: var(--corner-radius-corner-rounded);
       flex-shrink:   0;
-      padding:       4px;
-      color:         var(--border-primary-focus);  /* chevron stroke #00a36a */
+      padding:       var(--spacing-space-xxs);
+      color:         var(--icon-primary-focus);   /* #00a36a — chevron stroke */
     }
     .nav-menu-cta__btn:hover  .nav-menu-cta__btn-arrow { background: var(--surface-secondary-default-subtle); }
     .nav-menu-cta__btn:active .nav-menu-cta__btn-arrow { background: var(--surface-primary-default); }
@@ -1588,14 +1660,14 @@
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      gap:             8px;
-      padding:         16px 60px 0;
+      gap:             var(--spacing-space-xs);
+      padding:         var(--spacing-space-m) var(--page-padding-x) 0;
     }
     .nav-menu-locale__btn {
       display: flex; align-items: center;
       cursor: pointer;
       color:      var(--text-primary-default);  /* #00cc85 — BM and Mandarin */
-      background: none; border: none; padding: 4px;
+      background: none; border: none; padding: var(--spacing-space-xxs);
     }
     /* EN is the active locale — DS uses #00564C (Surface/tertiary/default) for selected locale stroke */
     .nav-menu-locale__btn:first-child { color: var(--surface-tertiary-default, #00564c); }
@@ -1664,7 +1736,7 @@
       align-items:     center;
       justify-content: space-between;
       gap:             10px;
-      padding:         16px;
+      padding:         var(--spacing-space-m);
       flex-shrink:     0;
       background:      var(--surface-general-default);
     }
@@ -1681,8 +1753,8 @@
     .nav-menu-mobile__content {
       display:     flex;
       flex-direction: column;
-      gap:         8px;
-      padding:     0 16px 16px;
+      gap:         var(--spacing-space-xs);
+      padding:     0 var(--spacing-space-m) var(--spacing-space-m);
       flex-shrink: 0;
     }
 
@@ -1697,8 +1769,8 @@
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      gap:             8px;
-      padding:         0 60px;
+      gap:             var(--spacing-space-xs);
+      padding:         0 var(--page-padding-x);
       flex-shrink:     0;
     }
 
@@ -1777,7 +1849,7 @@
       font-weight: 600;
       line-height: 18px;
       color:       var(--text-default-body);        /* Default: Text/default/body #666666 */
-      padding:     0 4px;
+      padding:     0 var(--spacing-space-xxs);
       transition:  color 0.12s ease;
     }
     .navbar-bottom__btn:hover  .navbar-bottom__label { color: var(--text-secondary-focus); }  /* #70bc6f */
@@ -1959,7 +2031,7 @@
 
       /* Mobile: hide top hamburger navbar → replaced by bottom Navbar Mobile - 1.5 */
       #NavBar-Mobile { display: none; }
-      body { padding-top: 16px; }
+      body { padding-top: var(--spacing-space-m); }
 
       /* Mobile bottom navbar visible; desktop footer hidden */
       .navbar-bottom { display: flex; }
@@ -2005,240 +2077,737 @@
       color:  var(--text-disabled-default);
     }
 
-
-
     /* ═══════════════════════════════════════════════════════════════
-       PAGE — Practice: My Subjects
-       Breadcrumb · 2-column Practice Card Grid (DS node 5072:104627)
-       Practice Card - 1.5 (DS node 5072:104628): 652×160px
+       PAGE — Flashcards
+       Breadcrumb (DS 4523:76232) · Tab Bar · Quick Notes Card (DS 4523:76233)
     ═══════════════════════════════════════════════════════════════ */
 
-    /* ── Breadcrumb 1.5 (DS node 3284:218453) ──────────────────── */
-    .bc-row { display: flex; align-items: center; gap: 12px; min-height: 36px; }
-    .bc-left { flex: 1; width: 100%; min-width: 0; display: flex; align-items: center; gap: var(--spacing-space-m); }
-    .bc-title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; flex-shrink: 0; }
-    .bc-sep { width: 1px; height: 20px; background: var(--border-general-default-secondary); flex-shrink: 0; }
-    .bc-trail { display: flex; align-items: center; gap: var(--spacing-space-xs); flex-wrap: wrap; }
-    .bc-link { display: inline-flex; align-items: center; gap: var(--spacing-space-xs); font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary-default); text-decoration: none; white-space: nowrap; }
-    .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
-    .bc-chevron { width: 16px; height: 16px; stroke: var(--text-default-caption); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
-    .bc-link--current { color: var(--text-default-body); }
-
-    /* ── Practice Card Grid ─────────────────────────────────────── */
-    .practice-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--spacing-space-m);
+    /* Override page-viewport to accept real content */
+    #PageViewport {
+      align-items:     stretch;
+      justify-content: flex-start;
+      background:      transparent;
+      box-shadow:      none;
+      border-radius:   0;
+      gap:             var(--spacing-space-m);
+      padding:         0;
+      min-height:      0;
     }
 
-    /* ── Practice Card - 1.5 (DS 5072:104628) ──────────────────────
-       Per-card colours via inline style on <article>:
-         --subj-bg      card background (subject/default)
-         --subj-border  outer card border (subject/focus)
-         --subj-title   title text (default white; override for light-bg subjects)
-         --subj-text    stat label/icon colour (default white; override for light-bg subjects)
-         (circles use rgba(255,255,255,0.12) — no per-card variable needed)
-    ──────────────────────────────────────────────────────────────── */
-
-    /* Outer card shell */
-    .practice-card {
-      display: flex;
-      align-items: stretch;
-      position: relative;           /* anchor for absolutely-positioned circles */
-      border: none;
-      box-shadow: inset 0 0 0 1px var(--subj-border); /* DS strokeAlign:INSIDE → box-shadow:inset */
-      border-radius: 24px;          /* corner-4xl */
-      overflow: hidden;
-      background: var(--subj-bg);
-      height: 160px;                /* DS confirmed 160px */
-      cursor: default;
-      transition: background 0.18s ease, box-shadow 0.18s ease;
-    }
-    .practice-card:hover {
-      background: var(--subj-bg-hover);
-      box-shadow: inset 0 0 0 8px var(--subj-bg); /* DS hover: border-l (8px) in subject/default */
-      cursor: pointer;
-    }
-    .practice-card:hover .practice-card__content {
-      border-left: none; /* DS: no separator on hover */
-    }
-
-    /* Left image panel — 160×160 */
-    .practice-card__image {
-      width: 160px;
-      min-width: 160px;
-      flex-shrink: 0;
-      display: flex;
+    /* Breadcrumb - 1.5 (DS node 4523:76232)
+       Outer: flex row, gap-16, items-center
+       Title: H3 24px Medium #00564c | Sep: 1px #d9d9d9 | Trail: 14px Regular links */
+    .bc-row {
+      display:     flex;
       align-items: center;
-      justify-content: center;
-      position: relative;
+      gap:         var(--spacing-space-m);
+      min-height:  44px;
+      flex-shrink: 0;
     }
-
-    /* Decorative circles — pure CSS, positioned to match DS blob geometry */
-    .practice-card__circles {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      transform-origin: left center;
-      transition: transform 0.3s ease;
-    }
-    .practice-card:hover .practice-card__circles {
-      transform: scale(1.4);
-    }
-    .practice-card__circle {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.12);
-    }
-    .practice-card__circle--1 { width: 50px;  height: 50px;  top: -17px; left: -11px; }
-    .practice-card__circle--2 { width: 85px;  height: 85px;  top:  14px; left:  64px; }
-    .practice-card__circle--3 { width: 184px; height: 184px; top:  68px; left: -92px; }
-
-    /* Icon placeholder — 100×100, corner-l (12px) */
-    .practice-card__icon-placeholder {
-      width: 100px;
-      height: 100px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.28);
-      display: flex;
+    .bc-title-group {
+      display:     flex;
       align-items: center;
-      justify-content: center;
-      font-family: var(--font-family);
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--subj-title, white);
-      text-align: center;
-      line-height: 1;
-      user-select: none;
-      flex-shrink: 0;
-      letter-spacing: -0.5px;
+      align-self:  stretch;
+      gap:         var(--spacing-space-m);
     }
-
-    /* Icon wrap — 100×100 clip container, sits above circles */
-    .practice-card__icon-wrap {
-      position: relative;
-      width: 100px;
-      height: 100px;
-      overflow: hidden;
-      z-index: 1;
-      flex-shrink: 0;
-    }
-
-    .practice-card__icon-img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: contain;
-    }
-
-    /* Right content panel — fills remaining width, padding 16px */
-    .practice-card__content {
-      flex: 1;
-      min-width: 0;
-      /* no background — card's own background shows through; circles render freely behind */
-      /* same-color left border = subtle separator against image panel */
-      border-left: 1px solid var(--subj-bg);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 0;
-    }
-
-    /* Inner group: title + stats (gap 4px — DS confirmed space-xxs) */
-    .practice-card__inner {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      width: 100%;
-    }
-
-    /* Subject title — 24px Bold, DS text color (white on dark, dark on light bg) */
-    .practice-card__title {
-      font-family: var(--font-family);
-      font-size: 24px;
-      font-weight: 700;
+    .bc-title {
+      font-size:   24px;
+      font-weight: 500;
       line-height: 36px;
-      color: var(--subj-title, white);
-      overflow: hidden;
-      text-overflow: ellipsis;
+      color:       var(--text-tertiary-default);
       white-space: nowrap;
-      width: 100%;
-      margin: 0;
-    }
-
-    /* Stats row — HORIZONTAL, flex-wrap, 8px col-gap, 0 row-gap (DS confirmed) */
-    .practice-card__stats {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 0 8px;
-      align-items: flex-start;
-      width: 100%;
-    }
-
-    /* Single stat item: Icon(24px) + Label(h:24) — gap 2px (DS confirmed) */
-    .practice-card__stat {
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-      min-height: 24px;
       flex-shrink: 0;
     }
-
-    /* Stat icon outer container — 24×24 (DS confirmed) */
-    .practice-card__stat-icon {
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .bc-sep {
+      width:      1px;
+      align-self: stretch;
+      background: var(--border-general-default);
       flex-shrink: 0;
     }
-    /* Stat icon inner — 20×20 (DS confirmed) */
-    .practice-card__stat-icon svg {
-      width: 20px;
-      height: 20px;
-      display: block;
-      color: var(--subj-text, white);
-    }
-
-    /* Stat label — 14px Regular, h:24, no-wrap */
-    .practice-card__stat-label {
-      height: 24px;
-      display: flex;
+    .bc-trail {
+      display:     flex;
       align-items: center;
-      font-family: var(--font-family);
-      font-size: 14px;
+      gap:         var(--spacing-space-xs);
+    }
+    .bc-link {
+      display:         inline-flex;
+      align-items:     center;
+      gap:             var(--spacing-space-xs);
+      font-size:       14px;
+      font-weight:     400;
+      line-height:     20px;
+      color:           var(--text-primary-default);
+      text-decoration: none;
+      white-space:     nowrap;
+    }
+    .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .bc-chevron  { width: 20px; height: 20px; flex-shrink: 0; color: var(--icon-default-default); }
+    .bc-current  {
+      font-size:   14px;
       font-weight: 400;
       line-height: 20px;
-      color: var(--subj-text, white);
+      color:       var(--text-default-body);
       white-space: nowrap;
     }
 
+    /* Tab Bar - 1.5 Secondary (DS node 4523:76234)
+       Bottom 1px #00cc85 line spans full width. Active tab: #e8fbe8 bg, green 3-side border,
+       20px top radius. Inactive: white bg, #d9d9d9 3-side border, clips 1px at bottom. */
+    .fc-main {
+      display:        flex;
+      flex-direction: column;
+      flex:           1;
+      min-height:     0;
+    }
+    .fc-tab-bar {
+      position:   relative;
+      display:    flex;
+      width:      100%;
+      flex-shrink: 0;
+    }
+    /* Green bottom line behind all tabs */
+    .fc-tab-bar::after {
+      content:    '';
+      position:   absolute;
+      bottom:     0;
+      left:       0;
+      right:      0;
+      height:     1px;
+      background: var(--border-primary-default);
+      z-index:    0;
+    }
+    .fc-tab-bar__tabs {
+      display:     flex;
+      gap:         10px;
+      align-items: flex-end;
+      width:       100%;
+      position:    relative;
+      z-index:     1;
+    }
+    /* Tab button shared
+       DS: Tab frame is VERTICAL flex, justify-end. Content (icon+label, gap:8) fills top,
+       Bar (1px) is pinned at the bottom. We keep a simpler flex-row layout but preserve the
+       visual by centering icon+label and simulating the bottom bar via ::after. */
+    .fc-tab {
+      flex:                    1 0 0;
+      display:                 flex;
+      align-items:             center;
+      justify-content:         center;
+      gap:                     var(--spacing-space-xs);  /* 8px icon-label gap (DS Content frame) */
+      height:                  41px;
+      padding:                 0 var(--spacing-space-m);
+      border-top-left-radius:  20px;
+      border-top-right-radius: 20px;
+      background:              none;
+      font-family:             var(--font-family);
+      cursor:                  pointer;
+      user-select:             none;
+      position:                relative;
+    }
+    /* Active tab — Secondary style (DS 3283:74226) */
+    .fc-tab--active {
+      background:   var(--surface-secondary-default-subtle);
+      border-top:   1px solid var(--border-primary-default);
+      border-left:  1px solid var(--border-primary-default);
+      border-right: 1px solid var(--border-primary-default);
+      border-bottom: none;
+      margin-bottom: -1px;  /* overlap the ::after bottom line so no gap */
+    }
+    .fc-tab--active::after {
+      content:    '';
+      position:   absolute;
+      bottom:     0;
+      left:       0;
+      right:      0;
+      height:     1px;
+      background: var(--surface-tab-active-strip);  /* #d1f7d1 — Tab Bar - 1.5 Secondary active bottom strip */
+    }
+    .fc-tab--active .fc-tab__label {
+      font-size:   14px;
+      font-weight: 600;
+      color:       var(--text-primary-default-hover);  /* #00a36a */
+    }
+    .fc-tab--active .fc-tab__icon svg { color: var(--text-primary-default-hover); }
+    /* Inactive tab (DS 3302:67602)
+       3-sided border: top + left + right only — NO border-bottom (DS design context confirms)
+       overflow:hidden + padding-bottom:1px clips the grey bar at bottom (DS: overflow-clip pb-px)
+       Net visual: grey-bordered tab, transparent bottom showing the green tab bar line */
+    .fc-tab:not(.fc-tab--active) {
+      background:    var(--surface-general-default);
+      border-top:    1px solid var(--border-general-default);
+      border-left:   1px solid var(--border-general-default);
+      border-right:  1px solid var(--border-general-default);
+      border-bottom: none;
+      overflow:      hidden;
+      padding-bottom: 1px;
+    }
+    .fc-tab:not(.fc-tab--active) .fc-tab__label {
+      font-size:   14px;
+      font-weight: 500;
+      color:       var(--text-disabled-default);  /* #bfbfbf */
+    }
+    .fc-tab:not(.fc-tab--active) .fc-tab__icon svg { color: var(--text-disabled-default); }
+    .fc-tab__icon {
+      width:           20px;
+      height:          20px;
+      flex-shrink:     0;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      overflow:        hidden;
+    }
+    .fc-tab__icon svg { width: 20px; height: 20px; display: block; }
+    .fc-tab__label { white-space: nowrap; }
 
-    /* Responsive */
-    @media (max-width: 1279px) {
-      .practice-grid { grid-template-columns: repeat(2, 1fr); }
-      .practice-card { height: 160px; }
-      .practice-card__image { width: 120px; min-width: 120px; }
-      .practice-card__icon-placeholder { width: 80px; height: 80px; font-size: 22px; }
-      .practice-card__icon-wrap { width: 80px; height: 80px; }
-      .practice-card__title { font-size: 20px; line-height: 30px; }
+    /* Quick Notes Card - 1.5 outer container (DS 5164:73057)
+       bg: #e8fbe8 · border: inset 1px #00cc85 · padding: 16px · gap: 16px
+       CRITICAL: tl:0 tr:0 bl:24 br:24 — top corners SQUARE (tab bar sits flush above) */
+    .fc-qncard {
+      background:     var(--surface-secondary-default-subtle);
+      box-shadow:     inset 0 0 0 1px var(--border-primary-default);
+      border-radius:  0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl);
+      padding:        var(--spacing-space-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-m);
+      flex:           1;
+      min-height:     0;
     }
-    @media (max-width: 767px) {
-      .practice-grid { grid-template-columns: 1fr; }
-      .practice-card__image { width: 100px; min-width: 100px; }
-      .practice-card__icon-placeholder { width: 68px; height: 68px; font-size: 18px; }
-      .practice-card__icon-wrap { width: 68px; height: 68px; }
-      .practice-card__title { font-size: 18px; line-height: 28px; }
+
+    /* Subject header (DS: 110px, radius 18px, subject-colored bg, INSIDE stroke) */
+    .fc-qncard__header {
+      height:        110px;
+      min-height:    110px;
+      border-radius: var(--corner-radius-corner-2xl);  /* 18px */
+      display:       flex;
+      align-items:   stretch;
+      overflow:      hidden;
+      position:      relative;
+      flex-shrink:   0;
     }
+    .fc-qncard__header--bm {
+      background: var(--subjects-b-melayu-default);  /* #4d77ff */
+      box-shadow: inset 0 0 0 1px var(--subjects-b-melayu-focus);   /* #2e4799 */
+    }
+    /* fc-qncard__header--account removed — account header in recall card is redundant */
+    /* Icon area: 110×110 (DS: tl:12 tr:0 bl:12 br:0 — left corners 12px, right square)
+       The icon area and content frame share the same subject bg color; the radius difference
+       creates a subtle inset tab on the left side within the 18px header clip. */
+    .fc-qncard__header-icon {
+      width:           110px;
+      min-width:       110px;
+      height:          110px;
+      border-radius:   var(--corner-radius-corner-lg) 0 0 var(--corner-radius-corner-lg);
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+    }
+    /* Subject icon: 60×60, flex-shrink:0 — wraps the DS icon SVG */
+    .fc-subject-icon {
+      width:       60px;
+      height:      60px;
+      flex-shrink: 0;
+      display:     flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .fc-subject-icon svg { display: block; flex-shrink: 0; }
+    /* Header content (DS: HORIZONTAL, crossAlign:CENTER, tl:0 tr:12 bl:0 br:12)
+       pt:16 r:16 b:16 l:24. P.Fano-Wireframe child is position:absolute → overflow:hidden clips it. */
+    .fc-qncard__header-content {
+      padding:        16px 16px 16px 24px;
+      display:        flex;
+      flex-direction: row;
+      align-items:    center;
+      gap:            2px;
+      flex:           1 0 0;
+      min-width:      0;
+      border-radius:  0 var(--corner-radius-corner-lg) var(--corner-radius-corner-lg) 0;
+      position:       relative;
+      overflow:       hidden;
+    }
+
+    /* Label sub-frame: VERTICAL flex, gap:2, flex:1 (fills remaining width)
+       Title + subtitle stacked, z-index:1 so text sits above the wireframe deco */
+    .fc-qncard__header-label {
+      display:        flex;
+      flex-direction: column;
+      gap:            2px;
+      flex:           1 0 0;
+      min-width:      0;
+      position:       relative;
+      z-index:        1;
+    }
+
+    /* P.Fano-Wireframe decorative background
+       DS: constraintsH=MAX (right-aligned), constraintsV=STRETCH, opacity:0.5, mix-blend-mode:overlay
+       The SVG itself carries opacity + mix-blend-mode in its <g> wrapper. */
+    .fc-qncard__header-deco {
+      position:       absolute;
+      right:          0;
+      top:            0;
+      bottom:         0;
+      display:        flex;
+      align-items:    center;
+      pointer-events: none;
+      z-index:        0;
+    }
+    .fc-qncard__header-deco svg { display: block; flex-shrink: 0; }
+    .fc-qncard__title {
+      font-size:     24px;
+      font-weight:   700;
+      line-height:   36px;
+      color:         #ffffff;
+      white-space:   nowrap;
+      overflow:      hidden;
+      text-overflow: ellipsis;
+      margin:        0;
+    }
+    .fc-qncard__subtitle {
+      font-size:     14px;
+      font-weight:   500;
+      line-height:   20px;
+      color:         var(--text-on-color-subtitle);
+      white-space:   nowrap;
+      overflow:      hidden;
+      text-overflow: ellipsis;
+      margin:        0;
+    }
+
+    /* Content slot (DS I5164:73057;2339:5079)
+       White bg · 1px #d9d9d9 INSIDE stroke · 16px radius · clipsContent:true · gap:16
+       Wraps all 3 sections (Active Recall + 2 chapters) inside the outer fc-qncard */
+    /* fc-qncard__content-slot removed — sections are now direct children of fc-qncard,
+       each rendered as its own separate card against the #e8fbe8 outer background. */
+
+    /* Active Recall History container (DS I5164:73057;2339:5079;5164:73363)
+       DS confirmed: fillHex:null (transparent), strokeHex:null (no border), radius:0, padding:0
+       Purely structural — heading-row and cols-wrap provide all visible styling. */
+    /* Active Recall History — standalone card (direct child of fc-qncard)
+       White bg · grey border (CSS border — always visible above children, no ::after needed
+       because heading-row + cols-wrap carry their own corner-radius so overflow:hidden not required) */
+    .fc-qncard--nested {
+      display:        flex;
+      flex-direction: column;
+      background:     var(--surface-general-default);
+      border-radius:  var(--corner-radius-corner-2xl);
+      overflow:       hidden;
+      position:       relative;
+      flex-shrink:    0;
+    }
+    .fc-qncard--nested::after {
+      content:        '';
+      position:       absolute;
+      inset:          0;
+      border-radius:  var(--corner-radius-corner-2xl);
+      box-shadow:     inset 0 0 0 1px var(--border-general-default);
+      pointer-events: none;
+      z-index:        10;
+    }
+
+    /* Active Recall History — DS table structure (nodes 5164:73077/78/79)
+       Structure: [heading-row 56px] + [divider 1px] + [2-col cols-wrap white]
+       The heading row reuses the same Body Cell - 1.5 / #f6f9ff pattern as chapter headings. */
+
+    /* fc-recall-block: wraps heading-row + divider + cols-wrap with gap:0 between them */
+    .fc-recall-block {
+      display:        flex;
+      flex-direction: column;
+      flex:           1;
+      min-height:     0;
+    }
+
+    /* "Active Recall History" heading row (DS 5164:73077 — Body Cell - 1.5)
+       56px · #f6f9ff · tl:18 tr:18 bl:0 br:0 · Text: 16px SemiBold */
+    .fc-recall-heading-row {
+      height:       56px;
+      min-height:   56px;
+      background:   var(--surface-table-heading);
+      border-radius: 18px 18px 0 0;
+      display:      flex;
+      align-items:  center;
+      padding:      0 var(--spacing-space-m);
+      flex-shrink:  0;
+    }
+    .fc-recall-heading-row__text {
+      font-size:   16px;
+      font-weight: 600;
+      line-height: 24px;
+      color:       var(--text-default-heading);
+    }
+
+    /* Divider - 1.5 (dashed horizontal separator) */
+    .fc-recall-divider {
+      border:      none;
+      border-top:  1px dashed var(--border-general-default);
+      margin:      0;
+      flex-shrink: 0;
+    }
+
+    /* 2-column container (DS Frame 1707479867)
+       strokeHex:#2e4799, token: Subjects/b-melayu/focus (VariableID:1753:5923)
+       strokeAlign:INSIDE · tl:0 tr:0 bl:18 br:18 · pad:16 · white bg
+       ::after overlay places the BM-focus border above children (same pattern as fc-chapter) */
+    .fc-recall-cols-wrap {
+      background:     var(--surface-general-default);
+      border-radius:  0 0 var(--corner-radius-corner-2xl) var(--corner-radius-corner-2xl);
+      padding:        var(--spacing-space-m);
+      flex:           1;
+      min-height:     0;
+      overflow:       hidden;
+      position:       relative;
+    }
+    .fc-recall-cols-wrap::after {
+      content:        '';
+      position:       absolute;
+      inset:          0;
+      border-radius:  0 0 var(--corner-radius-corner-2xl) var(--corner-radius-corner-2xl);
+      box-shadow:     inset 0 0 0 1px var(--subjects-b-melayu-focus);
+      pointer-events: none;
+      z-index:        10;
+    }
+    .fc-recall-cols {
+      display:    flex;
+      gap:        var(--spacing-space-m);
+      height:     100%;
+      min-height: 280px;
+    }
+
+    /* Individual table columns (DS: radius:18, NO stroke — DS confirmed)
+       Rounded corners are clipped by the parent overflow:hidden. */
+    .fc-recall-table {
+      flex:           1;
+      min-width:      0;
+      border-radius:  var(--corner-radius-corner-2xl);
+      overflow:       hidden;
+      display:        flex;
+      flex-direction: column;
+    }
+    /* .fc-recall-table::after removed — DS confirms no stroke on individual column tables */
+
+    /* Column heading row (Top Slot4 — 56px, #f6f9ff bg, top corners clipped by parent radius)
+       Text: 16px Medium (w500) — distinct from the outer "Active Recall History" SemiBold (w600) */
+    .fc-recall-table__heading {
+      height:        56px;
+      min-height:    56px;
+      background:    var(--surface-table-heading);
+      border-bottom: 1px solid var(--border-general-default);
+      display:       flex;
+      align-items:   center;
+      padding:       0 var(--spacing-space-m);
+      flex-shrink:   0;
+    }
+    .fc-recall-table__label {
+      font-size:   16px;
+      font-weight: 500;
+      line-height: 24px;
+      color:       var(--text-default-heading);
+    }
+
+    /* Column body */
+    .fc-recall-table__body {
+      flex:           1;
+      overflow-y:     auto;
+      display:        flex;
+      flex-direction: column;
+      background:     var(--surface-general-default);
+    }
+
+    /* Empty state (Recent column) */
+    .fc-recall-empty {
+      flex:            1;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      font-size:       14px;
+      font-weight:     400;
+      line-height:     20px;
+      color:           var(--text-disabled-default);
+      padding:         var(--spacing-space-m);
+    }
+
+    /* Upcoming data rows (DS Mid Slot — 56px, white bg, grey bottom border)
+       3-cell structure: icon-cell (56px) | info-cell (flex:1) | badge-cell (160px)
+       Each cell has own 16px padding; grey left-border dividers between cells. */
+    .fc-recall-row {
+      display:       flex;
+      align-items:   stretch;
+      min-height:    56px;
+      background:    var(--surface-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+    }
+    .fc-recall-row:last-child { border-bottom: none; }
+
+    /* Icon cell (DS: 56×56 Body Cell - 1.5, pad:16, centred) */
+    .fc-recall-row__icon-cell {
+      width:           56px;
+      min-width:       56px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      padding:         var(--spacing-space-m);
+      flex-shrink:     0;
+    }
+    .fc-recall-row__icon-cell svg { width: 24px; height: 24px; display: block; flex-shrink: 0; }
+
+    /* Info cell (DS: flex:1/383px, Body Cell pad:16, VERTICAL gap:2px) */
+    .fc-recall-row__info-cell {
+      flex:           1 0 0;
+      min-width:      0;
+      display:        flex;
+      flex-direction: column;
+      justify-content: center;
+      gap:            2px;
+      padding:        var(--spacing-space-m);
+      border-left:    1px solid var(--border-general-default);
+    }
+
+    /* Date row: date text (12px) + info icon (16px orange) */
+    .fc-recall-row__date-row {
+      display:     flex;
+      align-items: center;
+      gap:         4px;
+    }
+    .fc-recall-row__date {
+      font-size:   12px;
+      font-weight: 400;
+      line-height: 18px;
+      color:       var(--text-default-body);
+    }
+    /* Feather info icon — Icon/alert/default = #ff9f43 orange */
+    .fc-recall-info-icon { width: 16px; height: 16px; flex-shrink: 0; color: var(--icon-alert-default); }
+
+    /* Flashcard title: 14px Regular, Text/primary/default = #00cc85 */
+    .fc-recall-row__title {
+      font-size:     14px;
+      font-weight:   400;
+      line-height:   20px;
+      color:         var(--text-primary-default);
+      white-space:   nowrap;
+      overflow:      hidden;
+      text-overflow: ellipsis;
+      cursor:        pointer;
+    }
+
+    /* Badge cell (DS: 160px Body Cell - 1.5, centred, pad:16) */
+    .fc-recall-row__badge-cell {
+      width:           160px;
+      min-width:       160px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      padding:         var(--spacing-space-m);
+      border-left:     1px solid var(--border-general-default);
+      flex-shrink:     0;
+    }
+
+    /* Strength badges (Pill Badge - 1.5 variants)
+       Strong = Primary type: #00cc85 green fill, white text
+       Moderate = Alert type: #ff9f43 orange fill, white text */
+    .fc-strength-badge {
+      flex-shrink:   0;
+      height:        24px;
+      padding:       2px 12px;
+      border-radius: var(--corner-radius-corner-rounded);
+      font-size:     12px;
+      font-weight:   600;
+      line-height:   20px;
+      display:       flex;
+      align-items:   center;
+      white-space:   nowrap;
+    }
+    .fc-strength-badge--strong   { background: var(--surface-primary-default); color: var(--text-primary-on-color); }
+    .fc-strength-badge--moderate { background: var(--icon-alert-default); color: var(--text-primary-on-color); }
+
+    /* Chapter sections (DS Content frames — 5164:73364 / 5164:73467)
+       strokeAlign:INSIDE, 1px #2e4799 · 18px radius · overflow:hidden
+       Same ::after fix as content-slot — zero-padding, children cover inset shadow on straight edges. */
+    .fc-chapter {
+      border-radius:  var(--corner-radius-corner-2xl);
+      overflow:       hidden;
+      flex-shrink:    0;
+      position:       relative;
+    }
+    .fc-chapter::after {
+      content:        '';
+      position:       absolute;
+      inset:          0;
+      border-radius:  var(--corner-radius-corner-2xl);
+      box-shadow:     inset 0 0 0 1px var(--subjects-b-melayu-focus);
+      pointer-events: none;
+      z-index:        10;
+    }
+
+    /* Heading row (DS Top Slot3 — 5164:73365)
+       56px · #f6f9ff bg · #4d77ff bottom border · no padding on row itself
+       Two columns: icon-col (40px) + label-col (flex:1) */
+    .fc-chapter__heading-row {
+      height:      56px;
+      background:  var(--surface-table-heading);
+      border-bottom: 1px solid var(--subjects-b-melayu-default);
+      display:     flex;
+      align-items: stretch;
+    }
+
+    /* Icon column (DS Frame 1707479815 — 40×56, pad: t16 r0 b16 l16) */
+    .fc-chapter__heading-icon-col {
+      width:           40px;
+      min-width:       40px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      padding:         var(--spacing-space-m) 0 var(--spacing-space-m) var(--spacing-space-m);
+      flex-shrink:     0;
+    }
+
+    /* Icon box (DS inner Frame — 24×24, fill:#b6eeff, radius:0, no variable binding in DS) */
+    .fc-chapter__heading-icon {
+      width:           24px;
+      height:          24px;
+      background:      #b6eeff;
+      border-radius:   0;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+      overflow:        hidden;
+    }
+    .fc-chapter__heading-icon svg { width: 16px; height: 16px; color: var(--subjects-b-melayu-default); }
+
+    /* Label column (DS Heading Cell - 1.5 — 1249×56, pad:16 all) */
+    .fc-chapter__heading-label-col {
+      flex:        1 0 0;
+      display:     flex;
+      align-items: center;
+      padding:     0 var(--spacing-space-m);
+      min-width:   0;
+    }
+    .fc-chapter__heading-text {
+      font-size:   16px;
+      font-weight: 500;
+      line-height: 24px;
+      color:       var(--text-default-heading);
+    }
+
+    .fc-chapter__rows { display: flex; flex-direction: column; }
+
+    /* Data row (DS Mid Slot — 56px · white · grey INSIDE border at bottom)
+       Two cells: left (flex:1, text+badge) + right (160px, Start button) */
+    .fc-chapter-row {
+      height:      56px;
+      display:     flex;
+      align-items: stretch;
+      background:  var(--surface-general-default);
+      border-bottom: 1px solid var(--border-general-default);
+    }
+    .fc-chapter-row:last-child { border-bottom: none; }
+
+    /* Left cell (DS Body Cell - 1.5, 1129px, Type=Right Slots, pad:16, gap:8)
+       Text + pill badge sit inline with 8px gap; label is natural width (no flex grow) */
+    .fc-chapter-row__left {
+      flex:        1 0 0;
+      min-width:   0;
+      display:     flex;
+      align-items: center;
+      gap:         var(--spacing-space-xs);
+      padding:     0 var(--spacing-space-m);
+    }
+    .fc-chapter-row__label {
+      font-size:   14px;
+      font-weight: 400;
+      line-height: 20px;
+      color:       var(--text-default-body);
+      white-space: nowrap;
+    }
+
+    /* Right cell (DS Body Cell - 1.5, 160px, Type=Left Slots, centred)
+       Contains the Start button. Left divider = grey INSIDE stroke. */
+    .fc-chapter-row__right {
+      flex:            0 0 160px;
+      width:           160px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      padding:         0 var(--spacing-space-m);
+      box-shadow:      inset 1px 0 0 0 var(--border-general-default);
+    }
+
+    /* "N cards" Pill Badge - Info type (DS Pill Badge - 1.5, Type=Info)
+       Surface/informative/default (#00a2e8) · pill radius · 14px Medium white */
+    .fc-chapter-row__pill {
+      height:        24px;
+      padding:       2px 16px;
+      border-radius: var(--corner-radius-corner-rounded);
+      background:    var(--surface-informative-default);
+      color:         #ffffff;
+      font-size:     14px;
+      font-weight:   500;
+      line-height:   20px;
+      white-space:   nowrap;
+      flex-shrink:   0;
+    }
+    /* Start button — Button - 1.5 Primary/S Student (DS 1437:8154)
+       24px height · pill · #00cc85 bg · inset 1px #00a36a · white text */
+    /* Button - 1.5 Primary/S (DS node 1437:8154 — Student type)
+       Rule 82: NO transitions — all state changes are instant.
+       Rule 83: Pressed state via CSS :active + JS .is-pressing class. */
+    .fc-start-btn {
+      display:       inline-flex;
+      align-items:   center;
+      height:        24px;
+      padding:       2px 8px;
+      border-radius: var(--corner-radius-corner-rounded);
+      background:    var(--surface-primary-default);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-focus);
+      border:        none;
+      cursor:        pointer;
+      font-family:   var(--font-family);
+      font-size:     12px;
+      font-weight:   600;
+      color:         var(--text-primary-on-color);
+      gap:           0;
+      flex-shrink:   0;
+      user-select:   none;
+    }
+    /* Hover — Secondary palette (DS node 1437:8146) */
+    .fc-start-btn:hover {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+      color:      var(--text-primary-default-hover);
+    }
+    /* Pressed — Primary/focus palette (DS node 1437:8138, Rule 40 — 2026-05-31) */
+    .fc-start-btn:active,
+    .fc-start-btn.is-pressing {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+      color:      var(--text-primary-default);
+    }
+    .fc-start-btn__label { padding: 0 4px; }
+    /* Arrow circle: 16×16, arrow bg DS #99ebce, 2px padding, 12×12 chevron clip — NO CSS padding on clip (Rule 16) */
+    .fc-start-btn__arrow {
+      width:           16px;
+      height:          16px;
+      border-radius:   var(--corner-radius-corner-rounded);
+      background:      var(--surface-primary-default-subtle-hover);   /* #99ebce — Primary/S default arrow bg */
+      display:         inline-flex;
+      align-items:     center;
+      justify-content: center;
+      padding:         2px;
+      flex-shrink:     0;
+    }
+    .fc-start-btn__arrow svg { display: block; width: 12px; height: 12px; color: var(--icon-primary-focus); }
+    .fc-start-btn:hover .fc-start-btn__arrow          { background: var(--surface-secondary-default-subtle); }
+    .fc-start-btn:hover .fc-start-btn__arrow svg      { color: var(--border-secondary-focus); }
+    .fc-start-btn:active .fc-start-btn__arrow,
+    .fc-start-btn.is-pressing .fc-start-btn__arrow    { background: var(--surface-primary-default); }
+    .fc-start-btn:active .fc-start-btn__arrow svg,
+    .fc-start-btn.is-pressing .fc-start-btn__arrow svg { color: var(--surface-primary-focus); }
+
 
   </style>
 </head>
 <body>
-
 
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        NAVBAR â€” Navbar 1.5  (DS node 2339:2617)
@@ -2268,7 +2837,7 @@
       <!-- Outline/bookmark (260:504) — path translated by x+5 y+3 to match 24x24 DS frame; viewBox -1 -1 26 26 for 1px stroke buffer --><symbol id="ic-bookmark" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 19 21 L 12 16 L 5 21 L 5 5 C 5 4.47 5.211 3.961 5.586 3.586 C 5.961 3.211 6.47 3 7 3 L 17 3 C 17.53 3 18.039 3.211 18.414 3.586 C 18.789 3.961 19 4.47 19 5 L 19 21 Z"/></symbol>
       <!-- Outline/clock (260:566) --><symbol id="ic-clock" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6V12L16 14M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
       <!-- Outline/EN (1104:2538) — vec x:3 y:6 +3+6 → vb -1 -1 26 26; no CSS clip, icon renders at natural 24x24 --><symbol id="ic-en" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 21.613 6 L 21.613 17.252 L 13.086 6 L 13.086 17.252"/><path d="M 9.129 6.05 L 3 6.05 L 3 11.651 L 3 17.252 L 9.129 17.252"/><path d="M 3 11.651 L 9.181 11.651"/></symbol>
-      <!-- Nav Button - 1.5 Active state Union bg (DS node 3908:6165) — 44×52 speech-bubble shape, green fill, downward tail at bottom-center --><symbol id="ic-nav-btn-union" viewBox="0 0 44 52"><path d="M36 0C40.4183 0 44 3.58172 44 8V36C44 40.4183 40.4183 44 36 44H31.6569C30.596 44 29.5786 44.4214 28.8284 45.1716L23.4141 50.5859C22.6331 51.3668 21.3669 51.3668 20.5859 50.5859L15.1716 45.1716C14.4214 44.4214 13.404 44 12.3431 44H8C3.58172 44 0 40.4183 0 36V8C0 3.58172 3.58172 0 8 0H36Z" fill="#00cc85"/></symbol>
+      <!-- ic-nav-btn-union removed: Active state is a plain rounded square (Rules 52, 59) — no speech-bubble tail in DS -->
       <!-- Filled/waffle-menu (3075:61110) — DS export, 9 filled dots, fill+stroke=currentColor --><symbol id="ic-waffle" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z"/><path d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z"/><path d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z"/><path d="M12 6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5C11 5.55228 11.4477 6 12 6Z"/><path d="M19 6C19.5523 6 20 5.55228 20 5C20 4.44772 19.5523 4 19 4C18.4477 4 18 4.44772 18 5C18 5.55228 18.4477 6 19 6Z"/><path d="M5 6C5.55228 6 6 5.55228 6 5C6 4.44772 5.55228 4 5 4C4.44772 4 4 4.44772 4 5C4 5.55228 4.44772 6 5 6Z"/><path d="M12 20C12.5523 20 13 19.5523 13 19C13 18.4477 12.5523 18 12 18C11.4477 18 11 18.4477 11 19C11 19.5523 11.4477 20 12 20Z"/><path d="M19 20C19.5523 20 20 19.5523 20 19C20 18.4477 19.5523 18 19 18C18.4477 18 18 18.4477 18 19C18 19.5523 18.4477 20 19 20Z"/><path d="M5 20C5.55228 20 6 19.5523 6 19C6 18.4477 5.55228 18 5 18C4.44772 18 4 18.4477 4 19C4 19.5523 4.44772 20 5 20Z"/></symbol>
       <!-- Outline/info (260:832) — vec x:2 y:2 +2+2 → vb -1 -1 26 26 --><symbol id="ic-info" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 12 22 C 17.523 22 22 17.523 22 12 C 22 6.477 22 2 12 2 C 6.477 2 2 6.477 2 12 C 2 17.523 6.477 22 12 22 Z"/><path d="M 12 16 L 12 12 M 12 8 L 12.01 8"/></symbol>
       <!-- Outline/heart (260:815) --><symbol id="ic-heart" viewBox="0 0 22.4031 19.7318" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 20.0413 2.36183 C 19.5305 1.85083 18.9241 1.44547 18.2566 1.16891 C 17.5892 0.892347 16.8738 0.75 16.1513 0.75 C 15.4288 0.75 14.7134 0.892347 14.0459 1.16891 C 13.3785 1.44547 12.772 1.85083 12.2613 2.36183 L 11.2013 3.42183 L 10.1413 2.36183 C 9.1096 1.33013 7.71032 0.750535 6.25129 0.750535 C 4.79226 0.750535 3.39298 1.33013 2.36129 2.36183 C 1.3296 3.39352 0.75 4.79279 0.75 6.25183 C 0.75 7.71086 1.3296 9.11013 2.36129 10.1418 L 3.42129 11.2018 L 11.2013 18.9818 L 18.9813 11.2018 L 20.0413 10.1418 C 20.5523 9.63107 20.9576 9.02464 21.2342 8.35718 C 21.5108 7.68972 21.6531 6.97431 21.6531 6.25183 C 21.6531 5.52934 21.5108 4.81393 21.2342 4.14647 C 20.9576 3.47901 20.5523 2.87258 20.0413 2.36183 Z"/></symbol>
@@ -2421,676 +2990,481 @@
       <!-- Outline/shopping-cart (260:1137) --><symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6M10 21C10 21.5523 9.55228 22 9 22C8.44772 22 8 21.5523 8 21C8 20.4477 8.44772 20 9 20C9.55228 20 10 20.4477 10 21ZM21 21C21 21.5523 20.5523 22 20 22C19.4477 22 19 21.5523 19 21C19 20.4477 19.4477 20 20 20C20.5523 20 21 20.4477 21 21Z"/></symbol>
       <!-- Outline/smile (260:1181) --><symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14M9 9H9.01M15 9H15.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
 
-      <!-- Outline/video (used in Premium badge icon) -->
-      <symbol id="ic-video" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></symbol>
-      <!-- Outline/corner-down-right (breadcrumb sub-nav link indicator) -->
-      <symbol id="ic-corner-down-right" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></symbol>
-      <!-- Outline/file (DS node 260:718) — plain file/document icon -->
-      <symbol id="ic-file" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 8L14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8ZM14 2V8H20"/></symbol>
+      <!-- Outline/file (260:734) — DS exported path, viewBox -1 -1 26 26 (Rule 27) --><symbol id="ic-file" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 9L13 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V9ZM13 2V9H20"/></symbol>
+      <!-- Outline/layers (260:847) — DS exported path, viewBox -1 -1 26 26 (Rule 27) --><symbol id="ic-layers" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17L12 22L22 17M2 12L12 17L22 12M12 2L2 7L12 12L22 7L12 2Z"/></symbol>
     </defs>
   </svg>
 
+  <!-- ═══════════════════════════════════════════════════════════════
+       NAVBAR PRIMARY DESKTOP — Navbar Primary Desktop - 1.5
+       Navbar Primary Desktop - 1.5 / Type=Desktop (node 866:5576)
+       COMPONENT_SET: Navbar Primary Desktop - 1.5 (2337:21975) · only variant: Type=Desktop
+       Logo left · 6 action icons + avatar + notification badge right
+  ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       NAVIGATION SHELL
+       All nav variants wrapped in one section. Fixed elements
+       (NavMenu-Tablet, NavMenu-Mobile, NavBar-Bottom) escape DOM
+       stacking — this section is semantic grouping only.
+       Desktop: NavbarPrimary-Desktop + NavTopMenu-Desktop
+       Tablet:  NavBar-Mobile + NavMenu-Tablet
+       Mobile:  NavBar-Mobile + NavBar-Bottom + NavMenu-Mobile
+  ═══════════════════════════════════════════════════════════════ -->
   <section id="Navigation-Shell"></section>
 
 
   <!-- ═══════════════════════════════════════════════════════════════
-       PAGE VIEWPORT — Practice: My Subjects
+       PAGE VIEWPORT
+       Drop DS component instances inside PageViewport.
+       Replace the placeholder <div> with real content sections.
+       Use <section id="SectionName-Desktop"> per Rule 10.
   ═══════════════════════════════════════════════════════════════ -->
   <main>
     <div class="page-container">
       <div class="main-content">
 
-        <!-- Breadcrumb — Practice > My Subjects (DS node 3284:218453) -->
-        <section class="bc-row" aria-label="Breadcrumb">
-          <div class="bc-left">
-            <span class="bc-title">Practice</span>
-            <div class="bc-sep" aria-hidden="true"></div>
-            <nav class="bc-trail" aria-label="breadcrumb trail">
+        <section id="PageViewport" class="page-viewport" aria-label="Flashcards page">
+
+          <!-- Breadcrumb - 1.5 (DS node 4523:76232)
+               "Flashcards" H3 title · separator · "Practise > Flashcards" breadcrumb path -->
+          <section class="bc-row" aria-label="Breadcrumb">
+            <div class="bc-title-group">
+              <h2 class="bc-title">Flashcards</h2>
+              <div class="bc-sep" aria-hidden="true"></div>
+            </div>
+            <nav class="bc-trail" aria-label="Breadcrumb path">
               <a href="#" class="bc-link">
-                <svg aria-hidden="true"><use href="#ic-home"/></svg>
-                Home
+                <svg aria-hidden="true"><use href="#ic-book-open"/></svg>
+                <span>Practise</span>
               </a>
-              <svg class="bc-chevron" aria-hidden="true" viewBox="0 0 16 16"><path d="M6 4L10 8L6 12" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <a href="#" class="bc-link bc-link--current" aria-current="page">My Subjects</a>
+              <svg class="bc-chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+              <span class="bc-current">Flashcards</span>
             </nav>
-          </div>
+          </section>
+
+          <!-- Tab Bar + Quick Notes Card (DS node 4523:76233) -->
+          <section id="FlashcardsMain-Desktop" class="fc-main">
+
+            <!-- Tab Bar - 1.5 Secondary (DS node 4523:76234)
+                 3 tabs visible: Flashcards (active), Topical Test, Practise Exam.
+                 Tab 4 "Tab Bar" hidden (visible:false in DS). -->
+            <div class="fc-tab-bar" role="tablist" aria-label="Practice type">
+              <div class="fc-tab-bar__tabs">
+
+                <!-- Tab 1: Flashcards — Type=Secondary (active) · Outline/book-open icon -->
+                <button class="fc-tab fc-tab--active" role="tab" aria-selected="true" tabindex="0">
+                  <span class="fc-tab__icon"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></span>
+                  <span class="fc-tab__label">Flashcards</span>
+                </button>
+
+                <!-- Tab 2: Topical Test — Type=Inactive · Outline/file icon -->
+                <button class="fc-tab" role="tab" aria-selected="false" tabindex="-1">
+                  <span class="fc-tab__icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
+                  <span class="fc-tab__label">Topical Test</span>
+                </button>
+
+                <!-- Tab 3: Practise Exam — Type=Inactive · Outline/layers icon -->
+                <button class="fc-tab" role="tab" aria-selected="false" tabindex="-1">
+                  <span class="fc-tab__icon"><svg aria-hidden="true"><use href="#ic-layers"/></svg></span>
+                  <span class="fc-tab__label">Practise Exam</span>
+                </button>
+
+              </div>
+            </div><!-- /fc-tab-bar -->
+
+            <!-- Quick Notes Card - 1.5 (DS 5164:73057)
+                 Subject: Bahasa Melayu · bg #e8fbe8 · green inset border · 24px radius
+                 Header: #4d77ff · Content slot: white · gap-16 between 3 sections -->
+            <div class="fc-qncard" role="tabpanel" aria-label="Flashcards content">
+
+              <!-- BM Subject Header (DS I5164:73057;2339:5073)
+                   bg #4d77ff · inset 1px #2e4799 · radius 18px · clipsContent:true
+                   Icon area: 110×110 (tl:12 bl:12 rounded) centres Border/Fano-Emblem 60×60
+                   Content: HORIZONTAL row — Label (flex:1) + P.Fano-Wireframe (position:absolute right) -->
+              <div class="fc-qncard__header fc-qncard__header--bm">
+
+                <!-- Icon area: 110×110, tl:12 bl:12 border-radius, centres the 60×60 Fano-Emblem -->
+                <div class="fc-qncard__header-icon">
+                  <!-- Border/Fano-Emblem (DS node I5164:73057;3703:67962)
+                       Vector 1 (58×60): white outer shape
+                       Vector 2 (52×54): #00CC85 green inner fill -->
+                  <div class="fc-subject-icon">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <g clip-path="url(#fano-clip-bm)">
+                        <path d="M58.3992 28.3382C58.3992 28.3382 58.0662 27.8282 58.0572 27.8102C53.3922 20.6942 47.0172 14.3672 39.6132 9.51621C39.4152 9.37821 39.2112 9.24621 39.0072 9.11721L38.8302 9.00321C38.7462 8.94921 38.6652 8.89521 38.5842 8.84121C38.4252 8.73321 38.2632 8.62821 38.0982 8.52621C38.0682 8.50821 38.0382 8.49021 38.0082 8.47221C38.0082 8.47221 37.8912 8.40621 37.8612 8.39121C37.8072 8.36421 37.6662 8.29221 37.6662 8.29221C37.0512 7.94421 36.4002 7.61121 35.7282 7.30521C30.1512 4.51821 21.6072 0.747211 11.6532 0.0182109C11.6142 0.0182109 11.5752 0.0122109 11.5362 0.0122109L10.9332 -0.00878906C10.9002 -0.00878906 10.8642 -0.00878906 10.8312 -0.00878906C9.71219 -0.00878906 8.68019 0.615211 8.16419 1.61721L7.89419 2.14221C4.02719 9.64221 1.78919 18.1772 1.23719 27.5102C1.22819 27.6152 1.22219 27.7232 1.21919 27.8312V27.8702C1.21619 27.9032 1.21319 27.9362 1.21019 27.9692C1.20119 28.1642 1.18919 28.3562 1.17719 28.5482C1.15319 28.9442 1.12919 29.3402 1.11719 29.7422C1.11719 29.7722 1.11719 29.9672 1.11719 29.9792C1.11719 30.1352 1.12619 30.2882 1.13519 30.4442L1.14119 30.5252C1.39619 40.5332 3.59519 49.7192 7.68419 57.8282C7.69019 57.8372 7.97519 58.3892 7.97519 58.3892C8.10119 58.6292 8.25719 58.8512 8.44019 59.0492H8.44319C9.01319 59.6672 9.81119 60.0122 10.6392 60.0122C10.7202 60.0122 10.8012 60.0092 10.8852 60.0032L11.4852 59.9552C20.1762 59.2292 28.4652 56.7122 36.1272 52.4672C37.5672 51.7802 38.9502 50.9432 40.2402 49.9802C47.3382 45.2822 53.5062 39.1052 58.0842 32.1062L58.4022 31.6172C59.0532 30.6212 59.0532 29.3372 58.4022 28.3412L58.3992 28.3382Z" fill="white"/>
+                        <path d="M55.5654 29.4874L55.5444 29.4544C51.0594 22.6084 44.9814 16.6144 37.9284 12.0004C37.6974 11.8384 37.4544 11.6884 37.2144 11.5324C36.9804 11.3824 36.7554 11.2234 36.5184 11.0764L36.4614 11.0434C36.3894 11.0074 36.3114 10.9684 36.2394 10.9294C35.6544 10.5934 35.0484 10.2904 34.4304 10.0084C28.2504 6.91542 20.3634 3.66042 11.4294 3.00342L10.8264 2.98242L10.5564 3.50742C6.85437 10.6894 4.74238 18.8344 4.22338 27.7234C4.21138 27.8524 4.21138 27.9874 4.20238 28.1164C4.17238 28.6864 4.12738 29.2474 4.10938 29.8234V29.8954C4.10938 29.8954 4.10938 29.9224 4.10938 29.9374C4.10938 29.9494 4.10938 29.9614 4.10938 29.9734C4.10938 30.1324 4.13037 30.2854 4.13337 30.4414C4.37637 39.9814 6.45537 48.7294 10.3554 56.4694L10.6314 57.0004H10.6344L11.2284 56.9554C19.5714 56.2594 27.4734 53.8324 34.7484 49.7884C36.0804 49.1584 37.3374 48.3964 38.5044 47.5174C45.2814 43.0444 51.1554 37.1974 55.5654 30.4594L55.8834 29.9704L55.5654 29.4814V29.4874ZM53.1114 29.0794H47.2164C47.0724 25.5574 46.1214 22.2484 44.5194 19.3444C47.7624 22.2874 50.6544 25.5604 53.1144 29.0794H53.1114ZM37.5324 46.0234C37.2504 46.2094 36.9654 46.3924 36.6774 46.5724L27.7404 30.8674H45.4254C45.1584 37.0624 42.1194 42.5254 37.5324 46.0234ZM6.00538 27.9124C6.65338 21.5254 10.2744 16.0354 15.4254 12.8494L24.6624 29.0824H5.94538C5.95438 28.8844 5.96038 28.6894 5.97538 28.4944C5.98438 28.3024 5.99638 28.1074 6.00538 27.9154V27.9124ZM35.0364 12.3244L26.1084 28.0024L16.9884 11.9764C19.6164 10.6624 22.5624 9.90642 25.6854 9.90642C28.5054 9.90642 31.1874 10.5184 33.6174 11.6044C34.0974 11.8444 34.5684 12.0844 35.0364 12.3274V12.3244ZM24.4794 30.8674L15.2814 47.0224C9.89637 43.6234 6.24238 37.6864 5.94538 30.8674H24.4794ZM26.1084 31.6174L35.1534 47.5114C34.7064 47.7754 34.2534 48.0214 33.8034 48.2704C31.3224 49.4104 28.5804 50.0584 25.6854 50.0584C22.5024 50.0584 19.4994 49.2724 16.8324 47.9104L26.1084 31.6174ZM27.5544 29.0794L36.5694 13.2424C36.6804 13.3144 36.7884 13.3864 36.8994 13.4584C41.8404 16.9234 45.1404 22.6054 45.4284 29.0794H27.5574H27.5544ZM25.6854 8.11542C22.2414 8.11542 18.9954 8.95842 16.1034 10.4194L13.0044 4.97742C17.5944 5.49042 21.8364 6.64842 25.7334 8.11842C25.7184 8.11842 25.7004 8.11842 25.6854 8.11842V8.11542ZM11.4324 5.82642L14.5434 11.2924C11.5074 13.1584 8.96638 15.7564 7.14838 18.8524C8.07238 14.2414 9.50337 9.88842 11.4294 5.82642H11.4324ZM7.02238 40.9024C8.81638 44.0404 11.3544 46.6774 14.3934 48.5794L11.2314 54.1324C9.31137 50.0044 7.90438 45.5824 7.02238 40.9024ZM12.8034 54.9874L15.9444 49.4674C18.8754 50.9794 22.1784 51.8494 25.6854 51.8494C25.8174 51.8494 25.9464 51.8314 26.0814 51.8284C21.8184 53.4124 17.3814 54.4684 12.8064 54.9874H12.8034ZM44.5374 40.5844C46.1304 37.6864 47.0724 34.3834 47.2134 30.8704H53.1084C50.6364 34.4104 47.7504 37.6714 44.5374 40.5844Z" fill="#00CC85"/>
+                      </g>
+                      <defs>
+                        <clipPath id="fano-clip-bm">
+                          <rect width="60" height="60" fill="white"/>
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  </div>
+                </div><!-- /header-icon -->
+
+                <!-- Content: HORIZONTAL row (DS: gap:2, crossAlign:CENTER)
+                     Label (flex:1) fills available space; wireframe is position:absolute right -->
+                <div class="fc-qncard__header-content">
+                  <div class="fc-qncard__header-label">
+                    <h2 class="fc-qncard__title">Topics</h2>
+                    <p class="fc-qncard__subtitle">Topic Descriptions</p>
+                  </div>
+                  <!-- P.Fano-Wireframe (DS I5164:73057;5173:77576)
+                       constraintsH:MAX → right-aligned · opacity:0.5 · mix-blend-mode:overlay
+                       Exported at 488×110 (clipped visible portion of the 512×512 frame) -->
+                  <div class="fc-qncard__header-deco" aria-hidden="true">
+                    <svg width="488" height="110" viewBox="0 0 488 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g style="mix-blend-mode:overlay" opacity="0.5">
+                        <g opacity="0.5">
+                          <mask id="fano-wf-mask" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="-201" width="513" height="512">
+                            <path d="M256.064 311C397.448 311 512.062 196.385 512.062 55C512.062 -86.3849 397.448 -201 256.064 -201C114.68 -201 0.0664062 -86.3849 0.0664062 55C0.0664062 196.385 114.68 311 256.064 311Z" fill="white"/>
+                          </mask>
+                          <g mask="url(#fano-wf-mask)">
+                            <path d="M767.999 -188.713C810.514 -443.679 639.658 -684.607 386.381 -726.842C133.103 -769.076 -106.684 -596.624 -149.199 -341.658C-191.714 -86.6924 -20.858 154.236 232.419 196.47C485.696 238.705 725.483 66.2522 767.999 -188.713Z" stroke="white" stroke-miterlimit="10"/>
+                            <path d="M461.229 652.215C692.264 652.215 879.555 464.922 879.555 233.885C879.555 2.8475 692.264 -184.445 461.229 -184.445C230.193 -184.445 42.9023 2.8475 42.9023 233.885C42.9023 464.922 230.193 652.215 461.229 652.215Z" stroke="white" stroke-miterlimit="10"/>
+                            <path d="M3.90457 575.967C234.94 575.967 422.231 388.674 422.231 157.637C422.231 -73.4005 234.94 -260.693 3.90457 -260.693C-227.131 -260.693 -414.422 -73.4005 -414.422 157.637C-414.422 388.674 -227.131 575.967 3.90457 575.967Z" stroke="white" stroke-miterlimit="10"/>
+                            <path d="M232.416 196.477L231.691 196.354M232.77 196.53L232.398 196.477M133.317 -26.1121C136.13 -29.6317 138.942 -33.063 141.825 -36.4766C141.683 -36.2289 141.489 -36.0698 141.347 -35.8045L133.317 -26.0944V-26.1121ZM393.188 4.15021C395.293 9.33247 397.186 14.6562 399.007 19.8738L393.931 6.308C393.666 5.61822 393.436 4.8223 393.171 4.13251L393.188 4.15021ZM421.027 188.784L368.48 145.521C384.186 126.42 395.311 103.144 399.662 77.0555C403.747 52.5061 401.377 28.3459 393.931 6.3257L399.007 19.8915C417.914 74.0665 425.414 131.584 421.027 188.801V188.784ZM112.96 29.2125C108.609 55.3007 111.474 81.0174 120.247 104.099L56.5039 127.976C70.9186 72.6692 96.7766 20.0153 133.406 -26.1121L141.436 -35.8222C126.685 -16.8441 116.904 5.49441 112.96 29.2125Z" stroke="white" stroke-miterlimit="10"/>
+                            <path d="M368.498 145.504L421.045 188.766C359.477 204.348 295.345 206.983 232.699 196.513C285.706 205.25 336.626 184.149 368.498 145.486V145.504ZM231.691 196.353C169.168 185.741 109.493 162.43 56.5039 127.976L120.247 104.099C137.774 150.898 179.02 187.298 231.709 196.353H231.691Z" stroke="white" stroke-miterlimit="10"/>
+                            <path d="M368.499 145.504C336.645 184.079 285.708 205.179 232.771 196.548L232.4 196.495L256.312 53.1427L368.482 145.521L368.499 145.504ZM120.231 104.099L256.295 53.125L232.382 196.477L231.657 196.353C178.968 187.298 137.723 150.898 120.195 104.099H120.231Z" stroke="white" stroke-miterlimit="10"/>
+                            <path d="M120.232 104.099C111.565 80.9467 108.594 55.3184 112.945 29.2126C117.031 4.66317 127.13 -17.4101 141.314 -35.8398L142.588 -37.3962C143.048 -37.9622 143.614 -38.6166 144.091 -39.1826L256.278 53.0899L120.214 104.063L120.232 104.099ZM392.395 2.15163L393.934 6.21961C401.486 28.2575 403.768 52.3824 399.664 76.9495C395.313 103.038 384.259 126.437 368.483 145.415L256.296 53.1429L392.36 2.16931L392.395 2.15163Z" stroke="white" stroke-miterlimit="10"/>
+                            <path d="M280.224 -90.2272C329.057 -82.0913 368.056 -50.5202 387.741 -8.92062C389.351 -5.22406 390.872 -1.54518 392.393 2.15138L256.329 53.125L280.241 -90.2272H280.224ZM280.224 -90.2272L256.311 53.125L144.23 -39.2359C147.22 -42.6318 150.191 -46.0454 153.357 -49.4059C185.352 -81.5607 232.027 -98.2571 280.224 -90.2272Z" stroke="white" stroke-miterlimit="10"/>
+                            <path d="M289.882 -147.851L256.383 53.1255" stroke="white" stroke-miterlimit="10"/>
+                          </g>
+                          <circle cx="256" cy="55" r="255.5" stroke="white"/>
+                        </g>
+                      </g>
+                    </svg>
+                  </div><!-- /header-deco -->
+                </div><!-- /header-content -->
+
+              </div><!-- /header--bm -->
+
+
+
+                <!-- ── Section 1: Active Recall History
+                     DS node I5164:73057;2339:5079;5164:73363
+                     Outer: #e8fbe8 bg, green inset border, 24px radius
+                     Header removed — redundant per user instruction -->
+                <div class="fc-qncard--nested">
+
+                  <!-- Active Recall History block (DS nodes 5164:73077 + 5164:73078 + 5164:73079)
+                       Structure: [heading-row 56px] + [dashed divider] + [2-col table white area]
+                       fc-recall-block wraps all three so they stack with gap:0 (not the card's 16px) -->
+                  <div class="fc-recall-block">
+
+                    <!-- "Active Recall History" heading row (DS 5164:73077 — Body Cell - 1.5)
+                         #f6f9ff bg · tl:18 tr:18 bl:0 br:0 · 56px · 16px SemiBold -->
+                    <div class="fc-recall-heading-row">
+                      <span class="fc-recall-heading-row__text">Active Recall History</span>
+                    </div>
+
+                    <!-- Divider - 1.5 (DS 5164:73078) -->
+                    <hr class="fc-recall-divider" aria-hidden="true">
+
+                    <!-- 2-column container (DS Frame 1707479867 — 5164:73079)
+                         White bg · tl:0 tr:0 bl:18 br:18 · pad:16 · HORIZONTAL gap:16 -->
+                    <div class="fc-recall-cols-wrap">
+                      <div class="fc-recall-cols">
+
+                        <!-- Left table: "Recent" (DS 5164:73081 — 621×280, radius:18)
+                             Top Slot4 heading: 56px · #f6f9ff · "Recent" 16px Medium
+                             Body: empty state "No recent active recall" -->
+                        <div class="fc-recall-table">
+                          <div class="fc-recall-table__heading">
+                            <span class="fc-recall-table__label">Recent</span>
+                          </div>
+                          <div class="fc-recall-table__body">
+                            <div class="fc-recall-empty">No recent active recall</div>
+                          </div>
+                        </div>
+
+                        <!-- Right table: "Upcoming" (DS 5164:73096 — 599×280) + Scroll Bar (14px)
+                             Top Slot4 heading: 56px · #f6f9ff · "Upcoming" 16px Medium
+                             Body: 4 rows · 56px each · icon + date/title + strength badge -->
+                        <div class="fc-recall-table fc-recall-table--scrollable">
+                          <div class="fc-recall-table__heading">
+                            <span class="fc-recall-table__label">Upcoming</span>
+                          </div>
+                          <div class="fc-recall-table__body">
+
+                            <div class="fc-recall-row">
+                              <!-- Icon cell: Subject/BM icon (24×24, 16px padding) -->
+                              <div class="fc-recall-row__icon-cell">
+                                <svg aria-hidden="true" width="24" height="24"><use href="#ic-subj-bm"/></svg>
+                              </div>
+                              <!-- Info cell: date + info icon / flashcard title -->
+                              <div class="fc-recall-row__info-cell">
+                                <div class="fc-recall-row__date-row">
+                                  <span class="fc-recall-row__date">19 March 2024</span>
+                                  <svg class="fc-recall-info-icon" aria-hidden="true"><use href="#ic-info"/></svg>
+                                </div>
+                                <span class="fc-recall-row__title">Idioms starting with A - Set 1</span>
+                              </div>
+                              <!-- Badge cell: strength pill (160px centred) -->
+                              <div class="fc-recall-row__badge-cell">
+                                <span class="fc-strength-badge fc-strength-badge--strong">Strong</span>
+                              </div>
+                            </div>
+
+                            <div class="fc-recall-row">
+                              <!-- Icon cell: Subject/BM icon (24×24, 16px padding) -->
+                              <div class="fc-recall-row__icon-cell">
+                                <svg aria-hidden="true" width="24" height="24"><use href="#ic-subj-bm"/></svg>
+                              </div>
+                              <!-- Info cell: date + info icon / flashcard title -->
+                              <div class="fc-recall-row__info-cell">
+                                <div class="fc-recall-row__date-row">
+                                  <span class="fc-recall-row__date">19 March 2024</span>
+                                  <svg class="fc-recall-info-icon" aria-hidden="true"><use href="#ic-info"/></svg>
+                                </div>
+                                <span class="fc-recall-row__title">Idioms starting with A - Set 1</span>
+                              </div>
+                              <!-- Badge cell: strength pill (160px centred) -->
+                              <div class="fc-recall-row__badge-cell">
+                                <span class="fc-strength-badge fc-strength-badge--moderate">Moderate</span>
+                              </div>
+                            </div>
+
+                            <div class="fc-recall-row">
+                              <!-- Icon cell: Subject/BM icon (24×24, 16px padding) -->
+                              <div class="fc-recall-row__icon-cell">
+                                <svg aria-hidden="true" width="24" height="24"><use href="#ic-subj-bm"/></svg>
+                              </div>
+                              <!-- Info cell: date + info icon / flashcard title -->
+                              <div class="fc-recall-row__info-cell">
+                                <div class="fc-recall-row__date-row">
+                                  <span class="fc-recall-row__date">19 March 2024</span>
+                                  <svg class="fc-recall-info-icon" aria-hidden="true"><use href="#ic-info"/></svg>
+                                </div>
+                                <span class="fc-recall-row__title">Idioms starting with A - Set 1</span>
+                              </div>
+                              <!-- Badge cell: strength pill (160px centred) -->
+                              <div class="fc-recall-row__badge-cell">
+                                <span class="fc-strength-badge fc-strength-badge--strong">Strong</span>
+                              </div>
+                            </div>
+
+                            <div class="fc-recall-row">
+                              <!-- Icon cell: Subject/BM icon (24×24, 16px padding) -->
+                              <div class="fc-recall-row__icon-cell">
+                                <svg aria-hidden="true" width="24" height="24"><use href="#ic-subj-bm"/></svg>
+                              </div>
+                              <!-- Info cell: date + info icon / flashcard title -->
+                              <div class="fc-recall-row__info-cell">
+                                <div class="fc-recall-row__date-row">
+                                  <span class="fc-recall-row__date">19 March 2024</span>
+                                  <svg class="fc-recall-info-icon" aria-hidden="true"><use href="#ic-info"/></svg>
+                                </div>
+                                <span class="fc-recall-row__title">Idioms starting with A - Set 1</span>
+                              </div>
+                              <!-- Badge cell: strength pill (160px centred) -->
+                              <div class="fc-recall-row__badge-cell">
+                                <span class="fc-strength-badge fc-strength-badge--strong">Strong</span>
+                              </div>
+                            </div>
+
+                          </div><!-- /fc-recall-table__body -->
+                        </div><!-- /fc-recall-table--scrollable -->
+
+                      </div><!-- /fc-recall-cols -->
+                    </div><!-- /fc-recall-cols-wrap -->
+
+                  </div><!-- /fc-recall-block -->
+
+                </div><!-- /fc-qncard--nested -->
+
+                <!-- ── Section 2: Chapter — Aspek Seni Bahasa
+                     DS node I5164:73057;2339:5079;5164:73364
+                     Outer: inset 1px #2e4799, radius 18px (BM dark border)
+                     Heading row: 56px, #f6f9ff bg, #4d77ff bottom border
+                     4 data rows: label + pill ("N cards") + Start button -->
+                <div class="fc-chapter">
+                  <div class="fc-chapter__heading-row">
+                    <!-- Icon column (DS Frame 1707479815 — 40×56, pad t16 r0 b16 l16) -->
+                    <div class="fc-chapter__heading-icon-col">
+                      <!-- 24×24 icon box, fill:#b6eeff, radius:0 (no DS token — raw value in DS) -->
+                      <div class="fc-chapter__heading-icon">
+                        <svg aria-hidden="true" width="16" height="16"><use href="#ic-book-open"/></svg>
+                      </div>
+                    </div>
+                    <!-- Label column (Heading Cell - 1.5, pad:16) -->
+                    <div class="fc-chapter__heading-label-col">
+                      <span class="fc-chapter__heading-text">Aspek Seni Bahasa</span>
+                    </div>
+                  </div>
+                  <div class="fc-chapter__rows">
+
+                    <!-- Left cell: label + pill badge side-by-side (gap:8px, pad:16px) -->
+                    <!-- Right cell: 160px fixed, Start button centred -->
+                    <div class="fc-chapter-row">
+                      <div class="fc-chapter-row__left">
+                        <span class="fc-chapter-row__label">Antonim bermula dengan A</span>
+                        <span class="fc-chapter-row__pill">10 cards</span>
+                      </div>
+                      <div class="fc-chapter-row__right">
+                        <button class="fc-start-btn" type="button">
+                          <span class="fc-start-btn__label">Start</span>
+                          <span class="fc-start-btn__arrow">
+                            <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Left cell: label + pill badge side-by-side (gap:8px, pad:16px) -->
+                    <!-- Right cell: 160px fixed, Start button centred -->
+                    <div class="fc-chapter-row">
+                      <div class="fc-chapter-row__left">
+                        <span class="fc-chapter-row__label">Antonim bermula dengan B</span>
+                        <span class="fc-chapter-row__pill">10 cards</span>
+                      </div>
+                      <div class="fc-chapter-row__right">
+                        <button class="fc-start-btn" type="button">
+                          <span class="fc-start-btn__label">Start</span>
+                          <span class="fc-start-btn__arrow">
+                            <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Left cell: label + pill badge side-by-side (gap:8px, pad:16px) -->
+                    <!-- Right cell: 160px fixed, Start button centred -->
+                    <div class="fc-chapter-row">
+                      <div class="fc-chapter-row__left">
+                        <span class="fc-chapter-row__label">Antonim bermula dengan C</span>
+                        <span class="fc-chapter-row__pill">9 cards</span>
+                      </div>
+                      <div class="fc-chapter-row__right">
+                        <button class="fc-start-btn" type="button">
+                          <span class="fc-start-btn__label">Start</span>
+                          <span class="fc-start-btn__arrow">
+                            <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Left cell: label + pill badge side-by-side (gap:8px, pad:16px) -->
+                    <!-- Right cell: 160px fixed, Start button centred -->
+                    <div class="fc-chapter-row">
+                      <div class="fc-chapter-row__left">
+                        <span class="fc-chapter-row__label">Antonim bermula dengan D</span>
+                        <span class="fc-chapter-row__pill">5 cards</span>
+                      </div>
+                      <div class="fc-chapter-row__right">
+                        <button class="fc-start-btn" type="button">
+                          <span class="fc-start-btn__label">Start</span>
+                          <span class="fc-start-btn__arrow">
+                            <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+
+                  </div><!-- /fc-chapter__rows -->
+                </div><!-- /fc-chapter Aspek Seni Bahasa -->
+
+                <!-- ── Section 3: Chapter — Kemahiran Mendengar dan Bertutur
+                     DS node I5164:73057;2339:5079;5164:73467
+                     Same structure as Section 2 -->
+                <div class="fc-chapter">
+                  <div class="fc-chapter__heading-row">
+                    <!-- Icon column (DS Frame 1707479815 — 40×56, pad t16 r0 b16 l16) -->
+                    <div class="fc-chapter__heading-icon-col">
+                      <!-- 24×24 icon box, fill:#b6eeff, radius:0 (no DS token — raw value in DS) -->
+                      <div class="fc-chapter__heading-icon">
+                        <svg aria-hidden="true" width="16" height="16"><use href="#ic-book-open"/></svg>
+                      </div>
+                    </div>
+                    <!-- Label column (Heading Cell - 1.5, pad:16) -->
+                    <div class="fc-chapter__heading-label-col">
+                      <span class="fc-chapter__heading-text">Kemahiran Mendengar dan Bertutur</span>
+                    </div>
+                  </div>
+                  <div class="fc-chapter__rows">
+
+                    <!-- Left cell: label + pill badge side-by-side (gap:8px, pad:16px) -->
+                    <!-- Right cell: 160px fixed, Start button centred -->
+                    <div class="fc-chapter-row">
+                      <div class="fc-chapter-row__left">
+                        <span class="fc-chapter-row__label">Antonim bermula dengan A</span>
+                        <span class="fc-chapter-row__pill">10 cards</span>
+                      </div>
+                      <div class="fc-chapter-row__right">
+                        <button class="fc-start-btn" type="button">
+                          <span class="fc-start-btn__label">Start</span>
+                          <span class="fc-start-btn__arrow">
+                            <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Left cell: label + pill badge side-by-side (gap:8px, pad:16px) -->
+                    <!-- Right cell: 160px fixed, Start button centred -->
+                    <div class="fc-chapter-row">
+                      <div class="fc-chapter-row__left">
+                        <span class="fc-chapter-row__label">Antonim bermula dengan B</span>
+                        <span class="fc-chapter-row__pill">5 cards</span>
+                      </div>
+                      <div class="fc-chapter-row__right">
+                        <button class="fc-start-btn" type="button">
+                          <span class="fc-start-btn__label">Start</span>
+                          <span class="fc-start-btn__arrow">
+                            <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Left cell: label + pill badge side-by-side (gap:8px, pad:16px) -->
+                    <!-- Right cell: 160px fixed, Start button centred -->
+                    <div class="fc-chapter-row">
+                      <div class="fc-chapter-row__left">
+                        <span class="fc-chapter-row__label">Antonim bermula dengan C</span>
+                        <span class="fc-chapter-row__pill">9 cards</span>
+                      </div>
+                      <div class="fc-chapter-row__right">
+                        <button class="fc-start-btn" type="button">
+                          <span class="fc-start-btn__label">Start</span>
+                          <span class="fc-start-btn__arrow">
+                            <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Left cell: label + pill badge side-by-side (gap:8px, pad:16px) -->
+                    <!-- Right cell: 160px fixed, Start button centred -->
+                    <div class="fc-chapter-row">
+                      <div class="fc-chapter-row__left">
+                        <span class="fc-chapter-row__label">Antonim bermula dengan D</span>
+                        <span class="fc-chapter-row__pill">10 cards</span>
+                      </div>
+                      <div class="fc-chapter-row__right">
+                        <button class="fc-start-btn" type="button">
+                          <span class="fc-start-btn__label">Start</span>
+                          <span class="fc-start-btn__arrow">
+                            <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+
+                  </div><!-- /fc-chapter__rows -->
+                </div><!-- /fc-chapter Kemahiran -->
+
+            </div><!-- /fc-qncard -->
+
+          </section><!-- /FlashcardsMain-Desktop -->
+
         </section>
 
-        <!-- Practice Card Grid — 19 subjects (DS node 5072:104627) -->
-        <section class="practice-grid" aria-label="Practice subjects">
-
-          <!-- 1 · Add Mathematics (DS 5072:104629) — bg #283589 / border #182052 / text white -->
-          <article class="practice-card" style="--subj-bg:#283589;--subj-border:#182052;--subj-bg-hover:#202a6e">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/add-math.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Additional Mathematics</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 2 · Accounting (DS 5072:104628) — bg #0072ca / border #004479 / title #e6f1fa / stats white -->
-          <article class="practice-card" style="--subj-bg:#0072ca;--subj-border:#004479;--subj-title:#e6f1fa;--subj-bg-hover:#005ba2">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/accounting.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Accounting</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 3 · Bahasa Melayu (DS 5072:104630) — bg #4d77ff / border #2e4799 / text white -->
-          <article class="practice-card" style="--subj-bg:#4d77ff;--subj-border:#2e4799;--subj-bg-hover:#3e5fcc">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/bahasa-melayu.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Bahasa Melayu</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 4 · Biology (DS 5072:104631) — bg #8431d8 / border #4f1d82 / text white -->
-          <article class="practice-card" style="--subj-bg:#8431d8;--subj-border:#4f1d82;--subj-bg-hover:#6a27ad">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/biology.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Biology</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 5 · Business (DS 5072:104632) — bg #efb42b / border #8f6c1a / title+stats #604811 -->
-          <article class="practice-card" style="--subj-bg:#efb42b;--subj-border:#8f6c1a;--subj-title:#604811;--subj-text:#604811;--subj-bg-hover:#bf9022">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/business.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Business</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 6 · Chemistry (DS 5072:104633) — bg #e20082 / border #88004e / text white -->
-          <article class="practice-card" style="--subj-bg:#e20082;--subj-border:#88004e;--subj-bg-hover:#b50068">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/chemistry.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Chemistry</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 7 · Chinese Language (DS 5072:104634) — bg #f94848 / border #952b2b / text white -->
-          <article class="practice-card" style="--subj-bg:#f94848;--subj-border:#952b2b;--subj-bg-hover:#c73a3a">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/chinese-language.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Chinese Language</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 8 · Computer Science (DS 5072:104635) — bg #d10070 / border #7d0043 / text white -->
-          <article class="practice-card" style="--subj-bg:#d10070;--subj-border:#7d0043;--subj-bg-hover:#a7005a">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/computer-science.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Computer Science</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 9 · Economy (DS 5072:104636) — bg #ff5733 / border #99341f / text white -->
-          <article class="practice-card" style="--subj-bg:#ff5733;--subj-border:#99341f;--subj-bg-hover:#cc4629">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/economy.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Economy</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 10 · English (DS 5072:104637) — bg #ff4d56 / border #992e34 / text white -->
-          <article class="practice-card" style="--subj-bg:#ff4d56;--subj-border:#992e34;--subj-bg-hover:#cc3e45">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/english.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">English</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 11 · Geography (DS 5072:104638) — bg #77d836 / border #478220 / text white -->
-          <article class="practice-card" style="--subj-bg:#77d836;--subj-border:#478220;--subj-bg-hover:#5fad2b">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/geography.png" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Geography</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 12 · History (DS 5072:104639) — bg #a97c50 / border #654a30 / text white -->
-          <article class="practice-card" style="--subj-bg:#a97c50;--subj-border:#654a30;--subj-bg-hover:#876340">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/history.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">History</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 13 · Islamic Studies (DS 5072:104640) — bg #de4d7f / border #852e4c / text white -->
-          <article class="practice-card" style="--subj-bg:#de4d7f;--subj-border:#852e4c;--subj-bg-hover:#b23e66">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/islamic-studies.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Islamic Studies</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 14 · KAFA (DS 5072:104641) — bg #8ae3a9 / border #538865 / title+stats #375b44 -->
-          <article class="practice-card" style="--subj-bg:#8ae3a9;--subj-border:#538865;--subj-title:#375b44;--subj-text:#375b44;--subj-bg-hover:#6eb687">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/kafa.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">KAFA</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 15 · Mathematics (DS 5072:104642) — bg #42ac7b / border #28674a / text white -->
-          <article class="practice-card" style="--subj-bg:#42ac7b;--subj-border:#28674a;--subj-bg-hover:#358a62">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/mathematics.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Mathematics</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 16 · Moral Studies (DS 5072:104643) — bg #0072ca / border #004479 / text white -->
-          <article class="practice-card" style="--subj-bg:#0072ca;--subj-border:#004479;--subj-bg-hover:#005ba2">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/moral-studies.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Moral Studies</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 17 · Physics (DS 5072:104644) — bg #27a0d7 / border #176081 / text white -->
-          <article class="practice-card" style="--subj-bg:#27a0d7;--subj-border:#176081;--subj-bg-hover:#1f80ac">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/physics.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Physics</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 18 · RBT (DS 5072:104645) — bg #353535 / border #202020 / text white -->
-          <article class="practice-card" style="--subj-bg:#353535;--subj-border:#202020;--subj-bg-hover:#2a2a2a">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/rbt.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Reka Bentuk &amp; Teknologi</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 19 · Science (DS 5072:104646) — bg #ffd641 / border #998027 / title+stats #66561a -->
-          <article class="practice-card" style="--subj-bg:#ffd641;--subj-border:#998027;--subj-title:#66561a;--subj-text:#66561a;--subj-bg-hover:#ccab34">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../../src/image-repo/page.practise/assets/main/PracticeCard/science.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Science</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-
-        </section><!-- /.practice-grid -->
-
-      </div><!-- /.main-content -->
-    </div><!-- /.page-container -->
+      </div>
+    </div>
   </main>
 
   <footer class="footer" id="zul-footer"></footer>
@@ -3098,6 +3472,14 @@
   <div id="zul-nav-bottom"></div>
 
   <script>
+  /* fc-start-btn is-pressing handlers — registered first per Rule 14 (critical before non-critical)
+     Rule 83: CSS :active alone is unreliable in Electron webviews; pair with JS mousedown/mouseup/mouseleave */
+  document.querySelectorAll('.fc-start-btn').forEach(function (btn) {
+    btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+    btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+    btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+  });
+
   (function () {
     var TPL = '../../zul.test.git/zul.page.template.html';
 
