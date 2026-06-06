@@ -64,6 +64,8 @@
       --border-tertiary-focus:    #00453d;   /* Border/tertiary/focus — pressed state border */
       --border-disabled-disabled: #bfbfbf;   /* Border/disabled/disabled */
       --border-on-color:          #ffffff;   /* Border/on-color — white border on Number Badge (DS 618:417 updated 2026-05-26) */
+      --border-general-default-secondary: #bfbfbf;   /* Border/general/default-secondary — bc-sep, notif dot active (DS node 3655:16650) */
+      --border-secondary-default: #b5f291;   /* Border/secondary/default — notif dot focus-visible (DS confirmed template) */
 
       /* Corner Radius (confirmed from design contexts) */
       --corner-radius-corner-pill:    999px;  /* Corner Radius/corner-pill â€” nav row 2 */
@@ -193,16 +195,18 @@
       left:       0;
       right:      0;
       min-width:  390px;
+      height:     60px;   /* DS node 2073:6579 — fixed height 60px */
       z-index:    100;
       background: var(--surface-general-default);
       border-top: 1px solid var(--border-default);
     }
 
     .footer__inner {
+      height:          100%;   /* fills the 60px footer; align-items:center handles vertical centering */
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      padding:         var(--spacing-space-s) var(--spacing-space-2xl); /* DS: t:12 r:28 b:12 l:28 */
+      padding:         0 var(--spacing-space-2xl);   /* DS: t:20 r:28 b:20 l:28 → 0 sides + height:60px */
     }
 
     .footer__left {
@@ -592,6 +596,7 @@
     .learn-dropdown__grid {
       display:               grid;
       grid-template-columns: repeat(3, 1fr);
+      gap:                   var(--spacing-space-xs);   /* DS node 3908:2462 — 8px gap between cells */
     }
 
     /* Cell — DS State=Default: transparent bg, no border, 12px radius, flex-col, gap 4px, p-8px */
@@ -639,13 +644,13 @@
       flex-shrink: 0;
     }
 
-    /* Label — DS State=Default: 14px SemiBold, #404040 (Text/default/heading, varName 106:34) */
+    /* Label — DS node 3908:2464: 14px SemiBold, Text/default/body #666 */
     .learn-dropdown__label {
       font-family: var(--font-family);
       font-size:   14px;
       font-weight: 600;
       line-height: 20px;
-      color:       var(--text-default-heading);
+      color:       var(--text-default-body);   /* Text/default/body #666 — confirmed DS node 3908:2462 */
       text-align:  center;
       transition:  color 0.12s ease;
     }
@@ -953,7 +958,12 @@
       border-bottom-color: transparent;
       padding-bottom:      0;
     }
-    .notif-item:active .notif-item__text { color: var(--text-primary-default); }
+    .notif-item:active .notif-item__text,
+    .notif-item:focus-visible .notif-item__text { color: var(--text-tertiary-default); }   /* DS node 3908:13442 Pressed/Focus */
+    .notif-item:active .notif-item__time,
+    .notif-item:focus-visible .notif-item__time { color: var(--text-secondary-focus); }
+    .notif-item:active .notif-item__dot,
+    .notif-item:focus-visible .notif-item__dot  { box-shadow: 0 0 0 1px var(--border-secondary-default); }
 
     /* Avatar — 60×60 clip, user-circle at 50px (DS inset 8.33% = 5px each side) */
     .notif-item__avatar {
@@ -1005,10 +1015,11 @@
       align-items:     center;
       justify-content: center;
       width:           100%;
-      max-height:      48px;
+      height:          40px;   /* DS Primary/L confirmed height */
       padding:         8px var(--spacing-space-s);
       background:      var(--surface-primary-default);
-      border:          1px solid var(--border-primary-focus);
+      border:          none;   /* strokeAlign: INSIDE → box-shadow:inset (Rule 60) */
+      box-shadow:      inset 0 0 0 1px var(--border-primary-focus);
       border-radius:   var(--corner-radius-corner-rounded);
       cursor:          pointer;
       user-select:     none;
@@ -1017,10 +1028,11 @@
       font-weight:     600;
       line-height:     20px;
       color:           var(--text-primary-on-color);
-      transition:      background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+      /* no transition — Rule 82: Button-1.5 uses instant state changes */
     }
-    .notif-see-all:hover  { background: var(--surface-secondary-default);  border-color: var(--border-secondary-focus); color: var(--text-secondary-focus); }
-    .notif-see-all:active { background: var(--surface-tertiary-default);   border-color: var(--border-tertiary-focus);  color: var(--text-primary-default); }
+    /* Rule 89: all state overrides use box-shadow (border-color is silent when base has no border) */
+    .notif-see-all:hover  { background: var(--surface-secondary-default);  box-shadow: inset 0 0 0 1px var(--border-secondary-focus);  color: var(--text-secondary-focus); }
+    .notif-see-all:active { background: var(--surface-primary-focus);      box-shadow: inset 0 0 0 1px var(--border-primary-default);   color: var(--text-primary-default); }   /* Rule 40: Primary Pressed = surface-primary-focus #00a36a */
 
     /* ─── Download Apps dropdown (DS node 3909:3405, Navbar Download Apps - 1.5)
        238px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
@@ -2044,45 +2056,41 @@
       font-size:   24px;
       font-weight: 500;
       line-height: 36px;
-      color:       #00564c;
+      color:       var(--text-tertiary-default);   /* Text/tertiary/default #00564c (Rule N-C1) */
       white-space: nowrap;
       flex-shrink: 0;
     }
     .bc-sep {
       width:       1px;
       height:      20px;
-      background:  #d9d9d9;
+      background:  var(--border-general-default-secondary);   /* Border/general/default-secondary #bfbfbf (Session 23 confirmed DS node 3655:16650) */
       flex-shrink: 0;
     }
     .bc-trail {
       display:     flex;
       align-items: center;
-      gap:         var(--sp-xs);
+      gap:         var(--spacing-space-xs);
       flex-wrap:   wrap;
     }
     .bc-link {
       display:         inline-flex;
       align-items:     center;
-      gap:             var(--sp-xs);
+      gap:             var(--spacing-space-xs);
       font-size:       14px;
       font-weight:     400;
       line-height:     20px;
-      color:           var(--og-500);
+      color:           var(--text-primary-default);   /* Text/primary/default #00cc85 (Rule N-C1 — text token, not og-500) */
       text-decoration: none;
       white-space:     nowrap;
     }
     .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
     .bc-chevron {
-      width:           16px;
-      height:          16px;
-      stroke:          #bfbfbf;
-      fill:            none;
-      stroke-width:    1.5;
-      stroke-linecap:  round;
-      stroke-linejoin: round;
-      flex-shrink:     0;
+      width:      16px;
+      height:     16px;
+      color:      var(--border-general-default-secondary);   /* #bfbfbf — inherits via stroke="currentColor" */
+      flex-shrink: 0;
     }
-    .bc-link--current { color: #666; }
+    .bc-link--current { color: var(--text-default-body); }   /* Text/default/body #666 (Rule N-C1) */
 
     /* Mobile coin balance — shows in page header, hidden on desktop */
     .bc-coin-mobile {
@@ -2119,18 +2127,18 @@
       min-width:      240px;
       flex-shrink:    0;
       background:     #fff;
-      border:         1px solid var(--og-500);
-      border-radius:  24px;
-      padding:        var(--sp-m);
+      border:         1px solid var(--border-primary-default);
+      border-radius:  var(--corner-radius-corner-4xl);
+      padding:        var(--spacing-space-m);
       display:        flex;
       flex-direction: column;
-      gap:            var(--sp-xs);
+      gap:            var(--spacing-space-xs);
     }
     .sidebar-balance {
       background:      #fef1ce;
       border:          1px solid #fabb0a;
       border-radius:   16px;
-      padding:         var(--sp-xs) var(--sp-xs) var(--sp-xs) var(--sp-xxxs);
+      padding:         var(--spacing-space-xs) var(--spacing-space-xs) var(--spacing-space-xs) 2px;
       display:         flex;
       align-items:     center;
       justify-content: center;
@@ -2164,7 +2172,7 @@
     .sidebar-btn {
       width:         100%;
       border-radius: 108px;
-      padding:       var(--sp-xs) var(--sp-m);
+      padding:       var(--spacing-space-xs) var(--spacing-space-m);
       display:       flex;
       align-items:   center;
       gap:           10px;
@@ -2177,11 +2185,11 @@
     }
     .sidebar-btn:not(.sidebar-btn--active):hover {
       background:   #e8fbe8;
-      border-color: #00cc85;
+      border-color: var(--border-primary-default);
     }
-    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__icon-wrap { color: #00cc85; }
-    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__label     { color: #00cc85; }
-    .sidebar-btn--active { background: #b5f291; border-color: #00a36a; }
+    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__icon-wrap { color: var(--icon-primary-default); }
+    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__label     { color: var(--text-primary-default); }
+    .sidebar-btn--active { background: #b5f291; border-color: var(--border-primary-focus); }
     .sidebar-btn__icon-wrap {
       width:       24px;
       height:      24px;
@@ -2191,7 +2199,7 @@
       flex-shrink: 0;
       color:       var(--icon-primary-default);
     }
-    .sidebar-btn--active .sidebar-btn__icon-wrap { color: #00a36a; }
+    .sidebar-btn--active .sidebar-btn__icon-wrap { color: var(--border-primary-focus); }
     .sidebar-btn__icon-wrap svg { display: block; width: 100%; height: 100%; }
     .sidebar-btn__icon-wrap[data-icon="box"]           { padding: 1.24px 2px 1.23px; }
     .sidebar-btn__icon-wrap[data-icon="shopping-bag"]  { padding: 2px 3px; }
@@ -2205,7 +2213,7 @@
       min-width:   0;
       white-space: nowrap;
     }
-    .sidebar-btn--active .sidebar-btn__label { color: #00a36a; }
+    .sidebar-btn--active .sidebar-btn__label { color: var(--border-primary-focus); }
 
     /* Right Main Panel */
     .rewards-main {
@@ -2213,10 +2221,10 @@
       min-width:      0;
       align-self:     stretch;
       border-radius:  var(--r-4xl);
-      padding:        var(--sp-m);
+      padding:        var(--spacing-space-m);
       display:        flex;
       flex-direction: column;
-      gap:            var(--sp-xs);
+      gap:            var(--spacing-space-xs);
       overflow:       hidden;
     }
     .rewards-main--evoucher {
@@ -2254,20 +2262,20 @@
     }
     .rc__badges { display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
 
-    /* Label Badge 1.5 — Premium / Premium Lite */
+    /* Label Badge 1.5 — Premium / Premium Lite (Primary/Success variant, DS node 843:666) */
     .lbadge-prem {
-      display: inline-flex; align-items: center; gap: 4px;
+      display: inline-flex; align-items: center;
       padding: 2px 8px; border-radius: 60px;
-      background: #d9f7ed; border: 1px solid #00cc85;
+      background: #e1f9ea;             /* Surface/primary/default-subtle (Session 23 DS confirmed) */
+      border: 1px solid #66e0b6;       /* Border/primary/default-hover (Session 23 DS confirmed) */
       font-size: 10px; font-weight: 500; line-height: 12px;
       color: #00cc85; white-space: nowrap; flex-shrink: 0;
     }
-    .lbadge-prem svg { width: 10px; height: 10px; flex-shrink: 0; }
 
     .rc__title {
       font-size: 14px; font-weight: 600; line-height: 20px; color: #404040;
       overflow: hidden; text-overflow: ellipsis;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      display: -webkit-box; -webkit-line-clamp: 3; min-height: 60px; -webkit-box-orient: vertical;
     }
     .rc__divider { height: 1px; background: #d9d9d9; flex-shrink: 0; }
     .rc__cta { padding: 16px; display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
@@ -2281,25 +2289,28 @@
       padding: 2px 8px; height: 24px;
       background: #00cc85; border: 1px solid #00a36a;
       cursor: pointer; text-decoration: none; flex-shrink: 0;
-      transition: background 0.12s ease, border-color 0.12s ease;
+      /* no transition — Rule 82: Button-1.5 uses instant state changes */
     }
     .btn-show__label {
       font-size: 12px; font-weight: 600; line-height: 18px; color: #f6fdfb;
-      padding: 0 4px; transition: color 0.12s ease; white-space: nowrap;
+      padding: 0 4px; white-space: nowrap;
     }
     .btn-show__arrow {
       width: 16px; height: 16px; border-radius: 60px; background: #99ebce;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0; padding: 2px; color: #00a36a;
-      transition: background 0.12s ease, color 0.12s ease;
     }
     .btn-show__arrow svg { display: block; width: 12px; height: 12px; }
     .btn-show:hover { background: #b5f291; border-color: #70bc6f; }
     .btn-show:hover .btn-show__label { color: #70bc6f; }
     .btn-show:hover .btn-show__arrow { background: #e8fbe8; color: #70bc6f; }
-    .btn-show:active { background: #00564c; border-color: #00453d; }
-    .btn-show:active .btn-show__label { color: #00cc85; }
-    .btn-show:active .btn-show__arrow { background: #00cc85; color: #00564c; }
+    /* Rule 40: Primary/S Pressed = Surface/primary/focus #00a36a bg, Border/primary/default #00cc85 border */
+    .btn-show:active,
+    .btn-show.is-pressing { background: #00a36a; border-color: #00cc85; }
+    .btn-show:active .btn-show__label,
+    .btn-show.is-pressing .btn-show__label { color: #00cc85; }
+    .btn-show:active .btn-show__arrow,
+    .btn-show.is-pressing .btn-show__arrow { background: #00cc85; color: #00a36a; }
     .btn-show--disabled,
     .btn-show--disabled:hover,
     .btn-show--disabled:active {
@@ -2437,8 +2448,8 @@
 </g></symbol>
 
       <!-- Profile Menu icons — all DS exports, viewBox -1 -1 26 26 (1px stroke buffer per Rule 27) -->
-      <!-- Outline/user-circle (1942:23330) — My Profile -->
-      <symbol id="ic-user-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20C18 18.4087 17.3679 16.8826 16.2426 15.7574C15.1174 14.6321 13.5913 14 12 14M12 14C10.4087 14 8.88258 14.6321 7.75736 15.7574C6.63214 16.8826 6 18.4087 6 20M12 14C14.2091 14 16 12.2091 16 10C16 7.79086 14.2091 6 12 6C9.79086 6 8 7.79086 8 10C8 12.2091 9.79086 14 12 14ZM22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
+      <!-- Outline/user-circle (3908:13415 60×60 DS export) — My Profile / Notif avatar -->
+      <symbol id="ic-user-circle" viewBox="-1 -1 62 62" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M45 50C45 46.0218 43.4196 42.2064 40.6066 39.3934C37.7936 36.5804 33.9782 35 30 35M30 35C26.0218 35 22.2064 36.5804 19.3934 39.3934C16.5804 42.2064 15 46.0218 15 50M30 35C35.5228 35 40 30.5228 40 25C40 19.4772 35.5228 15 30 15C24.4772 15 20 19.4772 20 25C20 30.5228 24.4772 35 30 35ZM55 30C55 43.8071 43.8071 55 30 55C16.1929 55 5 43.8071 5 30C5 16.1929 16.1929 5 30 5C43.8071 5 55 16.1929 55 30Z"/></symbol>
       <!-- Outline/user-check (260:1300) — Manage Account -->
       <symbol id="ic-user-check" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M17 11L19 13L23 9M12.5 7C12.5 9.20914 10.7091 11 8.5 11C6.29086 11 4.5 9.20914 4.5 7C4.5 4.79086 6.29086 3 8.5 3C10.7091 3 12.5 4.79086 12.5 7Z"/></symbol>
       <!-- Outline/star 24px (260:1192) — Subscribe Pandai Premium -->
@@ -2559,754 +2570,7 @@
        Tablet:  NavBar-Mobile + NavMenu-Tablet
        Mobile:  NavBar-Mobile + NavBar-Bottom + NavMenu-Mobile
   ═══════════════════════════════════════════════════════════════ -->
-  <section id="Navigation-Shell">
-  <section id="NavbarPrimary-Desktop">
-    <div class="navbar-primary">
-
-      <!-- Logo/Pandai/Logo Horizontal (node 1898:6965): 116×28px overflow-clip container -->
-      <!-- mark: inset-[0_76.95%_0_0] · wordmark: inset-[15.07%_0_15.03%_26.66%] -->
-      <a class="navbar-primary__logo" href="#" aria-label="Pandai">
-        <img src="../../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-mark.svg" class="navbar-primary__logo-mark" alt="" aria-hidden="true">
-        <img src="../../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/logo-text.svg" class="navbar-primary__logo-text" alt="Pandai">
-      </a>
-
-      <!-- Navbar Search Frame — Dropdown-Parts/Search (DS node 1342:4370, Type=Search, State=Focus)
-           Own frame fills empty area between logo and action buttons. Rearrange-friendly. -->
-      <div class="navbar-search-frame" id="NavbarSearch-Desktop">
-        <div class="navbar-search">
-          <input class="navbar-search__input" type="text" placeholder="Search" aria-label="Search Pandai">
-          <div class="navbar-search__icon" aria-hidden="true">
-            <svg width="24" height="24" aria-hidden="true"><use href="#ic-search"/></svg>
-          </div>
-        </div>
-      </div>
-
-      <!-- Avatar group (node 1084:1836): gap-16, justify-end, relative -->
-      <div class="navbar-primary__actions">
-
-        <!-- Row wrap (flex-row, items-center, self-stretch) -->
-        <div class="navbar-primary__icons-wrap">
-          <!-- Top Icons (node 1084:1909): flex, gap-8, h-full, justify-end -->
-          <div class="navbar-primary__icons">
-            <button class="navbar-action-btn" aria-label="Search" type="button">
-              <div class="nav-btn-content">
-                <div class="nav-btn-rect" aria-hidden="true"></div>
-                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-search"/></svg></div>
-              </div>
-            </button>
-            <button class="navbar-action-btn" id="maximize-btn" aria-label="Enter fullscreen" type="button">
-              <div class="nav-btn-content">
-                <div class="nav-btn-rect" aria-hidden="true"></div>
-                <div class="nav-btn-icon-clip"><svg aria-hidden="true" id="maximize-icon"><use href="#ic-maximize"/></svg></div>
-              </div>
-            </button>
-            <button class="navbar-action-btn" aria-label="Download app" id="download-btn" type="button" aria-haspopup="true">
-              <div class="nav-btn-content">
-                <div class="nav-btn-rect" aria-hidden="true"></div>
-                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></div>
-              </div>
-            </button>
-            <button class="navbar-action-btn" aria-label="Notifications" id="notif-btn" type="button" aria-haspopup="true">
-              <div class="nav-btn-content">
-                <div class="nav-btn-rect" aria-hidden="true"></div>
-                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-bell"/></svg></div>
-                <div class="num-badge num-badge--primary" aria-label="5 notifications" aria-live="polite">5</div>
-              </div>
-            </button>
-            <button class="navbar-action-btn" aria-label="Language" id="locale-btn" type="button" aria-haspopup="true">
-              <div class="nav-btn-content">
-                <div class="nav-btn-rect" aria-hidden="true"></div>
-                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-en"/></svg></div>
-              </div>
-            </button>
-            <button class="navbar-action-btn" aria-label="App menu" id="waffle-btn" type="button" aria-haspopup="true">
-              <div class="nav-btn-content">
-                <div class="nav-btn-rect" aria-hidden="true"></div>
-                <div class="nav-btn-icon-clip"><svg aria-hidden="true"><use href="#ic-waffle"/></svg></div>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <!-- Avatar - 1.5 Size=L Type=Image (node 684:621): 48×48 circle · image fill 60×60 at x:-6 y:0 -->
-        <div class="navbar-avatar" aria-label="Profile">
-          <img class="navbar-avatar__image" src="../../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
-        </div>
-
-        <!-- Number Badge - 1.5 (node 1084:1826): absolute right:-0.48px top:0 of Avatar group -->
-        <span class="navbar-badge" aria-label="15 notifications">15</span>
-
-      </div>
-
-    </div>
-
-    <!-- Profile Menu - 1.5 (DS node 3908:3679)
-         Opens on avatar click · closes on mouseleave · positioned below navbar at right:page-padding-x -->
-    <div class="profile-dropdown" id="profile-dropdown" aria-label="Profile menu">
-
-      <!-- Header: mint bg · 1px green border · 16px radius -->
-      <div class="profile-dropdown__header">
-
-        <!-- Avatar 100×100 -->
-        <div class="profile-dropdown__avatar-wrap">
-          <div class="profile-dropdown__avatar">
-            <img src="../../src/image-repo/page.template/assets/main/NavbarPrimary-Desktop/Avatar-Aidan.png" alt="User avatar">
-          </div>
-        </div>
-
-        <!-- Name / username / plan pill -->
-        <div class="profile-dropdown__info">
-          <div class="profile-dropdown__name-row">
-            <span class="profile-dropdown__name">Diana Adam</span>
-            <!-- Icon Badge - 1.5: blue #00a2e8 · 1px white border · check icon 8×8 -->
-            <span class="profile-dropdown__verified" aria-label="Verified">
-              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17L4 12"/></svg>
-            </span>
-          </div>
-          <span class="profile-dropdown__username">@dianaadam26</span>
-        </div>
-
-        <!-- Pill Badge - 1.5: Free plan -->
-        <span class="profile-dropdown__plan">Free</span>
-
-        <!-- Upgrade link: Filled/star + text -->
-        <a class="profile-dropdown__upgrade" href="#">
-          <svg aria-hidden="true"><use href="#ic-star-filled-24"/></svg>
-          Upgrade to Pandai Premium
-        </a>
-
-      </div><!-- end header -->
-
-      <!-- Menu items (DS Dropdown - Parts rows) -->
-      <div class="profile-dropdown__menu">
-
-        <div class="profile-dropdown__item" role="button" tabindex="0">
-          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-user-circle"/></svg></div>
-          <span class="profile-dropdown__item-label">My Profile</span>
-        </div>
-
-        <div class="profile-dropdown__item" role="button" tabindex="0">
-          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-user-check"/></svg></div>
-          <span class="profile-dropdown__item-label">Manage Account</span>
-        </div>
-
-        <div class="profile-dropdown__item" role="button" tabindex="0">
-          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-star-24"/></svg></div>
-          <span class="profile-dropdown__item-label">Subscribe Pandai Premium</span>
-        </div>
-
-        <div class="profile-dropdown__item" role="button" tabindex="0">
-          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-credit-card"/></svg></div>
-          <span class="profile-dropdown__item-label">Payment History</span>
-        </div>
-
-        <div class="profile-dropdown__item" role="button" tabindex="0">
-          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-progress-mobile"/></svg></div>
-          <span class="profile-dropdown__item-label">Share My Progress</span>
-        </div>
-
-        <div class="profile-dropdown__item" role="button" tabindex="0">
-          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div>
-          <span class="profile-dropdown__item-label">Learn and Earn</span>
-        </div>
-
-        <div class="profile-dropdown__item" role="button" tabindex="0">
-          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-life-buoy"/></svg></div>
-          <span class="profile-dropdown__item-label">Online Support</span>
-        </div>
-
-        <div class="profile-dropdown__divider" role="separator"></div>
-
-        <div class="profile-dropdown__item" role="button" tabindex="0">
-          <div class="profile-dropdown__item-icon"><svg aria-hidden="true"><use href="#ic-power"/></svg></div>
-          <span class="profile-dropdown__item-label">Log Out</span>
-        </div>
-
-      </div><!-- end menu -->
-
-    </div><!-- end profile-dropdown -->
-
-    <!-- Learn Menu - 1.5 (DS node 3908:5091)
-         Triggered by waffle button · closes on mouseleave / outside click
-         JS positions .style.left to align to waffle button · 0.15s snappy animation -->
-    <div class="learn-dropdown" id="learn-dropdown" aria-label="Learn menu" role="menu">
-      <div class="learn-dropdown__grid">
-
-        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Live Tuition">
-          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-live-tuition.png" alt="" width="70" height="70">
-          <span class="learn-dropdown__label">Live Tuition</span>
-        </div>
-
-        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Live Help">
-          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-live-help.png" alt="" width="70" height="70">
-          <span class="learn-dropdown__label">Live Help</span>
-        </div>
-
-        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quiz">
-          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-quiz.png" alt="" width="70" height="70">
-          <span class="learn-dropdown__label">Quiz</span>
-        </div>
-
-        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Practice">
-          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-practice.png" alt="" width="70" height="70">
-          <span class="learn-dropdown__label">Practice</span>
-        </div>
-
-        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Chapters">
-          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-chapters.png" alt="" width="70" height="70">
-          <span class="learn-dropdown__label">Chapters</span>
-        </div>
-
-        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Textbooks">
-          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-textbooks.png" alt="" width="70" height="70">
-          <span class="learn-dropdown__label">Textbooks</span>
-        </div>
-
-        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Quick Notes">
-          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-quick-notes.png" alt="" width="70" height="70">
-          <span class="learn-dropdown__label">Quick Notes</span>
-        </div>
-
-        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Videos">
-          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-videos.png" alt="" width="70" height="70">
-          <span class="learn-dropdown__label">Videos</span>
-        </div>
-
-        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Experiments">
-          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-experiments.png" alt="" width="70" height="70">
-          <span class="learn-dropdown__label">Experiments</span>
-        </div>
-
-        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Personality">
-          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-personality.png" alt="" width="70" height="70">
-          <span class="learn-dropdown__label">Personality</span>
-        </div>
-
-        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="University">
-          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-university.png" alt="" width="70" height="70">
-          <span class="learn-dropdown__label">University</span>
-        </div>
-
-        <div class="learn-dropdown__item" role="menuitem" tabindex="0" aria-label="Rewards">
-          <img class="learn-dropdown__icon" src="../../src/image-repo/page.template/assets/main/LearnMenu/feature-rewards.png" alt="" width="70" height="70">
-          <span class="learn-dropdown__label">Rewards</span>
-        </div>
-
-      </div>
-    </div><!-- end learn-dropdown -->
-
-    <!-- Localization dropdown (DS node 3928:3067, Navbar Download Apps - 1.5)
-         Triggered by EN button · right-aligned to EN button right edge via JS
-         3 language options: Bahasa Melayu (default selected), English, Chinese -->
-    <div class="locale-dropdown" id="locale-dropdown" aria-label="Select language" role="menu">
-
-      <div class="locale-dropdown__item is-selected" role="menuitem" tabindex="0" data-lang="ms" aria-label="Bahasa Melayu">
-        <span class="locale-dropdown__label">Bahasa Melayu</span>
-      </div>
-
-      <div class="locale-dropdown__item" role="menuitem" tabindex="0" data-lang="en" aria-label="English">
-        <span class="locale-dropdown__label">English</span>
-      </div>
-
-      <div class="locale-dropdown__item" role="menuitem" tabindex="0" data-lang="zh" aria-label="Chinese">
-        <span class="locale-dropdown__label">Chinese</span>
-      </div>
-
-    </div><!-- end locale-dropdown -->
-
-    <!-- Navbar Notification - 1.5 (DS node 3908:13057, Type=Default)
-         320px panel · 4 items · "See all notification" button
-         Triggered by bell button · right-aligned to bell button right edge via JS -->
-    <div class="notif-dropdown" id="notif-dropdown" aria-label="Notifications" role="menu">
-
-      <!-- Navbar Notification Button - Parts ×4 (DS 3908:13427) -->
-      <div class="notif-item" role="menuitem" tabindex="0">
-        <div class="notif-item__content">
-          <div class="notif-item__body">
-            <div class="notif-item__avatar" aria-hidden="true">
-              <svg><use href="#ic-user-circle"/></svg>
-            </div>
-            <div class="notif-item__texts">
-              <div class="notif-item__texts-inner">
-                <p class="notif-item__text">Your quiz result for Chapter 3 is ready. Check your score now!</p>
-                <span class="notif-item__time">2 Hours Ago...</span>
-              </div>
-            </div>
-            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="notif-item" role="menuitem" tabindex="0">
-        <div class="notif-item__content">
-          <div class="notif-item__body">
-            <div class="notif-item__avatar" aria-hidden="true">
-              <svg><use href="#ic-user-circle"/></svg>
-            </div>
-            <div class="notif-item__texts">
-              <div class="notif-item__texts-inner">
-                <p class="notif-item__text">Live Tuition for Add Maths starts in 30 minutes. Join now!</p>
-                <span class="notif-item__time">5 Hours Ago...</span>
-              </div>
-            </div>
-            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="notif-item" role="menuitem" tabindex="0">
-        <div class="notif-item__content">
-          <div class="notif-item__body">
-            <div class="notif-item__avatar" aria-hidden="true">
-              <svg><use href="#ic-user-circle"/></svg>
-            </div>
-            <div class="notif-item__texts">
-              <div class="notif-item__texts-inner">
-                <p class="notif-item__text">You earned 50 coins from completing today's daily challenge.</p>
-                <span class="notif-item__time">1 Day Ago...</span>
-              </div>
-            </div>
-            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="notif-item" role="menuitem" tabindex="0">
-        <div class="notif-item__content">
-          <div class="notif-item__body">
-            <div class="notif-item__avatar" aria-hidden="true">
-              <svg><use href="#ic-user-circle"/></svg>
-            </div>
-            <div class="notif-item__texts">
-              <div class="notif-item__texts-inner">
-                <p class="notif-item__text">New Quick Notes for Physics Chapter 5 are now available.</p>
-                <span class="notif-item__time">6 Days Ago...</span>
-              </div>
-            </div>
-            <div class="notif-item__indicator"><div class="notif-item__dot"></div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- "See all notification" — Primary/L Button - 1.5, no arrow, full-width -->
-      <div class="notif-dropdown__footer">
-        <button class="notif-see-all" type="button">See all notification</button>
-      </div>
-
-    </div><!-- end notif-dropdown -->
-
-    <!-- Download Apps dropdown (DS node 3909:3405, Navbar Download Apps - 1.5)
-         238px panel · 3 items with app store icons
-         Triggered by smartphone button · right-aligned to button right edge via JS -->
-    <div class="download-dropdown" id="download-dropdown" aria-label="Download app" role="menu">
-
-      <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Google Android">
-        <svg class="download-dropdown__icon" aria-hidden="true" focusable="false"><use href="#ic-store-google-play"/></svg>
-        <span class="download-dropdown__label">Google Android</span>
-      </a>
-
-      <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Apple iOS">
-        <svg class="download-dropdown__icon" aria-hidden="true" focusable="false"><use href="#ic-store-apple"/></svg>
-        <span class="download-dropdown__label">Apple iOS</span>
-      </a>
-
-      <a class="download-dropdown__item" role="menuitem" href="#" tabindex="0" aria-label="Huawei AppGallery">
-        <svg class="download-dropdown__icon" aria-hidden="true" focusable="false"><use href="#ic-store-huawei"/></svg>
-        <span class="download-dropdown__label">Huawei</span>
-      </a>
-
-    </div><!-- end download-dropdown -->
-
-  </section><!-- end NavbarPrimary-Desktop -->
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       NAV TOP MENU DESKTOP — Nav Top Menu Desktop - 1.5
-       DS node 3406:789 (Type=Desktop) / inner "Navbar Content" 3406:802
-       Pill nav bar · 9 items: Home, Quiz, Battle, Practice,
-       Class↓, Learn↓, Achievement↓, Potential↓, Rewards↓
-  ═══════════════════════════════════════════════════════════════ -->
-  <section id="NavTopMenu-Desktop">
-    <nav class="navbar-nav-menu" aria-label="Main navigation">
-
-      <!-- Home (no chevron) -->
-      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Home">
-        <div class="nav-menu-btn__inner">
-          <div class="nav-menu-btn__icon-wrap">
-            <div class="nav-menu-btn__icon-clip" data-icon="home"><svg aria-hidden="true"><use href="#ic-home"/></svg></div>
-          </div>
-          <span class="nav-menu-btn__label">Home</span>
-        </div>
-      </div>
-
-      <!-- Quiz (no chevron) -->
-      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Quiz">
-        <div class="nav-menu-btn__inner">
-          <div class="nav-menu-btn__icon-wrap">
-            <div class="nav-menu-btn__icon-clip" data-icon="quiz"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></div>
-          </div>
-          <span class="nav-menu-btn__label">Quiz</span>
-        </div>
-      </div>
-
-      <!-- Battle (no chevron) -->
-      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Battle">
-        <div class="nav-menu-btn__inner">
-          <div class="nav-menu-btn__icon-wrap">
-            <div class="nav-menu-btn__icon-clip" data-icon="battle"><svg aria-hidden="true"><use href="#ic-battle"/></svg></div>
-          </div>
-          <span class="nav-menu-btn__label">Battle</span>
-        </div>
-      </div>
-
-      <!-- Practice (no chevron) -->
-      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Practice">
-        <div class="nav-menu-btn__inner">
-          <div class="nav-menu-btn__icon-wrap">
-            <div class="nav-menu-btn__icon-clip" data-icon="practice"><svg aria-hidden="true"><use href="#ic-book-open"/></svg></div>
-          </div>
-          <span class="nav-menu-btn__label">Practice</span>
-        </div>
-      </div>
-
-      <!-- Class (with chevron dropdown) -->
-      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Class" aria-haspopup="true">
-        <div class="nav-menu-btn__inner">
-          <div class="nav-menu-btn__icon-wrap">
-            <div class="nav-menu-btn__icon-clip" data-icon="class"><svg aria-hidden="true"><use href="#ic-users"/></svg></div>
-          </div>
-          <span class="nav-menu-btn__label">Class</span>
-          <div class="nav-menu-btn__chevron-clip" aria-hidden="true"><svg><use href="#ic-chevron-down"/></svg></div>
-        </div>
-      </div>
-
-      <!-- Learn (with chevron dropdown) -->
-      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Learn" aria-haspopup="true">
-        <div class="nav-menu-btn__inner">
-          <div class="nav-menu-btn__icon-wrap">
-            <div class="nav-menu-btn__icon-clip" data-icon="learn"><svg aria-hidden="true"><use href="#ic-book"/></svg></div>
-          </div>
-          <span class="nav-menu-btn__label">Learn</span>
-          <div class="nav-menu-btn__chevron-clip" aria-hidden="true"><svg><use href="#ic-chevron-down"/></svg></div>
-        </div>
-      </div>
-
-      <!-- Achievement (with chevron dropdown) -->
-      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Achievement" aria-haspopup="true">
-        <div class="nav-menu-btn__inner">
-          <div class="nav-menu-btn__icon-wrap">
-            <div class="nav-menu-btn__icon-clip" data-icon="achievement"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></div>
-          </div>
-          <span class="nav-menu-btn__label">Achievement</span>
-          <div class="nav-menu-btn__chevron-clip" aria-hidden="true"><svg><use href="#ic-chevron-down"/></svg></div>
-        </div>
-      </div>
-
-      <!-- Potential (with chevron dropdown) -->
-      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Potential" aria-haspopup="true">
-        <div class="nav-menu-btn__inner">
-          <div class="nav-menu-btn__icon-wrap">
-            <div class="nav-menu-btn__icon-clip" data-icon="potential"><svg aria-hidden="true"><use href="#ic-star"/></svg></div>
-          </div>
-          <span class="nav-menu-btn__label">Potential</span>
-          <div class="nav-menu-btn__chevron-clip" aria-hidden="true"><svg><use href="#ic-chevron-down"/></svg></div>
-        </div>
-      </div>
-
-      <!-- Rewards (with chevron dropdown) — ACTIVE PAGE -->
-      <div class="nav-menu-btn is-active" role="button" tabindex="0" aria-label="Rewards" aria-haspopup="true" aria-current="page">
-        <div class="nav-menu-btn__inner">
-          <div class="nav-menu-btn__icon-wrap">
-            <div class="nav-menu-btn__icon-clip" data-icon="rewards"><svg aria-hidden="true"><use href="#ic-gift"/></svg></div>
-          </div>
-          <span class="nav-menu-btn__label">Rewards</span>
-          <div class="nav-menu-btn__chevron-clip" aria-hidden="true"><svg><use href="#ic-chevron-down"/></svg></div>
-        </div>
-      </div>
-
-    </nav>
-
-    <!-- Class dropdown — Sub-topic Class - 1.5 (DS node 4753:69867) -->
-    <div class="nav-menu-dropdown" id="class-dropdown" aria-label="Class menu">
-      <div class="nav-menu-dropdown__list">
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-airplay"/></svg></div>
-          <span class="nav-menu-dropdown__label">My Classes</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-globe"/></svg></div>
-          <span class="nav-menu-dropdown__label">Browse Classes</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-layout"/></svg></div>
-          <span class="nav-menu-dropdown__label">Timetable</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-edit"/></svg></div>
-          <span class="nav-menu-dropdown__label">Assignments</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Learn dropdown — Sub-topic Learn - 1.5 (DS node 4753:69817) -->
-    <div class="nav-menu-dropdown" id="learn-menu-dropdown" aria-label="Learn menu">
-      <div class="nav-menu-dropdown__list">
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-folder"/></svg></div>
-          <span class="nav-menu-dropdown__label">Learning Hub</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></div>
-          <span class="nav-menu-dropdown__label">Quick Notes</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-film"/></svg></div>
-          <span class="nav-menu-dropdown__label">Videos</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-experiment"/></svg></div>
-          <span class="nav-menu-dropdown__label">Experiments</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-book"/></svg></div>
-          <span class="nav-menu-dropdown__label">Textbooks</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-bookmark"/></svg></div>
-          <span class="nav-menu-dropdown__label">Bookmarks</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Achievement dropdown — Sub-topic Achievement - 1.5 (DS node 4742:74267) -->
-    <div class="nav-menu-dropdown" id="achievement-dropdown" aria-label="Achievement menu">
-      <div class="nav-menu-dropdown__list">
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-pie-chart"/></svg></div>
-          <span class="nav-menu-dropdown__label">Score Card</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-filled-check-circle"/></svg></div>
-          <span class="nav-menu-dropdown__label">Report Card</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-calendar"/></svg></div>
-          <span class="nav-menu-dropdown__label">History</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-shield"/></svg></div>
-          <span class="nav-menu-dropdown__label">Badges</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-award"/></svg></div>
-          <span class="nav-menu-dropdown__label">Leaderboard</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-flag"/></svg></div>
-          <span class="nav-menu-dropdown__label">School Leaderboard</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-certificate"/></svg></div>
-          <span class="nav-menu-dropdown__label">Certificates</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-progress-mobile"/></svg></div>
-          <span class="nav-menu-dropdown__label">Goals &amp; Rewards</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Potential dropdown — Sub-topic Potential - 1.5 (DS node 4753:69767) -->
-    <div class="nav-menu-dropdown" id="potential-dropdown" aria-label="Potential menu">
-      <div class="nav-menu-dropdown__list">
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-sun"/></svg></div>
-          <span class="nav-menu-dropdown__label">Personality Test</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-bar-chart-3"/></svg></div>
-          <span class="nav-menu-dropdown__label">Competition</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-mortar-board"/></svg></div>
-          <span class="nav-menu-dropdown__label">University Matching</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Rewards dropdown — Sub-topic Rewards - 1.5 (DS node 4753:70068) -->
-    <div class="nav-menu-dropdown" id="rewards-dropdown" aria-label="Rewards menu">
-      <div class="nav-menu-dropdown__list">
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-stop-circle"/></svg></div>
-          <span class="nav-menu-dropdown__label">Coin Quests</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-package"/></svg></div>
-          <span class="nav-menu-dropdown__label">My Rewards</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-shopping-bag"/></svg></div>
-          <span class="nav-menu-dropdown__label">Merchandise</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-shopping-cart"/></svg></div>
-          <span class="nav-menu-dropdown__label">eVoucher</span>
-        </div>
-        <div class="nav-menu-dropdown__item" role="button" tabindex="0">
-          <div class="nav-menu-dropdown__icon"><svg aria-hidden="true"><use href="#ic-smile"/></svg></div>
-          <span class="nav-menu-dropdown__label">Avatar</span>
-        </div>
-      </div>
-    </div>
-
-  </section><!-- end NavTopMenu-Desktop -->
-
-
-  <!-- Navbar Tablet - 1.5 / Type=Mobile (node 1943:22641)
-       COMPONENT_SET: Navbar Tablet - 1.5 (2337:22738) · only variant: Type=Mobile
-       Logo left · hamburger menu icon right -->
-  <section id="NavBar-Mobile">
-    <div class="navbar-mobile">
-      <a class="navbar-mobile__logo" href="#">
-        <img src="../../src/image-repo/page.template/assets/main/NavBar-Mobile/logo-mark.svg" class="navbar-mobile__logo-mark" alt="Pandai mark">
-        <img src="../../src/image-repo/page.template/assets/main/NavBar-Mobile/logo-text.svg" class="navbar-mobile__logo-text" alt="Pandai">
-      </a>
-      <button class="navbar-mobile__menu-btn" id="tablet-menu-btn" aria-label="Open menu" type="button">
-        <svg class="ham-svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-          <path class="ham-top" d="M3 6H21"/>
-          <path class="ham-mid" d="M3 12H21"/>
-          <path class="ham-bot" d="M3 18H21"/>
-        </svg>
-      </button>
-    </div>
-  </section><!-- end NavBar-Mobile -->
-
-
-  <!-- Nav Menu Tablet - 1.5 (DS node 3427:4590)
-       Full-width dropdown · position absolute below #NavBar-Mobile
-       Triggered by hamburger btn in #NavBar-Mobile · tablet only (769px-1319px) -->
-  <div id="NavMenu-Tablet" class="nav-menu-tablet" aria-hidden="true">
-
-    <!-- Header: Logo + X close -->
-    <div class="nav-menu-tablet__header">
-      <a class="nav-menu-tablet__logo" href="#" aria-label="Pandai">
-        <svg width="117" height="28" aria-label="Pandai" role="img" style="display:block;flex-shrink:0;"><use href="#ic-pandai-logo-large"/></svg>
-      </a>
-      <button class="nav-menu-tablet__close" id="nav-menu-tablet-close" type="button" aria-label="Close menu">
-        <svg width="24" height="24" aria-hidden="true"><use href="#ic-x"/></svg>
-      </button>
-    </div>
-
-    <!-- Search bar -->
-    <div class="nav-menu-tablet__search">
-      <button class="nav-menu-tablet__search-btn" type="button">
-        <span class="nav-menu-tablet__search-text">Search</span>
-        <span class="nav-menu-tablet__search-icon"><svg width="24" height="24" aria-hidden="true"><use href="#ic-search"/></svg></span>
-      </button>
-    </div>
-
-    <!-- 2-column menu -->
-    <div class="nav-menu-tablet__menu">
-
-      <!-- Left column: Home, Quiz, Battle, Practice, Class -->
-      <div class="nav-menu-tablet__col">
-        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Home">
-          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-home"/></svg></span>
-          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
-          <span class="nav-menu-item__label">Home</span>
-        </div>
-        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Quiz">
-          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></span>
-          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
-          <span class="nav-menu-item__label">Quiz</span>
-        </div>
-        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Battle">
-          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
-          <span class="nav-menu-item__label">Battle</span>
-        </div>
-        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Practice">
-          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-clipboard"/></svg></span>
-          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
-          <span class="nav-menu-item__label">Practice</span>
-        </div>
-        <div class="nav-menu-item is-active" role="button" tabindex="0" aria-label="Class" aria-current="page">
-          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-users"/></svg></span>
-          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
-          <span class="nav-menu-item__label">Class</span>
-          <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
-        </div>
-      </div>
-
-      <!-- Vertical divider -->
-      <div class="nav-menu-tablet__divider" aria-hidden="true"></div>
-
-      <!-- Right column: Learn, Achievement, Potential, Rewards, My Account -->
-      <div class="nav-menu-tablet__col">
-        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Learn">
-          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-book"/></svg></span>
-          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
-          <span class="nav-menu-item__label">Learn</span>
-          <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
-        </div>
-        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Achievement">
-          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></span>
-          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
-          <span class="nav-menu-item__label">Achievement</span>
-          <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
-        </div>
-        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Potential">
-          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-star"/></svg></span>
-          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
-          <span class="nav-menu-item__label">Potential</span>
-          <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
-        </div>
-        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Rewards">
-          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-gift"/></svg></span>
-          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
-          <span class="nav-menu-item__label">Rewards</span>
-          <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
-        </div>
-        <div class="nav-menu-item" role="button" tabindex="0" aria-label="My Account">
-          <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-settings"/></svg></span>
-          <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
-          <span class="nav-menu-item__label">My Account</span>
-          <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
-        </div>
-      </div>
-
-    </div><!-- end 2-col menu -->
-
-    <!-- Footer: CTA + Language switcher -->
-    <div class="nav-menu-tablet__footer">
-      <!-- CTA: Notification + Download App -->
-      <div class="nav-menu-cta">
-        <div class="nav-menu-cta__notif" role="button" tabindex="0" aria-label="Notification">
-          <svg aria-hidden="true"><use href="#ic-bell"/></svg>
-          <span class="nav-menu-cta__notif-label">Notification</span>
-        </div>
-        <button class="nav-menu-cta__btn" type="button">
-          <span class="nav-menu-cta__btn-icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></span>
-          <span class="nav-menu-cta__btn-text">Download App</span>
-          <span class="nav-menu-cta__btn-arrow"><svg width="16" height="16" aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
-        </button>
-      </div>
-      <!-- Language switcher: EN / BM / Mandarin -->
-      <div class="nav-menu-locale">
-        <button class="nav-menu-locale__btn" type="button" aria-label="English"><svg aria-hidden="true"><use href="#ic-en"/></svg></button>
-        <button class="nav-menu-locale__btn" type="button" aria-label="Bahasa Melayu"><svg aria-hidden="true"><use href="#ic-bm"/></svg></button>
-        <button class="nav-menu-locale__btn" type="button" aria-label="Mandarin"><svg aria-hidden="true"><use href="#ic-mandarin"/></svg></button>
-      </div>
-    </div>
-
-  </div><!-- end NavMenu-Tablet -->
-
-  <!-- Tablet overlay — Overlay/Overlay-Dark rgba(26,26,26,0.5) · z-index 250
-       Behind navbar (300) and dropdown (300), in front of page content (0).
-       Click closes the dropdown. -->
-  <div id="tablet-overlay" class="tablet-overlay" aria-hidden="true"></div>
-
-  </section><!-- end Navigation-Shell -->
+  <section id="Navigation-Shell"></section>
 
 
   <!-- ═══════════════════════════════════════════════════════════════
@@ -3330,7 +2594,7 @@
                 <a href="#" class="bc-link">
                   <svg aria-hidden="true"><use href="#ic-gift"/></svg>
                   Rewards
-                  <svg class="bc-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                  <svg class="bc-chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
                 </a>
                 <span class="bc-link bc-link--current" aria-current="page">eVoucher</span>
               </nav>
@@ -3338,7 +2602,7 @@
             <!-- Coin balance — mobile only, hidden on desktop -->
             <div class="bc-coin-mobile" aria-hidden="true">
               <img class="bc-coin-mobile__icon" src="../../src/image-repo/page.rewards/evoucher/assets/P.Coin.svg" alt="">
-              <span class="bc-coin-mobile__value">10,000</span>
+              <span class="bc-coin-mobile__value">500</span>
             </div>
           </section>
 
@@ -3351,7 +2615,7 @@
               <!-- Score chip — Surface/gold/default-subtle #fef1ce, Border/gold/default #fabb0a -->
               <div class="sidebar-balance">
                 <img class="sidebar-balance__coin" src="../../src/image-repo/page.rewards/evoucher/assets/P.Coin.svg" alt="Pandai Coin">
-                <span class="sidebar-balance__value">10,000</span>
+                <span class="sidebar-balance__value">500</span>
               </div>
 
               <!-- Divider — 1px #d9d9d9 -->
@@ -3363,7 +2627,7 @@
               </button>
               <button class="sidebar-btn" type="button">
                 <div class="sidebar-btn__icon-wrap" data-icon="box"><svg aria-hidden="true"><use href="#ic-package"/></svg></div>
-                <span class="sidebar-btn__label">My Reward</span>
+                <span class="sidebar-btn__label">My Rewards</span>
               </button>
               <button class="sidebar-btn" type="button">
                 <div class="sidebar-btn__icon-wrap" data-icon="shopping-bag"><svg aria-hidden="true"><use href="#ic-shopping-bag"/></svg></div>
@@ -3410,15 +2674,15 @@
                   <div class="rc__body">
                     <div class="rc__badges">
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium
                       </span>
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium Lite
                       </span>
                     </div>
-                    <p class="rc__title">This is the title for the reward voucher</p>
+                    <p class="rc__title">Free Drinks Voucher (Medium Size)</p>
                   </div>
                   <div class="rc__divider"></div>
                   <div class="rc__cta">
@@ -3426,7 +2690,7 @@
                       <img class="rc__coin-icon"
                            src="../../src/image-repo/page.rewards/evoucher/assets/P.Coin.svg"
                            alt="Pandai Coin">
-                      <span class="rc__coin-value">120</span>
+                      <span class="rc__coin-value">50</span>
                     </div>
                     <a href="#" class="btn-show">
                       <span class="btn-show__label">Redeem</span>
@@ -3446,15 +2710,15 @@
                   <div class="rc__body">
                     <div class="rc__badges">
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium
                       </span>
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium Lite
                       </span>
                     </div>
-                    <p class="rc__title">This is the title for the reward voucher</p>
+                    <p class="rc__title">10% Off Electronics Voucher</p>
                   </div>
                   <div class="rc__divider"></div>
                   <div class="rc__cta">
@@ -3462,7 +2726,7 @@
                       <img class="rc__coin-icon"
                            src="../../src/image-repo/page.rewards/evoucher/assets/P.Coin.svg"
                            alt="Pandai Coin">
-                      <span class="rc__coin-value">120</span>
+                      <span class="rc__coin-value">80</span>
                     </div>
                     <a href="#" class="btn-show">
                       <span class="btn-show__label">Redeem</span>
@@ -3482,15 +2746,15 @@
                   <div class="rc__body">
                     <div class="rc__badges">
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium
                       </span>
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium Lite
                       </span>
                     </div>
-                    <p class="rc__title">This is the title for the reward voucher</p>
+                    <p class="rc__title">RM5 Food Delivery Discount</p>
                   </div>
                   <div class="rc__divider"></div>
                   <div class="rc__cta">
@@ -3498,7 +2762,7 @@
                       <img class="rc__coin-icon"
                            src="../../src/image-repo/page.rewards/evoucher/assets/P.Coin.svg"
                            alt="Pandai Coin">
-                      <span class="rc__coin-value">120</span>
+                      <span class="rc__coin-value">100</span>
                     </div>
                     <a href="#" class="btn-show">
                       <span class="btn-show__label">Redeem</span>
@@ -3518,15 +2782,15 @@
                   <div class="rc__body">
                     <div class="rc__badges">
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium
                       </span>
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium Lite
                       </span>
                     </div>
-                    <p class="rc__title">This is the title for the reward voucher</p>
+                    <p class="rc__title">Pandai Premium Access (30 Days)</p>
                   </div>
                   <div class="rc__divider"></div>
                   <div class="rc__cta">
@@ -3534,7 +2798,7 @@
                       <img class="rc__coin-icon"
                            src="../../src/image-repo/page.rewards/evoucher/assets/P.Coin.svg"
                            alt="Pandai Coin">
-                      <span class="rc__coin-value">120</span>
+                      <span class="rc__coin-value">500</span>
                     </div>
                     <a href="#" class="btn-show">
                       <span class="btn-show__label">Redeem</span>
@@ -3554,15 +2818,15 @@
                   <div class="rc__body">
                     <div class="rc__badges">
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium
                       </span>
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium Lite
                       </span>
                     </div>
-                    <p class="rc__title">This is the title for the reward voucher</p>
+                    <p class="rc__title">1 Month Gaming Pass</p>
                   </div>
                   <div class="rc__divider"></div>
                   <div class="rc__cta">
@@ -3570,7 +2834,7 @@
                       <img class="rc__coin-icon"
                            src="../../src/image-repo/page.rewards/evoucher/assets/P.Coin.svg"
                            alt="Pandai Coin">
-                      <span class="rc__coin-value">120</span>
+                      <span class="rc__coin-value">200</span>
                     </div>
                     <span class="btn-show btn-show--disabled" aria-disabled="true">
                       <span class="btn-show__label">Coming Soon</span>
@@ -3590,15 +2854,15 @@
                   <div class="rc__body">
                     <div class="rc__badges">
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium
                       </span>
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium Lite
                       </span>
                     </div>
-                    <p class="rc__title">This is the title for the reward voucher</p>
+                    <p class="rc__title">Beauty Kit Sample Set</p>
                   </div>
                   <div class="rc__divider"></div>
                   <div class="rc__cta">
@@ -3606,7 +2870,7 @@
                       <img class="rc__coin-icon"
                            src="../../src/image-repo/page.rewards/evoucher/assets/P.Coin.svg"
                            alt="Pandai Coin">
-                      <span class="rc__coin-value">120</span>
+                      <span class="rc__coin-value">150</span>
                     </div>
                     <span class="btn-show btn-show--disabled" aria-disabled="true">
                       <span class="btn-show__label">Coming Soon</span>
@@ -3626,15 +2890,15 @@
                   <div class="rc__body">
                     <div class="rc__badges">
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium
                       </span>
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium Lite
                       </span>
                     </div>
-                    <p class="rc__title">This is the title for the reward voucher</p>
+                    <p class="rc__title">3 eBooks SPM Collection</p>
                   </div>
                   <div class="rc__divider"></div>
                   <div class="rc__cta">
@@ -3662,15 +2926,15 @@
                   <div class="rc__body">
                     <div class="rc__badges">
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium
                       </span>
                       <span class="lbadge-prem">
-                        <svg aria-hidden="true"><use href="#ic-video"/></svg>
+                        
                         Premium Lite
                       </span>
                     </div>
-                    <p class="rc__title">This is the title for the reward voucher</p>
+                    <p class="rc__title">Sports Gear Discount Voucher</p>
                   </div>
                   <div class="rc__divider"></div>
                   <div class="rc__cta">
@@ -3678,7 +2942,7 @@
                       <img class="rc__coin-icon"
                            src="../../src/image-repo/page.rewards/evoucher/assets/P.Coin.svg"
                            alt="Pandai Coin">
-                      <span class="rc__coin-value">120</span>
+                      <span class="rc__coin-value">250</span>
                     </div>
                     <span class="btn-show btn-show--disabled" aria-disabled="true">
                       <span class="btn-show__label">Out Of Stock</span>
@@ -3700,935 +2964,18 @@
     </div>
   </main>
 
-  <footer class="footer">
-    <div class="footer__inner">
-
-        <!-- Left text group -->
-        <div class="footer__left">
-          <span class="footer__text">&copy; 2026</span>
-          <a class="footer__link" href="#">Pandai.org</a>
-          <span class="footer__text">All Rights Reserved</span>
-        </div>
-
-        <!-- Right: Made with heart -->
-        <div class="footer__right">
-          <span class="footer__text">Made with</span>
-          <!-- Outline/heart · node 260:815 -->
-          <svg class="footer__heart" aria-hidden="true"><use href="#ic-heart"/></svg>
-          <span class="footer__text">in Malaysia</span>
-        </div>
-
-    </div>
-  </footer>
+  <footer class="footer" id="zul-footer"></footer>
 
 
+  <!-- is-pressing handler — all .btn-show buttons (Rule 39 / Rule N-C3: CSS :active unreliable in Electron) -->
   <script>
-
-    // Search bar — btn click → open + focus + start 3s timer; inactivity → close + reset btn (Rule 14: critical first)
-    (function () {
-      var searchBtn   = document.querySelector('#NavbarPrimary-Desktop .navbar-action-btn[aria-label="Search"]');
-      var searchFrame = document.getElementById('NavbarSearch-Desktop');
-      var searchInput = searchFrame ? searchFrame.querySelector('.navbar-search__input') : null;
-      if (!searchBtn || !searchFrame || !searchInput) return;
-
-      var closeTimer = null;
-      var isOpen     = false;
-
-      function openSearch() {
-        isOpen = true;
-        searchFrame.classList.add('is-open');
-        searchBtn.classList.add('is-active');
-        setTimeout(function () { searchInput.focus(); }, 50);   /* delay so the expand transition is visible first */
-        resetTimer();
-      }
-
-      function closeSearch() {
-        isOpen = false;
-        clearTimer();
-        searchFrame.classList.remove('is-open');
-        searchBtn.classList.remove('is-active');
-        searchInput.value = '';
-        searchInput.blur();
-      }
-
-      function resetTimer() {
-        clearTimer();
-        closeTimer = setTimeout(closeSearch, 3000);
-      }
-
-      function clearTimer() {
-        if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
-      }
-
-      /* Search button: click to open; click again while open → close */
-      searchBtn.addEventListener('click', function () {
-        if (isOpen) { closeSearch(); } else { openSearch(); }
-      });
-
-      /* Reset 3s timer on any typing; Escape closes immediately */
-      searchInput.addEventListener('input', resetTimer);
-      searchInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') { closeSearch(); return; }
-        resetTimer();
-      });
-      searchInput.addEventListener('focus', resetTimer);
-
-      /* Click anywhere outside the search frame + button → close */
-      document.addEventListener('click', function (e) {
-        if (!isOpen) return;
-        if (searchFrame.contains(e.target) || searchBtn.contains(e.target)) return;
-        closeSearch();
-      });
-    })();
-
-    // Profile dropdown — avatar click → toggle open; mouseleave dropdown → close (Rule 14: critical first)
-    (function () {
-      var avatar   = document.querySelector('.navbar-avatar');
-      var dropdown = document.getElementById('profile-dropdown');
-      if (!avatar || !dropdown) return;
-
-      avatar.addEventListener('click', function () {
-        var learnDd      = document.getElementById('learn-dropdown');
-        var waffleBtn    = document.getElementById('waffle-btn');
-        var localeDd     = document.getElementById('locale-dropdown');
-        var localeBtn    = document.getElementById('locale-btn');
-        var notifDd      = document.getElementById('notif-dropdown');
-        var notifBtn     = document.getElementById('notif-btn');
-        var downloadDd   = document.getElementById('download-dropdown');
-        var downloadBtn  = document.getElementById('download-btn');
-        if (learnDd)     learnDd.classList.remove('is-open');
-        if (waffleBtn)   waffleBtn.classList.remove('is-active');
-        if (localeDd)    localeDd.classList.remove('is-open');
-        if (localeBtn)   localeBtn.classList.remove('is-active');
-        if (notifDd)     notifDd.classList.remove('is-open');
-        if (notifBtn)    notifBtn.classList.remove('is-active');
-        if (downloadDd)  downloadDd.classList.remove('is-open');
-        if (downloadBtn) downloadBtn.classList.remove('is-active');
-        dropdown.classList.toggle('is-open');
-      });
-
-      dropdown.addEventListener('mouseleave', function () {
-        dropdown.classList.remove('is-open');
-      });
-    })();
-
-    // Learn Menu dropdown — waffle btn click → position + toggle; mouseleave → close (Rule 14: critical first)
-    (function () {
-      var waffleBtn  = document.getElementById('waffle-btn');
-      var navSection = document.getElementById('NavbarPrimary-Desktop');
-      var dropdown   = document.getElementById('learn-dropdown');
-      if (!waffleBtn || !navSection || !dropdown) return;
-
-      function positionDropdown() {
-        var btnRect     = waffleBtn.getBoundingClientRect();
-        var sectionRect = navSection.getBoundingClientRect();
-        // Right-align: dropdown right edge = waffle button right edge → extends leftward
-        // right = distance from section's right edge to the button's right edge
-        var rightOffset = sectionRect.right - btnRect.right;
-        var dropW       = dropdown.offsetWidth || 365;
-        // Clamp so the dropdown never clips past the section's left edge
-        var maxRight    = sectionRect.width - dropW;
-        dropdown.style.right = Math.max(0, Math.min(rightOffset, maxRight)) + 'px';
-        dropdown.style.left  = 'auto';
-      }
-
-      waffleBtn.addEventListener('click', function () {
-        var willOpen = !dropdown.classList.contains('is-open');
-        var profileDd   = document.getElementById('profile-dropdown');
-        var localeDd    = document.getElementById('locale-dropdown');
-        var localeBtn   = document.getElementById('locale-btn');
-        var notifDd     = document.getElementById('notif-dropdown');
-        var notifBtn    = document.getElementById('notif-btn');
-        var downloadDd  = document.getElementById('download-dropdown');
-        var downloadBtn = document.getElementById('download-btn');
-        if (profileDd)  profileDd.classList.remove('is-open');
-        if (localeDd)   localeDd.classList.remove('is-open');
-        if (localeBtn)  localeBtn.classList.remove('is-active');
-        if (notifDd)    notifDd.classList.remove('is-open');
-        if (notifBtn)   notifBtn.classList.remove('is-active');
-        if (downloadDd)  downloadDd.classList.remove('is-open');
-        if (downloadBtn) downloadBtn.classList.remove('is-active');
-        if (willOpen) positionDropdown();
-        dropdown.classList.toggle('is-open');
-        waffleBtn.classList.toggle('is-active', willOpen);
-      });
-
-      dropdown.addEventListener('mouseleave', function () {
-        dropdown.classList.remove('is-open');
-        waffleBtn.classList.remove('is-active');
-      });
-
-      // Close on outside click
-      document.addEventListener('click', function (e) {
-        if (!dropdown.contains(e.target) && !waffleBtn.contains(e.target)) {
-          dropdown.classList.remove('is-open');
-          waffleBtn.classList.remove('is-active');
-        }
-      }, true);
-
-      // Reposition on resize if open
-      window.addEventListener('resize', function () {
-        if (dropdown.classList.contains('is-open')) positionDropdown();
-      });
-
-      // Persistent Selected state on menu items — DS has Default/Hover/Selected only (no Pressed)
-      var allItems = Array.from(dropdown.querySelectorAll('.learn-dropdown__item'));
-      allItems.forEach(function (item) {
-        item.addEventListener('click', function () {
-          allItems.forEach(function (i) { i.classList.remove('is-selected'); });
-          item.classList.add('is-selected');
-        });
-      });
-    })();
-
-    // Locale dropdown — EN button click → position + toggle; mouseleave → close (Rule 14: critical first)
-    (function () {
-      var localeBtn  = document.getElementById('locale-btn');
-      var navSection = document.getElementById('NavbarPrimary-Desktop');
-      var dropdown   = document.getElementById('locale-dropdown');
-      if (!localeBtn || !navSection || !dropdown) return;
-
-      function positionDropdown() {
-        var btnRect     = localeBtn.getBoundingClientRect();
-        var sectionRect = navSection.getBoundingClientRect();
-        // Right-align dropdown's right edge to the EN button's right edge
-        var rightOffset = sectionRect.right - btnRect.right;
-        var dropW       = dropdown.offsetWidth || 204;
-        var maxRight    = sectionRect.width - dropW;
-        dropdown.style.right = Math.max(0, Math.min(rightOffset, maxRight)) + 'px';
-        dropdown.style.left  = 'auto';
-      }
-
-      localeBtn.addEventListener('click', function () {
-        var willOpen    = !dropdown.classList.contains('is-open');
-        var profileDd   = document.getElementById('profile-dropdown');
-        var learnDd     = document.getElementById('learn-dropdown');
-        var waffleBtn   = document.getElementById('waffle-btn');
-        var notifDd     = document.getElementById('notif-dropdown');
-        var notifBtn    = document.getElementById('notif-btn');
-        var downloadDd  = document.getElementById('download-dropdown');
-        var downloadBtn = document.getElementById('download-btn');
-        if (profileDd)  profileDd.classList.remove('is-open');
-        if (learnDd)    learnDd.classList.remove('is-open');
-        if (waffleBtn)  waffleBtn.classList.remove('is-active');
-        if (notifDd)    notifDd.classList.remove('is-open');
-        if (notifBtn)   notifBtn.classList.remove('is-active');
-        if (downloadDd)  downloadDd.classList.remove('is-open');
-        if (downloadBtn) downloadBtn.classList.remove('is-active');
-        if (willOpen) positionDropdown();
-        dropdown.classList.toggle('is-open');
-        localeBtn.classList.toggle('is-active', willOpen);
-      });
-
-      dropdown.addEventListener('mouseleave', function () {
-        dropdown.classList.remove('is-open');
-        localeBtn.classList.remove('is-active');
-      });
-
-      // Close on outside click
-      document.addEventListener('click', function (e) {
-        if (!dropdown.contains(e.target) && !localeBtn.contains(e.target)) {
-          dropdown.classList.remove('is-open');
-          localeBtn.classList.remove('is-active');
-        }
-      }, true);
-
-      // Reposition on resize if open
-      window.addEventListener('resize', function () {
-        if (dropdown.classList.contains('is-open')) positionDropdown();
-      });
-
-      // Language selection — persistent selected state, auto-close after pick
-      var allItems = Array.from(dropdown.querySelectorAll('.locale-dropdown__item'));
-      allItems.forEach(function (item) {
-        item.addEventListener('click', function () {
-          allItems.forEach(function (i) { i.classList.remove('is-selected'); });
-          item.classList.add('is-selected');
-          setTimeout(function () {
-            dropdown.classList.remove('is-open');
-            localeBtn.classList.remove('is-active');
-          }, 150);
-        });
-      });
-    })();
-
-    // Download Apps dropdown — smartphone button click → position + toggle; mouseleave → close (Rule 14: critical first)
-    (function () {
-      var downloadBtn = document.getElementById('download-btn');
-      var navSection  = document.getElementById('NavbarPrimary-Desktop');
-      var dropdown    = document.getElementById('download-dropdown');
-      if (!downloadBtn || !navSection || !dropdown) return;
-
-      function positionDropdown() {
-        var btnRect     = downloadBtn.getBoundingClientRect();
-        var sectionRect = navSection.getBoundingClientRect();
-        var rightOffset = sectionRect.right - btnRect.right;
-        var dropW       = dropdown.offsetWidth || 238;
-        var maxRight    = sectionRect.width - dropW;
-        dropdown.style.right = Math.max(0, Math.min(rightOffset, maxRight)) + 'px';
-        dropdown.style.left  = 'auto';
-      }
-
-      downloadBtn.addEventListener('click', function () {
-        var willOpen    = !dropdown.classList.contains('is-open');
-        var profileDd   = document.getElementById('profile-dropdown');
-        var learnDd     = document.getElementById('learn-dropdown');
-        var waffleBtn   = document.getElementById('waffle-btn');
-        var localeDd    = document.getElementById('locale-dropdown');
-        var localeBtn   = document.getElementById('locale-btn');
-        var notifDd     = document.getElementById('notif-dropdown');
-        var notifBtn    = document.getElementById('notif-btn');
-        if (profileDd)  profileDd.classList.remove('is-open');
-        if (learnDd)    learnDd.classList.remove('is-open');
-        if (waffleBtn)  waffleBtn.classList.remove('is-active');
-        if (localeDd)   localeDd.classList.remove('is-open');
-        if (localeBtn)  localeBtn.classList.remove('is-active');
-        if (notifDd)    notifDd.classList.remove('is-open');
-        if (notifBtn)   notifBtn.classList.remove('is-active');
-        if (willOpen) positionDropdown();
-        dropdown.classList.toggle('is-open');
-        downloadBtn.classList.toggle('is-active', willOpen);
-      });
-
-      dropdown.addEventListener('mouseleave', function () {
-        dropdown.classList.remove('is-open');
-        downloadBtn.classList.remove('is-active');
-      });
-
-      document.addEventListener('click', function (e) {
-        if (!dropdown.contains(e.target) && !downloadBtn.contains(e.target)) {
-          dropdown.classList.remove('is-open');
-          downloadBtn.classList.remove('is-active');
-        }
-      }, true);
-
-      window.addEventListener('resize', function () {
-        if (dropdown.classList.contains('is-open')) positionDropdown();
-      });
-    })();
-
-    // Notification dropdown — bell button click → position + toggle; mouseleave → close (Rule 14: critical first)
-    (function () {
-      var notifBtn   = document.getElementById('notif-btn');
-      var navSection = document.getElementById('NavbarPrimary-Desktop');
-      var dropdown   = document.getElementById('notif-dropdown');
-      if (!notifBtn || !navSection || !dropdown) return;
-
-      function positionDropdown() {
-        var btnRect     = notifBtn.getBoundingClientRect();
-        var sectionRect = navSection.getBoundingClientRect();
-        // Right-align: dropdown right edge = bell button right edge → extends leftward
-        var rightOffset = sectionRect.right - btnRect.right;
-        var dropW       = dropdown.offsetWidth || 320;
-        var maxRight    = sectionRect.width - dropW;
-        dropdown.style.right = Math.max(0, Math.min(rightOffset, maxRight)) + 'px';
-        dropdown.style.left  = 'auto';
-      }
-
-      notifBtn.addEventListener('click', function () {
-        var willOpen    = !dropdown.classList.contains('is-open');
-        var profileDd   = document.getElementById('profile-dropdown');
-        var learnDd     = document.getElementById('learn-dropdown');
-        var waffleBtn   = document.getElementById('waffle-btn');
-        var localeDd    = document.getElementById('locale-dropdown');
-        var localeBtn   = document.getElementById('locale-btn');
-        var downloadDd  = document.getElementById('download-dropdown');
-        var downloadBtn = document.getElementById('download-btn');
-        if (profileDd)  profileDd.classList.remove('is-open');
-        if (learnDd)    learnDd.classList.remove('is-open');
-        if (waffleBtn)  waffleBtn.classList.remove('is-active');
-        if (localeDd)   localeDd.classList.remove('is-open');
-        if (localeBtn)  localeBtn.classList.remove('is-active');
-        if (downloadDd)  downloadDd.classList.remove('is-open');
-        if (downloadBtn) downloadBtn.classList.remove('is-active');
-        if (willOpen) positionDropdown();
-        dropdown.classList.toggle('is-open');
-        notifBtn.classList.toggle('is-active', willOpen);
-      });
-
-      dropdown.addEventListener('mouseleave', function () {
-        dropdown.classList.remove('is-open');
-        notifBtn.classList.remove('is-active');
-      });
-
-      // Close on outside click
-      document.addEventListener('click', function (e) {
-        if (!dropdown.contains(e.target) && !notifBtn.contains(e.target)) {
-          dropdown.classList.remove('is-open');
-          notifBtn.classList.remove('is-active');
-        }
-      }, true);
-
-      // Reposition on resize if open
-      window.addEventListener('resize', function () {
-        if (dropdown.classList.contains('is-open')) positionDropdown();
-      });
-    })();
-
-    // Nav Top Menu Dropdowns — Class, Learn, Achievement, Potential, Rewards (Rule 14: critical first)
-    // Each dropdown: left-aligns to its .nav-menu-btn, closes all others (Rule 53).
-    // is-active on the nav button is tied to dropdown open state — removed on every close path.
-    (function () {
-      var navSection = document.getElementById('NavTopMenu-Desktop');
-      if (!navSection) return;
-
-      var menuMap = [
-        { label: 'Class',       dropId: 'class-dropdown'       },
-        { label: 'Learn',       dropId: 'learn-menu-dropdown'  },
-        { label: 'Achievement', dropId: 'achievement-dropdown' },
-        { label: 'Potential',   dropId: 'potential-dropdown'   },
-        { label: 'Rewards',     dropId: 'rewards-dropdown',     rightAlign: true },
-      ];
-
-      // Resolve btn reference for each entry so sibling-close can remove is-active
-      menuMap.forEach(function (config) {
-        config.btn = navSection.querySelector('[aria-label="' + config.label + '"]');
-      });
-
-      menuMap.forEach(function (config) {
-        var btn      = config.btn;
-        var dropdown = document.getElementById(config.dropId);
-        if (!btn || !dropdown) return;
-
-        function positionDropdown() {
-          var btnRect     = btn.getBoundingClientRect();
-          var sectionRect = navSection.getBoundingClientRect();
-          var dropW       = dropdown.offsetWidth || 242;
-          if (config.rightAlign) {
-            // Right edge of dropdown aligns with right edge of button
-            var rightOffset = sectionRect.right - btnRect.right;
-            dropdown.style.right = Math.max(0, Math.min(rightOffset, sectionRect.width - dropW)) + 'px';
-            dropdown.style.left  = 'auto';
-          } else {
-            var leftOffset = btnRect.left - sectionRect.left;
-            dropdown.style.left  = Math.max(0, Math.min(leftOffset, sectionRect.width - dropW)) + 'px';
-            dropdown.style.right = 'auto';
-          }
-        }
-
-        function restoreHome() {
-          // If this page declares a persistent nav section (e.g. Rewards sub-pages),
-          // restore that button instead of Home so sub-page nav context is preserved.
-          var persistLabel = document.body.getAttribute('data-active-nav');
-          if (persistLabel) {
-            var persistBtn = navSection.querySelector('[aria-label="' + persistLabel + '"]');
-            if (persistBtn) { persistBtn.classList.add('is-active'); persistBtn.setAttribute('aria-current', 'page'); return; }
-          }
-          var homeBtn = navSection.querySelector('[aria-label="Home"]');
-          if (homeBtn) { homeBtn.classList.add('is-active'); homeBtn.setAttribute('aria-current', 'page'); }
-        }
-
-        function openDropdown() {
-          document.querySelectorAll('.nav-menu-btn').forEach(function (b) {
-            b.classList.remove('is-active'); b.removeAttribute('aria-current');
-          });
-          btn.classList.add('is-active');
-          btn.setAttribute('aria-current', 'page');
-          positionDropdown();
-          dropdown.classList.add('is-open');
-        }
-
-        function closeDropdown() {
-          dropdown.classList.remove('is-open');
-          btn.classList.remove('is-active');
-          btn.removeAttribute('aria-current');
-          restoreHome();   /* always restore Home when any dropdown closes */
-        }
-
-        btn.addEventListener('click', function () {
-          var willOpen = !dropdown.classList.contains('is-open');
-          // Close all other nav-menu dropdowns (Rule 53)
-          menuMap.forEach(function (c) {
-            if (c.dropId !== config.dropId) {
-              var dd = document.getElementById(c.dropId);
-              if (dd) dd.classList.remove('is-open');
-            }
-          });
-          // Close all navbar action dropdowns (Rule 53)
-          var navbarPairs = [
-            { dd: 'profile-dropdown'  },
-            { dd: 'learn-dropdown',    btn: 'waffle-btn'   },
-            { dd: 'locale-dropdown',   btn: 'locale-btn'   },
-            { dd: 'notif-dropdown',    btn: 'notif-btn'    },
-            { dd: 'download-dropdown', btn: 'download-btn' },
-          ];
-          navbarPairs.forEach(function (p) {
-            var d = document.getElementById(p.dd);
-            var b = p.btn ? document.getElementById(p.btn) : null;
-            if (d) d.classList.remove('is-open');
-            if (b) b.classList.remove('is-active');
-          });
-          if (willOpen) { openDropdown(); } else { closeDropdown(); }
-        });
-
-        dropdown.addEventListener('mouseleave', closeDropdown);
-
-        document.addEventListener('click', function (e) {
-          if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
-            closeDropdown();
-          }
-        }, true);
-
-        window.addEventListener('resize', function () {
-          if (dropdown.classList.contains('is-open')) positionDropdown();
-        });
-
-        // Persistent selected state — DS has Default/Hover/Selected only (no Pressed)
-        var allItems = Array.from(dropdown.querySelectorAll('.nav-menu-dropdown__item'));
-        allItems.forEach(function (item) {
-          item.addEventListener('click', function () {
-            allItems.forEach(function (i) { i.classList.remove('is-selected'); });
-            item.classList.add('is-selected');
-          });
-        });
-      });
-    })();
-
-    // Quiz, Battle, Practice — no dropdown, same Home-restore pattern as dropdown buttons.
-    // Click → is-active. Mouseleave → 3 s delay, then default + Home restored.
-    // Mouseenter within the 3 s cancels the timer (user hovered back).
-    (function () {
-      var navSection = document.getElementById('NavTopMenu-Desktop');
-      if (!navSection) return;
-      ['Quiz', 'Battle', 'Practice'].forEach(function (label) {
-        var btn = navSection.querySelector('[aria-label="' + label + '"]');
-        if (!btn) return;
-        var timer = null;
-        btn.addEventListener('mouseleave', function () {
-          if (!btn.classList.contains('is-active')) return;
-          timer = setTimeout(function () {
-            btn.classList.remove('is-active');
-            btn.removeAttribute('aria-current');
-            var homeBtn = navSection.querySelector('[aria-label="Home"]');
-            if (homeBtn) { homeBtn.classList.add('is-active'); homeBtn.setAttribute('aria-current', 'page'); }
-          }, 3000);
-        });
-        btn.addEventListener('mouseenter', function () { clearTimeout(timer); });
-      });
-    })();
-
-    // Nav Top Menu — active page toggle + pressed feedback (Rule 14: critical handlers first)
-    // Dropdown buttons (aria-haspopup) manage is-active via the IIFE — skip here.
-    // Non-dropdown buttons (Home, Quiz, Battle, Practice) are managed here.
-    document.querySelectorAll('.nav-menu-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (btn.getAttribute('aria-haspopup') === 'true') return;
-        document.querySelectorAll('.nav-menu-btn').forEach(b => {
-          b.classList.remove('is-active');
-          b.removeAttribute('aria-current');
-        });
-        btn.classList.add('is-active');
-        btn.setAttribute('aria-current', 'page');
-      });
-      btn.addEventListener('mousedown',  () => btn.classList.add('is-pressing'));
-      btn.addEventListener('mouseup',    () => btn.classList.remove('is-pressing'));
-      btn.addEventListener('mouseleave', () => btn.classList.remove('is-pressing'));
-    });
-
-    // Navbar action buttons — pressed feedback via JS (Rule 39: CSS :active unreliable in Electron webview)
-    document.querySelectorAll('.navbar-action-btn').forEach(function (btn) {
-      btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
-      btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
-      btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
-    });
-
-    // Lives/Ruby badge flip — every 4s
-    const flipper = document.querySelector('.status-pill-flipper__inner');
-    if (flipper) setInterval(() => flipper.classList.toggle('is-flipped'), 3000);
-
-    // Carousel — wrapped in try/catch so any error never blocks other JS
-
-    // ─── Nav Menu Tablet — hamburger toggle + X close (Rule 14: registered first)
-    (function () {
-      var menuBtn     = document.getElementById('tablet-menu-btn');
-      var menuPanel   = document.getElementById('NavMenu-Tablet');
-      var closeBtn    = document.getElementById('nav-menu-tablet-close');
-      var tabOverlay  = document.getElementById('tablet-overlay');
-      var tabletNavbar = document.getElementById('NavBar-Mobile');
-      if (!menuBtn || !menuPanel) return;
-
-      function openTabletMenu() {
-        menuPanel.classList.add('is-open');
-        menuPanel.setAttribute('aria-hidden', 'false');
-        menuBtn.classList.add('is-open');
-        menuBtn.setAttribute('aria-label', 'Close menu');
-        if (tabOverlay)   { tabOverlay.classList.add('is-open');  tabOverlay.setAttribute('aria-hidden', 'false'); }
-        // Fade out the tablet navbar bar — dropdown occupies the same fixed position on top
-        if (tabletNavbar) tabletNavbar.classList.add('is-hidden-for-menu');
-      }
-      function closeTabletMenu() {
-        menuPanel.classList.remove('is-open');
-        menuPanel.setAttribute('aria-hidden', 'true');
-        menuBtn.classList.remove('is-open');
-        menuBtn.setAttribute('aria-label', 'Open menu');
-        if (tabOverlay)   { tabOverlay.classList.remove('is-open'); tabOverlay.setAttribute('aria-hidden', 'true'); }
-        // Restore the tablet navbar bar
-        if (tabletNavbar) tabletNavbar.classList.remove('is-hidden-for-menu');
-      }
-
-      menuBtn.addEventListener('click', function () {
-        if (window.innerWidth <= 767) return;
-        menuPanel.classList.contains('is-open') ? closeTabletMenu() : openTabletMenu();
-      });
-
-      if (closeBtn) closeBtn.addEventListener('click', closeTabletMenu);
-
-      // Click overlay to close
-      if (tabOverlay) tabOverlay.addEventListener('click', closeTabletMenu);
-
-      // Auto-close if viewport leaves tablet range
-      window.addEventListener('resize', function () {
-        var w = window.innerWidth;
-        if (menuPanel.classList.contains('is-open') && (w >= 1320 || w <= 767)) closeTabletMenu();
-      });
-    })();
-
-    // Nav Menu Mobile IIFE is in a separate <script> AFTER the DOM elements it references
-    // (account-btn, NavMenu-Mobile, mobile-overlay are defined after this script block)
-
     try {
-      (function () {
-        const content = document.querySelector('.carousel__content');
-        const track   = document.getElementById('carouselTrack');
-        const btnPrev = document.getElementById('carouselPrev');
-        const btnNext = document.getElementById('carouselNext');
-        const origCards = Array.from(track.querySelectorAll('.carousel__card'));
-        const total = origCards.length;
-        const firstOriginal = track.firstChild;
-        origCards.forEach(c => track.insertBefore(c.cloneNode(true), firstOriginal));
-        origCards.forEach(c => track.appendChild(c.cloneNode(true)));
-
-        let idx  = total;
-        let busy = false;
-
-        function offsetFor(i) {
-          const cw  = track.querySelector('.carousel__card').offsetWidth;
-          const gap = parseFloat(getComputedStyle(track).columnGap) || 16;
-          return -(i * (cw + gap)) + (content.offsetWidth / 2 - cw / 2);
-        }
-
-        const dots = document.querySelectorAll('.carousel__dot');
-        function updateDots(i) {
-          const active = ((i - total) % total + total) % total;
-          dots.forEach((d, n) => d.classList.toggle('is-active', n === active));
-        }
-
-        function jump(i) {
-          track.style.transition = 'none';
-          track.style.transform  = `translateX(${offsetFor(i)}px)`;
-          track.offsetHeight;
-          track.style.transition = '';
-          updateDots(i);
-        }
-
-        function slide(i) {
-          if (busy) return;
-          busy = true;
-          idx = i;
-          track.style.transform = `translateX(${offsetFor(i)}px)`;
-          updateDots(i);
-        }
-
-        track.addEventListener('transitionend', () => {
-          busy = false;
-          if (idx < total)           { idx += total; jump(idx); }
-          else if (idx >= total * 2) { idx -= total; jump(idx); }
-        });
-
-        jump(idx);
-        window.addEventListener('resize', () => jump(idx));
-
-        let timer;
-        function startAuto() { timer = setInterval(() => slide(idx + 1), 5000); }
-        function resetAuto() { clearInterval(timer); startAuto(); }
-
-        btnPrev.addEventListener('click', () => { slide(idx - 1); resetAuto(); });
-        btnNext.addEventListener('click', () => { slide(idx + 1); resetAuto(); });
-
-        startAuto();
-      })();
-    } catch (e) {
-      console.warn('Carousel init error:', e);
-    }
-
-    /* Recent Activities Carousel — Section 6
-       4 cards, wrap-around prev/next. visibleCount() computed live from card size. */
-    try {
-      (function () {
-        const viewport = document.querySelector('#YourRecentActivities-Desktop .recent-carousel__viewport');
-        const track    = document.getElementById('recentTrack');
-        const btnPrev  = document.getElementById('recentPrev');
-        const btnNext  = document.getElementById('recentNext');
-        if (!viewport || !track || !btnPrev || !btnNext) return;
-
-        const TOTAL = 4;
-        let idx = 0;
-
-        function gap() { return parseFloat(getComputedStyle(track).columnGap) || 16; }
-
-        function setCardWidths() {
-          const vw    = viewport.offsetWidth;
-          const g     = gap();
-          // 2 full cards + 20% peek: 2.2×cardW + 2×gap = vw → cardW = (vw - 2g) / 2.2
-          const cardW = Math.min(370, Math.max(250, (vw - 2 * g) / 2.2));
-          track.querySelectorAll('.quiz-card').forEach(c => { c.style.width = cardW + 'px'; });
-        }
-
-        function cw() { return track.querySelector('.quiz-card').offsetWidth; }
-
-        function visibleCount() {
-          return Math.max(1, Math.floor((viewport.offsetWidth + gap()) / (cw() + gap())));
-        }
-
-        function maxIdx() { return Math.max(0, TOTAL - visibleCount()); }
-
-        /* Max offset: last card right edge exactly at viewport right — never empty area */
-        function maxOffset() {
-          return Math.max(0, TOTAL * cw() + (TOTAL - 1) * gap() - viewport.offsetWidth);
-        }
-
-        function offsetFor(i) {
-          return -Math.min(i * (cw() + gap()), maxOffset());
-        }
-
-        function jump(i) {
-          track.style.transition = 'none';
-          track.style.transform  = `translateX(${offsetFor(i)}px)`;
-          track.offsetHeight;
-          track.style.transition = '';
-        }
-
-        function slide(i) {
-          const max = maxIdx();
-          idx = ((i % (max + 1)) + (max + 1)) % (max + 1);
-          track.style.transform = `translateX(${offsetFor(idx)}px)`;
-        }
-
-        let timer;
-        function startAuto() { timer = setInterval(() => slide(idx + 1), 5000); }
-        function resetAuto() { clearInterval(timer); startAuto(); }
-
-        setCardWidths();
-        jump(0);
-        window.addEventListener('resize', () => {
-          setCardWidths();
-          idx = Math.min(idx, maxIdx());
-          jump(idx);
-        });
-        btnPrev.addEventListener('click', () => { slide(idx - 1); resetAuto(); });
-        btnNext.addEventListener('click', () => { slide(idx + 1); resetAuto(); });
-
-        startAuto();
-      })();
-    } catch (e) {
-      console.warn('Recent activities carousel error:', e);
-    }
-  </script>
-  <nav id="NavBar-Bottom" class="navbar-bottom" aria-label="Mobile navigation">
-    <button class="navbar-bottom__btn" type="button" aria-label="Quiz">
-      <span class="navbar-bottom__icon"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></span>
-      <span class="navbar-bottom__label">Quiz</span>
-    </button>
-    <button class="navbar-bottom__btn" type="button" aria-label="Practice">
-      <span class="navbar-bottom__icon"><svg aria-hidden="true"><use href="#ic-clipboard"/></svg></span>
-      <span class="navbar-bottom__label">Practice</span>
-    </button>
-    <button class="navbar-bottom__btn" type="button" aria-label="Score">
-      <span class="navbar-bottom__icon"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></span>
-      <span class="navbar-bottom__label">Score</span>
-    </button>
-    <button class="navbar-bottom__btn" id="account-btn" type="button" aria-label="Account">
-      <span class="navbar-bottom__icon"><svg aria-hidden="true"><use href="#ic-menu"/></svg></span>
-      <span class="navbar-bottom__label">Account</span>
-    </button>
-  </nav>
-
-  <!-- Dim overlay for Nav Menu Mobile -->
-  <div id="mobile-overlay" class="mobile-overlay" aria-hidden="true"></div>
-
-  <!-- Nav Menu Mobile - 1.5 (DS node 3427:2185)
-       Full-height left panel · width 329px · slides from left
-       Triggered by Account btn in #NavBar-Bottom (or hamburger at mobile) -->
-  <div id="NavMenu-Mobile" class="nav-menu-mobile" aria-hidden="true">
-
-    <!-- Header — DS 3427:2443: h:60, pad:16, gap:10 — logo 117×28 + X close -->
-    <div class="nav-menu-mobile__header">
-      <a class="nav-menu-mobile__logo" href="#" aria-label="Pandai">
-        <svg width="117" height="28" aria-label="Pandai" role="img" style="display:block;flex-shrink:0;"><use href="#ic-pandai-logo-large"/></svg>
-      </a>
-      <button class="nav-menu-mobile__close" id="nav-menu-mobile-close" type="button" aria-label="Close menu">
-        <svg width="24" height="24" aria-hidden="true"><use href="#ic-x"/></svg>
-      </button>
-    </div>
-
-    <!-- Menu — DS 3427:2461: pad t:0 r:16 b:16 l:16, gap:8 -->
-    <div class="nav-menu-mobile__content">
-      <!-- Search — DS 3427:2463: pill, stroke #d9d9d9 INSIDE, pad t:8 r:12 b:8 l:12 -->
-      <button class="nav-menu-tablet__search-btn" type="button" style="width:100%">
-        <span class="nav-menu-tablet__search-text">Search</span>
-        <span class="nav-menu-tablet__search-icon"><svg width="24" height="24" aria-hidden="true"><use href="#ic-search"/></svg></span>
-      </button>
-      <!-- Home — Active state (DS 3427:2464): fill #b5f291, stroke #00a36a, radius 999 -->
-      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Home">
-        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-home"/></svg></span>
-        <span class="nav-menu-item__label">Home</span>
-      </div>
-      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Quiz">
-        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></span>
-        <span class="nav-menu-item__label">Quiz</span>
-      </div>
-      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Battle">
-        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-        <span class="nav-menu-item__label">Battle</span>
-      </div>
-      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Practice">
-        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-clipboard"/></svg></span>
-        <span class="nav-menu-item__label">Practice</span>
-      </div>
-      <div class="nav-menu-item is-active" role="button" tabindex="0" aria-label="Class" aria-current="page">
-        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-users"/></svg></span>
-        <span class="nav-menu-item__label">Class</span>
-        <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
-      </div>
-      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Learn">
-        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-book"/></svg></span>
-        <span class="nav-menu-item__label">Learn</span>
-        <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
-      </div>
-      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Achievement">
-        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></span>
-        <span class="nav-menu-item__label">Achievement</span>
-        <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
-      </div>
-      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Potential">
-        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-star"/></svg></span>
-        <span class="nav-menu-item__label">Potential</span>
-        <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
-      </div>
-      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Rewards">
-        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-gift"/></svg></span>
-        <span class="nav-menu-item__label">Rewards</span>
-        <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
-      </div>
-      <div class="nav-menu-item" role="button" tabindex="0" aria-label="My Account">
-        <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-settings"/></svg></span>
-        <span class="nav-menu-item__label">My Account</span>
-        <span class="nav-menu-item__arrow"><svg aria-hidden="true"><use href="#ic-chevron-right"/></svg></span>
-      </div>
-      <!-- CTA — DS 3427:2477: VERTICAL, last item inside inner menu, radius:20 -->
-      <div class="nav-menu-cta">
-        <div class="nav-menu-cta__notif" role="button" tabindex="0" aria-label="Notification">
-          <svg aria-hidden="true"><use href="#ic-bell"/></svg>
-          <span class="nav-menu-cta__notif-label">Notification</span>
-        </div>
-        <button class="nav-menu-cta__btn" type="button">
-          <span class="nav-menu-cta__btn-icon"><svg aria-hidden="true"><use href="#ic-smartphone"/></svg></span>
-          <span class="nav-menu-cta__btn-text">Download App</span>
-          <span class="nav-menu-cta__btn-arrow"><svg width="16" height="16" aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
-        </button>
-      </div>
-
-      <!-- Locale — DS 3427:2479: last child of Menu frame (inside .content), pad 0 60px
-           Total offset from panel edge = 16px (content pad) + 60px (locale pad) = 76px -->
-      <div class="nav-menu-mobile__locale">
-        <button class="nav-menu-locale__btn" type="button" aria-label="English"><svg aria-hidden="true"><use href="#ic-en"/></svg></button>
-        <button class="nav-menu-locale__btn" type="button" aria-label="Bahasa Melayu"><svg aria-hidden="true"><use href="#ic-bm"/></svg></button>
-        <button class="nav-menu-locale__btn" type="button" aria-label="Mandarin"><svg aria-hidden="true"><use href="#ic-mandarin"/></svg></button>
-      </div>
-    </div><!-- end nav-menu-mobile__content (Menu frame) -->
-
-  </div><!-- end NavMenu-Mobile -->
-  <script>
-    (function () {
-      var accountBtn    = document.getElementById('account-btn');
-      var mobilePanel   = document.getElementById('NavMenu-Mobile');
-      var mobileOverlay = document.getElementById('mobile-overlay');
-      var closeBtn      = document.getElementById('nav-menu-mobile-close');
-      if (!mobilePanel || !mobileOverlay) return;
-
-      var leaveTimer = null;
-
-      function openMobileMenu() {
-        clearTimeout(leaveTimer);
-        mobilePanel.classList.add('is-open');
-        mobileOverlay.classList.add('is-open');
-        mobilePanel.setAttribute('aria-hidden', 'false');
-        if (accountBtn) accountBtn.classList.add('is-active');
-      }
-      function closeMobileMenu() {
-        mobilePanel.classList.remove('is-open');
-        mobileOverlay.classList.remove('is-open');
-        mobilePanel.setAttribute('aria-hidden', 'true');
-        if (accountBtn) accountBtn.classList.remove('is-active');
-      }
-
-      if (accountBtn) {
-        accountBtn.addEventListener('click', function () {
-          mobilePanel.classList.contains('is-open') ? closeMobileMenu() : openMobileMenu();
-        });
-      }
-
-      mobileOverlay.addEventListener('click', closeMobileMenu);
-      if (closeBtn) closeBtn.addEventListener('click', closeMobileMenu);
-
-      mobilePanel.addEventListener('mouseleave', function () {
-        leaveTimer = setTimeout(closeMobileMenu, 300);
+      document.querySelectorAll('.btn-show:not(.btn-show--disabled)').forEach(function (btn) {
+        btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+        btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+        btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
       });
-      mobilePanel.addEventListener('mouseenter', function () {
-        clearTimeout(leaveTimer);
-      });
-
-      window.addEventListener('resize', function () {
-        if (mobilePanel.classList.contains('is-open') && window.innerWidth > 767) closeMobileMenu();
-      });
-    })();
-  </script>
-
-  <script>
-    (function () {
-      var btn  = document.getElementById('maximize-btn');
-      var icon = document.getElementById('maximize-icon');
-      if (!btn || !icon) return;
-
-      function isFullscreen() {
-        return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
-      }
-
-      function enterFullscreen() {
-        var el = document.documentElement;
-        if (el.requestFullscreen)       el.requestFullscreen();
-        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-        else if (el.mozRequestFullScreen)    el.mozRequestFullScreen();
-      }
-
-      function exitFullscreen() {
-        if (document.exitFullscreen)         document.exitFullscreen();
-        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-        else if (document.mozCancelFullScreen)  document.mozCancelFullScreen();
-      }
-
-      function syncIcon() {
-        if (isFullscreen()) {
-          icon.querySelector('use').setAttribute('href', '#ic-minimize');
-          btn.setAttribute('aria-label', 'Exit fullscreen');
-          btn.classList.add('is-active');
-        } else {
-          icon.querySelector('use').setAttribute('href', '#ic-maximize');
-          btn.setAttribute('aria-label', 'Enter fullscreen');
-          btn.classList.remove('is-active');
-        }
-      }
-
-      btn.addEventListener('click', function () {
-        isFullscreen() ? exitFullscreen() : enterFullscreen();
-      });
-
-      document.addEventListener('fullscreenchange',       syncIcon);
-      document.addEventListener('webkitfullscreenchange', syncIcon);
-      document.addEventListener('mozfullscreenchange',    syncIcon);
-
-      /* ESC is handled natively by the browser — fullscreenchange fires on exit */
-    })();
+    } catch (e) { console.warn('btn-show is-pressing:', e); }
   </script>
 
   <!-- Rewards pages — sidebar active state (Rule 14: non-critical, wrapped in try/catch) -->
@@ -4644,6 +2991,66 @@
         });
       });
     } catch (e) { console.warn('sidebar init:', e); }
+  </script>
+  <div id="zul-nav-bottom"></div>
+
+  <script>
+  (function () {
+    var TPL = '../../zul.test.git/zul.page.template.html';
+
+    fetch(TPL)
+      .then(function (r) { return r.text(); })
+      .then(function (html) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+
+        // Fix image paths: template is one level deep (zul.test.git/),
+        // nadia is two levels deep (Nadia.test.git/Rewards/). ../src/ → ../../src/
+        function fixPaths(html) {
+          return html.replace(/src="\.\.\/src\//g, 'src="../../src/');
+        }
+
+        // 1. Inject Navigation-Shell contents
+        var srcShell = doc.getElementById('Navigation-Shell');
+        var dstShell = document.getElementById('Navigation-Shell');
+        if (srcShell && dstShell) dstShell.innerHTML = fixPaths(srcShell.innerHTML);
+
+        // 2. Inject footer contents
+        var srcFooter = doc.querySelector('footer.footer');
+        var dstFooter = document.getElementById('zul-footer');
+        if (srcFooter && dstFooter) dstFooter.innerHTML = srcFooter.innerHTML;
+
+        // 3. Inject bottom nav elements
+        var bottom = document.getElementById('zul-nav-bottom');
+        if (bottom) {
+          ['NavBar-Bottom', 'mobile-overlay', 'NavMenu-Mobile'].forEach(function (id) {
+            var el = doc.getElementById(id);
+            if (el) {
+              el.innerHTML = fixPaths(el.innerHTML);
+              bottom.appendChild(document.adoptNode(el));
+            }
+          });
+        }
+
+        // 4. Execute template scripts (nav handlers + mobile menu + maximize)
+        Array.prototype.forEach.call(doc.querySelectorAll('script'), function (s) {
+          if (s.src) return;
+          var ns = document.createElement('script');
+          ns.textContent = s.textContent;
+          document.body.appendChild(ns);
+        });
+
+        // 5. Set active nav state — clear template's hardcoded Home active, then set Rewards
+        document.querySelectorAll('#NavTopMenu-Desktop .nav-menu-btn').forEach(function (b) {
+          b.classList.remove('is-active');
+        });
+        var btn = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="Rewards"]');
+        if (btn) btn.classList.add('is-active');
+      })
+      .catch(function (err) {
+        console.error('[nav-inject] Failed to load navigation:', err);
+      });
+  })();
   </script>
 
 </body>
