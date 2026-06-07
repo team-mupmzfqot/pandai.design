@@ -5808,7 +5808,31 @@ Non-negotiable. Every session, every task, every fix — no exceptions.
 - Session 33: shorthand aliases in breadcrumb; wrong token type for active icon/label; gold tokens missing
 - Sessions 34–35: template commits not propagated (ic-user-circle, learn menu, notif-see-all)
 - **Session 37: Session 23 bc-sep pending since 3 sessions; Pressed state palette contradiction (Rule 19 vs Rule 40) — needs live DS resolution**
+- **Session 38: nav CSS drift — MyClasses was behind template on 9 areas (see Rule N-C38)**
 
 ---
 
-*Last updated: 2026-06-06 | Session 37 — Merchandise DS compliance audit + 9 fix areas; Rule N-C37 (audit pending list); Pressed palette contradiction flagged | Branch: staging*
+### Rule N-C38 — MyClasses nav CSS synced to zul.page.template.html (Session 38, 2026-06-07)
+
+**File:** `Nadia.test.git/Class/nadia_Class-MyClasses.html`
+**Change:** Replaced nav CSS block (lines 12–2084) with latest from `zul.test.git/zul.page.template.html` (lines 12–2086). Page-specific CSS (`MY CLASSES PAGE` section) preserved unchanged.
+
+**9 areas updated:**
+
+| Area | Old (MyClasses) | New (Template) |
+|---|---|---|
+| `--border-secondary-default` | missing | `#b5f291` added to `:root` |
+| `--subjects-chinese-default` | `#f94848` (preserved) | kept — template was missing it |
+| `.navbar-badge` | basic 20×20 position | added `.welcome-avatar-group` (100×100) + XXL badge size overrides |
+| `#tablet-notif-btn.is-active .num-badge` | missing | `opacity: 0` on dropdown open |
+| `.notif-dropdown` | `position: absolute; top: var(--nav-dropdown-top)` | `position: fixed; top: 0; left: 0; right: auto` (Rule 99) |
+| `.notif-list` | missing rule | `display: flex; flex-direction: column; gap: 8px` added |
+| Notif focus/active state | `#e8fbe8` bg + `#00cc85` inset (wrong) | `Surface/secondary/default #b5f291` + `Border/secondary/focus #70bc6f` (DS confirmed) + full time/dot overrides |
+| `.navbar-mobile__buttons` gap | old pattern | 8px gap confirmed; hamburger animation scoped to `#tablet-menu-btn` |
+| `learn-dropdown__label` color | `--text-default-heading` (#404040) | `--text-default-body` (#666) — DS node 3908:2464 |
+
+**No DS live fetch required** — this was a CSS drift correction from template, not a new DS component audit.
+
+---
+
+*Last updated: 2026-06-07 | Session 38 — MyClasses nav CSS synced to template (9 areas, Rule N-C38) | Branch: staging*
