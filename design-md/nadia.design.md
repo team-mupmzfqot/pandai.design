@@ -5984,4 +5984,30 @@ Non-negotiable. Every session, every task, every fix — no exceptions.
 ---
 
 *Last updated: 2026-06-07 | Session 38 — All 10 Nadia pages nav CSS synced to template (N-C38, N-C39 + continuations) | Branch: staging*
-| `.footer__inner` | `height: 100
+| `.footer__inner` | `height: 100---
+
+### Session 38 (cont.) — nadia_Rewards-Myrewards.html nav/footer CSS sync
+
+**File:** `Nadia.test.git/Rewards/nadia_Rewards-Myrewards.html`
+**Change:** Replaced CSS block lines 188–2032 (old nav/footer/responsive/page-viewport CSS) with template lines 181–2086 from `zul.test.git/zul.page.template.html`.
+
+This page uses the **fetch/injection pattern** — Navigation-Shell HTML and footer HTML are injected at runtime from the template. Only the CSS block needed updating.
+
+**Key changes from template sync:**
+
+| Area | Before | After |
+|---|---|---|
+| `.footer__inner` padding | `0 var(--spacing-space-2xl)` + explicit `height:60px` in inner | `var(--spacing-space-s) var(--spacing-space-2xl)` (12px 28px) |
+| `.num-badge` | No opacity transition | `transition: opacity 0.15s ease` + `#notif-btn.is-active` hide rule |
+| `notif-dropdown` | `position: absolute` | `position: fixed` (JS-positioned, Rule 99) |
+| `notif-see-all` | `max-height:48px; box-shadow:inset` | `height:40px; border:1px solid; border-color` states |
+| `navbar-mobile__menu-btn` | Old class | Removed — uses `.navbar-action-btn` (44×44) |
+| `nav-menu-submenu` | Not present | Full accordion CSS with `max-height` + margin-top trick |
+| `has-submenu.is-open` | Not present | State CSS (bg, border, label/icon/arrow, chevron rotate) |
+| Home-screen responsive CSS | Embedded (status-pill, carousel, welcome) | Replaced by template version (those classes have no HTML on this page) |
+
+**Preserved:** `:root` N-C21 override (`#e1f9ea`), page-specific CSS (breadcrumb, sidebar, voucher grid), SVG defs, fetch-injection script.
+
+---
+
+*Last updated: 2026-06-07 | Session 38 — all pending Nadia pages nav CSS synced to template; Myrewards fetch-pattern CSS updated | Branch: staging*
