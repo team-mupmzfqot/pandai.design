@@ -64,7 +64,8 @@
       --border-default:           #00cc85;   /* Border/default â€” navbar, footer, quiz card */
       --border-general-default:   #d9d9d9;   /* Border/general/default — carousel cards */
       --border-tertiary-focus:    #00453d;   /* Border/tertiary/focus — pressed state border */
-      --border-disabled-disabled: #bfbfbf;   /* Border/disabled/disabled */
+      --border-disabled-disabled:             #bfbfbf;   /* Border/disabled/disabled */
+      --border-general-default-secondary:    #bfbfbf;   /* Border/general/default-secondary — bc-sep, bc-chevron (DS node 3655:16650) */
       --border-on-color:          #ffffff;   /* Border/on-color — white border on Number Badge (DS 618:417 updated 2026-05-26) */
 
       /* Corner Radius (confirmed from design contexts) */
@@ -2131,7 +2132,7 @@
     .bc-sep {
       width:      1px;
       height:     20px;
-      background: var(--border-disabled-disabled);
+      background: var(--border-general-default-secondary);
       flex-shrink: 0;
     }
     .bc-trail {

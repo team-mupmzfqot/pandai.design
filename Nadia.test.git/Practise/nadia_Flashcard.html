@@ -19,7 +19,6 @@
     :root {
       /* Surface */
       --surface-general-default:         #FFFFFF;
-      --surface-subtle:                  #F8FAFC;
       --surface-primary-default:         #00cc85;
       --surface-primary-focus:           #00a36a;   /* Surface/primary/focus — pressed state bg */
       --surface-primary-default-subtle:        #d9f7ed;
@@ -57,11 +56,13 @@
       --icon-primary-on-color:    #ffffff;   /* Icon/primary/on-color — Foundation/white (DS updated 2026-05-24, was #e1f9ea) */
       --icon-tertiary-default:    #00564c;   /* Icon/tertiary/default — pressed arrow chevron */
       --icon-primary-focus:       #00a36a;   /* Icon/primary/focus — Primary button arrow chevron default */
-      --icon-alert-default:       #ff9f43;   /* Icon/alert/default — DS VariableID:119:14, Feather info icon in Upcoming rows */
+      --icon-alert-default:       #ff9f43;   /* Icon/alert/default — DS VariableID:119:14, info icon */
+
 
       /* Border */
       --border-primary-default:   #00cc85;   /* Border/primary/default */
       --border-primary-focus:     #00a36a;   /* Border/primary/focus */
+      --border-secondary-default: #b5f291;   /* Border/secondary/default — Focus indicator dot border */
       --border-secondary-focus:   #70bc6f;   /* Border/secondary/focus — hover border on all buttons */
       --border-default:           #00cc85;   /* Border/default â€” navbar, footer, quiz card */
       --border-general-default:   #d9d9d9;   /* Border/general/default — carousel cards */
@@ -95,8 +96,8 @@
       --scale-200: 8px;
 
       /* Subject Colors â€” ALL confirmed from DS get_variable_defs */
-      --subjects-b-melayu-100:       #dbe4ff;   /* Subject/b-melayu/100 — DS Primitives (confirmed) */
       --subjects-b-melayu-default:   #4d77ff;   /* Subjects/b-melayu/default */
+      --subjects-b-melayu-100:       #dbe4ff;   /* Subject/b-melayu/100 — DS Primitives (confirmed) */
       --subjects-b-melayu-focus:     #2e4799;   /* Subjects/b-melayu/focus — VariableID:1753:5923, DS confirmed */
       --subjects-english-default:    #ff4d56;   /* Subjects/english/default */
       --subjects-math-default:       #42ac7b;   /* Subjects/math/default */
@@ -122,7 +123,7 @@
       /* Layout */
       --page-max-width:          100%;
       --page-padding-x:          60px;
-      --nav-dropdown-top:        72px;   /* navbar 64px + gap. DS=80px (16px gap). Change here to revert. */
+      --nav-dropdown-top:        80px;   /* navbar 72px + 8px gap. Change here to revert. */
       --section-gap:             var(--spacing-space-m);   /* Spacing/space-m = 16px */
       --overlay-dark:            rgba(26, 26, 26, 0.5);    /* Overlay/Overlay-Dark → Foundation/black 50 (DS confirmed) */
       --check-in-card-max-width: 390px;
@@ -202,8 +203,7 @@
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      height:          60px;                       /* DS: h:60px (node 2073:6579) */
-      padding:         0 var(--spacing-space-2xl); /* DS: t:20 r:28 b:20 l:28 → align-items:center handles vertical */
+      padding:         var(--spacing-space-s) var(--spacing-space-2xl); /* DS: t:12 r:28 b:12 l:28 */
     }
 
     .footer__left {
@@ -264,7 +264,7 @@
       align-items:   center;
       gap:           var(--spacing-space-2xl);   /* 28px — Spacing/space-2xl */
       padding:       var(--spacing-space-xs) var(--spacing-space-xl);   /* 8px · 24px — DS px-[Spacing/space-xl] */
-      height:        64px;
+      height:        72px;   /* DS Navbar Top = 72px (t:8 + 56px content + b:8) */
       overflow:      visible;   /* must be visible so Union tail (44×52) clears the navbar bottom edge */
     }
 
@@ -439,7 +439,7 @@
     .navbar-action-btn:hover     .nav-btn-icon-clip svg { color: var(--icon-primary-default); }
     .navbar-action-btn:active    .nav-btn-icon-clip svg { color: var(--icon-primary-default); }
     .navbar-action-btn.is-pressing .nav-btn-icon-clip svg { color: var(--icon-primary-default); }
-    .navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--icon-primary-on-color); }   /* Icon/primary/on-color #ffffff — DS node 3908:6148 Active (DS updated 2026-05-24) */
+    .navbar-action-btn.is-active .nav-btn-icon-clip svg { color: var(--icon-primary-on-color); }   /* Icon/primary/on-color #e1f9ea — DS node 3908:6148 Active */
 
     /* Number Badge - 1.5 (DS node 618:417, Type=Primary/M)
        20px circle · #00cc85 bg · #ffffff text · 1px white border · 60px radius · 4px padding
@@ -473,16 +473,17 @@
       color:      var(--text-primary-on-color);            /* #ffffff */
       box-shadow: 0 0 0 1px var(--border-on-color);        /* 1px white border OUTSIDE (strokeAlign:OUTSIDE) */
     }
-    #notif-btn.is-active .num-badge { opacity: 0; }
+    #notif-btn.is-active .num-badge,
+    #tablet-notif-btn.is-active .num-badge { opacity: 0; }
 
     /* Avatar - 1.5 (node 684:621): flex items-start · 48×48 · border · overflow-clip */
     .navbar-avatar {
       display:       flex;
       align-items:   flex-start;
-      width:         48px;
-      height:        48px;
-      min-width:     48px;
-      min-height:    48px;
+      width:         56px;
+      height:        56px;
+      min-width:     56px;
+      min-height:    56px;
       border-radius: var(--corner-radius-corner-rounded);   /* 60px */
       border:        1px solid var(--border-default);
       background:    var(--surface-general-default);
@@ -505,27 +506,39 @@
       display:         block;
     }
 
-    /* Number Badge - 1.5 (node 1084:1826): absolute right-[-0.48px] top-0 within Avatar group */
+    /* DS Avatar - 1.5, Size=L Type=Image = 56×56 frame (includes space for badge) */
+    .navbar-avatar-group {
+      position:    relative;
+      width:       56px;
+      height:      56px;
+      flex-shrink: 0;
+    }
+    /* Wrapper for welcome avatar — moves badge outside overflow:hidden circle */
+    .welcome-avatar-group {
+      position:    relative;
+      width:       100px;
+      height:      100px;
+      min-width:   100px;
+      min-height:  100px;
+      flex-shrink: 0;
+    }
+    /* P.Premium badge — absolutely positioned top:0 right:0 of avatar frame.
+       Size matches DS: L/Image=16px, XL/Image=20px, XXL/Image=28px */
     .navbar-badge {
       position:        absolute;
       top:             0;
-      right:           -0.48px;   /* DS: right-[-0.48px] relative to Avatar group */
-      background:      var(--surface-primary-default);
-      border-radius:   var(--corner-radius-corner-rounded);
-      box-shadow:      0 0 0 1px var(--border-on-color);          /* 1px white border OUTSIDE (strokeAlign:OUTSIDE) */
-      min-width:       20px;
+      right:           0;
+      width:           20px;   /* DS navbar Content frame: P.Premium = 20×20 */
       height:          20px;
-      padding:         var(--spacing-space-xxs);   /* 4px */
       display:         flex;
       align-items:     center;
       justify-content: center;
-      font-size:       10px;
-      font-weight:     600;
-      line-height:     1;          /* Rule 146: never DS line-height in fixed-height flex badge */
-      color:           var(--text-primary-on-color);
-      overflow:        hidden;
       pointer-events:  none;
     }
+    .navbar-badge svg { width: 100%; height: 100%; }
+    /* XXL/Image (profile dropdown, welcome desktop) */
+    .profile-dropdown__avatar-wrap .navbar-badge,
+    .welcome-avatar-group .navbar-badge            { width: 28px; height: 28px; }
 
     /* ─── Profile Menu - 1.5 (DS node 3908:3679)
        320px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding · 8px gap
@@ -595,6 +608,7 @@
     .learn-dropdown__grid {
       display:               grid;
       grid-template-columns: repeat(3, 1fr);
+      gap:                   var(--spacing-space-xs);
     }
 
     /* Cell — DS State=Default: transparent bg, no border, 12px radius, flex-col, gap 4px, p-8px */
@@ -642,13 +656,13 @@
       flex-shrink: 0;
     }
 
-    /* Label — DS State=Default: 14px SemiBold, #404040 (Text/default/heading, varName 106:34) */
+    /* Label — DS node 3908:2464: 14px SemiBold, Text/default/body #666 */
     .learn-dropdown__label {
       font-family: var(--font-family);
       font-size:   14px;
       font-weight: 600;
       line-height: 20px;
-      color:       var(--text-default-heading);
+      color:       var(--text-default-body);
       text-align:  center;
       transition:  color 0.12s ease;
     }
@@ -884,10 +898,10 @@
        Right-aligned to bell button via JS · top: var(--nav-dropdown-top) · same animation as all other dropdowns
     ──────────────────────────────────────────────────────────────────────────────────────── */
     .notif-dropdown {
-      position:       absolute;
-      top:            var(--nav-dropdown-top);
-      right:          0;
-      left:           auto;
+      position:       fixed;
+      top:            0;
+      left:           0;
+      right:          auto;
       z-index:        500;
       width:          320px;
       background:     var(--surface-general-default);
@@ -909,6 +923,13 @@
       pointer-events: auto;
       visibility:     visible;
       transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
+    }
+
+    /* Notifications List — DS node 6305:45076: flex-col, gap 8px between items */
+    .notif-list {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xs);
     }
 
     /* Navbar Notification Button - Parts (DS 3908:13427/13443/13456) */
@@ -948,11 +969,11 @@
       padding-bottom:      0;
     }
     .notif-item:hover .notif-item__text { color: var(--text-tertiary-default); }
-    /* Focus — Surface/secondary/default-subtle #e8fbe8 · 1px #00cc85 inset · 16px radius */
+    /* Focus — DS node 3908:13456: Surface/secondary/default #b5f291 · 1px Border/secondary/focus #70bc6f · 16px radius */
     .notif-item:active .notif-item__content,
     .notif-item:focus-visible .notif-item__content {
-      background:    var(--surface-secondary-default-subtle);
-      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+      background:    var(--surface-secondary-default);
+      box-shadow:    inset 0 0 0 1px var(--border-secondary-focus);
       border-radius: var(--corner-radius-corner-xl);
       padding:       var(--spacing-space-s);
     }
@@ -962,7 +983,11 @@
       padding-bottom:      0;
     }
     .notif-item:active .notif-item__text,
-    .notif-item:focus-visible .notif-item__text { color: var(--text-primary-default); }
+    .notif-item:focus-visible .notif-item__text { color: var(--text-tertiary-default); }
+    .notif-item:active .notif-item__time,
+    .notif-item:focus-visible .notif-item__time { color: var(--text-secondary-focus); }
+    .notif-item:active .notif-item__dot,
+    .notif-item:focus-visible .notif-item__dot  { box-shadow: 0 0 0 1px var(--border-secondary-default); }
 
     /* Avatar — 60×60 clip, user-circle at 50px (DS inset 8.33% = 5px each side) */
     .notif-item__avatar {
@@ -1341,25 +1366,14 @@
     .navbar-mobile__logo-mark { display: block; height: 28px;     width: auto; }
     .navbar-mobile__logo-text { display: block; height: 19.573px; width: auto; }
 
-    .navbar-mobile__menu-btn {
-      width:            40px;
-      height:           40px;
-      display:          flex;
-      align-items:      center;
-      justify-content:  center;
-      cursor:           pointer;
-      user-select:      none;
-      flex-shrink:      0;
-      color:            var(--icon-primary-default);
-      background:       none;
-      border:           none;
-      padding:          0;
+    /* DS Menu Icon frame (1943:22623): HORIZONTAL, gap=8px — bell + hamburger */
+    .navbar-mobile__buttons {
+      display:     flex;
+      align-items: center;
+      gap:         8px;
     }
-    .navbar-mobile__menu-btn svg {
-      display: block;
-      width:   24px;
-      height:  24px;
-    }
+
+    /* .navbar-mobile__menu-btn removed — button now uses .navbar-action-btn (Nav Button - 1.5, 44×44) */
 
     /* ─────────────────────────────────────────────────────
        HAMBURGER → X ANIMATION
@@ -1377,9 +1391,9 @@
     .ham-mid { transform-box: view-box; transform-origin: 50% 50%; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.2s ease; }
     .ham-bot { transform-box: view-box; transform-origin: 50% 75%; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
     /* 50% 25% = (12,6) · 50% 50% = (12,12) · 50% 75% = (12,18) in 24×24 viewport */
-    .navbar-mobile__menu-btn.is-open .ham-top { transform: translateY(6px)  rotate(45deg);  }
-    .navbar-mobile__menu-btn.is-open .ham-mid { opacity: 0; transform: scaleX(0); }
-    .navbar-mobile__menu-btn.is-open .ham-bot { transform: translateY(-6px) rotate(-45deg); }
+    #tablet-menu-btn.is-open .ham-top { transform: translateY(6px)  rotate(45deg);  }
+    #tablet-menu-btn.is-open .ham-mid { opacity: 0; transform: scaleX(0); }
+    #tablet-menu-btn.is-open .ham-bot { transform: translateY(-6px) rotate(-45deg); }
 
     /* ─────────────────────────────────────────────────────
        NAV MENU TABLET — Nav Menu Tablet - 1.5 (DS node 3427:4590)
@@ -1593,7 +1607,7 @@
       align-items:   center;
       padding:       var(--spacing-space-xs);
       background:    var(--surface-secondary-default-subtle);
-      box-shadow:    inset 0 0 0 1px var(--surface-tab-active-strip);
+      box-shadow:    inset 0 0 0 1px #d1f7d1;
       border-radius: 28px;
     }
     .nav-menu-cta__notif {
@@ -1632,7 +1646,6 @@
       font-size:      14px;
       font-weight:    600;
       gap:            0;
-      transition:     background 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
     }
     .nav-menu-cta__btn:hover  { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); color: var(--text-secondary-focus); }
     .nav-menu-cta__btn:active { background: var(--surface-primary-focus);     box-shadow: inset 0 0 0 1px var(--border-primary-default); color: var(--text-primary-default); }
@@ -1645,11 +1658,11 @@
     .nav-menu-cta__btn-arrow    {
       display: flex; align-items: center; justify-content: center;
       width: 24px; height: 24px;
-      background:    var(--surface-primary-default-subtle-hover);   /* #99ebce — Primary arrow bg */
+      background:    #99ebce;
       border-radius: var(--corner-radius-corner-rounded);
       flex-shrink:   0;
       padding:       var(--spacing-space-xxs);
-      color:         var(--icon-primary-focus);   /* #00a36a — chevron stroke */
+      color:         var(--border-primary-focus);  /* chevron stroke #00a36a */
     }
     .nav-menu-cta__btn:hover  .nav-menu-cta__btn-arrow { background: var(--surface-secondary-default-subtle); }
     .nav-menu-cta__btn:active .nav-menu-cta__btn-arrow { background: var(--surface-primary-default); }
@@ -1916,6 +1929,11 @@
       :root {
         --page-padding-x:          32px;
         --check-in-card-max-width: none;
+
+      /* Component-specific tokens — values confirmed from DS but not yet exported as named Semantic tokens */
+      --surface-table-heading:    #f6f9ff;              /* Body Cell - 1.5 heading row bg (DS Table - 1.5 pattern) */
+      --surface-tab-active-strip: #d1f7d1;              /* Tab Bar active tab bottom strip (Tab Bar - 1.5 Secondary) */
+      --text-on-color-subtitle:   rgba(255,255,255,0.85); /* Subtitle text on subject-coloured card header bg */
       }
       .primary-card__content {
         grid-template-columns: repeat(2, 1fr);
@@ -1926,6 +1944,8 @@
 
       /* Avatar - 1.5 Size=XL on tablet (64×64, node 684:627) */
       .welcome-avatar { width: 64px; height: 64px; min-width: 64px; min-height: 64px; }
+      .welcome-avatar-group { width: 64px; height: 64px; min-width: 64px; min-height: 64px; }
+      .welcome-avatar-group .navbar-badge { width: 20px; height: 20px; }
 
       /* Welcome section — Tablet + Mobile: welcome-row flex-wrap layout
          Row 1: welcome-text (flex:1) + Avatar-Mobile
@@ -2026,8 +2046,10 @@
       /* Status badges: allow wrapping when pills don't fit in a single row */
       .status-badges { flex-wrap: wrap; }
 
-      /* Avatar - 1.5 Size=L on mobile (48×48) — tablet uses XXL (100×100) */
-      .welcome-avatar { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
+      /* Avatar - 1.5 Size=L on mobile (56×56 Type=Image, node 684:621) */
+      .welcome-avatar { width: 56px; height: 56px; min-width: 56px; min-height: 56px; }
+      .welcome-avatar-group { width: 56px; height: 56px; min-width: 56px; min-height: 56px; }
+      .welcome-avatar-group .navbar-badge { width: 16px; height: 16px; }
 
       /* Mobile: hide top hamburger navbar → replaced by bottom Navbar Mobile - 1.5 */
       #NavBar-Mobile { display: none; }
@@ -2894,7 +2916,7 @@
 
       <!-- Profile Menu icons — all DS exports, viewBox -1 -1 26 26 (1px stroke buffer per Rule 27) -->
       <!-- Outline/user-circle (1942:23330) — My Profile -->
-      <symbol id="ic-user-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20C18 18.4087 17.3679 16.8826 16.2426 15.7574C15.1174 14.6321 13.5913 14 12 14M12 14C10.4087 14 8.88258 14.6321 7.75736 15.7574C6.63214 16.8826 6 18.4087 6 20M12 14C14.2091 14 16 12.2091 16 10C16 7.79086 14.2091 6 12 6C9.79086 6 8 7.79086 8 10C8 12.2091 9.79086 14 12 14ZM22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
+      <symbol id="ic-user-circle" viewBox="-1 -1 62 62" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M45 50C45 46.0218 43.4196 42.2064 40.6066 39.3934C37.7936 36.5804 33.9782 35 30 35M30 35C26.0218 35 22.2064 36.5804 19.3934 39.3934C16.5804 42.2064 15 46.0218 15 50M30 35C35.5228 35 40 30.5228 40 25C40 19.4772 35.5228 15 30 15C24.4772 15 20 19.4772 20 25C20 30.5228 24.4772 35 30 35ZM55 30C55 43.8071 43.8071 55 30 55C16.1929 55 5 43.8071 5 30C5 16.1929 16.1929 5 30 5C43.8071 5 55 16.1929 55 30Z"/></symbol>
       <!-- Outline/user-check (260:1300) — Manage Account -->
       <symbol id="ic-user-check" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M17 11L19 13L23 9M12.5 7C12.5 9.20914 10.7091 11 8.5 11C6.29086 11 4.5 9.20914 4.5 7C4.5 4.79086 6.29086 3 8.5 3C10.7091 3 12.5 4.79086 12.5 7Z"/></symbol>
       <!-- Outline/star 24px (260:1192) — Subscribe Pandai Premium -->

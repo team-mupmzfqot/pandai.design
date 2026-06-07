@@ -5835,4 +5835,25 @@ Non-negotiable. Every session, every task, every fix — no exceptions.
 
 ---
 
-*Last updated: 2026-06-07 | Session 38 — MyClasses nav CSS synced to template (9 areas, Rule N-C38) | Branch: staging*
+---
+
+### Session 38 (cont.) — nadia_Quiz.html nav/footer sync
+
+**File:** `Nadia.test.git/Quiz/nadia_Quiz.html`
+**Change:** Same template sync as MyClasses — replaced shared CSS (lines 12–2081) and SVG defs block with latest from `zul.test.git/zul.page.template.html`. Quiz-specific CSS (`QUIZ PAGE` block), injection script, and page content preserved unchanged.
+
+**Additions from template:**
+
+| Area | Detail |
+|---|---|
+| `--border-secondary-default` | `#b5f291` added to `:root` |
+| Tablet notif btn badge hide | `#tablet-notif-btn.is-active .num-badge { opacity: 0 }` |
+| `welcome-avatar-group` | 100×100 avatar frame class added |
+| `navbar-badge svg` sizing | `width: 100%; height: 100%` |
+| XXL badge variants | profile dropdown + welcome avatar group → 28×28 |
+| Nav label color | `--text-default-heading` → `--text-default-body` (#666) |
+| SVG defs | Was 8-line diff vs template; now **0-line diff** — all icons match template exactly |
+
+---
+
+*Last updated: 2026-06-07 | Session 38 — MyClasses + Quiz nav CSS/SVG synced to template | Branch: staging*

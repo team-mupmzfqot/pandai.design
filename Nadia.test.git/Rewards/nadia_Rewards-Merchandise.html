@@ -21,7 +21,7 @@
       --surface-general-default:         #FFFFFF;
       --surface-primary-default:         #00cc85;
       --surface-primary-focus:           #00a36a;   /* Surface/primary/focus — pressed state bg */
-      --surface-primary-default-subtle:        #e1f9ea;   /* Surface/primary/default-subtle — DS confirmed */
+      --surface-primary-default-subtle:        #d9f7ed;
       --border-primary-default-subtle:         #d9f7ed;   /* Border/primary/default-subtle — Secondary Active arrow */
       --surface-primary-default-subtle-hover:  #99ebce;
       --surface-secondary-default:             #b5f291;  /* Surface/secondary/default */
@@ -31,6 +31,7 @@
       --surface-disabled-on-color:       #e5e5e5;   /* Surface/disabled/on color — disabled button arrow bg (DS confirmed 2026-05-24) */
       --surface-general-default-secondary: #f2f2f2;  /* Surface/general/default-secondary — carousel indicator inactive dot */
       --surface-tertiary-default:        #00564c;   /* Surface/tertiary/default — pressed state bg */
+      --surface-informative-default:     #00a2e8;   /* Surface/informative/default — Icon Badge - 1.5 (DS node 3908:1491) */
 
       /* Border */
 
@@ -58,13 +59,13 @@
       /* Border */
       --border-primary-default:   #00cc85;   /* Border/primary/default */
       --border-primary-focus:     #00a36a;   /* Border/primary/focus */
+      --border-secondary-default: #b5f291;   /* Border/secondary/default — Focus indicator dot border */
       --border-secondary-focus:   #70bc6f;   /* Border/secondary/focus — hover border on all buttons */
       --border-default:           #00cc85;   /* Border/default â€” navbar, footer, quiz card */
       --border-general-default:   #d9d9d9;   /* Border/general/default — carousel cards */
       --border-tertiary-focus:    #00453d;   /* Border/tertiary/focus — pressed state border */
       --border-disabled-disabled: #bfbfbf;   /* Border/disabled/disabled */
       --border-on-color:          #ffffff;   /* Border/on-color — white border on Number Badge (DS 618:417 updated 2026-05-26) */
-      --border-general-default-secondary: #bfbfbf;  /* Border/general/default-secondary (DS node 3655:16650) — bc-sep */
 
       /* Corner Radius (confirmed from design contexts) */
       --corner-radius-corner-pill:    999px;  /* Corner Radius/corner-pill â€” nav row 2 */
@@ -74,7 +75,7 @@
       --corner-radius-corner-xl:      16px;   /* Corner Radius/corner-xl â€” carousel cards */
       --corner-radius-corner-lg:      12px;
       --corner-radius-corner-md:      8px;
-      --radius-xl:                    8px;   /* Radius/xl (Semantic) — Primary Card content placeholder */
+      --radius-xl:                    8px;   /* Radius/xl (Semantic) — Nav Button - 1.5 (44×44 square) */
 
       /* Spacing (Semantic) */
       --spacing-space-xxs:  4px;
@@ -117,7 +118,7 @@
       /* Layout */
       --page-max-width:          100%;
       --page-padding-x:          60px;
-      --nav-dropdown-top:        72px;   /* navbar 64px + gap. DS=80px (16px gap). Change here to revert. */
+      --nav-dropdown-top:        80px;   /* navbar 72px + 8px gap. Change here to revert. */
       --section-gap:             var(--spacing-space-m);   /* Spacing/space-m = 16px */
       --overlay-dark:            rgba(26, 26, 26, 0.5);    /* Overlay/Overlay-Dark → Foundation/black 50 (DS confirmed) */
       --check-in-card-max-width: 390px;
@@ -132,6 +133,7 @@
       --r-rounded: 60px;  --r-4xl: 24px;  --r-2xl: 18px;  --r-xl: 16px;
       --coin-bg: #fece00;  --coin-border: #cba500;  --coin-text: #7a5c00;
       --ruby-bg: #ff4c51;  --ruby-border: #cc3d41;
+      --border-general-default-secondary: #bfbfbf;  /* Border/general/default-secondary (DS node 3655:16650) — bc-sep */
     }
 
     /* â”€â”€ Reset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -194,7 +196,6 @@
       left:       0;
       right:      0;
       min-width:  390px;
-      height:     60px;   /* DS node 2073:6579: height 60px */
       z-index:    100;
       background: var(--surface-general-default);
       border-top: 1px solid var(--border-default);
@@ -204,8 +205,7 @@
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      height:          100%;
-      padding:         0 var(--spacing-space-2xl);   /* DS: t:20 r:28 b:20 l:28 → height:60px + align-items:center + padding:0 28px */
+      padding:         var(--spacing-space-s) var(--spacing-space-2xl); /* DS: t:12 r:28 b:12 l:28 */
     }
 
     .footer__left {
@@ -266,7 +266,7 @@
       align-items:   center;
       gap:           var(--spacing-space-2xl);   /* 28px — Spacing/space-2xl */
       padding:       var(--spacing-space-xs) var(--spacing-space-xl);   /* 8px · 24px — DS px-[Spacing/space-xl] */
-      height:        64px;
+      height:        72px;   /* DS Navbar Top = 72px (t:8 + 56px content + b:8) */
       overflow:      visible;   /* must be visible so Union tail (44×52) clears the navbar bottom edge */
     }
 
@@ -468,21 +468,24 @@
       text-align:      center;
       white-space:     nowrap;
       pointer-events:  none;
+      transition:      opacity 0.15s ease;
     }
     .num-badge--primary {
       background: var(--surface-primary-default);          /* #00cc85 */
       color:      var(--text-primary-on-color);            /* #ffffff */
       box-shadow: 0 0 0 1px var(--border-on-color);        /* 1px white border OUTSIDE (strokeAlign:OUTSIDE) */
     }
+    #notif-btn.is-active .num-badge,
+    #tablet-notif-btn.is-active .num-badge { opacity: 0; }
 
     /* Avatar - 1.5 (node 684:621): flex items-start · 48×48 · border · overflow-clip */
     .navbar-avatar {
       display:       flex;
       align-items:   flex-start;
-      width:         48px;
-      height:        48px;
-      min-width:     48px;
-      min-height:    48px;
+      width:         56px;
+      height:        56px;
+      min-width:     56px;
+      min-height:    56px;
       border-radius: var(--corner-radius-corner-rounded);   /* 60px */
       border:        1px solid var(--border-default);
       background:    var(--surface-general-default);
@@ -505,27 +508,39 @@
       display:         block;
     }
 
-    /* Number Badge - 1.5 (node 1084:1826): absolute right-[-0.48px] top-0 within Avatar group */
+    /* DS Avatar - 1.5, Size=L Type=Image = 56×56 frame (includes space for badge) */
+    .navbar-avatar-group {
+      position:    relative;
+      width:       56px;
+      height:      56px;
+      flex-shrink: 0;
+    }
+    /* Wrapper for welcome avatar — moves badge outside overflow:hidden circle */
+    .welcome-avatar-group {
+      position:    relative;
+      width:       100px;
+      height:      100px;
+      min-width:   100px;
+      min-height:  100px;
+      flex-shrink: 0;
+    }
+    /* P.Premium badge — absolutely positioned top:0 right:0 of avatar frame.
+       Size matches DS: L/Image=16px, XL/Image=20px, XXL/Image=28px */
     .navbar-badge {
       position:        absolute;
       top:             0;
-      right:           -0.48px;   /* DS: right-[-0.48px] relative to Avatar group */
-      background:      var(--surface-primary-default);
-      border-radius:   var(--corner-radius-corner-rounded);
-      box-shadow:      0 0 0 1px var(--border-on-color);          /* 1px white border OUTSIDE (strokeAlign:OUTSIDE) */
-      min-width:       20px;
+      right:           0;
+      width:           20px;   /* DS navbar Content frame: P.Premium = 20×20 */
       height:          20px;
-      padding:         var(--spacing-space-xxs);   /* 4px */
       display:         flex;
       align-items:     center;
       justify-content: center;
-      font-size:       10px;
-      font-weight:     600;
-      line-height:     1;          /* Rule 146: never DS line-height in fixed-height flex badge */
-      color:           var(--text-primary-on-color);
-      overflow:        hidden;
       pointer-events:  none;
     }
+    .navbar-badge svg { width: 100%; height: 100%; }
+    /* XXL/Image (profile dropdown, welcome desktop) */
+    .profile-dropdown__avatar-wrap .navbar-badge,
+    .welcome-avatar-group .navbar-badge            { width: 28px; height: 28px; }
 
     /* ─── Profile Menu - 1.5 (DS node 3908:3679)
        320px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding · 8px gap
@@ -595,6 +610,7 @@
     .learn-dropdown__grid {
       display:               grid;
       grid-template-columns: repeat(3, 1fr);
+      gap:                   var(--spacing-space-xs);
     }
 
     /* Cell — DS State=Default: transparent bg, no border, 12px radius, flex-col, gap 4px, p-8px */
@@ -642,13 +658,13 @@
       flex-shrink: 0;
     }
 
-    /* Label — DS State=Default: 14px SemiBold, #404040 (Text/default/heading, varName 106:34) */
+    /* Label — DS node 3908:2464: 14px SemiBold, Text/default/body #666 */
     .learn-dropdown__label {
       font-family: var(--font-family);
       font-size:   14px;
       font-weight: 600;
       line-height: 20px;
-      color:       var(--text-default-heading);
+      color:       var(--text-default-body);
       text-align:  center;
       transition:  color 0.12s ease;
     }
@@ -709,15 +725,16 @@
       color:       var(--text-tertiary-default);
       white-space: nowrap;
     }
-    /* Icon Badge - 1.5: 12×12, blue, 1px white border, 2px padding */
+    /* Icon Badge - 1.5: 12×12, blue, 1px white OUTSIDE stroke, 2px padding
+       strokeAlign:OUTSIDE → box-shadow NO inset (Rule 60).
+       border-box: 12px − 4px padding = 8px icon area. Stroke renders outside bounds. */
     .profile-dropdown__verified {
       width:           12px;
       height:          12px;
-      background:      #00a2e8;
-      border:          none;
-      box-shadow:      0 0 0 1px var(--border-on-color);   /* strokeAlign:OUTSIDE → no inset (Rule 60) */
+      background:      var(--surface-informative-default);
+      box-shadow:      0 0 0 1px var(--border-on-color);
       border-radius:   var(--corner-radius-corner-rounded);
-      display:         flex;
+      display:         inline-flex;
       align-items:     center;
       justify-content: center;
       flex-shrink:     0;
@@ -883,10 +900,10 @@
        Right-aligned to bell button via JS · top: var(--nav-dropdown-top) · same animation as all other dropdowns
     ──────────────────────────────────────────────────────────────────────────────────────── */
     .notif-dropdown {
-      position:       absolute;
-      top:            var(--nav-dropdown-top);
-      right:          0;
-      left:           auto;
+      position:       fixed;
+      top:            0;
+      left:           0;
+      right:          auto;
       z-index:        500;
       width:          320px;
       background:     var(--surface-general-default);
@@ -910,16 +927,24 @@
       transition:     opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
     }
 
+    /* Notifications List — DS node 6305:45076: flex-col, gap 8px between items */
+    .notif-list {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xs);
+    }
+
     /* Navbar Notification Button - Parts (DS 3908:13427/13443/13456) */
     .notif-item {
       cursor:      pointer;
       user-select: none;
+      overflow:    hidden;                                    /* needed for max-height collapse */
     }
     /* Content frame — Default: white, pt-12 px-12 pb-0, no border */
     .notif-item__content {
       display:       flex;
       background:    var(--surface-general-default);
-      padding:       12px 12px 0;
+      padding:       var(--spacing-space-s) var(--spacing-space-s) 0;
       border-radius: 0;
       transition:    background 0.12s ease, box-shadow 0.12s ease, border-radius 0.12s ease, padding 0.12s ease;
     }
@@ -928,9 +953,9 @@
       display:        flex;
       flex:           1 0 0;
       min-width:      0;
-      gap:            8px;
+      gap:            var(--spacing-space-xs);
       align-items:    flex-start;
-      padding-bottom: 12px;
+      padding-bottom: var(--spacing-space-s);
       border-bottom:  1px solid var(--border-general-default);
       transition:     border-color 0.12s ease, padding-bottom 0.12s ease;
     }
@@ -939,25 +964,32 @@
       background:    var(--surface-secondary-default-hover);
       box-shadow:    inset 0 0 0 1px var(--border-primary-default);
       border-radius: var(--corner-radius-corner-xl);
-      padding:       12px;
+      padding:       var(--spacing-space-s);
     }
     .notif-item:hover .notif-item__body {
       border-bottom-color: transparent;
       padding-bottom:      0;
     }
     .notif-item:hover .notif-item__text { color: var(--text-tertiary-default); }
-    /* Pressed — Surface/primary/focus #00a36a · 1px #00cc85 inset · 16px radius */
-    .notif-item:active .notif-item__content {
-      background:    var(--surface-primary-focus);
-      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+    /* Focus — DS node 3908:13456: Surface/secondary/default #b5f291 · 1px Border/secondary/focus #70bc6f · 16px radius */
+    .notif-item:active .notif-item__content,
+    .notif-item:focus-visible .notif-item__content {
+      background:    var(--surface-secondary-default);
+      box-shadow:    inset 0 0 0 1px var(--border-secondary-focus);
       border-radius: var(--corner-radius-corner-xl);
-      padding:       12px;
+      padding:       var(--spacing-space-s);
     }
-    .notif-item:active .notif-item__body {
+    .notif-item:active .notif-item__body,
+    .notif-item:focus-visible .notif-item__body {
       border-bottom-color: transparent;
       padding-bottom:      0;
     }
-    .notif-item:active .notif-item__text { color: var(--text-primary-default); }
+    .notif-item:active .notif-item__text,
+    .notif-item:focus-visible .notif-item__text { color: var(--text-tertiary-default); }
+    .notif-item:active .notif-item__time,
+    .notif-item:focus-visible .notif-item__time { color: var(--text-secondary-focus); }
+    .notif-item:active .notif-item__dot,
+    .notif-item:focus-visible .notif-item__dot  { box-shadow: 0 0 0 1px var(--border-secondary-default); }
 
     /* Avatar — 60×60 clip, user-circle at 50px (DS inset 8.33% = 5px each side) */
     .notif-item__avatar {
@@ -992,28 +1024,38 @@
       color:       var(--text-primary-default);
       white-space: nowrap;
     }
-    /* Unread indicator — 8×8 dot, pt-4 from top, Surface/primary/default #00cc85 */
+    /* Unread indicator — Indicator Badge - 1.5: 8×8, #00cc85 bg, 1px white OUTSIDE stroke (DS strokeAlign:OUTSIDE) */
     .notif-item__indicator { display: flex; align-items: flex-start; padding-top: 4px; flex-shrink: 0; }
     .notif-item__dot {
       width:         8px;
       height:        8px;
       border-radius: var(--corner-radius-corner-rounded);
       background:    var(--surface-primary-default);
+      box-shadow:    0 0 0 1px var(--border-on-color);   /* strokeAlign:OUTSIDE → no inset; #ffffff */
       flex-shrink:   0;
     }
 
+    /* Read state (click 1): fade out indicator dot */
+    .notif-item__indicator           { transition: opacity 0.2s ease; }
+    .notif-item.is-read .notif-item__indicator { opacity: 0; pointer-events: none; }
+
     /* "See all notification" — Primary/L Button - 1.5, no arrow, full-width */
-    .notif-dropdown__footer { padding-top: var(--spacing-space-m); width: 100%; }
+    .notif-dropdown__footer {
+      padding-top: var(--spacing-space-m);
+      width:       100%;
+      transition:  padding-top 0.3s ease;
+    }
+    /* When all items are dismissed, drop footer padding (dropdown's own 16px padding is enough) */
+    .notif-dropdown.is-empty .notif-dropdown__footer { padding-top: 0; }
     .notif-see-all {
       display:         flex;
       align-items:     center;
       justify-content: center;
       width:           100%;
-      max-height:      48px;
+      height:          40px;
       padding:         8px var(--spacing-space-s);
       background:      var(--surface-primary-default);
-      border:          none;
-      box-shadow:      inset 0 0 0 1px var(--border-primary-focus);   /* strokeAlign:INSIDE → inset (Rule 60) */
+      border:          1px solid var(--border-primary-focus);
       border-radius:   var(--corner-radius-corner-rounded);
       cursor:          pointer;
       user-select:     none;
@@ -1022,10 +1064,10 @@
       font-weight:     600;
       line-height:     20px;
       color:           var(--text-primary-on-color);
-      /* no transition — Button-1.5 uses instant state changes (Rule 82) */
+      transition:      background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
     }
-    .notif-see-all:hover  { background: var(--surface-secondary-default);  box-shadow: inset 0 0 0 1px var(--border-secondary-focus); color: var(--text-secondary-focus); }
-    .notif-see-all:active { background: var(--surface-primary-focus);       box-shadow: inset 0 0 0 1px var(--border-primary-default);  color: var(--text-primary-default); }   /* Rule 40: pressed = primary/focus palette */
+    .notif-see-all:hover  { background: var(--surface-secondary-default); border-color: var(--border-secondary-focus); color: var(--text-secondary-focus); }
+    .notif-see-all:active { background: var(--surface-primary-focus);    border-color: var(--border-primary-default); color: var(--text-primary-default); }
 
     /* ─── Download Apps dropdown (DS node 3909:3405, Navbar Download Apps - 1.5)
        238px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding
@@ -1326,25 +1368,14 @@
     .navbar-mobile__logo-mark { display: block; height: 28px;     width: auto; }
     .navbar-mobile__logo-text { display: block; height: 19.573px; width: auto; }
 
-    .navbar-mobile__menu-btn {
-      width:            40px;
-      height:           40px;
-      display:          flex;
-      align-items:      center;
-      justify-content:  center;
-      cursor:           pointer;
-      user-select:      none;
-      flex-shrink:      0;
-      color:            var(--icon-primary-default);
-      background:       none;
-      border:           none;
-      padding:          0;
+    /* DS Menu Icon frame (1943:22623): HORIZONTAL, gap=8px — bell + hamburger */
+    .navbar-mobile__buttons {
+      display:     flex;
+      align-items: center;
+      gap:         8px;
     }
-    .navbar-mobile__menu-btn svg {
-      display: block;
-      width:   24px;
-      height:  24px;
-    }
+
+    /* .navbar-mobile__menu-btn removed — button now uses .navbar-action-btn (Nav Button - 1.5, 44×44) */
 
     /* ─────────────────────────────────────────────────────
        HAMBURGER → X ANIMATION
@@ -1362,9 +1393,9 @@
     .ham-mid { transform-box: view-box; transform-origin: 50% 50%; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.2s ease; }
     .ham-bot { transform-box: view-box; transform-origin: 50% 75%; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
     /* 50% 25% = (12,6) · 50% 50% = (12,12) · 50% 75% = (12,18) in 24×24 viewport */
-    .navbar-mobile__menu-btn.is-open .ham-top { transform: translateY(6px)  rotate(45deg);  }
-    .navbar-mobile__menu-btn.is-open .ham-mid { opacity: 0; transform: scaleX(0); }
-    .navbar-mobile__menu-btn.is-open .ham-bot { transform: translateY(-6px) rotate(-45deg); }
+    #tablet-menu-btn.is-open .ham-top { transform: translateY(6px)  rotate(45deg);  }
+    #tablet-menu-btn.is-open .ham-mid { opacity: 0; transform: scaleX(0); }
+    #tablet-menu-btn.is-open .ham-bot { transform: translateY(-6px) rotate(-45deg); }
 
     /* ─────────────────────────────────────────────────────
        NAV MENU TABLET — Nav Menu Tablet - 1.5 (DS node 3427:4590)
@@ -1409,7 +1440,7 @@
       border-right:   1px solid var(--border-primary-default);
       border-radius:  0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl);
       overflow:       hidden;
-      padding:        16px;
+      padding:        var(--spacing-space-m);
       box-sizing:     border-box;
       display:        flex;
       flex-direction: column;
@@ -1432,7 +1463,7 @@
       align-items:     center;
       justify-content: space-between;
       gap:             10px;
-      padding:         0 16px 16px;
+      padding:         0 var(--spacing-space-m) var(--spacing-space-m);
       background:      var(--surface-general-default);
     }
     .nav-menu-tablet__logo { display: flex; align-items: center; }
@@ -1445,7 +1476,7 @@
     }
     .nav-menu-tablet__close:hover { color: var(--icon-primary-default); }
 
-    .nav-menu-tablet__search { padding: 0 16px; }
+    .nav-menu-tablet__search { padding: 0 var(--spacing-space-m); }
     .nav-menu-tablet__search-btn {
       display:       flex;
       align-items:   center;
@@ -1474,11 +1505,11 @@
 
     .nav-menu-tablet__menu {
       display:    flex;
-      gap:        8px;
-      padding:    16px;
+      gap:        var(--spacing-space-xs);
+      padding:    var(--spacing-space-m);
       background: var(--surface-general-default);
     }
-    .nav-menu-tablet__col { display: flex; flex-direction: column; gap: 8px; flex: 1 0 0; min-width: 0; }
+    .nav-menu-tablet__col { display: flex; flex-direction: column; gap: var(--spacing-space-xs); flex: 1 0 0; min-width: 0; }
     /* 32px-wide spacer with a centred 1px divider line */
     .nav-menu-tablet__divider { width: 32px; flex-shrink: 0; position: relative; align-self: stretch; }
     .nav-menu-tablet__divider::after {
@@ -1525,13 +1556,58 @@
     /* DS nav menu items have no checkbox indicator — active state uses pill background only */
     .nav-menu-check { display: none; }
 
+.nav-menu-item.has-submenu.is-open {
+      background:    var(--surface-secondary-default);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-focus);
+      border-radius: 108px;
+    }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__label { color: var(--text-primary-default-hover); }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__icon  { color: var(--icon-primary-default); }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__arrow { color: var(--icon-primary-default); }
+    .nav-menu-item.has-submenu .nav-menu-item__arrow svg { transition: transform 0.15s ease; }
+    .nav-menu-item.has-submenu.is-open .nav-menu-item__arrow svg { transform: rotate(90deg); }
+
+    /* DS Sub-topic: gap=8px, pl=16px, pr=16px, pt=0, pb=0 (tablet) / pb=16px (mobile).
+       DS nodes: tablet 5283:118410 (pt:0 pb:0), mobile 5283:122098 (pt:0 pb:16).
+       margin-top:-8px cancels the flex column's phantom gap when height=0 (flat layout).
+       Tablet open: margin stays -8px; sub-item py:8px provides the trigger→sub-item gap.
+       Mobile open: margin restores to 0; flex gap provides the trigger→sub-item gap. */
+    .nav-menu-submenu {
+      display:         flex;
+      flex-direction:  column;
+      gap:             0;
+      padding-top:     0;
+      padding-right:   var(--spacing-space-m);
+      padding-left:    var(--spacing-space-m);
+      box-sizing:      border-box;
+      max-height:      0;
+      overflow:        hidden;
+      /* Flat layout: negative margin cancels the flex column's phantom 8px gap when height is 0. */
+      margin-top:      calc(-1 * var(--spacing-space-xs));
+      transition:      max-height 0.2s ease, margin-top 0.2s ease;
+    }
+    /* Both tablet and mobile: restore margin-top to 0 when open so the 8px column gap
+       reappears between the trigger and the first sub-item. */
+    .nav-menu-submenu.is-open { max-height: 500px; margin-top: 0; }
+    /* Use margin instead of gap — flex gap can be unreliable inside overflow:hidden max-height containers. */
+    .nav-menu-submenu .nav-menu-item + .nav-menu-item {
+      margin-top: var(--spacing-space-xs);
+    }
+    /* Mobile: DS node 5283:122098 — pt:0, pb:16, pl:16, pr:16, border-radius:24px. */
+    #NavMenu-Mobile .nav-menu-submenu {
+      border-radius: 24px;
+      margin-top:    calc(-1 * var(--spacing-space-xs));
+      transition:    max-height 0.2s ease, margin-top 0.2s ease;
+    }
+    #NavMenu-Mobile .nav-menu-submenu.is-open { max-height: 800px; margin-top: 0; padding-bottom: var(--spacing-space-m); }
+
     /* CTA row: Notification + Download App button */
     .nav-menu-tablet__footer { padding: 0; display: flex; flex-direction: column; }
     .nav-menu-cta {
       display:       flex;
-      gap:           8px;
+      gap:           var(--spacing-space-xs);
       align-items:   center;
-      padding:       8px;
+      padding:       var(--spacing-space-xs);
       background:    var(--surface-secondary-default-subtle);
       box-shadow:    inset 0 0 0 1px #d1f7d1;
       border-radius: 28px;
@@ -1561,7 +1637,7 @@
       flex:           1 0 0;
       min-width:      0;
       height:         40px;
-      padding:        8px 12px;
+      padding:        var(--spacing-space-xs) var(--spacing-space-s);
       background:     var(--surface-primary-default);
       border:         none;
       box-shadow:     inset 0 0 0 1px var(--border-primary-focus);
@@ -1572,7 +1648,6 @@
       font-size:      14px;
       font-weight:    600;
       gap:            0;
-      transition:     background 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
     }
     .nav-menu-cta__btn:hover  { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); color: var(--text-secondary-focus); }
     .nav-menu-cta__btn:active { background: var(--surface-primary-focus);     box-shadow: inset 0 0 0 1px var(--border-primary-default); color: var(--text-primary-default); }
@@ -1580,7 +1655,7 @@
     .nav-menu-cta__btn-icon     { display: flex; flex-shrink: 0; width: 24px; height: 24px; align-items: center; justify-content: center; }
     .nav-menu-cta__btn-icon svg { width: 20px; height: 20px; display: block; }
     /* Label: DS pad l:8 r:8 — no flex:1, no growing */
-    .nav-menu-cta__btn-text     { padding: 0 8px; white-space: nowrap; }
+    .nav-menu-cta__btn-text     { padding: 0 var(--spacing-space-xs); white-space: nowrap; }
     /* R Arrow: 24×24 pill, #99ebce bg, 4px pad → 16px clip, chevron #00a36a */
     .nav-menu-cta__btn-arrow    {
       display: flex; align-items: center; justify-content: center;
@@ -1588,7 +1663,7 @@
       background:    #99ebce;
       border-radius: var(--corner-radius-corner-rounded);
       flex-shrink:   0;
-      padding:       4px;
+      padding:       var(--spacing-space-xxs);
       color:         var(--border-primary-focus);  /* chevron stroke #00a36a */
     }
     .nav-menu-cta__btn:hover  .nav-menu-cta__btn-arrow { background: var(--surface-secondary-default-subtle); }
@@ -1600,14 +1675,14 @@
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      gap:             8px;
-      padding:         16px 60px 0;
+      gap:             var(--spacing-space-xs);
+      padding:         var(--spacing-space-m) var(--page-padding-x) 0;
     }
     .nav-menu-locale__btn {
       display: flex; align-items: center;
       cursor: pointer;
       color:      var(--text-primary-default);  /* #00cc85 — BM and Mandarin */
-      background: none; border: none; padding: 4px;
+      background: none; border: none; padding: var(--spacing-space-xxs);
     }
     /* EN is the active locale — DS uses #00564C (Surface/tertiary/default) for selected locale stroke */
     .nav-menu-locale__btn:first-child { color: var(--surface-tertiary-default, #00564c); }
@@ -1676,7 +1751,7 @@
       align-items:     center;
       justify-content: space-between;
       gap:             10px;
-      padding:         16px;
+      padding:         var(--spacing-space-m);
       flex-shrink:     0;
       background:      var(--surface-general-default);
     }
@@ -1693,8 +1768,8 @@
     .nav-menu-mobile__content {
       display:     flex;
       flex-direction: column;
-      gap:         8px;
-      padding:     0 16px 16px;
+      gap:         var(--spacing-space-xs);
+      padding:     0 var(--spacing-space-m) var(--spacing-space-m);
       flex-shrink: 0;
     }
 
@@ -1709,8 +1784,8 @@
       display:         flex;
       align-items:     center;
       justify-content: space-between;
-      gap:             8px;
-      padding:         0 60px;
+      gap:             var(--spacing-space-xs);
+      padding:         0 var(--page-padding-x);
       flex-shrink:     0;
     }
 
@@ -1789,7 +1864,7 @@
       font-weight: 600;
       line-height: 18px;
       color:       var(--text-default-body);        /* Default: Text/default/body #666666 */
-      padding:     0 4px;
+      padding:     0 var(--spacing-space-xxs);
       transition:  color 0.12s ease;
     }
     .navbar-bottom__btn:hover  .navbar-bottom__label { color: var(--text-secondary-focus); }  /* #70bc6f */
@@ -1866,6 +1941,8 @@
 
       /* Avatar - 1.5 Size=XL on tablet (64×64, node 684:627) */
       .welcome-avatar { width: 64px; height: 64px; min-width: 64px; min-height: 64px; }
+      .welcome-avatar-group { width: 64px; height: 64px; min-width: 64px; min-height: 64px; }
+      .welcome-avatar-group .navbar-badge { width: 20px; height: 20px; }
 
       /* Welcome section — Tablet + Mobile: welcome-row flex-wrap layout
          Row 1: welcome-text (flex:1) + Avatar-Mobile
@@ -1966,12 +2043,14 @@
       /* Status badges: allow wrapping when pills don't fit in a single row */
       .status-badges { flex-wrap: wrap; }
 
-      /* Avatar - 1.5 Size=L on mobile (48×48) — tablet uses XXL (100×100) */
-      .welcome-avatar { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
+      /* Avatar - 1.5 Size=L on mobile (56×56 Type=Image, node 684:621) */
+      .welcome-avatar { width: 56px; height: 56px; min-width: 56px; min-height: 56px; }
+      .welcome-avatar-group { width: 56px; height: 56px; min-width: 56px; min-height: 56px; }
+      .welcome-avatar-group .navbar-badge { width: 16px; height: 16px; }
 
       /* Mobile: hide top hamburger navbar → replaced by bottom Navbar Mobile - 1.5 */
       #NavBar-Mobile { display: none; }
-      body { padding-top: 16px; }
+      body { padding-top: var(--spacing-space-m); }
 
       /* Mobile bottom navbar visible; desktop footer hidden */
       .navbar-bottom { display: flex; }
@@ -2447,7 +2526,7 @@
 
       <!-- Profile Menu icons — all DS exports, viewBox -1 -1 26 26 (1px stroke buffer per Rule 27) -->
       <!-- Outline/user-circle (1942:23330) — My Profile -->
-      <symbol id="ic-user-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20C18 18.4087 17.3679 16.8826 16.2426 15.7574C15.1174 14.6321 13.5913 14 12 14M12 14C10.4087 14 8.88258 14.6321 7.75736 15.7574C6.63214 16.8826 6 18.4087 6 20M12 14C14.2091 14 16 12.2091 16 10C16 7.79086 14.2091 6 12 6C9.79086 6 8 7.79086 8 10C8 12.2091 9.79086 14 12 14ZM22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
+      <symbol id="ic-user-circle" viewBox="-1 -1 62 62" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M45 50C45 46.0218 43.4196 42.2064 40.6066 39.3934C37.7936 36.5804 33.9782 35 30 35M30 35C26.0218 35 22.2064 36.5804 19.3934 39.3934C16.5804 42.2064 15 46.0218 15 50M30 35C35.5228 35 40 30.5228 40 25C40 19.4772 35.5228 15 30 15C24.4772 15 20 19.4772 20 25C20 30.5228 24.4772 35 30 35ZM55 30C55 43.8071 43.8071 55 30 55C16.1929 55 5 43.8071 5 30C5 16.1929 16.1929 5 30 5C43.8071 5 55 16.1929 55 30Z"/></symbol>
       <!-- Outline/user-check (260:1300) — Manage Account -->
       <symbol id="ic-user-check" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M17 11L19 13L23 9M12.5 7C12.5 9.20914 10.7091 11 8.5 11C6.29086 11 4.5 9.20914 4.5 7C4.5 4.79086 6.29086 3 8.5 3C10.7091 3 12.5 4.79086 12.5 7Z"/></symbol>
       <!-- Outline/star 24px (260:1192) — Subscribe Pandai Premium -->
