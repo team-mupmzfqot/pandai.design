@@ -6010,4 +6010,23 @@ This page uses the **fetch/injection pattern** — Navigation-Shell HTML and foo
 
 ---
 
-*Last updated: 2026-06-07 | Session 38 — all pending Nadia pages nav CSS synced to template; Myrewards fetch-pattern CSS updated | Branch: staging*
+
+
+---
+
+### Session 38 (cont.) — BrowseClasses: button state CSS + is-pressing JS
+
+**File:** `Nadia.test.git/Class/nadia_Class-BrowseClasses.html`
+**Changes:** Full button state rules added for `.btn-secondary` and `.btn-primary` breadcrumb action buttons; `is-pressing` JS handlers added.
+
+| Area | Before | After |
+|---|---|---|
+| `.btn-secondary` hover | missing | `background: #b5f291`, `box-shadow:inset`, `color: --text-secondary-focus` |
+| `.btn-secondary` pressed | missing | `background: --surface-primary-focus`, `box-shadow:inset` |
+| `.btn-primary` hover | missing | Secondary palette hover |
+| `.btn-primary` pressed | missing | Primary/focus palette |
+| `is-pressing` handlers | missing | `mousedown/mouseup/mouseleave` on `.btn-secondary, .btn-primary` |
+| `.bc-row` | `align-items: flex-start; width: 100%` | `width: 100%` (align-items removed) |
+| Token in `.btn-primary` | `var(--og-500)` / `var(--og-600)` | `var(--surface-primary-default)` / `var(--border-primary-focus)` (canonical tokens) |
+
+*Last updated: 2026-06-07 | Session 38 — BrowseClasses button states + is-pressing; all Nadia pages nav CSS synced to template | Branch: staging*
