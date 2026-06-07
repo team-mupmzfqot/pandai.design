@@ -2135,36 +2135,36 @@
 
     /* ── Breadcrumb 1.5 — DS node 1777:18856 ───────────────────── */
     .bc-row {
-      display: flex; align-items: center; gap: 12px; min-height: 36px;
+      display: flex; align-items: center; gap: var(--spacing-space-s); min-height: 36px;
     }
     .bc-left {
       flex: 1; width: 100%; min-width: 0;
-      display: flex; align-items: center; gap: var(--sp-m);
+      display: flex; align-items: center; gap: var(--spacing-space-m);
     }
     .bc-title {
       font-size: 24px; font-weight: 500; line-height: 36px;
-      color: #00564c;
+      color: var(--text-tertiary-default);
       white-space: nowrap; flex-shrink: 0;
     }
     .bc-sep {
       width: 1px; height: 20px; background: var(--border-general-default-secondary); flex-shrink: 0;
     }
     .bc-trail {
-      display: flex; align-items: center; gap: var(--sp-xs); flex-wrap: wrap;
+      display: flex; align-items: center; gap: var(--spacing-space-xs); flex-wrap: wrap;
     }
     .bc-link {
-      display: inline-flex; align-items: center; gap: var(--sp-xs);
+      display: inline-flex; align-items: center; gap: var(--spacing-space-xs);
       font-size: 14px; font-weight: 400; line-height: 20px;
-      color: var(--og-500); text-decoration: none; white-space: nowrap;
+      color: var(--text-primary-default); text-decoration: none; white-space: nowrap;
     }
     .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
     .bc-chevron {
       width: 16px; height: 16px; flex-shrink: 0; display: block;
       color: var(--border-general-default-secondary);   /* #bfbfbf — drives currentColor in symbol */
     }
-    .bc-link--current { color: #666; }
+    .bc-link--current { color: var(--text-default-body); }
     .bc-actions {
-      display: flex; align-items: center; gap: var(--sp-xs); flex-shrink: 0;
+      display: flex; align-items: center; gap: var(--spacing-space-xs); flex-shrink: 0;
     }
 
     /* ── Breadcrumb buttons ──────────────────────────────────────── */
@@ -2180,7 +2180,7 @@
     .btn-icon-wrap { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .btn-icon-clip { width: 24px; height: 24px; overflow: hidden; flex-shrink: 0; }
     .btn-icon-clip svg { display: block; width: 100%; height: 100%; }
-    .btn-label { padding: 0 var(--sp-xs); white-space: nowrap; }
+    .btn-label { padding: 0 var(--spacing-space-xs); white-space: nowrap; }
     .btn-secondary {
       background: #fff;
       border-color: var(--og-500);
@@ -2197,12 +2197,12 @@
     .cards-grid { display: grid; gap: 20px; width: 100%; grid-template-columns: repeat(3, 1fr); }
     @media (max-width: 1279px) {
       .cards-grid { grid-template-columns: repeat(2, 1fr); }
-      .bc-row     { flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+      .bc-row     { flex-wrap: wrap; gap: var(--spacing-space-s); align-items: flex-start; }
       .bc-left    { align-items: flex-start; width: 100%; }
     }
     @media (max-width: 767px) {
       .cards-grid   { grid-template-columns: 1fr; }
-      .bc-row       { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .bc-row       { flex-direction: column; align-items: flex-start; gap: var(--spacing-space-s); }
       .bc-left      { flex-wrap: wrap; }
       .bc-actions   { width: 100%; }
       .btn-secondary, .btn-primary { flex: 1; justify-content: center; }

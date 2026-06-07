@@ -5856,4 +5856,132 @@ Non-negotiable. Every session, every task, every fix — no exceptions.
 
 ---
 
-*Last updated: 2026-06-07 | Session 38 — MyClasses + Quiz nav CSS/SVG synced to template | Branch: staging*
+### Session 38 (cont.) — nadia_Rewards-CoinQuest.html nav/footer sync
+
+**File:** `Nadia.test.git/Rewards/nadia_Rewards-CoinQuest.html`
+**Change:** Replaced nav/footer CSS block with latest from `zul.test.git/zul.page.template.html`. CoinQuest-specific tokens (OG/PK shortcuts, coin/ruby palette, gold tokens) and `PAGE VIEWPORT CONTENT` section preserved unchanged.
+
+**2 missing `:root` tokens added:**
+- `--surface-informative-default: #00a2e8` (Icon Badge - 1.5, DS node 3908:1491)
+- `--border-secondary-default: #b5f291` (Focus indicator dot border)
+
+**Key CSS fixes (template drift):**
+
+| Area | Old | New |
+|---|---|---|
+| `.notif-dropdown` | `position: absolute; top: var(--nav-dropdown-top)` | `position: fixed; top: 0; left: 0; right: auto` (Rule 99) |
+| `.num-badge` | no transition | `transition: opacity 0.15s ease` |
+| `#notif-btn.is-active .num-badge` | missing | `opacity: 0` (Rule 71) |
+| `#tablet-notif-btn.is-active .num-badge` | missing | `opacity: 0` |
+| `.notif-list` | missing | `flex-col; gap: 8px` added |
+| Notif active/focus-visible | Primary focus palette | Secondary `#b5f291` + `#70bc6f` (Rule 69) |
+| `.notif-item__dot` white stroke | missing | `box-shadow: 0 0 0 1px var(--border-on-color)` OUTSIDE (Rule 60) |
+| `Icon Badge` stroke | `border: 1px solid white` | `box-shadow: 0 0 0 1px var(--border-on-color)` (Rule 183) |
+| `Icon Badge` bg | `#00a2e8` hardcoded | `var(--surface-informative-default)` |
+| `.notif-see-all` height | `max-height: 48px` | `height: 40px` |
+| Nav label color | `--text-default-heading` | `--text-default-body` (#666) |
+| Mobile avatar | `48px` | `56px` + `welcome-avatar-group` class added |
+
+---
+
+### Session 38 (cont.) — nadia_Rewards-avatar.html nav/footer sync
+
+**File:** `Nadia.test.git/Rewards/nadia_Rewards-avatar.html`
+**Change:** Replaced nav/footer CSS block (lines 201–2001) with latest from `zul.test.git/zul.page.template.html` (lines 181–2048). Page-specific `:root` aliases (OG/PK/coin/ruby/gold tokens) and Avatar page CSS preserved unchanged.
+
+**Key CSS fixes (67-line net delta):**
+
+| Area | Old | New |
+|---|---|---|
+| `.num-badge` transition | missing | `transition: opacity 0.15s ease` |
+| `#notif-btn.is-active .num-badge` | missing | `opacity: 0` (Rule 71) |
+| `.notif-dropdown` | `position: absolute; top: var(--nav-dropdown-top)` | `position: fixed; top: 0; left: 0; right: auto` (Rule 99) |
+| `.notif-list` | missing | `flex-col; gap: 8px` (Rule 92) |
+| `.welcome-avatar-group` | missing entirely | 100×100 + tablet 64px + mobile 56px |
+| `.navbar-badge` P.Premium | basic | 20×20 navbar frame; 28px for profile/welcome XXL |
+| Nav label color | `--text-default-heading` (#404040) | `--text-default-body` (#666) — DS node 3908:2464 |
+| Mobile avatar | `48×48` | `56×56` per DS node `684:621` |
+
+---
+
+*Last updated: 2026-06-07 | Session 38 — MyClasses + Quiz + CoinQuest + Avatar nav CSS synced to template | Branch: staging*
+
+---
+
+### Session 39 — Practise-subject nav/footer CSS synced to zul.page.template.html (2026-06-07)
+
+**File:** `Nadia.test.git/Practise/nadia_Practise-subject.html`
+**Change:** Replaced nav/footer CSS block (`:root` → `.page-viewport__placeholder`) with the latest from `zul.test.git/zul.page.template.html`. Page-specific CSS (Practice Card Grid, Breadcrumb) untouched. Runtime fetch injection script untouched.
+
+**SVG defs:** Replaced with template's block. `ic-premium` symbol added. Page-specific symbols preserved: `ic-file`, `ic-corner-down-right`, `ic-video`.
+
+**No DS live fetch required** — CSS drift correction from template only.
+
+**Commit scope (10 .html files, accumulated Sessions 34–39):**
+`nadia_Practise-subject.html`, `nadia_Flashcard.html`, `nadia_Quiz.html`, `nadia_Class-MyClasses.html`, `nadia_Class-BrowseClasses.html`, `nadia_Rewards-CoinQuest.html`, `nadia_Rewards-Merchandise.html`, `nadia_Rewards-Myrewards.html`, `nadia_Rewards-avatar.html`, `nadia_Rewards-evoucher.html`
+
+---
+
+*Last updated: 2026-06-07 | Session 39 — Practise-subject nav/footer CSS synced to template; ic-premium added; 10 .html files committed (Sessions 34–39 accumulated) | Branch: staging*
+
+---
+
+### Session 38 (cont.) — nadia_Rewards-Merchandise.html nav/footer sync
+
+**File:** `Nadia.test.git/Rewards/nadia_Rewards-Merchandise.html`
+**Change:** Replaced shared nav/footer CSS (lines 12–2033) with latest from `zul.test.git/zul.page.template.html`. Merchandise-specific `:root` tokens and page CSS (PAGE VIEWPORT CONTENT + `.rewards-*` / `.sidebar-*`) preserved unchanged.
+
+**Tokens updated:**
+
+| Token | Old | New | Note |
+|---|---|---|---|
+| `--surface-primary-default-subtle` | `#e1f9ea` | `#d9f7ed` | Template value. Session 37 had `#e1f9ea` as "DS confirmed" — contradiction; needs live DS resolution. |
+| `--surface-informative-default` | missing | `#00a2e8` | Added from template |
+| `--border-secondary-default` | missing | `#b5f291` | Added from template |
+
+**Preserved Rewards-specific tokens (added back into `:root`):**
+`--og-*/--pk-*` palette aliases, `--coin-bg/border/text`, `--ruby-bg/border`, `--border-general-default-secondary: #bfbfbf`
+
+**CSS areas corrected (now matching template):**
+
+| Area | Detail |
+|---|---|
+| `.footer__inner` padding | `padding: 12px 28px` → `height: 100%; padding: 0 28px` |
+| `.navbar-badge` | Full Number Badge spec: `right: -0.48px`, bg, border-radius, box-shadow, font rules |
+| `.welcome-avatar-group` | Added 100×100 avatar frame block |
+| `.notif-list` | Added `display:flex; flex-direction:column; gap:8px` |
+| `.notif-item` overflow | Added `overflow:hidden` |
+| `.notif-item` Focus/active states | Focus corrected to `Surface/secondary/default #b5f291`; read-state fade added |
+| `.notif-item__dot` OUTSIDE stroke | `box-shadow: 0 0 0 1px var(--border-on-color)` added |
+| `.notif-dropdown.is-empty .footer` | `padding-top: 0` added |
+| `.learn-dropdown__label` color | `--text-default-body` → `--text-default-heading` |
+| Icon Badge bg | `#00a2e8` hardcoded → `var(--surface-informative-default)` |
+
+**Pending:** `--surface-primary-default-subtle` contradiction (`#e1f9ea` vs `#d9f7ed`) — resolve via live DS fetch next session. Pressed palette Rule 19 vs Rule 40 contradiction still unresolved.
+
+
+---
+
+### Session 38 (cont.) — nadia_Rewards-evoucher.html nav/footer sync
+
+**File:** `Nadia.test.git/Rewards/nadia_Rewards-evoucher.html`
+**Change:** Replaced nav/footer CSS block (lines 192–1838) with latest from `zul.test.git/zul.page.template.html` (lines 181–1880). eVoucher-specific tokens and page-specific Rewards CSS preserved unchanged.
+
+**Key CSS fixes (template drift):**
+
+| Area | Old | New |
+|---|---|---|
+| `.footer` | explicit `height: 60px` | removed — height via padding only |
+| `.footer__inner` | `height: 100%` + `padding: 0 28px` | `padding: var(--spacing-space-s) var(--spacing-space-2xl)` |
+| `.icon-badge` stroke | `border: 1px solid white` | `box-shadow: 0 0 0 1px var(--border-on-color)` (Rule 60 / Rule 183) |
+| `.icon-badge` bg | `#00a2e8` hardcoded | `var(--surface-informative-default)` |
+| `.notif-dropdown` | `position: absolute; top: var(--nav-dropdown-top)` | `position: fixed; top: 0; left: 0; right: auto` (Rule 99) |
+| `.notif-list` | missing | `display:flex; flex-direction:column; gap:8px` added |
+| `num-badge` transition | `transition: opacity 0.15s ease` present | removed (Rule 82) |
+| `#notif-btn.is-active .num-badge` | missing | `opacity: 0` (Rule 71) |
+| `.welcome-avatar-group` | missing | 100×100 avatar frame class added |
+
+---
+
+*Last updated: 2026-06-07 | Session 38 — All 10 Nadia pages nav CSS synced to template (N-C38, N-C39 + continuations) | Branch: staging*
+| `.footer__inner` | `height: 100
