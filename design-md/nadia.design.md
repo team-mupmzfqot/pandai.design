@@ -6149,6 +6149,7 @@ The "Practice" nav item maps to `nadia_Practise-subject.html` (note: `Practise`,
 □ Shorthand aliases     → var(--og-*), var(--sp-*), var(--r-*) used in component rules? (N-C33)
 □ Label Badge bg        → var(--surface-primary-default-subtle) = #e1f9ea? (Session 23)
 □ Nav link wiring       → step 6 in injection callback present? (N-C40)
+□ Body Cell stroke      → box-shadow:inset on .pe-table__cell, no border-bottom on row? (N-C43)
 □ New page subfolder    → confirmed correct Nadia.test.git/[subfolder]/ before creating? (N-C42)
 □ Pending list from last session → addressed first?
 ```
@@ -6249,3 +6250,59 @@ Both variants:
 ---
 
 *Last updated: 2026-06-09 | Session 41 — nadia_PracticeExam.html built (breadcrumb + tab bar + QN card + table); Body Cell INSIDE stroke (N-C43); N-C40 propagation resolved; Rule N-C42 (subfolder confirmation) added | Branch: staging*
+
+---
+
+### Rule N-C43 — Sidebar button navigation — Rewards pages (Session 41, 2026-06-09)
+
+All 5 Rewards pages share a left sidebar with `<button class="sidebar-btn">` elements. These are native `<button>` — not `<a>` — so navigation requires JS.
+
+**Pattern:** Replace the old active-toggle-only handler with a `SIDEBAR_HREFS` map keyed by `.sidebar-btn__label` text content. If a href is found, navigate; else fall back to active toggle.
+
+All 5 Rewards pages are in the same folder (`Nadia.test.git/Rewards/`) — filename only, no path prefix.
+
+```js
+try {
+  var SIDEBAR_HREFS = {
+    'Coin Quest':  'nadia_Rewards-CoinQuest.html',
+    'My Rewards':  'nadia_Rewards-Myrewards.html',
+    'Merchandise': 'nadia_Rewards-Merchandise.html',
+    'eVoucher':    'nadia_Rewards-evoucher.html',
+    'Avatar':      'nadia_Rewards-avatar.html',
+  };
+  document.querySelectorAll('.sidebar-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var lbl = btn.querySelector('.sidebar-btn__label');
+      var href = lbl && SIDEBAR_HREFS[lbl.textContent.trim()];
+      if (href) { window.location.href = href; return; }
+      document.querySelectorAll('.sidebar-btn').forEach(function (b) { b.classList.remove('sidebar-btn--active'); });
+      btn.classList.add('sidebar-btn--active');
+    });
+  });
+} catch (e) { console.warn('sidebar init:', e); }
+```
+
+**Applied to all 5 Rewards pages (2026-06-09).** If a new Rewards page is added, add its label → filename entry to `SIDEBAR_HREFS` in all existing pages.
+
+---
+
+### Rule N-C44 — In-page `<a href>` buttons — update href directly, no JS (Session 41, 2026-06-09)
+
+Class pages use native `<a class="btn-*">` for within-page buttons (Browse Classes, Go to My Classes, Timetable, Join Class). These are real anchors — not `<div role="button">` — so just update the `href` attribute. No JS needed.
+
+```html
+<!-- Before -->
+<a href="#" class="btn-secondary"><span class="btn-label">Browse Classes</span></a>
+
+<!-- After — only the href changes -->
+<a href="nadia_Class-BrowseClasses.html" class="btn-secondary"><span class="btn-label">Browse Classes</span></a>
+```
+
+**Always grep the target file first** — some buttons may already be correctly wired from a prior session. Confirmed: `Go to My Classes` in `nadia_Class-BrowseClasses.html` was already `href="nadia_Class-MyClasses.html"` — no change needed.
+
+**Confirmed wiring (2026-06-09):**
+
+| Page | Button | href |
+|---|---|---|
+| `nadia_Class-MyClasses.html` | Browse Classes | `nadia_Class-BrowseClasses.html` |
+| `nadia_Class-BrowseClasses.html` | Go to My Classes | `nadia_Class-MyClasses.html` *(pre-wired)* |

@@ -60,7 +60,8 @@
       --border-primary-focus:     #00a36a;   /* Border/primary/focus */
       --border-secondary-focus:   #70bc6f;   /* Border/secondary/focus — hover border on all buttons */
       --border-default:           #00cc85;   /* Border/default â€” navbar, footer, quiz card */
-      --border-general-default:   #d9d9d9;   /* Border/general/default — carousel cards */
+      --border-general-default:              #d9d9d9;   /* Border/general/default — carousel cards */
+      --border-general-default-secondary:   #bfbfbf;   /* Border/general/default-secondary — bc-sep, bc-chevron (DS node 3655:16650) */
       --border-tertiary-focus:    #00453d;   /* Border/tertiary/focus — pressed state border */
       --border-disabled-disabled: #bfbfbf;   /* Border/disabled/disabled */
       --border-on-color:          #ffffff;   /* Border/on-color — white border on Number Badge (DS 618:417 updated 2026-05-26) */
@@ -275,7 +276,7 @@
       gap:           var(--spacing-space-2xl);   /* 28px — Spacing/space-2xl */
       padding:       var(--spacing-space-xs) var(--spacing-space-xl);   /* 8px · 24px — DS px-[Spacing/space-xl] */
       height:        72px;   /* DS Navbar Top = 72px (t:8 + 56px content + b:8) */
-      overflow:      visible;   /* must be visible so Union tail (44×52) clears the navbar bottom edge */
+      overflow:      hidden;   /* DS clipsContent:true on node 1084:1787 */
     }
 
     /* Logo/Pandai/Logo Horizontal (node 1898:6965): height-only constraint, width auto */
@@ -496,7 +497,7 @@
       min-height:    56px;
       border-radius: var(--corner-radius-corner-rounded);   /* 60px */
       border:        1px solid var(--border-default);
-      background:    var(--surface-general-default);
+      background:    var(--surface-primary-default-subtle);   /* #e1f9ea — DS node 1084:1825 */
       overflow:      hidden;
       position:      relative;
       flex-shrink:   0;
@@ -532,14 +533,14 @@
       min-height:  100px;
       flex-shrink: 0;
     }
-    /* P.Premium badge — absolutely positioned top:0 right:0 of avatar frame.
-       Size matches DS: L/Image=16px, XL/Image=20px, XXL/Image=28px */
+    /* P.Premium badge — DS node I1084:1825;6416:70718: 16×16 at top:-1px right:-1px
+       inside Avatar-1.5 (L size = 56×56). Confirmed get_design_context 2026-06-09. */
     .navbar-badge {
       position:        absolute;
-      top:             0;
-      right:           0;
-      width:           20px;   /* DS navbar Content frame: P.Premium = 20×20 */
-      height:          20px;
+      top:             -1px;
+      right:           -1px;
+      width:           16px;   /* DS: w-[16px] h-[16px] inside Avatar-1.5 */
+      height:          16px;
       display:         flex;
       align-items:     center;
       justify-content: center;
@@ -548,7 +549,7 @@
     .navbar-badge svg { width: 100%; height: 100%; }
     /* XXL/Image (profile dropdown, welcome desktop) */
     .profile-dropdown__avatar-wrap .navbar-badge,
-    .welcome-avatar-group .navbar-badge            { width: 28px; height: 28px; }
+    .welcome-avatar-group .navbar-badge            { width: 28px; height: 28px; top: 0; right: 0; }
 
     /* ─── Profile Menu - 1.5 (DS node 3908:3679)
        320px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding · 8px gap
@@ -702,7 +703,7 @@
       height:        100px;
       border-radius: var(--corner-radius-corner-rounded);
       border:        1px solid var(--border-default);
-      background:    var(--surface-general-default);
+      background:    var(--surface-primary-default-subtle);   /* #e1f9ea — DS node 1084:1825 */
       overflow:      hidden;
     }
     .profile-dropdown__avatar img {
@@ -2121,7 +2122,7 @@
     .bc-row {
       display:     flex;
       align-items: center;
-      gap:         12px;
+      gap:         var(--spacing-space-s);
       min-height:  36px;
     }
     .bc-left {
@@ -2143,7 +2144,7 @@
     .bc-sep {
       width:       1px;
       height:      20px;
-      background:  var(--border-general-default);   /* Border/general/default #d9d9d9 */
+      background:  var(--border-general-default-secondary);   /* Border/general/default-secondary #bfbfbf */
       flex-shrink: 0;
     }
     .bc-trail {
@@ -2165,7 +2166,9 @@
     }
     .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
     .bc-chevron {
-      color:       var(--text-disabled-default);    /* Text/default/caption #bfbfbf */
+      width:       16px;
+      height:      16px;
+      color:       var(--border-general-default-secondary);   /* Border/general/default-secondary #bfbfbf */
       flex-shrink: 0;
     }
     .bc-link--current { color: var(--text-default-body); font-weight: 500; }  /* Text/default/body #666 */
@@ -4614,11 +4617,19 @@
   <!-- Nav persistence handled by data-active-nav="Rewards" on <body> + restoreHome() in nav IIFE -->
   <script>
     try {
+      var SIDEBAR_HREFS = {
+        'Coin Quest':  'nadia_Rewards-CoinQuest.html',
+        'My Rewards':  'nadia_Rewards-Myrewards.html',
+        'Merchandise': 'nadia_Rewards-Merchandise.html',
+        'eVoucher':    'nadia_Rewards-evoucher.html',
+        'Avatar':      'nadia_Rewards-avatar.html',
+      };
       document.querySelectorAll('.sidebar-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
-          document.querySelectorAll('.sidebar-btn').forEach(function (b) {
-            b.classList.remove('sidebar-btn--active');
-          });
+          var lbl = btn.querySelector('.sidebar-btn__label');
+          var href = lbl && SIDEBAR_HREFS[lbl.textContent.trim()];
+          if (href) { window.location.href = href; return; }
+          document.querySelectorAll('.sidebar-btn').forEach(function (b) { b.classList.remove('sidebar-btn--active'); });
           btn.classList.add('sidebar-btn--active');
         });
       });
@@ -4743,6 +4754,50 @@
         });
         var btn = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="Rewards"]');
         if (btn) btn.classList.add('is-active');
+
+        // 6. Wire Nadia page navigation links (N-C40)
+        (function () {
+          var BASE = '../';
+          var NAV_HREFS = {
+            'Quiz':           BASE + 'Quiz/nadia_Quiz.html',
+            'Battle':         BASE + 'Battle/nadia_Battle.html',
+            'Practice':       BASE + 'Practise/nadia_Practise-subject.html',
+            'My Classes':     BASE + 'Class/nadia_Class-MyClasses.html',
+            'Browse Classes': BASE + 'Class/nadia_Class-BrowseClasses.html',
+            'Avatar':         BASE + 'Rewards/nadia_Rewards-avatar.html',
+            'Coin Quests':    BASE + 'Rewards/nadia_Rewards-CoinQuest.html',
+            'eVoucher':       BASE + 'Rewards/nadia_Rewards-evoucher.html',
+            'Merchandise':    BASE + 'Rewards/nadia_Rewards-Merchandise.html',
+            'My Rewards':     BASE + 'Rewards/nadia_Rewards-Myrewards.html',
+          };
+          function link(el, href) {
+            if (el) el.addEventListener('click', function () { window.location.href = href; });
+          }
+          ['Quiz', 'Battle', 'Practice'].forEach(function (label) {
+            link(document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="' + label + '"]'), NAV_HREFS[label]);
+          });
+          function dropItem(dropId, labelText) {
+            var drop = document.getElementById(dropId);
+            if (!drop) return null;
+            var items = drop.querySelectorAll('.nav-menu-dropdown__item');
+            for (var i = 0; i < items.length; i++) {
+              var lbl = items[i].querySelector('.nav-menu-dropdown__label');
+              if (lbl && lbl.textContent.trim() === labelText) return items[i];
+            }
+            return null;
+          }
+          ['My Classes', 'Browse Classes'].forEach(function (label) {
+            link(dropItem('class-dropdown', label), NAV_HREFS[label]);
+          });
+          ['Avatar', 'Coin Quests', 'eVoucher', 'Merchandise', 'My Rewards'].forEach(function (label) {
+            link(dropItem('rewards-dropdown', label), NAV_HREFS[label]);
+          });
+          ['#NavMenu-Tablet', '#NavMenu-Mobile'].forEach(function (menuId) {
+            Object.keys(NAV_HREFS).forEach(function (label) {
+              link(document.querySelector(menuId + ' [aria-label="' + label + '"]'), NAV_HREFS[label]);
+            });
+          });
+        })();
       })
       .catch(function (err) {
         console.error('[nav-inject] Failed to load navigation:', err);

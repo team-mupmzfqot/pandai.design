@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pandai — My Classes</title>
+  <title>Pandai — Practise Exam</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,9 +12,6 @@
   <style>
     /* ═══════════════════════════════════════════════════════════════
        Pandai DS 1.5 — Page Template
-       Navigation Shell (Desktop/Tablet/Mobile) + PageViewport placeholder
-       Token values confirmed 2026-05-24 (Rules 153–156 / DS audit)
-       Source DS: TLVKe3bgJTdVvuPAzgDq2f
     ═══════════════════════════════════════════════════════════════ */
     :root {
       /* Surface */
@@ -55,6 +52,9 @@
       --icon-secondary-hover:     #70bc6f;   /* Icon/secondary/hover — nav button icons, hover state */
       --icon-primary-on-color:    #ffffff;   /* Icon/primary/on-color — Foundation/white (DS updated 2026-05-24, was #e1f9ea) */
       --icon-tertiary-default:    #00564c;   /* Icon/tertiary/default — pressed arrow chevron */
+      --icon-primary-focus:       #00a36a;   /* Icon/primary/focus — Primary button arrow chevron default */
+      --icon-alert-default:       #ff9f43;   /* Icon/alert/default — DS VariableID:119:14, info icon */
+
 
       /* Border */
       --border-primary-default:   #00cc85;   /* Border/primary/default */
@@ -62,10 +62,10 @@
       --border-secondary-default: #b5f291;   /* Border/secondary/default — Focus indicator dot border */
       --border-secondary-focus:   #70bc6f;   /* Border/secondary/focus — hover border on all buttons */
       --border-default:           #00cc85;   /* Border/default â€” navbar, footer, quiz card */
-      --border-general-default:   #d9d9d9;   /* Border/general/default — carousel cards */
+      --border-general-default:              #d9d9d9;   /* Border/general/default — carousel cards */
+      --border-general-default-secondary:   #bfbfbf;   /* Border/general/default-secondary — bc-sep, bc-chevron (DS node 3655:16650) */
       --border-tertiary-focus:    #00453d;   /* Border/tertiary/focus — pressed state border */
-      --border-disabled-disabled:             #bfbfbf;   /* Border/disabled/disabled */
-      --border-general-default-secondary:    #bfbfbf;   /* Border/general/default-secondary — bc-sep, bc-chevron (DS node 3655:16650) */
+      --border-disabled-disabled: #bfbfbf;   /* Border/disabled/disabled */
       --border-on-color:          #ffffff;   /* Border/on-color — white border on Number Badge (DS 618:417 updated 2026-05-26) */
 
       /* Corner Radius (confirmed from design contexts) */
@@ -95,6 +95,9 @@
 
       /* Subject Colors â€” ALL confirmed from DS get_variable_defs */
       --subjects-b-melayu-default:   #4d77ff;   /* Subjects/b-melayu/default */
+      --subjects-b-melayu-100:       #dbe4ff;   /* Subject/b-melayu/100 — DS Primitives (confirmed) */
+      --subjects-b-melayu-focus:     #2e4799;   /* Subjects/b-melayu/focus — VariableID:1753:5923, DS confirmed */
+      --subjects-b-melayu-default-subtle: #f6f9ff;  /* Subjects/b-melayu/default-subtle — label separator (DS 4090-58010) */
       --subjects-english-default:    #ff4d56;   /* Subjects/english/default */
       --subjects-math-default:       #42ac7b;   /* Subjects/math/default */
       --subjects-science-default:    #ffd641;   /* Subjects/science/default */
@@ -123,6 +126,11 @@
       --section-gap:             var(--spacing-space-m);   /* Spacing/space-m = 16px */
       --overlay-dark:            rgba(26, 26, 26, 0.5);    /* Overlay/Overlay-Dark → Foundation/black 50 (DS confirmed) */
       --check-in-card-max-width: 390px;
+
+      /* Component-specific tokens — values confirmed from DS but not yet exported as named Semantic tokens */
+      --surface-table-heading:    #f6f9ff;              /* Body Cell - 1.5 heading row bg (DS Table - 1.5 pattern) */
+      --surface-tab-active-strip: #d1f7d1;              /* Tab Bar active tab bottom strip (Tab Bar - 1.5 Secondary) */
+      --text-on-color-subtitle:   rgba(255,255,255,0.85); /* Subtitle text on subject-coloured card header bg */
     }
 
     /* â”€â”€ Reset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -1920,6 +1928,11 @@
       :root {
         --page-padding-x:          32px;
         --check-in-card-max-width: none;
+
+      /* Component-specific tokens — values confirmed from DS but not yet exported as named Semantic tokens */
+      --surface-table-heading:    #f6f9ff;              /* Body Cell - 1.5 heading row bg (DS Table - 1.5 pattern) */
+      --surface-tab-active-strip: #d1f7d1;              /* Tab Bar active tab bottom strip (Tab Bar - 1.5 Secondary) */
+      --text-on-color-subtitle:   rgba(255,255,255,0.85); /* Subtitle text on subject-coloured card header bg */
       }
       .primary-card__content {
         grid-template-columns: repeat(2, 1fr);
@@ -2052,73 +2065,66 @@
        Drop Figma DS components here to build page content.
     ═══════════════════════════════════════════════════════════════ */
 
-    /* ══════════════════════════════════════════════════════════════
-       MY CLASSES PAGE — specific CSS
-       DS Avatar 1.5 + Breadcrumb 1.5 + Class Cards 1.5
-    ══════════════════════════════════════════════════════════════ */
-
-    /* Desktop default — 3-column cards (before all media-query overrides) */
-    .cards-grid { grid-template-columns: repeat(3, 1fr); }
-
-    /* ── viewport-myclass — My Classes combined section ── */
-    #viewport-myclass {
-      display:        flex;
-      flex-direction: column;
-      gap:            var(--section-gap);
-    }
-
-    /* Tablet ≤ 1279px */
-    @media (max-width: 1279px) {
-      .cards-grid { grid-template-columns: repeat(2, 1fr); }
-      .bc-row     { flex-wrap: wrap; gap: var(--spacing-space-s); align-items: flex-start; }
-      .bc-left    { align-items: flex-start; width: 100%; }
-    }
-
-    /* Mobile ≤ 767px */
-    @media (max-width: 767px) {
-      .cards-grid   { grid-template-columns: 1fr; }
-      .bc-row       { flex-direction: column; align-items: flex-start; gap: var(--spacing-space-s); }
-      .bc-left      { flex-wrap: wrap; }
-      .bc-actions   { width: 100%; }
-      .btn-secondary, .btn-primary { flex: 1; justify-content: center; }
-    }
-
-    /* ── DS Avatar 1.5 — node 3065:40786 ──────────────────────── */
-    .ds-avatar {
-      border-radius: var(--corner-radius-corner-rounded);   /* 60px */
-      background: var(--surface-general-default);
-      border: 1px solid var(--border-primary-default);
-      overflow: hidden;
-      flex-shrink: 0;
-      position: relative;
-    }
-    .ds-avatar { background: #e1f9ea; }
-    .ds-avatar--xl { width: 64px; height: 64px; }
-    .ds-avatar--xl img {
-      position:        absolute;
-      inset:           0;
-      width:           100%;
-      height:          100%;
-      object-fit:      cover;
-      object-position: center top;
-      pointer-events:  none;
-      display:         block;
-    }
-
-    /* ── Breadcrumb 1.5 — node 1777:18856 ─────────────────────── */
-    .bc-row {
+    .page-viewport {
       display:         flex;
+      flex-direction:  column;
       align-items:     center;
-      justify-content: flex-start;
-      gap:             var(--spacing-space-s);
-      min-height:      36px;
+      justify-content: center;
+      flex:            1;
+      min-height:      0;
+      background:      var(--surface-general-default);
+      box-shadow:      inset 0 0 0 1px var(--border-general-default);
+      border-radius:   var(--corner-radius-corner-4xl);
     }
-    .bc-left {
-      flex:        1;
-      width:       100%;
-      min-width:   0;
+
+    .page-viewport__placeholder {
+      display:         flex;
+      flex-direction:  column;
+      align-items:     center;
+      justify-content: center;
+      gap:             var(--spacing-space-xs);
+      padding:         var(--spacing-space-xl);
+      color:           var(--text-disabled-default);
+      font-size:       14px;
+      font-weight:     500;
+      text-align:      center;
+      pointer-events:  none;
+      user-select:     none;
+    }
+
+    .page-viewport__placeholder svg {
+      width:  24px;
+      height: 24px;
+      color:  var(--text-disabled-default);
+    }
+
+    /* Override page-viewport to accept real content — same pattern as Flashcard */
+    #PageViewport {
+      align-items:     stretch;
+      justify-content: flex-start;
+      background:      transparent;
+      box-shadow:      none;
+      border-radius:   0;
+      gap:             var(--spacing-space-m);
+      padding:         0;
+      min-height:      0;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       BREADCRUMB — DS node 4090-58009
+       Title: H3 24px Medium #00564c | Sep: 1px #bfbfbf | Trail: 14px links
+    ═══════════════════════════════════════════════════════════════ */
+    .bc-row {
       display:     flex;
       align-items: center;
+      gap:         var(--spacing-space-m);
+      min-height:  44px;
+      flex-shrink: 0;
+    }
+    .bc-title-group {
+      display:     flex;
+      align-items: center;
+      align-self:  stretch;
       gap:         var(--spacing-space-m);
     }
     .bc-title {
@@ -2130,16 +2136,15 @@
       flex-shrink: 0;
     }
     .bc-sep {
-      width:      1px;
-      height:     20px;
-      background: var(--border-general-default-secondary);
+      width:       1px;
+      align-self:  stretch;
+      background:  var(--border-general-default-secondary);
       flex-shrink: 0;
     }
     .bc-trail {
       display:     flex;
       align-items: center;
       gap:         var(--spacing-space-xs);
-      flex-wrap:   wrap;
     }
     .bc-link {
       display:         inline-flex;
@@ -2153,369 +2158,413 @@
       white-space:     nowrap;
     }
     .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
-    .bc-chevron {
-      width:       16px; height: 16px;
-      color:       var(--border-general-default-secondary);
+    .bc-chevron  { width: 20px; height: 20px; flex-shrink: 0; color: var(--border-general-default-secondary); }
+    .bc-current  {
+      font-size:   14px;
+      font-weight: 500;
+      line-height: 20px;
+      color:       var(--text-default-body);
+      white-space: nowrap;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TAB BAR + QUICK NOTES CARD — DS nodes 4090-58009 / 4090-58010
+       Tab Bar: 41px height, 10px gap between tabs, 1px green bottom line.
+       Active tab: #e8fbe8 bg, 3-side #00cc85 border, 20px top radius, #d1f7d1 bottom strip.
+       Quick Notes Card: #e8fbe8 bg, inset 1px #00cc85, 0 0 24px 24px radius.
+    ═══════════════════════════════════════════════════════════════ */
+    .fc-main {
+      display:        flex;
+      flex-direction: column;
+      flex:           1;
+      min-height:     0;
+    }
+    .fc-tab-bar {
+      position:    relative;
+      display:     flex;
+      width:       100%;
       flex-shrink: 0;
     }
-    .bc-link--current { color: var(--text-default-body); }  /* #666 */
+    .fc-tab-bar::after {
+      content:    '';
+      position:   absolute;
+      bottom:     0;
+      left:       0;
+      right:      0;
+      height:     1px;
+      background: var(--border-primary-default);
+      z-index:    0;
+    }
+    .fc-tab-bar__tabs {
+      display:     flex;
+      gap:         10px;
+      align-items: flex-end;
+      width:       100%;
+      position:    relative;
+      z-index:     1;
+    }
+    .fc-tab {
+      flex:                    1 0 0;
+      display:                 flex;
+      align-items:             center;
+      justify-content:         center;
+      gap:                     var(--spacing-space-xs);
+      height:                  41px;
+      padding:                 0 var(--spacing-space-m);
+      border-top-left-radius:  20px;
+      border-top-right-radius: 20px;
+      background:              none;
+      font-family:             var(--font-family);
+      cursor:                  pointer;
+      user-select:             none;
+      position:                relative;
+    }
+    .fc-tab--active {
+      background:    var(--surface-secondary-default-subtle);
+      border-top:    1px solid var(--border-primary-default);
+      border-left:   1px solid var(--border-primary-default);
+      border-right:  1px solid var(--border-primary-default);
+      border-bottom: none;
+      margin-bottom: -1px;
+    }
+    .fc-tab--active::after {
+      content:    '';
+      position:   absolute;
+      bottom:     0;
+      left:       0;
+      right:      0;
+      height:     1px;
+      background: var(--surface-tab-active-strip);
+    }
+    .fc-tab--active .fc-tab__label {
+      font-size:   14px;
+      font-weight: 600;
+      color:       var(--text-primary-default-hover);
+    }
+    .fc-tab--active .fc-tab__icon svg { color: var(--text-primary-default-hover); }
+    .fc-tab:not(.fc-tab--active) {
+      background:     var(--surface-general-default);
+      border-top:     1px solid var(--border-general-default);
+      border-left:    1px solid var(--border-general-default);
+      border-right:   1px solid var(--border-general-default);
+      border-bottom:  none;
+      overflow:       hidden;
+      padding-bottom: 1px;
+    }
+    .fc-tab:not(.fc-tab--active) .fc-tab__label {
+      font-size:   14px;
+      font-weight: 500;
+      color:       var(--text-disabled-default);
+    }
+    .fc-tab:not(.fc-tab--active) .fc-tab__icon svg { color: var(--text-disabled-default); }
+    .fc-tab__icon {
+      width:           20px;
+      height:          20px;
+      flex-shrink:     0;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      overflow:        hidden;
+    }
+    .fc-tab__icon svg { width: 20px; height: 20px; display: block; }
+    .fc-tab__label    { white-space: nowrap; }
 
-    /* Breadcrumb action buttons */
-    .bc-actions {
+    /* Quick Notes Card - 1.5 (DS 5164:76335)
+       bg: #e8fbe8 · inset 1px #00cc85 · padding: 16px · gap: 16px
+       Top corners SQUARE — tab bar sits flush above */
+    .fc-qncard {
+      background:     var(--surface-secondary-default-subtle);
+      box-shadow:     inset 0 0 0 1px var(--border-primary-default);
+      border-radius:  0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl);
+      padding:        var(--spacing-space-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-m);
+      flex:           1;
+      min-height:     0;
+    }
+
+    /* Subject header (DS: 110px, radius 18px, subject-colored bg, INSIDE stroke) */
+    .fc-qncard__header {
+      height:        110px;
+      min-height:    110px;
+      border-radius: var(--corner-radius-corner-2xl);
+      display:       flex;
+      align-items:   stretch;
+      overflow:      hidden;
+      position:      relative;
+      flex-shrink:   0;
+    }
+    .fc-qncard__header--bm {
+      background: var(--subjects-b-melayu-default);
+      box-shadow: inset 0 0 0 1px var(--subjects-b-melayu-focus);
+    }
+    .fc-qncard__header-icon {
+      width:           110px;
+      min-width:       110px;
+      height:          110px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+    }
+    .fc-subject-icon {
+      width:           60px;
+      height:          60px;
+      flex-shrink:     0;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+    }
+    .fc-subject-icon img { width: 60px; height: 60px; display: block; }
+    /* Content area: right of icon. Label has left border separator (#f6f9ff = BM subtle). */
+    .fc-qncard__header-content {
+      padding:        0 16px 0 0;
+      display:        flex;
+      flex-direction: row;
+      align-items:    center;
+      flex:           1 0 0;
+      min-width:      0;
+    }
+    .fc-qncard__header-label {
+      display:        flex;
+      flex-direction: column;
+      gap:            2px;
+      flex:           1 0 0;
+      min-width:      0;
+      padding:        16px 0 16px 24px;
+      border-left:    1px solid var(--subjects-b-melayu-default-subtle);
+    }
+    .fc-qncard__title {
+      font-size:     24px;
+      font-weight:   700;
+      line-height:   36px;
+      color:         #ffffff;
+      white-space:   nowrap;
+      overflow:      hidden;
+      text-overflow: ellipsis;
+      margin:        0;
+    }
+    .fc-qncard__subtitle {
+      font-size:     14px;
+      font-weight:   500;
+      line-height:   20px;
+      color:         var(--text-on-color-subtitle);
+      white-space:   nowrap;
+      overflow:      hidden;
+      text-overflow: ellipsis;
+      margin:        0;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       PRACTISE EXAM TABLE
+       DS Quick Notes Card content — exam list with action buttons
+       Outer table: inset 1px #2e4799, radius 18px, overflow hidden
+    ═══════════════════════════════════════════════════════════════ */
+    .pe-table {
+      border-radius:  var(--corner-radius-corner-2xl);
+      overflow:       hidden;
+      flex-shrink:    0;
+      position:       relative;
+    }
+    .pe-table::after {
+      content:        '';
+      position:       absolute;
+      inset:          0;
+      border-radius:  var(--corner-radius-corner-2xl);
+      box-shadow:     inset 0 0 0 1px var(--subjects-b-melayu-focus);
+      pointer-events: none;
+      z-index:        10;
+    }
+
+    /* Heading row — 56px, #f6f9ff bg, dashed #bfbfbf bottom divider (DS Divider - 1.5) */
+    .pe-table__heading-row {
+      height:        56px;
+      background:    var(--surface-table-heading);
+      border-bottom: 1px dashed var(--border-general-default-secondary);
+      display:       flex;
+      align-items:   center;
+      padding:       0 var(--spacing-space-m);
+    }
+
+    /* Data rows — 56px, white */
+    .pe-table__row {
+      height:     56px;
+      display:    flex;
+      align-items: stretch;
+      background: var(--surface-general-default);
+    }
+
+    /* Cell base — DS Body Cell - 1.5: strokeAlign INSIDE, 1px Border/general/default */
+    .pe-table__cell {
       display:     flex;
       align-items: center;
-      gap:         var(--spacing-space-xs);
-      flex-shrink: 0;
+      padding:     0 var(--spacing-space-m);
+      font-size:   14px;
+      line-height: 20px;
+      box-shadow:  inset 0 0 0 1px var(--border-general-default);
     }
-    .btn-secondary, .btn-primary {
+
+    /* No. column — 60px, centred */
+    .pe-table__cell--no {
+      width:            60px;
+      min-width:        60px;
+      justify-content:  center;
+      font-weight:      400;
+      color:            var(--text-default-body);
+      flex-shrink:      0;
+    }
+
+    /* Name column — flex:1 fills remaining space (no separator — No. column removed) */
+    .pe-table__cell--name {
+      flex:        1 0 0;
+      min-width:   0;
+      font-weight: 400;
+      color:       var(--text-default-body);
+    }
+
+    /* Actions column — 160px (DS 4090-58010 confirmed) */
+    .pe-table__cell--actions {
+      flex-shrink:     0;
+      display:         flex;
+      align-items:     center;
+      justify-content: flex-end;
+      gap:             var(--spacing-space-xs);
+      padding:         0 var(--spacing-space-m);
+      width:           160px;
+      min-width:       160px;
+    }
+
+    /* Heading row text style */
+    .pe-table__heading-row__title {
+      font-size:   16px;
+      font-weight: 500;
+      line-height: 24px;
+      color:       var(--text-default-heading);
+    }
+
+    /* Exam name text */
+    .pe-exam-name {
+      font-size:     14px;
+      font-weight:   400;
+      line-height:   20px;
+      color:         var(--text-default-body);
+      white-space:   nowrap;
+      overflow:      hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Secondary/M icon-only action button
+       DS Button - 1.5 Secondary/M: 32px h, 8px padding, pill, white bg, inset 1px #00cc85
+       strokeAlign: INSIDE → box-shadow:inset (Rule 60). Rule 82: no transitions. */
+    .pe-action-btn {
       display:         inline-flex;
       align-items:     center;
-      gap:             0;
+      justify-content: center;
+      width:           32px;
+      height:          32px;
+      background:      var(--surface-general-default);
+      box-shadow:      inset 0 0 0 1px var(--border-primary-default);
+      border:          none;
       border-radius:   var(--corner-radius-corner-rounded);
-      padding:         8px 12px;
-      font-family:     'Poppins', sans-serif;
-      font-size:       14px;
-      font-weight:     600;
-      line-height:     20px;
       cursor:          pointer;
-      text-decoration: none;
-      white-space:     nowrap;
+      color:           var(--icon-primary-default);
+      flex-shrink:     0;
+      user-select:     none;
     }
-    .btn-icon-wrap { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .btn-icon-clip { width: 24px; height: 24px; overflow: hidden; flex-shrink: 0; }
-    .btn-icon-clip svg { display: block; width: 100%; height: 100%; }
-    .btn-label { padding: 0 var(--spacing-space-xs); white-space: nowrap; }
-
-    /* Button - 1.5 Secondary/L — DS strokeAlign:INSIDE → box-shadow:inset (Rule 60, 85) */
-    .btn-secondary {
-      background:  var(--surface-general-default);
-      border:      none;
+    .pe-action-btn:hover {
+      background:  var(--surface-secondary-default);
+      box-shadow:  inset 0 0 0 1px var(--border-secondary-focus);
+      color:       var(--border-secondary-focus);
+    }
+    .pe-action-btn:active,
+    .pe-action-btn.is-pressing {
+      background:  var(--surface-primary-focus);
       box-shadow:  inset 0 0 0 1px var(--border-primary-default);
-      color:       var(--text-primary-default);
+      color:       var(--surface-general-default);
     }
-    .btn-secondary svg { color: var(--icon-primary-default); }
-    .btn-secondary:hover {
+    .pe-action-btn svg { width: 16px; height: 16px; display: block; }
+
+    /* Completion button — 32px green pill, inset 1px #00a36a, white check (DS 4090-58010)
+       circle fill=currentColor blends into green bg → only white stroke visible */
+    .pe-done-btn {
+      display:         inline-flex;
+      align-items:     center;
+      justify-content: center;
+      width:           32px;
+      height:          32px;
+      padding:         8px;
+      background:      var(--surface-primary-default);
+      box-shadow:      inset 0 0 0 1px var(--border-primary-focus);
+      border:          none;
+      border-radius:   var(--corner-radius-corner-rounded);
+      color:           var(--surface-primary-default);
+      flex-shrink:     0;
+      cursor:          default;
+      user-select:     none;
+    }
+    .pe-done-btn svg { width: 16px; height: 16px; display: block; }
+
+    /* Primary/M Start button
+       DS Button - 1.5 Primary/M (node 479:344): 32px h, pad 2px 8px, pill
+       Rule 82: NO transitions. Rule 83: pair CSS :active with JS is-pressing. */
+    .pe-start-btn {
+      display:       inline-flex;
+      align-items:   center;
+      height:        32px;
+      padding:       2px 8px;
+      border-radius: var(--corner-radius-corner-rounded);
+      background:    var(--surface-primary-default);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-focus);
+      border:        none;
+      cursor:        pointer;
+      font-family:   var(--font-family);
+      font-size:     12px;
+      font-weight:   600;
+      color:         var(--text-primary-on-color);
+      gap:           0;
+      flex-shrink:   0;
+      user-select:   none;
+    }
+    .pe-start-btn:hover {
       background: var(--surface-secondary-default);
       box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
-      color:      var(--text-secondary-focus);
+      color:      var(--text-primary-default-hover);
     }
-    .btn-secondary:hover svg { color: var(--icon-secondary-hover); }
-    .btn-secondary:active,
-    .btn-secondary.is-pressing {
+    .pe-start-btn:active,
+    .pe-start-btn.is-pressing {
       background: var(--surface-primary-focus);
       box-shadow: inset 0 0 0 1px var(--border-primary-default);
       color:      var(--text-primary-default);
     }
-    .btn-secondary:active svg,
-    .btn-secondary.is-pressing svg { color: var(--icon-primary-default); }
-
-    /* Button - 1.5 Primary/L */
-    .btn-primary {
-      background:  var(--surface-primary-default);
-      border:      1px solid var(--border-primary-focus);
-      color:       var(--text-primary-on-color);
+    .pe-start-btn__label { padding: 0 8px; }
+    /* Arrow: 20×20 filled circle, 2px pad → 16×16 chevron clip, #99ebce bg */
+    .pe-start-btn__arrow {
+      width:           20px;
+      height:          20px;
+      border-radius:   var(--corner-radius-corner-rounded);
+      background:      var(--surface-primary-default-subtle-hover);
+      display:         inline-flex;
+      align-items:     center;
+      justify-content: center;
+      padding:         2px;
+      flex-shrink:     0;
     }
-    .btn-primary svg { color: var(--icon-primary-on-color); }
-    .btn-primary:hover {
-      background:   var(--surface-secondary-default);
-      border-color: var(--border-secondary-focus);
-      color:        var(--text-secondary-focus);
-    }
-    .btn-primary:hover svg { color: var(--icon-secondary-hover); }
-    .btn-primary:active,
-    .btn-primary.is-pressing {
-      background:   var(--surface-primary-focus);
-      border-color: var(--border-primary-default);
-      color:        var(--text-primary-default);
-    }
-    .btn-primary:active svg,
-    .btn-primary.is-pressing svg { color: var(--icon-primary-default); }
-
-    /* ── Class Cards Grid ──────────────────────────────────────── */
-    .cards-grid {
-      display: grid;
-      gap:     var(--spacing-space-l);
-      width:   100%;
-    }
-
-    /* ── Class Card 1.5 — node 3065:40784 ─────────────────────── */
-    .cc {
-      border-radius: var(--corner-radius-corner-4xl);
-      border:        1px solid var(--border-primary-default);
-      overflow:      hidden;
-      display:       flex; flex-direction: column;
-      background:    var(--surface-general-default);
-    }
-    .cc__cover { width: 100%; display: block; overflow: hidden; }
-    .cc__cover img { width: 100%; aspect-ratio: 1000 / 435; object-fit: cover; display: block; }
-    .cc__body { padding: var(--spacing-space-m); background: var(--surface-secondary-default-subtle); }
-    .cc__inner {
-      border-radius: var(--corner-radius-corner-2xl);
-      border:        1px solid var(--border-primary-default);
-      overflow:      hidden;
-      background:    var(--surface-general-default);
-      display:       flex; flex-direction: column;
-    }
-    .cc__hdr {
-      background: var(--surface-primary-default);
-      padding:    var(--spacing-space-xs) var(--spacing-space-m);
-      display:    flex; align-items: center; justify-content: space-between;
-      gap:        0; min-height: 44px;
-    }
-    .cc__hdr-title {
-      font-size:  18px; font-weight: 600; line-height: 28px;
-      color:      var(--surface-general-default);
-      flex:       1; min-width: 0;
-      overflow:   hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .dlp-badge { width: 57px; height: 24px; overflow: hidden; flex-shrink: 0; display: block; }
-    .dlp-badge img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
-    .cc__main {
-      background: var(--surface-general-default); padding: var(--spacing-space-m);
-      display: flex; align-items: flex-start; gap: var(--spacing-space-m);
-      height: 96px;
-    }
-    .cc__text {
-      flex: 1; min-width: 0;
-      display: flex; flex-direction: column;
-      gap: 2px;
-      height: 100%;
-    }
-    .cc__teacher { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-default-heading); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .cc__schedule { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); display: flex; flex-wrap: wrap; gap: 2px; align-items: center; }
-    .cc__schedule strong { font-weight: 600; color: var(--text-default-heading); }
-    .live-badge {
-      display:      inline-flex; align-items: center; gap: 4px;
-      border-radius: var(--corner-radius-corner-rounded);
-      padding:      2px 8px;
-      background:   #e1f9ea;   /* TODO: verify DS token — #e1f9ea has no current :root mapping */
-      border:       1px solid var(--border-primary-default);
-      align-self:   flex-start;
-      font-size:    10px; font-weight: 500; line-height: 12px;
-      color:        var(--text-primary-default);
-      white-space:  nowrap;
-    }
-    .live-badge svg { width: 10px; height: 10px; color: var(--icon-primary-default); }
-
-    /* Divider Var 5 — DS: two #d9d9d9 lines + centered "+ More" chip */
-    .cc__divider {
-      display:     flex;
-      align-items: center;
-      height:      16px;
-    }
-    .cc__divider::before,
-    .cc__divider::after {
-      content:    '';
-      flex:       1;
-      height:     1px;
-      background: var(--border-general-default);
-    }
-    .cc__divider-more {
-      flex-shrink: 0;
-      display:     inline-flex;
-      align-items: center;
-      gap:         2px;
-      padding:     0 8px;
-      background:  none;
-      border:      none;
-      cursor:      pointer;
-      font-family: 'Poppins', sans-serif;
-      font-size:   10px;
-      font-weight: 400;
-      line-height: 16px;
-      color:       var(--text-default-caption);
-      white-space: nowrap;
-    }
-    .cc__divider-more svg { width: 12px; height: 12px; color: var(--text-default-caption); }
-
-    /* CTA row: Premium label left + button right */
-    .cc__cta { background: var(--surface-general-default); padding: var(--spacing-space-m); display: flex; justify-content: space-between; align-items: center; }
-    .cc__premium { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-primary-default); flex: 1; }
-
-    /* Enter Class button — Button - 1.5 Primary/S (Rule 19, 83) */
-    .btn-enter {
-      display:       inline-flex; align-items: center;
-      border-radius: var(--corner-radius-corner-rounded);
-      padding:       2px 4px;
-      background:    var(--surface-primary-default);
-      border:        1px solid var(--border-primary-focus);
-      cursor:        pointer; text-decoration: none;
-    }
-    .btn-enter__label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--text-primary-on-color); white-space: nowrap; padding: 0 4px; }
-    .btn-enter__arrow { width: 16px; height: 16px; border-radius: var(--corner-radius-corner-rounded); background: var(--surface-primary-default-subtle-hover); display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 2px; }
-    .btn-enter__arrow svg { width: 12px; height: 12px; color: var(--surface-primary-focus); }
-    .btn-enter:hover { background: var(--surface-secondary-default); border-color: var(--border-secondary-focus); }
-    .btn-enter:hover .btn-enter__label { color: var(--text-secondary-focus); }
-    .btn-enter:hover .btn-enter__arrow { background: var(--surface-secondary-default-subtle); }
-    .btn-enter:hover .btn-enter__arrow svg { color: var(--text-secondary-focus); }
-    .btn-enter:active,
-    .btn-enter.is-pressing { background: var(--surface-tertiary-default); border-color: var(--border-tertiary-focus); }
-    .btn-enter:active .btn-enter__label,
-    .btn-enter.is-pressing .btn-enter__label { color: var(--text-primary-default); }
-    .btn-enter:active .btn-enter__arrow,
-    .btn-enter.is-pressing .btn-enter__arrow { background: var(--surface-primary-default); }
-    .btn-enter:active .btn-enter__arrow svg,
-    .btn-enter.is-pressing .btn-enter__arrow svg { color: var(--surface-tertiary-default); }
-
-    /* Avatar inside class cards */
-    .cc .ds-avatar { border-color: var(--border-primary-default); }
-    .cc .ds-avatar svg { color: var(--icon-primary-default); }
-
-    /* ── Subject colour palettes — DS confirmed, using :root vars (Rule 36) ──── */
-    .cc--bm { border-color: var(--subjects-b-melayu-default); }
-    .cc--bm .cc__body { background: #f6f9ff; }
-    .cc--bm .cc__inner { border-color: var(--subjects-b-melayu-default); }
-    .cc--bm .cc__hdr  { background: var(--subjects-b-melayu-default); }
-    .cc--bm .ds-avatar { border-color: var(--subjects-b-melayu-default); }
-    .cc--bm .ds-avatar svg { color: var(--subjects-b-melayu-default); }
-
-    .cc--en { border-color: var(--subjects-english-default); }
-    .cc--en .cc__body { background: #ffedee; }
-    .cc--en .cc__inner { border-color: var(--subjects-english-default); }
-    .cc--en .cc__hdr  { background: var(--subjects-english-default); }
-    .cc--en .ds-avatar { border-color: var(--subjects-english-default); }
-    .cc--en .ds-avatar svg { color: var(--subjects-english-default); }
-
-    .cc--mt { border-color: var(--subjects-math-default); }
-    .cc--mt .cc__body { background: #ecf7f2; }
-    .cc--mt .cc__inner { border-color: var(--subjects-math-default); }
-    .cc--mt .cc__hdr  { background: var(--subjects-math-default); }
-    .cc--mt .ds-avatar { border-color: var(--subjects-math-default); }
-    .cc--mt .ds-avatar svg { color: var(--subjects-math-default); }
-
-    .cc--sc { border-color: var(--subjects-science-default); }
-    .cc--sc .cc__body { background: #fffbec; }
-    .cc--sc .cc__inner { border-color: var(--subjects-science-default); }
-    .cc--sc .cc__hdr  { background: var(--subjects-science-default); }
-    .cc--sc .cc__hdr-title { color: #998027; }
-    .cc--sc .ds-avatar { border-color: var(--subjects-science-default); }
-    .cc--sc .ds-avatar svg { color: var(--subjects-science-default); }
-
-    .cc--bio { border-color: var(--subjects-biology-default); }
-    .cc--bio .cc__body { background: #f3ebfb; }
-    .cc--bio .cc__inner { border-color: var(--subjects-biology-default); }
-    .cc--bio .cc__hdr  { background: var(--subjects-biology-default); }
-    .cc--bio .ds-avatar { border-color: var(--subjects-biology-default); }
-    .cc--bio .ds-avatar svg { color: var(--subjects-biology-default); }
-
-    .cc--hs { border-color: var(--subjects-history-default); }
-    .cc--hs .cc__body { background: #f7f2ee; }
-    .cc--hs .cc__inner { border-color: var(--subjects-history-default); }
-    .cc--hs .cc__hdr  { background: var(--subjects-history-default); }
-    .cc--hs .ds-avatar { border-color: var(--subjects-history-default); }
-    .cc--hs .ds-avatar svg { color: var(--subjects-history-default); }
-
-    .cc--enrichment { border-color: var(--border-primary-default); }
-    .cc--enrichment .cc__body { background: var(--surface-secondary-default-subtle); }
-    .cc--enrichment .cc__inner { border-color: var(--border-primary-default); }
-    .cc--enrichment .cc__hdr  { background: var(--surface-primary-default); }
-    .cc--enrichment .ds-avatar { border-color: var(--border-primary-default); }
-    .cc--enrichment .ds-avatar svg { color: var(--icon-primary-default); }
-
-    .cc--acc { border-color: var(--subjects-account-default); }
-    .cc--acc .cc__body { background: #e6f1fa; }
-    .cc--acc .cc__inner { border-color: var(--subjects-account-default); }
-    .cc--acc .cc__hdr  { background: var(--subjects-account-default); }
-    .cc--acc .ds-avatar { border-color: var(--subjects-account-default); }
-    .cc--acc .ds-avatar svg { color: var(--subjects-account-default); }
-
-    .cc--add-math { border-color: var(--subjects-add-math-default); }
-    .cc--add-math .cc__body { background: #eaebf3; }
-    .cc--add-math .cc__inner { border-color: var(--subjects-add-math-default); }
-    .cc--add-math .cc__hdr  { background: var(--subjects-add-math-default); }
-    .cc--add-math .cc__divider { background: #c0c5e8; }
-    .cc--add-math .ds-avatar { border-color: var(--subjects-add-math-default); }
-    .cc--add-math .ds-avatar svg { color: var(--subjects-add-math-default); }
-
-    .cc--biz { border-color: var(--subjects-business-default); }
-    .cc--biz .cc__body { background: #fef8ea; }
-    .cc--biz .cc__inner { border-color: var(--subjects-business-default); }
-    .cc--biz .cc__hdr  { background: var(--subjects-business-default); }
-    .cc--biz .ds-avatar { border-color: var(--subjects-business-default); }
-    .cc--biz .ds-avatar svg { color: var(--subjects-business-default); }
-
-    .cc--chem { border-color: var(--subjects-chemistry-default); }
-    .cc--chem .cc__body { background: #fce6f3; }
-    .cc--chem .cc__inner { border-color: var(--subjects-chemistry-default); }
-    .cc--chem .cc__hdr  { background: var(--subjects-chemistry-default); }
-    .cc--chem .ds-avatar { border-color: var(--subjects-chemistry-default); }
-    .cc--chem .ds-avatar svg { color: var(--subjects-chemistry-default); }
-
-    .cc--chi { border-color: var(--subjects-chinese-default); }
-    .cc--chi .cc__body { background: #ffeded; }
-    .cc--chi .cc__inner { border-color: var(--subjects-chinese-default); }
-    .cc--chi .cc__hdr  { background: var(--subjects-chinese-default); }
-    .cc--chi .ds-avatar { border-color: var(--subjects-chinese-default); }
-    .cc--chi .ds-avatar svg { color: var(--subjects-chinese-default); }
-
-    .cc--cs { border-color: var(--subjects-cs-default); }
-    .cc--cs .cc__body { background: #fbe6f1; }
-    .cc--cs .cc__inner { border-color: var(--subjects-cs-default); }
-    .cc--cs .cc__hdr  { background: var(--subjects-cs-default); }
-    .cc--cs .ds-avatar { border-color: var(--subjects-cs-default); }
-    .cc--cs .ds-avatar svg { color: var(--subjects-cs-default); }
-
-    .cc--eco { border-color: var(--subjects-economy-default); }
-    .cc--eco .cc__body { background: #ffeeeb; }
-    .cc--eco .cc__inner { border-color: var(--subjects-economy-default); }
-    .cc--eco .cc__hdr  { background: var(--subjects-economy-default); }
-    .cc--eco .ds-avatar { border-color: var(--subjects-economy-default); }
-    .cc--eco .ds-avatar svg { color: var(--subjects-economy-default); }
-
-    .cc--geo { border-color: var(--subjects-geo-default); }
-    .cc--geo .cc__body { background: #f2fbeb; }
-    .cc--geo .cc__inner { border-color: var(--subjects-geo-default); }
-    .cc--geo .cc__hdr  { background: var(--subjects-geo-default); }
-    .cc--geo .ds-avatar { border-color: var(--subjects-geo-default); }
-    .cc--geo .ds-avatar svg { color: var(--subjects-geo-default); }
-
-    .cc--isl { border-color: var(--subjects-islamic-default); }
-    .cc--isl .cc__body { background: #fcedf2; }
-    .cc--isl .cc__inner { border-color: var(--subjects-islamic-default); }
-    .cc--isl .cc__hdr  { background: var(--subjects-islamic-default); }
-    .cc--isl .ds-avatar { border-color: var(--subjects-islamic-default); }
-    .cc--isl .ds-avatar svg { color: var(--subjects-islamic-default); }
-
-    .cc--kafa { border-color: var(--subjects-kafa-default); }
-    .cc--kafa .cc__body { background: #f4fcf7; }
-    .cc--kafa .cc__inner { border-color: var(--subjects-kafa-default); }
-    .cc--kafa .cc__hdr  { background: var(--subjects-kafa-default); }
-    .cc--kafa .cc__hdr-title { color: #1a6b3a; }
-    .cc--kafa .ds-avatar { border-color: var(--subjects-kafa-default); }
-    .cc--kafa .ds-avatar svg { color: var(--subjects-kafa-default); }
-
-    .cc--moral { border-color: var(--subjects-moral-default); }
-    .cc--moral .cc__body { background: #e6f1fa; }
-    .cc--moral .cc__inner { border-color: var(--subjects-moral-default); }
-    .cc--moral .cc__hdr  { background: var(--subjects-moral-default); }
-    .cc--moral .ds-avatar { border-color: var(--subjects-moral-default); }
-    .cc--moral .ds-avatar svg { color: var(--subjects-moral-default); }
-
-    .cc--phy { border-color: var(--subjects-physics-default); }
-    .cc--phy .cc__body { background: #eaf6fb; }
-    .cc--phy .cc__inner { border-color: var(--subjects-physics-default); }
-    .cc--phy .cc__hdr  { background: var(--subjects-physics-default); }
-    .cc--phy .ds-avatar { border-color: var(--subjects-physics-default); }
-    .cc--phy .ds-avatar svg { color: var(--subjects-physics-default); }
-
-    .cc--rbt { border-color: var(--subjects-rbt-default); }
-    .cc--rbt .cc__body { background: #d7d7d7; }
-    .cc--rbt .cc__inner { border-color: var(--subjects-rbt-default); }
-    .cc--rbt .cc__hdr  { background: var(--subjects-rbt-default); }
-    .cc--rbt .ds-avatar { border-color: var(--subjects-rbt-default); }
-    .cc--rbt .ds-avatar svg { color: var(--subjects-rbt-default); }
+    .pe-start-btn__arrow svg { display: block; width: 16px; height: 16px; color: var(--icon-primary-focus); }
+    .pe-start-btn:hover .pe-start-btn__arrow          { background: var(--surface-secondary-default-subtle); }
+    .pe-start-btn:hover .pe-start-btn__arrow svg      { color: var(--border-secondary-focus); }
+    .pe-start-btn:active .pe-start-btn__arrow,
+    .pe-start-btn.is-pressing .pe-start-btn__arrow    { background: var(--surface-primary-default); }
+    .pe-start-btn:active .pe-start-btn__arrow svg,
+    .pe-start-btn.is-pressing .pe-start-btn__arrow svg { color: var(--surface-primary-focus); }
 
   </style>
 </head>
 <body>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       NAVBAR â€” Navbar 1.5  (DS node 2339:2617)
-       2-row structure sourced from get_design_context
-  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-    <!-- DS ICON SYMBOLS - Pandai DS 1.5 Iconography page (TLVKe3bgJTdVvuPAzgDq2f)
-       All paths extracted via use_figma. Stroke icons inherit currentColor.
-       Waffle uses fill="currentColor" (filled dots, not stroked). -->
+  <!-- DS ICON SYMBOLS — Pandai DS 1.5 Iconography (TLVKe3bgJTdVvuPAzgDq2f)
+       Shared symbols: copied from zul.page.template.html
+       New symbols for Practise Exam: ic-layers, ic-file, ic-download, ic-rotate-cw, ic-check-circle-filled -->
   <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <!-- Outline/image (611:3075) --><symbol id="ic-image" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="18" height="18" rx="2" ry="2"/><circle cx="6.5" cy="6.5" r="1.5"/><polyline points="19 13.5 14 8.5 3 19.5"/></symbol>
@@ -2693,449 +2742,320 @@
       <clipPath id="clip-premium"><rect width="20" height="20" fill="white"/></clipPath>
       <symbol id="ic-premium" viewBox="0 0 20 20" fill="none"><g clip-path="url(#clip-premium)"><path d="M8.18945 2.68805C8.90941 1.15493 11.0906 1.15493 11.8105 2.68805L13.4287 6.13629L17.1924 6.71539C18.8009 6.96261 19.4562 8.92502 18.3193 10.0894L15.5332 12.942L16.1758 16.8785C16.4446 18.5264 14.6955 19.7587 13.2344 18.9507L10 17.1627L6.76562 18.9507C5.3045 19.7587 3.55544 18.5264 3.82422 16.8785L4.46582 12.942L1.68066 10.0894C0.543759 8.92502 1.19912 6.96261 2.80762 6.71539L6.57031 6.13629L8.18945 2.68805Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.09473 3.11383C9.45466 2.34708 10.5453 2.34707 10.9053 3.11383L12.6377 6.80328C12.7084 6.95396 12.8492 7.06012 13.0137 7.08551L17.041 7.70367C17.845 7.82751 18.1728 8.80905 17.6045 9.39117L14.6426 12.4244C14.5317 12.5379 14.4814 12.6975 14.5068 12.8541L15.1895 17.0396C15.3238 17.8634 14.4492 18.4793 13.7188 18.0757L10.2422 16.1529C10.0916 16.0696 9.90837 16.0696 9.75781 16.1529L6.28125 18.0757C5.55077 18.4793 4.67621 17.8634 4.81055 17.0396L5.49316 12.8541C5.51863 12.6975 5.46828 12.5379 5.35742 12.4244L2.39551 9.39117C1.82719 8.80905 2.15501 7.82751 2.95898 7.70367L6.98633 7.08551C7.15083 7.06012 7.29156 6.95396 7.3623 6.80328L9.09473 3.11383Z" fill="#FFF200" stroke="#F2B839" stroke-linecap="round" stroke-linejoin="round"/></g></symbol>
 
-      <!-- Outline/plus-circle — Divider Var 5 center icon · 12×12 render --><symbol id="ic-plus-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></symbol>
-      <!-- Outline/video — Live Tuition badge icon · DS video-camera path --><symbol id="ic-video" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></symbol>
+      <!-- PE-specific symbols (not in template) -->
+      <symbol id="ic-layers" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M0.750122 15.75L10.7501 20.75L20.7501 15.75M0.750122 10.75L10.7501 15.75L20.7501 10.75M10.7501 0.75L0.750122 5.75L10.7501 10.75L20.7501 5.75L10.7501 0.75Z"/>
+      </symbol>
+      <!-- Outline/file (DS icon for Topical Test tab)
+           Path from DS Iconography, frame ~18×22, viewBox -1 -1 20 24 -->
+      <symbol id="ic-file" viewBox="-1 -1 20 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16.75 7.75L9.75 0.75H2.75C2.21957 0.75 1.71086 0.960714 1.33579 1.33579C0.960714 1.71086 0.75 2.21957 0.75 2.75V18.75C0.75 19.2804 0.960714 19.7891 1.33579 20.1642C1.71086 20.5393 2.21957 20.75 2.75 20.75H14.75C15.2804 20.75 15.7891 20.5393 16.1642 20.1642C16.5393 19.7891 16.75 19.2804 16.75 18.75V7.75ZM9.75 0.75V7.75H16.75"/>
+      </symbol>
+      <!-- Outline/download (DS Iconography, frame ~20×20, viewBox -1 -1 22 22) -->
+      <symbol id="ic-download" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18.75 12.75V16.75C18.75 17.2804 18.5393 17.7891 18.1642 18.1642C17.7891 18.5393 17.2804 18.75 16.75 18.75H2.75C2.21957 18.75 1.71086 18.5393 1.33579 18.1642C0.960714 17.7891 0.75 17.2804 0.75 16.75V12.75M14.75 7.75L9.75 12.75L4.75 7.75M9.75 12.75V0.75"/>
+      </symbol>
+      <!-- Outline/rotate-cw (DS Iconography, frame ~22×20, viewBox -1 -1 24 22) -->
+      <symbol id="ic-rotate-cw" viewBox="-1 -1 24 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14.746 7.74806H20.746V1.74806M20.746 7.74806L16.116 3.38806C14.7366 2.0078 12.946 1.11325 11.0139 0.839204C9.0819 0.565161 7.11314 0.926475 5.40433 1.8687C3.69551 2.81092 2.33922 4.28301 1.53984 6.06313C0.740451 7.84325 0.541281 9.83495 0.972339 11.7381C1.4034 13.6413 2.44133 15.3528 3.92973 16.6147C5.41813 17.8767 7.27636 18.6207 9.22439 18.7346C11.1724 18.8486 13.1047 18.3264 14.7301 17.2466C16.3555 16.1668 17.5859 14.588 18.236 12.7481"/>
+      </symbol>
+      <!-- Filled/check-circle — completion status indicator
+           Solid circle fill + white checkmark stroke. Color inherited from parent `color:`. -->
+      <symbol id="ic-check-circle-filled" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" fill="currentColor"/>
+        <path d="M8 12L11 15L16 9" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+
+      <!-- Subject badge pointer -->
+      <symbol id="ic-subj-pointer" viewBox="0 0 4 8"><path d="M2.93934 2.93934L0 0V8L2.93934 5.06066C3.52513 4.47487 3.52513 3.52513 2.93934 2.93934Z" fill="white"/></symbol>
     </defs>
   </svg>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       NAVBAR PRIMARY DESKTOP — Navbar Primary Desktop - 1.5
-       Navbar Primary Desktop - 1.5 / Type=Desktop (node 866:5576)
-       COMPONENT_SET: Navbar Primary Desktop - 1.5 (2337:21975) · only variant: Type=Desktop
-       Logo left · 6 action icons + avatar + notification badge right
-  ═══════════════════════════════════════════════════════════════ -->
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       NAVIGATION SHELL
-       All nav variants wrapped in one section. Fixed elements
-       (NavMenu-Tablet, NavMenu-Mobile, NavBar-Bottom) escape DOM
-       stacking — this section is semantic grouping only.
-       Desktop: NavbarPrimary-Desktop + NavTopMenu-Desktop
-       Tablet:  NavBar-Mobile + NavMenu-Tablet
-       Mobile:  NavBar-Mobile + NavBar-Bottom + NavMenu-Mobile
-  ═══════════════════════════════════════════════════════════════ -->
+  <!-- Navigation Shell — filled by fetch from zul.page.template.html -->
   <section id="Navigation-Shell"></section>
 
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       PAGE VIEWPORT
-       Drop DS component instances inside PageViewport.
-       Replace the placeholder <div> with real content sections.
-       Use <section id="SectionName-Desktop"> per Rule 10.
-  ═══════════════════════════════════════════════════════════════ -->
   <main>
     <div class="page-container">
       <div class="main-content">
 
+        <!-- Page Viewport — Practise Exam content (DS nodes 4090:58009 + 4090:58010) -->
+        <section id="PageViewport" class="page-viewport" aria-label="Practise Exam page">
 
-        <section id="viewport-myclass" aria-label="My Classes">
-
-          <!-- ── Breadcrumb 1.5 — node 3065:40778 ── -->
-          <div class="bc-row">
-            <div class="bc-left">
-              <span class="bc-title">My Classes</span>
-              <span class="bc-sep" aria-hidden="true"></span>
-              <nav class="bc-trail" aria-label="Breadcrumb">
-                <a href="#" class="bc-link">
-                  <svg aria-hidden="true"><use href="#ic-users"/></svg>
-                  Class
-                  <svg class="bc-chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
-                </a>
-                <span class="bc-link bc-link--current" aria-current="page">My Classes</span>
-              </nav>
+          <!-- Breadcrumb - 1.5 (DS node 4090:58009)
+               Title: "Topical Test" · Trail: Practise [book-open icon] › Topical Test (current) -->
+          <section class="bc-row" aria-label="Breadcrumb">
+            <div class="bc-title-group">
+              <span class="bc-title">Topical Test</span>
             </div>
-            <div class="bc-actions">
-              <a href="#" class="btn-secondary">
-                <div class="btn-icon-wrap"><div class="btn-icon-clip"><svg aria-hidden="true"><use href="#ic-calendar"/></svg></div></div>
-                <span class="btn-label">Timetable</span>
+            <div class="bc-sep" aria-hidden="true"></div>
+            <nav class="bc-trail" aria-label="Breadcrumb navigation">
+              <a href="#" class="bc-link">
+                <svg aria-hidden="true"><use href="#ic-book-open"/></svg>
+                Practise
               </a>
-              <a href="nadia_Class-BrowseClasses.html" class="btn-secondary">
-                <div class="btn-icon-wrap"><div class="btn-icon-clip"><svg aria-hidden="true"><use href="#ic-globe"/></svg></div></div>
-                <span class="btn-label">Browse Classes</span>
-              </a>
-              <a href="#" class="btn-primary">
-                <div class="btn-icon-wrap"><div class="btn-icon-clip"><svg aria-hidden="true"><use href="#ic-plus"/></svg></div></div>
-                <span class="btn-label">Join Class</span>
-              </a>
-            </div>
-          </div><!-- /.bc-row -->
+              <svg class="bc-chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+              <span class="bc-current">Topical Test</span>
+            </nav>
+          </section>
 
-          <!-- ── Class Cards 1.5 ── -->
-          <div class="cards-grid">
+          <!-- Tab Bar + Quick Notes Card (DS node 4090:58010) -->
+          <section id="PractiseExamMain-Desktop" class="fc-main">
 
-            <!-- ① Enrichment | Form 5 -->
-            <div class="cc cc--enrichment">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/enrichment.png" alt="Enrichment cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Enrichment | Form 5</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-3.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Cikgu Zainab binti Ali</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Monday</strong><span>at</span><strong>7am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+            <!-- Tab Bar - 1.5 (DS node 4090:58010)
+                 3 tabs · Tab 3 (Practise Exam) is active -->
+            <div class="fc-tab-bar" role="tablist" aria-label="Practise sections">
+              <div class="fc-tab-bar__tabs">
+
+                <!-- Tab 1: Flashcards (inactive) — ic-book-open DS confirmed -->
+                <button class="fc-tab" role="tab" aria-selected="false" type="button">
+                  <span class="fc-tab__icon" aria-hidden="true">
+                    <svg><use href="#ic-book-open"/></svg>
+                  </span>
+                  <span class="fc-tab__label">Flashcards</span>
+                </button>
+
+                <!-- Tab 2: Topical Test (inactive) -->
+                <button class="fc-tab" role="tab" aria-selected="false" type="button">
+                  <span class="fc-tab__icon" aria-hidden="true">
+                    <svg><use href="#ic-file"/></svg>
+                  </span>
+                  <span class="fc-tab__label">Topical Test</span>
+                </button>
+
+                <!-- Tab 3: Practise Exam (ACTIVE) -->
+                <button class="fc-tab fc-tab--active" role="tab" aria-selected="true" id="tab-practise-exam" aria-controls="tab-panel-practise-exam" type="button">
+                  <span class="fc-tab__icon" aria-hidden="true">
+                    <svg><use href="#ic-layers"/></svg>
+                  </span>
+                  <span class="fc-tab__label">Practise Exam</span>
+                </button>
+
+              </div>
+            </div><!-- /fc-tab-bar -->
+
+            <!-- Quick Notes Card - 1.5 (DS 5164:76335 / 4090:58010)
+                 Subject: Bahasa Melayu · bg #e8fbe8 · green inset border · 24px radius bottom only -->
+            <div class="fc-qncard" id="tab-panel-practise-exam" role="tabpanel" aria-labelledby="tab-practise-exam" aria-label="Practise Exam content">
+
+              <!-- BM Subject Header (DS: 110px, #4d77ff, inset 1px #2e4799, radius 18px)
+                   Icon: BM at 60×60 · label: border-left #f6f9ff separator (DS confirmed) -->
+              <div class="fc-qncard__header fc-qncard__header--bm">
+                <div class="fc-qncard__header-icon">
+                  <div class="fc-subject-icon">
+                    <img src="../../src/image-repo/page.practise/assets/PracticeExam/bm-icon.png"
+                         width="60" height="60"
+                         alt="" aria-hidden="true">
                   </div>
                 </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
-
-            <!-- ② Account | Form 4 -->
-            <div class="cc cc--acc">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/account.png" alt="Account cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Account | Form 4</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-1.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">En. Faizal bin Ahmad</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Monday</strong><span>at</span><strong>8am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                <div class="fc-qncard__header-content">
+                  <div class="fc-qncard__header-label">
+                    <h2 class="fc-qncard__title">Bahasa Melayu</h2>
+                    <p class="fc-qncard__subtitle">50 Practice Exams</p>
                   </div>
                 </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
+              </div><!-- /header--bm -->
 
-            <!-- ③ Add Mathematics | Form 4 -->
-            <div class="cc cc--add-math">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/add-math.png" alt="Add Mathematics cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Add Mathematics | Form 4</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-6.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Cikgu Rozita binti Hamid</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Monday</strong><span>at</span><strong>9am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+              <!-- Exam List Table (DS 4090:58010)
+                   Heading row: "Practise Exam" title only (no columns)
+                   Rows 1–3: completed (download + retry + done)
+                   Rows 4–10: not started (download + Start) -->
+              <div class="pe-table">
+
+                <!-- Heading row — single title spanning full width -->
+                <div class="pe-table__heading-row">
+                  <span class="pe-table__heading-row__title">Practise Exam</span>
+                </div>
+
+                <!-- Row 01 — Peribahasa Set 1 — completed -->
+                <div class="pe-table__row">
+                  <div class="pe-table__cell pe-table__cell--name">
+                    <span class="pe-exam-name">Peribahasa Set 1</span>
+                  </div>
+                  <div class="pe-table__cell pe-table__cell--actions">
+                    <button class="pe-action-btn" type="button" aria-label="Download exam">
+                      <svg aria-hidden="true"><use href="#ic-download"/></svg>
+                    </button>
+                    <button class="pe-action-btn" type="button" aria-label="Retry exam">
+                      <svg aria-hidden="true"><use href="#ic-rotate-cw"/></svg>
+                    </button>
+                    <div class="pe-done-btn" aria-label="Completed" role="img">
+                      <svg aria-hidden="true"><use href="#ic-check-circle-filled"/></svg>
+                    </div>
                   </div>
                 </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
 
-            <!-- ④ Biology | Form 4 -->
-            <div class="cc cc--bio">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/biology.png" alt="Biology cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Biology | Form 4</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-2.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Cikgu Nur Hana binti Salleh</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Monday</strong><span>at</span><strong>10am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                <!-- Row 02 — Peribahasa Set 2 — completed -->
+                <div class="pe-table__row">
+                  <div class="pe-table__cell pe-table__cell--name">
+                    <span class="pe-exam-name">Peribahasa Set 2</span>
+                  </div>
+                  <div class="pe-table__cell pe-table__cell--actions">
+                    <button class="pe-action-btn" type="button" aria-label="Download exam">
+                      <svg aria-hidden="true"><use href="#ic-download"/></svg>
+                    </button>
+                    <button class="pe-action-btn" type="button" aria-label="Retry exam">
+                      <svg aria-hidden="true"><use href="#ic-rotate-cw"/></svg>
+                    </button>
+                    <div class="pe-done-btn" aria-label="Completed" role="img">
+                      <svg aria-hidden="true"><use href="#ic-check-circle-filled"/></svg>
+                    </div>
                   </div>
                 </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
 
-            <!-- ⑤ Bahasa Melayu | Form 4 -->
-            <div class="cc cc--bm">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/bm.png" alt="Bahasa Melayu cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Bahasa Melayu | Form 4</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-4.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Cikgu Aminah binti Yusoff</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Tuesday</strong><span>at</span><strong>8am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                <!-- Row 03 — Maksud Perkataan Set 1 — completed -->
+                <div class="pe-table__row">
+                  <div class="pe-table__cell pe-table__cell--name">
+                    <span class="pe-exam-name">Maksud Perkataan Set 1</span>
+                  </div>
+                  <div class="pe-table__cell pe-table__cell--actions">
+                    <button class="pe-action-btn" type="button" aria-label="Download exam">
+                      <svg aria-hidden="true"><use href="#ic-download"/></svg>
+                    </button>
+                    <button class="pe-action-btn" type="button" aria-label="Retry exam">
+                      <svg aria-hidden="true"><use href="#ic-rotate-cw"/></svg>
+                    </button>
+                    <div class="pe-done-btn" aria-label="Completed" role="img">
+                      <svg aria-hidden="true"><use href="#ic-check-circle-filled"/></svg>
+                    </div>
                   </div>
                 </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
 
-            <!-- ⑥ Business | Form 4 -->
-            <div class="cc cc--biz">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/business.png" alt="Business cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Business | Form 4</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-7.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Puan Hazlina binti Osman</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Tuesday</strong><span>at</span><strong>9am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                <!-- Row 04 — Maksud Perkataan Set 2 — not started -->
+                <div class="pe-table__row">
+                  <div class="pe-table__cell pe-table__cell--name">
+                    <span class="pe-exam-name">Maksud Perkataan Set 2</span>
+                  </div>
+                  <div class="pe-table__cell pe-table__cell--actions">
+                    <button class="pe-action-btn" type="button" aria-label="Download exam">
+                      <svg aria-hidden="true"><use href="#ic-download"/></svg>
+                    </button>
+                    <button class="pe-start-btn" type="button">
+                      <span class="pe-start-btn__label">Start</span>
+                      <span class="pe-start-btn__arrow">
+                        <svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
+                      </span>
+                    </button>
                   </div>
                 </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
 
-            <!-- ⑦ Chemistry | Form 4 -->
-            <div class="cc cc--chem">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/chemistry.png" alt="Chemistry cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Chemistry | Form 4</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-5.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Dr. Rashid bin Othman</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Tuesday</strong><span>at</span><strong>10am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                <!-- Row 05 — Antonim Set 1 — not started -->
+                <div class="pe-table__row">
+                  <div class="pe-table__cell pe-table__cell--name">
+                    <span class="pe-exam-name">Antonim Set 1</span>
+                  </div>
+                  <div class="pe-table__cell pe-table__cell--actions">
+                    <button class="pe-action-btn" type="button" aria-label="Download exam">
+                      <svg aria-hidden="true"><use href="#ic-download"/></svg>
+                    </button>
+                    <button class="pe-start-btn" type="button">
+                      <span class="pe-start-btn__label">Start</span>
+                      <span class="pe-start-btn__arrow">
+                        <svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
+                      </span>
+                    </button>
                   </div>
                 </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
 
-            <!-- ⑧ Chinese Language | Form 4 -->
-            <div class="cc cc--chi">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/chi-lang.png" alt="Chinese Language cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Chinese Language | Form 4</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-3.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Cikgu Li Wei</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Wednesday</strong><span>at</span><strong>7am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                <!-- Row 06 — Antonim Set 2 — not started -->
+                <div class="pe-table__row">
+                  <div class="pe-table__cell pe-table__cell--name">
+                    <span class="pe-exam-name">Antonim Set 2</span>
+                  </div>
+                  <div class="pe-table__cell pe-table__cell--actions">
+                    <button class="pe-action-btn" type="button" aria-label="Download exam">
+                      <svg aria-hidden="true"><use href="#ic-download"/></svg>
+                    </button>
+                    <button class="pe-start-btn" type="button">
+                      <span class="pe-start-btn__label">Start</span>
+                      <span class="pe-start-btn__arrow">
+                        <svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
+                      </span>
+                    </button>
                   </div>
                 </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
 
-            <!-- ⑨ Computer Science | Form 4 -->
-            <div class="cc cc--cs">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/chemistry.png" alt="Computer Science cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Computer Science | Form 4</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-1.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">En. Azri bin Zakaria</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Wednesday</strong><span>at</span><strong>8am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                <!-- Row 07 — Simpulan Bahasa Set 1 — not started -->
+                <div class="pe-table__row">
+                  <div class="pe-table__cell pe-table__cell--name">
+                    <span class="pe-exam-name">Simpulan Bahasa Set 1</span>
+                  </div>
+                  <div class="pe-table__cell pe-table__cell--actions">
+                    <button class="pe-action-btn" type="button" aria-label="Download exam">
+                      <svg aria-hidden="true"><use href="#ic-download"/></svg>
+                    </button>
+                    <button class="pe-start-btn" type="button">
+                      <span class="pe-start-btn__label">Start</span>
+                      <span class="pe-start-btn__arrow">
+                        <svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
+                      </span>
+                    </button>
                   </div>
                 </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
 
-            <!-- ⑩ Economy | Form 4 -->
-            <div class="cc cc--eco">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/economy.png" alt="Economy cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Economy | Form 4</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-6.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Puan Suraya binti Mat</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Wednesday</strong><span>at</span><strong>9am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                <!-- Row 08 — Simpulan Bahasa Set 2 — not started -->
+                <div class="pe-table__row">
+                  <div class="pe-table__cell pe-table__cell--name">
+                    <span class="pe-exam-name">Simpulan Bahasa Set 2</span>
+                  </div>
+                  <div class="pe-table__cell pe-table__cell--actions">
+                    <button class="pe-action-btn" type="button" aria-label="Download exam">
+                      <svg aria-hidden="true"><use href="#ic-download"/></svg>
+                    </button>
+                    <button class="pe-start-btn" type="button">
+                      <span class="pe-start-btn__label">Start</span>
+                      <span class="pe-start-btn__arrow">
+                        <svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
+                      </span>
+                    </button>
                   </div>
                 </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
 
-            <!-- ⑪ English | Form 4 -->
-            <div class="cc cc--en">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/en.png" alt="English cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr">
-                  <div class="cc__hdr-title">English | Form 4</div>
-                  <div class="dlp-badge"><img src="../../src/image-repo/page.class/my.class/assets/dlp.svg" alt="DLP"></div>
-                </div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-2.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Puan Sarah binti Abdullah</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Wednesday</strong><span>at</span><strong>10am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                <!-- Row 09 — Tatabahasa Set 1 — not started -->
+                <div class="pe-table__row">
+                  <div class="pe-table__cell pe-table__cell--name">
+                    <span class="pe-exam-name">Tatabahasa Set 1</span>
+                  </div>
+                  <div class="pe-table__cell pe-table__cell--actions">
+                    <button class="pe-action-btn" type="button" aria-label="Download exam">
+                      <svg aria-hidden="true"><use href="#ic-download"/></svg>
+                    </button>
+                    <button class="pe-start-btn" type="button">
+                      <span class="pe-start-btn__label">Start</span>
+                      <span class="pe-start-btn__arrow">
+                        <svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
+                      </span>
+                    </button>
                   </div>
                 </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
 
-            <!-- ⑫ Geography | Form 4 -->
-            <div class="cc cc--geo">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/geography.png" alt="Geography cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Geography | Form 4</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-4.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Cikgu Huzaifah bin Ismail</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Thursday</strong><span>at</span><strong>7am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                <!-- Row 10 — Tatabahasa Set 2 — not started -->
+                <div class="pe-table__row">
+                  <div class="pe-table__cell pe-table__cell--name">
+                    <span class="pe-exam-name">Tatabahasa Set 2</span>
+                  </div>
+                  <div class="pe-table__cell pe-table__cell--actions">
+                    <button class="pe-action-btn" type="button" aria-label="Download exam">
+                      <svg aria-hidden="true"><use href="#ic-download"/></svg>
+                    </button>
+                    <button class="pe-start-btn" type="button">
+                      <span class="pe-start-btn__label">Start</span>
+                      <span class="pe-start-btn__arrow">
+                        <svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
+                      </span>
+                    </button>
                   </div>
                 </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
 
-            <!-- ⑬ History | Form 5 -->
-            <div class="cc cc--hs">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/history.png" alt="History cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">History | Form 5</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-7.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">En. Roslan bin Daud</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Thursday</strong><span>at</span><strong>8am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
-                  </div>
-                </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
+              </div><!-- /pe-table -->
 
-            <!-- ⑭ Islamic Studies | Form 4 -->
-            <div class="cc cc--isl">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/islamic.png" alt="Islamic Studies cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Islamic Studies | Form 4</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-5.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Ustaz Luqman bin Yusof</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Thursday</strong><span>at</span><strong>9am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
-                  </div>
-                </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
+            </div><!-- /fc-qncard -->
 
-            <!-- ⑮ KAFA | Form 5 -->
-            <div class="cc cc--kafa">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/kafa.png" alt="KAFA cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">KAFA | Form 5</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-3.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Ustazah Fatimah binti Ghani</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Thursday</strong><span>at</span><strong>10am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
-                  </div>
-                </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
+          </section><!-- /PractiseExamMain-Desktop -->
 
-            <!-- ⑯ Mathematics | Form 4 -->
-            <div class="cc cc--mt">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/math.png" alt="Mathematics cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Mathematics | Form 4</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-1.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">En. Hafiz bin Zulkifli</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Friday</strong><span>at</span><strong>8am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
-                  </div>
-                </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
+        </section><!-- /PageViewport -->
 
-            <!-- ⑰ Moral | Form 4 -->
-            <div class="cc cc--moral">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/moral.png" alt="Moral cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Moral | Form 4</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-6.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Cikgu Kavitha Selvan</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Friday</strong><span>at</span><strong>9am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
-                  </div>
-                </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
-
-            <!-- ⑱ Physics | Form 4 -->
-            <div class="cc cc--phy">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/physics.png" alt="Physics cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">Physics | Form 4</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-2.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Dr. Khairul bin Rahman</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Friday</strong><span>at</span><strong>10am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
-                  </div>
-                </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
-
-            <!-- ⑲ RBT | Form 5 -->
-            <div class="cc cc--rbt">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/rbt.png" alt="RBT cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr"><div class="cc__hdr-title">RBT | Form 5</div></div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-4.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Cikgu Azman bin Kassim</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Saturday</strong><span>at</span><strong>9am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
-                  </div>
-                </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
-
-            <!-- ⑳ Science | Form 4 -->
-            <div class="cc cc--sc">
-              <div class="cc__cover"><img src="../../src/image-repo/page.class/my.class/assets/science.png" alt="Science cover"></div>
-              <div class="cc__body"><div class="cc__inner">
-                <div class="cc__hdr">
-                  <div class="cc__hdr-title">Science | Form 4</div>
-                  <div class="dlp-badge"><img src="../../src/image-repo/page.class/my.class/assets/dlp.svg" alt="DLP"></div>
-                </div>
-                <div class="cc__main">
-                  <div class="ds-avatar ds-avatar--xl"><img src="../../src/image-repo/page.class/browse.class/assets/tutor-7.png" alt="Teacher avatar"></div>
-                  <div class="cc__text">
-                    <div class="cc__teacher">Cikgu Norliza binti Kassim</div>
-                    <div class="cc__schedule"><span>Every</span><strong>Monday</strong><span>at</span><strong>7am</strong></div>
-                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
-                  </div>
-                </div>
-                <div class="cc__divider"><button class="cc__divider-more" type="button" aria-label="Show more"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg>More</button></div>
-                <div class="cc__cta"><span class="cc__premium">Premium Only</span><a href="#" class="btn-enter"><span class="btn-enter__label">Enter Class</span><div class="btn-enter__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div></a></div>
-              </div></div>
-            </div>
-
-          </div><!-- /.cards-grid -->
-
-        </section><!-- end viewport-myclass -->
-
-
-      </div>
-    </div>
+      </div><!-- /main-content -->
+    </div><!-- /page-container -->
   </main>
 
   <footer class="footer" id="zul-footer"></footer>
@@ -3143,15 +3063,15 @@
   <div id="zul-nav-bottom"></div>
 
   <script>
-  /* is-pressing — reliable press feedback on <a> and <button> elements (Rule 83) */
-  document.querySelectorAll('.btn-enter, .btn-secondary, .btn-primary').forEach(function (btn) {
+  /* pe-action-btn + pe-start-btn is-pressing handlers — registered first (Rule 14)
+     Rule 83: CSS :active alone unreliable in Electron webviews; pair with JS mousedown/up/leave */
+  document.querySelectorAll('.pe-action-btn, .pe-start-btn').forEach(function (btn) {
     btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
     btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
     btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
   });
-  </script>
 
-  <script>
+  /* Nav injection — fetch zul.page.template.html and inject shell + footer + bottom nav */
   (function () {
     var TPL = '../../zul.test.git/zul.page.template.html';
 
@@ -3161,23 +3081,23 @@
         var parser = new DOMParser();
         var doc = parser.parseFromString(html, 'text/html');
 
-        // Fix image paths: template is one level deep (zul.test.git/),
-        // nadia is two levels deep (Nadia.test.git/Class/). ../src/ → ../../src/
+        /* Fix image paths: template is one level deep (zul.test.git/),
+           nadia is two levels deep (Nadia.test.git/Practise/). ../src/ → ../../src/ */
         function fixPaths(html) {
           return html.replace(/src="\.\.\/src\//g, 'src="../../src/');
         }
 
-        // 1. Inject Navigation-Shell contents
+        /* 1. Inject Navigation-Shell contents */
         var srcShell = doc.getElementById('Navigation-Shell');
         var dstShell = document.getElementById('Navigation-Shell');
         if (srcShell && dstShell) dstShell.innerHTML = fixPaths(srcShell.innerHTML);
 
-        // 2. Inject footer contents
+        /* 2. Inject footer contents */
         var srcFooter = doc.querySelector('footer.footer');
         var dstFooter = document.getElementById('zul-footer');
         if (srcFooter && dstFooter) dstFooter.innerHTML = srcFooter.innerHTML;
 
-        // 3. Inject bottom nav elements
+        /* 3. Inject bottom nav elements */
         var bottom = document.getElementById('zul-nav-bottom');
         if (bottom) {
           ['NavBar-Bottom', 'mobile-overlay', 'NavMenu-Mobile'].forEach(function (id) {
@@ -3189,7 +3109,7 @@
           });
         }
 
-        // 4. Execute template scripts (nav handlers + mobile menu + maximize)
+        /* 4. Execute template scripts (nav handlers + mobile menu + maximize) */
         Array.prototype.forEach.call(doc.querySelectorAll('script'), function (s) {
           if (s.src) return;
           var ns = document.createElement('script');
@@ -3197,14 +3117,14 @@
           document.body.appendChild(ns);
         });
 
-        // 5. Set active nav state — clear template's hardcoded Home active, then set Class
+        /* 5. Set active nav state — clear Home active, set Practice */
         document.querySelectorAll('#NavTopMenu-Desktop .nav-menu-btn').forEach(function (b) {
           b.classList.remove('is-active');
         });
-        var classBtn = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="Class"]');
-        if (classBtn) classBtn.classList.add('is-active');
+        var practiceBtn = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="Practice"]');
+        if (practiceBtn) practiceBtn.classList.add('is-active');
 
-        // 6. Wire Nadia page navigation links (N-C40)
+        /* 6. Wire Nadia page navigation links (N-C40) */
         (function () {
           var BASE = '../';
           var NAV_HREFS = {
@@ -3219,12 +3139,15 @@
             'Merchandise':    BASE + 'Rewards/nadia_Rewards-Merchandise.html',
             'My Rewards':     BASE + 'Rewards/nadia_Rewards-Myrewards.html',
           };
+
           function link(el, href) {
             if (el) el.addEventListener('click', function () { window.location.href = href; });
           }
+
           ['Quiz', 'Battle', 'Practice'].forEach(function (label) {
             link(document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="' + label + '"]'), NAV_HREFS[label]);
           });
+
           function dropItem(dropId, labelText) {
             var drop = document.getElementById(dropId);
             if (!drop) return null;
@@ -3241,6 +3164,7 @@
           ['Avatar', 'Coin Quests', 'eVoucher', 'Merchandise', 'My Rewards'].forEach(function (label) {
             link(dropItem('rewards-dropdown', label), NAV_HREFS[label]);
           });
+
           ['#NavMenu-Tablet', '#NavMenu-Mobile'].forEach(function (menuId) {
             Object.keys(NAV_HREFS).forEach(function (label) {
               link(document.querySelector(menuId + ' [aria-label="' + label + '"]'), NAV_HREFS[label]);
