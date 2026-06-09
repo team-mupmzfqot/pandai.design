@@ -6030,3 +6030,222 @@ This page uses the **fetch/injection pattern** — Navigation-Shell HTML and foo
 | Token in `.btn-primary` | `var(--og-500)` / `var(--og-600)` | `var(--surface-primary-default)` / `var(--border-primary-focus)` (canonical tokens) |
 
 *Last updated: 2026-06-07 | Session 38 — BrowseClasses button states + is-pressing; all Nadia pages nav CSS synced to template | Branch: staging*
+
+---
+
+### Rule N-C40 — Nav link wiring pattern for inject-fetched Nadia pages (Session 40, 2026-06-09)
+
+**Context:** Nav HTML is fetched at runtime from `zul.page.template.html`. Nav items are `<div role="button">` elements — no `href`, no native navigation. To make them navigate to Nadia pages, click handlers must be added as **step 6** in the fetch callback, after the template scripts have been executed (step 4) and the active state has been set (step 5).
+
+**Pattern — add to the `.then()` callback in the nav injection IIFE:**
+
+```js
+// 6. Wire Nadia page navigation links
+(function () {
+  var BASE = '../';
+  var NAV_HREFS = {
+    'Quiz':           BASE + 'Quiz/nadia_Quiz.html',
+    'Battle':         BASE + 'Battle/nadia_Battle.html',
+    'Practice':       BASE + 'Practise/nadia_Practise-subject.html',
+    'My Classes':     BASE + 'Class/nadia_Class-MyClasses.html',
+    'Browse Classes': BASE + 'Class/nadia_Class-BrowseClasses.html',
+    'Avatar':         BASE + 'Rewards/nadia_Rewards-avatar.html',
+    'Coin Quests':    BASE + 'Rewards/nadia_Rewards-CoinQuest.html',
+    'eVoucher':       BASE + 'Rewards/nadia_Rewards-evoucher.html',
+    'Merchandise':    BASE + 'Rewards/nadia_Rewards-Merchandise.html',
+    'My Rewards':     BASE + 'Rewards/nadia_Rewards-Myrewards.html',
+  };
+
+  function link(el, href) {
+    if (el) el.addEventListener('click', function () { window.location.href = href; });
+  }
+
+  // Desktop nav pill — Quiz, Battle, Practice (no dropdown)
+  ['Quiz', 'Battle', 'Practice'].forEach(function (label) {
+    link(document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="' + label + '"]'), NAV_HREFS[label]);
+  });
+
+  // Desktop dropdown items — no aria-label, match by visible text
+  function dropItem(dropId, labelText) {
+    var drop = document.getElementById(dropId);
+    if (!drop) return null;
+    var items = drop.querySelectorAll('.nav-menu-dropdown__item');
+    for (var i = 0; i < items.length; i++) {
+      var lbl = items[i].querySelector('.nav-menu-dropdown__label');
+      if (lbl && lbl.textContent.trim() === labelText) return items[i];
+    }
+    return null;
+  }
+  ['My Classes', 'Browse Classes'].forEach(function (label) {
+    link(dropItem('class-dropdown', label), NAV_HREFS[label]);
+  });
+  ['Avatar', 'Coin Quests', 'eVoucher', 'Merchandise', 'My Rewards'].forEach(function (label) {
+    link(dropItem('rewards-dropdown', label), NAV_HREFS[label]);
+  });
+
+  // Tablet + mobile menus — items have aria-label
+  ['#NavMenu-Tablet', '#NavMenu-Mobile'].forEach(function (menuId) {
+    Object.keys(NAV_HREFS).forEach(function (label) {
+      link(document.querySelector(menuId + ' [aria-label="' + label + '"]'), NAV_HREFS[label]);
+    });
+  });
+})();
+```
+
+**Two selection strategies — always verify which applies:**
+
+| Context | Selector strategy | Why |
+|---|---|---|
+| Desktop nav pill (`#NavTopMenu-Desktop .nav-menu-btn`) | `[aria-label="Label"]` | Pill buttons have `aria-label` |
+| Desktop dropdown items (`#class-dropdown`, `#rewards-dropdown`) | `.nav-menu-dropdown__label` text match | `<div class="nav-menu-dropdown__item">` has NO `aria-label` |
+| Tablet menu (`#NavMenu-Tablet`) | `[aria-label="Label"]` | `.nav-menu-item` has `aria-label` |
+| Mobile menu (`#NavMenu-Mobile`) | `[aria-label="Label"]` | `.nav-menu-item` has `aria-label` |
+
+**Always step 6, never earlier:**
+Step 4 (execute template scripts) registers the dropdown open/close click handlers. Step 6 adds navigation on top — the two coexist. For dropdown items, clicking navigates AND marks the item `is-selected` (template's existing handler runs first). For dropdown trigger buttons (Class, Rewards), step 6 adds nothing — they open the dropdown, navigation happens from the item click.
+
+**File name reference — confirmed 2026-06-09:**
+
+| Nav label | Actual file | Path from `Nadia.test.git/[subfolder]/` |
+|---|---|---|
+| Quiz | `nadia_Quiz.html` | `../Quiz/nadia_Quiz.html` |
+| Battle | `nadia_Battle.html` | `../Battle/nadia_Battle.html` |
+| Practice | `nadia_Practise-subject.html` | `../Practise/nadia_Practise-subject.html` |
+| My Classes | `nadia_Class-MyClasses.html` | `../Class/nadia_Class-MyClasses.html` |
+| Browse Classes | `nadia_Class-BrowseClasses.html` | `../Class/nadia_Class-BrowseClasses.html` |
+| Avatar | `nadia_Rewards-avatar.html` | `../Rewards/nadia_Rewards-avatar.html` |
+| Coin Quests | `nadia_Rewards-CoinQuest.html` | `../Rewards/nadia_Rewards-CoinQuest.html` |
+| eVoucher | `nadia_Rewards-evoucher.html` | `../Rewards/nadia_Rewards-evoucher.html` |
+| Merchandise | `nadia_Rewards-Merchandise.html` | `../Rewards/nadia_Rewards-Merchandise.html` |
+| My Rewards | `nadia_Rewards-Myrewards.html` | `../Rewards/nadia_Rewards-Myrewards.html` |
+
+**Common mistake — file name mismatch:**
+The "Practice" nav item maps to `nadia_Practise-subject.html` (note: `Practise`, not `Practice`; and `subject` suffix). There is no `nadia_Practice.html`. Always verify actual filenames with `find` before writing any path.
+
+**Propagation:** When this step 6 block is added to one Nadia page, it should be added to ALL other inject-fetched Nadia pages in the same commit — otherwise navigation works from some pages but not others.
+
+**Applied to all 13 pages (2026-06-09):** `nadia_Quiz.html`, `nadia_Battle.html`, `nadia_Practise-subject.html`, `nadia_Flashcard.html`, `nadia_TopicalTest.html`, `nadia_PracticeExam.html`, `nadia_Class-MyClasses.html`, `nadia_Class-BrowseClasses.html`, `nadia_Rewards-avatar.html`, `nadia_Rewards-CoinQuest.html`, `nadia_Rewards-evoucher.html`, `nadia_Rewards-Merchandise.html`, `nadia_Rewards-Myrewards.html`. **No pending files.**
+
+---
+
+### Pre-flight checklist — updated Session 40
+
+**Non-negotiable. Every session, every task, every fix — no exceptions. "Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first."**
+
+```
+□ Step 0 — Read design-md/nadia.design.md       → ALL rules N-1 through N-C40+, known deviations
+□ Step 1 — Fetch DS live: TLVKe3bgJTdVvuPAzgDq2f → verify every token, state, structure
+□ Step 2 — Run component audit (Rule N-C4)       → full table: component | DS node | status | issues
+□ Step 3 — Compare nav CSS vs template (N-C35)   → ic-user-circle, learn menu, notif-see-all, footer
+□ Step 4 — Check pending list from prior session → start there, not from scratch
+□ Step 5 — Only then write HTML, CSS, or document any value
+```
+
+**Extended checklist:**
+```
+□ Breadcrumb bc-chevron → <use href="#ic-chevron-right"/> not inline <polyline>? (N-C36)
+□ Footer height: 60px?  → padding: 0 28px? (N-C27)
+□ notif-see-all         → box-shadow:inset? no transition? correct pressed palette? (N-C28, Rule 40)
+□ Shorthand aliases     → var(--og-*), var(--sp-*), var(--r-*) used in component rules? (N-C33)
+□ Label Badge bg        → var(--surface-primary-default-subtle) = #e1f9ea? (Session 23)
+□ Nav link wiring       → step 6 in injection callback present? (N-C40)
+□ New page subfolder    → confirmed correct Nadia.test.git/[subfolder]/ before creating? (N-C42)
+□ Pending list from last session → addressed first?
+```
+
+**Cumulative violations log (all sessions):**
+- Session 24: skipped pre-flight → wrong `data-active-nav` pattern
+- Sessions 25–26: missing `color:` on arrow containers; inline polyline chevron
+- Session 28: unrealistic data; stale balance
+- Session 29: 8/14 wrong token categories; `is-pressing` missing; inline paths
+- Sessions 30–31: footer height; notif-see-all 4 violations; Icon Badge `border:`; quiz card sizes
+- Session 32: Session 21 fixes not synced to sibling page (2-session drift)
+- Session 33: shorthand aliases in breadcrumb; wrong token type for active icon/label; gold tokens missing
+- Sessions 34–35: template commits not propagated (ic-user-circle, learn menu, notif-see-all)
+- Session 37: Session 23 bc-sep pending since 3 sessions; Pressed state palette contradiction (Rule 19 vs Rule 40) — needs live DS resolution
+- Session 38: nav CSS drift — MyClasses was behind template on 9 areas (see Rule N-C38)
+- Session 40: nav link wiring only added to Quiz page → **resolved Session 41** — applied to all 13 pages including nadia_PracticeExam.html (N-C40)
+- **Session 41: nadia_TopicalTest.html initially created under Battle/ instead of Practise/ — always confirm subfolder before creating a new page (see Rule N-C42)**
+
+---
+
+### Rule N-C42 — Always confirm subfolder placement before creating a new Nadia page (Session 41, 2026-06-09)
+
+Before creating any new Nadia prototype page, confirm which `Nadia.test.git/[subfolder]/` it belongs to by checking the nav structure and page subject. Pages are grouped by feature area:
+
+| Feature | Subfolder |
+|---|---|
+| Quiz, Flashcard, Topical Test, Practice Exam | `Practise/` |
+| Battle | `Battle/` |
+| My Classes, Browse Classes | `Class/` |
+| Avatar, Coin Quests, eVoucher, Merchandise, My Rewards | `Rewards/` |
+
+**Relative paths from each subfolder to shared assets:**
+- Template: `../../zul.test.git/zul.page.template.html` (same for all Nadia subfolders)
+- Images: `../../src/image-repo/page.[name]/assets/` (same depth for all)
+
+**Mistake made (Session 41):** `nadia_TopicalTest.html` was created under `Battle/` and had to be moved to `Practise/`. File creation and `mv` were needed as a follow-up step — wasted work. Correct approach: read the page subject and the Practise subfolder contents before writing the file.
+
+---
+
+### Rule N-C41 — Practice subject card → Flashcard page; Flashcard tabs → sibling pages (Session 40, 2026-06-09)
+
+#### Practice subject cards (`nadia_Practise-subject.html`)
+
+Every `.practice-card` is a whole-card navigable target (Rule 21 exception) → clicking any card goes to `nadia_Flashcard.html` (same folder, no path prefix needed).
+
+```js
+// Registered before injection IIFE (Rule 14: critical first)
+document.querySelectorAll('.practice-card').forEach(function (card) {
+  card.addEventListener('click', function () {
+    window.location.href = 'nadia_Flashcard.html';
+  });
+});
+```
+
+#### Flashcard tabs (`nadia_Flashcard.html`)
+
+3 tab buttons (`<button class="fc-tab">`) — selected by DOM order. Tab 1 is the current page (reloads). All 3 siblings are in the same `Practise/` folder.
+
+```js
+// Registered before injection IIFE (Rule 14: critical first)
+var TAB_HREFS = ['nadia_Flashcard.html', 'nadia_TopicalTest.html', 'nadia_PracticeExam.html'];
+document.querySelectorAll('.fc-tab').forEach(function (tab, i) {
+  if (TAB_HREFS[i]) tab.addEventListener('click', function () { window.location.href = TAB_HREFS[i]; });
+});
+```
+
+**Tab order confirmed (DS node 4523:76234):** Flashcards (index 0, `fc-tab--active`) → Topical Test (index 1) → Practise Exam (index 2).
+
+**File names confirmed 2026-06-09:**
+- `nadia_Flashcard.html` (same folder, self-link = reload)
+- `nadia_TopicalTest.html` (same folder)
+- `nadia_PracticeExam.html` (same folder — note: no space in filename)
+
+---
+
+### Rule N-C43 — Body Cell - 1.5: INSIDE stroke on each cell, remove border-bottom from row (Session 41, 2026-06-09)
+
+**DS confirmed:** `Body Cell - 1.5` (node `4591:96188`, `⚙️ Table` page) — 2 variants (`Type=Left Slots`, `Type=Right Slots`).
+
+Both variants:
+- `strokeAlign: INSIDE`
+- `strokeWeight: 1`
+- stroke color: `Border/general/default` (`VariableID:123:35`) = `--border-general-default` = `#d9d9d9`
+
+**CSS pattern:**
+```css
+.pe-table__cell {
+  box-shadow: inset 0 0 0 1px var(--border-general-default);   /* DS Body Cell - 1.5 INSIDE stroke */
+}
+```
+
+**Never use `border-bottom` on the row container** — the INSIDE stroke on cells handles all four sides including horizontal separators between rows. Adjacent cells' overlapping inset strokes at the same pixel row render as a single 1px line. Remove `border-bottom` from `.pe-table__row` when switching to per-cell INSIDE stroke.
+
+**Invalid node IDs — fall back to DS component set:** If a Figma URL node ID cannot be found in `TLVKe3bgJTdVvuPAzgDq2f` (confirmed via `figma.getNodeById()` returning `false`), do NOT abandon the task. Identify the authoritative DS component set for the feature (e.g. `Body Cell - 1.5` at `4591:96188`) and inspect it directly. The component set is always the ground truth.
+
+**Confirmed instance (Session 41):** User shared nodes `7247:44141` and `7247:44148` for body cell stroke reference — both returned "invalid" from `get_design_context` and `figma.getNodeById()`. Fell back to `Body Cell - 1.5` component set; confirmed INSIDE stroke spec and implemented correctly.
+
+---
+
+*Last updated: 2026-06-09 | Session 41 — nadia_PracticeExam.html built (breadcrumb + tab bar + QN card + table); Body Cell INSIDE stroke (N-C43); N-C40 propagation resolved; Rule N-C42 (subfolder confirmation) added | Branch: staging*
