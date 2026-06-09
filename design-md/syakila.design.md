@@ -4209,4 +4209,20 @@ var gradeMatch = noGradeFilter || grades.indexOf(card.dataset.grade) !== -1;
 
 ---
 
-*Last updated: 2026-06-05 (Session 18 — Rule 105: Textbooks page DS node 5057:96802, all 4 sections confirmed; fixes: breadcrumb structure, alert rich text, card header removal, table header labels, button SVG removal, other-years border/structure)*
+*Last updated: 2026-06-09 (Session 18 — Rule 105: Textbooks page DS node 5057:96802, all 4 sections confirmed; fixes: breadcrumb structure, alert rich text, card header removal, table header labels, button SVG removal, other-years border/structure; repo maintenance — unused asset cleanup logged below)*
+
+---
+
+## Repo maintenance — 2026-06-09: unused asset cleanup
+
+**Commit `8ad9d6b` · branch `cleanup/remove-unused-assets`.** A repo-wide reference sweep removed **161 files referenced nowhere**. None were referenced in any `.md` doc, so no spec above is affected. All recoverable via `git checkout staging -- <path>`.
+
+**Syakila-scope assets removed (57):**
+- `src/image-repo/Achievement/score.card/assets/` — **34** root files: nav/logo/breadcrumb PNGs (`icon-bell.png`, `icon-home-nav.png`, `logo-pandai.{png,svg}`, `logo-text.png`, `logo-leaf.png`, `progress-fill.png`) and battle-icon variants (`icon-battle-1..4.png`, `icon-battle-v1..4.{png,svg}`, `feature-videos.svg`). Pages use inline `<symbol>` icons instead — these loose files were never path-referenced.
+- `src/image-repo/Achievement/score.card/assets/subject-icons/icon-*.png` — **15** PNG twins of the `.svg` subject icons. **Only the `.svg` versions are used** (scoreCard/AnalysisCard/reportCard reference `icon-account.svg`, etc.); the `.png` duplicates were dead. Keep sourcing subject icons as SVG.
+- `src/image-repo/Learn/experiments/icons/border-{biology,bmelayu,business,geography}.png` — **4**.
+- `src/image-repo/Learn/videos/icons/border-{biology,bmelayu,business,geography}.png` — **4**.
+
+**Redundant `.gitkeep` removed (10):** in `Achievement/`, `Achievement/score.card/`, `Learn/quick.notes/` (+`selections/`), `Learn/experiments/` (+`view/`), `Learn/videos/`, `Learn/learning.hub/`, `Learn/bookmarks/` (+`myBookmarks/`) — all folders that already contain tracked files. Justified `.gitkeep` in genuinely-empty `Learn/textbooks/` and `Learn/videos/selection/` were kept.
+
+**Reaffirmed rule:** subject icons are SVG-only (no PNG twins); nav/logo glyphs are inline symbols (no loose image files).

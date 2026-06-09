@@ -9601,4 +9601,18 @@ Side buttons (`.side-btn--left` / `.side-btn--right`) carry the full `box-shadow
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-06 (Rule 233 corrected — Side Button border-radius 24px → 16px; Rules 234–238 added — Subject variable collections, ::after border pattern, Quiz Card hover spec, Texts centering, Tertiary Card per-child border; workflow steps 0s/0t/0u added) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+*Generated: May 2026 | Last updated: 2026-06-09 (Rule 233 corrected — Side Button border-radius 24px → 16px; Rules 234–238 added — Subject variable collections, ::after border pattern, Quiz Card hover spec, Texts centering, Tertiary Card per-child border; workflow steps 0s/0t/0u added; repo maintenance — unused asset cleanup logged below) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+
+---
+
+## Repo maintenance — 2026-06-09: unused asset cleanup
+
+**Commit `8ad9d6b` · branch `cleanup/remove-unused-assets`.** A repo-wide reference sweep (every asset basename grepped against all HTML/CSS/JS/TS/JSON/MD) removed **161 files referenced nowhere** (151 orphaned assets + 10 redundant `.gitkeep`). None were referenced in any `.md` doc, so no rule above is affected. All recoverable via `git checkout staging -- <path>`.
+
+**Zul-scope assets removed (68):**
+- `zul.test.git/icons/` — **56** standalone icon files (`ic-*.svg`, `icon-*.svg`, `nav-ic-*.svg`, `badge-*.png`, `quiz-card-img.png`, `carousel-dots.svg`, `nav-btn-waffle-active.png`). **Dead because of Rule 36** — the prototype renders every icon via inline `<symbol>` + `<use href="#ic-*">`, so the on-disk files are never path-referenced.
+- `zul.test.git/assets/static-card/{bg-tertiary.png, deco-tertiary.svg}` + the compiled twins in `test.page.compiled/assets/static-card/` — **4** (tertiary static-card variant never wired up).
+- `src/image-repo/page.home/assets/main/YourSelectedSubjects-Desktop/{imagea.png, imageas.png, 1090-image-223.png}` — **3** (stray exports).
+- `src/image-repo/Home/Avatar-{Dad,Mom,Miss,Sir,Nadia}.png` — **5** (unreferenced home avatars).
+
+**Reaffirmed rule:** if an icon lives as a `<symbol>` (Rules 36/90), there must be **no** corresponding standalone file in `zul.test.git/icons/` — the two are mutually exclusive. Keeping both is what produced this orphan pile. Add new icons as symbols in the `<svg><defs>` block, never as loose files.

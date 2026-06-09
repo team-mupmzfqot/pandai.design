@@ -112,3 +112,11 @@ We're working in azrai.test.git/characterCustomizer.html (Profile page, DS node 
 The profile page is done (breadcrumb + header card + 3-column grid). Next: build the
 Character Customizer panel that the "Customize Avatar" button opens — I'll give the DS node.
 ```
+
+---
+
+## 6. Repo maintenance — 2026-06-09: unused asset cleanup
+
+**Commit `8ad9d6b` · branch `cleanup/remove-unused-assets`.** A repo-wide reference sweep removed **161 files referenced nowhere**. None were referenced in any `.md` doc, so no note above is affected. All recoverable via `git checkout staging -- <path>`.
+
+**Azrai-scope assets removed (6):** `azrai.test.git/assets/` — `avatar-icon.svg`, `avatar-photo.png`, `p-coin.svg`, `p-heart.svg`, `p-ruby.svg`, `p-trophy.svg`. None were path-referenced by `azrai.html` or `characterCustomizer.html` (status-badge glyphs render via inline symbols / DS exports). If the Character Customizer panel (Section 4 NEXT) needs an avatar photo or status-icon asset, re-export it fresh from DS into `azrai.test.git/assets/` at that time — don't assume these still exist.

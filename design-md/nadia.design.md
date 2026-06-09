@@ -6029,4 +6029,16 @@ This page uses the **fetch/injection pattern** — Navigation-Shell HTML and foo
 | `.bc-row` | `align-items: flex-start; width: 100%` | `width: 100%` (align-items removed) |
 | Token in `.btn-primary` | `var(--og-500)` / `var(--og-600)` | `var(--surface-primary-default)` / `var(--border-primary-focus)` (canonical tokens) |
 
-*Last updated: 2026-06-07 | Session 38 — BrowseClasses button states + is-pressing; all Nadia pages nav CSS synced to template | Branch: staging*
+*Last updated: 2026-06-09 | Session 38 — BrowseClasses button states + is-pressing; all Nadia pages nav CSS synced to template; repo maintenance — unused asset cleanup logged below | Branch: staging*
+
+---
+
+## Repo maintenance — 2026-06-09: unused asset cleanup
+
+**Commit `8ad9d6b` · branch `cleanup/remove-unused-assets`.** A repo-wide reference sweep removed **161 files referenced nowhere**. None were referenced in any `.md` doc, so no spec above is affected. All recoverable via `git checkout staging -- <path>`.
+
+**Nadia-scope (Rewards) assets removed (20):**
+- `src/image-repo/page.rewards/coin.quest/assets/` — **16** old Figma exports using the `Property 1=*` naming (`Property 1=Enroll Course.svg`, `…_Completed.svg`, `Goal & Reward`, `Personality Test`, `Score Exam`, `Score Full Mark`, `Submit Task`, `Topical Test`, `Verify Phone Number` — each with a `_Completed` twin). Superseded; never path-referenced by `nadia_Rewards-CoinQuest.html`.
+- `src/image-repo/page.rewards/merchandize/assets/{Merchandise.png, Merchandise-1.png, Merchandise-2.png, Merchandise-3.png}` — **4** (unreferenced).
+
+**Reaffirmed rule:** when re-exporting reward/quest art from Figma, replace the old `Property 1=*`-named exports rather than leaving both naming generations in the folder.

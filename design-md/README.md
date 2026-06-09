@@ -74,3 +74,9 @@ npm run storybook
 ## License
 
 MIT
+
+---
+
+## Repo maintenance log
+
+- **2026-06-09 — unused asset cleanup** (commit `8ad9d6b`, branch `cleanup/remove-unused-assets`): removed **161 files referenced nowhere** in the repo (151 orphaned image assets + 10 redundant `.gitkeep`), identified via a repo-wide basename reference sweep against all HTML/CSS/JS/TS/JSON/MD. Tracked images: 635 → 484. No code, HTML, config, or docs were touched. Per-designer breakdowns are logged at the foot of `zul.design.md`, `syakila.design.md`, `nadia.design.md`, and `azrai.git.md`. Everything is recoverable from git history (`git checkout staging -- <path>`).
