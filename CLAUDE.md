@@ -2868,4 +2868,29 @@ dropdown.style.right = 'auto';
 
 ---
 
-*Generated: May 2026 | Last updated: 2026-06-05 (Rules 94–95 corrected — Carousel uses Type=Desktop / Rule 42, not Desktop 4 gradients; Rule 97 = Pill Button dual strokes; workflow steps 0f + 0n–0p added) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+*Generated: May 2026 | Last updated: 2026-06-09 (Rules 94–95 corrected — Carousel uses Type=Desktop / Rule 42, not Desktop 4 gradients; Rule 97 = Pill Button dual strokes; workflow steps 0f + 0n–0p added; repo maintenance — unused asset cleanup logged below) | Cleanup target: Original DS (TLVKe3bgJTdVvuPAzgDq2f)*
+
+---
+
+## Repo maintenance — 2026-06-09: unused asset cleanup
+
+**Commit `8ad9d6b` · branch `cleanup/remove-unused-assets`.** A repo-wide reference sweep (every asset basename grepped against all HTML/CSS/JS/TS/JSON/MD) removed **161 files that were referenced nowhere** — **151 orphaned image assets + 10 redundant `.gitkeep`**. Tracked images: 635 → 484. No code, HTML, config, or docs were touched. None of the deleted files were referenced in any `.md`, so no rule above is affected. Everything is recoverable via `git checkout staging -- <path>`.
+
+**Removed by area:**
+
+| Folder | Count | Why unused |
+|---|---|---|
+| `zul.test.git/icons/` | 56 | Superseded by inline `<symbol>` + `<use href="#ic-*">` (Rule 36). A symbol and a loose icon file are mutually exclusive — never keep both. |
+| `src/image-repo/Achievement/score.card/assets/` | 49 | Nav/logo PNGs (pages use inline symbols) + 15 PNG twins of the `.svg` subject icons that are actually used. Subject icons are SVG-only. |
+| `src/image-repo/page.rewards/coin.quest/assets/` | 16 | Old `Property 1=*` Figma export naming — superseded. |
+| `src/image-repo/Learn/{experiments,videos}/icons/border-*.png` | 8 | Unreferenced. |
+| `azrai.test.git/assets/` | 6 | Unreferenced avatar + status-badge glyphs. |
+| `src/image-repo/Home/Avatar-*.png` | 5 | Unreferenced home avatars. |
+| `src/image-repo/page.rewards/merchandize/assets/Merchandise*.png` | 4 | Unreferenced. |
+| static-card tertiary (`zul.test.git/` + `test.page.compiled/`) | 4 | Tertiary variant never wired up. |
+| `src/image-repo/page.home/.../YourSelectedSubjects-Desktop/` | 3 | Stray exports. |
+| Redundant `.gitkeep` | 10 | Folders already contain tracked files. Justified `.gitkeep` in genuinely-empty folders retained. |
+
+**Per-designer breakdowns** are logged at the foot of `design-md/zul.design.md`, `design-md/syakila.design.md`, `design-md/nadia.design.md`, and `design-md/azrai.git.md`.
+
+**Standing rule going forward:** if an icon exists as an inline `<symbol>`, there must be **no** corresponding standalone file in an `icons/` folder; subject icons are SVG-only (no PNG twins); when re-exporting art from Figma, replace the prior-naming exports rather than leaving both generations in the folder. These three habits are what produced the orphan pile.
