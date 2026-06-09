@@ -6253,7 +6253,7 @@ Both variants:
 
 ---
 
-### Rule N-C43 — Sidebar button navigation — Rewards pages (Session 41, 2026-06-09)
+### Rule N-C44 — Sidebar button navigation — Rewards pages (Session 41, 2026-06-09)
 
 All 5 Rewards pages share a left sidebar with `<button class="sidebar-btn">` elements. These are native `<button>` — not `<a>` — so navigation requires JS.
 
@@ -6286,7 +6286,7 @@ try {
 
 ---
 
-### Rule N-C44 — In-page `<a href>` buttons — update href directly, no JS (Session 41, 2026-06-09)
+### Rule N-C45 — In-page `<a href>` buttons — update href directly, no JS (Session 41, 2026-06-09)
 
 Class pages use native `<a class="btn-*">` for within-page buttons (Browse Classes, Go to My Classes, Timetable, Join Class). These are real anchors — not `<div role="button">` — so just update the `href` attribute. No JS needed.
 
