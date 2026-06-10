@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pandai — Sign Up</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── DS Semantic tokens ── */
+    :root {
+      --surface-primary-default:          #00cc85;
+      --surface-primary-focus:            #00a36a;
+      --surface-secondary-default:        #b5f291;
+      --surface-secondary-default-subtle: #e8fbe8;
+      --surface-general-default:          #ffffff;
+      --border-primary-default:           #00cc85;
+      --border-primary-focus:             #00a36a;
+      --border-secondary-focus:           #70bc6f;
+      --border-tertiary-focus:            #00453d;
+      --border-general-default:           #d9d9d9;
+      --text-default-heading:             #404040;
+      --text-default-body:                #666666;
+      --text-default-caption:             #bfbfbf;
+      --text-primary-default:             #00cc85;
+      --text-primary-on-color:            #ffffff;
+      --text-secondary-focus:             #70bc6f;
+      --icon-primary-default:             #00cc85;
+      --text-error:                       #ff4c51;
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f0faf7;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    /* ══════════════════════════════════════
+       SIGNUP CARD
+    ══════════════════════════════════════ */
+    .signup-card {
+      display:        flex;
+      width:          1000px;
+      max-width:      100%;
+      height:         648px;
+      border-radius:  50px;
+      box-shadow:     inset 0 0 0 1px var(--border-primary-default);
+      overflow:       hidden;
+      flex-shrink:    0;
+    }
+
+    /* ══════════════════════════════════════
+       LEFT PANEL
+    ══════════════════════════════════════ */
+    .signup-panel-left {
+      width:          300px;
+      flex-shrink:    0;
+      background:     var(--surface-primary-default);
+      padding:        50px 32px 0 32px;
+      display:        flex;
+      flex-direction: column;
+      gap:            62px;
+      position:       relative;
+      overflow:       hidden;
+    }
+
+    /* Logo */
+    .signup-logo {
+      display:        flex;
+      align-items:    center;
+      gap:            8px;
+      height:         54px;
+    }
+    .signup-logo__mark {
+      width:          51px;
+      height:         54px;
+      flex-shrink:    0;
+      object-fit:     contain;
+    }
+    .signup-logo__text {
+      height:         37px;
+      width:          auto;
+      object-fit:     contain;
+    }
+
+    /* Tagline */
+    .signup-tagline {
+      display:        flex;
+      flex-direction: column;
+      gap:            17px;
+    }
+    .signup-tagline__heading {
+      font-size:      18px;
+      font-weight:    700;
+      color:          #ffffff;
+      line-height:    1.5;
+    }
+    .signup-tagline__body {
+      font-size:      14px;
+      font-weight:    400;
+      color:          #ffffff;
+      line-height:    1.57;
+    }
+
+    /* Illustration */
+    .signup-illustration {
+      position:       absolute;
+      bottom:         0;
+      left:           0;
+      right:          0;
+    }
+    .signup-illustration img {
+      width:          100%;
+      height:         auto;
+      display:        block;
+    }
+
+    /* ══════════════════════════════════════
+       RIGHT PANEL
+    ══════════════════════════════════════ */
+    .signup-panel-right {
+      flex:           1;
+      background:     var(--surface-general-default);
+      padding:        60px 32px 28px 32px;
+      display:        flex;
+      flex-direction: column;
+      gap:            25px;
+    }
+
+    /* ── Header: title block + Button Group ── */
+    .signup-header {
+      display:        flex;
+      flex-direction: column;
+      gap:            15px;
+    }
+    .signup-title-block {
+      display:        flex;
+      flex-direction: column;
+      gap:            5px;
+    }
+    .signup-title {
+      font-size:      24px;
+      font-weight:    700;
+      color:          var(--border-tertiary-focus);
+      line-height:    36px;
+    }
+    .signup-subtitle {
+      font-size:      16px;
+      font-weight:    600;
+      color:          var(--text-default-caption);
+      line-height:    24px;
+    }
+
+    /* ── Button Group - 1.5 (Size=L) ── */
+    .btn-group {
+      display:        flex;
+      height:         40px;
+      border-radius:  999px;
+      overflow:       hidden;
+      box-shadow:     inset 0 0 0 1px var(--border-general-default);
+    }
+    .btn-group-part {
+      flex:           1;
+      height:         100%;
+      background:     var(--surface-general-default);
+      box-shadow:     inset 0 0 0 1px var(--border-general-default);
+      color:          var(--text-default-body);
+      font-family:    'Poppins', sans-serif;
+      font-size:      14px;
+      font-weight:    600;
+      border:         none;
+      cursor:         pointer;
+      user-select:    none;
+      line-height:    20px;
+    }
+    .btn-group-part.is-active {
+      background:     var(--surface-primary-default);
+      box-shadow:     inset 0 0 0 1px var(--border-primary-focus);
+      color:          var(--text-primary-on-color);
+    }
+    .btn-group-part:hover:not(.is-active) {
+      background:     var(--surface-secondary-default);
+      box-shadow:     inset 0 0 0 1px var(--border-secondary-focus);
+      color:          var(--text-secondary-focus);
+    }
+
+    /* ── Form ── */
+    .signup-form {
+      display:        flex;
+      flex-direction: column;
+      gap:            25px;
+    }
+    .signup-fields {
+      display:        flex;
+      flex-direction: column;
+      gap:            15px;
+    }
+
+    /* ── Input Field - 1.5 (VERTICAL gap:4, label 18px + box 40px + helper 16px) ── */
+    .input-field {
+      display:        flex;
+      flex-direction: column;
+      gap:            4px;
+    }
+    .input-field__label-row {
+      display:        flex;
+      align-items:    center;
+      gap:            2px;
+      height:         18px;
+    }
+    .input-field__label {
+      font-size:      12px;
+      font-weight:    500;
+      color:          var(--text-default-body);
+      line-height:    18px;
+    }
+    .input-field__info-icon {
+      width:          10px;
+      height:         10px;
+      color:          var(--icon-primary-default);
+      flex-shrink:    0;
+    }
+    .input-field__required {
+      font-size:      12px;
+      font-weight:    500;
+      color:          var(--text-error);
+      line-height:    18px;
+    }
+    /* Input box: strokeAlign INSIDE → box-shadow:inset (Rule 60) */
+    .input-field__box {
+      display:        flex;
+      align-items:    center;
+      gap:            4px;
+      height:         40px;
+      padding:        8px 12px;
+      background:     var(--surface-general-default);
+      box-shadow:     inset 0 0 0 1px var(--border-general-default);
+      border-radius:  999px;
+    }
+    .input-field__box:focus-within {
+      box-shadow:     inset 0 0 0 1px var(--border-primary-default);
+    }
+    .input-field__box input {
+      flex:           1;
+      min-width:      0;
+      border:         none;
+      outline:        none;
+      background:     transparent;
+      font-family:    'Poppins', sans-serif;
+      font-size:      12px;
+      font-weight:    500;
+      color:          var(--text-default-heading);
+      line-height:    18px;
+    }
+    .input-field__box input::placeholder {
+      color:          var(--text-default-caption);
+    }
+    /* Eye toggle button (Rule 32 — reset native button styles) */
+    .input-field__eye-btn {
+      background:     none;
+      border:         none;
+      padding:        0;
+      cursor:         pointer;
+      display:        flex;
+      align-items:    center;
+      justify-content: center;
+      color:          var(--text-default-body);
+      flex-shrink:    0;
+      width:          18px;
+      height:         18px;
+    }
+    .input-field__eye-icon {
+      width:          18px;
+      height:         18px;
+    }
+    .input-field__helper {
+      font-size:      10px;
+      font-weight:    400;
+      color:          var(--text-default-caption);
+      line-height:    16px;
+    }
+
+    /* ── T&C row ── */
+    .tc-row {
+      display:        flex;
+      align-items:    center;
+      gap:            4px;
+      height:         20px;
+    }
+    .tc-row__text {
+      font-size:      14px;
+      font-weight:    500;
+      color:          var(--text-default-body);
+      line-height:    20px;
+      white-space:    nowrap;
+    }
+    .tc-row__link {
+      font-size:      14px;
+      font-weight:    500;
+      color:          var(--text-primary-default);
+      line-height:    20px;
+      text-decoration: none;
+      white-space:    nowrap;
+    }
+    .tc-row__link:hover { text-decoration: underline; }
+
+    /* ── Footer ── */
+    .signup-footer {
+      display:        flex;
+      flex-direction: column;
+      gap:            15px;
+    }
+
+    /* ── Button - 1.5 Primary/L (Rule 31) ── */
+    .btn-signup {
+      display:        flex;
+      align-items:    center;
+      width:          100%;
+      height:         40px;
+      padding:        8px 12px;
+      border-radius:  60px;
+      background:     var(--surface-primary-default);
+      box-shadow:     inset 0 0 0 1px var(--border-primary-focus);
+      border:         none;
+      cursor:         pointer;
+      user-select:    none;
+      gap:            0;
+    }
+    .btn-signup__text-slot {
+      flex:           1;
+      padding:        0 8px;
+      display:        flex;
+      align-items:    center;
+      justify-content: center;
+    }
+    .btn-signup__label {
+      font-family:    'Poppins', sans-serif;
+      font-size:      14px;
+      font-weight:    600;
+      color:          var(--text-primary-on-color);
+      line-height:    20px;
+    }
+    /* Arrow: 24px circle (p:4px → 16×16 chevron clip), Rule 31 L size */
+    .btn-signup__arrow {
+      width:          24px;
+      height:         24px;
+      border-radius:  60px;
+      background:     #99ebce;
+      padding:        4px;
+      flex-shrink:    0;
+      display:        flex;
+      align-items:    center;
+      justify-content: center;
+    }
+    .btn-signup__chevron {
+      width:          16px;
+      height:         16px;
+      color:          var(--border-primary-focus);
+    }
+    /* Hover — Rule 19 */
+    .btn-signup:hover {
+      background:     var(--surface-secondary-default);
+      box-shadow:     inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .btn-signup:hover .btn-signup__label   { color: var(--text-secondary-focus); }
+    .btn-signup:hover .btn-signup__arrow   { background: var(--surface-secondary-default-subtle); }
+    .btn-signup:hover .btn-signup__chevron { color: var(--text-secondary-focus); }
+    /* Pressed — Rule 40 Primary/L */
+    .btn-signup:active,
+    .btn-signup.is-pressing {
+      background:     var(--surface-primary-focus);
+      box-shadow:     inset 0 0 0 1px var(--border-primary-default);
+    }
+    .btn-signup:active .btn-signup__label,
+    .btn-signup.is-pressing .btn-signup__label { color: var(--text-primary-default); }
+    .btn-signup:active .btn-signup__arrow,
+    .btn-signup.is-pressing .btn-signup__arrow { background: var(--surface-primary-default); }
+    .btn-signup:active .btn-signup__chevron,
+    .btn-signup.is-pressing .btn-signup__chevron { color: var(--border-primary-focus); }
+
+    /* ── Footer links row ── */
+    .signup-links {
+      display:        flex;
+      align-items:    center;
+      justify-content: space-between;
+      height:         20px;
+    }
+    .signup-links__group {
+      display:        flex;
+      align-items:    center;
+      gap:            8px;
+    }
+    .signup-links__text {
+      font-size:      14px;
+      font-weight:    500;
+      color:          var(--text-default-body);
+      line-height:    20px;
+    }
+    .signup-links__link {
+      font-size:      14px;
+      font-weight:    500;
+      color:          var(--text-primary-default);
+      line-height:    20px;
+      text-decoration: none;
+    }
+    .signup-links__link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<!-- ══ SVG icon symbol defs (Rule 36) ══════════════════════════ -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <defs>
+    <!-- Outline/info (24×24 DS frame, viewBox with 1px buffer per Rule 27) -->
+    <symbol id="ic-info" viewBox="-1 -1 26 26">
+      <path d="M12 16V12M12 8H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+
+    <!-- Outline/eye (24×24 DS frame) -->
+    <symbol id="ic-eye" viewBox="-1 -1 26 26">
+      <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+
+    <!-- Outline/eye-off (24×24 DS frame) -->
+    <symbol id="ic-eye-off" viewBox="-1 -1 26 26">
+      <path d="M9.9 4.24C10.5883 4.07888 11.2931 3.99834 12 4C19 4 23 12 23 12C22.393 13.1356 21.6691 14.2047 20.84 15.19M14.12 14.12C13.8454 14.4148 13.5141 14.6512 13.1462 14.8151C12.7782 14.9791 12.3809 15.0673 11.9781 15.0744C11.5753 15.0815 11.1752 15.0074 10.8016 14.8565C10.4281 14.7056 10.0887 14.4811 9.80385 14.1962C9.51897 13.9113 9.29439 13.572 9.14351 13.1984C8.99262 12.8249 8.91853 12.4247 8.92563 12.0219C8.93274 11.6191 9.02091 11.2218 9.18488 10.8539C9.34884 10.4859 9.58525 10.1547 9.88 9.88M17.94 17.94C16.2306 19.243 14.1491 19.9649 12 20C5 20 1 12 1 12C2.24389 9.68189 3.96914 7.65661 6.06 6.06L17.94 17.94ZM1 1L23 23"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+
+    <!-- Button 1.5 chevron clip Size=M/L (DS node 479:352, Rule 16) -->
+    <symbol id="ic-chevron-btn-m" viewBox="0 0 16 16">
+      <path d="M6 12L10 8L6 4"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ══ Signup card ═══════════════════════════════════════════════ -->
+<div class="signup-card">
+
+  <!-- Left panel — bg #00cc85, pt:50 pr:32 pb:0 pl:32, gap:62 -->
+  <div class="signup-panel-left">
+
+    <!-- Logo: mark (51×54) + white wordmark (164×37) -->
+    <div class="signup-logo">
+      <img class="signup-logo__mark"
+           src="../src/image-repo/page.onboarding/assets/main/SignUp-Desktop/logo-mark.svg"
+           alt="">
+      <img class="signup-logo__text"
+           src="../src/image-repo/page.onboarding/assets/main/SignUp-Desktop/pandai-text-white.svg"
+           alt="Pandai">
+    </div>
+
+    <!-- Tagline: heading + body -->
+    <div class="signup-tagline">
+      <p class="signup-tagline__heading">Generate Assessments, Monitor Growth, Plan for Success!</p>
+      <p class="signup-tagline__body">Empower your teaching journey so you'll have the confidence and resources to unlock your students' true potential.</p>
+    </div>
+
+    <!-- Cover illustration (132×125 at 0.5x) -->
+    <div class="signup-illustration">
+      <img src="../src/image-repo/page.onboarding/assets/main/SignUp-Desktop/cover-students.png" alt="">
+    </div>
+
+  </div>
+
+  <!-- Right panel — bg #fff, pt:60 pr:32 pb:28 pl:32, gap:25 -->
+  <div class="signup-panel-right">
+
+    <!-- ── Header: title block + Button Group ── -->
+    <div class="signup-header">
+      <div class="signup-title-block">
+        <h1 class="signup-title">Sign Up</h1>
+        <p class="signup-subtitle">Register Pandai account as a:</p>
+      </div>
+      <!-- Button Group - 1.5, Type=Button Group, Size=L, cornerRadius:108/999 -->
+      <div class="btn-group" role="group" aria-label="Account type">
+        <button class="btn-group-part is-active" data-role="student">Student</button>
+        <button class="btn-group-part" data-role="parent">Parent</button>
+        <button class="btn-group-part" data-role="teacher">Teacher</button>
+      </div>
+    </div>
+
+    <!-- ── Form: fields + T&C ── -->
+    <div class="signup-form">
+      <div class="signup-fields">
+
+        <!-- Input Field 1.5 — Full Name -->
+        <div class="input-field">
+          <div class="input-field__label-row">
+            <label class="input-field__label" for="inp-fullname">Full Name</label>
+            <svg class="input-field__info-icon" aria-hidden="true"><use href="#ic-info"/></svg>
+            <span class="input-field__required" aria-hidden="true">*</span>
+          </div>
+          <div class="input-field__box">
+            <input type="text" id="inp-fullname" placeholder="Label"
+                   autocomplete="name" aria-required="true">
+          </div>
+          <p class="input-field__helper">This info will be used to suggest you username</p>
+        </div>
+
+        <!-- Input Field 1.5 — Username -->
+        <div class="input-field">
+          <div class="input-field__label-row">
+            <label class="input-field__label" for="inp-username">Username</label>
+            <svg class="input-field__info-icon" aria-hidden="true"><use href="#ic-info"/></svg>
+            <span class="input-field__required" aria-hidden="true">*</span>
+          </div>
+          <div class="input-field__box">
+            <input type="text" id="inp-username" placeholder="Enter your username"
+                   autocomplete="username" aria-required="true">
+          </div>
+          <p class="input-field__helper">This name will be your unique ID &amp; display name in Pandai</p>
+        </div>
+
+        <!-- Input Field 1.5 — Password (eye toggle, no helper text — visible:false in DS) -->
+        <div class="input-field">
+          <div class="input-field__label-row">
+            <label class="input-field__label" for="inp-password">Password</label>
+            <svg class="input-field__info-icon" aria-hidden="true"><use href="#ic-info"/></svg>
+            <span class="input-field__required" aria-hidden="true">*</span>
+          </div>
+          <div class="input-field__box">
+            <input type="password" id="inp-password" placeholder="Enter your password"
+                   autocomplete="new-password" aria-required="true">
+            <button type="button" class="input-field__eye-btn" id="toggle-password"
+                    aria-label="Show password" aria-controls="inp-password">
+              <svg class="input-field__eye-icon" aria-hidden="true"><use href="#ic-eye"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- T&C row — DS typo "accepth" preserved as-is -->
+      <div class="tc-row">
+        <span class="tc-row__text">By registering, I accepth the</span>
+        <a href="#" class="tc-row__link">Terms and Conditions</a>
+      </div>
+    </div>
+
+    <!-- ── Footer: Primary/L button + links ── -->
+    <div class="signup-footer">
+
+      <!-- Button - 1.5 Primary/L (Rule 31) -->
+      <button type="submit" class="btn-signup" id="btn-signup">
+        <div class="btn-signup__text-slot">
+          <span class="btn-signup__label">Sign Up</span>
+        </div>
+        <div class="btn-signup__arrow" aria-hidden="true">
+          <svg class="btn-signup__chevron"><use href="#ic-chevron-btn-m"/></svg>
+        </div>
+      </button>
+
+      <!-- Links row -->
+      <div class="signup-links">
+        <div class="signup-links__group">
+          <span class="signup-links__text">Have an account?</span>
+          <a href="#" class="signup-links__link">Sign In</a>
+        </div>
+        <div class="signup-links__group">
+          <span class="signup-links__text">Need Help?</span>
+          <a href="#" class="signup-links__link">Get Support</a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // ── Button Group role selection
+  document.querySelectorAll('.btn-group-part').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.btn-group-part').forEach(function (b) {
+        b.classList.remove('is-active');
+      });
+      btn.classList.add('is-active');
+    });
+  });
+
+  // ── Password eye toggle
+  var toggleBtn = document.getElementById('toggle-password');
+  var pwdInput  = document.getElementById('inp-password');
+  if (toggleBtn && pwdInput) {
+    toggleBtn.addEventListener('click', function () {
+      var showing = pwdInput.type === 'text';
+      pwdInput.type = showing ? 'password' : 'text';
+      toggleBtn.querySelector('use').setAttribute('href', showing ? '#ic-eye' : '#ic-eye-off');
+      toggleBtn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+    });
+  }
+
+  // ── Sign Up button pressed state (Rule 83 — JS mousedown for Electron webview reliability)
+  var btnSignup = document.getElementById('btn-signup');
+  if (btnSignup) {
+    btnSignup.addEventListener('mousedown',  function () { btnSignup.classList.add('is-pressing'); });
+    btnSignup.addEventListener('mouseup',    function () { btnSignup.classList.remove('is-pressing'); });
+    btnSignup.addEventListener('mouseleave', function () { btnSignup.classList.remove('is-pressing'); });
+  }
+</script>
+
+</body>
+</html>
