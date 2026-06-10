@@ -2167,7 +2167,9 @@
     /* â”€â”€ Card header row (subject badge + download btn) â”€â”€ */
     .an-header {
       display: flex; align-items: center; justify-content: space-between;
-      height: 32px; flex-shrink: 0;
+      flex-shrink: 0; width: 100%;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border-general-default);
     }
 
     /* â”€â”€ Subject Badge BM â€” L size (32px)
@@ -2227,21 +2229,22 @@
 
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        ANALYTICS INNER CARD
-       DS: white bg, grey border, 18px r, pt-28 px-60 pb-54
+       DS: white bg, grey border, 18px r, pt-28 px-60 pb-28 (header inside with border-bottom)
     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     .an-analytics-card {
       background: var(--surface-general-default);
       border: 1px solid var(--border-general-default);
       border-radius: var(--corner-2xl);
-      padding: 28px 60px 54px;
-      overflow: visible;
-      display: flex; align-items: center; justify-content: center;
+      padding: 28px 60px;
+      overflow: hidden;
+      display: flex; flex-direction: column; align-items: stretch;
     }
 
     /* Row with grade + donut pairs. gap-60px between grade and donut section */
     .an-analytics-row {
       display: flex; align-items: center;
       gap: 60px; width: 100%; overflow: hidden;
+      padding-top: 28px; padding-bottom: 28px;
     }
 
     /* â”€â”€ Grade column (195px w, flex-col gap-16px) â”€â”€ */
@@ -3830,39 +3833,41 @@
   <section id="AnalysisCard-Desktop">
     <div class="an-outer">
 
-      <!-- â”€â”€ HEADER: Subject badge + Download button â”€â”€ -->
-      <div class="an-header">
-
-        <!-- Subject Badge BM â€” L size (32px)
-             DS: Subject Badge/Bahasa Melayu - L, border #2e4799 bg #4d77ff -->
-        <div id="an-badge" class="an-subject-badge">
-          <div class="an-subject-badge__icon">
-            <img id="an-badge-icon" src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-bmelayu.svg" alt="Bahasa Melayu" width="20" height="20">
-          </div>
-          <div id="an-badge-label" class="an-subject-badge__label">
-            <svg class="an-subject-badge__pointer" width="4" height="8" viewBox="0 0 4 8" fill="white" aria-hidden="true">
-              <path d="M 0 0 L 4 4 L 0 8 Z"/>
-            </svg>
-            Bahasa Melayu
-          </div>
-        </div>
-
-        <!-- Download button â€” Secondary style, 32px -->
-        <button class="an-download-btn" type="button">
-          <svg aria-hidden="true"><use href="#ic-download"/></svg>
-          Download
-        </button>
-
-      </div><!-- /an-header -->
-
-
       <!-- â”€â”€ CONTENT AREA: analytics + topics + table â”€â”€ -->
       <div class="an-content">
 
-        <!-- â•â• ANALYTICS INNER CARD
-             DS: white bg, border #d9d9d9, r-18px, pt-28 px-60 pb-54
-        â•â• -->
+        <!-- ANALYTICS INNER CARD
+             DS node I5215:105749;2881:36281;5215:105672
+             white bg · border #d9d9d9 · r-18px · pt-28 px-60 pb-28
+             Header (badge + btn) is inside with border-bottom separator -->
+        
         <div class="an-analytics-card">
+
+          <!-- HEADER: Subject badge + Download button (inside white card) -->
+          <div class="an-header">
+
+            <!-- Subject Badge BM - L size (32px)
+                 DS: Subject Badge/Bahasa Melayu - L, border #2e4799 bg #4d77ff -->
+            <div id="an-badge" class="an-subject-badge">
+              <div class="an-subject-badge__icon">
+                <img id="an-badge-icon" src="../src/image-repo/Achievement/score.card/assets/subject-icons/icon-bmelayu.svg" alt="Bahasa Melayu" width="20" height="20">
+              </div>
+              <div id="an-badge-label" class="an-subject-badge__label">
+                <svg class="an-subject-badge__pointer" width="4" height="8" viewBox="0 0 4 8" fill="white" aria-hidden="true">
+                  <path d="M 0 0 L 4 4 L 0 8 Z"/>
+                </svg>
+                Bahasa Melayu
+              </div>
+            </div>
+
+            <!-- Download button - Secondary/M style, 32px -->
+            <button class="an-download-btn" type="button">
+              <svg aria-hidden="true"><use href="#ic-download"/></svg>
+              Download
+            </button>
+
+          </div><!-- /an-header -->
+
           <div class="an-analytics-row">
 
             <!-- GRADE SECTION (195px, flex-col gap-16px) -->
