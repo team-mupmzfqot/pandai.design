@@ -2204,7 +2204,7 @@
       display: flex; flex-direction: column;
       gap: var(--spacing-space-m);
     }
-    .vd-main-card { width: 843px; flex-shrink: 0; }
+    .vd-main-card { flex: 1 0 0; min-width: 0; }
 
     .qn-card__header {
       background: var(--qn-subj-default, var(--subjects-b-melayu-default));
@@ -2240,26 +2240,17 @@
       display: flex; flex-direction: column; gap: var(--spacing-space-m); width: 100%;
     }
 
-    /* Video player — 16:9 aspect ratio fills iframe without letterboxing */
+    /* Video player — 16:9 aspect ratio, black bg matches YouTube player chrome */
     .vd-player {
       position: relative; overflow: hidden;
       width: 100%; aspect-ratio: 16 / 9;
+      background: #000;
       border: 1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus));
       border-radius: 18px;
       flex-shrink: 0;
     }
     .vd-player__iframe {
       position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
-    }
-    .vd-player__bg {
-      position: absolute; inset: 0;
-      background-color: #e8e8e8;
-      background-image: linear-gradient(45deg,#ccc 25%,transparent 25%),
-                        linear-gradient(-45deg,#ccc 25%,transparent 25%),
-                        linear-gradient(45deg,transparent 75%,#ccc 75%),
-                        linear-gradient(-45deg,transparent 75%,#ccc 75%);
-      background-size: 20px 20px;
-      background-position: 0 0, 0 10px, 10px -10px, -10px 0;
     }
 
     /* Content below player (DS node 5137:81238) */
@@ -2292,13 +2283,15 @@
 
     .vd-content-heading { font-size: 16px; font-weight: 600; line-height: 24px; color: var(--text-default-heading); white-space: nowrap; }
 
-    /* "language" pill (DS node 5137:81244) */
+    /* "language" pill (DS node 5137:81244 — Pill Badge - 1.5, updated with border) */
     .vd-lang-pill {
       display: flex; align-items: center; justify-content: center;
       background: var(--surface-primary-default);
-      border-radius: 60px; height: 32px; padding: 2px 16px; overflow: hidden; flex-shrink: 0;
+      border: 1px solid var(--border-primary-focus);
+      border-radius: 60px; height: 32px; padding: 2px 16px;
+      gap: var(--spacing-space-xxs); overflow: hidden; flex-shrink: 0;
     }
-    .vd-lang-pill__text { font-size: 14px; font-weight: 500; line-height: 20px; color: #ffffff; }
+    .vd-lang-pill__text { font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-primary-on-color); }
 
     /* "Report this Video" button (DS node 5137:81245 — Secondary/M no arrow) */
     .vd-report-btn {
@@ -2319,7 +2312,7 @@
     .vd-description a { color: var(--text-default-body); text-decoration: underline; cursor: pointer; }
 
     /* ── Sidebar (DS node 4506:116372) ── */
-    .vd-sidebar { flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: var(--spacing-space-m); }
+    .vd-sidebar { flex: 1 0 0; min-width: 0; max-width: 461px; display: flex; flex-direction: column; gap: var(--spacing-space-m); }
 
     /* Chapter/Topic meta card (DS node 4506:116373) */
     .vd-meta-card {
@@ -2358,42 +2351,77 @@
     /* Nav buttons row (DS node 4506:116386) */
     .vd-nav-btns { display: flex; align-items: center; justify-content: space-between; }
 
-    /* "Back to List" — Secondary/M with L-arrow (DS node 4506:116387) */
+    /* "Back to List" — Secondary/M, L-Arrow (DS node 4506:116387, Rule 95) */
     .btn-back-list {
       display: flex; align-items: center; height: 32px; padding: 2px 8px;
       background: var(--surface-general-default);
       border: none; box-shadow: inset 0 0 0 1px var(--border-primary-default);
-      border-radius: 60px; cursor: pointer; font-family: var(--font-family);
+      border-radius: 60px; cursor: pointer; font-family: var(--font-family); text-decoration: none;
     }
     .btn-back-list__arrow {
-      width: 18px; height: 18px; padding: 1px;
+      width: 18px; height: 18px; padding: 1px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
       background: var(--surface-general-default);
       box-shadow: inset 0 0 0 1px var(--border-primary-default);
-      border-radius: 60px; flex-shrink: 0;
+      border-radius: 60px;
     }
     .btn-back-list__clip { width: 16px; height: 16px; overflow: hidden; flex-shrink: 0; }
-    .btn-back-list__clip svg { display: block; width: 16px; height: 16px; color: var(--border-primary-default); }
+    .btn-back-list__clip svg { display: block; width: 16px; height: 16px; color: var(--icon-primary-default); }
     .btn-back-list__label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--text-primary-default); padding: 0 4px; }
-    .btn-back-list:hover { background: var(--surface-secondary-default-subtle); }
+    /* Hover */
+    .btn-back-list:hover                           { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+    .btn-back-list:hover .btn-back-list__label     { color: var(--text-secondary-focus); }
+    .btn-back-list:hover .btn-back-list__arrow     { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+    .btn-back-list:hover .btn-back-list__clip svg  { color: var(--text-secondary-focus); }
+    /* Pressed */
+    .btn-back-list:active,
+    .btn-back-list.is-pressing                              { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+    .btn-back-list:active .btn-back-list__label,
+    .btn-back-list.is-pressing .btn-back-list__label        { color: var(--text-primary-default); }
+    .btn-back-list:active .btn-back-list__arrow,
+    .btn-back-list.is-pressing .btn-back-list__arrow        { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+    .btn-back-list:active .btn-back-list__clip svg,
+    .btn-back-list.is-pressing .btn-back-list__clip svg     { color: var(--icon-primary-default); }
+    /* Disabled */
+    .btn-back-list.is-disabled                              { background: var(--surface-disabled-primary); box-shadow: inset 0 0 0 1px var(--border-disabled-disabled); pointer-events: none; }
+    .btn-back-list.is-disabled .btn-back-list__label        { color: var(--text-disabled-default); }
+    .btn-back-list.is-disabled .btn-back-list__arrow        { background: var(--surface-disabled-primary); box-shadow: inset 0 0 0 1px var(--border-disabled-disabled); }
+    .btn-back-list.is-disabled .btn-back-list__clip svg     { color: var(--text-disabled-default); }
 
-    /* "View all videos" — Primary/M with R-arrow (DS node 4506:116388) */
+    /* "View all videos" — Primary/M, R-Arrow (DS node 4506:116388) */
     .btn-view-all {
       display: flex; align-items: center; height: 32px; padding: 2px 8px;
       background: var(--surface-primary-default);
-      border: 1px solid var(--border-primary-focus);
-      border-radius: 60px; cursor: pointer; font-family: var(--font-family);
+      border: none; box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+      border-radius: 60px; cursor: pointer; font-family: var(--font-family); text-decoration: none;
     }
-    .btn-view-all__label { font-size: 12px; font-weight: 600; line-height: 18px; color: #ffffff; padding: 0 4px; }
+    .btn-view-all__label { font-size: 12px; font-weight: 600; line-height: 18px; color: var(--text-primary-on-color); padding: 0 4px; }
     .btn-view-all__arrow {
-      width: 20px; height: 20px; padding: 2px;
+      width: 20px; height: 20px; padding: 2px; flex-shrink: 0;
       background: var(--surface-primary-default-subtle-hover);
-      border-radius: 60px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      border-radius: 60px; display: flex; align-items: center; justify-content: center;
     }
     .btn-view-all__clip { width: 16px; height: 16px; overflow: hidden; flex-shrink: 0; }
     .btn-view-all__clip svg { display: block; width: 16px; height: 16px; color: var(--border-primary-focus); }
-    .btn-view-all:hover { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); border-color: transparent; }
-    .btn-view-all:hover .btn-view-all__label { color: var(--text-secondary-focus); }
+    /* Hover */
+    .btn-view-all:hover                           { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+    .btn-view-all:hover .btn-view-all__label      { color: var(--text-secondary-focus); }
+    .btn-view-all:hover .btn-view-all__arrow      { background: var(--surface-secondary-default-subtle); }
+    .btn-view-all:hover .btn-view-all__clip svg   { color: var(--text-secondary-focus); }
+    /* Pressed */
+    .btn-view-all:active,
+    .btn-view-all.is-pressing                             { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+    .btn-view-all:active .btn-view-all__label,
+    .btn-view-all.is-pressing .btn-view-all__label        { color: var(--text-primary-default); }
+    .btn-view-all:active .btn-view-all__arrow,
+    .btn-view-all.is-pressing .btn-view-all__arrow        { background: var(--surface-primary-default); }
+    .btn-view-all:active .btn-view-all__clip svg,
+    .btn-view-all.is-pressing .btn-view-all__clip svg     { color: var(--border-primary-focus); }
+    /* Disabled */
+    .btn-view-all.is-disabled                             { background: var(--surface-disabled-primary); box-shadow: inset 0 0 0 1px var(--border-disabled-disabled); pointer-events: none; }
+    .btn-view-all.is-disabled .btn-view-all__label        { color: var(--text-disabled-default); }
+    .btn-view-all.is-disabled .btn-view-all__arrow        { background: var(--surface-disabled-primary); }
+    .btn-view-all.is-disabled .btn-view-all__clip svg     { color: var(--text-disabled-default); }
 
     /* Related Videos card (DS node 4506:116389) */
     .vd-related-card { border: 1px solid var(--qn-subj-focus, var(--subjects-b-melayu-focus)); border-radius: 18px; overflow: hidden; }
@@ -3639,7 +3667,7 @@
                       </div>
                       <div class="vd-content-header-right">
                         <div class="vd-lang-pill">
-                          <span class="vd-lang-pill__text">Language</span>
+                          <span class="vd-lang-pill__text">Malay</span>
                         </div>
                         <button class="vd-report-btn" type="button">
                           <svg class="vd-report-btn__icon" width="16" height="16" aria-hidden="true"><use href="#ic-alert-triangle"/></svg>
@@ -3692,22 +3720,22 @@
 
                   <!-- Navigation buttons: Back to List + View all videos -->
                   <div class="vd-nav-btns">
-                    <button class="btn-back-list" type="button">
+                    <a class="btn-back-list" href="videos.selections.html">
                       <div class="btn-back-list__arrow">
                         <div class="btn-back-list__clip">
                           <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 3L4.5 6L7.5 9"/></svg>
                         </div>
                       </div>
                       <span class="btn-back-list__label">Back to List</span>
-                    </button>
-                    <button class="btn-view-all" type="button">
+                    </a>
+                    <a class="btn-view-all" href="videos.html">
                       <span class="btn-view-all__label">View all videos</span>
                       <div class="btn-view-all__arrow">
                         <div class="btn-view-all__clip">
                           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12L10 8L6 4"/></svg>
                         </div>
                       </div>
-                    </button>
+                    </a>
                   </div>
                 </div><!-- end vd-meta-card -->
 
@@ -3720,11 +3748,11 @@
                   <!-- Related row 1 -->
                   <div class="vd-related-row">
                     <div class="vd-related-thumb">
-                      <div class="vd-related-thumb-bg"></div>
+                      <div class="vd-related-thumb-bg" style="background-image:url('../src/image-repo/syakila/assets/main/RelatedPanel/thumb-1.png');background-size:cover;background-position:center;"></div>
                     </div>
                     <div class="vd-related-info">
                       <span class="vd-related-title">How to improve your English speaking skills (by yourself)</span>
-                      <div class="vd-related-pill"><span class="vd-related-pill__text">Language</span></div>
+                      <div class="vd-related-pill"><span class="vd-related-pill__text">Malay</span></div>
                       <div class="vd-related-contributor">
                         <svg class="vd-related-contributor__icon" width="12" height="12" aria-hidden="true"><use href="#ic-user"/></svg>
                         <span class="vd-related-contributor__text">EngFluent</span>
@@ -3735,11 +3763,11 @@
                   <!-- Related row 2 -->
                   <div class="vd-related-row">
                     <div class="vd-related-thumb">
-                      <div class="vd-related-thumb-bg"></div>
+                      <div class="vd-related-thumb-bg" style="background-image:url('../src/image-repo/syakila/assets/main/RelatedPanel/thumb-2.png');background-size:cover;background-position:center;"></div>
                     </div>
                     <div class="vd-related-info">
                       <span class="vd-related-title">Bahasa Melayu — Teknik Menjawab Soalan KBAT</span>
-                      <div class="vd-related-pill"><span class="vd-related-pill__text">Language</span></div>
+                      <div class="vd-related-pill"><span class="vd-related-pill__text">Malay</span></div>
                       <div class="vd-related-contributor">
                         <svg class="vd-related-contributor__icon" width="12" height="12" aria-hidden="true"><use href="#ic-user"/></svg>
                         <span class="vd-related-contributor__text">CikguHafiz</span>
@@ -3750,11 +3778,11 @@
                   <!-- Related row 3 -->
                   <div class="vd-related-row">
                     <div class="vd-related-thumb">
-                      <div class="vd-related-thumb-bg"></div>
+                      <div class="vd-related-thumb-bg" style="background-image:url('../src/image-repo/syakila/assets/main/RelatedPanel/thumb-3.png');background-size:cover;background-position:center;"></div>
                     </div>
                     <div class="vd-related-info">
                       <span class="vd-related-title">Penulisan Karangan SPM — Cara Mudah Dapat A</span>
-                      <div class="vd-related-pill"><span class="vd-related-pill__text">Language</span></div>
+                      <div class="vd-related-pill"><span class="vd-related-pill__text">Malay</span></div>
                       <div class="vd-related-contributor">
                         <svg class="vd-related-contributor__icon" width="12" height="12" aria-hidden="true"><use href="#ic-user"/></svg>
                         <span class="vd-related-contributor__text">PandaiTV</span>
@@ -3798,25 +3826,19 @@
 
   <script>
 
-    // Back to List + View all notes — navigation handlers (critical first, Rule 14)
+    // Back to List + View all videos — is-pressing handlers (navigation via <a href>, Rule 14)
     (function () {
-      var btnBack = document.querySelector('.qn-btn-back');
-      var btnView = document.querySelector('.qn-btn-view');
+      var btnBack = document.querySelector('.btn-back-list');
+      var btnView = document.querySelector('.btn-view-all');
       if (btnBack) {
         btnBack.addEventListener('mousedown',  function () { btnBack.classList.add('is-pressing'); });
         btnBack.addEventListener('mouseup',    function () { btnBack.classList.remove('is-pressing'); });
         btnBack.addEventListener('mouseleave', function () { btnBack.classList.remove('is-pressing'); });
-        btnBack.addEventListener('click',      function () {
-          var back = 'quickNotes.selections.html';
-          if (window.location.search) back += window.location.search;
-          window.location.href = back;
-        });
       }
       if (btnView) {
         btnView.addEventListener('mousedown',  function () { btnView.classList.add('is-pressing'); });
         btnView.addEventListener('mouseup',    function () { btnView.classList.remove('is-pressing'); });
         btnView.addEventListener('mouseleave', function () { btnView.classList.remove('is-pressing'); });
-        btnView.addEventListener('click',      function () { window.location.href = 'quickNotes.html'; });
       }
     })();
 
