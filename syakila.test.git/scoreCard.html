@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Score Card â€” Pandai</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <style>
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        PANDAI DS 1.5 â€” CSS Custom Properties
@@ -137,6 +138,11 @@
       --icon-secondary-hover:              #70bc6f;
       --icon-disabled-default:             #bfbfbf;
       --surface-secondary-50:              #e8fbe8;
+
+      /* Subject analytics color tokens (DS node 6481:154671) — default = All Subjects / OG-Green */
+      --subject-default:        #00cc85;   /* Subject/default — main color: borders, values, donut */
+      --subject-default-subtle: #e8fbe8;   /* Subject/default-subtle — light bg tint: outer card, icon circles */
+      --subject-focus:          #00a36a;   /* Subject/focus — dark shade: outer card border */
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -2142,8 +2148,8 @@
       display: flex;
       gap: var(--space-m);
       padding: var(--space-m);
-      background: var(--surface-secondary-default-subtle);
-      border: 1px solid var(--border-general-default);
+      background: var(--subject-default-subtle);
+      border: 1px solid var(--subject-focus);
       border-radius: var(--corner-4xl);
       align-items: stretch;
     }
@@ -2156,7 +2162,7 @@
       justify-content: space-between;
       padding: 20px;
       background: var(--surface-general-default);
-      border: 1px solid var(--sc-inner-border, var(--border-primary-default));
+      border: 1px solid var(--subject-default);
       border-radius: var(--corner-2xl);
     }
     .sc-left__header { display: flex; flex-direction: column; gap: 7px; }
@@ -2240,7 +2246,7 @@
       position: absolute; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       font-size: 28px; font-weight: 700;
-      color: var(--surface-primary-default);
+      color: var(--subject-default);
       font-family: var(--font); pointer-events: none;
     }
 
@@ -2254,7 +2260,7 @@
     }
     .sc-mini-stat-item { flex: 1; display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center; padding: 0 24px; }
     .sc-mini-stat-item + .sc-mini-stat-item { border-left: 1px solid var(--border-general-default); }
-    .sc-mini-stat-value { font-size: 28px; font-weight: 700; line-height: 36px; color: var(--text-primary-focus); }
+    .sc-mini-stat-value { font-size: 28px; font-weight: 700; line-height: 36px; color: var(--subject-default); }
     .sc-mini-stat-label { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-heading); }
 
     /* â”€â”€ Right column wrapper  DS 5376:191595  flex:2 â”€â”€ */
@@ -2268,11 +2274,11 @@
     .sc-mid {
       flex: 0 0 auto;
       height: 300px;
-      display: flex; flex-direction: column; gap: 45px;
+      display: flex; flex-direction: column; gap: 0;
       padding: 20px;
       background: var(--surface-general-default);
       border: none;
-      box-shadow: inset 0 0 0 1px var(--sc-inner-border, var(--border-primary-default));
+      box-shadow: inset 0 0 0 1px var(--subject-default);
       border-radius: var(--corner-2xl);
       overflow: hidden;
     }
@@ -2280,23 +2286,16 @@
     .sc-mid__header { display: flex; align-items: flex-start; gap: 12px; }
     .sc-mid__content { display: flex; flex-direction: column; gap: var(--space-none); flex: 1 0 0; min-width: 0; }
     .sc-mid__subtitle { font-size: 20px; font-weight: 500; line-height: 32px; color: var(--text-default-heading); }
-    .sc-mid__value    { font-size: 28px; font-weight: 700; line-height: 42px; color: var(--text-primary-focus); }
+    .sc-mid__value    { font-size: 28px; font-weight: 700; line-height: 42px; color: var(--subject-default); }
 
     /* Line chart â€” fills remaining height in mid container */
-    .sc-graph { width: 100%; flex: 1; min-height: 0; }
-    .sc-graph svg { display: block; width: 100%; height: 100%; }
-
-    /* Graph day label tooltip */
-    .graph-tooltip {
-      position: fixed; z-index: 200; pointer-events: none;
-      background: var(--text-default-heading); color: #fff;
-      font-family: var(--font); font-size: 11px; font-weight: 500;
-      padding: 3px 8px; border-radius: 6px;
-      transform: translate(-50%, calc(-100% - 8px));
-      opacity: 0; transition: opacity 0.15s;
-      white-space: nowrap;
+    .sc-graph { flex: 1; min-height: 120px; overflow: hidden; margin-top: -60px; margin-left: -20px; margin-right: -20px; margin-bottom: -20px; width: calc(100% + 40px); }
+    .sc-graph .apexcharts-canvas { background: transparent !important; }
+    .sc-graph .apexcharts-tooltip {
+      font-family: var(--font) !important;
+      border: 1px solid var(--border-general-default) !important;
+      box-shadow: none !important;
     }
-    .graph-tooltip.is-visible { opacity: 1; }
 
     /* â”€â”€ Stat row  DS 5376:191595  5 equal individual cards â”€â”€ */
     .sc-stat-row {
@@ -2309,16 +2308,16 @@
       gap: 12px;
       padding: 24px var(--space-xs);
       background: var(--surface-general-default);
-      border: 1px solid var(--sc-inner-border, var(--border-primary-default));
+      border: 1px solid var(--subject-default);
       border-radius: var(--corner-2xl);
     }
 
     /* Icon circle  48Ã—48  #d1f7d1 bg */
     .sc-icon-circle {
       width: 48px; height: 48px; border-radius: 60px;
-      background: #d1f7d1;
+      background: var(--subject-default-subtle);
       display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; color: var(--icon-primary-default);
+      flex-shrink: 0; color: var(--subject-default);
     }
     .sc-icon-circle svg { display: block; width: 22px; height: 22px; }
     /* Large icon circle for mid container header (56px) */
@@ -2327,7 +2326,7 @@
 
     .sc-stat-texts { display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center; }
     .sc-stat-label { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-heading); }
-    .sc-stat-value { font-size: 18px; font-weight: 700; line-height: 28px; color: var(--text-primary-focus); }
+    .sc-stat-value { font-size: 18px; font-weight: 700; line-height: 28px; color: var(--subject-default); }
     /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
        FOOTER 1.5  DS 2073:6579
     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
@@ -3617,37 +3616,8 @@
             </div>
           </div>
 
-          <!-- Line chart  7 data points  Sunâ†’Sat  animated -->
-          <div class="sc-graph" aria-label="Score trend line chart">
-            <svg id="score-graph" viewBox="0 0 380 120" fill="none">
-              <!-- Smooth line -->
-              <path id="graph-line" stroke="var(--surface-tertiary-default)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              <!-- Dots -->
-              <circle id="graph-dot-0" r="5" fill="var(--surface-primary-default)"/>
-              <circle id="graph-dot-1" r="5" fill="var(--surface-primary-default)"/>
-              <circle id="graph-dot-2" r="5" fill="var(--surface-primary-default)"/>
-              <circle id="graph-dot-3" r="5" fill="var(--surface-primary-default)"/>
-              <circle id="graph-dot-4" r="5" fill="var(--surface-primary-default)"/>
-              <circle id="graph-dot-5" r="5" fill="var(--surface-primary-default)"/>
-              <circle id="graph-dot-6" r="5" fill="var(--surface-primary-default)"/>
-              <!-- Hit areas -->
-              <rect id="graph-hit-0" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-1" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-2" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-3" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-4" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-5" fill="transparent" style="cursor:pointer"/>
-              <rect id="graph-hit-6" fill="transparent" style="cursor:pointer"/>
-              <!-- Day labels -->
-              <text x="34"  y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Sun</text>
-              <text x="86"  y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Mon</text>
-              <text x="138" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Tue</text>
-              <text x="190" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Wed</text>
-              <text x="242" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Thu</text>
-              <text x="294" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Fri</text>
-              <text x="346" y="116" text-anchor="middle" font-size="9" fill="#999" font-family="Poppins,sans-serif">Sat</text>
-            </svg>
-          </div>
+          <!-- ApexCharts area chart — 7-day score trend -->
+          <div id="sc-apexchart" class="sc-graph" aria-label="Score trend line chart"></div>
 
         </div><!-- /sc-mid -->
 
@@ -4900,133 +4870,86 @@
     }
 
     /* â”€â”€ Graph: 7-day (Sunâ†’Sat) animated chart â”€â”€ */
-    const GRAPH_DATA = {
-      'all':       [ 20, -15,  45,  35,  55,  70,  40],
-      'account':   [ 30,  10,  50,  25,  60,  45,  55],
-      'add-math':  [-10,  20,  35,  50,  40,  65,  30],
-      'bm':        [ 15,  30,  55,  20,  70,  45,  60],
-      'biology':   [ 40,  -5,  60,  30,  75,  55,  80],
-      'chemistry': [ 10,  25,  -5,  45,  30,  60,  20],
-      'science':   [ 50,  30,  70,  55,  80,  65,  75],
-      'economy':   [-20,  10,  25,  -5,  40,  20,  35],
-      'english':   [ 60,  45,  75,  55,  80,  70,  85],
-      'geography': [ 20,  35,  10,  50,  30,  45,  25],
-      'history':   [ 55,  70,  60,  75,  65,  80,  70],
-      'islamic':   [ 40,  55,  45,  60,  50,  70,  55],
-      'kafa':      [ 30,  45,  60,  40,  55,  65,  50],
-      'math':      [ 45,  60,  50,  70,  55,  75,  65],
-      'moral':     [ -5,  15,  30, -10,  25,  40,  20],
-      'cs':        [ 35,  50,  65,  45,  60,  70,  55],
-      'physics':   [ 40,  55,  45,  65,  50,  70,  60],
-      'rbt':       [ 50,  65,  55,  70,  60,  75,  65],
-      'chinese':   [ 45,  55,  65,  50,  70,  60,  75],
+    /* -- ApexCharts area chart -- */
+    var APEX_DATA = {
+      'all':       [75, 75, 55, 80, 65, 88, 70, 78, 78],
+      'account':   [78, 78, 60, 82, 70, 88, 72, 83, 83],
+      'add-math':  [65, 65, 75, 58, 80, 68, 85, 70, 70],
+      'bm':        [72, 72, 82, 65, 88, 75, 80, 72, 72],
+      'biology':   [82, 82, 70, 90, 75, 92, 80, 88, 88],
+      'chemistry': [60, 60, 72, 55, 70, 78, 63, 72, 72],
+      'science':   [80, 80, 88, 75, 85, 90, 78, 85, 85],
+      'economy':   [50, 50, 62, 45, 58, 68, 52, 62, 62],
+      'english':   [85, 85, 75, 90, 80, 92, 88, 87, 87],
+      'geography': [62, 62, 72, 55, 68, 58, 72, 63, 63],
+      'history':   [80, 80, 88, 75, 90, 82, 88, 80, 80],
+      'islamic':   [75, 75, 85, 70, 80, 88, 75, 82, 82],
+      'kafa':      [70, 70, 80, 65, 75, 83, 70, 77, 77],
+      'math':      [78, 78, 70, 85, 75, 88, 80, 83, 83],
+      'moral':     [45, 45, 58, 40, 53, 63, 50, 58, 58],
+      'cs':        [68, 68, 78, 63, 73, 83, 68, 75, 75],
+      'physics':   [72, 72, 65, 78, 68, 83, 72, 78, 78],
+      'rbt':       [80, 80, 72, 87, 75, 90, 80, 85, 85],
+      'chinese':   [77, 77, 85, 70, 80, 87, 75, 82, 82],
     };
-    let GRAPH_X    = [34, 86, 138, 190, 242, 294, 346];
-    let BAR_W      = 28;
-    let BASELINE_Y = 68;
-    let MAX_AMP    = 55;
-    let GRAPH_W    = 380;
-    let GRAPH_H    = 120;
-    let graphAnimFrame  = null;
-    let currentGraphKey = 'all';
-    const graphSvg = document.getElementById('score-graph');
 
-    function initGraph() {
-      const rect = graphSvg.getBoundingClientRect();
-      if (!rect.width || !rect.height) return;
-      GRAPH_W = rect.width;
-      GRAPH_H = rect.height;
-      graphSvg.setAttribute('viewBox', `0 0 ${Math.round(GRAPH_W)} ${Math.round(GRAPH_H)}`);
-      /* reserve bottom 18px for day labels */
-      const labelH   = 18;
-      BASELINE_Y = (GRAPH_H - labelH) * (68 / 120);
-      MAX_AMP    = (GRAPH_H - labelH) * (55 / 120);
-      const paddingX = GRAPH_W * (34 / 380);
-      const stepX    = (GRAPH_W - 2 * paddingX) / 6;
-      GRAPH_X = Array.from({ length: 7 }, (_, i) => Math.round(paddingX + i * stepX));
-      BAR_W   = Math.round(stepX * 0.54);
-      /* reposition day labels to match new GRAPH_X */
-      const labelY = (GRAPH_H - 4).toFixed(1);
-      graphSvg.querySelectorAll('text').forEach(function(el, i) {
-        if (GRAPH_X[i] !== undefined) {
-          el.setAttribute('x', GRAPH_X[i]);
-          el.setAttribute('y', labelY);
-        }
-      });
-    }
+    var currentGraphKey = 'all';
+    var currentAccentColor = '#28c76f';
 
-    function gY(val, maxAbs) {
-      return maxAbs === 0 ? BASELINE_Y : BASELINE_Y - (val / maxAbs) * MAX_AMP;
-    }
-
-    function smoothCurve(pts) {
-      const t = 0.35;
-      let d = `M${pts[0][0]},${pts[0][1].toFixed(2)}`;
-      for (let i = 0; i < pts.length - 1; i++) {
-        const p0 = pts[Math.max(0, i - 1)], p1 = pts[i];
-        const p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
-        const cp1x = (p1[0] + (p2[0] - p0[0]) * t).toFixed(2);
-        const cp1y = (p1[1] + (p2[1] - p0[1]) * t).toFixed(2);
-        const cp2x = (p2[0] - (p3[0] - p1[0]) * t).toFixed(2);
-        const cp2y = (p2[1] - (p3[1] - p1[1]) * t).toFixed(2);
-        d += ` C${cp1x},${cp1y} ${cp2x},${cp2y} ${p2[0]},${p2[1].toFixed(2)}`;
+    var scoreChart = new ApexCharts(document.getElementById('sc-apexchart'), {
+      chart: {
+        type: 'area',
+        height: '115%',
+        toolbar:    { show: false },
+        background: 'transparent',
+        fontFamily: 'Poppins, sans-serif',
+        animations: { enabled: true, easing: 'easeinout', speed: 900 },
+        sparkline:  { enabled: false },
+        offsetY:    0
+      },
+      series: [{ name: 'Score', data: APEX_DATA['all'] }],
+      xaxis: {
+        categories: ['', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', ''],
+        labels:     { show: false },
+        axisBorder: { show: false },
+        axisTicks:  { show: false }
+      },
+      yaxis: {
+        show:   false,
+        min:    40,
+        labels: { show: false },
+        title:  { text: undefined }
+      },
+      stroke: { curve: 'smooth', width: 1.5, colors: ['#00cc85'] },
+      fill:   { type: 'solid', opacity: 0.15 },
+      markers: {
+        size: 4, colors: ['#ffffff'],
+        strokeColors: '#00cc85', strokeWidth: 2, strokeOpacity: 1, fillOpacity: 1,
+        hover: { size: 6 },
+        discrete: [
+          { seriesIndex: 0, dataPointIndex: 0, size: 0 },
+          { seriesIndex: 0, dataPointIndex: 8, size: 0 }
+        ]
+      },
+      grid:        { show: false, padding: { top: 8, right: 0, bottom: 0, left: 0 } },
+      dataLabels:  { enabled: false },
+      colors:      ['#00cc85'],
+      tooltip: {
+        theme: 'light',
+        x: { show: true },
+        y: { title: { formatter: function() { return 'Score: '; } } }
       }
-      return d;
-    }
-
-    function renderGraphAt(vals, progress) {
-      const maxAbs = Math.max(...vals.map(v => Math.abs(v)), 1);
-      const pts = GRAPH_X.map((x, i) => [x, gY(vals[i] * progress, maxAbs)]);
-      GRAPH_X.forEach((x, i) => {
-        const [, dotY] = pts[i];
-        document.getElementById(`graph-dot-${i}`).setAttribute('cx', x);
-        document.getElementById(`graph-dot-${i}`).setAttribute('cy', dotY.toFixed(2));
-        const hit = document.getElementById(`graph-hit-${i}`);
-        hit.setAttribute('x', x - BAR_W / 2); hit.setAttribute('y', 5);
-        hit.setAttribute('width', BAR_W); hit.setAttribute('height', Math.round(GRAPH_H - 10));
-      });
-      document.getElementById('graph-line').setAttribute('d', smoothCurve(pts));
-    }
-
-    /* â”€â”€ Bar tooltip on hover â”€â”€ */
-    const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const graphTooltip = document.createElement('div');
-    graphTooltip.className = 'graph-tooltip';
-    document.body.appendChild(graphTooltip);
-
-    GRAPH_X.forEach((x, i) => {
-      const hit = document.getElementById(`graph-hit-${i}`);
-      hit.addEventListener('mouseenter', () => {
-        const svgRect = graphSvg.getBoundingClientRect();
-        const bar = document.getElementById(`graph-bar-${i}`);
-        const barTop = parseFloat(bar.getAttribute('y'));
-        graphTooltip.textContent = DAYS[i];
-        graphTooltip.style.left = (svgRect.left + GRAPH_X[i] * svgRect.width  / GRAPH_W) + 'px';
-        graphTooltip.style.top  = (svgRect.top  + barTop     * svgRect.height / GRAPH_H) + 'px';
-        graphTooltip.classList.add('is-visible');
-      });
-      hit.addEventListener('mouseleave', () => graphTooltip.classList.remove('is-visible'));
     });
+    scoreChart.render();
 
-    window.addEventListener('resize', () => { initGraph(); animateGraph(currentGraphKey, 0); });
-
-    function animateGraph(key, duration) {
+    function animateGraph(key) {
       currentGraphKey = key;
-      const vals = GRAPH_DATA[key] || GRAPH_DATA['all'];
-      if (graphAnimFrame) cancelAnimationFrame(graphAnimFrame);
-      renderGraphAt(vals, 0);
-      const start = performance.now();
-      function step(now) {
-        const t     = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - t, 3);
-        renderGraphAt(vals, eased);
-        if (t < 1) graphAnimFrame = requestAnimationFrame(step);
-        else renderGraphAt(vals, 1);
-      }
-      graphAnimFrame = requestAnimationFrame(step);
+      var vals = APEX_DATA[key] || APEX_DATA['all'];
+      scoreChart.updateSeries([{ name: 'Score', data: vals }]);
     }
 
-    /* â”€â”€ Accent color â€” syncs donut, label, graph line + dots to subject color â”€â”€ */
+    window.addEventListener('resize', function() { scoreChart.updateOptions({}); });
+    /* Subject color system — sets all three tokens per subject (DS node 6481:154671) */
     function hexToRgba(hex, alpha) {
       const r = parseInt(hex.slice(1,3), 16);
       const g = parseInt(hex.slice(3,5), 16);
@@ -5034,25 +4957,45 @@
       return `rgba(${r},${g},${b},${alpha})`;
     }
 
-    function setAccentColor(color) {
-      document.getElementById('donut-progress').setAttribute('stroke', color);
-      document.getElementById('donut-label').style.color = color;
-      document.getElementById('graph-line').setAttribute('stroke', color);
-      for (let i = 0; i < 7; i++) {
-        document.getElementById(`graph-dot-${i}`).setAttribute('stroke', color);
-      }
-      document.querySelectorAll('.sc-stat-value, .sc-mid__value, .sc-mini-stat-value').forEach(el => {
-        el.style.color = color;
-      });
-      document.querySelectorAll('.sc-icon-circle').forEach(el => {
-        el.style.background = hexToRgba(color, 0.15);
-        el.style.color = color;
-      });
+    /* Compute 10%-tint-on-white for --subject-default-subtle */
+    function computeSubtle(hex) {
+      var r = parseInt(hex.slice(1,3), 16), g = parseInt(hex.slice(3,5), 16), b = parseInt(hex.slice(5,7), 16);
+      var ch = function(v) { return Math.min(255, Math.round(229.5 + v * 0.1)).toString(16).padStart(2, '0'); };
+      return '#' + ch(r) + ch(g) + ch(b);
     }
 
     const cardOuter = document.querySelector('.sc-card-outer');
-    function setInnerBorder(color) {
-      if (cardOuter) cardOuter.style.setProperty('--sc-inner-border', color);
+
+    function setSubjectColors(defaultColor, subtleColor, focusColor) {
+      currentAccentColor = defaultColor;
+      if (cardOuter) {
+        cardOuter.style.setProperty('--subject-default',        defaultColor);
+        cardOuter.style.setProperty('--subject-default-subtle', subtleColor);
+        cardOuter.style.setProperty('--subject-focus',          focusColor);
+      }
+      document.getElementById('donut-progress').setAttribute('stroke', defaultColor);
+      document.getElementById('donut-label').style.removeProperty('color');
+      document.querySelectorAll('.sc-stat-value, .sc-mid__value, .sc-mini-stat-value').forEach(function(el) {
+        el.style.removeProperty('color');
+      });
+      document.querySelectorAll('.sc-icon-circle').forEach(function(el) {
+        el.style.removeProperty('background');
+        el.style.removeProperty('color');
+      });
+      scoreChart.updateOptions({
+        stroke:  { colors: [defaultColor] },
+        fill:    { type: 'solid', opacity: 0.15 },
+        colors:  [defaultColor],
+        markers: {
+          size: 4, colors: ['#ffffff'],
+          strokeColors: defaultColor, strokeWidth: 2, strokeOpacity: 1, fillOpacity: 1,
+          hover: { size: 6 },
+          discrete: [
+            { seriesIndex: 0, dataPointIndex: 0, size: 0 },
+            { seriesIndex: 0, dataPointIndex: 8, size: 0 }
+          ]
+        }
+      }, false, true);
     }
 
     /* â”€â”€ Filter dropdown â€” expand/collapse + chip selection â”€â”€ */
@@ -5101,12 +5044,12 @@
           chip.classList.toggle('is-active', chip.dataset.key === key);
         });
         var color       = key === 'all' ? '#00cc85' : (SUBJECT_DATA[key] ? SUBJECT_DATA[key].bg     : '#00cc85');
-        var borderColor = key === 'all' ? '#00cc85' : (SUBJECT_DATA[key] ? SUBJECT_DATA[key].border : '#00cc85');
+        var borderColor = key === 'all' ? '#00a36a' : (SUBJECT_DATA[key] ? SUBJECT_DATA[key].border : '#00a36a');
+        var subtleColor = key === 'all' ? '#e8fbe8' : computeSubtle(color);
         renderBadges(key);
-        setAccentColor(color);
-        setInnerBorder(borderColor);
+        setSubjectColors(color, subtleColor, borderColor);
         animateDonut(s.progress, 900);
-        animateGraph(key, 900);
+        animateGraph(key);
         closeSubjects();
       }
 
@@ -5128,10 +5071,8 @@
 
     /* Initial render â€” "All" is active on load */
     renderBadges('all');
-    setAccentColor('#00cc85');
-    setInnerBorder('#00cc85');
-    /* setTimeout lets flex layout fully settle before reading SVG dimensions */
-    setTimeout(function() { initGraph(); animateGraph('all', 900); }, 0);
+    setSubjectColors('#00cc85', '#e8fbe8', '#00a36a');
+    setTimeout(function() { animateGraph('all'); }, 100);
 
   } catch(e) { console.warn('Score card init error:', e); }
 </script>
