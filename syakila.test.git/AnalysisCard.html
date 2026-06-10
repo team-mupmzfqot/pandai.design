@@ -2287,24 +2287,29 @@
       display: flex; flex-direction: column; gap: var(--space-m);
     }
 
-    /* â”€â”€ Two donut columns (flex-1 each, no gap between them) â”€â”€ */
+    /* â”€â”€ Two chart rows stacked vertically â”€â”€ */
     .an-donut-pairs {
       flex: 1; min-width: 0;
-      display: flex; flex-direction: row; align-items: flex-start;
+      display: flex; flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Each row: title | donut | table — all three side by side */
+    .an-donut-col {
+      width: 100%;
+      display: flex; flex-direction: row; align-items: center;
       gap: 28px;
     }
 
-    /* Single donut column: title on top, body (donut + rows) below */
-    .an-donut-col {
-      flex: 1; min-width: 0;
-      display: flex; flex-direction: column; align-items: flex-start;
-      gap: 16px;
+    /* Title column — fixed width so both rows align */
+    .an-legend__title {
+      flex-shrink: 0; width: 160px;
     }
 
-    /* Body inside each col: donut SVG left, legend rows right */
+    /* Body: donut + table side by side — fills remaining width */
     .an-donut-body {
       display: flex; flex-direction: row; align-items: center;
-      gap: 28px; width: 100%;
+      gap: 28px; flex: 1; min-width: 0;
     }
 
     /* â”€â”€ Donut chart wrapper â”€â”€ */
@@ -2339,8 +2344,8 @@
     }
 
     .an-legend__title {
-      font-size: 16px; font-weight: 700; line-height: 24px;
-      color: #626262; max-width: 212px;
+      font-size: 14px; font-weight: 700; line-height: 20px;
+      color: #626262;
     }
 
     .an-legend__rows {
@@ -2563,14 +2568,12 @@
       .an-grade { width: auto; }
       .an-grade__title-row { font-size: 44px; }
 
-      /* Right column: both donuts side by side (same as desktop), scaled down */
+      /* Tablet: title narrower, donut smaller */
+      .an-legend__title { width: 130px; font-size: 13px; }
       .an-donut-col { gap: 16px; }
-      .an-donut-wrap svg { width: 120px; height: 120px; flex-shrink: 0; }
-
-      /* Legend: tighten row width to fit smaller columns */
-      .an-legend__title { font-size: 14px; }
-      .an-legend__rows { gap: 12px; }
-      .an-donut-wrap svg { width: 140px; height: 140px; }
+      .an-donut-body { gap: 16px; }
+      .an-donut-wrap svg { width: 120px; height: 120px; }
+      .an-legend__rows { gap: 10px; }
 
       /* Table: reduce fixed columns so table fits without horizontal scroll */
       .an-col--chapter { width: 60px; }
@@ -2688,20 +2691,13 @@
         border-radius: 0 0 var(--corner-m) var(--corner-m);
       }
 
-      /* â”€â”€ Divider + donut section: each row = donut left + legend table right â”€â”€ */
-      .an-donut-pairs {
-        flex-direction: row; gap: var(--space-xs);
-        border-top: 1px solid var(--border-general-default);
-        padding-top: var(--space-s);
-        align-items: flex-start;
-      }
-      .an-donut-col   { flex: 1; min-width: 0; flex-direction: column; align-items: flex-start; gap: var(--space-xs); }
-      .an-donut-body  { gap: var(--space-xs); align-items: flex-start; }
-      .an-donut-wrap  { flex-shrink: 0; }
-      .an-donut-wrap svg { width: 80px; height: 80px; }
-
-      .an-legend__title { font-size: 11px; line-height: 14px; }
-      .an-legend__rows  { gap: 8px; }
+      /* â”€â”€ Mobile: same row layout, scaled down â”€â”€ */
+      .an-donut-pairs { gap: 12px; }
+      .an-legend__title { width: 90px; font-size: 11px; line-height: 14px; }
+      .an-donut-col   { gap: 8px; }
+      .an-donut-body  { gap: 8px; }
+      .an-donut-wrap svg { width: 72px; height: 72px; }
+      .an-legend__rows  { gap: 6px; }
       .an-legend__pill  { font-size: 10px; padding: 2px 6px; min-height: 20px; }
       .an-legend__value { font-size: 12px; white-space: nowrap; }
 
