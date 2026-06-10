@@ -2287,24 +2287,22 @@
       display: flex; flex-direction: column; gap: var(--space-m);
     }
 
-    /* â”€â”€ Two chart groups stacked vertically â”€â”€ */
+    /* Two chart groups stacked vertically */
     .an-donut-pairs {
       flex: 1; min-width: 0;
       display: flex; flex-direction: column;
-      gap: 24px;
+      gap: 28px; align-self: stretch;
     }
 
-    /* Each group: title on top, donut + table below */
+    /* Each group: donut left + legend (title + rows) right */
     .an-donut-col {
-      width: 100%;
-      display: flex; flex-direction: column; align-items: stretch;
-      gap: 12px;
+      display: flex; flex-direction: row; align-items: center;
+      gap: 28px; width: 100%;
     }
 
-    /* Body: donut left, table right — fills full width */
-    .an-donut-body {
-      display: flex; flex-direction: row; align-items: center;
-      gap: 28px;
+    /* Legend fills remaining width beside the donut */
+    .an-legend {
+      flex: 1; min-width: 0;
     }
 
     /* â”€â”€ Donut chart wrapper â”€â”€ */
@@ -2340,30 +2338,17 @@
 
     .an-legend__title {
       font-size: 16px; font-weight: 700; line-height: 24px;
-      color: #626262;
+      color: #626262; max-width: 212px;
     }
 
     .an-legend__rows {
-      display: flex; flex-direction: column; gap: 16px;
-      flex: 1; min-width: 0;
+      display: flex; flex-direction: column; gap: 30px;
     }
 
     .an-legend__row {
-      display: flex; align-items: center;
-      gap: 10px; width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      width: 142px;
     }
-
-    /* Progress bar inside each legend row */
-    .an-legend__bar-wrap {
-      flex: 1; height: 6px; min-width: 30px;
-      background: #f2f2f2; border-radius: 99px; overflow: hidden;
-    }
-    .an-legend__bar {
-      height: 100%; border-radius: 99px;
-    }
-    .an-legend__bar--easy   { background: var(--surface-primary-default); }
-    .an-legend__bar--medium { background: var(--surface-alert-default);   }
-    .an-legend__bar--hard   { background: var(--surface-warning-default); }
 
     /* Legend level pill (Easy / Medium / Hard / LOTS / MOTS / HOTS) */
     .an-legend__pill {
@@ -2563,12 +2548,11 @@
       .an-grade { width: auto; }
       .an-grade__title-row { font-size: 44px; }
 
-      /* Tablet: tighten spacing, smaller donut */
-      .an-legend__title { font-size: 14px; line-height: 20px; }
-      .an-donut-col { gap: 10px; }
-      .an-donut-body { gap: 20px; }
-      .an-donut-wrap svg { width: 120px; height: 120px; }
-      .an-legend__rows { gap: 10px; }
+      /* Tablet: scale donut down, tighten legend */
+      .an-donut-col { gap: 20px; }
+      .an-donut-wrap svg { width: 140px; height: 140px; }
+      .an-legend__title { font-size: 14px; }
+      .an-legend__rows { gap: 20px; }
 
       /* Table: reduce fixed columns so table fits without horizontal scroll */
       .an-col--chapter { width: 60px; }
@@ -2686,15 +2670,14 @@
         border-radius: 0 0 var(--corner-m) var(--corner-m);
       }
 
-      /* â”€â”€ Mobile: scaled down, same column→row structure â”€â”€ */
-      .an-donut-pairs { gap: 16px; }
-      .an-legend__title { font-size: 12px; line-height: 16px; }
-      .an-donut-col   { gap: 8px; }
-      .an-donut-body  { gap: 12px; }
-      .an-donut-wrap svg { width: 80px; height: 80px; }
-      .an-legend__rows  { gap: 6px; }
-      .an-legend__pill  { font-size: 10px; padding: 2px 6px; min-height: 20px; }
-      .an-legend__value { font-size: 12px; white-space: nowrap; }
+      /* Mobile: same column layout, just smaller donut */
+      .an-donut-pairs { gap: var(--space-m); }
+      .an-donut-col   { gap: var(--space-s); align-items: flex-start; }
+      .an-donut-wrap svg { width: 100px; height: 100px; }
+      .an-legend__title { font-size: 13px; line-height: 18px; }
+      .an-legend__rows  { gap: 16px; }
+      .an-legend__row   { width: 130px; }
+      .an-legend__row:last-child { border-bottom: none; }
 
       /* â”€â”€ Table: tablet-style layout scaled for mobile â”€â”€ */
       .an-table-outer { overflow-x: auto; }
@@ -3897,114 +3880,124 @@
             <!-- DONUT PAIRS (flex-1, 2 equal cols) -->
             <div class="an-donut-pairs">
 
-              <!-- Difficulty Level column: title top, donut + rows side-by-side -->
+              <!-- â”€â”€ Difficulty Level: donut + legend â”€â”€ -->
               <div class="an-donut-col">
-                <p class="an-legend__title">Result by Difficulty&nbsp;Level</p>
-                <div class="an-donut-body">
 
-                  <div class="an-donut-wrap">
-                    <svg viewBox="0 0 210 210" width="240" height="240" aria-label="Result by Difficulty Level: Easy 90%, Medium 82%, Hard 75%">
-                      <!-- Grey tracks (full 360) -->
-                      <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
-                      <circle cx="105" cy="105" r="63" fill="none" stroke="#e8e8e8" stroke-width="16"/>
-                      <circle cx="105" cy="105" r="42" fill="none" stroke="#e8e8e8" stroke-width="16"/>
-                      <!-- Easy - outer ring, green, 90% -->
-                      <circle class="an-donut-ring" cx="105" cy="105" r="84" fill="none" stroke="#00cc85" stroke-width="16"
-                        stroke-dasharray="527.8" stroke-linecap="round"
-                        transform="rotate(90 105 105)"
-                        style="--c:527.8;--offset:52.8"/>
-                      <!-- Medium - middle ring, orange, 82% -->
-                      <circle class="an-donut-ring" cx="105" cy="105" r="63" fill="none" stroke="#ff9f43" stroke-width="16"
-                        stroke-dasharray="395.8" stroke-linecap="round"
-                        transform="rotate(90 105 105)"
-                        style="--c:395.8;--offset:71.2;animation-delay:0.1s"/>
-                      <!-- Hard - inner ring, red, 75% -->
-                      <circle class="an-donut-ring" cx="105" cy="105" r="42" fill="none" stroke="#ff4c51" stroke-width="16"
-                        stroke-dasharray="263.9" stroke-linecap="round"
-                        transform="rotate(90 105 105)"
-                        style="--c:263.9;--offset:66.0;animation-delay:0.2s"/>
-                      <!-- Hit areas -->
-                      <circle class="an-ring-hit" cx="105" cy="105" r="84" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
-                      <circle class="an-ring-hit" cx="105" cy="105" r="63" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
-                      <circle class="an-ring-hit" cx="105" cy="105" r="42" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
-                      <!-- Per-ring labels (JS shows one at a time) -->
-                      <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
-                        font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#00cc85">90%</text>
-                      <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
-                        font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff9f43">82%</text>
-                      <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
-                        font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff4c51">75%</text>
-                    </svg>
-                  </div>
+                <!-- Progress Wheel â€” 3 concentric rings
+                     Outer(r=84) = Easy 100% green
+                     Middle(r=63) = Medium 82% orange
+                     Inner(r=42) = Hard 75% red
+                     Grey tracks beneath each colored arc
+                     All arcs rotate from -90Â° (12 o'clock)
+                -->
+                <div class="an-donut-wrap">
+                  <svg viewBox="0 0 210 210" width="210" height="210" aria-label="Result by Difficulty Level: Easy 100%, Medium 82%, Hard 75%">
+                    <!-- Grey tracks (full 360Â°) -->
+                    <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="63" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="42" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <!-- Easy  â€” outer ring, green, 90% â€” C=527.8, offset=52.8 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="84" fill="none" stroke="#00cc85" stroke-width="16"
+                      stroke-dasharray="527.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:527.8;--offset:52.8"/>
+                    <!-- Medium â€” middle ring, orange, 82% â€” C=395.8, offset=71.2 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="63" fill="none" stroke="#ff9f43" stroke-width="16"
+                      stroke-dasharray="395.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:395.8;--offset:71.2;animation-delay:0.1s"/>
+                    <!-- Hard   â€” inner ring, red, 75% â€” C=263.9, offset=66.0 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="42" fill="none" stroke="#ff4c51" stroke-width="16"
+                      stroke-dasharray="263.9" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:263.9;--offset:66.0;animation-delay:0.2s"/>
+                    <!-- Hit areas â€” transparent wide strokes, one per ring, no fill overlap -->
+                    <circle class="an-ring-hit" cx="105" cy="105" r="84" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="63" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="42" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <!-- Per-ring labels (JS shows one at a time) -->
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#00cc85">90%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff9f43">82%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff4c51">75%</text>
+                  </svg>
+                </div>
 
+                <!-- Legend for Difficulty Level -->
+                <div class="an-legend">
+                  <p class="an-legend__title">Result by Difficulty&nbsp;Level</p>
                   <div class="an-legend__rows">
                     <div class="an-legend__row">
                       <span class="an-legend__pill an-legend__pill--easy">Easy</span>
-                      <div class="an-legend__bar-wrap"><div class="an-legend__bar an-legend__bar--easy" style="width:90%"></div></div>
                       <span class="an-legend__value">90%</span>
                     </div>
                     <div class="an-legend__row">
                       <span class="an-legend__pill an-legend__pill--medium">Medium</span>
-                      <div class="an-legend__bar-wrap"><div class="an-legend__bar an-legend__bar--medium" style="width:82%"></div></div>
                       <span class="an-legend__value">82%</span>
                     </div>
                     <div class="an-legend__row">
                       <span class="an-legend__pill an-legend__pill--hard">Hard</span>
-                      <div class="an-legend__bar-wrap"><div class="an-legend__bar an-legend__bar--hard" style="width:75%"></div></div>
                       <span class="an-legend__value">75%</span>
                     </div>
                   </div>
+                </div>
 
-                </div><!-- /an-donut-body -->
               </div><!-- /Difficulty Level col -->
 
-              <!-- Thinking Skills column: title top, donut + rows side-by-side -->
+              <!-- â”€â”€ Thinking Skills: donut + legend â”€â”€ -->
               <div class="an-donut-col">
-                <p class="an-legend__title">Result by Thinking Skills</p>
-                <div class="an-donut-body">
 
-                  <div class="an-donut-wrap">
-                    <svg viewBox="0 0 210 210" width="240" height="240" aria-label="Result by Thinking Skills: LOTS 80%, MOTS 75%, HOTS 90%">
-                      <!-- Grey tracks -->
-                      <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
-                      <circle cx="105" cy="105" r="63" fill="none" stroke="#e8e8e8" stroke-width="16"/>
-                      <circle cx="105" cy="105" r="42" fill="none" stroke="#e8e8e8" stroke-width="16"/>
-                      <!-- LOTS - outer ring, green, 80% -->
-                      <circle class="an-donut-ring" cx="105" cy="105" r="84" fill="none" stroke="#00cc85" stroke-width="16"
-                        stroke-dasharray="527.8" stroke-linecap="round"
-                        transform="rotate(90 105 105)"
-                        style="--c:527.8;--offset:105.6"/>
-                      <!-- MOTS - middle ring, orange, 75% -->
-                      <circle class="an-donut-ring" cx="105" cy="105" r="63" fill="none" stroke="#ff9f43" stroke-width="16"
-                        stroke-dasharray="395.8" stroke-linecap="round"
-                        transform="rotate(90 105 105)"
-                        style="--c:395.8;--offset:99.0;animation-delay:0.1s"/>
-                      <!-- HOTS - inner ring, red, 90% -->
-                      <circle class="an-donut-ring" cx="105" cy="105" r="42" fill="none" stroke="#ff4c51" stroke-width="16"
-                        stroke-dasharray="263.9" stroke-linecap="round"
-                        transform="rotate(90 105 105)"
-                        style="--c:263.9;--offset:26.4;animation-delay:0.2s"/>
-                      <!-- Hit areas -->
-                      <circle class="an-ring-hit" cx="105" cy="105" r="84" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
-                      <circle class="an-ring-hit" cx="105" cy="105" r="63" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
-                      <circle class="an-ring-hit" cx="105" cy="105" r="42" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
-                      <!-- Per-ring labels (JS shows one at a time) -->
-                      <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
-                        font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#00cc85">80%</text>
-                      <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
-                        font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff9f43">75%</text>
-                      <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
-                        font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff4c51">90%</text>
-                    </svg>
-                  </div>
+                <!-- Progress Wheel â€” 3 concentric rings
+                     Outer(r=84) = LOTS 80% green
+                     Middle(r=63) = MOTS 75% orange
+                     Inner(r=42) = HOTS 100% red
+                -->
+                <div class="an-donut-wrap">
+                  <svg viewBox="0 0 210 210" width="210" height="210" aria-label="Result by Thinking Skills: LOTS 80%, MOTS 75%, HOTS 100%">
+                    <!-- Grey tracks -->
+                    <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="63" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <circle cx="105" cy="105" r="42" fill="none" stroke="#e8e8e8" stroke-width="16"/>
+                    <!-- LOTS  â€” outer ring, green, 80% â€” C=527.8, offset=105.6 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="84" fill="none" stroke="#00cc85" stroke-width="16"
+                      stroke-dasharray="527.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:527.8;--offset:105.6"/>
+                    <!-- MOTS â€” middle ring, orange, 75% â€” C=395.8, offset=99.0 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="63" fill="none" stroke="#ff9f43" stroke-width="16"
+                      stroke-dasharray="395.8" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:395.8;--offset:99.0;animation-delay:0.1s"/>
+                    <!-- HOTS â€” inner ring, red, 90% â€” C=263.9, offset=26.4 -->
+                    <circle class="an-donut-ring" cx="105" cy="105" r="42" fill="none" stroke="#ff4c51" stroke-width="16"
+                      stroke-dasharray="263.9" stroke-linecap="round"
+                      transform="rotate(90 105 105)"
+                      style="--c:263.9;--offset:26.4;animation-delay:0.2s"/>
+                    <!-- Hit areas â€” transparent wide strokes, one per ring -->
+                    <circle class="an-ring-hit" cx="105" cy="105" r="84" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="63" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <circle class="an-ring-hit" cx="105" cy="105" r="42" fill="none" stroke="rgba(0,0,0,0.001)" stroke-width="20"/>
+                    <!-- Per-ring labels (JS shows one at a time) -->
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#00cc85">80%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff9f43">75%</text>
+                    <text class="an-ring-label" x="105" y="105" text-anchor="middle" dominant-baseline="central"
+                      font-family="Poppins,sans-serif" font-size="22" font-weight="700" fill="#ff4c51">90%</text>
+                  </svg>
+                </div>
 
+                <!-- Legend for Thinking Skills -->
+                <div class="an-legend">
+                  <p class="an-legend__title">Result by Thinking Skills</p>
                   <div class="an-legend__rows">
                     <div class="an-legend__row">
                       <span class="an-legend__pill-wrap">
                         <span class="an-legend__pill an-legend__pill--easy">LOTS</span>
                         <span class="an-tooltip" role="tooltip">Lower Order Thinking Skills</span>
                       </span>
-                      <div class="an-legend__bar-wrap"><div class="an-legend__bar an-legend__bar--easy" style="width:80%"></div></div>
                       <span class="an-legend__value">80%</span>
                     </div>
                     <div class="an-legend__row">
@@ -4012,7 +4005,6 @@
                         <span class="an-legend__pill an-legend__pill--medium">MOTS</span>
                         <span class="an-tooltip" role="tooltip">Medium Order Thinking Skills</span>
                       </span>
-                      <div class="an-legend__bar-wrap"><div class="an-legend__bar an-legend__bar--medium" style="width:75%"></div></div>
                       <span class="an-legend__value">75%</span>
                     </div>
                     <div class="an-legend__row">
@@ -4020,12 +4012,11 @@
                         <span class="an-legend__pill an-legend__pill--hard">HOTS</span>
                         <span class="an-tooltip" role="tooltip">High Order Thinking Skills</span>
                       </span>
-                      <div class="an-legend__bar-wrap"><div class="an-legend__bar an-legend__bar--hard" style="width:90%"></div></div>
                       <span class="an-legend__value">90%</span>
                     </div>
                   </div>
+                </div>
 
-                </div><!-- /an-donut-body -->
               </div><!-- /Thinking Skills col -->
 
             </div><!-- /an-donut-pairs -->
