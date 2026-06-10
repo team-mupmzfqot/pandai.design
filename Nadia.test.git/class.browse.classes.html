@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pandai DS — Rewards: My Rewards</title>
+  <title>Pandai — Browse Classes</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +21,7 @@
       --surface-general-default:         #FFFFFF;
       --surface-primary-default:         #00cc85;
       --surface-primary-focus:           #00a36a;   /* Surface/primary/focus — pressed state bg */
-      --surface-primary-default-subtle:        #e1f9ea;   /* overrides stale template #d9f7ed — N-C21 */
+      --surface-primary-default-subtle:        #d9f7ed;
       --border-primary-default-subtle:         #d9f7ed;   /* Border/primary/default-subtle — Secondary Active arrow */
       --surface-primary-default-subtle-hover:  #99ebce;
       --surface-secondary-default:             #b5f291;  /* Surface/secondary/default */
@@ -31,14 +31,7 @@
       --surface-disabled-on-color:       #e5e5e5;   /* Surface/disabled/on color — disabled button arrow bg (DS confirmed 2026-05-24) */
       --surface-general-default-secondary: #f2f2f2;  /* Surface/general/default-secondary — carousel indicator inactive dot */
       --surface-tertiary-default:        #00564c;   /* Surface/tertiary/default — pressed state bg */
-
-      /* Gold palette — Coin balance / Rewards pages (N-C31) */
-      --surface-gold-default-subtle:  #fef1ce;   /* Surface/gold/default-subtle — coin balance bg */
-      --border-gold-default:          #fabb0a;   /* Border/gold/default — coin balance border */
-      --text-stroke-gold-default:     #c89608;   /* text-stroke on coin value — DS confirmed */
-
-      /* Informative */
-      --surface-informative-default:  #00a2e8;   /* Surface/informative/default — Icon Badge blue */
+      --surface-informative-default:     #00a2e8;   /* Surface/informative/default — Icon Badge - 1.5 (DS node 3908:1491) */
 
       /* Border */
 
@@ -62,15 +55,14 @@
       --icon-secondary-hover:     #70bc6f;   /* Icon/secondary/hover — nav button icons, hover state */
       --icon-primary-on-color:    #ffffff;   /* Icon/primary/on-color — Foundation/white (DS updated 2026-05-24, was #e1f9ea) */
       --icon-tertiary-default:    #00564c;   /* Icon/tertiary/default — pressed arrow chevron */
-      --icon-primary-focus:       #00a36a;   /* Icon/primary/focus — active icon on outlined circle (N-C32) */
 
       /* Border */
       --border-primary-default:   #00cc85;   /* Border/primary/default */
       --border-primary-focus:     #00a36a;   /* Border/primary/focus */
+      --border-secondary-default: #b5f291;   /* Border/secondary/default — Focus indicator dot border */
       --border-secondary-focus:   #70bc6f;   /* Border/secondary/focus — hover border on all buttons */
       --border-default:           #00cc85;   /* Border/default â€” navbar, footer, quiz card */
-      --border-general-default:              #d9d9d9;   /* Border/general/default — carousel cards */
-      --border-general-default-secondary:   #bfbfbf;   /* Border/general/default-secondary — bc-sep, bc-chevron (DS node 3655:16650) */
+      --border-general-default:   #d9d9d9;   /* Border/general/default — carousel cards */
       --border-tertiary-focus:    #00453d;   /* Border/tertiary/focus — pressed state border */
       --border-disabled-disabled: #bfbfbf;   /* Border/disabled/disabled */
       --border-on-color:          #ffffff;   /* Border/on-color — white border on Number Badge (DS 618:417 updated 2026-05-26) */
@@ -83,7 +75,7 @@
       --corner-radius-corner-xl:      16px;   /* Corner Radius/corner-xl â€” carousel cards */
       --corner-radius-corner-lg:      12px;
       --corner-radius-corner-md:      8px;
-      --radius-xl:                    8px;   /* Radius/xl (Semantic) — Primary Card content placeholder */
+      --radius-xl:                    8px;   /* Radius/xl (Semantic) — Nav Button - 1.5 (44×44 square) */
 
       /* Spacing (Semantic) */
       --spacing-space-xxs:  4px;
@@ -126,7 +118,7 @@
       /* Layout */
       --page-max-width:          100%;
       --page-padding-x:          60px;
-      --nav-dropdown-top:        80px;   /* navbar 72px + 8px gap — DS confirmed (Rule 100) */
+      --nav-dropdown-top:        80px;   /* navbar 72px + 8px gap. Change here to revert. */
       --section-gap:             var(--spacing-space-m);   /* Spacing/space-m = 16px */
       --overlay-dark:            rgba(26, 26, 26, 0.5);    /* Overlay/Overlay-Dark → Foundation/black 50 (DS confirmed) */
       --check-in-card-max-width: 390px;
@@ -2059,261 +2051,410 @@
        Drop Figma DS components here to build page content.
     ═══════════════════════════════════════════════════════════════ */
 
-    .page-viewport {
-      display:         flex;
-      flex-direction:  column;
-      align-items:     center;
-      justify-content: center;
-      flex:            1;
-      min-height:      0;
-      background:      var(--surface-general-default);
-      box-shadow:      inset 0 0 0 1px var(--border-general-default);
-      border-radius:   var(--corner-radius-corner-4xl);
+  </style>
+
+  <style>
+    /* ════════════════════════════════════════════════════════════════
+       Nadia — Browse Classes page-specific CSS
+       Integrated with zul.page.template.html (2026-05-26)
+    ════════════════════════════════════════════════════════════════ */
+
+    /* ── Additional subject palette tokens ─────────────────────── */
+    :root {
+      /* Subject palette shades — 500 aliased to canonical DS subject tokens */
+      --og-50:  #e9fbf5;
+      --og-500: var(--surface-primary-default);   /* #00cc85 */
+      --og-600: var(--border-primary-focus);       /* #00a36a */
+      /* B-Melayu */
+      --bm-50:  #f6f9ff;  --bm-100: #dbe4ff;
+      --bm-500: var(--subjects-b-melayu-default);  /* #4d77ff */
+      /* English */
+      --en-50:  #ffedee;  --en-100: #ffdbdd;
+      --en-500: var(--subjects-english-default);   /* #ff4d56 */
+      /* Math */
+      --mt-50:  #ecf7f2;  --mt-100: #d9eee5;
+      --mt-500: var(--subjects-math-default);      /* #42ac7b */
+      /* Science */
+      --sc-50:  #fffbec;  --sc-100: #fff7d9;
+      --sc-500: var(--subjects-science-default);   /* #ffd641 */
+      --sc-700: #998027;
+      /* Biology */
+      --bi-50:  #f3ebfb;  --bi-100: #e6d6f7;
+      --bi-500: var(--subjects-biology-default);   /* #8431d8 */
+      /* History */
+      --hs-50:  #f7f2ee;  --hs-100: #eee5dc;
+      --hs-500: var(--subjects-history-default);   /* #a97c50 */
+      /* Radius — aliased to canonical DS tokens */
+      --r-rounded: var(--corner-radius-corner-rounded);  /* 60px */
+      --r-4xl:     var(--corner-radius-corner-4xl);      /* 24px */
+      --r-2xl:     var(--corner-radius-corner-2xl);      /* 18px */
+      /* Spacing — aliased to canonical DS tokens */
+      --sp-xxxs: 2px;                             /* no DS canonical at 2px; keep raw */
+      --sp-xxs:  var(--spacing-space-xxs);        /* 4px */
+      --sp-xs:   var(--spacing-space-xs);         /* 8px */
+      --sp-s:    var(--spacing-space-s);          /* 12px */
+      --sp-m:    var(--spacing-space-m);          /* 16px */
+      /* Text — aliased to canonical DS tokens */
+      --text-heading: var(--text-default-heading); /* #404040 */
+      --text-body:    var(--text-default-body);    /* #666666 */
+      /* DS-confirmed value override for this page */
+      --surface-primary-default-subtle: #e1f9ea;        /* DS confirmed (Avatar bg, live badge bg) */
+      --border-general-default-secondary: #bfbfbf;      /* Border/general/default-secondary — bc-sep */
     }
 
-    .page-viewport__placeholder {
-      display:         flex;
-      flex-direction:  column;
-      align-items:     center;
-      justify-content: center;
-      gap:             var(--spacing-space-xs);
-      padding:         var(--spacing-space-xl);
-      color:           var(--text-disabled-default);
-      font-size:       14px;
-      font-weight:     500;
-      text-align:      center;
-      pointer-events:  none;
-      user-select:     none;
+    /* ── Browse Classes viewport — replaces page-viewport card ─── */
+    .viewport-browseclasses {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-m);   /* 16px between breadcrumb and cards */
+      width:          100%;
+      /* no border-radius, no box-shadow — plain flow section */
+    }
+    /* bc-row fills full width of the viewport section */
+    .viewport-browseclasses .bc-row {
+      width: 100%;
     }
 
-    .page-viewport__placeholder svg {
-      width:  24px;
-      height: 24px;
-      color:  var(--text-disabled-default);
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       PAGE — Rewards: My Rewards
-       Breadcrumb · Two-panel layout (Sidebar + Main)
-    ═══════════════════════════════════════════════════════════════ */
-
-    /* ── Breadcrumb 1.5 (DS node 3284:218453) ──────────────────── */
-    .bc-row { display: flex; align-items: center; gap: var(--spacing-space-s); min-height: 36px; }
-    .bc-left { flex: 1; width: 100%; min-width: 0; display: flex; align-items: center; gap: var(--spacing-space-m); }
-    .bc-title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; flex-shrink: 0; }
-    .bc-sep { width: 1px; height: 20px; background: var(--border-general-default-secondary); flex-shrink: 0; }
-    .bc-trail { display: flex; align-items: center; gap: var(--spacing-space-xs); flex-wrap: wrap; }
-    .bc-link { display: inline-flex; align-items: center; gap: var(--spacing-space-xs); font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary-default); text-decoration: none; white-space: nowrap; }
-    .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
-    .bc-chevron { width: 16px; height: 16px; color: var(--border-general-default-secondary); flex-shrink: 0; }   /* Border/general/default-secondary — currentColor via <use> (Rule N-C36) */
-    .bc-link--current { color: var(--text-default-body); }
-
-    /* Mobile coin balance — shows in page header, hidden on desktop */
-    .bc-coin-mobile {
-      display:       none;
-      align-items:   center;
-      gap:           2px;
-      background:    var(--surface-gold-default-subtle);   /* #fef1ce */
-      border:        1px solid var(--border-gold-default);   /* #fabb0a */
-      border-radius: var(--corner-radius-corner-xl);         /* 16px */
-      padding:       var(--spacing-space-xxs) var(--spacing-space-xs) var(--spacing-space-xxs) 2px;
-      flex-shrink:   0;
-    }
-    .bc-coin-mobile__icon  { width: 20px; height: 20px; flex-shrink: 0; object-fit: contain; display: block; }
-    .bc-coin-mobile__value {
-      font-size: 14px; font-weight: 700; line-height: 20px; color: var(--text-primary-on-color);   /* #fff */
-      -webkit-text-stroke: 2px var(--text-stroke-gold-default); paint-order: stroke fill; white-space: nowrap;
-    }
-
-    /* ── Two-panel layout ──────────────────────────────────────── */
-    .rewards-layout { display: flex; gap: 12px; align-items: stretch; }
-
-    /* ── Sidebar — DS node 3849:48401 (Nav Side Menu Desktop 1.5) */
-    .rewards-sidebar {
-      width: 280px; min-width: 240px; flex-shrink: 0;
-      background: var(--surface-general-default); border: 1px solid var(--border-primary-default);
-      border-radius: var(--corner-radius-corner-4xl);
-      padding: var(--spacing-space-m);
-      display: flex; flex-direction: column; gap: var(--spacing-space-xs);
-    }
-    .sidebar-balance {
-      background: var(--surface-gold-default-subtle); border: 1px solid var(--border-gold-default);
-      border-radius: var(--corner-radius-corner-xl);   /* 16px */
-      padding: var(--spacing-space-xs) var(--spacing-space-xs) var(--spacing-space-xs) 2px;
-      display: flex; align-items: center; justify-content: center; gap: 2px;
-      overflow: hidden; flex-shrink: 0;
-    }
-    .sidebar-balance__coin { width: 24px; height: 24px; flex-shrink: 0; display: block; object-fit: contain; }
-    .sidebar-balance__value {
-      font-size: 18px; font-weight: 700; line-height: 28px; color: var(--text-primary-on-color);   /* #fff */
-      -webkit-text-stroke: 2px var(--text-stroke-gold-default); paint-order: stroke fill; white-space: nowrap;
-    }
-    .sidebar-divider { height: 1px; background: var(--border-general-default); width: 100%; flex-shrink: 0; margin: var(--spacing-space-xs) 0; }
-    .sidebar-btn {
-      width: 100%; border-radius: 108px; padding: var(--spacing-space-xs) var(--spacing-space-m);
-      display: flex; align-items: center; gap: 10px; cursor: pointer;
-      background: transparent; border: 1px solid transparent; flex-shrink: 0;
-      transition: background 0.12s ease; text-align: left;
-    }
-    .sidebar-btn:not(.sidebar-btn--active):hover { background: var(--surface-secondary-default-subtle); border-color: var(--border-primary-default); }
-    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__icon-wrap { color: var(--icon-primary-default); }
-    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__label { color: var(--text-primary-default); }
-    .sidebar-btn--active { background: var(--surface-secondary-default); border-color: var(--border-primary-focus); }
-    .sidebar-btn__icon-wrap {
-      width: 24px; height: 24px; padding: 2px; box-sizing: border-box;
-      overflow: hidden; flex-shrink: 0; color: var(--icon-primary-default);
-    }
-    .sidebar-btn--active .sidebar-btn__icon-wrap { color: var(--icon-primary-focus); }   /* Icon context → --icon-* (N-C26/N-C32) */
-    .sidebar-btn__icon-wrap svg { display: block; width: 100%; height: 100%; }
-    .sidebar-btn__icon-wrap[data-icon="box"]          { padding: 1.24px 2px 1.23px; }
-    .sidebar-btn__icon-wrap[data-icon="shopping-bag"] { padding: 2px 3px; }
-    .sidebar-btn__icon-wrap[data-icon="shopping-cart"]{ padding: 1px 1px 2px; }
-    .sidebar-btn__label {
-      font-size: 14px; font-weight: 600; line-height: 20px;
-      color: var(--text-default-body); flex: 1 0 0; min-width: 0; white-space: nowrap;
-    }
-    .sidebar-btn--active .sidebar-btn__label { color: var(--text-primary-default-hover); }   /* Text context → --text-* (N-C26) */
-
-    /* ── Right main panel ─────────────────────────────────────── */
-    .rewards-main {
-      flex: 1; min-width: 0;
-      background: var(--surface-secondary-default-subtle); border: 1px solid var(--border-primary-default);
-      border-radius: var(--corner-radius-corner-4xl);
-      padding: var(--spacing-space-m);
-      display: flex; flex-direction: column; gap: var(--spacing-space-xs);
+    /* ── DS Avatar 1.5 — node 3065:40786 ───────────────────────── */
+    .ds-avatar {
+      border-radius: var(--r-rounded);
+      background: var(--surface-primary-default-subtle);   /* #e1f9ea — DS Avatar-1.5 bg */
+      border: 1px solid var(--og-500);
       overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
     }
-    .mr-header {
-      display: flex; align-items: center; justify-content: space-between;
-      flex-shrink: 0; flex-wrap: wrap; gap: var(--spacing-space-xs);
+    .ds-avatar--xl { width: 64px; height: 64px; }
+    .ds-avatar--xl img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+      pointer-events: none; display: block;
     }
-    .mr-header__desc {
-      font-size: 14px; font-weight: 400; line-height: 20px;
-      color: var(--text-tertiary-default); flex: 1; min-width: 0;
-    }
-    .mr-header__redeem {
-      display: flex; align-items: center; gap: var(--spacing-space-xs);
-      font-size: 14px; font-weight: 400; line-height: 20px;
-      color: var(--text-tertiary-default); white-space: nowrap; flex-shrink: 0;
-    }
-    .mr-header__coin { width: 18px; height: 21px; flex-shrink: 0; object-fit: contain; }
 
-    /* ── Voucher card grid (DS 3065:43088) ─────────────────────── */
-    .mr-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-space-m); }
-    .mr-card {
-      border: 1px solid var(--border-general-default); border-radius: var(--corner-radius-corner-4xl);
-      overflow: hidden; display: flex; flex-direction: column; background: var(--surface-general-default);
+    /* ── Breadcrumb 1.5 — DS node 1777:18856 ───────────────────── */
+    .bc-row {
+      display: flex; align-items: center; gap: var(--spacing-space-s); min-height: 36px;
     }
-    .mr-card__img { width: 100%; aspect-ratio: 250 / 148; background: var(--surface-primary-default-subtle); overflow: hidden; flex-shrink: 0; }
-    .mr-card__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .mr-card__body {
-      padding: var(--spacing-space-m);
-      display: flex; flex-direction: column; gap: var(--spacing-space-xs);
-      background: var(--surface-general-default);
+    .bc-left {
+      flex: 1; width: 100%; min-width: 0;
+      display: flex; align-items: center; gap: var(--spacing-space-m);
     }
-    .mr-card__badges { display: flex; gap: var(--spacing-space-xs); align-items: center; flex-wrap: wrap; }
-    .mr-badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      background: var(--surface-primary-default-subtle); border: 1px solid var(--border-primary-default);
-      border-radius: var(--corner-radius-corner-rounded); padding: 2px 8px;
+    .bc-title {
+      font-size: 24px; font-weight: 500; line-height: 36px;
+      color: var(--text-tertiary-default);
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .bc-sep {
+      width: 1px; height: 20px; background: var(--border-general-default-secondary); flex-shrink: 0;
+    }
+    .bc-trail {
+      display: flex; align-items: center; gap: var(--spacing-space-xs); flex-wrap: wrap;
+    }
+    .bc-link {
+      display: inline-flex; align-items: center; gap: var(--spacing-space-xs);
+      font-size: 14px; font-weight: 400; line-height: 20px;
+      color: var(--text-primary-default); text-decoration: none; white-space: nowrap;
+    }
+    .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .bc-chevron {
+      width: 16px; height: 16px; flex-shrink: 0; display: block;
+      color: var(--border-general-default-secondary);   /* #bfbfbf — drives currentColor in symbol */
+    }
+    .bc-link--current { color: var(--text-default-body); }
+    .bc-actions {
+      display: flex; align-items: center; gap: var(--spacing-space-xs); flex-shrink: 0;
+    }
+
+    /* ── Breadcrumb buttons ──────────────────────────────────────── */
+    .btn-secondary, .btn-primary {
+      display:         inline-flex;
+      align-items:     center;
+      gap:             0;
+      border-radius:   var(--corner-radius-corner-rounded);
+      padding:         8px 12px;
+      font-family:     'Poppins', sans-serif;
+      font-size:       14px;
+      font-weight:     600;
+      line-height:     20px;
+      cursor:          pointer;
+      text-decoration: none;
+      white-space:     nowrap;
+    }
+    .btn-icon-wrap { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .btn-icon-clip { width: 24px; height: 24px; overflow: hidden; flex-shrink: 0; }
+    .btn-icon-clip svg { display: block; width: 100%; height: 100%; }
+    .btn-label { padding: 0 var(--spacing-space-xs); white-space: nowrap; }
+
+    /* Button - 1.5 Secondary/L — DS strokeAlign:INSIDE → box-shadow:inset (Rule 60, 85) */
+    .btn-secondary {
+      background:  var(--surface-general-default);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--border-primary-default);
+      color:       var(--text-primary-default);
+    }
+    .btn-secondary svg { color: var(--icon-primary-default); }
+    .btn-secondary:hover {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+      color:      var(--text-secondary-focus);
+    }
+    .btn-secondary:hover svg { color: var(--icon-secondary-hover); }
+    .btn-secondary:active,
+    .btn-secondary.is-pressing {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+      color:      var(--text-primary-default);
+    }
+    .btn-secondary:active svg,
+    .btn-secondary.is-pressing svg { color: var(--icon-primary-default); }
+
+    /* Button - 1.5 Primary/L */
+    .btn-primary {
+      background:  var(--surface-primary-default);
+      border:      1px solid var(--border-primary-focus);
+      color:       var(--text-primary-on-color);
+    }
+    .btn-primary svg { color: var(--icon-primary-on-color); }
+    .btn-primary:hover {
+      background: var(--surface-secondary-default);
+      border-color: var(--border-secondary-focus);
+      color:      var(--text-secondary-focus);
+    }
+    .btn-primary:hover svg { color: var(--icon-secondary-hover); }
+    .btn-primary:active,
+    .btn-primary.is-pressing {
+      background:  var(--surface-primary-focus);
+      border-color: var(--border-primary-default);
+      color:       var(--text-primary-default);
+    }
+    .btn-primary:active svg,
+    .btn-primary.is-pressing svg { color: var(--icon-primary-default); }
+
+    /* ── Class Cards grid ────────────────────────────────────────── */
+    .cards-grid { display: grid; gap: 20px; width: 100%; grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 1279px) {
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .bc-row     { flex-wrap: wrap; gap: var(--spacing-space-s); align-items: flex-start; }
+      .bc-left    { align-items: flex-start; width: 100%; }
+    }
+    @media (max-width: 767px) {
+      .cards-grid   { grid-template-columns: 1fr; }
+      .bc-row       { flex-direction: column; align-items: flex-start; gap: var(--spacing-space-s); }
+      .bc-left      { flex-wrap: wrap; }
+      .bc-actions   { width: 100%; }
+      .btn-secondary, .btn-primary { flex: 1; justify-content: center; }
+    }
+
+    /* ── Class Card 1.5 ──────────────────────────────────────────── */
+    .cc {
+      border-radius: var(--r-4xl);
+      border: 1px solid var(--og-500);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      background: #fff;
+      cursor: default;
+    }
+    .cc__cover { width: 100%; display: block; overflow: hidden; }
+    .cc__cover img { width: 100%; aspect-ratio: 1000/435; object-fit: cover; display: block; }
+    .cc__body { padding: var(--sp-m); background: #e8fbe8; }
+    .cc__inner {
+      border-radius: var(--r-2xl);
+      border: 1px solid var(--og-500);
+      overflow: hidden; background: #fff;
+      display: flex; flex-direction: column;
+    }
+    .cc__hdr {
+      background: var(--og-500);
+      padding: var(--sp-xs) var(--sp-m);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 0; min-height: 44px;   /* DS gap = 0; title flex:1 right-aligns DLP badge */
+    }
+    .cc__hdr-title {
+      font-size: 18px; font-weight: 600; line-height: 28px;
+      color: #fff;
+      flex: 1; min-width: 0;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .dlp-badge { width: 57px; height: 24px; overflow: hidden; flex-shrink: 0; display: block; }
+    .dlp-badge img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+    .cc__main { background: #fff; padding: var(--sp-m); display: flex; align-items: flex-start; gap: var(--sp-m); height: 96px; }
+    .cc__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--sp-xxxs); height: 100%; }
+    .cc__teacher { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-heading); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cc__schedule { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-body); display: flex; flex-wrap: wrap; gap: var(--sp-xxxs); align-items: center; }
+    .cc__schedule strong { font-weight: 600; color: var(--text-heading); }
+    .live-badge {
+      display: inline-flex; align-items: center; gap: var(--sp-xxs);
+      border-radius: var(--r-rounded);
+      padding: var(--sp-xxxs) var(--sp-xs);
+      background: var(--surface-primary-default-subtle);   /* #e1f9ea — DS confirmed */
+      border: 1px solid var(--border-primary-default);
+      align-self: flex-start;
       font-size: 10px; font-weight: 500; line-height: 12px;
       color: var(--text-primary-default); white-space: nowrap;
     }
-    .mr-badge__icon { width: 10px; height: 10px; flex-shrink: 0; color: var(--text-primary-default); }
-    .mr-badge__icon svg { display: block; width: 100%; height: 100%; }
-    .mr-card__title {
-      font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-default-heading);
-      overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
-      min-height: 60px;
+    /* ic-video symbol uses stroke="currentColor" — color: drives it */
+    .live-badge svg { width: 10px; height: 10px; display: block; color: var(--icon-primary-default); }
+    /* Divider — text-hidden variant (DS "Divider Var 5", node I4661:37865;2339:5273) */
+    .cc__divider {
+      height: 1px; background: var(--border-general-default); flex-shrink: 0; width: 100%;
     }
-    .mr-card__divider { height: 1px; background: var(--border-general-default); width: 100%; flex-shrink: 0; }
-    .mr-card__footer {
-      padding: var(--spacing-space-m); background: var(--surface-general-default);
-      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
-    }
-    .mr-card__cost {
-      display: flex; align-items: center; gap: var(--spacing-space-xs);
-      font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body);
-    }
-    .mr-card__coin { width: 24px; height: 24px; flex-shrink: 0; display: block; object-fit: contain; }
+    .cc__cta { background: #fff; padding: var(--sp-m); display: flex; justify-content: space-between; align-items: center; }
+    .cc-premium-tag { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--og-500); white-space: nowrap; }
 
-    /* ── Show Voucher button — Primary/S Button-1.5 (DS 3065:43115)
-       No transition (Rule 82). Pressed = Primary/focus palette (Rule 40). */
-    .btn-voucher {
+    /* Preview — Button-1.5 Secondary/S Student (Rule 31)
+       No CSS transitions (Rule 82 — Button-1.5 uses instant state changes only).
+       Border: strokeAlign INSIDE → box-shadow: inset (Rule 60/85). */
+    .btn-preview {
       display: inline-flex; align-items: center;
-      height: 24px; max-height: 24px; border-radius: var(--corner-radius-corner-rounded);
-      padding: 2px 8px; background: var(--surface-primary-default);
-      box-shadow: inset 0 0 0 1px var(--border-primary-focus);   /* strokeAlign:INSIDE (Rule 60) */
-      cursor: pointer; text-decoration: none; flex-shrink: 0;
+      border-radius: var(--r-rounded); padding: 2px 8px;
+      background: var(--surface-general-default);
+      border: none;
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+      cursor: pointer; text-decoration: none;
     }
-    .btn-voucher__label {
-      font-size: 12px; font-weight: 600; line-height: 18px; color: var(--text-primary-on-color);
-      padding: 0 4px; white-space: nowrap;
+    .btn-preview__label {
+      font-size: 12px; font-weight: 600; line-height: 18px;
+      color: var(--text-primary-default); white-space: nowrap;
+      padding: 0 var(--sp-xxs);
     }
-    .btn-voucher__arrow {
-      width: 16px; height: 16px; border-radius: var(--corner-radius-corner-rounded);
-      background: var(--surface-primary-default-subtle-hover);   /* #99ebce — no hardcode */
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; padding: 2px;
-      color: var(--icon-primary-focus);   /* Icon context → --icon-* not --border-* (N-C32) */
+    .btn-preview__arrow {
+      width: 16px; height: 16px;
+      border-radius: var(--r-rounded);
+      background: var(--surface-general-default);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      padding: 2px;
     }
-    .btn-voucher__arrow svg { display: block; width: 12px; height: 12px; }
-    /* Hover — Secondary palette */
-    .btn-voucher:hover { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
-    .btn-voucher:hover .btn-voucher__label { color: var(--text-secondary-focus); }
-    .btn-voucher:hover .btn-voucher__arrow { background: var(--surface-secondary-default-subtle); color: var(--icon-secondary-hover); }
-    /* Pressed — Primary/focus palette (Rule 40: Primary pressed ≠ Tertiary) */
-    .btn-voucher.is-pressed,
-    .btn-voucher:active { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
-    .btn-voucher.is-pressed .btn-voucher__label,
-    .btn-voucher:active .btn-voucher__label { color: var(--text-primary-default); }
-    .btn-voucher.is-pressed .btn-voucher__arrow,
-    .btn-voucher:active .btn-voucher__arrow { background: var(--surface-primary-default); color: var(--icon-primary-focus); }
-
-    /* ── Responsive overrides ───────────────────────────────────── */
-    @media (max-width: 1279px) {
-      .rewards-layout { flex-direction: column; }
-      .rewards-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; height: auto; }
-      .mr-grid { grid-template-columns: repeat(2, 1fr); }
+    .btn-preview__arrow svg {
+      width: 12px; height: 12px; display: block;
+      fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+      stroke: var(--border-primary-default);   /* inline SVG path — CSS stroke applies directly */
     }
-    @media (max-width: 767px) {
-      .mr-grid { grid-template-columns: 1fr; }
+    /* Hover */
+    .btn-preview:hover                         { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+    .btn-preview:hover .btn-preview__label     { color: var(--text-secondary-focus); }
+    .btn-preview:hover .btn-preview__arrow     { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+    .btn-preview:hover .btn-preview__arrow svg { stroke: var(--border-secondary-focus); }
+    /* Pressed — Secondary/S Pressed = Surface/primary/focus #00a36a (CLAUDE.md Rule 40, 2026-05-31) */
+    .btn-preview:active,
+    .btn-preview.is-pressing                           { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); }
+    .btn-preview:active .btn-preview__label,
+    .btn-preview.is-pressing .btn-preview__label       { color: var(--text-primary-default); }
+    .btn-preview:active .btn-preview__arrow,
+    .btn-preview.is-pressing .btn-preview__arrow       { background: var(--surface-primary-default); box-shadow: none; }
+    .btn-preview:active .btn-preview__arrow svg,
+    .btn-preview.is-pressing .btn-preview__arrow svg   { stroke: var(--surface-tertiary-default); }   /* #00564c — visible on #00cc85 arrow */
 
-      /* Coin balance moves into page header — hide from sidebar */
-      .bc-coin-mobile  { display: flex; }
-      .sidebar-balance { display: none; }
-      .sidebar-divider { display: none; }
+    /* Avatar inside cards */
+    .cc .ds-avatar { border-color: var(--og-500); }
 
-      /* Pill tab bar */
-      .rewards-sidebar {
-        flex-direction:              row;
-        flex-wrap:                   nowrap;
-        overflow-x:                  auto;
-        overflow-y:                  hidden;
-        -webkit-overflow-scrolling:  touch;
-        scrollbar-width:             none;
-        background:                  transparent;
-        border:                      none;
-        border-radius:               0;
-        padding:                     0;
-        height:                      auto;
-        gap:                         var(--spacing-space-xs);
-        align-items:                 center;
-        min-width:                   0;
-      }
-      .rewards-sidebar::-webkit-scrollbar { display: none; }
+    /* ── Subject colour overrides ────────────────────────────────── */
+    .cc--bm { border-color: var(--bm-500); }
+    .cc--bm .cc__body { background: var(--bm-50); }
+    .cc--bm .cc__inner, .cc--bm .cc__hdr, .cc--bm .ds-avatar { border-color: var(--bm-500); }
+    .cc--bm .cc__hdr  { background: var(--bm-500); }
+    .cc--bm .ds-avatar { border-color: var(--bm-500); }
 
-      /* Each pill: auto-width, no shrink/grow */
-      .sidebar-btn { width: auto; flex: 0 0 auto; }
+    .cc--en { border-color: var(--en-500); }
+    .cc--en .cc__body { background: var(--en-50); }
+    .cc--en .cc__inner, .cc--en .ds-avatar { border-color: var(--en-500); }
+    .cc--en .cc__hdr  { background: var(--en-500); }
 
-      /* Main content fills full width below the pill bar */
-      .rewards-main { width: 100%; }
-    }
+    .cc--mt { border-color: var(--mt-500); }
+    .cc--mt .cc__body { background: var(--mt-50); }
+    .cc--mt .cc__inner, .cc--mt .ds-avatar { border-color: var(--mt-500); }
+    .cc--mt .cc__hdr  { background: var(--mt-500); }
 
+    .cc--sc { border-color: var(--sc-500); }
+    .cc--sc .cc__body { background: var(--sc-50); }
+    .cc--sc .cc__inner, .cc--sc .ds-avatar { border-color: var(--sc-500); }
+    .cc--sc .cc__hdr  { background: var(--sc-500); }
+    .cc--sc .cc__hdr-title { color: var(--sc-700); }
+
+    .cc--bio { border-color: var(--bi-500); }
+    .cc--bio .cc__body { background: var(--bi-50); }
+    .cc--bio .cc__inner, .cc--bio .ds-avatar { border-color: var(--bi-500); }
+    .cc--bio .cc__hdr  { background: var(--bi-500); }
+
+    .cc--hs { border-color: var(--hs-500); }
+    .cc--hs .cc__body { background: var(--hs-50); }
+    .cc--hs .cc__inner, .cc--hs .ds-avatar { border-color: var(--hs-500); }
+    .cc--hs .cc__hdr  { background: var(--hs-500); }
+
+    .cc--enrichment { border-color: #00cc85; }
+    .cc--enrichment .cc__body { background: #e8fbe8; }
+    .cc--enrichment .cc__inner, .cc--enrichment .ds-avatar { border-color: #00cc85; }
+    .cc--enrichment .cc__hdr  { background: #00cc85; }
+
+    .cc--acc { border-color: #0072ca; }
+    .cc--acc .cc__body { background: #e6f1fa; }
+    .cc--acc .cc__inner, .cc--acc .ds-avatar { border-color: #0072ca; }
+    .cc--acc .cc__hdr  { background: #0072ca; }
+
+    .cc--add-math { border-color: #283589; }
+    .cc--add-math .cc__body { background: #eaebf3; }
+    .cc--add-math .cc__inner, .cc--add-math .ds-avatar { border-color: #283589; }
+    .cc--add-math .cc__hdr  { background: #283589; }
+
+    .cc--biz { border-color: #efb42b; }
+    .cc--biz .cc__body { background: #fef8ea; }
+    .cc--biz .cc__inner, .cc--biz .ds-avatar { border-color: #efb42b; }
+    .cc--biz .cc__hdr  { background: #efb42b; }
+
+    .cc--chem { border-color: #e20082; }
+    .cc--chem .cc__body { background: #fce6f3; }
+    .cc--chem .cc__inner, .cc--chem .ds-avatar { border-color: #e20082; }
+    .cc--chem .cc__hdr  { background: #e20082; }
+
+    .cc--chi { border-color: #f94848; }
+    .cc--chi .cc__body { background: #ffeded; }
+    .cc--chi .cc__inner, .cc--chi .ds-avatar { border-color: #f94848; }
+    .cc--chi .cc__hdr  { background: #f94848; }
+
+    .cc--cs { border-color: #d10070; }
+    .cc--cs .cc__body { background: #fbe6f1; }
+    .cc--cs .cc__inner, .cc--cs .ds-avatar { border-color: #d10070; }
+    .cc--cs .cc__hdr  { background: #d10070; }
+
+    .cc--eco { border-color: #ff5733; }
+    .cc--eco .cc__body { background: #ffeeeb; }
+    .cc--eco .cc__inner, .cc--eco .ds-avatar { border-color: #ff5733; }
+    .cc--eco .cc__hdr  { background: #ff5733; }
+
+    .cc--geo { border-color: #77d836; }
+    .cc--geo .cc__body { background: #f2fbeb; }
+    .cc--geo .cc__inner, .cc--geo .ds-avatar { border-color: #77d836; }
+    .cc--geo .cc__hdr  { background: #77d836; }
+
+    .cc--isl { border-color: #de4d7f; }
+    .cc--isl .cc__body { background: #fcedf2; }
+    .cc--isl .cc__inner, .cc--isl .ds-avatar { border-color: #de4d7f; }
+    .cc--isl .cc__hdr  { background: #de4d7f; }
+
+    .cc--kafa { border-color: #8ae3a9; }
+    .cc--kafa .cc__body { background: #f4fcf7; }
+    .cc--kafa .cc__inner, .cc--kafa .ds-avatar { border-color: #8ae3a9; }
+    .cc--kafa .cc__hdr  { background: #8ae3a9; }
+    .cc--kafa .cc__hdr-title { color: #1a6b3a; }
+
+    .cc--moral { border-color: #0072ca; }
+    .cc--moral .cc__body { background: #e6f1fa; }
+    .cc--moral .cc__inner, .cc--moral .ds-avatar { border-color: #0072ca; }
+    .cc--moral .cc__hdr  { background: #0072ca; }
+
+    .cc--phy { border-color: #27a0d7; }
+    .cc--phy .cc__body { background: #eaf6fb; }
+    .cc--phy .cc__inner, .cc--phy .ds-avatar { border-color: #27a0d7; }
+    .cc--phy .cc__hdr  { background: #27a0d7; }
+
+    .cc--rbt { border-color: #353535; }
+    .cc--rbt .cc__body { background: #d7d7d7; }
+    .cc--rbt .cc__inner, .cc--rbt .ds-avatar { border-color: #353535; }
+    .cc--rbt .cc__hdr  { background: #353535; }
   </style>
 </head>
-<body>
-
+<body data-active-nav="Class">
 
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        NAVBAR â€” Navbar 1.5  (DS node 2339:2617)
@@ -2343,7 +2484,7 @@
       <!-- Outline/bookmark (260:504) — path translated by x+5 y+3 to match 24x24 DS frame; viewBox -1 -1 26 26 for 1px stroke buffer --><symbol id="ic-bookmark" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 19 21 L 12 16 L 5 21 L 5 5 C 5 4.47 5.211 3.961 5.586 3.586 C 5.961 3.211 6.47 3 7 3 L 17 3 C 17.53 3 18.039 3.211 18.414 3.586 C 18.789 3.961 19 4.47 19 5 L 19 21 Z"/></symbol>
       <!-- Outline/clock (260:566) --><symbol id="ic-clock" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6V12L16 14M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
       <!-- Outline/EN (1104:2538) — vec x:3 y:6 +3+6 → vb -1 -1 26 26; no CSS clip, icon renders at natural 24x24 --><symbol id="ic-en" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 21.613 6 L 21.613 17.252 L 13.086 6 L 13.086 17.252"/><path d="M 9.129 6.05 L 3 6.05 L 3 11.651 L 3 17.252 L 9.129 17.252"/><path d="M 3 11.651 L 9.181 11.651"/></symbol>
-      <!-- ic-nav-btn-union removed — dead symbol, never referenced (Rule N-C30) -->
+      <!-- Nav Button - 1.5 Active state Union bg (DS node 3908:6165) — 44×52 speech-bubble shape, green fill, downward tail at bottom-center --><symbol id="ic-nav-btn-union" viewBox="0 0 44 52"><path d="M36 0C40.4183 0 44 3.58172 44 8V36C44 40.4183 40.4183 44 36 44H31.6569C30.596 44 29.5786 44.4214 28.8284 45.1716L23.4141 50.5859C22.6331 51.3668 21.3669 51.3668 20.5859 50.5859L15.1716 45.1716C14.4214 44.4214 13.404 44 12.3431 44H8C3.58172 44 0 40.4183 0 36V8C0 3.58172 3.58172 0 8 0H36Z" fill="#00cc85"/></symbol>
       <!-- Filled/waffle-menu (3075:61110) — DS export, 9 filled dots, fill+stroke=currentColor --><symbol id="ic-waffle" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z"/><path d="M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z"/><path d="M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z"/><path d="M12 6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5C11 5.55228 11.4477 6 12 6Z"/><path d="M19 6C19.5523 6 20 5.55228 20 5C20 4.44772 19.5523 4 19 4C18.4477 4 18 4.44772 18 5C18 5.55228 18.4477 6 19 6Z"/><path d="M5 6C5.55228 6 6 5.55228 6 5C6 4.44772 5.55228 4 5 4C4.44772 4 4 4.44772 4 5C4 5.55228 4.44772 6 5 6Z"/><path d="M12 20C12.5523 20 13 19.5523 13 19C13 18.4477 12.5523 18 12 18C11.4477 18 11 18.4477 11 19C11 19.5523 11.4477 20 12 20Z"/><path d="M19 20C19.5523 20 20 19.5523 20 19C20 18.4477 19.5523 18 19 18C18.4477 18 18 18.4477 18 19C18 19.5523 18.4477 20 19 20Z"/><path d="M5 20C5.55228 20 6 19.5523 6 19C6 18.4477 5.55228 18 5 18C4.44772 18 4 18.4477 4 19C4 19.5523 4.44772 20 5 20Z"/></symbol>
       <!-- Outline/info (260:832) — vec x:2 y:2 +2+2 → vb -1 -1 26 26 --><symbol id="ic-info" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 12 22 C 17.523 22 22 17.523 22 12 C 22 6.477 22 2 12 2 C 6.477 2 2 6.477 2 12 C 2 17.523 6.477 22 12 22 Z"/><path d="M 12 16 L 12 12 M 12 8 L 12.01 8"/></symbol>
       <!-- Outline/heart (260:815) --><symbol id="ic-heart" viewBox="0 0 22.4031 19.7318" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 20.0413 2.36183 C 19.5305 1.85083 18.9241 1.44547 18.2566 1.16891 C 17.5892 0.892347 16.8738 0.75 16.1513 0.75 C 15.4288 0.75 14.7134 0.892347 14.0459 1.16891 C 13.3785 1.44547 12.772 1.85083 12.2613 2.36183 L 11.2013 3.42183 L 10.1413 2.36183 C 9.1096 1.33013 7.71032 0.750535 6.25129 0.750535 C 4.79226 0.750535 3.39298 1.33013 2.36129 2.36183 C 1.3296 3.39352 0.75 4.79279 0.75 6.25183 C 0.75 7.71086 1.3296 9.11013 2.36129 10.1418 L 3.42129 11.2018 L 11.2013 18.9818 L 18.9813 11.2018 L 20.0413 10.1418 C 20.5523 9.63107 20.9576 9.02464 21.2342 8.35718 C 21.5108 7.68972 21.6531 6.97431 21.6531 6.25183 C 21.6531 5.52934 21.5108 4.81393 21.2342 4.14647 C 20.9576 3.47901 20.5523 2.87258 20.0413 2.36183 Z"/></symbol>
@@ -2399,7 +2540,7 @@
 </g></symbol>
 
       <!-- Profile Menu icons — all DS exports, viewBox -1 -1 26 26 (1px stroke buffer per Rule 27) -->
-      <!-- Outline/user-circle (1942:23330) — My Profile -->
+      <!-- Outline/user-circle (3908:13415 60×60 DS export) — My Profile / Notif avatar -->
       <symbol id="ic-user-circle" viewBox="-1 -1 62 62" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M45 50C45 46.0218 43.4196 42.2064 40.6066 39.3934C37.7936 36.5804 33.9782 35 30 35M30 35C26.0218 35 22.2064 36.5804 19.3934 39.3934C16.5804 42.2064 15 46.0218 15 50M30 35C35.5228 35 40 30.5228 40 25C40 19.4772 35.5228 15 30 15C24.4772 15 20 19.4772 20 25C20 30.5228 24.4772 35 30 35ZM55 30C55 43.8071 43.8071 55 30 55C16.1929 55 5 43.8071 5 30C5 16.1929 16.1929 5 30 5C43.8071 5 55 16.1929 55 30Z"/></symbol>
       <!-- Outline/user-check (260:1300) — Manage Account -->
       <symbol id="ic-user-check" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M17 11L19 13L23 9M12.5 7C12.5 9.20914 10.7091 11 8.5 11C6.29086 11 4.5 9.20914 4.5 7C4.5 4.79086 6.29086 3 8.5 3C10.7091 3 12.5 4.79086 12.5 7Z"/></symbol>
@@ -2495,334 +2636,526 @@
       <!-- Outline/shopping-bag (260:1133) --><symbol id="ic-shopping-bag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 6V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V6L6 2H18L21 6ZM3 6H21M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10"/></symbol>
       <!-- Outline/shopping-cart (260:1137) --><symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6M10 21C10 21.5523 9.55228 22 9 22C8.44772 22 8 21.5523 8 21C8 20.4477 8.44772 20 9 20C9.55228 20 10 20.4477 10 21ZM21 21C21 21.5523 20.5523 22 20 22C19.4477 22 19 21.5523 19 21C19 20.4477 19.4477 20 20 20C20.5523 20 21 20.4477 21 21Z"/></symbol>
       <!-- Outline/smile (260:1181) --><symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14M9 9H9.01M15 9H15.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
+      <!-- P.Premium (6352:41216) — clipPath in defs (Rule 57: url() resolves from document root, not <use> shadow) -->
+      <clipPath id="clip-premium"><rect width="20" height="20" fill="white"/></clipPath>
+      <symbol id="ic-premium" viewBox="0 0 20 20" fill="none"><g clip-path="url(#clip-premium)"><path d="M8.18945 2.68805C8.90941 1.15493 11.0906 1.15493 11.8105 2.68805L13.4287 6.13629L17.1924 6.71539C18.8009 6.96261 19.4562 8.92502 18.3193 10.0894L15.5332 12.942L16.1758 16.8785C16.4446 18.5264 14.6955 19.7587 13.2344 18.9507L10 17.1627L6.76562 18.9507C5.3045 19.7587 3.55544 18.5264 3.82422 16.8785L4.46582 12.942L1.68066 10.0894C0.543759 8.92502 1.19912 6.96261 2.80762 6.71539L6.57031 6.13629L8.18945 2.68805Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.09473 3.11383C9.45466 2.34708 10.5453 2.34707 10.9053 3.11383L12.6377 6.80328C12.7084 6.95396 12.8492 7.06012 13.0137 7.08551L17.041 7.70367C17.845 7.82751 18.1728 8.80905 17.6045 9.39117L14.6426 12.4244C14.5317 12.5379 14.4814 12.6975 14.5068 12.8541L15.1895 17.0396C15.3238 17.8634 14.4492 18.4793 13.7188 18.0757L10.2422 16.1529C10.0916 16.0696 9.90837 16.0696 9.75781 16.1529L6.28125 18.0757C5.55077 18.4793 4.67621 17.8634 4.81055 17.0396L5.49316 12.8541C5.51863 12.6975 5.46828 12.5379 5.35742 12.4244L2.39551 9.39117C1.82719 8.80905 2.15501 7.82751 2.95898 7.70367L6.98633 7.08551C7.15083 7.06012 7.29156 6.95396 7.3623 6.80328L9.09473 3.11383Z" fill="#FFF200" stroke="#F2B839" stroke-linecap="round" stroke-linejoin="round"/></g></symbol>
 
-      <!-- Outline/video (used in Premium badge icon) -->
-      <symbol id="ic-video" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></symbol>
-      <!-- Outline/corner-down-right (breadcrumb sub-nav link indicator) -->
-      <symbol id="ic-corner-down-right" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></symbol>
+
+      <!-- Outline/video (DS Iconography) — live badge icon, 10×10 CSS; stroke="currentColor" -->
+      <symbol id="ic-video" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></symbol>
+      <!-- Outline/plus-circle (DS Iconography) — Divider + More chip; 12×12 CSS -->
+      <symbol id="ic-plus-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></symbol>
     </defs>
   </svg>
 
+  <!-- ═══════════════════════════════════════════════════════════════
+       NAVBAR PRIMARY DESKTOP — Navbar Primary Desktop - 1.5
+       Navbar Primary Desktop - 1.5 / Type=Desktop (node 866:5576)
+       COMPONENT_SET: Navbar Primary Desktop - 1.5 (2337:21975) · only variant: Type=Desktop
+       Logo left · 6 action icons + avatar + notification badge right
+  ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       NAVIGATION SHELL
+       All nav variants wrapped in one section. Fixed elements
+       (NavMenu-Tablet, NavMenu-Mobile, NavBar-Bottom) escape DOM
+       stacking — this section is semantic grouping only.
+       Desktop: NavbarPrimary-Desktop + NavTopMenu-Desktop
+       Tablet:  NavBar-Mobile + NavMenu-Tablet
+       Mobile:  NavBar-Mobile + NavBar-Bottom + NavMenu-Mobile
+  ═══════════════════════════════════════════════════════════════ -->
   <section id="Navigation-Shell"></section>
 
 
   <!-- ═══════════════════════════════════════════════════════════════
-       PAGE VIEWPORT — My Rewards main content
+       PAGE VIEWPORT
+       Drop DS component instances inside PageViewport.
+       Replace the placeholder <div> with real content sections.
+       Use <section id="SectionName-Desktop"> per Rule 10.
   ═══════════════════════════════════════════════════════════════ -->
   <main>
     <div class="page-container">
       <div class="main-content">
 
+        <section id="viewport-browseclasses" class="viewport-browseclasses" aria-label="Browse Classes">
 
-        <!-- Breadcrumb — Rewards > My Rewards (DS node 3284:218453) -->
-        <section class="bc-row" aria-label="Breadcrumb">
-          <div class="bc-left">
-            <span class="bc-title">Rewards</span>
-            <span class="bc-sep" aria-hidden="true"></span>
-            <nav class="bc-trail" aria-label="Breadcrumb">
-              <a href="#" class="bc-link">
-                <svg aria-hidden="true" width="20" height="20"><use href="#ic-gift"/></svg>
-                Rewards
-                <svg class="bc-chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+          <!-- ── Breadcrumb 1.5 — DS node 3528:52796 ── -->
+          <section id="BrowseClasses-Breadcrumb-Desktop" class="bc-row" aria-label="Breadcrumb">
+            <div class="bc-left">
+              <span class="bc-title">Browse Classes</span>
+              <span class="bc-sep" aria-hidden="true"></span>
+              <nav class="bc-trail" aria-label="Breadcrumb">
+                <a href="class.my.classes.html" class="bc-link">
+                  <svg aria-hidden="true"><use href="#ic-users"/></svg>
+                  Class
+                  <svg class="bc-chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+                </a>
+                <span class="bc-link bc-link--current" aria-current="page">Browse Classes</span>
+              </nav>
+            </div>
+            <div class="bc-actions">
+              <!-- Timetable — Secondary · Outline/calendar -->
+              <a href="#" class="btn-secondary">
+                <div class="btn-icon-wrap"><div class="btn-icon-clip"><svg aria-hidden="true"><use href="#ic-calendar"/></svg></div></div>
+                <span class="btn-label">Timetable</span>
               </a>
-              <span class="bc-link bc-link--current" aria-current="page">My Rewards</span>
-            </nav>
-          </div>
-          <!-- Coin balance — mobile only, hidden on desktop -->
-          <div class="bc-coin-mobile" aria-hidden="true">
-            <img class="bc-coin-mobile__icon" src="../../src/image-repo/page.rewards/my.rewards/assets/P.Coin.svg" alt="">
-            <span class="bc-coin-mobile__value">550</span>
-          </div>
-        </section>
+              <!-- Go to My Classes — Secondary · Outline/airplay — DS node 3528:52800 -->
+              <a href="class.my.classes.html" class="btn-secondary">
+                <div class="btn-icon-wrap"><div class="btn-icon-clip"><svg aria-hidden="true"><use href="#ic-airplay"/></svg></div></div>
+                <span class="btn-label">Go to My Classes</span>
+              </a>
+              <!-- Join Class — Primary · Outline/plus -->
+              <a href="#" class="btn-primary">
+                <div class="btn-icon-wrap"><div class="btn-icon-clip"><svg aria-hidden="true"><use href="#ic-plus"/></svg></div></div>
+                <span class="btn-label">Join Class</span>
+              </a>
+            </div>
+          </section><!-- /.bc-row -->
 
-        <!-- Two-panel layout — DS node 3065:42921 -->
-        <div class="rewards-layout">
+          <!-- ── Class Cards 1.5 ─────────────────────────────────────── -->
+          <section id="BrowseClasses-Cards-Desktop" class="cards-grid" aria-label="Class Cards">
 
-          <!-- LEFT SIDEBAR — DS node 3849:48401 (Nav Side Menu Desktop 1.5) -->
-          <aside class="rewards-sidebar">
-
-            <!-- Score chip — Surface/gold/default-subtle #fef1ce, Border/gold/default #fabb0a -->
-            <div class="sidebar-balance">
-              <img class="sidebar-balance__coin" src="../../src/image-repo/page.rewards/my.rewards/assets/P.Coin.svg" alt="Pandai Coin">
-              <span class="sidebar-balance__value">550</span>
+            <!-- ① Enrichment | Form 5 -->
+            <div class="cc cc--enrichment">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/enrichment.png" alt="Enrichment cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Enrichment | Form 5</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-3.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Cikgu Zainab binti Ali</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Monday</strong><span>at</span><strong>7am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                  </div>
+                </div>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
+                </div>
+              </div></div>
             </div>
 
-            <div class="sidebar-divider" aria-hidden="true"></div>
-
-            <button class="sidebar-btn" type="button">
-              <div class="sidebar-btn__icon-wrap"><svg aria-hidden="true"><use href="#ic-stop-circle"/></svg></div>
-              <span class="sidebar-btn__label">Coin Quest</span>
-            </button>
-            <button class="sidebar-btn sidebar-btn--active" type="button">
-              <div class="sidebar-btn__icon-wrap" data-icon="box"><svg aria-hidden="true"><use href="#ic-package"/></svg></div>
-              <span class="sidebar-btn__label">My Rewards</span>
-            </button>
-            <button class="sidebar-btn" type="button">
-              <div class="sidebar-btn__icon-wrap" data-icon="shopping-bag"><svg aria-hidden="true"><use href="#ic-shopping-bag"/></svg></div>
-              <span class="sidebar-btn__label">Merchandise</span>
-            </button>
-            <button class="sidebar-btn" type="button">
-              <div class="sidebar-btn__icon-wrap" data-icon="shopping-cart"><svg aria-hidden="true"><use href="#ic-shopping-cart"/></svg></div>
-              <span class="sidebar-btn__label">eVoucher</span>
-            </button>
-            <button class="sidebar-btn" type="button">
-              <div class="sidebar-btn__icon-wrap"><svg aria-hidden="true"><use href="#ic-smile"/></svg></div>
-              <span class="sidebar-btn__label">Avatar</span>
-            </button>
-
-          </aside>
-
-          <!-- RIGHT MAIN — DS node 3065:43086 -->
-          <section class="rewards-main" aria-label="My Rewards">
-
-            <!-- Header — DS node 3897:67569 Content Placeholder header row -->
-            <div class="mr-header">
-              <p class="mr-header__desc">All items you have redeemed!</p>
-              <div class="mr-header__redeem">
-                <span>Total redeem this month :</span>
-                <img class="mr-header__coin" src="../../src/image-repo/page.rewards/my.rewards/assets/P.Coin.svg" alt="Coin">
-                <span>200</span>
-              </div>
+            <!-- ② Account | Form 4 -->
+            <div class="cc cc--acc">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/account.png" alt="Account cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Account | Form 4</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-1.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">En. Faizal bin Ahmad</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Monday</strong><span>at</span><strong>8am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                  </div>
+                </div>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
+                </div>
+              </div></div>
             </div>
 
-            <!-- Voucher card grid — 4 cols · 2 rows · 8 cards
-                 DS rows: 3065:43088 (row 1) + 3065:43197 (row 2) -->
-            <div class="mr-grid">
+            <!-- ③ Add Mathematics | Form 4 -->
+            <div class="cc cc--add-math">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/add-math.png" alt="Add Mathematics cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Add Mathematics | Form 4</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-6.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Cikgu Rozita binti Hamid</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Monday</strong><span>at</span><strong>9am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                  </div>
+                </div>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
+                </div>
+              </div></div>
+            </div>
 
-              <!-- ① Free Drinks Voucher -->
-              <article class="mr-card">
-                <div class="mr-card__img"><img src="../../src/image-repo/page.rewards/my.rewards/assets/MyRewards-1.svg" alt=""></div>
-                <div class="mr-card__body">
-                  <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+            <!-- ④ Biology | Form 4 -->
+            <div class="cc cc--bio">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/biology.png" alt="Biology cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Biology | Form 4</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-2.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Cikgu Nur Hana binti Salleh</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Monday</strong><span>at</span><strong>10am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
                   </div>
-                  <p class="mr-card__title">Free Drinks Voucher (Medium Size)</p>
                 </div>
-                <div class="mr-card__divider"></div>
-                <div class="mr-card__footer">
-                  <div class="mr-card__cost">
-                    <img class="mr-card__coin" src="../../src/image-repo/page.rewards/my.rewards/assets/P.Coin.svg" alt="Coin"><span>50</span>
-                  </div>
-                  <a href="#" class="btn-voucher">
-                    <span class="btn-voucher__label">Show Voucher</span>
-                    <div class="btn-voucher__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
-                  </a>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
                 </div>
-              </article>
+              </div></div>
+            </div>
 
-              <!-- ② 10% Off Electronics -->
-              <article class="mr-card">
-                <div class="mr-card__img"><img src="../../src/image-repo/page.rewards/my.rewards/assets/MyRewards-2.svg" alt=""></div>
-                <div class="mr-card__body">
-                  <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+            <!-- ⑤ Bahasa Melayu | Form 4 -->
+            <div class="cc cc--bm">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/bm.png" alt="Bahasa Melayu cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Bahasa Melayu | Form 4</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-4.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Cikgu Aminah binti Yusoff</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Tuesday</strong><span>at</span><strong>8am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
                   </div>
-                  <p class="mr-card__title">10% Off Electronics Voucher</p>
                 </div>
-                <div class="mr-card__divider"></div>
-                <div class="mr-card__footer">
-                  <div class="mr-card__cost">
-                    <img class="mr-card__coin" src="../../src/image-repo/page.rewards/my.rewards/assets/P.Coin.svg" alt="Coin"><span>80</span>
-                  </div>
-                  <a href="#" class="btn-voucher">
-                    <span class="btn-voucher__label">Show Voucher</span>
-                    <div class="btn-voucher__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
-                  </a>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">RM 80.00</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
                 </div>
-              </article>
+              </div></div>
+            </div>
 
-              <!-- ③ 1 Month Gaming Pass -->
-              <article class="mr-card">
-                <div class="mr-card__img"><img src="../../src/image-repo/page.rewards/my.rewards/assets/MyRewards-3.svg" alt=""></div>
-                <div class="mr-card__body">
-                  <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+            <!-- ⑥ Business | Form 4 -->
+            <div class="cc cc--biz">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/business.png" alt="Business cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Business | Form 4</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-7.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Puan Hazlina binti Osman</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Tuesday</strong><span>at</span><strong>9am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
                   </div>
-                  <p class="mr-card__title">1 Month Gaming Pass</p>
                 </div>
-                <div class="mr-card__divider"></div>
-                <div class="mr-card__footer">
-                  <div class="mr-card__cost">
-                    <img class="mr-card__coin" src="../../src/image-repo/page.rewards/my.rewards/assets/P.Coin.svg" alt="Coin"><span>100</span>
-                  </div>
-                  <a href="#" class="btn-voucher">
-                    <span class="btn-voucher__label">Show Voucher</span>
-                    <div class="btn-voucher__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
-                  </a>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
                 </div>
-              </article>
+              </div></div>
+            </div>
 
-              <!-- ④ RM5 Food Delivery Discount -->
-              <article class="mr-card">
-                <div class="mr-card__img"><img src="../../src/image-repo/page.rewards/my.rewards/assets/MyRewards-4.svg" alt=""></div>
-                <div class="mr-card__body">
-                  <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+            <!-- ⑦ Chemistry | Form 4 -->
+            <div class="cc cc--chem">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/chemistry.png" alt="Chemistry cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Chemistry | Form 4</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-5.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Dr. Rashid bin Othman</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Tuesday</strong><span>at</span><strong>10am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
                   </div>
-                  <p class="mr-card__title">RM5 Food Delivery Discount</p>
                 </div>
-                <div class="mr-card__divider"></div>
-                <div class="mr-card__footer">
-                  <div class="mr-card__cost">
-                    <img class="mr-card__coin" src="../../src/image-repo/page.rewards/my.rewards/assets/P.Coin.svg" alt="Coin"><span>25</span>
-                  </div>
-                  <a href="#" class="btn-voucher">
-                    <span class="btn-voucher__label">Show Voucher</span>
-                    <div class="btn-voucher__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
-                  </a>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
                 </div>
-              </article>
+              </div></div>
+            </div>
 
-              <!-- ⑤ Pandai Premium Access -->
-              <article class="mr-card">
-                <div class="mr-card__img"><img src="../../src/image-repo/page.rewards/my.rewards/assets/MyRewards-5.svg" alt=""></div>
-                <div class="mr-card__body">
-                  <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+            <!-- ⑧ Chinese Language | Form 4 -->
+            <div class="cc cc--chi">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/chi-lang.png" alt="Chinese Language cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Chinese Language | Form 4</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-3.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Cikgu Li Wei</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Wednesday</strong><span>at</span><strong>7am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
                   </div>
-                  <p class="mr-card__title">Pandai Premium Access (30 Days)</p>
                 </div>
-                <div class="mr-card__divider"></div>
-                <div class="mr-card__footer">
-                  <div class="mr-card__cost">
-                    <img class="mr-card__coin" src="../../src/image-repo/page.rewards/my.rewards/assets/P.Coin.svg" alt="Coin"><span>150</span>
-                  </div>
-                  <a href="#" class="btn-voucher">
-                    <span class="btn-voucher__label">Show Voucher</span>
-                    <div class="btn-voucher__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
-                  </a>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Free</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
                 </div>
-              </article>
+              </div></div>
+            </div>
 
-              <!-- ⑥ Beauty Kit Sample Set -->
-              <article class="mr-card">
-                <div class="mr-card__img"><img src="../../src/image-repo/page.rewards/my.rewards/assets/MyRewards-6.svg" alt=""></div>
-                <div class="mr-card__body">
-                  <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+            <!-- ⑨ Computer Science | Form 4 -->
+            <div class="cc cc--cs">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/chemistry.png" alt="Computer Science cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Computer Science | Form 4</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-1.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">En. Azri bin Zakaria</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Wednesday</strong><span>at</span><strong>8am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
                   </div>
-                  <p class="mr-card__title">Beauty Kit Sample Set</p>
                 </div>
-                <div class="mr-card__divider"></div>
-                <div class="mr-card__footer">
-                  <div class="mr-card__cost">
-                    <img class="mr-card__coin" src="../../src/image-repo/page.rewards/my.rewards/assets/P.Coin.svg" alt="Coin"><span>40</span>
-                  </div>
-                  <a href="#" class="btn-voucher">
-                    <span class="btn-voucher__label">Show Voucher</span>
-                    <div class="btn-voucher__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
-                  </a>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
                 </div>
-              </article>
+              </div></div>
+            </div>
 
-              <!-- ⑦ 3 eBooks Collection -->
-              <article class="mr-card">
-                <div class="mr-card__img"><img src="../../src/image-repo/page.rewards/my.rewards/assets/MyRewards-7.svg" alt=""></div>
-                <div class="mr-card__body">
-                  <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+            <!-- ⑩ Economy | Form 4 -->
+            <div class="cc cc--eco">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/economy.png" alt="Economy cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Economy | Form 4</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-6.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Puan Suraya binti Mat</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Wednesday</strong><span>at</span><strong>9am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
                   </div>
-                  <p class="mr-card__title">3 eBooks SPM Collection</p>
                 </div>
-                <div class="mr-card__divider"></div>
-                <div class="mr-card__footer">
-                  <div class="mr-card__cost">
-                    <img class="mr-card__coin" src="../../src/image-repo/page.rewards/my.rewards/assets/P.Coin.svg" alt="Coin"><span>60</span>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
+                </div>
+              </div></div>
+            </div>
+
+            <!-- ⑪ English | Form 4 -->
+            <div class="cc cc--en">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/en.png" alt="English cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr">
+                  <div class="cc__hdr-title">English | Form 4</div>
+                  <div class="dlp-badge"><img src="../src/image-repo/page.class/my.class/assets/dlp.svg" alt="DLP"></div>
+                </div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-2.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Puan Sarah binti Abdullah</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Wednesday</strong><span>at</span><strong>10am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
                   </div>
-                  <a href="#" class="btn-voucher">
-                    <span class="btn-voucher__label">Show Voucher</span>
-                    <div class="btn-voucher__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
-                  </a>
                 </div>
-              </article>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">RM 80.00</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
+                </div>
+              </div></div>
+            </div>
 
-              <!-- ⑧ Sports Gear Discount -->
-              <article class="mr-card">
-                <div class="mr-card__img"><img src="../../src/image-repo/page.rewards/my.rewards/assets/MyRewards-8.svg" alt=""></div>
-                <div class="mr-card__body">
-                  <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+            <!-- ⑫ Geography | Form 4 -->
+            <div class="cc cc--geo">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/geography.png" alt="Geography cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Geography | Form 4</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-4.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Cikgu Huzaifah bin Ismail</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Thursday</strong><span>at</span><strong>7am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
                   </div>
-                  <p class="mr-card__title">Sports Gear Discount Voucher</p>
                 </div>
-                <div class="mr-card__divider"></div>
-                <div class="mr-card__footer">
-                  <div class="mr-card__cost">
-                    <img class="mr-card__coin" src="../../src/image-repo/page.rewards/my.rewards/assets/P.Coin.svg" alt="Coin"><span>75</span>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
+                </div>
+              </div></div>
+            </div>
+
+            <!-- ⑬ History | Form 5 -->
+            <div class="cc cc--hs">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/history.png" alt="History cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">History | Form 5</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-7.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">En. Roslan bin Daud</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Thursday</strong><span>at</span><strong>8am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
                   </div>
-                  <a href="#" class="btn-voucher">
-                    <span class="btn-voucher__label">Show Voucher</span>
-                    <div class="btn-voucher__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></div>
-                  </a>
                 </div>
-              </article>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
+                </div>
+              </div></div>
+            </div>
 
-            </div><!-- /.mr-grid -->
-          </section><!-- /.rewards-main -->
+            <!-- ⑭ Islamic Studies | Form 4 -->
+            <div class="cc cc--isl">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/islamic.png" alt="Islamic Studies cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Islamic Studies | Form 4</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-5.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Ustaz Luqman bin Yusof</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Thursday</strong><span>at</span><strong>9am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                  </div>
+                </div>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
+                </div>
+              </div></div>
+            </div>
 
-        </div><!-- /.rewards-layout -->
+            <!-- ⑮ KAFA | Form 5 -->
+            <div class="cc cc--kafa">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/kafa.png" alt="KAFA cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">KAFA | Form 5</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-3.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Ustazah Fatimah binti Ghani</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Thursday</strong><span>at</span><strong>10am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                  </div>
+                </div>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Free</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
+                </div>
+              </div></div>
+            </div>
 
-      </div><!-- /.main-content -->
-    </div><!-- /.page-container -->
+            <!-- ⑯ Mathematics | Form 4 -->
+            <div class="cc cc--mt">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/math.png" alt="Mathematics cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Mathematics | Form 4</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-1.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">En. Hafiz bin Zulkifli</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Friday</strong><span>at</span><strong>8am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                  </div>
+                </div>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
+                </div>
+              </div></div>
+            </div>
+
+            <!-- ⑰ Moral | Form 4 -->
+            <div class="cc cc--moral">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/moral.png" alt="Moral cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Moral | Form 4</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-6.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Cikgu Kavitha Selvan</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Friday</strong><span>at</span><strong>9am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                  </div>
+                </div>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
+                </div>
+              </div></div>
+            </div>
+
+            <!-- ⑱ Physics | Form 4 -->
+            <div class="cc cc--phy">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/physics.png" alt="Physics cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">Physics | Form 4</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-2.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Dr. Khairul bin Rahman</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Friday</strong><span>at</span><strong>10am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                  </div>
+                </div>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
+                </div>
+              </div></div>
+            </div>
+
+            <!-- ⑲ RBT | Form 5 -->
+            <div class="cc cc--rbt">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/rbt.png" alt="RBT cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr"><div class="cc__hdr-title">RBT | Form 5</div></div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-4.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Cikgu Azman bin Kassim</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Saturday</strong><span>at</span><strong>9am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                  </div>
+                </div>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
+                </div>
+              </div></div>
+            </div>
+
+            <!-- ⑳ Science | Form 4 -->
+            <div class="cc cc--sc">
+              <div class="cc__cover"><img src="../src/image-repo/page.class/my.class/assets/science.png" alt="Science cover"></div>
+              <div class="cc__body"><div class="cc__inner">
+                <div class="cc__hdr">
+                  <div class="cc__hdr-title">Science | Form 4</div>
+                  <div class="dlp-badge"><img src="../src/image-repo/page.class/my.class/assets/dlp.svg" alt="DLP"></div>
+                </div>
+                <div class="cc__main">
+                  <div class="ds-avatar ds-avatar--xl"><img src="../src/image-repo/page.class/browse.class/assets/tutor-7.png" alt="Teacher avatar"></div>
+                  <div class="cc__text">
+                    <div class="cc__teacher">Cikgu Norliza binti Kassim</div>
+                    <div class="cc__schedule"><span>Every</span><strong>Monday</strong><span>at</span><strong>7am</strong></div>
+                    <div class="live-badge"><svg aria-hidden="true"><use href="#ic-video"/></svg>Live Tuition</div>
+                  </div>
+                </div>
+                <div class="cc__divider"></div>
+                <div class="cc__cta">
+                  <span class="cc-premium-tag">Premium Only</span>
+                  <a href="#" class="btn-preview"><span class="btn-preview__label">Preview</span><div class="btn-preview__arrow"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 9L7.5 6L4.5 3"/></svg></div></a>
+                </div>
+              </div></div>
+            </div>
+
+          </section><!-- /#BrowseClasses-Cards-Desktop -->
+
+        </section><!-- /#viewport-browseclasses -->
+
+      </div>
+    </div>
   </main>
 
   <footer class="footer" id="zul-footer"></footer>
-
-  <script>
-    // Sidebar active state toggle
-    try {
-      var SIDEBAR_HREFS = {
-        'Coin Quest':  'nadia_Rewards-CoinQuest.html',
-        'My Rewards':  'nadia_Rewards-Myrewards.html',
-        'Merchandise': 'nadia_Rewards-Merchandise.html',
-        'eVoucher':    'nadia_Rewards-evoucher.html',
-        'Avatar':      'nadia_Rewards-avatar.html',
-      };
-      document.querySelectorAll('.sidebar-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          var lbl = btn.querySelector('.sidebar-btn__label');
-          var href = lbl && SIDEBAR_HREFS[lbl.textContent.trim()];
-          if (href) { window.location.href = href; return; }
-          document.querySelectorAll('.sidebar-btn').forEach(function (b) { b.classList.remove('sidebar-btn--active'); });
-          btn.classList.add('sidebar-btn--active');
-        });
-      });
-    } catch(e) { console.warn('sidebar init:', e); }
-
-    // Voucher button pressed feedback (Rule 83: JS mousedown paired with CSS .is-pressing)
-    try {
-      document.querySelectorAll('.btn-voucher').forEach(function (btn) {
-        btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressed'); });
-        btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressed'); });
-        btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressed'); });
-      });
-    } catch(e) { console.warn('voucher btn init:', e); }
-
-    // notif-see-all pressed feedback (Rule 83: CSS :active unreliable in webview)
-    try {
-      var notifSeeAll = document.querySelector('.notif-see-all');
-      if (notifSeeAll) {
-        notifSeeAll.addEventListener('mousedown',  function () { notifSeeAll.classList.add('is-pressing'); });
-        notifSeeAll.addEventListener('mouseup',    function () { notifSeeAll.classList.remove('is-pressing'); });
-        notifSeeAll.addEventListener('mouseleave', function () { notifSeeAll.classList.remove('is-pressing'); });
-      }
-    } catch(e) { console.warn('notif-see-all init:', e); }
-
-  </script>
 
   <div id="zul-nav-bottom"></div>
 
   <script>
   (function () {
-    var TPL = '../../zul.test.git/zul.page.template.html';
+    var TPL = '../zul.test.git/zul.page.template.html';
 
     fetch(TPL)
       .then(function (r) { return r.text(); })
@@ -2831,9 +3164,9 @@
         var doc = parser.parseFromString(html, 'text/html');
 
         // Fix image paths: template is one level deep (zul.test.git/),
-        // nadia is two levels deep (Nadia.test.git/Rewards/). ../src/ → ../../src/
+        // nadia is two levels deep (Nadia.test.git/Class/). ../src/ → ../src/
         function fixPaths(html) {
-          return html.replace(/src="\.\.\/src\//g, 'src="../../src/');
+          return html.replace(/src="\.\.\/src\//g, 'src="../src/');
         }
 
         // 1. Inject Navigation-Shell contents
@@ -2866,27 +3199,44 @@
           document.body.appendChild(ns);
         });
 
-        // 5. Set active nav state — clear template's hardcoded Home active, then set Rewards
+        // 5. Set active nav state — clear template's hardcoded Home active, then set Class
         document.querySelectorAll('#NavTopMenu-Desktop .nav-menu-btn').forEach(function (b) {
           b.classList.remove('is-active');
         });
-        var btn = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="Rewards"]');
-        if (btn) btn.classList.add('is-active');
+        var classBtn = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="Class"]');
+        if (classBtn) classBtn.classList.add('is-active');
+
+        // Nav persistence: template's restoreHome() resets to Home on dropdown close.
+        // MutationObserver re-applies Class active whenever it is removed (Rule data-active-nav).
+        var navTopMenu = document.getElementById('NavTopMenu-Desktop');
+        if (navTopMenu) {
+          var _restoring = false;
+          new MutationObserver(function () {
+            if (_restoring) return;
+            var btn = navTopMenu.querySelector('.nav-menu-btn[aria-label="Class"]');
+            if (btn && !btn.classList.contains('is-active')) {
+              _restoring = true;
+              navTopMenu.querySelectorAll('.nav-menu-btn').forEach(function (b) { b.classList.remove('is-active'); });
+              btn.classList.add('is-active');
+              _restoring = false;
+            }
+          }).observe(navTopMenu, { subtree: true, attributes: true, attributeFilter: ['class'] });
+        }
 
         // 6. Wire Nadia page navigation links (N-C40)
         (function () {
-          var BASE = '../';
+          var BASE = '';
           var NAV_HREFS = {
-            'Quiz':           BASE + 'Quiz/nadia_Quiz.html',
-            'Battle':         BASE + 'Battle/nadia_Battle.html',
-            'Practice':       BASE + 'Practise/nadia_Practise-subject.html',
-            'My Classes':     BASE + 'Class/nadia_Class-MyClasses.html',
-            'Browse Classes': BASE + 'Class/nadia_Class-BrowseClasses.html',
-            'Avatar':         BASE + 'Rewards/nadia_Rewards-avatar.html',
-            'Coin Quests':    BASE + 'Rewards/nadia_Rewards-CoinQuest.html',
-            'eVoucher':       BASE + 'Rewards/nadia_Rewards-evoucher.html',
-            'Merchandise':    BASE + 'Rewards/nadia_Rewards-Merchandise.html',
-            'My Rewards':     BASE + 'Rewards/nadia_Rewards-Myrewards.html',
+            'Quiz':           BASE + 'quiz.html',
+            'Battle':         BASE + 'battle.html',
+            'Practice':       BASE + 'practise.subject.html',
+            'My Classes':     BASE + 'class.my.classes.html',
+            'Browse Classes': BASE + 'class.browse.classes.html',
+            'Avatar':         BASE + 'rewards.avatar.html',
+            'Coin Quests':    BASE + 'rewards.coin.quest.html',
+            'eVoucher':       BASE + 'rewards.evoucher.html',
+            'Merchandise':    BASE + 'rewards.merchandise.html',
+            'My Rewards':     BASE + 'rewards.my.rewards.html',
           };
           function link(el, href) {
             if (el) el.addEventListener('click', function () { window.location.href = href; });
@@ -2921,6 +3271,20 @@
         console.error('[nav-inject] Failed to load navigation:', err);
       });
   })();
+
+  // Breadcrumb button pressed feedback — Rule 39/83
+  document.querySelectorAll('.btn-secondary, .btn-primary').forEach(function (btn) {
+    btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+    btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+    btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+  });
+
+  // Preview button pressed feedback — Rule 39/83: JS mousedown/mouseup on <a> elements
+  document.querySelectorAll('.btn-preview').forEach(function (btn) {
+    btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+    btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+    btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+  });
   </script>
 
 </body>

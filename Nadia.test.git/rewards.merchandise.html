@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pandai — Battle</title>
+  <title>Pandai — Merchandise</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,74 +11,73 @@
 
   <style>
     /* ═══════════════════════════════════════════════════════════════
-       Pandai DS 1.5 — Battle Page
+       Pandai DS 1.5 — Page Template
+       Navigation Shell (Desktop/Tablet/Mobile) + PageViewport placeholder
        Token values confirmed 2026-05-24 (Rules 153–156 / DS audit)
        Source DS: TLVKe3bgJTdVvuPAzgDq2f
     ═══════════════════════════════════════════════════════════════ */
     :root {
       /* Surface */
-      --surface-general-default:               #FFFFFF;
-      --surface-primary-default:               #00cc85;
-      --surface-primary-focus:                 #00a36a;
-      --surface-primary-default-subtle:        #e1f9ea;   /* OG-Green/50 — DS confirmed 2026-06-09 */
-      --border-primary-default-subtle:         #d9f7ed;
+      --surface-general-default:         #FFFFFF;
+      --surface-primary-default:         #00cc85;
+      --surface-primary-focus:           #00a36a;   /* Surface/primary/focus — pressed state bg */
+      --surface-primary-default-subtle:        #d9f7ed;
+      --border-primary-default-subtle:         #d9f7ed;   /* Border/primary/default-subtle — Secondary Active arrow */
       --surface-primary-default-subtle-hover:  #99ebce;
-      --surface-secondary-default:             #b5f291;
-      --surface-secondary-default-subtle:      #e8fbe8;
-      --surface-secondary-default-hover:       #f6fef6;   /* profile menu header bg */
-      --surface-disabled-primary:              #f2f2f2;
-      --surface-disabled-on-color:             #e5e5e5;
-      --surface-general-default-secondary:     #f2f2f2;
-      --surface-tertiary-default:              #00564c;
-      --surface-informative-default:           #00a2e8;   /* Icon Badge - 1.5 */
+      --surface-secondary-default:             #b5f291;  /* Surface/secondary/default */
+      --surface-secondary-default-subtle:      #e8fbe8;  /* Surface/secondary/default-subtle */
+      --surface-secondary-default-hover:       #f6fef6;  /* Surface/secondary/default-hover — profile menu header bg */
+      --surface-disabled-primary:        #f2f2f2;
+      --surface-disabled-on-color:       #e5e5e5;   /* Surface/disabled/on color — disabled button arrow bg (DS confirmed 2026-05-24) */
+      --surface-general-default-secondary: #f2f2f2;  /* Surface/general/default-secondary — carousel indicator inactive dot */
+      --surface-tertiary-default:        #00564c;   /* Surface/tertiary/default — pressed state bg */
+      --surface-informative-default:     #00a2e8;   /* Surface/informative/default — Icon Badge - 1.5 (DS node 3908:1491) */
 
       /* Border */
-      --border-primary-default:                #00cc85;
-      --border-primary-focus:                  #00a36a;
-      --border-secondary-default:              #b5f291;
-      --border-secondary-focus:                #70bc6f;
-      --border-default:                        #00cc85;
-      --border-general-default:                #d9d9d9;
-      --border-tertiary-focus:                 #00453d;
-      --border-disabled-disabled:              #bfbfbf;
-      --border-on-color:                       #ffffff;
-      --border-general-default-secondary:      #bfbfbf;
 
       /* Text */
-      --text-default-heading:       #404040;
-      --text-tertiary-default:      #00564c;
-      --text-default-body:          #666666;
-      --text-default-secondary:     #6B7280;
-      --text-default-placeholder:   #f2f2f2;
+      --text-default-heading:     #404040;
+      --text-tertiary-default:    #00564c;   /* Text/tertiary/default — Primary Card header title */
+      --text-default-body:        #666666;   /* Text/default/body â€” used in navbar, footer */
+      --text-default-secondary:   #6B7280;
+      --text-default-placeholder: #f2f2f2;   /* Text/default/placeholder â€” subject badge label */
       --text-primary-default:       #00cc85;
-      --text-primary-default-hover: #00a36a;   /* Dropdown selected label */
-      --text-primary-on-color:      #ffffff;
-      --text-secondary-focus:       #70bc6f;
-      --text-on-color-heading:      #ffffff;
-      --text-on-color-subtitle:     rgba(255,255,255,0.85);
-      --text-disabled-default:      #bfbfbf;
-      --text-default-caption:       #bfbfbf;
+      --text-primary-default-hover: #00a36a;   /* Text/primary/default-hover — Dropdown Selected label */
+      --text-primary-on-color:      #ffffff;   /* Text/primary/on-color — Foundation/white (DS updated 2026-05-24, was #e1f9ea) */
+      --text-secondary-focus:     #70bc6f;  /* Text/secondary/focus */
+      --text-on-color-heading:    #FFFFFF;   /* Text/on-color/heading â€” status pill */
+      --text-disabled-default:    #bfbfbf;
+      --text-default-caption:     #bfbfbf;   /* Text/default/caption — DS Search placeholder (DS node 1363:2852) */
 
       /* Icon */
-      --icon-default-default:  #808080;
-      --icon-primary-default:  #00cc85;
-      --icon-primary-focus:    #00a36a;   /* button arrow chevron */
-      --icon-secondary-hover:  #70bc6f;
-      --icon-primary-on-color: #ffffff;
-      --icon-tertiary-default: #00564c;
-      --icon-alert-default:    #ff9f43;
+      --icon-default-default:     #808080;   /* Icon/default/default — action icons, inactive (DS confirmed 2026-05-14) */
+      --icon-primary-default:     #00cc85;   /* Icon/primary/default — nav button icons, default */
+      --icon-secondary-hover:     #70bc6f;   /* Icon/secondary/hover — nav button icons, hover state */
+      --icon-primary-on-color:    #ffffff;   /* Icon/primary/on-color — Foundation/white (DS updated 2026-05-24, was #e1f9ea) */
+      --icon-tertiary-default:    #00564c;   /* Icon/tertiary/default — pressed arrow chevron */
 
-      /* Corner Radius */
-      --corner-radius-corner-pill:    999px;
-      --corner-radius-corner-rounded: 60px;
-      --corner-radius-corner-4xl:     24px;
-      --corner-radius-corner-2xl:     18px;
-      --corner-radius-corner-xl:      16px;
+      /* Border */
+      --border-primary-default:   #00cc85;   /* Border/primary/default */
+      --border-primary-focus:     #00a36a;   /* Border/primary/focus */
+      --border-secondary-default: #b5f291;   /* Border/secondary/default — Focus indicator dot border */
+      --border-secondary-focus:   #70bc6f;   /* Border/secondary/focus — hover border on all buttons */
+      --border-default:           #00cc85;   /* Border/default â€” navbar, footer, quiz card */
+      --border-general-default:   #d9d9d9;   /* Border/general/default — carousel cards */
+      --border-tertiary-focus:    #00453d;   /* Border/tertiary/focus — pressed state border */
+      --border-disabled-disabled: #bfbfbf;   /* Border/disabled/disabled */
+      --border-on-color:          #ffffff;   /* Border/on-color — white border on Number Badge (DS 618:417 updated 2026-05-26) */
+
+      /* Corner Radius (confirmed from design contexts) */
+      --corner-radius-corner-pill:    999px;  /* Corner Radius/corner-pill â€” nav row 2 */
+      --corner-radius-corner-rounded: 60px;   /* Corner Radius/Corner-Rounded â€” buttons, badges */
+      --corner-radius-corner-4xl:     24px;   /* Corner Radius/corner-4xl */
+      --corner-radius-corner-2xl:     18px;   /* Corner Radius/corner-2xl â€” quiz card */
+      --corner-radius-corner-xl:      16px;   /* Corner Radius/corner-xl â€” carousel cards */
       --corner-radius-corner-lg:      12px;
       --corner-radius-corner-md:      8px;
-      --radius-xl:                    8px;
+      --radius-xl:                    8px;   /* Radius/xl (Semantic) — Nav Button - 1.5 (44×44 square) */
 
-      /* Spacing */
+      /* Spacing (Semantic) */
       --spacing-space-xxs:  4px;
       --spacing-space-xs:   8px;
       --spacing-space-s:    12px;
@@ -88,32 +87,30 @@
       --spacing-space-2xl:  28px;
       --spacing-space-3xl:  40px;
 
-      /* Scale */
+      /* Scale (Primitives) */
       --scale-25:  1px;
       --scale-50:  2px;
       --scale-200: 8px;
 
-      /* Subject colors — DS confirmed */
-      --subjects-b-melayu-default:   #4d77ff;
-      --subjects-b-melayu-100:       #dbe4ff;
-      --subjects-b-melayu-focus:     #2e4799;
-      --subjects-english-default:    #ff4d56;
-      --subjects-math-default:       #42ac7b;
-      --subjects-science-default:    #ffd641;
-      --subjects-chemistry-default:  #e20082;
-      --subjects-physics-default:    #27a0d7;
-      --subjects-history-default:    #a97c50;
-      --subjects-geo-default:        #77d836;
-      --subjects-islamic-default:    #de4d7f;
-      --subjects-moral-default:      #0072ca;
-      --subjects-biology-default:    #8431d8;
-      --subjects-add-math-default:   #283589;
-      --subjects-economy-default:    #ff5733;
-      --subjects-account-default:    #0072ca;
-      --subjects-business-default:   #efb42b;
-      --subjects-cs-default:         #d10070;
-      --subjects-kafa-default:       #8ae3a9;
-      --subjects-rbt-default:        #353535;
+      /* Subject Colors â€” ALL confirmed from DS get_variable_defs */
+      --subjects-b-melayu-default:   #4d77ff;   /* Subjects/b-melayu/default */
+      --subjects-english-default:    #ff4d56;   /* Subjects/english/default */
+      --subjects-math-default:       #42ac7b;   /* Subjects/math/default */
+      --subjects-science-default:    #ffd641;   /* Subjects/science/default */
+      --subjects-chemistry-default:  #e20082;   /* Subjects/chemistry/default */
+      --subjects-physics-default:    #27a0d7;   /* Subjects/physics/default */
+      --subjects-history-default:    #a97c50;   /* Subjects/history/default */
+      --subjects-geo-default:        #77d836;   /* Subjects/geo/default */
+      --subjects-islamic-default:    #de4d7f;   /* Subjects/islamic/default */
+      --subjects-moral-default:      #0072ca;   /* Subjects/moral/default */
+      --subjects-biology-default:    #8431d8;   /* Subjects/biology/default */
+      --subjects-add-math-default:   #283589;   /* Subjects/add-math/default */
+      --subjects-economy-default:    #ff5733;   /* Subjects/economy/default */
+      --subjects-account-default:    #0072ca;   /* Subjects/account/default */
+      --subjects-business-default:   #efb42b;   /* Subjects/business/default */
+      --subjects-cs-default:         #d10070;   /* Subjects/comp-science/default */
+      --subjects-kafa-default:       #8ae3a9;   /* Subjects/kafa/default */
+      --subjects-rbt-default:        #353535;   /* Subjects/rbt/default */
 
       /* Typography */
       --font-family: 'Poppins', sans-serif;
@@ -121,26 +118,30 @@
       /* Layout */
       --page-max-width:          100%;
       --page-padding-x:          60px;
-      --nav-dropdown-top:        80px;
-      --section-gap:             var(--spacing-space-m);
-      --overlay-dark:            rgba(26, 26, 26, 0.5);
-      --check-in-card-max-width: 600px;
+      --nav-dropdown-top:        80px;   /* navbar 72px + 8px gap. Change here to revert. */
+      --section-gap:             var(--spacing-space-m);   /* Spacing/space-m = 16px */
+      --overlay-dark:            rgba(26, 26, 26, 0.5);    /* Overlay/Overlay-Dark → Foundation/black 50 (DS confirmed) */
+      --check-in-card-max-width: 390px;
 
-      /* Component-specific tokens */
-      --surface-table-heading:    #f6f9ff;
-      --surface-tab-active-strip: #d1f7d1;
-
-      /* Battle page — DS-confirmed 2026-06 */
-      --primary-800:      #005235;
-      --accents-pumpkin:  #f2b839;
+      /* CoinQuest / Rewards — shorthand token aliases */
+      --og-50:  #e9fbf5;  --og-100: #ccf5e7;  --og-200: #99ebce;
+      --og-500: #00cc85;  --og-600: #00a36a;  --og-700: #007a50;
+      --pk-50:  #ffebf2;  --pk-100: #ffdeea;  --pk-500: #ff5c98;
+      --Surface-general-default: #ffffff;
+      --sp-xxxs: 2px;  --sp-xxs: 4px;  --sp-xs: 8px;  --sp-s: 12px;  --sp-m: 16px;
+      --sp-l: 20px;    --sp-xl: 24px;
+      --r-rounded: 60px;  --r-4xl: 24px;  --r-2xl: 18px;  --r-xl: 16px;
+      --coin-bg: #fece00;  --coin-border: #cba500;  --coin-text: #7a5c00;
+      --ruby-bg: #ff4c51;  --ruby-border: #cc3d41;
+      --border-general-default-secondary: #bfbfbf;  /* Border/general/default-secondary (DS node 3655:16650) — bc-sep */
     }
 
-    /* ── Reset ─────────────────────────────────────────────────── */
+    /* â”€â”€ Reset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    img    { display: block; }
-    a      { text-decoration: none; color: inherit; }
+    img  { display: block; }
+    a    { text-decoration: none; color: inherit; }
     button { font-family: var(--font-family); cursor: pointer; }
-    html   { min-width: 390px; height: 100%; }
+    html { min-width: 390px; height: 100%; }
 
     body {
       font-family:    var(--font-family);
@@ -150,7 +151,7 @@
       min-width:      390px;
       max-width:      var(--page-max-width);
       margin:         0 auto;
-      padding-bottom: 60px;
+      padding-bottom: 60px; /* reserve footer height; main-content padding-bottom adds the 16px DS gap */
       min-height:     100vh;
       display:        flex;
       flex-direction: column;
@@ -173,21 +174,22 @@
       flex-direction: column;
     }
 
-    /* DS icon size rules */
+    /* DS icon size rules â€” never override unless explicitly stated */
     .icon-ds    { width: 24px; height: 24px; display: block; flex-shrink: 0; }
     .icon-ds-20 { width: 20px; height: 20px; display: block; flex-shrink: 0; }
     .icon-ds-16 { width: 16px; height: 16px; display: block; flex-shrink: 0; }
 
-    /* MAIN CONTENT */
+    /* MAIN CONTENT
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
     .main-content {
       display:        flex;
       flex-direction: column;
       flex:           1;
-      gap:            var(--section-gap);
-      padding-top:    var(--section-gap);
-      padding-bottom: var(--section-gap);
+      gap:            var(--section-gap);    /* 16px between every section */
+      padding-top:    var(--section-gap);    /* 16px space at top of page */
+      padding-bottom: var(--section-gap);    /* 16px space above footer */
     }
-
     .footer {
       position:   fixed;
       bottom:     0;
@@ -476,8 +478,7 @@
     #notif-btn.is-active .num-badge,
     #tablet-notif-btn.is-active .num-badge { opacity: 0; }
 
-    /* Avatar - 1.5 (node 1084:1825): 56×56 · border-radius 60px · border 1px #00cc85
-       DS bg: Surface/primary/default-subtle #e1f9ea (confirmed get_design_context 2026-06-09) */
+    /* Avatar - 1.5 (node 684:621): flex items-start · 48×48 · border · overflow-clip */
     .navbar-avatar {
       display:       flex;
       align-items:   flex-start;
@@ -693,7 +694,7 @@
       height:        100px;
       border-radius: var(--corner-radius-corner-rounded);
       border:        1px solid var(--border-default);
-      background:    var(--surface-general-default);
+      background:    var(--surface-primary-default-subtle);   /* #e1f9ea — DS node 1084:1825 */
       overflow:      hidden;
     }
     .profile-dropdown__avatar img {
@@ -2057,10 +2058,47 @@
       body           { padding-bottom: 56px; }   /* bottom navbar height */
     }
 
+    /* ═══════════════════════════════════════════════════════════════
+       PAGE VIEWPORT — placeholder zone for DS component instances
+       Drop Figma DS components here to build page content.
+    ═══════════════════════════════════════════════════════════════ */
 
-    /* ══════════════════════════════════════════════════════════════
-       PAGE VIEWPORT CONTENT
-    ══════════════════════════════════════════════════════════════ */
+    .page-viewport {
+      display:         flex;
+      flex-direction:  column;
+      align-items:     center;
+      justify-content: center;
+      flex:            1;
+      min-height:      0;
+      background:      var(--surface-general-default);
+      box-shadow:      inset 0 0 0 1px var(--border-general-default);
+      border-radius:   var(--corner-radius-corner-4xl);
+    }
+
+    .page-viewport__placeholder {
+      display:         flex;
+      flex-direction:  column;
+      align-items:     center;
+      justify-content: center;
+      gap:             var(--spacing-space-xs);
+      padding:         var(--spacing-space-xl);
+      color:           var(--text-disabled-default);
+      font-size:       14px;
+      font-weight:     500;
+      text-align:      center;
+      pointer-events:  none;
+      user-select:     none;
+    }
+
+    .page-viewport__placeholder svg {
+      width:  24px;
+      height: 24px;
+      color:  var(--text-disabled-default);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       PAGE VIEWPORT CONTENT — replaces placeholder for content pages
+    ═══════════════════════════════════════════════════════════════ */
     .page-viewport-content {
       flex:           1;
       min-height:     0;
@@ -2084,690 +2122,332 @@
       min-width:   0;
       display:     flex;
       align-items: center;
-      gap:         var(--spacing-space-m);
+      gap:         var(--spacing-space-m);   /* was: var(--sp-m) — old shorthand (Rule N-R7) */
     }
     .bc-title {
       font-size:   24px;
       font-weight: 500;
       line-height: 36px;
-      color:       var(--text-tertiary-default);
+      color:       var(--text-tertiary-default);   /* was: #00564c — hardcoded hex (Rule N-C1) */
       white-space: nowrap;
       flex-shrink: 0;
     }
     .bc-sep {
       width:       1px;
       height:      20px;
-      background:  var(--border-general-default-secondary);
+      background:  var(--border-general-default-secondary);   /* was: #d9d9d9 — DS: Border/general/default-secondary #bfbfbf (Session 23) */
       flex-shrink: 0;
     }
     .bc-trail {
       display:     flex;
       align-items: center;
-      gap:         var(--spacing-space-xs);
+      gap:         var(--spacing-space-xs);   /* was: var(--sp-xs) — old shorthand (Rule N-R7) */
       flex-wrap:   wrap;
     }
     .bc-link {
-      display:     inline-flex;
-      align-items: center;
-      gap:         var(--spacing-space-xs);
-      font-size:   14px;
-      font-weight: 400;
-      line-height: 20px;
-      color:       var(--text-primary-default);
-      white-space: nowrap;
+      display:         inline-flex;
+      align-items:     center;
+      gap:             var(--spacing-space-xs);   /* was: var(--sp-xs) — old shorthand (Rule N-R7) */
+      font-size:       14px;
+      font-weight:     400;
+      line-height:     20px;
+      color:           var(--text-primary-default);   /* was: var(--og-500) — old shorthand (Rule N-R7) */
+      text-decoration: none;
+      white-space:     nowrap;
     }
     .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
     .bc-chevron {
       width:       16px;
       height:      16px;
-      color:       var(--border-general-default-secondary);
+      color:       var(--border-general-default-secondary);   /* Border/general/default-secondary #bfbfbf — via currentColor (Rule N-C36) */
       flex-shrink: 0;
     }
-    .bc-link--current { color: var(--text-default-body); }
+    .bc-link--current { color: var(--text-default-body); }   /* was: #666 — hardcoded hex (Rule N-C1) */
+
+    /* Mobile coin balance — shows in page header, hidden on desktop */
+    .bc-coin-mobile {
+      display:       none;
+      align-items:   center;
+      gap:           2px;
+      background:    #fef1ce;
+      border:        1px solid #fabb0a;
+      border-radius: 16px;
+      padding:       var(--spacing-space-xxs) var(--spacing-space-xs) var(--spacing-space-xxs) var(--scale-50);   /* was: var(--sp-*) shorthand */
+      flex-shrink:   0;
+    }
+    .bc-coin-mobile__icon  { width: 20px; height: 20px; flex-shrink: 0; object-fit: contain; display: block; }
+    .bc-coin-mobile__value {
+      font-size: 14px; font-weight: 700; line-height: 20px; color: #fff;
+      -webkit-text-stroke: 2px #c89608; paint-order: stroke fill; white-space: nowrap;
+    }
 
     /* ══════════════════════════════════════════════════════════════
-       BATTLE BANNER — DS node 6498:146095
-       Two Static Card - 1.5 side by side, gap 50px
+       Two-panel rewards layout — DS node 3065:42736
+       Left sidebar: 280px  |  gap: 12px  |  Right main: flex-1
     ══════════════════════════════════════════════════════════════ */
-    .battle-banner-row {
-      display: flex;
-      gap:     50px;
-    }
-
-    /* Shared card base — DS: stroke visible:false → NO border */
-    .battle-card {
-      flex:           1;
-      height:         244px;
-      border-radius:  var(--corner-radius-corner-4xl);
-      overflow:       hidden;
-      position:       relative;
-      display:        flex;
-      flex-direction: row;
-    }
-
-    /* ── Card 1: Player Profile Stats ─────────────────────────── */
-    /* Background — DS: Rectangle 333, layoutPositioning:ABSOLUTE, x:635.5 y:244 w:680 h:244 rotation:-180
-       Positioned at right:0, 680px wide, rotated 180° — card overflow:hidden clips left overflow.
-       Rule 5: no gradient — flat image fill only. */
-    .bpc__bg {
-      position:         absolute;
-      right:            0;
-      top:              0;
-      width:            680px;
-      height:           100%;
-      background-image: url('../../src/image-repo/page.battle/assets/Battle Stat Card.png');
-      background-size:  100% 100%;
-      background-repeat: no-repeat;
-      transform:        rotate(180deg);
-      pointer-events:   none;
-    }
-
-    /* Spacer — DS: Empty frame flex:1, transparent */
-    .bpc__spacer {
-      flex: 1 0 0;
-    }
-
-    /* Stats — DS: Statistic Content, flex:1, pt:28 pr:28 pb:28 pl:28, gap:8, align:flex-end */
-    .bpc__stats {
-      flex:            1 0 0;
-      position:        relative;
-      z-index:         1;
-      display:         flex;
-      flex-direction:  column;
-      justify-content: center;
-      align-items:     flex-end;
-      padding:         28px;
-      gap:             8px;
-    }
-    .bpc__stat-item {
-      width:       100%;   /* DS: w-full on each Container — fills stats column width */
+    .rewards-layout {
       display:     flex;
-      align-items: center;
       gap:         12px;
-    }
-    .bpc__stat-icon {
-      width:       24px;
-      height:      24px;
-      flex-shrink: 0;
-      object-fit:  contain;
-    }
-    .bpc__stat-text {
-      display:     flex;
-      align-items: center;
-      gap:         8px;
-    }
-    .bpc__stat-value {
-      font-size:   16px;
-      font-weight: 700;
-      line-height: 24px;
-      color:       var(--primary-800);
-    }
-    .bpc__stat-label {
-      font-size:   16px;
-      font-weight: 500;
-      line-height: 24px;
-      color:       var(--primary-800);
+      align-items: stretch;
+      flex:        1;
+      min-height:  0;
     }
 
-    /* Profile section — DS node 6498:146126: 299px, #e8fbe8, 1px #00cc85 inset, right-side separator radius
-       Profile is leftmost (first in DOM). Right edge faces stats → right-side 24px radius.
-       Outer left corners are clipped by parent card overflow:hidden + border-radius:24px. */
-    .bpc__profile {
-      width:           299px;
-      flex-shrink:     0;
-      background:      var(--surface-secondary-default-subtle);
-      box-shadow:      inset 0 0 0 1px var(--border-primary-default);
-      border-radius:   0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl) 0;
-      overflow:        hidden;
-      display:         flex;
-      flex-direction:  column;
-      align-items:     center;
-      justify-content: center;
-      gap:             8px;
-      padding:         16px;
-    }
-
-    /* Avatar circle — DS: 100×100, r:60, bg #e1f9ea, border 4px #00cc85 */
-    .bpc__avatar {
-      width:           100px;
-      height:          100px;
-      border-radius:   60px;
-      background:      var(--surface-primary-default-subtle);
-      border:          4px solid var(--border-primary-default);
-      flex-shrink:     0;
-      overflow:        hidden;
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-    }
-    .bpc__avatar-img {
-      width:      100%;
-      height:     100%;
-      object-fit: cover;
-    }
-
-    /* Username — DS: 14px Regular #404040 */
-    .bpc__username {
-      font-size:   14px;
-      font-weight: 400;
-      line-height: 20px;
-      color:       var(--text-default-heading);
-    }
-
-    /* Ranking badge — DS: 177.5×48, #f2b839, inset border 1px #00564c, r:40.5, HORIZONTAL, p:8, justify:space-between */
-    .bpc__rank {
-      width:           178px;
-      height:          48px;
-      background:      var(--accents-pumpkin);
-      box-shadow:      inset 0 0 0 1px var(--icon-tertiary-default);
-      border-radius:   40.5px;
-      padding:         8px;
-      display:         flex;
-      flex-direction:  row;
-      align-items:     center;
-      justify-content: space-between;
-      flex-shrink:     0;
-    }
-    /* Left: stacked "Ranking" label + rank number */
-    .bpc__rank-texts {
-      display:        flex;
-      flex-direction: column;
-      gap:            2px;
-    }
-    .bpc__rank-label {
-      font-size:   10px;
-      font-weight: 600;
-      line-height: 12px;
-      color:       #ffffff;
-    }
-    .bpc__rank-value {
-      font-size:   16px;
-      font-weight: 700;
-      line-height: 20px;
-      color:       #ffffff;
-    }
-    /* Right: white circle with crown icon — DS: bg white, p:4px, r:999px */
-    .bpc__rank-crown {
-      width:           32px;
-      height:          32px;
-      background:      var(--surface-general-default);
-      border-radius:   var(--corner-radius-corner-pill);
-      padding:         4px;
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      flex-shrink:     0;
-    }
-    .bpc__rank-crown svg {
-      width:  24px;
-      height: 22px;
-    }
-
-    /* ── Card 2: Battle Game ───────────────────────────────────── */
-    /* Background — DS: right:0 bottom:0, 680px wide, no gradient (Rule 5) */
-    .bgc__bg {
-      position:            absolute;
-      right:               0;
-      top:                 0;
-      height:              100%;
-      width:               680px;
-      background-image:    url('../../src/image-repo/page.battle/assets/Battle Content Card.png');
-      background-size:     cover;
-      background-position: center;
-    }
-
-    /* Crown large — DS: left:171.5, top:61, 119×111, rotate(8.74deg), opacity:0.8 */
-    .bgc__crown-lg {
-      position:   absolute;
-      left:       171.5px;
-      top:        61px;
-      width:      119px;
-      height:     111px;
-      opacity:    0.8;
-      transform:  rotate(8.74deg);
-      object-fit: contain;
-      z-index:    1;
-    }
-
-    /* Crown small — DS: left:32.5, top:24, 39×36, rotate(-20.17deg), opacity:0.5 */
-    .bgc__crown-sm {
-      position:   absolute;
-      left:       32.5px;
-      top:        24px;
-      width:      39px;
-      height:     36px;
-      opacity:    0.5;
-      transform:  rotate(-20.17deg);
-      object-fit: contain;
-      z-index:    1;
-    }
-
-    /* Content — DS node 6498:146138: VERTICAL, pt:20 pr:60 pb:20 pl:60, gap:12,
-       primaryAxisAlignItems:CENTER (justify:center), counterAxisAlignItems:MAX (align:flex-end)
-       FILL×FILL — fills card width AND height so vertical centering works */
-    .bgc__content {
-      position:        relative;
-      z-index:         2;
-      width:           100%;
-      height:          100%;
-      display:         flex;
-      flex-direction:  column;
-      justify-content: center;
-      align-items:     flex-end;
-      padding:         20px 60px;
-      gap:             12px;
-    }
-
-    /* Title — DS node 6498:146140: Title/T1 18px Bold, textAlignHorizontal:RIGHT, sizingH:FILL */
-    .bgc__title {
-      width:       100%;
-      font-size:   18px;
-      font-weight: 700;
-      line-height: 28px;
-      color:       var(--text-default-heading);
-      text-align:  right;
-    }
-
-    /* Subtitle — DS node 6498:146141: Body/B1 14px SemiBold, textAlignHorizontal:RIGHT, sizingH:FILL */
-    .bgc__subtitle {
-      width:       100%;
-      font-size:   14px;
-      font-weight: 600;
-      line-height: 20px;
-      color:       var(--text-default-heading);
-      text-align:  right;
-    }
-
-    /* Start Battle — DS node I6498:146142: Primary/M, FIXED 101×32, padding:2px 8px
-       strokeAlign:INSIDE → box-shadow:inset (Rule 60) */
-    .btn-start-battle {
-      width:           101px;
-      height:          32px;
-      padding:         2px 8px;
-      border-radius:   var(--corner-radius-corner-rounded);
-      background:      var(--surface-primary-default);
-      box-shadow:      inset 0 0 0 1px var(--border-primary-focus);
-      border:          none;
-      display:         flex;
-      align-items:     center;
-      gap:             0;
-      cursor:          pointer;
-      user-select:     none;
-      flex-shrink:     0;
-    }
-    .btn-start-battle__label {
-      padding:     0 4px;
-      font-size:   12px;
-      font-weight: 600;
-      line-height: 18px;
-      color:       var(--text-primary-on-color);
-    }
-    /* Arrow — Primary/M: 20×20 circle (#99ebce), padding:2px → 16×16 clip */
-    .btn-start-battle__arrow {
-      width:           20px;
-      height:          20px;
-      border-radius:   var(--corner-radius-corner-rounded);
-      background:      #99ebce;
-      padding:         2px;
-      flex-shrink:     0;
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-    }
-    .btn-start-battle__clip {
-      width:    16px;
-      height:   16px;
-      overflow: hidden;
-      display:  flex;
-      flex-shrink: 0;
-    }
-    .btn-start-battle__clip svg {
-      width:  16px;
-      height: 16px;
-      color:  #00a36a;
-      flex-shrink: 0;
-    }
-    /* Hover state */
-    .btn-start-battle:hover {
-      background: var(--surface-secondary-default);
-      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
-    }
-    .btn-start-battle:hover .btn-start-battle__label { color: var(--text-secondary-focus); }
-    .btn-start-battle:hover .btn-start-battle__arrow { background: #e8fbe8; }
-    .btn-start-battle:hover .btn-start-battle__clip svg { color: var(--text-secondary-focus); }
-    /* Pressed state */
-    .btn-start-battle:active,
-    .btn-start-battle.is-pressing {
-      background: var(--surface-tertiary-default);
-      box-shadow: inset 0 0 0 1px var(--border-tertiary-focus);
-    }
-    .btn-start-battle:active .btn-start-battle__label,
-    .btn-start-battle.is-pressing .btn-start-battle__label { color: var(--text-primary-default); }
-    .btn-start-battle:active .btn-start-battle__arrow,
-    .btn-start-battle.is-pressing .btn-start-battle__arrow { background: var(--surface-primary-default); }
-    .btn-start-battle:active .btn-start-battle__clip svg,
-    .btn-start-battle.is-pressing .btn-start-battle__clip svg { color: var(--surface-tertiary-default); }
-
-    /* ══════════════════════════════════════════════════════════════
-       BATTLE HISTORY — DS node 6498:146143
-       Primary Card - 1.5 (Secondary variant)
-    ══════════════════════════════════════════════════════════════ */
-    /* Outer card — DS: bg #e8fbe8, strokeAlign INSIDE → inset shadow, r:24, p:16, gap:8, flex-col */
-    .primary-card {
-      background:     var(--surface-secondary-default-subtle);
-      box-shadow:     inset 0 0 0 1px var(--border-primary-default);
+    /* Rewards Sidebar — DS node 3849:48401 */
+    .rewards-sidebar {
+      width:          280px;
+      min-width:      240px;
+      flex-shrink:    0;
+      background:     #fff;
+      border:         1px solid var(--border-primary-default);
       border-radius:  var(--corner-radius-corner-4xl);
       padding:        var(--spacing-space-m);
       display:        flex;
       flex-direction: column;
       gap:            var(--spacing-space-xs);
     }
-
-    /* Header row — DS: HORIZONTAL, SPACE_BETWEEN, CENTER */
-    .primary-card__header {
+    .sidebar-balance {
+      background:      #fef1ce;
+      border:          1px solid #fabb0a;
+      border-radius:   16px;
+      padding:         var(--spacing-space-xs) var(--spacing-space-xs) var(--spacing-space-xs) 2px;
       display:         flex;
       align-items:     center;
-      justify-content: space-between;
-      height:          32px;
+      justify-content: center;
+      gap:             2px;
+      overflow:        hidden;
+      flex-shrink:     0;
     }
-    .primary-card__header-left {
-      display:     flex;
-      align-items: center;
-      gap:         4px;
+    .sidebar-balance__coin {
+      width:       24px;
+      height:      24px;
+      flex-shrink: 0;
+      display:     block;
+      object-fit:  contain;
     }
-    .primary-card__header-left svg {
-      width:       20px;
-      height:      20px;
+    .sidebar-balance__value {
+      font-size:           18px;
+      font-weight:         700;
+      line-height:         28px;
+      color:               #fff;
+      -webkit-text-stroke: 2px #c89608;
+      paint-order:         stroke fill;
+      white-space:         nowrap;
+    }
+    .sidebar-divider {
+      height:      1px;
+      background:  #d9d9d9;
+      width:       100%;
+      flex-shrink: 0;
+      margin:      8px 0;
+    }
+    .sidebar-btn {
+      width:         100%;
+      border-radius: 108px;
+      padding:       var(--spacing-space-xs) var(--spacing-space-m);
+      display:       flex;
+      align-items:   center;
+      gap:           10px;
+      cursor:        pointer;
+      background:    transparent;
+      border:        1px solid transparent;
+      flex-shrink:   0;
+      transition:    background 0.12s ease;
+      text-align:    left;
+    }
+    .sidebar-btn:not(.sidebar-btn--active):hover {
+      background:   var(--surface-secondary-default-subtle);   /* was: #e8fbe8 */
+      border-color: var(--border-primary-default);
+    }
+    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__icon-wrap { color: var(--icon-primary-default); }
+    .sidebar-btn:not(.sidebar-btn--active):hover .sidebar-btn__label     { color: var(--text-primary-default); }
+    .sidebar-btn--active { background: var(--surface-secondary-default); border-color: var(--border-primary-focus); }   /* was: bg #b5f291 */
+    .sidebar-btn__icon-wrap {
+      width:       24px;
+      height:      24px;
+      padding:     2px;
+      box-sizing:  border-box;
+      overflow:    hidden;
       flex-shrink: 0;
       color:       var(--icon-primary-default);
     }
-
-    /* Title — DS: 18px Bold #00564c */
-    .primary-card__title {
-      font-size:   18px;
-      font-weight: 700;
-      line-height: 28px;
-      color:       var(--text-tertiary-default);
-    }
-
-    /* Leaderboard button — Secondary/M with R Arrow
-       DS node I6498:146238;2339:5402 — showRArrow:true override */
-    .btn-leaderboard {
-      height:        32px;
-      padding:       2px 8px;
-      gap:           0;
-      border-radius: var(--corner-radius-corner-rounded);
-      background:    var(--surface-general-default);
-      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
-      border:        none;
-      display:       flex;
-      align-items:   center;
-      cursor:        pointer;
-      user-select:   none;
-    }
-    .btn-leaderboard__label {
-      padding:     0 4px;
-      font-size:   12px;
+    .sidebar-btn--active .sidebar-btn__icon-wrap { color: var(--border-primary-focus); }
+    .sidebar-btn__icon-wrap svg { display: block; width: 100%; height: 100%; }
+    .sidebar-btn__icon-wrap[data-icon="box"]           { padding: 1.24px 2px 1.23px; }
+    .sidebar-btn__icon-wrap[data-icon="shopping-bag"]  { padding: 2px 3px; }
+    .sidebar-btn__icon-wrap[data-icon="shopping-cart"] { padding: 1px 1px 2px; }
+    .sidebar-btn__label {
+      font-size:   14px;
       font-weight: 600;
-      line-height: 18px;
-      color:       var(--text-primary-default);
-    }
-    .btn-leaderboard__arrow {
-      width:         20px;
-      height:        20px;
-      border-radius: var(--corner-radius-corner-rounded);
-      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
-      background:    var(--surface-general-default);
-      padding:       2px;
-      display:       flex;
-      align-items:   center;
-      justify-content: center;
-      flex-shrink:   0;
-      overflow:      hidden;
-      color:         var(--icon-primary-default);
-    }
-    .btn-leaderboard:hover {
-      background: var(--surface-secondary-default);
-      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
-    }
-    .btn-leaderboard:hover .btn-leaderboard__label { color: var(--text-secondary-focus); }
-    .btn-leaderboard:hover .btn-leaderboard__arrow {
-      background:  var(--surface-secondary-default);
-      box-shadow:  inset 0 0 0 1px var(--border-secondary-focus);
-      color:       var(--text-secondary-focus);
-    }
-    .btn-leaderboard:active,
-    .btn-leaderboard.is-pressing {
-      background: var(--surface-primary-focus);
-      box-shadow: inset 0 0 0 1px var(--border-primary-default);
-    }
-    .btn-leaderboard:active .btn-leaderboard__label,
-    .btn-leaderboard.is-pressing .btn-leaderboard__label { color: var(--text-primary-default); }
-    .btn-leaderboard:active .btn-leaderboard__arrow,
-    .btn-leaderboard.is-pressing .btn-leaderboard__arrow {
-      background: var(--surface-primary-focus);
-      box-shadow: inset 0 0 0 1px var(--border-primary-default);
-      color:      var(--icon-primary-default);
-    }
-
-    /* Inner content — DS: bg white, NO stroke on content frame, r:18 */
-    .primary-card__content {
-      background:    var(--surface-general-default);
-      border-radius: var(--corner-radius-corner-2xl);
-      box-shadow:    inset 0 0 0 1px var(--border-primary-focus);
-      overflow:      hidden;
-    }
-
-    /* ── Battle History Table ─────────────────────────────────── */
-    .battle-table {
-      width:           100%;
-      border-collapse: collapse;
-      font-family:     var(--font-family);
-    }
-    .battle-table thead {
-      background: var(--surface-general-default);
-    }
-    .battle-table th {
-      padding:     0 16px;
-      height:      56px;
-      font-size:   12px;
-      font-weight: 600;
-      line-height: 18px;
-      color:       var(--text-tertiary-default);
-      text-align:  left;
-      border:      1px solid var(--border-general-default);
+      line-height: 20px;
+      color:       var(--text-default-body);   /* was: #666 */
+      flex:        1 0 0;
+      min-width:   0;
       white-space: nowrap;
     }
-    .battle-table th.col-players { text-align: center; }
-    .battle-table td {
-      padding:        0 16px;
-      height:         56px;
-      font-size:      14px;
-      font-weight:    400;
-      line-height:    20px;
-      color:          var(--text-default-heading);
-      border:         1px solid var(--border-general-default);
-      vertical-align: middle;
-    }
-    .battle-table tbody td { border-top: none; border-bottom: none; }
-    .battle-table tbody tr:hover td { background: #fafcfa; }
+    .sidebar-btn--active .sidebar-btn__label { color: var(--border-primary-focus); }
 
-    /* Player group — no internal dividers between col 1 (player1), col 2 (VS), col 3 (player2) */
-    .battle-table td:nth-child(1) { border-right: none; }
-    .battle-table td:nth-child(2) { border-left: none; border-right: none; padding: 0 4px; }
-    .battle-table td:nth-child(3) { border-left: none; }
-
-    /* Player cell (col 1 & 3) — DS: display flex, gap 8px, padding 0 16px via td */
-    .battle-player-cell {
-      display:     flex;
-      align-items: center;
-      gap:         8px;
+    /* Right Main Panel */
+    .rewards-main {
+      flex:           1;
+      min-width:      0;
+      align-self:     stretch;
+      border-radius:  var(--corner-radius-corner-4xl);   /* was: var(--r-4xl) — old shorthand */
+      padding:        var(--spacing-space-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xs);
+      overflow:       hidden;
     }
-    .player-avatar {
-      width:         32px;
-      height:        32px;
-      border-radius: 60px;
-      background:    var(--surface-primary-default-subtle, #e1f9ea);
-      flex-shrink:   0;
-      overflow:      hidden;
-      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
-    }
-    .battle-cell-name {
-      font-size:   14px;
-      font-weight: 400;
-      line-height: 20px;
-      color:       var(--text-default-body);
-      white-space: nowrap;
-      overflow:    hidden;
-      text-overflow: ellipsis;
+    .rewards-main--merch {
+      background: var(--surface-secondary-default-subtle);   /* was: #e8fbe8 */
+      border:     1px solid var(--border-primary-default);   /* was: #00cc85 */
     }
 
-    /* VS cell (col 2) — centered P.Battle illustration placeholder */
-    .battle-vs-cell {
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      color:           var(--text-tertiary-default);
+    /* Merchandise header row */
+    .merch-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-shrink: 0; flex-wrap: wrap;
+    }
+    .merch-header__text { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-tertiary-default); flex: 1; min-width: 0; }   /* was: #00564c */
+    .merch-header__stat { display: flex; align-items: center; gap: var(--spacing-space-xs); flex-shrink: 0; }   /* was: var(--sp-xs) */
+    .merch-header__stat-label { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-tertiary-default); white-space: nowrap; }   /* was: #00564c */
+    .merch-header__coin { width: 18px; height: 21px; display: block; object-fit: contain; flex-shrink: 0; }
+    .merch-header__count { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-tertiary-default); white-space: nowrap; }   /* was: #00564c */
+
+    /* Merchandise reward cards — 4-col grid */
+    .merch-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
     }
 
-    /* Subject badge — L size (32px), same as nadia_Quiz quiz card header */
-    .subject-badge {
-      display:       inline-flex;
-      align-items:   stretch;
-      height:        32px;
-      border-radius: var(--corner-radius-corner-rounded);
-      overflow:      hidden;
-      border:        1px solid var(--badge-border);
-      flex-shrink:   0;
+    /* Reward Card - 1.5 (DS node 3065:43481) */
+    .rc {
+      border: 1px solid #d9d9d9; border-radius: 24px;
+      overflow: hidden; display: flex; flex-direction: column; background: #fff;
     }
-    .subject-badge__icon {
-      background:      var(--surface-general-default);
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      padding:         var(--spacing-space-xxs) var(--spacing-space-xs) var(--spacing-space-xxs) var(--spacing-space-s);
-      flex-shrink:     0;
+    .rc__img { width: 100%; height: auto; display: block; flex-shrink: 0; }
+    .rc__body {
+      padding: 16px; display: flex; flex-direction: column;
+      gap: 8px; flex: 1; min-height: 0;
     }
-    .subject-badge__icon svg,
-    .subject-badge__icon img { width: 20px; height: 20px; display: block; flex-shrink: 0; object-fit: contain; }
-    .subject-badge__label-panel {
-      background:  var(--badge-bg);
-      display:     flex;
-      align-items: center;
-      padding:     0 var(--spacing-space-m) 0 var(--spacing-space-s);
-      position:    relative;
-    }
-    .subject-badge__pointer { position: absolute; left: 0; top: 50%; transform: translateY(-50%); display: flex; }
-    .subject-badge__text {
-      font-size:   14px;
-      font-weight: 500;
-      line-height: 20px;
-      color:       var(--badge-text, #f2f2f2);
-      white-space: nowrap;
+    .rc__badges { display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+
+    /* Label Badge 1.5 — Premium / Premium Lite (DS node 843:666, Secondary variant) */
+    .lbadge-prem {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px; border-radius: 60px;
+      background: var(--surface-primary-default-subtle);   /* was: #d9f7ed — DS: Surface/primary/default-subtle #e1f9ea (Session 23) */
+      border: 1px solid var(--border-primary-default);     /* was: #00cc85 — hardcoded hex */
+      font-size: 10px; font-weight: 500; line-height: 12px;
+      color: var(--text-primary-default);                  /* was: #00cc85 — hardcoded hex */
+      white-space: nowrap; flex-shrink: 0;
     }
 
-    /* Subject badge colors — DS confirmed (CLAUDE.md Rule 17b) */
-    .subject-badge--bm        { --badge-border: #2e4799; --badge-bg: #4d77ff; }
-    .subject-badge--english   { --badge-border: #cc3e45; --badge-bg: #ff4d56; }
-    .subject-badge--math      { --badge-border: #358a62; --badge-bg: #42ac7b; }
-    .subject-badge--science   { --badge-border: #ccab34; --badge-bg: #ffd641; --badge-text: #998027; }
-    .subject-badge--chemistry { --badge-border: #b50068; --badge-bg: #e20082; }
-    .subject-badge--physics   { --badge-border: #1f80ac; --badge-bg: #27a0d7; }
-    .subject-badge--history   { --badge-border: #876340; --badge-bg: #a97c50; }
-    .subject-badge--geo       { --badge-border: #5fad2b; --badge-bg: #77d836; --badge-text: #478220; }
-    .subject-badge--islamic   { --badge-border: #b23e66; --badge-bg: #de4d7f; }
-    .subject-badge--moral     { --badge-border: #005ba2; --badge-bg: #0072ca; }
-    .subject-badge--biology   { --badge-border: #6a27ad; --badge-bg: #8431d8; }
-    .subject-badge--add-math  { --badge-border: #182052; --badge-bg: #283589; }
-    .subject-badge--economy   { --badge-border: #cc4629; --badge-bg: #ff5733; }
-    .subject-badge--account   { --badge-border: #004479; --badge-bg: #0072ca; }
-    .subject-badge--business  { --badge-border: #bf9022; --badge-bg: #efb42b; }
-    .subject-badge--cs        { --badge-border: #a7005a; --badge-bg: #d10070; }
-    .subject-badge--kafa      { --badge-border: #6eb687; --badge-bg: #8ae3a9; --badge-text: #538865; }
-    .subject-badge--rbt       { --badge-border: #2a2a2a; --badge-bg: #353535; }
-
-    /* Result — DS: plain text, 14px/400, won=#18c964, lost=#666666 */
-    .battle-result--won  { font-size: 14px; font-weight: 400; line-height: 20px; color: #18c964; }
-    .battle-result--lost { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); }
-
-    /* Score — DS: 14px/400/#666666 */
-    .battle-score {
-      font-size:   14px;
-      font-weight: 400;
-      line-height: 20px;
-      color:       var(--text-default-body);
+    .rc__title {
+      font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-default-heading);   /* was: #404040 */
+      overflow: hidden; text-overflow: ellipsis;
+      display: -webkit-box; -webkit-line-clamp: 3; min-height: 60px; -webkit-box-orient: vertical;
     }
+    .rc__divider { height: 1px; background: #d9d9d9; flex-shrink: 0; }
+    .rc__cta { padding: 16px; display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+    .rc__coin { display: flex; align-items: center; gap: 4px; flex: 1; min-width: 0; }
+    .rc__coin-icon  { width: 24px; height: 24px; flex-shrink: 0; display: block; object-fit: contain; }
+    .rc__coin-value { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); }   /* was: #666 */
 
-    /* Date — DS: 14px/400/#666666 */
-    .battle-date {
-      font-size:   14px;
-      font-weight: 400;
-      line-height: 20px;
-      color:       var(--text-default-body);
-      white-space: nowrap;
+    /* Show Voucher — Button - 1.5 Primary/S (DS node 1437:8154) — no transition (Rule 82) */
+    .btn-show {
+      display: inline-flex; align-items: center; border-radius: 60px;
+      padding: 2px 8px; height: 24px;
+      background: var(--surface-primary-default);   /* #00cc85 */
+      border: 1px solid var(--border-primary-focus); /* #00a36a */
+      cursor: pointer; text-decoration: none; flex-shrink: 0;
+      /* no transition — Rule 82 */
     }
-
-    /* Button Icon - 1.5 action button — DS: 40×40, bg #00cc85, r:108px, padding 8px, icon white 24×24 */
-    .btn-action {
-      width:         40px;
-      height:        40px;
-      background:    var(--surface-primary-default);
-      border:        none;
-      border-radius: 108px;
-      padding:       8px;
-      cursor:        pointer;
-      display:       flex;
-      align-items:   center;
-      justify-content: center;
-      color:         #ffffff;
-      flex-shrink:   0;
+    .btn-show__label {
+      font-size: 12px; font-weight: 600; line-height: 18px;
+      color: var(--text-primary-on-color);   /* #ffffff */
+      padding: 0 4px; white-space: nowrap;   /* no transition — Rule 82 */
     }
-    .btn-action:hover    { background: var(--surface-secondary-default); color: var(--icon-secondary-hover); }
-    .btn-action:active,
-    .btn-action.is-pressing { background: var(--surface-primary-focus); color: #ffffff; }
+    .btn-show__arrow {
+      width: 16px; height: 16px; border-radius: 60px;
+      background: var(--surface-primary-default-subtle-hover);   /* #99ebce */
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; padding: 2px;
+      color: var(--border-primary-focus);   /* #00a36a — Rule N-R2/N-R6 */
+      /* no transition — Rule 82 */
+    }
+    .btn-show__arrow svg { display: block; width: 12px; height: 12px; }
+    .btn-show:hover { background: var(--surface-secondary-default); border-color: var(--border-secondary-focus); }
+    .btn-show:hover .btn-show__label { color: var(--text-secondary-focus); }
+    .btn-show:hover .btn-show__arrow { background: var(--surface-secondary-default-subtle); color: var(--icon-secondary-hover); }
+    .btn-show:active,
+    .btn-show.is-pressing { background: var(--surface-tertiary-default); border-color: var(--border-tertiary-focus); }
+    .btn-show:active .btn-show__label,
+    .btn-show.is-pressing .btn-show__label { color: var(--text-primary-default); }
+    .btn-show:active .btn-show__arrow,
+    .btn-show.is-pressing .btn-show__arrow { background: var(--surface-primary-default); color: var(--icon-tertiary-default); }
+    .btn-show--disabled,
+    .btn-show--disabled:hover,
+    .btn-show--disabled:active {
+      background: var(--surface-disabled-primary); border-color: var(--border-disabled-disabled); cursor: not-allowed; pointer-events: none;
+    }
+    .btn-show--disabled .btn-show__label { color: var(--text-disabled-default); }
+    .btn-show--disabled .btn-show__arrow { background: var(--surface-disabled-primary); box-shadow: inset 0 0 0 1px var(--border-disabled-disabled); color: var(--text-disabled-default); }
 
-    /* ══════════════════════════════════════════════════════════════
-       Responsive — Tablet (≤ 1279px)
-    ══════════════════════════════════════════════════════════════ */
+    /* Responsive — collapse sidebar and grid at tablet/mobile */
     @media (max-width: 1279px) {
-      :root { --page-padding-x: 32px; }
-      .battle-banner-row { gap: 16px; }
-      .bpc__profile { width: 240px; }
+      .rewards-layout  { flex-direction: column; }
+      .rewards-sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; height: auto; }
+      .merch-grid      { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 767px) {
+      .merch-grid { grid-template-columns: 1fr; }
+      .rc         { height: auto; }
+
+      /* Coin balance moves into page header — hide from sidebar */
+      .bc-coin-mobile  { display: flex; }
+      .sidebar-balance { display: none; }
+      .sidebar-divider { display: none; }
+
+      /* Pill tab bar */
+      .rewards-sidebar {
+        flex-direction:              row;
+        flex-wrap:                   nowrap;
+        overflow-x:                  auto;
+        overflow-y:                  hidden;
+        -webkit-overflow-scrolling:  touch;
+        scrollbar-width:             none;
+        background:                  transparent;
+        border:                      none;
+        border-radius:               0;
+        padding:                     0;
+        height:                      auto;
+        gap:                         var(--spacing-space-xs);   /* was: var(--sp-xs) shorthand */
+        align-items:                 center;
+        min-width:                   0;
+      }
+      .rewards-sidebar::-webkit-scrollbar { display: none; }
+
+      /* Each pill: auto-width, no shrink/grow */
+      .sidebar-btn { width: auto; flex: 0 0 auto; }
+
+      /* Main content fills full width below the pill bar */
+      .rewards-main { width: 100%; }
     }
 
-    /* ══════════════════════════════════════════════════════════════
-       Responsive — Mobile (≤ 767px)
-    ══════════════════════════════════════════════════════════════ */
-    @media (max-width: 767px) {
-      :root { --page-padding-x: 16px; }
-      .battle-banner-row {
-        flex-direction: column;
-        gap:            var(--spacing-space-m);
-      }
-      /* Card 1 stacks: stats (top) → profile (bottom) */
-      .battle-card       { flex-direction: column; height: auto; min-height: 300px; }
-      /* bg falls back to inset:0 since parent height is auto */
-      .bpc__bg           { inset: 0; width: auto; }
-      .bpc__spacer       { display: none; }
-      .bpc__stats        { flex: none; width: 100%; min-height: 150px; padding: 12px 16px; }
-      .bpc__profile      { width: 100%; border-radius: 0 0 var(--corner-radius-corner-4xl) var(--corner-radius-corner-4xl); }
-      /* Card 2 crowns */
-      .bgc__crown-lg { width: 70px; height: 65px; left: 16px; top: auto; bottom: 20px; }
-      .bgc__crown-sm { display: none; }
-      .bgc__content  { padding: 16px; }
-      /* Table */
-      .battle-table th, .battle-table td { padding: 0 8px; }
-      .battle-cell-name { display: none; }
-      .btn-action       { display: none; }
-    }
   </style>
 </head>
-<body>
+<body data-active-nav="Rewards">
 
-  <!-- ══════════════════════════════════════════════════════════════
-       SVG ICON DEFS — All symbols for this page
-       (Template nav icons are injected by the IIFE below)
-  ══════════════════════════════════════════════════════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       NAVBAR â€” Navbar 1.5  (DS node 2339:2617)
+       2-row structure sourced from get_design_context
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- DS ICON SYMBOLS - Pandai DS 1.5 Iconography page (TLVKe3bgJTdVvuPAzgDq2f)
+       All paths extracted via use_figma. Stroke icons inherit currentColor.
+       Waffle uses fill="currentColor" (filled dots, not stroked). -->
   <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <!-- Outline/image (611:3075) --><symbol id="ic-image" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="18" height="18" rx="2" ry="2"/><circle cx="6.5" cy="6.5" r="1.5"/><polyline points="19 13.5 14 8.5 3 19.5"/></symbol>
@@ -2845,7 +2525,7 @@
 </g></symbol>
 
       <!-- Profile Menu icons — all DS exports, viewBox -1 -1 26 26 (1px stroke buffer per Rule 27) -->
-      <!-- Outline/user-circle (3908:13415 60×60 DS export) — My Profile / Notif avatar -->
+      <!-- Outline/user-circle (1942:23330) — My Profile -->
       <symbol id="ic-user-circle" viewBox="-1 -1 62 62" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M45 50C45 46.0218 43.4196 42.2064 40.6066 39.3934C37.7936 36.5804 33.9782 35 30 35M30 35C26.0218 35 22.2064 36.5804 19.3934 39.3934C16.5804 42.2064 15 46.0218 15 50M30 35C35.5228 35 40 30.5228 40 25C40 19.4772 35.5228 15 30 15C24.4772 15 20 19.4772 20 25C20 30.5228 24.4772 35 30 35ZM55 30C55 43.8071 43.8071 55 30 55C16.1929 55 5 43.8071 5 30C5 16.1929 16.1929 5 30 5C43.8071 5 55 16.1929 55 30Z"/></symbol>
       <!-- Outline/user-check (260:1300) — Manage Account -->
       <symbol id="ic-user-check" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M17 11L19 13L23 9M12.5 7C12.5 9.20914 10.7091 11 8.5 11C6.29086 11 4.5 9.20914 4.5 7C4.5 4.79086 6.29086 3 8.5 3C10.7091 3 12.5 4.79086 12.5 7Z"/></symbol>
@@ -2941,537 +2621,412 @@
       <!-- Outline/shopping-bag (260:1133) --><symbol id="ic-shopping-bag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 6V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V6L6 2H18L21 6ZM3 6H21M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10"/></symbol>
       <!-- Outline/shopping-cart (260:1137) --><symbol id="ic-shopping-cart" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6M10 21C10 21.5523 9.55228 22 9 22C8.44772 22 8 21.5523 8 21C8 20.4477 8.44772 20 9 20C9.55228 20 10 20.4477 10 21ZM21 21C21 21.5523 20.5523 22 20 22C19.4477 22 19 21.5523 19 21C19 20.4477 19.4477 20 20 20C20.5523 20 21 20.4477 21 21Z"/></symbol>
       <!-- Outline/smile (260:1181) --><symbol id="ic-smile" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14M9 9H9.01M15 9H15.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
-      <!-- P.Premium (6352:41216) — clipPath in defs (Rule 57: url() resolves from document root, not <use> shadow) -->
-      <clipPath id="clip-premium"><rect width="20" height="20" fill="white"/></clipPath>
-      <symbol id="ic-premium" viewBox="0 0 20 20" fill="none"><g clip-path="url(#clip-premium)"><path d="M8.18945 2.68805C8.90941 1.15493 11.0906 1.15493 11.8105 2.68805L13.4287 6.13629L17.1924 6.71539C18.8009 6.96261 19.4562 8.92502 18.3193 10.0894L15.5332 12.942L16.1758 16.8785C16.4446 18.5264 14.6955 19.7587 13.2344 18.9507L10 17.1627L6.76562 18.9507C5.3045 19.7587 3.55544 18.5264 3.82422 16.8785L4.46582 12.942L1.68066 10.0894C0.543759 8.92502 1.19912 6.96261 2.80762 6.71539L6.57031 6.13629L8.18945 2.68805Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.09473 3.11383C9.45466 2.34708 10.5453 2.34707 10.9053 3.11383L12.6377 6.80328C12.7084 6.95396 12.8492 7.06012 13.0137 7.08551L17.041 7.70367C17.845 7.82751 18.1728 8.80905 17.6045 9.39117L14.6426 12.4244C14.5317 12.5379 14.4814 12.6975 14.5068 12.8541L15.1895 17.0396C15.3238 17.8634 14.4492 18.4793 13.7188 18.0757L10.2422 16.1529C10.0916 16.0696 9.90837 16.0696 9.75781 16.1529L6.28125 18.0757C5.55077 18.4793 4.67621 17.8634 4.81055 17.0396L5.49316 12.8541C5.51863 12.6975 5.46828 12.5379 5.35742 12.4244L2.39551 9.39117C1.82719 8.80905 2.15501 7.82751 2.95898 7.70367L6.98633 7.08551C7.15083 7.06012 7.29156 6.95396 7.3623 6.80328L9.09473 3.11383Z" fill="#FFF200" stroke="#F2B839" stroke-linecap="round" stroke-linejoin="round"/></g></symbol>
-      <!-- Crown vector (DS node 6498:146135, 24×22px) — clipPath in defs per Rule 57 -->
-      <clipPath id="clip-crown"><rect width="24" height="22" fill="white"/></clipPath>
-      <symbol id="ic-crown" viewBox="0 0 24 22" fill="none"><g clip-path="url(#clip-crown)"><path d="M22.6422 4.78633L20.4189 6.96853L16.3914 1.56137L12.4661 7.01917L8.43578 1.16406L4.81234 6.56293L1.41016 4.2974L2.73437 12.5161C5.77375 16.323 8.92469 24.9928 21.513 12.3969L22.6422 4.78633Z" fill="#F7BA0B"/><path d="M8.43437 1.16406L4.21094 6.16332L4.81094 6.56293L8.43437 1.16406Z" fill="#F3AE00"/><path d="M8.43359 1.16406L12.4587 6.24711L12.4639 7.01917L8.43359 1.16406Z" fill="#FFEB99"/><path d="M12.4609 6.24727L16.3914 1.56152L12.4661 7.01932L12.4609 6.24727Z" fill="#F3AE00"/><path d="M16.3906 1.56152L20.9853 6.41208L20.4181 6.96868L16.3906 1.56152Z" fill="#FFEB99"/><path d="M22.6422 4.78677L17.6608 15.2434L12.4675 7.31656L6.68453 15.4317L1.41016 4.29785L1.48563 15.7912C1.54141 24.2654 22.7692 24.1305 22.7134 15.6563L22.6417 4.78631L22.6422 4.78677Z" fill="#FED322"/><path d="M22.6419 4.78711L17.1992 14.0587L17.6605 15.2437L22.6419 4.78711Z" fill="#FFEB99"/><path d="M17.1964 14.0582L12.4648 7.31641L17.6581 15.2432L17.1969 14.0582H17.1964Z" fill="#F3AE00"/><path d="M12.4666 7.31641L7.05297 14.1227L6.68359 15.432L12.4666 7.31687V7.31641Z" fill="#FFEB99"/><path d="M7.05391 14.1228L1.41016 4.29785L6.685 15.4317L7.05438 14.1223L7.05391 14.1228Z" fill="#F3AE00"/><path d="M23.9974 5.53273C23.9379 6.29466 23.2615 6.86553 22.4857 6.80752C21.7099 6.74905 21.1287 6.08381 21.1877 5.32188C21.2473 4.55995 21.9246 3.99 22.7004 4.04801C23.4762 4.10648 24.0565 4.7708 23.9974 5.53273Z" fill="#F55858"/><path d="M17.7787 1.86574C17.7191 2.62767 17.0427 3.19854 16.2669 3.14053C15.4912 3.08206 14.9099 2.41681 14.969 1.65489C15.0285 0.892958 15.7059 0.323008 16.4816 0.381016C17.2574 0.439484 17.8377 1.10381 17.7787 1.86574Z" fill="#F55858"/><path d="M9.82944 1.40871C9.76991 2.17064 9.09351 2.74151 8.31772 2.6835C7.54194 2.62549 6.96069 1.95978 7.01976 1.19785C7.07929 0.435927 7.75663 -0.134023 8.53241 -0.0760152C9.30819 -0.017547 9.88851 0.64678 9.82944 1.40871Z" fill="#F55858"/><path d="M2.81388 4.40285C2.75435 5.16478 2.07794 5.73565 1.30216 5.67764C0.526378 5.61963 -0.0553404 4.95392 0.00419084 4.192C0.0637221 3.43007 0.741066 2.86012 1.51685 2.91813C2.29263 2.97659 2.87294 3.64092 2.81388 4.40285Z" fill="#F55858"/><path d="M13.8607 7.54738C13.8012 8.30931 13.1248 8.88018 12.349 8.82217C11.5732 8.7637 10.9919 8.09845 11.051 7.33653C11.1105 6.5746 11.7879 6.00465 12.5637 6.06266C13.3394 6.12112 13.9198 6.78545 13.8607 7.54738Z" fill="#F55858"/></g></symbol>
 
+      <!-- CoinQuest / Rewards page — additional icons not in template -->
+      <symbol id="ic-corner-down-right" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></symbol>
+      <symbol id="ic-coin" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M9 8.5c0-.83.67-1.5 1.5-1.5h3a1.5 1.5 0 0 1 0 3H10a1.5 1.5 0 0 0 0 3h3.5a1.5 1.5 0 0 1 0 3H10"/></symbol>
+      <symbol id="ic-gem" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 2 17 12 22 22 17 22 7 12 2"/><line x1="12" y1="22" x2="12" y2="2"/><line x1="2" y1="7" x2="22" y2="7"/></symbol>
+      <symbol id="ic-tag" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
+      <!-- Outline/video — label badge icon (Rewards Merchandise) --><symbol id="ic-video" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></symbol>
     </defs>
   </svg>
 
-  <!-- ══════════════════════════════════════════════════════════════
-       NAVIGATION SHELL — injected by IIFE below
-  ══════════════════════════════════════════════════════════════ -->
+  <!-- ═══════════════════════════════════════════════════════════════
+       NAVBAR PRIMARY DESKTOP — Navbar Primary Desktop - 1.5
+       Navbar Primary Desktop - 1.5 / Type=Desktop (node 866:5576)
+       COMPONENT_SET: Navbar Primary Desktop - 1.5 (2337:21975) · only variant: Type=Desktop
+       Logo left · 6 action icons + avatar + notification badge right
+  ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       NAVIGATION SHELL
+       All nav variants wrapped in one section. Fixed elements
+       (NavMenu-Tablet, NavMenu-Mobile, NavBar-Bottom) escape DOM
+       stacking — this section is semantic grouping only.
+       Desktop: NavbarPrimary-Desktop + NavTopMenu-Desktop
+       Tablet:  NavBar-Mobile + NavMenu-Tablet
+       Mobile:  NavBar-Mobile + NavBar-Bottom + NavMenu-Mobile
+  ═══════════════════════════════════════════════════════════════ -->
   <section id="Navigation-Shell"></section>
 
-  <!-- ══════════════════════════════════════════════════════════════
-       PAGE CONTENT
-  ══════════════════════════════════════════════════════════════ -->
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       PAGE VIEWPORT
+       Drop DS component instances inside PageViewport.
+       Replace the placeholder <div> with real content sections.
+       Use <section id="SectionName-Desktop"> per Rule 10.
+  ═══════════════════════════════════════════════════════════════ -->
   <main>
     <div class="page-container">
       <div class="main-content">
 
-        <section id="PageViewport" class="page-viewport-content" aria-label="Battle">
+        <section id="PageViewport" class="page-viewport-content" aria-label="Merchandise">
 
-          <!-- Breadcrumb -->
+          <!-- Breadcrumb — Merchandise (DS node 3284:219024) -->
           <section class="bc-row" aria-label="Breadcrumb">
             <div class="bc-left">
-              <span class="bc-title">Battle</span>
+              <span class="bc-title">Merchandise</span>
               <span class="bc-sep" aria-hidden="true"></span>
               <nav class="bc-trail" aria-label="Breadcrumb">
                 <a href="#" class="bc-link">
-                  <svg aria-hidden="true"><use href="#ic-battle"/></svg>
-                  Battle
+                  <svg aria-hidden="true"><use href="#ic-gift"/></svg>
+                  Rewards
                   <svg class="bc-chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
                 </a>
-                <span class="bc-link bc-link--current" aria-current="page">Battle</span>
+                <span class="bc-link bc-link--current" aria-current="page">Merchandise</span>
               </nav>
+            </div>
+            <!-- Coin balance — mobile only, hidden on desktop -->
+            <div class="bc-coin-mobile" aria-hidden="true">
+              <img class="bc-coin-mobile__icon" src="../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg" alt="">
+              <span class="bc-coin-mobile__value">500</span>
             </div>
           </section>
 
-          <!-- ══════════════════════════════════════════════════════
-               BATTLE BANNER — DS node 6498:146095
-               Two Static Card - 1.5 side by side
-          ══════════════════════════════════════════════════════════ -->
-          <section id="BattleBanner-Desktop" class="battle-banner-row" aria-label="Battle Banner">
+          <!-- Two-panel layout (DS node 3065:43313) -->
+          <div class="rewards-layout">
 
-            <!-- Card 1: Player Profile Stats — DS node 6498:146096
-                 Layout: Profile (left, 299px) | Spacer (flex:1) | Stats (flex:1, right)
-                 DS: Profile Card 6498:146126, Statistic Content 6498:146099 -->
-            <div class="battle-card" aria-label="Profile Stats">
-              <!-- Background — DS: Rectangle 333, absolute, right:0, w:680, rotate:-180 -->
-              <div class="bpc__bg" aria-hidden="true"></div>
+            <!-- LEFT SIDEBAR — DS node 3849:48401 (Nav Side Menu Desktop 1.5) -->
+            <aside class="rewards-sidebar">
 
-              <!-- Profile — DS node 6498:146126: 299px, #e8fbe8, 1px #00cc85, right-separator radius -->
-              <div class="bpc__profile">
-                <!-- Avatar — DS: 100×100, r:60, bg:#e1f9ea, border 4px #00cc85 -->
-                <div class="bpc__avatar">
-                  <svg width="40" height="40" viewBox="-1 -1 26 26" fill="none" stroke="#00a36a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                    <circle cx="12" cy="7" r="4"/>
-                  </svg>
-                </div>
-                <!-- Username — DS: 14px Regular #404040 -->
-                <span class="bpc__username">@dianadam</span>
-                <!-- Ranking badge — DS: 178×48, #f2b839, inset border 1px #00564c, r:40.5, HORIZONTAL -->
-                <div class="bpc__rank">
-                  <div class="bpc__rank-texts">
-                    <span class="bpc__rank-label">Ranking</span>
-                    <span class="bpc__rank-value">123</span>
-                  </div>
-                  <div class="bpc__rank-crown">
-                    <svg width="24" height="22" aria-hidden="true"><use href="#ic-crown"/></svg>
-                  </div>
+              <!-- Score chip — Surface/gold/default-subtle #fef1ce, Border/gold/default #fabb0a -->
+              <div class="sidebar-balance">
+                <img class="sidebar-balance__coin" src="../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg" alt="Pandai Coin">
+                <span class="sidebar-balance__value">500</span>
+              </div>
+
+              <!-- Divider — 1px #d9d9d9 -->
+              <div class="sidebar-divider" aria-hidden="true"></div>
+
+              <button class="sidebar-btn" type="button">
+                <div class="sidebar-btn__icon-wrap"><svg aria-hidden="true"><use href="#ic-stop-circle"/></svg></div>
+                <span class="sidebar-btn__label">Coin Quest</span>
+              </button>
+              <button class="sidebar-btn" type="button">
+                <div class="sidebar-btn__icon-wrap" data-icon="box"><svg aria-hidden="true"><use href="#ic-package"/></svg></div>
+                <span class="sidebar-btn__label">My Rewards</span>
+              </button>
+              <button class="sidebar-btn sidebar-btn--active" type="button">
+                <div class="sidebar-btn__icon-wrap" data-icon="shopping-bag"><svg aria-hidden="true"><use href="#ic-shopping-bag"/></svg></div>
+                <span class="sidebar-btn__label">Merchandise</span>
+              </button>
+              <button class="sidebar-btn" type="button">
+                <div class="sidebar-btn__icon-wrap" data-icon="shopping-cart"><svg aria-hidden="true"><use href="#ic-shopping-cart"/></svg></div>
+                <span class="sidebar-btn__label">eVoucher</span>
+              </button>
+              <button class="sidebar-btn" type="button">
+                <div class="sidebar-btn__icon-wrap"><svg aria-hidden="true"><use href="#ic-smile"/></svg></div>
+                <span class="sidebar-btn__label">Avatar</span>
+              </button>
+
+            </aside>
+
+            <!-- RIGHT MAIN — Merchandise panel
+                 bg: Surface/secondary/default-subtle #e8fbe8 · border: 1px #00cc85 (DS node 3065:43478) -->
+            <main class="rewards-main rewards-main--merch">
+
+              <!-- Header row — DS node I3897:68441;2881:36281;3902:49607+49609 -->
+              <div class="merch-header">
+                <p class="merch-header__text">Collect coins, redeem and enjoy these great rewards!</p>
+                <div class="merch-header__stat">
+                  <span class="merch-header__stat-label">Total redeem this month :</span>
+                  <img class="merch-header__coin"
+                       src="../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg"
+                       alt="Coin">
+                  <span class="merch-header__count">120</span>
                 </div>
               </div>
 
-              <!-- Spacer — DS: Content frame 6498:146098, flex:1, transparent -->
-              <div class="bpc__spacer" aria-hidden="true"></div>
+              <!-- Reward Cards grid — 4 columns desktop -->
+              <div class="merch-grid">
 
-              <!-- Stats — DS: Statistic Content 6498:146099, flex:1, p:28, gap:8, col, items-end, justify-center -->
-              <div class="bpc__stats">
-                <!-- Medal / Wins -->
-                <div class="bpc__stat-item">
-                  <img class="bpc__stat-icon" src="../../src/image-repo/page.battle/assets/P.Medal.png" alt="">
-                  <div class="bpc__stat-text">
-                    <span class="bpc__stat-value">38</span>
-                    <span class="bpc__stat-label">Wins</span>
-                  </div>
-                </div>
-                <!-- Battle / Count -->
-                <div class="bpc__stat-item">
-                  <img class="bpc__stat-icon" src="../../src/image-repo/page.battle/assets/P.Battle.png" alt="">
-                  <div class="bpc__stat-text">
-                    <span class="bpc__stat-value">89</span>
-                    <span class="bpc__stat-label">Battle</span>
-                  </div>
-                </div>
-                <!-- Coin / Collected -->
-                <div class="bpc__stat-item">
-                  <img class="bpc__stat-icon" src="../../src/image-repo/page.battle/assets/P.Coin.png" alt="">
-                  <div class="bpc__stat-text">
-                    <span class="bpc__stat-value">58</span>
-                    <span class="bpc__stat-label">Coins collected</span>
-                  </div>
-                </div>
-                <!-- Heart / Lives -->
-                <div class="bpc__stat-item">
-                  <img class="bpc__stat-icon" src="../../src/image-repo/page.battle/assets/P.Heart.png" alt="">
-                  <div class="bpc__stat-text">
-                    <span class="bpc__stat-value">3</span>
-                    <span class="bpc__stat-label">Hearts</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Card 2: Battle Game — DS node 6498:146136 -->
-            <div class="battle-card" aria-label="Battle Game">
-              <!-- Background placeholder -->
-              <div class="bgc__bg" aria-hidden="true"></div>
-
-              <!-- Crown illustrations — DS: P.Crown large (119×111) and small (39×36) -->
-              <img class="bgc__crown-lg"
-                   src="../../src/image-repo/page.battle/assets/P.Crown.png"
-                   width="119" height="111" alt="">
-              <img class="bgc__crown-sm"
-                   src="../../src/image-repo/page.battle/assets/P.Crown-sm.png"
-                   width="39" height="36" alt="">
-
-              <!-- Content — DS: VERTICAL, pt:20 pr:60 pb:20 pl:60, gap:12, CENTER, align:MAX (right) -->
-              <div class="bgc__content">
-                <!-- Title — DS: 18px Bold #404040 -->
-                <h2 class="bgc__title">Battle Game</h2>
-                <!-- Subtitle — DS: 14px SemiBold #404040 -->
-                <p class="bgc__subtitle">Enter Invitation Code</p>
-                <!-- Start Battle — Primary/M Button - 1.5 (DS node 479:344) -->
-                <button class="btn-start-battle" type="button">
-                  <span class="btn-start-battle__label">Start Battle</span>
-                  <div class="btn-start-battle__arrow">
-                    <div class="btn-start-battle__clip">
-                      <svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
+                <!-- Card 1 — active "Show Voucher" (DS node 3065:43481) -->
+                <article class="rc">
+                  <img class="rc__img"
+                       src="../src/image-repo/page.rewards/merchandize/assets/Merchandise.svg"
+                       alt="Reward merchandise item">
+                  <div class="rc__body">
+                    <div class="rc__badges">
+                      <span class="lbadge-prem">
+                        
+                        Premium
+                      </span>
+                      <span class="lbadge-prem">
+                        
+                        Premium Lite
+                      </span>
                     </div>
+                    <p class="rc__title">Pandai Branded Hoodie (Free Size)</p>
                   </div>
-                </button>
-              </div>
-            </div>
-
-          </section><!-- end BattleBanner-Desktop -->
-
-          <!-- ══════════════════════════════════════════════════════
-               BATTLE HISTORY — DS node 6498:146143
-               Primary Card - 1.5 (Secondary variant) with table
-          ══════════════════════════════════════════════════════════ -->
-          <section id="BattleHistory-Desktop" aria-label="Battle History">
-
-            <!-- Primary Card outer — DS: bg #e8fbe8, border 1px #00cc85, r:24, p:16, gap:8 -->
-            <div class="primary-card">
-
-              <!-- Header — DS: HORIZONTAL, SPACE_BETWEEN, CENTER -->
-              <div class="primary-card__header">
-                <div class="primary-card__header-left">
-                  <!-- Bookmark icon — DS: Outline/bookmark, 20×20 -->
-                  <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-bookmark"/></svg>
-                  <!-- Title — DS: Title/T2 18px Bold #00564c -->
-                  <span class="primary-card__title">Your Battle History</span>
-                </div>
-                <!-- Leaderboard button — Secondary/M, R Arrow visible (DS instance override) -->
-                <button class="btn-leaderboard" type="button">
-                  <span class="btn-leaderboard__label">Leaderboard</span>
-                  <div class="btn-leaderboard__arrow">
-                    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
+                  <div class="rc__divider"></div>
+                  <div class="rc__cta">
+                    <div class="rc__coin">
+                      <img class="rc__coin-icon"
+                           src="../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg"
+                           alt="Pandai Coin">
+                      <span class="rc__coin-value">500</span>
+                    </div>
+                    <a href="#" class="btn-show">
+                      <span class="btn-show__label">Show Voucher</span>
+                      <div class="btn-show__arrow">
+                        <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                      </div>
+                    </a>
                   </div>
-                </button>
-              </div>
+                </article>
 
-              <!-- Content area — DS: bg white, box-shadow inset 1px #00a36a, r:18 -->
-              <div class="primary-card__content">
-                <table class="battle-table">
-                  <!-- DS cols: player1=279, vs=50, player2=279, won=100, score=100, subject=220, date=180, action=80 -->
-                  <colgroup>
-                    <col style="width:279px">
-                    <col style="width:50px">
-                    <col style="width:279px">
-                    <col style="width:100px">
-                    <col style="width:100px">
-                    <col style="width:220px">
-                    <col style="width:180px">
-                    <col style="width:80px">
-                  </colgroup>
-                  <thead>
-                    <tr>
-                      <th colspan="3" class="col-players">Players</th>
-                      <th>Won</th>
-                      <th>Score</th>
-                      <th>Subject</th>
-                      <th>Last Played</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                <!-- Card 2 — active "Show Voucher" (DS node 3065:43482) -->
+                <article class="rc">
+                  <img class="rc__img"
+                       src="../src/image-repo/page.rewards/merchandize/assets/Merchandise-1.svg"
+                       alt="Reward merchandise item">
+                  <div class="rc__body">
+                    <div class="rc__badges">
+                      <span class="lbadge-prem">
+                        
+                        Premium
+                      </span>
+                      <span class="lbadge-prem">
+                        
+                        Premium Lite
+                      </span>
+                    </div>
+                    <p class="rc__title">Study Stationery Bundle (Pen, Ruler & Highlighter)</p>
+                  </div>
+                  <div class="rc__divider"></div>
+                  <div class="rc__cta">
+                    <div class="rc__coin">
+                      <img class="rc__coin-icon"
+                           src="../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg"
+                           alt="Pandai Coin">
+                      <span class="rc__coin-value">200</span>
+                    </div>
+                    <a href="#" class="btn-show">
+                      <span class="btn-show__label">Show Voucher</span>
+                      <div class="btn-show__arrow">
+                        <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                      </div>
+                    </a>
+                  </div>
+                </article>
 
-                    <!-- Row 1 — Aidan vs Syakila Rania, Won, 5, Science -->
-                    <tr>
-                      <td>
-                        <div class="battle-player-cell">
-                          <div class="player-avatar"></div>
-                          <span class="battle-cell-name">Aidan Kamaruddin</span>
-                        </div>
-                      </td>
-                      <td class="battle-vs-cell">
-                        <img src="../../src/image-repo/page.battle/assets/P.Battle.png" width="18" height="24" alt="">
-                      </td>
-                      <td>
-                        <div class="battle-player-cell">
-                          <div class="player-avatar" style="background:#ffd6e7;"></div>
-                          <span class="battle-cell-name">Syakila Rania</span>
-                        </div>
-                      </td>
-                      <td><span class="battle-result--won">Won</span></td>
-                      <td><span class="battle-score">5</span></td>
-                      <td>
-                        <span class="subject-badge subject-badge--science">
-                          <span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-science"/></svg></span>
-                          <span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Science</span></span>
-                        </span>
-                      </td>
-                      <td><span class="battle-date">2 weeks ago</span></td>
-                      <td style="text-align:center"><button class="btn-action" type="button" aria-label="View battle"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-chevron-right"/></svg></button></td>
-                    </tr>
+                <!-- Card 3 — disabled "Show Voucher" (DS node 3065:43483) -->
+                <article class="rc">
+                  <img class="rc__img"
+                       src="../src/image-repo/page.rewards/merchandize/assets/Merchandise-2.svg"
+                       alt="Reward merchandise item">
+                  <div class="rc__body">
+                    <div class="rc__badges">
+                      <span class="lbadge-prem">
+                        
+                        Premium
+                      </span>
+                      <span class="lbadge-prem">
+                        
+                        Premium Lite
+                      </span>
+                    </div>
+                    <p class="rc__title">Pandai Tote Bag</p>
+                  </div>
+                  <div class="rc__divider"></div>
+                  <div class="rc__cta">
+                    <div class="rc__coin">
+                      <img class="rc__coin-icon"
+                           src="../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg"
+                           alt="Pandai Coin">
+                      <span class="rc__coin-value">300</span>
+                    </div>
+                    <span class="btn-show btn-show--disabled" aria-disabled="true">
+                      <span class="btn-show__label">Show Voucher</span>
+                      <div class="btn-show__arrow">
+                        <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                      </div>
+                    </span>
+                  </div>
+                </article>
 
-                    <!-- Row 2 — Aidan vs Nur Nadia, Lost, 0, Moral Studies -->
-                    <tr>
-                      <td>
-                        <div class="battle-player-cell">
-                          <div class="player-avatar"></div>
-                          <span class="battle-cell-name">Aidan Kamaruddin</span>
-                        </div>
-                      </td>
-                      <td class="battle-vs-cell">
-                        <img src="../../src/image-repo/page.battle/assets/P.Battle.png" width="18" height="24" alt="">
-                      </td>
-                      <td>
-                        <div class="battle-player-cell">
-                          <div class="player-avatar" style="background:#cce5ff;"></div>
-                          <span class="battle-cell-name">Nur Nadia</span>
-                        </div>
-                      </td>
-                      <td><span class="battle-result--lost">Lost</span></td>
-                      <td><span class="battle-score">0</span></td>
-                      <td>
-                        <span class="subject-badge subject-badge--moral">
-                          <span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 20 24" aria-hidden="true"><use href="#ic-subj-moral"/></svg></span>
-                          <span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Moral Studies</span></span>
-                        </span>
-                      </td>
-                      <td><span class="battle-date">3 days ago</span></td>
-                      <td style="text-align:center"><button class="btn-action" type="button" aria-label="View battle"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-chevron-right"/></svg></button></td>
-                    </tr>
+                <!-- Card 4 — disabled "Show Voucher" (DS node 3065:43484) -->
+                <article class="rc">
+                  <img class="rc__img"
+                       src="../src/image-repo/page.rewards/merchandize/assets/Merchandise-3.svg"
+                       alt="Reward merchandise item">
+                  <div class="rc__body">
+                    <div class="rc__badges">
+                      <span class="lbadge-prem">
+                        
+                        Premium
+                      </span>
+                      <span class="lbadge-prem">
+                        
+                        Premium Lite
+                      </span>
+                    </div>
+                    <p class="rc__title">Study Planner & Revision Notepad</p>
+                  </div>
+                  <div class="rc__divider"></div>
+                  <div class="rc__cta">
+                    <div class="rc__coin">
+                      <img class="rc__coin-icon"
+                           src="../src/image-repo/page.rewards/merchandize/assets/P.Coin.svg"
+                           alt="Pandai Coin">
+                      <span class="rc__coin-value">150</span>
+                    </div>
+                    <span class="btn-show btn-show--disabled" aria-disabled="true">
+                      <span class="btn-show__label">Show Voucher</span>
+                      <div class="btn-show__arrow">
+                        <svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+                      </div>
+                    </span>
+                  </div>
+                </article>
 
-                    <!-- Row 3 — Aidan vs Hawa Akmal, Won, 5, Mathematics -->
-                    <tr>
-                      <td>
-                        <div class="battle-player-cell">
-                          <div class="player-avatar"></div>
-                          <span class="battle-cell-name">Aidan Kamaruddin</span>
-                        </div>
-                      </td>
-                      <td class="battle-vs-cell">
-                        <img src="../../src/image-repo/page.battle/assets/P.Battle.png" width="18" height="24" alt="">
-                      </td>
-                      <td>
-                        <div class="battle-player-cell">
-                          <div class="player-avatar" style="background:#d4edda;"></div>
-                          <span class="battle-cell-name">Hawa Akmal</span>
-                        </div>
-                      </td>
-                      <td><span class="battle-result--won">Won</span></td>
-                      <td><span class="battle-score">5</span></td>
-                      <td>
-                        <span class="subject-badge subject-badge--math">
-                          <span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 19 24" aria-hidden="true"><use href="#ic-subj-math"/></svg></span>
-                          <span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Mathematics</span></span>
-                        </span>
-                      </td>
-                      <td><span class="battle-date">1 week ago</span></td>
-                      <td style="text-align:center"><button class="btn-action" type="button" aria-label="View battle"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-chevron-right"/></svg></button></td>
-                    </tr>
+              </div><!-- /.merch-grid -->
+            </main>
 
-                    <!-- Row 4 — Aidan vs Syakila Rania, Lost, 2, Islamic Studies -->
-                    <tr>
-                      <td>
-                        <div class="battle-player-cell">
-                          <div class="player-avatar"></div>
-                          <span class="battle-cell-name">Aidan Kamaruddin</span>
-                        </div>
-                      </td>
-                      <td class="battle-vs-cell">
-                        <img src="../../src/image-repo/page.battle/assets/P.Battle.png" width="18" height="24" alt="">
-                      </td>
-                      <td>
-                        <div class="battle-player-cell">
-                          <div class="player-avatar" style="background:#ffd6e7;"></div>
-                          <span class="battle-cell-name">Syakila Rania</span>
-                        </div>
-                      </td>
-                      <td><span class="battle-result--lost">Lost</span></td>
-                      <td><span class="battle-score">2</span></td>
-                      <td>
-                        <span class="subject-badge subject-badge--islamic">
-                          <span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-islamic"/></svg></span>
-                          <span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Islamic Studies</span></span>
-                        </span>
-                      </td>
-                      <td><span class="battle-date">5 days ago</span></td>
-                      <td style="text-align:center"><button class="btn-action" type="button" aria-label="View battle"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-chevron-right"/></svg></button></td>
-                    </tr>
+          </div><!-- /.rewards-layout -->
 
-                    <!-- Row 5 — Aidan vs Muhsin Kamal, Lost, 3, Bahasa Melayu -->
-                    <tr>
-                      <td>
-                        <div class="battle-player-cell">
-                          <div class="player-avatar"></div>
-                          <span class="battle-cell-name">Aidan Kamaruddin</span>
-                        </div>
-                      </td>
-                      <td class="battle-vs-cell">
-                        <img src="../../src/image-repo/page.battle/assets/P.Battle.png" width="18" height="24" alt="">
-                      </td>
-                      <td>
-                        <div class="battle-player-cell">
-                          <div class="player-avatar" style="background:#dce4ff;"></div>
-                          <span class="battle-cell-name">Muhsin Kamal</span>
-                        </div>
-                      </td>
-                      <td><span class="battle-result--lost">Lost</span></td>
-                      <td><span class="battle-score">3</span></td>
-                      <td>
-                        <span class="subject-badge subject-badge--bm">
-                          <span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-bm"/></svg></span>
-                          <span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Bahasa Melayu</span></span>
-                        </span>
-                      </td>
-                      <td><span class="battle-date">4 days ago</span></td>
-                      <td style="text-align:center"><button class="btn-action" type="button" aria-label="View battle"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-chevron-right"/></svg></button></td>
-                    </tr>
+        </section><!-- #PageViewport -->
 
-                    <!-- Row 6 — Aidan vs Hawa Akmal, Won, 5, RBT -->
-                    <tr>
-                      <td>
-                        <div class="battle-player-cell">
-                          <div class="player-avatar"></div>
-                          <span class="battle-cell-name">Aidan Kamaruddin</span>
-                        </div>
-                      </td>
-                      <td class="battle-vs-cell">
-                        <img src="../../src/image-repo/page.battle/assets/P.Battle.png" width="18" height="24" alt="">
-                      </td>
-                      <td>
-                        <div class="battle-player-cell">
-                          <div class="player-avatar" style="background:#d4edda;"></div>
-                          <span class="battle-cell-name">Hawa Akmal</span>
-                        </div>
-                      </td>
-                      <td><span class="battle-result--won">Won</span></td>
-                      <td><span class="battle-score">5</span></td>
-                      <td>
-                        <span class="subject-badge subject-badge--rbt">
-                          <span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-rbt"/></svg></span>
-                          <span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">RBT</span></span>
-                        </span>
-                      </td>
-                      <td><span class="battle-date">2 weeks ago</span></td>
-                      <td style="text-align:center"><button class="btn-action" type="button" aria-label="View battle"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-chevron-right"/></svg></button></td>
-                    </tr>
-
-                  </tbody>
-                </table>
-              </div><!-- end primary-card__content -->
-
-            </div><!-- end primary-card -->
-
-          </section><!-- end BattleHistory-Desktop -->
-
-        </section><!-- end PageViewport -->
-
-      </div><!-- end main-content -->
-    </div><!-- end page-container -->
+      </div>
+    </div>
   </main>
 
   <footer class="footer" id="zul-footer"></footer>
-  <div id="zul-nav-bottom"></div>
 
-  <!-- ══════════════════════════════════════════════════════════════
-       BUTTON is-pressing handlers (Rule 83 — mousedown/up/leave)
-       Registered FIRST before any other JS (Rule 14)
-  ══════════════════════════════════════════════════════════════ -->
+
+  <!-- Rewards pages — sidebar active state (Rule 14: non-critical, wrapped in try/catch) -->
+  <!-- Nav persistence handled by data-active-nav="Rewards" on <body> + restoreHome() in nav IIFE -->
   <script>
-    document.querySelectorAll('.btn-start-battle, .btn-leaderboard, .btn-action').forEach(function (btn) {
+    /* btn-show is-pressing handlers — Rule 83: CSS :active unreliable in Electron webview */
+    document.querySelectorAll('.btn-show:not(.btn-show--disabled)').forEach(function (btn) {
       btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
       btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
       btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
     });
   </script>
-
-  <!-- ══════════════════════════════════════════════════════════════
-       NAV INJECTION — fetch zul.page.template.html, inject shell
-       Pattern: same as all Nadia pages (Sessions 28–38)
-  ══════════════════════════════════════════════════════════════ -->
   <script>
-    (function () {
-      var TPL = '../../zul.test.git/zul.page.template.html';
-
-      fetch(TPL)
-        .then(function (r) { return r.text(); })
-        .then(function (html) {
-          var parser = new DOMParser();
-          var doc    = parser.parseFromString(html, 'text/html');
-
-          function fixPaths(s) {
-            return s.replace(/src="\.\.\/src\//g, 'src="../../src/');
-          }
-
-          /* Navigation Shell */
-          var srcShell = doc.getElementById('Navigation-Shell');
-          var dstShell = document.getElementById('Navigation-Shell');
-          if (srcShell && dstShell) dstShell.innerHTML = fixPaths(srcShell.innerHTML);
-
-          /* Footer */
-          var srcFooter = doc.querySelector('footer.footer');
-          var dstFooter = document.getElementById('zul-footer');
-          if (srcFooter && dstFooter) dstFooter.innerHTML = srcFooter.innerHTML;
-
-          /* NavBar-Bottom + overlays + NavMenu-Mobile */
-          var bottom = document.getElementById('zul-nav-bottom');
-          if (bottom) {
-            ['NavBar-Bottom', 'mobile-overlay', 'NavMenu-Mobile'].forEach(function (id) {
-              var el = doc.getElementById(id);
-              if (el) {
-                el.innerHTML = fixPaths(el.innerHTML);
-                bottom.appendChild(document.adoptNode(el));
-              }
-            });
-          }
-
-          /* Run template scripts */
-          Array.prototype.forEach.call(doc.querySelectorAll('script'), function (s) {
-            if (s.src) return;
-            var ns = document.createElement('script');
-            ns.textContent = s.textContent;
-            document.body.appendChild(ns);
-          });
-
-          /* Set Battle as the active nav item */
-          document.querySelectorAll('#NavTopMenu-Desktop .nav-menu-btn').forEach(function (b) {
-            b.classList.remove('is-active');
-          });
-          var battleBtn = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="Battle"]');
-          if (battleBtn) battleBtn.classList.add('is-active');
-
-          /* MutationObserver — re-apply is-active if nav re-renders */
-          var _restoring = false;
-          var observer = new MutationObserver(function () {
-            if (_restoring) return;
-            var active = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn.is-active');
-            if (active && active.getAttribute('aria-label') === 'Battle') return;
-            _restoring = true;
-            document.querySelectorAll('#NavTopMenu-Desktop .nav-menu-btn').forEach(function (b) {
-              b.classList.remove('is-active');
-            });
-            var btn = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="Battle"]');
-            if (btn) btn.classList.add('is-active');
-            _restoring = false;
-          });
-          var navTop = document.getElementById('NavTopMenu-Desktop');
-          if (navTop) observer.observe(navTop, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
-
-          /* Step 6 — Wire Nadia page navigation links (N-C40) */
-          (function () {
-            var BASE = '../';
-            var NAV_HREFS = {
-              'Quiz':           BASE + 'Quiz/nadia_Quiz.html',
-              'Battle':         BASE + 'Battle/nadia_Battle.html',
-              'Practice':       BASE + 'Practise/nadia_Practise-subject.html',
-              'My Classes':     BASE + 'Class/nadia_Class-MyClasses.html',
-              'Browse Classes': BASE + 'Class/nadia_Class-BrowseClasses.html',
-              'Avatar':         BASE + 'Rewards/nadia_Rewards-avatar.html',
-              'Coin Quests':    BASE + 'Rewards/nadia_Rewards-CoinQuest.html',
-              'eVoucher':       BASE + 'Rewards/nadia_Rewards-evoucher.html',
-              'Merchandise':    BASE + 'Rewards/nadia_Rewards-Merchandise.html',
-              'My Rewards':     BASE + 'Rewards/nadia_Rewards-Myrewards.html',
-            };
-
-            function link(el, href) {
-              if (el) el.addEventListener('click', function () { window.location.href = href; });
-            }
-
-            // Desktop nav pill — Quiz, Battle and Practice (no dropdown)
-            ['Quiz', 'Battle', 'Practice'].forEach(function (label) {
-              link(document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="' + label + '"]'), NAV_HREFS[label]);
-            });
-
-            // Desktop dropdown items — matched by label text (no aria-label on these elements)
-            function dropItem(dropId, labelText) {
-              var drop = document.getElementById(dropId);
-              if (!drop) return null;
-              var items = drop.querySelectorAll('.nav-menu-dropdown__item');
-              for (var i = 0; i < items.length; i++) {
-                var lbl = items[i].querySelector('.nav-menu-dropdown__label');
-                if (lbl && lbl.textContent.trim() === labelText) return items[i];
-              }
-              return null;
-            }
-            ['My Classes', 'Browse Classes'].forEach(function (label) {
-              link(dropItem('class-dropdown', label), NAV_HREFS[label]);
-            });
-            ['Avatar', 'Coin Quests', 'eVoucher', 'Merchandise', 'My Rewards'].forEach(function (label) {
-              link(dropItem('rewards-dropdown', label), NAV_HREFS[label]);
-            });
-
-            // Tablet and mobile menus — items have aria-label
-            ['#NavMenu-Tablet', '#NavMenu-Mobile'].forEach(function (menuId) {
-              Object.keys(NAV_HREFS).forEach(function (label) {
-                link(document.querySelector(menuId + ' [aria-label="' + label + '"]'), NAV_HREFS[label]);
-              });
-            });
-          })();
-        })
-        .catch(function (err) {
-          console.error('[nav-inject] Failed to load navigation:', err);
+    try {
+      var SIDEBAR_HREFS = {
+        'Coin Quest':  'rewards.coin.quest.html',
+        'My Rewards':  'rewards.my.rewards.html',
+        'Merchandise': 'rewards.merchandise.html',
+        'eVoucher':    'rewards.evoucher.html',
+        'Avatar':      'rewards.avatar.html',
+      };
+      document.querySelectorAll('.sidebar-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var lbl = btn.querySelector('.sidebar-btn__label');
+          var href = lbl && SIDEBAR_HREFS[lbl.textContent.trim()];
+          if (href) { window.location.href = href; return; }
+          document.querySelectorAll('.sidebar-btn').forEach(function (b) { b.classList.remove('sidebar-btn--active'); });
+          btn.classList.add('sidebar-btn--active');
         });
-    })();
+      });
+    } catch (e) { console.warn('sidebar init:', e); }
+  </script>
+  <div id="zul-nav-bottom"></div>
+
+  <script>
+  (function () {
+    var TPL = '../zul.test.git/zul.page.template.html';
+
+    fetch(TPL)
+      .then(function (r) { return r.text(); })
+      .then(function (html) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+
+        // Fix image paths: template is one level deep (zul.test.git/),
+        // nadia is two levels deep (Nadia.test.git/Rewards/). ../src/ → ../src/
+        function fixPaths(html) {
+          return html.replace(/src="\.\.\/src\//g, 'src="../src/');
+        }
+
+        // 1. Inject Navigation-Shell contents
+        var srcShell = doc.getElementById('Navigation-Shell');
+        var dstShell = document.getElementById('Navigation-Shell');
+        if (srcShell && dstShell) dstShell.innerHTML = fixPaths(srcShell.innerHTML);
+
+        // 2. Inject footer contents
+        var srcFooter = doc.querySelector('footer.footer');
+        var dstFooter = document.getElementById('zul-footer');
+        if (srcFooter && dstFooter) dstFooter.innerHTML = srcFooter.innerHTML;
+
+        // 3. Inject bottom nav elements
+        var bottom = document.getElementById('zul-nav-bottom');
+        if (bottom) {
+          ['NavBar-Bottom', 'mobile-overlay', 'NavMenu-Mobile'].forEach(function (id) {
+            var el = doc.getElementById(id);
+            if (el) {
+              el.innerHTML = fixPaths(el.innerHTML);
+              bottom.appendChild(document.adoptNode(el));
+            }
+          });
+        }
+
+        // 4. Execute template scripts (nav handlers + mobile menu + maximize)
+        Array.prototype.forEach.call(doc.querySelectorAll('script'), function (s) {
+          if (s.src) return;
+          var ns = document.createElement('script');
+          ns.textContent = s.textContent;
+          document.body.appendChild(ns);
+        });
+
+        // 5. Set active nav state — clear template's hardcoded Home active, then set Rewards
+        document.querySelectorAll('#NavTopMenu-Desktop .nav-menu-btn').forEach(function (b) {
+          b.classList.remove('is-active');
+        });
+        var btn = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="Rewards"]');
+        if (btn) btn.classList.add('is-active');
+
+        // 6. Wire Nadia page navigation links (N-C40)
+        (function () {
+          var BASE = '';
+          var NAV_HREFS = {
+            'Quiz':           BASE + 'quiz.html',
+            'Battle':         BASE + 'battle.html',
+            'Practice':       BASE + 'practise.subject.html',
+            'My Classes':     BASE + 'class.my.classes.html',
+            'Browse Classes': BASE + 'class.browse.classes.html',
+            'Avatar':         BASE + 'rewards.avatar.html',
+            'Coin Quests':    BASE + 'rewards.coin.quest.html',
+            'eVoucher':       BASE + 'rewards.evoucher.html',
+            'Merchandise':    BASE + 'rewards.merchandise.html',
+            'My Rewards':     BASE + 'rewards.my.rewards.html',
+          };
+          function link(el, href) {
+            if (el) el.addEventListener('click', function () { window.location.href = href; });
+          }
+          ['Quiz', 'Battle', 'Practice'].forEach(function (label) {
+            link(document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="' + label + '"]'), NAV_HREFS[label]);
+          });
+          function dropItem(dropId, labelText) {
+            var drop = document.getElementById(dropId);
+            if (!drop) return null;
+            var items = drop.querySelectorAll('.nav-menu-dropdown__item');
+            for (var i = 0; i < items.length; i++) {
+              var lbl = items[i].querySelector('.nav-menu-dropdown__label');
+              if (lbl && lbl.textContent.trim() === labelText) return items[i];
+            }
+            return null;
+          }
+          ['My Classes', 'Browse Classes'].forEach(function (label) {
+            link(dropItem('class-dropdown', label), NAV_HREFS[label]);
+          });
+          ['Avatar', 'Coin Quests', 'eVoucher', 'Merchandise', 'My Rewards'].forEach(function (label) {
+            link(dropItem('rewards-dropdown', label), NAV_HREFS[label]);
+          });
+          ['#NavMenu-Tablet', '#NavMenu-Mobile'].forEach(function (menuId) {
+            Object.keys(NAV_HREFS).forEach(function (label) {
+              link(document.querySelector(menuId + ' [aria-label="' + label + '"]'), NAV_HREFS[label]);
+            });
+          });
+        })();
+      })
+      .catch(function (err) {
+        console.error('[nav-inject] Failed to load navigation:', err);
+      });
+  })();
   </script>
 
 </body>
