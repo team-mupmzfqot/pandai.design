@@ -2294,16 +2294,17 @@
       gap: 28px; align-self: stretch;
     }
 
-    /* Each group: donut left + legend (title + rows) right */
+    /* Each group: title on top, donut+rows row below */
     .an-donut-col {
+      display: flex; flex-direction: column;
+      gap: 16px; width: 100%;
+    }
+    /* Row inside each group: donut left + rows right */
+    .an-donut-body {
       display: flex; flex-direction: row; align-items: center;
-      gap: 28px; width: 100%;
+      gap: 60px; width: 100%;
     }
-
-    /* Legend fills remaining width beside the donut */
-    .an-legend {
-      flex: 1; min-width: 0;
-    }
+    .an-legend__rows { flex: 1; min-width: 0; }
 
     /* â”€â”€ Donut chart wrapper â”€â”€ */
     .an-donut-wrap { flex-shrink: 0; cursor: pointer; }
@@ -2347,7 +2348,7 @@
 
     .an-legend__row {
       display: flex; align-items: center; justify-content: space-between;
-      width: 142px;
+      width: 100%; max-width: 360px;
     }
 
     /* Legend level pill (Easy / Medium / Hard / LOTS / MOTS / HOTS) */
@@ -3822,17 +3823,14 @@
             <!-- DONUT PAIRS (flex-1, 2 equal cols) -->
             <div class="an-donut-pairs">
 
-              <!-- â”€â”€ Difficulty Level: donut + legend â”€â”€ -->
-              <div class="an-donut-col">
+              <!-- â”€â”€ Difficulty Level: title on top, donut+rows below â”€â”€ -->
+              <div class=”an-donut-col”>
 
-                <!-- Progress Wheel â€” 3 concentric rings
-                     Outer(r=84) = Easy 100% green
-                     Middle(r=63) = Medium 82% orange
-                     Inner(r=42) = Hard 75% red
-                     Grey tracks beneath each colored arc
-                     All arcs rotate from -90Â° (12 o'clock)
-                -->
-                <div class="an-donut-wrap">
+                <p class=”an-legend__title”>Result by Difficulty&nbsp;Level</p>
+
+                <div class=”an-donut-body”>
+
+                <div class=”an-donut-wrap”>
                   <svg viewBox="0 0 210 210" width="210" height="210" aria-label="Result by Difficulty Level: Easy 100%, Medium 82%, Hard 75%">
                     <!-- Grey tracks (full 360Â°) -->
                     <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
@@ -3867,36 +3865,32 @@
                   </svg>
                 </div>
 
-                <!-- Legend for Difficulty Level -->
-                <div class="an-legend">
-                  <p class="an-legend__title">Result by Difficulty&nbsp;Level</p>
-                  <div class="an-legend__rows">
-                    <div class="an-legend__row">
-                      <span class="an-legend__pill an-legend__pill--easy">Easy</span>
-                      <span class="an-legend__value">90%</span>
-                    </div>
-                    <div class="an-legend__row">
-                      <span class="an-legend__pill an-legend__pill--medium">Medium</span>
-                      <span class="an-legend__value">82%</span>
-                    </div>
-                    <div class="an-legend__row">
-                      <span class="an-legend__pill an-legend__pill--hard">Hard</span>
-                      <span class="an-legend__value">75%</span>
-                    </div>
+                <div class="an-legend__rows">
+                  <div class="an-legend__row">
+                    <span class="an-legend__pill an-legend__pill--easy">Easy</span>
+                    <span class="an-legend__value">90%</span>
+                  </div>
+                  <div class="an-legend__row">
+                    <span class="an-legend__pill an-legend__pill--medium">Medium</span>
+                    <span class="an-legend__value">82%</span>
+                  </div>
+                  <div class="an-legend__row">
+                    <span class="an-legend__pill an-legend__pill--hard">Hard</span>
+                    <span class="an-legend__value">75%</span>
                   </div>
                 </div>
 
+                </div><!-- /an-donut-body -->
               </div><!-- /Difficulty Level col -->
 
-              <!-- â”€â”€ Thinking Skills: donut + legend â”€â”€ -->
-              <div class="an-donut-col">
+              <!-- â”€â”€ Thinking Skills: title on top, donut+rows below â”€â”€ -->
+              <div class=”an-donut-col”>
 
-                <!-- Progress Wheel â€” 3 concentric rings
-                     Outer(r=84) = LOTS 80% green
-                     Middle(r=63) = MOTS 75% orange
-                     Inner(r=42) = HOTS 100% red
-                -->
-                <div class="an-donut-wrap">
+                <p class=”an-legend__title”>Result by Thinking Skills</p>
+
+                <div class=”an-donut-body”>
+
+                <div class=”an-donut-wrap”>
                   <svg viewBox="0 0 210 210" width="210" height="210" aria-label="Result by Thinking Skills: LOTS 80%, MOTS 75%, HOTS 100%">
                     <!-- Grey tracks -->
                     <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
@@ -3931,34 +3925,31 @@
                   </svg>
                 </div>
 
-                <!-- Legend for Thinking Skills -->
-                <div class="an-legend">
-                  <p class="an-legend__title">Result by Thinking Skills</p>
-                  <div class="an-legend__rows">
-                    <div class="an-legend__row">
-                      <span class="an-legend__pill-wrap">
-                        <span class="an-legend__pill an-legend__pill--easy">LOTS</span>
-                        <span class="an-tooltip" role="tooltip">Lower Order Thinking Skills</span>
-                      </span>
-                      <span class="an-legend__value">80%</span>
-                    </div>
-                    <div class="an-legend__row">
-                      <span class="an-legend__pill-wrap">
-                        <span class="an-legend__pill an-legend__pill--medium">MOTS</span>
-                        <span class="an-tooltip" role="tooltip">Medium Order Thinking Skills</span>
-                      </span>
-                      <span class="an-legend__value">75%</span>
-                    </div>
-                    <div class="an-legend__row">
-                      <span class="an-legend__pill-wrap">
-                        <span class="an-legend__pill an-legend__pill--hard">HOTS</span>
-                        <span class="an-tooltip" role="tooltip">High Order Thinking Skills</span>
-                      </span>
-                      <span class="an-legend__value">90%</span>
-                    </div>
+                <div class="an-legend__rows">
+                  <div class="an-legend__row">
+                    <span class="an-legend__pill-wrap">
+                      <span class="an-legend__pill an-legend__pill--easy">LOTS</span>
+                      <span class="an-tooltip" role="tooltip">Lower Order Thinking Skills</span>
+                    </span>
+                    <span class="an-legend__value">80%</span>
+                  </div>
+                  <div class="an-legend__row">
+                    <span class="an-legend__pill-wrap">
+                      <span class="an-legend__pill an-legend__pill--medium">MOTS</span>
+                      <span class="an-tooltip" role="tooltip">Medium Order Thinking Skills</span>
+                    </span>
+                    <span class="an-legend__value">75%</span>
+                  </div>
+                  <div class="an-legend__row">
+                    <span class="an-legend__pill-wrap">
+                      <span class="an-legend__pill an-legend__pill--hard">HOTS</span>
+                      <span class="an-tooltip" role="tooltip">High Order Thinking Skills</span>
+                    </span>
+                    <span class="an-legend__value">90%</span>
                   </div>
                 </div>
 
+                </div><!-- /an-donut-body -->
               </div><!-- /Thinking Skills col -->
 
             </div><!-- /an-donut-pairs -->
