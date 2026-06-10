@@ -2287,29 +2287,24 @@
       display: flex; flex-direction: column; gap: var(--space-m);
     }
 
-    /* â”€â”€ Two chart rows stacked vertically â”€â”€ */
+    /* â”€â”€ Two chart groups stacked vertically â”€â”€ */
     .an-donut-pairs {
       flex: 1; min-width: 0;
       display: flex; flex-direction: column;
-      gap: 20px;
+      gap: 24px;
     }
 
-    /* Each row: title | donut | table — all three side by side */
+    /* Each group: title on top, donut + table below */
     .an-donut-col {
       width: 100%;
-      display: flex; flex-direction: row; align-items: center;
-      gap: 28px;
+      display: flex; flex-direction: column; align-items: flex-start;
+      gap: 12px;
     }
 
-    /* Title column — fixed width so both rows align */
-    .an-legend__title {
-      flex-shrink: 0; width: 160px;
-    }
-
-    /* Body: donut + table side by side — fills remaining width */
+    /* Body: donut left, table right — fills full width */
     .an-donut-body {
       display: flex; flex-direction: row; align-items: center;
-      gap: 28px; flex: 1; min-width: 0;
+      gap: 28px; width: 100%;
     }
 
     /* â”€â”€ Donut chart wrapper â”€â”€ */
@@ -2344,7 +2339,7 @@
     }
 
     .an-legend__title {
-      font-size: 14px; font-weight: 700; line-height: 20px;
+      font-size: 16px; font-weight: 700; line-height: 24px;
       color: #626262;
     }
 
@@ -2568,10 +2563,10 @@
       .an-grade { width: auto; }
       .an-grade__title-row { font-size: 44px; }
 
-      /* Tablet: title narrower, donut smaller */
-      .an-legend__title { width: 130px; font-size: 13px; }
-      .an-donut-col { gap: 16px; }
-      .an-donut-body { gap: 16px; }
+      /* Tablet: tighten spacing, smaller donut */
+      .an-legend__title { font-size: 14px; line-height: 20px; }
+      .an-donut-col { gap: 10px; }
+      .an-donut-body { gap: 20px; }
       .an-donut-wrap svg { width: 120px; height: 120px; }
       .an-legend__rows { gap: 10px; }
 
@@ -2691,12 +2686,12 @@
         border-radius: 0 0 var(--corner-m) var(--corner-m);
       }
 
-      /* â”€â”€ Mobile: same row layout, scaled down â”€â”€ */
-      .an-donut-pairs { gap: 12px; }
-      .an-legend__title { width: 90px; font-size: 11px; line-height: 14px; }
+      /* â”€â”€ Mobile: scaled down, same column→row structure â”€â”€ */
+      .an-donut-pairs { gap: 16px; }
+      .an-legend__title { font-size: 12px; line-height: 16px; }
       .an-donut-col   { gap: 8px; }
-      .an-donut-body  { gap: 8px; }
-      .an-donut-wrap svg { width: 72px; height: 72px; }
+      .an-donut-body  { gap: 12px; }
+      .an-donut-wrap svg { width: 80px; height: 80px; }
       .an-legend__rows  { gap: 6px; }
       .an-legend__pill  { font-size: 10px; padding: 2px 6px; min-height: 20px; }
       .an-legend__value { font-size: 12px; white-space: nowrap; }
