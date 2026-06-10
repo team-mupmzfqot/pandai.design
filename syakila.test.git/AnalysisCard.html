@@ -2344,13 +2344,26 @@
     }
 
     .an-legend__rows {
-      display: flex; flex-direction: column; gap: 30px;
+      display: flex; flex-direction: column; gap: 16px;
+      flex: 1; min-width: 0;
     }
 
     .an-legend__row {
-      display: flex; align-items: center; justify-content: space-between;
-      width: 142px;
+      display: flex; align-items: center;
+      gap: 10px; width: 100%;
     }
+
+    /* Progress bar inside each legend row */
+    .an-legend__bar-wrap {
+      flex: 1; height: 6px; min-width: 30px;
+      background: #f2f2f2; border-radius: 99px; overflow: hidden;
+    }
+    .an-legend__bar {
+      height: 100%; border-radius: 99px;
+    }
+    .an-legend__bar--easy   { background: var(--surface-primary-default); }
+    .an-legend__bar--medium { background: var(--surface-alert-default);   }
+    .an-legend__bar--hard   { background: var(--surface-warning-default); }
 
     /* Legend level pill (Easy / Medium / Hard / LOTS / MOTS / HOTS) */
     .an-legend__pill {
@@ -2556,8 +2569,8 @@
 
       /* Legend: tighten row width to fit smaller columns */
       .an-legend__title { font-size: 14px; }
-      .an-legend__row { width: auto; min-width: 100px; }
-      .an-legend__rows { gap: 16px; }
+      .an-legend__rows { gap: 12px; }
+      .an-donut-wrap svg { width: 140px; height: 140px; }
 
       /* Table: reduce fixed columns so table fits without horizontal scroll */
       .an-col--chapter { width: 60px; }
@@ -3901,7 +3914,7 @@
                 <div class="an-donut-body">
 
                   <div class="an-donut-wrap">
-                    <svg viewBox="0 0 210 210" width="210" height="210" aria-label="Result by Difficulty Level: Easy 90%, Medium 82%, Hard 75%">
+                    <svg viewBox="0 0 210 210" width="240" height="240" aria-label="Result by Difficulty Level: Easy 90%, Medium 82%, Hard 75%">
                       <!-- Grey tracks (full 360) -->
                       <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
                       <circle cx="105" cy="105" r="63" fill="none" stroke="#e8e8e8" stroke-width="16"/>
@@ -3938,14 +3951,17 @@
                   <div class="an-legend__rows">
                     <div class="an-legend__row">
                       <span class="an-legend__pill an-legend__pill--easy">Easy</span>
+                      <div class="an-legend__bar-wrap"><div class="an-legend__bar an-legend__bar--easy" style="width:90%"></div></div>
                       <span class="an-legend__value">90%</span>
                     </div>
                     <div class="an-legend__row">
                       <span class="an-legend__pill an-legend__pill--medium">Medium</span>
+                      <div class="an-legend__bar-wrap"><div class="an-legend__bar an-legend__bar--medium" style="width:82%"></div></div>
                       <span class="an-legend__value">82%</span>
                     </div>
                     <div class="an-legend__row">
                       <span class="an-legend__pill an-legend__pill--hard">Hard</span>
+                      <div class="an-legend__bar-wrap"><div class="an-legend__bar an-legend__bar--hard" style="width:75%"></div></div>
                       <span class="an-legend__value">75%</span>
                     </div>
                   </div>
@@ -3959,7 +3975,7 @@
                 <div class="an-donut-body">
 
                   <div class="an-donut-wrap">
-                    <svg viewBox="0 0 210 210" width="210" height="210" aria-label="Result by Thinking Skills: LOTS 80%, MOTS 75%, HOTS 90%">
+                    <svg viewBox="0 0 210 210" width="240" height="240" aria-label="Result by Thinking Skills: LOTS 80%, MOTS 75%, HOTS 90%">
                       <!-- Grey tracks -->
                       <circle cx="105" cy="105" r="84" fill="none" stroke="#e8e8e8" stroke-width="16"/>
                       <circle cx="105" cy="105" r="63" fill="none" stroke="#e8e8e8" stroke-width="16"/>
@@ -3999,6 +4015,7 @@
                         <span class="an-legend__pill an-legend__pill--easy">LOTS</span>
                         <span class="an-tooltip" role="tooltip">Lower Order Thinking Skills</span>
                       </span>
+                      <div class="an-legend__bar-wrap"><div class="an-legend__bar an-legend__bar--easy" style="width:80%"></div></div>
                       <span class="an-legend__value">80%</span>
                     </div>
                     <div class="an-legend__row">
@@ -4006,6 +4023,7 @@
                         <span class="an-legend__pill an-legend__pill--medium">MOTS</span>
                         <span class="an-tooltip" role="tooltip">Medium Order Thinking Skills</span>
                       </span>
+                      <div class="an-legend__bar-wrap"><div class="an-legend__bar an-legend__bar--medium" style="width:75%"></div></div>
                       <span class="an-legend__value">75%</span>
                     </div>
                     <div class="an-legend__row">
@@ -4013,6 +4031,7 @@
                         <span class="an-legend__pill an-legend__pill--hard">HOTS</span>
                         <span class="an-tooltip" role="tooltip">High Order Thinking Skills</span>
                       </span>
+                      <div class="an-legend__bar-wrap"><div class="an-legend__bar an-legend__bar--hard" style="width:90%"></div></div>
                       <span class="an-legend__value">90%</span>
                     </div>
                   </div>
