@@ -11,3 +11,6 @@ dist/
 .env.local
 coverage/
 .tmp/
+
+# Generated repo analysis report (not committed)
+language-report.html

@@ -3622,10 +3622,12 @@
     ───────────────────────────────────────────────────── */
     .nav-menu-mobile {
       position:       fixed;
-      bottom:         72px;  /* 56px navbar + 16px gap — anchored above bottom navbar */
+      /* Hug content height by default; anchored above the bottom navbar, growing
+         upward. Capped so it never gets closer than 8px to the top of the page. */
+      bottom:         64px;                        /* 56px bottom navbar + 8px gap */
+      max-height:     calc(100dvh - 64px - var(--spacing-space-xs));  /* 8px top-of-page cap */
       left:           0;
       width:          300px;
-      max-height:     calc(100dvh - 72px);
       z-index:        500;
       background:     var(--surface-general-default);
       /* DS strokeWeights: top:1 right:1 bottom:1 left:0 — left edge is flat against page */
@@ -3635,7 +3637,7 @@
       /* NO border-left — DS leftWeight:0 */
       border-radius:  0 24px 24px 0;  /* DS: tl:0 tr:24 br:24 bl:0 */
       box-sizing:     border-box;
-      overflow-y:     auto;
+      overflow:       hidden;          /* content scrolls; header stays pinned */
       display:        flex;
       flex-direction: column;
       opacity:        0;
@@ -3668,7 +3670,7 @@
       visibility:     visible;
     }
 
-    /* Header — DS 3427:2443: h:60, pad t:16 r:16 b:16 l:16, gap:10 */
+    /* Header — 16px padding (space-m), pinned at top */
     .nav-menu-mobile__header {
       display:         flex;
       align-items:     center;
@@ -3687,13 +3689,16 @@
     }
     .nav-menu-mobile__close:hover { color: var(--icon-primary-default); }
 
-    /* Menu — DS 3427:2461: pad t:0 r:16 b:16 l:16, gap:8 */
+    /* Menu — 16px padding (space-m, top 0 — header provides top gap), gap:8. Scrollable fill region so the
+       overflow-hiding logic can measure available vs needed height. */
     .nav-menu-mobile__content {
-      display:     flex;
+      display:        flex;
       flex-direction: column;
-      gap:         var(--spacing-space-xs);
-      padding:     0 var(--spacing-space-m) var(--spacing-space-m);
-      flex-shrink: 0;
+      gap:            var(--spacing-space-xs);
+      padding:        0 var(--spacing-space-m) var(--spacing-space-m);
+      flex:           1 1 auto;
+      min-height:     0;
+      overflow-y:     auto;
     }
 
     /* CTA — DS 3427:2477: VERTICAL, pad:8, gap:8, radius:20 (differs from tablet radius:28) */
@@ -6362,6 +6367,7 @@
           if (submenu) {
             submenu.classList.remove('is-open');
             submenu.setAttribute('aria-hidden', 'true');
+            submenu.style.maxHeight = '';   // collapse from current height to 0 (CSS base)
           }
         });
       }
@@ -6384,6 +6390,7 @@
             btn.setAttribute('aria-expanded', 'true');
             submenu.classList.add('is-open');
             submenu.setAttribute('aria-hidden', 'false');
+            submenu.style.maxHeight = submenu.scrollHeight + 'px';   // animate to exact content height
             startAutoCollapse();
           }
         });
@@ -7190,34 +7197,33 @@
       var content       = panel ? panel.querySelector('.nav-menu-mobile__content') : null;
       var toggleBtns    = document.querySelectorAll('#NavMenu-Mobile .nav-menu-item.has-submenu');
       var autoCollapseTimer = null;
-      var HEIGHT_LIMIT  = 800;
 
-      // Hideable items = direct .nav-menu-item children BEFORE the first .has-submenu trigger
-      // (i.e. Home, Quiz, Battle, Practice — in top-to-bottom order)
+      // Hideable items = every direct .nav-menu-item child of the menu EXCEPT Home.
+      // Home is always kept at the top. The Search button, Notification + Download App
+      // CTA, and the Localization row are not .nav-menu-item children, so they are
+      // never in this list — they are never hidden.
       var hideableItems = [];
       if (content) {
-        var children = Array.prototype.slice.call(content.children);
-        var firstAccIdx = -1;
-        for (var i = 0; i < children.length; i++) {
-          if (children[i].classList.contains('has-submenu')) { firstAccIdx = i; break; }
-        }
-        if (firstAccIdx > -1) {
-          hideableItems = children.slice(0, firstAccIdx).filter(function (el) {
-            return el.classList.contains('nav-menu-item');
-          });
-        }
+        hideableItems = Array.prototype.slice.call(content.children).filter(function (el) {
+          return el.classList.contains('nav-menu-item') &&
+                 el.getAttribute('aria-label') !== 'Home';
+        });
       }
 
       function restoreHiddenItems() {
         hideableItems.forEach(function (el) { el.style.display = ''; });
       }
 
-      // After transition completes, hide topmost items one-by-one until content fits HEIGHT_LIMIT
-      function adjustVisibleItems() {
+      // After the submenu expand transition completes, hide non-essential items
+      // (top-to-bottom, skipping the currently open trigger) until the menu fits the
+      // visible area. Home, Search, Notification, Download App and Localization are
+      // never hidden; the open accordion and its submenu always stay visible.
+      function adjustVisibleItems(openTrigger) {
         if (!content) return;
         restoreHiddenItems();
         for (var i = 0; i < hideableItems.length; i++) {
-          if (content.scrollHeight <= HEIGHT_LIMIT) break;
+          if (content.scrollHeight <= content.clientHeight) break;
+          if (hideableItems[i] === openTrigger) continue;
           hideableItems[i].style.display = 'none';
         }
       }
@@ -7238,6 +7244,7 @@
           if (submenu) {
             submenu.classList.remove('is-open');
             submenu.setAttribute('aria-hidden', 'true');
+            submenu.style.maxHeight = '';   // collapse from current height to 0 (CSS base)
           }
         });
       }
@@ -7258,9 +7265,10 @@
             btn.setAttribute('aria-expanded', 'true');
             submenu.classList.add('is-open');
             submenu.setAttribute('aria-hidden', 'false');
+            submenu.style.maxHeight = submenu.scrollHeight + 'px';   // animate to exact content height
             startAutoCollapse();
             // Measure after CSS transition finishes (transition: max-height 0.2s)
-            setTimeout(adjustVisibleItems, 220);
+            setTimeout(function () { adjustVisibleItems(btn); }, 220);
           }
         });
       });

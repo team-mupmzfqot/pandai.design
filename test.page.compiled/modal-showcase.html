@@ -1689,10 +1689,12 @@
     ───────────────────────────────────────────────────── */
     .nav-menu-mobile {
       position:       fixed;
-      bottom:         72px;  /* 56px navbar + 16px gap — anchored above bottom navbar */
+      /* Hug content height by default; anchored above the bottom navbar, growing
+         upward. Capped so it never gets closer than 8px to the top of the page. */
+      bottom:         64px;                        /* 56px bottom navbar + 8px gap */
+      max-height:     calc(100dvh - 64px - var(--spacing-space-xs));  /* 8px top-of-page cap */
       left:           0;
       width:          300px;
-      max-height:     calc(100dvh - 72px);
       z-index:        500;
       background:     var(--surface-general-default);
       /* DS strokeWeights: top:1 right:1 bottom:1 left:0 — left edge is flat against page */
@@ -1702,7 +1704,7 @@
       /* NO border-left — DS leftWeight:0 */
       border-radius:  0 24px 24px 0;  /* DS: tl:0 tr:24 br:24 bl:0 */
       box-sizing:     border-box;
-      overflow-y:     auto;
+      overflow:       hidden;          /* content scrolls; header stays pinned */
       display:        flex;
       flex-direction: column;
       opacity:        0;
@@ -1758,9 +1760,11 @@
     .nav-menu-mobile__content {
       display:     flex;
       flex-direction: column;
-      gap:         var(--spacing-space-xs);
-      padding:     0 var(--spacing-space-m) var(--spacing-space-m);
-      flex-shrink: 0;
+      gap:            var(--spacing-space-xs);
+      padding:        0 var(--spacing-space-m) var(--spacing-space-m);
+      flex:           1 1 auto;
+      min-height:     0;
+      overflow-y:     auto;
     }
 
     /* CTA — DS 3427:2477: VERTICAL, pad:8, gap:8, radius:20 (differs from tablet radius:28) */
