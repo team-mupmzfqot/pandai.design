@@ -6306,3 +6306,99 @@ Class pages use native `<a class="btn-*">` for within-page buttons (Browse Class
 |---|---|---|
 | `nadia_Class-MyClasses.html` | Browse Classes | `nadia_Class-BrowseClasses.html` |
 | `nadia_Class-BrowseClasses.html` | Go to My Classes | `nadia_Class-MyClasses.html` *(pre-wired)* |
+
+---
+
+## Session 42 — class.battle.new.html: slanted hero rework (2026-06-11)
+
+**File:** `Nadia.test.git/class.battle.new.html`
+
+**Context:** Two battle prototype files exist:
+- `battle.html` — original dramatic slanted hero (overlapping columns, `skewX` `::before` separator, single-card `overflow:hidden` container)
+- `class.battle.new.html` — newer page that started with a subtle 25px polygon slant
+
+**Session work:**
+1. Ported the dramatic diagonal slant from `battle.html` into `class.battle.new.html`
+2. Then pivoted: removed single-card approach, added separate green stroke borders per card, removed corner radius
+
+### Rule N-C46 — Battle hero: two-file design history (Session 42, 2026-06-11)
+
+`battle.html` and `class.battle.new.html` are two distinct prototypes of the same Battle page. Always check BOTH files before building or editing the battle hero — they represent different design iterations and diverge in layout approach.
+
+| File | Hero approach | Status |
+|---|---|---|
+| `battle.html` | Single `overflow:hidden` card, overlapping columns, `skewX::before` separator | Original dramatic slant |
+| `class.battle.new.html` | Two separate bordered cards, frame+inner clip pattern, no corner radius | Current target |
+
+---
+
+### Rule N-C47 — Diagonal clip-path border: frame wrapper + 1px inset inner card (Session 42, 2026-06-11)
+
+`clip-path` clips everything including CSS `border` and `box-shadow`. To add a visible stroke to a diagonally clipped card, use the **frame + inner** pattern:
+
+1. **Outer frame** — `background: var(--border-primary-default)`, same `clip-path` as the card
+2. **Inner card** — `position:absolute; inset:0`, same `clip-path` with every vertex shifted 1px inward
+
+The 1px green gap between the two clipped layers IS the border — it follows the diagonal exactly.
+
+**Confirmed clip-path pairs (50% wide cards, 50px diagonal over 244px height):**
+
+```css
+/* Left card */
+.battle-hero__left-frame {
+  clip-path: polygon(0 0, 100% 0, calc(100% - 50px) 100%, 0 100%);
+}
+.battle-hero__left {
+  clip-path: polygon(1px 1px, calc(100% - 1px) 1px, calc(100% - 51px) calc(100% - 1px), 1px calc(100% - 1px));
+}
+
+/* Right card */
+.battle-hero__right-frame {
+  clip-path: polygon(50px 0, 100% 0, 100% 100%, 0 100%);
+}
+.battle-hero__right {
+  clip-path: polygon(51px 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - 1px), 1px calc(100% - 1px));
+}
+```
+
+**Never use `border:` or `box-shadow:` directly on a `clip-path` element** — both are clipped and invisible.
+
+---
+
+### Rule N-C48 — Mirror polygon clips at 50% width = consistent gap at both ends (Session 42, 2026-06-11)
+
+When two diagonal cards each occupy exactly **50% width** and their clips mirror each other (left clips 50px off its bottom-right; right clips 50px off its top-left), the visible gap between the cards is **constant** (~50px) at both top AND bottom.
+
+**Why:** The left frame's right visible edge moves 50px left from top to bottom. The right frame's left visible edge also moves 50px right from bottom to top (from its `right:0` anchor). The offsets cancel — gap stays constant.
+
+**Wrong approach (overlapping columns):** `width: calc(50%+50px)` + `z-index` overlap only works with an `overflow:hidden` single-card container and a `::before` separator. Without the container clip, the right column would paint over the left.
+
+**Container rules when using frame+inner approach:**
+```css
+.battle-hero {
+  position: relative;
+  height:   244px;
+  /* NO border-radius, NO overflow:hidden, NO background, NO ::before */
+}
+```
+
+---
+
+### Rule N-C49 — Single-card vs two-card battle hero: know which approach applies (Session 42, 2026-06-11)
+
+| Need | Use |
+|---|---|
+| Rounded outer corners on the whole hero | Single-card (`overflow:hidden` + `border-radius` + `::before` separator) |
+| Visible per-card stroke border + no corner radius + separated cards | Two-card (frame+inner clip, 50%+50% width, no container bg/overflow) |
+
+Switching between them requires changing: container CSS, `::before` presence, column widths, clip-paths, and HTML structure (frame wrapper divs). Always confirm which approach before touching the battle hero.
+
+**Pre-flight checklist for battle hero:**
+```
+□ Which variant does this prototype use? (single-card or two-card)
+□ Are frame wrapper divs present in HTML? (required for two-card)
+□ Does .battle-hero have border-radius + overflow:hidden? (single-card only)
+□ Is ::before separator present? (single-card only)
+□ Are column widths calc(50%+50px) (overlap) or 50% (non-overlap)?
+□ Mobile: frame wrappers need clip-path:none + stacked layout too
+```

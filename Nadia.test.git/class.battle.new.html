@@ -2130,45 +2130,40 @@
     .bc-link--current { color: var(--text-default-body); }
 
     /* ══════════════════════════════════════════════════════════════
-       BATTLE HERO — Two independent diagonal cards with 50px gap.
-       Each card is a frame wrapper (green bg + polygon clip) with an
-       inner content div (1px-inset polygon) — the 1px green gap between
-       the two polygons creates the per-card border on all edges including
-       the diagonal.
-       Left frame:  polygon(0 0, calc(100%-25px) 0, 100% 100%, 0 100%)
-       Right frame: polygon(25px 0, 100% 0, 100% 100%, 0 100%)
-       Gap at top ≈ 100px (50px flex gap + 25px each diagonal cut).
-       Gap at bottom = 50px (flex gap only). Min gap ≥ 50px ✓
+       BATTLE HERO — Two separate diagonal cards with green stroke border.
+       Each card is 50% wide. Diagonal = 50px over 244px height.
+       Left clips RIGHT edge: polygon(0 0, 100% 0, calc(100%-50px) 100%, 0 100%)
+       Right clips LEFT edge: polygon(50px 0, 100% 0, 100% 100%, 0 100%)
+       Gap between visible edges = ~50px at both top and bottom.
+       Border effect: green frame wrapper (1px) + 1px-inset inner card clip.
     ══════════════════════════════════════════════════════════════ */
     .battle-hero {
-      position:       relative;
-      height:         244px;
-      display:        flex;
-      flex-direction: row;
-      gap:            50px;
-      background:     transparent;
+      position: relative;
+      height:   244px;
     }
 
-    /* ── Frame wrappers — green border layer (clip-path defines card shape) */
+    /* ── Frame wrappers — green border layer, 1px wider than inner card */
     .battle-hero__left-frame {
-      flex:       1 0 0;
-      position:   relative;
-      background: var(--border-default);
-      clip-path:  polygon(0 0, calc(100% - 25px) 0, 100% 100%, 0 100%);
+      position:   absolute;
+      left:       0; top: 0; bottom: 0;
+      width:      50%;
+      background: var(--border-primary-default);
+      clip-path:  polygon(0 0, 100% 0, calc(100% - 50px) 100%, 0 100%);
     }
     .battle-hero__right-frame {
-      flex:       1 0 0;
-      position:   relative;
-      background: var(--border-default);
-      clip-path:  polygon(25px 0, 100% 0, 100% 100%, 0 100%);
+      position:   absolute;
+      right:      0; top: 0; bottom: 0;
+      width:      50%;
+      background: var(--border-primary-default);
+      clip-path:  polygon(50px 0, 100% 0, 100% 100%, 0 100%);
+      z-index:    2;
     }
 
-    /* ── Inner cards — 1px inset polygon over green frame = 1px green border */
-    /* Left: same polygon shifted 1px inward on all sides (diagonal ≈ vertical so +1px horiz) */
+    /* ── Inner cards — same polygon 1px inset = 1px green border on all edges */
     .battle-hero__left {
       position:            absolute;
       inset:               0;
-      clip-path:           polygon(1px 1px, calc(100% - 26px) 1px, calc(100% - 1px) calc(100% - 1px), 1px calc(100% - 1px));
+      clip-path:           polygon(1px 1px, calc(100% - 1px) 1px, calc(100% - 51px) calc(100% - 1px), 1px calc(100% - 1px));
       background-image:    url('../src/image-repo/page.battle.new/battle/asset/Background Battle Stat Card.png');
       background-size:     cover;
       background-position: right center;
@@ -2176,11 +2171,10 @@
       flex-direction:      row;
       align-items:         stretch;
     }
-    /* Right: same polygon shifted 1px inward on all sides */
     .battle-hero__right {
       position:            absolute;
       inset:               0;
-      clip-path:           polygon(26px 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - 1px), 1px calc(100% - 1px));
+      clip-path:           polygon(51px 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - 1px), 1px calc(100% - 1px));
       background-image:    url('../src/image-repo/page.battle.new/battle/asset/Background Battle Content Card.png');
       background-size:     cover;
       background-position: center;
@@ -2722,8 +2716,6 @@
     ══════════════════════════════════════════════════════════════ */
     @media (max-width: 1279px) {
       :root { --page-padding-x: 32px; }
-      /* Tablet: frames are flex:1 — auto-scale. Reduce gap slightly. */
-      .battle-hero { gap: 24px; }
       .bpc__profile { width: 240px; max-width: 240px; }
     }
 
@@ -2732,12 +2724,12 @@
     ══════════════════════════════════════════════════════════════ */
     @media (max-width: 767px) {
       :root { --page-padding-x: 16px; }
-      /* Stack cards vertically: remove diagonal clips, use simple bordered rectangles */
-      .battle-hero              { flex-direction: column; gap: var(--spacing-space-m); height: auto; }
-      .battle-hero__left-frame  { clip-path: none; overflow: hidden; border-radius: var(--corner-radius-corner-4xl); height: 244px; }
-      .battle-hero__right-frame { clip-path: none; overflow: hidden; border-radius: var(--corner-radius-corner-4xl); height: 220px; }
-      .battle-hero__left        { clip-path: none; position: absolute; inset: 1px; border-radius: 22px; }
-      .battle-hero__right       { clip-path: none; position: absolute; inset: 1px; border-radius: 22px; }
+      /* Stack cards vertically: remove clips, use full-width bordered rectangles */
+      .battle-hero              { height: auto; display: flex; flex-direction: column; gap: var(--spacing-space-m); }
+      .battle-hero__left-frame  { position: relative; width: 100%; height: 244px; clip-path: none; }
+      .battle-hero__right-frame { position: relative; width: 100%; height: 220px; clip-path: none; z-index: auto; }
+      .battle-hero__left        { clip-path: none; }
+      .battle-hero__right       { clip-path: none; }
       /* Profile adjustments in stacked layout */
       .bpc__profile             { width: 280px; max-width: 280px; border-radius: 0; }
       .bpc__stats               { padding: 12px 16px; }
@@ -2936,7 +2928,6 @@
       <symbol id="ic-premium" viewBox="0 0 20 20" fill="none"><g clip-path="url(#clip-premium)"><path d="M8.18945 2.68805C8.90941 1.15493 11.0906 1.15493 11.8105 2.68805L13.4287 6.13629L17.1924 6.71539C18.8009 6.96261 19.4562 8.92502 18.3193 10.0894L15.5332 12.942L16.1758 16.8785C16.4446 18.5264 14.6955 19.7587 13.2344 18.9507L10 17.1627L6.76562 18.9507C5.3045 19.7587 3.55544 18.5264 3.82422 16.8785L4.46582 12.942L1.68066 10.0894C0.543759 8.92502 1.19912 6.96261 2.80762 6.71539L6.57031 6.13629L8.18945 2.68805Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.09473 3.11383C9.45466 2.34708 10.5453 2.34707 10.9053 3.11383L12.6377 6.80328C12.7084 6.95396 12.8492 7.06012 13.0137 7.08551L17.041 7.70367C17.845 7.82751 18.1728 8.80905 17.6045 9.39117L14.6426 12.4244C14.5317 12.5379 14.4814 12.6975 14.5068 12.8541L15.1895 17.0396C15.3238 17.8634 14.4492 18.4793 13.7188 18.0757L10.2422 16.1529C10.0916 16.0696 9.90837 16.0696 9.75781 16.1529L6.28125 18.0757C5.55077 18.4793 4.67621 17.8634 4.81055 17.0396L5.49316 12.8541C5.51863 12.6975 5.46828 12.5379 5.35742 12.4244L2.39551 9.39117C1.82719 8.80905 2.15501 7.82751 2.95898 7.70367L6.98633 7.08551C7.15083 7.06012 7.29156 6.95396 7.3623 6.80328L9.09473 3.11383Z" fill="#FFF200" stroke="#F2B839" stroke-linecap="round" stroke-linejoin="round"/></g></symbol>
       <!-- Crown vector (DS node 6498:146135, 24×22px) — clipPath in defs per Rule 57 -->
       <clipPath id="clip-crown"><rect width="24" height="22" fill="white"/></clipPath>
-
       <symbol id="ic-crown" viewBox="0 0 24 22" fill="none"><g clip-path="url(#clip-crown)"><path d="M22.6422 4.78633L20.4189 6.96853L16.3914 1.56137L12.4661 7.01917L8.43578 1.16406L4.81234 6.56293L1.41016 4.2974L2.73437 12.5161C5.77375 16.323 8.92469 24.9928 21.513 12.3969L22.6422 4.78633Z" fill="#F7BA0B"/><path d="M8.43437 1.16406L4.21094 6.16332L4.81094 6.56293L8.43437 1.16406Z" fill="#F3AE00"/><path d="M8.43359 1.16406L12.4587 6.24711L12.4639 7.01917L8.43359 1.16406Z" fill="#FFEB99"/><path d="M12.4609 6.24727L16.3914 1.56152L12.4661 7.01932L12.4609 6.24727Z" fill="#F3AE00"/><path d="M16.3906 1.56152L20.9853 6.41208L20.4181 6.96868L16.3906 1.56152Z" fill="#FFEB99"/><path d="M22.6422 4.78677L17.6608 15.2434L12.4675 7.31656L6.68453 15.4317L1.41016 4.29785L1.48563 15.7912C1.54141 24.2654 22.7692 24.1305 22.7134 15.6563L22.6417 4.78631L22.6422 4.78677Z" fill="#FED322"/><path d="M22.6419 4.78711L17.1992 14.0587L17.6605 15.2437L22.6419 4.78711Z" fill="#FFEB99"/><path d="M17.1964 14.0582L12.4648 7.31641L17.6581 15.2432L17.1969 14.0582H17.1964Z" fill="#F3AE00"/><path d="M12.4666 7.31641L7.05297 14.1227L6.68359 15.432L12.4666 7.31687V7.31641Z" fill="#FFEB99"/><path d="M7.05391 14.1228L1.41016 4.29785L6.685 15.4317L7.05438 14.1223L7.05391 14.1228Z" fill="#F3AE00"/><path d="M23.9974 5.53273C23.9379 6.29466 23.2615 6.86553 22.4857 6.80752C21.7099 6.74905 21.1287 6.08381 21.1877 5.32188C21.2473 4.55995 21.9246 3.99 22.7004 4.04801C23.4762 4.10648 24.0565 4.7708 23.9974 5.53273Z" fill="#F55858"/><path d="M17.7787 1.86574C17.7191 2.62767 17.0427 3.19854 16.2669 3.14053C15.4912 3.08206 14.9099 2.41681 14.969 1.65489C15.0285 0.892958 15.7059 0.323008 16.4816 0.381016C17.2574 0.439484 17.8377 1.10381 17.7787 1.86574Z" fill="#F55858"/><path d="M9.82944 1.40871C9.76991 2.17064 9.09351 2.74151 8.31772 2.6835C7.54194 2.62549 6.96069 1.95978 7.01976 1.19785C7.07929 0.435927 7.75663 -0.134023 8.53241 -0.0760152C9.30819 -0.017547 9.88851 0.64678 9.82944 1.40871Z" fill="#F55858"/><path d="M2.81388 4.40285C2.75435 5.16478 2.07794 5.73565 1.30216 5.67764C0.526378 5.61963 -0.0553404 4.95392 0.00419084 4.192C0.0637221 3.43007 0.741066 2.86012 1.51685 2.91813C2.29263 2.97659 2.87294 3.64092 2.81388 4.40285Z" fill="#F55858"/><path d="M13.8607 7.54738C13.8012 8.30931 13.1248 8.88018 12.349 8.82217C11.5732 8.7637 10.9919 8.09845 11.051 7.33653C11.1105 6.5746 11.7879 6.00465 12.5637 6.06266C13.3394 6.12112 13.9198 6.78545 13.8607 7.54738Z" fill="#F55858"/></g></symbol>
 
     </defs>
@@ -3333,6 +3324,7 @@
       btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
       btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
     });
+
 
   </script>
 
