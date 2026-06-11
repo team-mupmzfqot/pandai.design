@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pandai — Practice: Subjects</title>
+  <title>Pandai — Quiz: Additional Mathematics</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,8 +62,7 @@
       --border-secondary-default: #b5f291;   /* Border/secondary/default — Focus indicator dot border */
       --border-secondary-focus:   #70bc6f;   /* Border/secondary/focus — hover border on all buttons */
       --border-default:           #00cc85;   /* Border/default â€” navbar, footer, quiz card */
-      --border-general-default:              #d9d9d9;   /* Border/general/default — carousel cards */
-      --border-general-default-secondary:   #bfbfbf;   /* Border/general/default-secondary — bc-sep, bc-chevron (DS node 3655:16650) */
+      --border-general-default:   #d9d9d9;   /* Border/general/default — carousel cards */
       --border-tertiary-focus:    #00453d;   /* Border/tertiary/focus — pressed state border */
       --border-disabled-disabled: #bfbfbf;   /* Border/disabled/disabled */
       --border-on-color:          #ffffff;   /* Border/on-color — white border on Number Badge (DS 618:417 updated 2026-05-26) */
@@ -2085,248 +2084,531 @@
       color:  var(--text-disabled-default);
     }
 
-
-/* ═══════════════════════════════════════════════════════════════
-       PAGE — Practice: My Subjects
-       Breadcrumb · 2-column Practice Card Grid (DS node 5072:104627)
-       Practice Card - 1.5 (DS node 5072:104628): 652×160px
+    /* ═══════════════════════════════════════════════════════════════
+       QUIZ PAGE — nadia_Quiz.html
+       Status badges (node 3420:87102) + Primary Card quiz grid (node 4642:70723)
     ═══════════════════════════════════════════════════════════════ */
 
-    /* ── Breadcrumb 1.5 (DS node 7403:226797) ──────────────────── */
-    .bc-row         { display: flex; align-items: center; gap: var(--spacing-space-m); min-height: 36px; flex-shrink: 0; }
-    .bc-title-group { display: flex; align-items: center; align-self: stretch; gap: var(--spacing-space-m); }
-    .bc-title       { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; flex-shrink: 0; }
-    .bc-sep         { width: 1px; align-self: stretch; background: var(--border-general-default-secondary); flex-shrink: 0; }
-    .bc-trail       { display: flex; align-items: center; gap: var(--spacing-space-xs); }
-    .bc-link        { display: inline-flex; align-items: center; gap: var(--spacing-space-xs); font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary-default); text-decoration: none; white-space: nowrap; }
-    .bc-link svg    { width: 20px; height: 20px; flex-shrink: 0; }
-    .bc-chevron     { width: 16px; height: 16px; flex-shrink: 0; color: var(--border-general-default-secondary); }
-    .bc-link .bc-chevron { color: var(--border-general-default-secondary); }
-    .bc-current     { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
-
-    /* ── Practice Card Grid ─────────────────────────────────────── */
-    .practice-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--spacing-space-m);
-    }
-
-    /* ── Practice Card - 1.5 (DS 5072:104628) ──────────────────────
-       Per-card colours via inline style on <article>:
-         --subj-bg      card background (subject/default)
-         --subj-border  outer card border (subject/focus)
-         --subj-title   title text (default white; override for light-bg subjects)
-         --subj-text    stat label/icon colour (default white; override for light-bg subjects)
-         (circles use rgba(255,255,255,0.12) — no per-card variable needed)
-    ──────────────────────────────────────────────────────────────── */
-
-    /* Outer card shell */
-    .practice-card {
-      display: flex;
-      align-items: stretch;
-      position: relative;           /* anchor for absolutely-positioned circles */
-      border: none;
-      box-shadow: inset 0 0 0 1px var(--subj-border); /* DS strokeAlign:INSIDE → box-shadow:inset */
-      border-radius: 24px;          /* corner-4xl */
-      overflow: hidden;
-      background: var(--subj-bg);
-      height: 160px;                /* DS confirmed 160px */
-      cursor: default;
-      transition: background 0.18s ease, box-shadow 0.18s ease;
-    }
-    .practice-card:hover {
-      background: var(--subj-bg-hover);
-      box-shadow: inset 0 0 0 8px var(--subj-bg); /* DS hover: border-l (8px) in subject/default */
-      cursor: pointer;
-    }
-    .practice-card:hover .practice-card__content {
-      border-left: none; /* DS: no separator on hover */
-    }
-
-    /* Left image panel — 160×160 */
-    .practice-card__image {
-      width: 160px;
-      min-width: 160px;
-      flex-shrink: 0;
-      display: flex;
+    /* Status Badge - 1.5 Size=L (48px) — following zul.home.screen.html pattern
+       DS nodes: Score L:3747:1351, Coins L:3752:4028, Lives L:3761:171 */
+    .status-badges {
+      display:     flex;
+      gap:         var(--spacing-space-xs);
       align-items: center;
+      flex-shrink: 0;
+      flex-wrap:   wrap;
+    }
+    .status-pill, .status-pill-flipper { cursor: pointer; user-select: none; }
+    .status-pill {
+      height:        48px;
+      min-height:    48px;
+      min-width:     115px;
+      background:    var(--surface-primary-default);
+      border:        1px solid var(--border-primary-focus);
+      border-radius: 40.5px;
+      padding:       var(--spacing-space-xs);
+      display:       flex;
+      flex-shrink:   0;
+    }
+    .status-pill--score  { background: var(--surface-primary-default); border-color: var(--border-primary-focus); }
+    .status-pill--coins  { background: #fece00; border-color: #cba500; }
+    .status-pill--streak { background: #7367f0; border-color: #5c52c0; }
+    .status-pill--lives  { background: #ff5c98; border-color: #cc4a7a; }
+    .status-pill--ruby   { background: #ff4c51; border-color: #b23539; }
+    /* DS node 2312:10654 — Coins label + value TEXT nodes: stroke #cba500, weight:1, align:OUTSIDE
+       CSS -webkit-text-stroke is centered. With paint-order:stroke fill the fill covers inner half
+       → use 2px so 1px outside remains visible, matching DS (Rule 26). */
+    .status-pill--coins .status-pill__label,
+    .status-pill--coins .status-pill__value {
+      -webkit-text-stroke: 2px #cba500;
+      paint-order:         stroke fill;
+    }
+    .status-pill__content {
+      display:       flex;
+      align-items:   center;
+      gap:           var(--spacing-space-xxs);
+      padding-left:  var(--spacing-space-xs);
+      padding-right: 2px;
+      width:         100%;
+    }
+    .status-pill__texts {
+      display:        flex;
+      flex-direction: column;
+      flex:           1;
+      padding-bottom: var(--spacing-space-xxs);
+    }
+    .status-pill__label {
+      font-size:     10px;
+      font-weight:   600;
+      line-height:   var(--spacing-space-s);
+      color:         var(--text-on-color-heading);
+      margin-bottom: -4px;
+    }
+    .status-pill__value {
+      font-size:     16px;
+      font-weight:   700;
+      line-height:   24px;
+      color:         var(--text-on-color-heading);
+      margin-bottom: -4px;
+    }
+    .status-pill__icon {
+      width:           32px;
+      height:          32px;
+      padding:         var(--spacing-space-xxs);
+      background:      var(--surface-general-default);
+      border-radius:   var(--corner-radius-corner-pill);
+      display:         flex;
+      align-items:     center;
       justify-content: center;
-      position: relative;
+      flex-shrink:     0;
+    }
+    .status-pill__icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .status-pill__icon svg { height: 24px; width: auto; display: block; flex-shrink: 0; }
+    /* Lives/Ruby flip badge */
+    .status-pill-flipper { perspective: 800px; flex-shrink: 0; }
+    .status-pill-flipper__inner {
+      position:          relative;
+      transform-style:   preserve-3d;
+      transition:        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change:       transform;
+    }
+    .status-pill-flipper__inner.is-flipped { transform: rotateY(180deg); }
+    .status-pill-face {
+      backface-visibility:         hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .status-pill-face--back {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      transform: rotateY(180deg);
     }
 
-    /* Decorative circles — pure CSS, positioned to match DS blob geometry */
-    .practice-card__circles {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      transform-origin: left center;
-      transition: transform 0.3s ease;
+    /* Primary Card - 1.5 / Secondary Card outer (DS node 2881:36272)
+       Mint green bg, green inset border, 24px radius */
+    .section-frame {
+      background:     var(--surface-secondary-default-subtle);
+      box-shadow:     inset 0 0 0 1px var(--border-default);
+      border-radius:  var(--corner-radius-corner-4xl);
+      padding:        var(--spacing-space-m);
+      display:        flex;
+      flex-direction: column;
+      align-items:    stretch;
+      gap:            var(--spacing-space-xs);
+      overflow:       hidden;
     }
-    .practice-card:hover .practice-card__circles {
-      transform: scale(1.4);
+    .section-header {
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
     }
-    .practice-card__circle {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.12);
-    }
-    .practice-card__circle--1 { width: 50px;  height: 50px;  top: -17px; left: -11px; }
-    .practice-card__circle--2 { width: 85px;  height: 85px;  top:  14px; left:  64px; }
-    .practice-card__circle--3 { width: 184px; height: 184px; top:  68px; left: -92px; }
-
-    /* Icon placeholder — 100×100, corner-l (12px) */
-    .practice-card__icon-placeholder {
-      width: 100px;
-      height: 100px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.28);
-      display: flex;
+    .section-header__left {
+      display:     flex;
       align-items: center;
-      justify-content: center;
-      font-family: var(--font-family);
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--subj-title, white);
-      text-align: center;
-      line-height: 1;
-      user-select: none;
-      flex-shrink: 0;
-      letter-spacing: -0.5px;
+      gap:         var(--spacing-space-xs);
+    }
+    .section-header__bookmark {
+      display:     flex;
+      align-items: center;
+      color:       var(--text-tertiary-default);
+    }
+    .section-header__title {
+      font-size:   18px;
+      font-weight: 600;
+      line-height: 28px;
+      color:       var(--text-tertiary-default);
     }
 
-    /* Icon wrap — 100×100 clip container, sits above circles */
-    .practice-card__icon-wrap {
-      position: relative;
-      width: 100px;
-      height: 100px;
-      overflow: hidden;
-      z-index: 1;
-      flex-shrink: 0;
+    /* Content Placeholder — flex-wrap grid, no white box (per DS node 4642:70723) */
+    .quiz-cards-grid {
+      display:       flex;
+      flex-wrap:     wrap;
+      gap:           var(--spacing-space-m);
+      width:         100%;
+      align-content: flex-start;
     }
 
-    .practice-card__icon-img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: contain;
-    }
-
-    /* Right content panel — fills remaining width, padding 16px */
-    .practice-card__content {
-      flex: 1;
-      min-width: 0;
-      /* no background — card's own background shows through; circles render freely behind */
-      /* same-color left border = subtle separator against image panel */
-      border-left: 1px solid var(--subj-bg);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 0;
-    }
-
-    /* Inner group: title + stats (gap 4px — DS confirmed space-xxs) */
-    .practice-card__inner {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      width: 100%;
-    }
-
-    /* Subject title — 24px Bold, DS text color (white on dark, dark on light bg) */
-    .practice-card__title {
-      font-family: var(--font-family);
-      font-size: 24px;
-      font-weight: 700;
-      line-height: 36px;
-      color: var(--subj-title, white);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      width: 100%;
-      margin: 0;
-    }
-
-    /* Stats row — HORIZONTAL, flex-wrap, 8px col-gap, 0 row-gap (DS confirmed) */
-    .practice-card__stats {
-      display: flex;
+    /* Quiz Card - 1.5 (DS node 2339:5346) — 148px tall, image-left + content-right */
+    .quiz-card {
+      height:         148px;
+      min-height:     148px;
+      max-height:     148px;
+      flex:           1 0 0;
+      min-width:      400px;
+      background:     var(--surface-general-default);
+      border-radius:  var(--corner-radius-corner-2xl);
+      display:        flex;
       flex-direction: row;
-      flex-wrap: wrap;
-      gap: 0 8px;
-      align-items: flex-start;
-      width: 100%;
+      align-items:    flex-start;
+      overflow:       hidden;
+      cursor:         default;
+      position:       relative;
+    }
+    /* Border on top of image children via ::after (strokeAlign:INSIDE, Rule 60 + Rule 118) */
+    .quiz-card::after {
+      content:       '';
+      position:      absolute;
+      inset:         0;
+      border:        1px solid var(--card-subject-color, var(--border-default));
+      border-radius: var(--corner-radius-corner-2xl);
+      pointer-events: none;
+      z-index:       1;
+    }
+    /* Image column — full card height, cover fill; KAFA uses contain */
+    .quiz-card__image {
+      width:               148px;
+      min-width:           148px;
+      flex-shrink:         0;
+      align-self:          stretch;
+      background-size:     cover;
+      background-position: center;
+      background-repeat:   no-repeat;
+      overflow:            hidden;
+    }
+    .quiz-card.kafa .quiz-card__image {
+      background-size:  contain;
+      background-color: var(--surface-general-default);
+    }
+    /* Content right column */
+    .quiz-card__content {
+      flex:           1;
+      min-width:      0;
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xxs);
+      padding:        var(--spacing-space-m);
+      align-self:     stretch;
+    }
+    .quiz-card__main {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--spacing-space-xs);
+      flex:           1;
+      min-height:     0;
+    }
+    .quiz-card__header {
+      display:     flex;
+      flex-wrap:   wrap;
+      align-items: center;
+      gap:         var(--spacing-space-xxs);
+    }
+    .quiz-card__texts {
+      flex:           1;
+      min-height:     0;
+      display:        flex;
+      flex-direction: column;
+    }
+    .quiz-card__subtitle {
+      font-size:              12px;
+      font-weight:            600;
+      line-height:            18px;
+      color:                  var(--text-default-body);
+      overflow:               hidden;
+      text-overflow:          ellipsis;
+      display:                -webkit-box;
+      -webkit-line-clamp:     2;
+      -webkit-box-orient:     vertical;
     }
 
-    /* Single stat item: Icon(24px) + Label(h:24) — gap 2px (DS confirmed) */
-    .practice-card__stat {
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-      min-height: 24px;
-      flex-shrink: 0;
+    /* Subject Badge - 1.5 Size=L (32px) — DS confirmed (CLAUDE.md Rules 17, 20) */
+    .subject-badge {
+      display:       inline-flex;
+      align-items:   stretch;
+      height:        32px;
+      border-radius: var(--corner-radius-corner-rounded);
+      overflow:      hidden;
+      border:        1px solid var(--badge-border);
+      flex-shrink:   0;
     }
-
-    /* Stat icon outer container — 24×24 (DS confirmed) */
-    .practice-card__stat-icon {
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
+    .subject-badge__icon {
+      background:      var(--surface-general-default);
+      display:         flex;
+      align-items:     center;
       justify-content: center;
-      flex-shrink: 0;
+      padding:         var(--spacing-space-xxs) var(--spacing-space-xs) var(--spacing-space-xxs) var(--spacing-space-s);
+      flex-shrink:     0;
     }
-    /* Stat icon inner — 20×20 (DS confirmed) */
-    .practice-card__stat-icon svg {
-      width: 20px;
-      height: 20px;
-      display: block;
-      color: var(--subj-text, white);
-    }
-
-    /* Stat label — 14px Regular, h:24, no-wrap */
-    .practice-card__stat-label {
-      height: 24px;
-      display: flex;
+    .subject-badge__icon svg,
+    .subject-badge__icon img { width: 20px; height: 20px; display: block; flex-shrink: 0; object-fit: contain; }   /* DS Rule 20: L size exact 20×20px */
+    .subject-badge__label-panel {
+      background:  var(--badge-bg);
+      display:     flex;
       align-items: center;
-      font-family: var(--font-family);
-      font-size: 14px;
-      font-weight: 400;
+      padding:     0 var(--spacing-space-m) 0 var(--spacing-space-s);
+      position:    relative;
+    }
+    .subject-badge__pointer { position: absolute; left: 0; top: 50%; transform: translateY(-50%); display: flex; }
+    .subject-badge__text {
+      font-size:   14px;
+      font-weight: 500;
       line-height: 20px;
-      color: var(--subj-text, white);
+      color:       var(--badge-text, #f2f2f2);
       white-space: nowrap;
     }
 
+    /* Subject badge colors — DS confirmed (CLAUDE.md Rule 17b) */
+    .subject-badge--bm        { --badge-border: #2e4799; --badge-bg: #4d77ff; }
+    .subject-badge--english   { --badge-border: #cc3e45; --badge-bg: #ff4d56; }
+    .subject-badge--math      { --badge-border: #358a62; --badge-bg: #42ac7b; }
+    .subject-badge--science   { --badge-border: #ccab34; --badge-bg: #ffd641; --badge-text: #998027; }
+    .subject-badge--chemistry { --badge-border: #b50068; --badge-bg: #e20082; }
+    .subject-badge--physics   { --badge-border: #1f80ac; --badge-bg: #27a0d7; }
+    .subject-badge--history   { --badge-border: #876340; --badge-bg: #a97c50; }
+    .subject-badge--geo       { --badge-border: #5fad2b; --badge-bg: #77d836; --badge-text: #478220; }
+    .subject-badge--islamic   { --badge-border: #b23e66; --badge-bg: #de4d7f; }
+    .subject-badge--moral     { --badge-border: #005ba2; --badge-bg: #0072ca; }
+    .subject-badge--biology   { --badge-border: #6a27ad; --badge-bg: #8431d8; }
+    .subject-badge--add-math  { --badge-border: #182052; --badge-bg: #283589; }
+    .subject-badge--economy   { --badge-border: #cc4629; --badge-bg: #ff5733; }
+    .subject-badge--account   { --badge-border: #004479; --badge-bg: #0072ca; }
+    .subject-badge--business  { --badge-border: #bf9022; --badge-bg: #efb42b; }
+    .subject-badge--cs        { --badge-border: #a7005a; --badge-bg: #d10070; }
+    .subject-badge--kafa      { --badge-border: #6eb687; --badge-bg: #8ae3a9; --badge-text: #538865; }
+    .subject-badge--rbt       { --badge-border: #2a2a2a; --badge-bg: #353535; }
+
+    /* Card border color per subject — DS Subjects/*/default-subtle-hover values */
+    .subject-add-math  { --card-subject-color: #a9aed0; }
+    .subject-biology   { --card-subject-color: #ceadef; }
+    .subject-economy   { --card-subject-color: #ffbcad; }
+    .subject-chemistry { --card-subject-color: #ed99c6; }
+    .subject-english   { --card-subject-color: #ffb8bb; }
+    .subject-moral     { --card-subject-color: #99c7ea; }
+    .subject-islamic   { --card-subject-color: #f2b8cc; }
+    .subject-math      { --card-subject-color: #b3deca; }
+    .subject-account   { --card-subject-color: #99c7ea; }
+    .subject-physics   { --card-subject-color: #a9d9ef; }
+    .subject-business  { --card-subject-color: #f9e1aa; }
+    .subject-cs        { --card-subject-color: #ed99c6; }
+    .subject-science   { --card-subject-color: #ffefb3; }
+    .subject-history   { --card-subject-color: #ddcbb9; }
+    .subject-kafa      { --card-subject-color: #d0f4dd; }
+    .subject-geo       { --card-subject-color: #c9efaf; }
+    .subject-rbt       { --card-subject-color: #aeaeae; }
+    .subject-bm        { --card-subject-color: #b8c9ff; }
+
+    /* Responsive — tablet */
+    @media (max-width: 1279px) {
+      .quiz-cards-grid { gap: var(--spacing-space-s); }
+      .quiz-card       { min-width: 340px; }
+      .section-header__title { font-size: 16px; line-height: 24px; }
+    }
+    /* Responsive — mobile */
+    @media (max-width: 767px) {
+      .quiz-cards-grid { gap: var(--spacing-space-xs); }
+      .quiz-card       { min-width: 300px; flex-basis: 100%; flex: none; width: 100%; }
+      .quiz-stats-row  { flex-wrap: wrap; }
+    }
+
+
+    /* ═══════════════════════════════════════════════════════════════
+       Quiz Subject — page-specific tokens + CSS
+       DS node: 6488:146563 | DS file: TLVKe3bgJTdVvuPAzgDq2f
+    ═══════════════════════════════════════════════════════════════ */
+
+    /* Additional tokens not in base :root */
+    :root {
+      --surface-score-default:  #00cc85;
+      --surface-score-focus:    #00a36a;
+      --surface-coins-default:  #fece00;
+      --surface-coins-focus:    #cba500;
+      --surface-streak-default: #7367f0;
+      --surface-streak-focus:   #5c52c0;
+      --surface-lives-default:  #ff5c98;
+      --surface-lives-focus:    #cc4a7a;
+      --subjects-add-math-focus: #182052;
+      --surface-general-default-secondary: #f2f2f2;
+      --border-secondary-focus: #70bc6f;
+      --text-secondary-focus: #70bc6f;
+      --border-tertiary-focus: #00453d;
+      --text-on-color-body: rgba(255, 255, 255, 0.85); /* Text/on-color/body */
+      --subject-default-subtle: #eaebf3;               /* Subject/default-subtle — header label border */
+      --spacing-component-xl: 24px;                    /* Spacing/component/xl */
+      --icon-default-default: #808080;                 /* Icon/default/default */
+    }
+
+    /* Breadcrumb */
+    .breadcrumb-section { padding: 8px 0 4px; }
+    .breadcrumb { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 400; color: var(--text-default-body); flex-wrap: wrap; }
+    .breadcrumb__item { color: var(--text-default-body); cursor: pointer; text-decoration: none; }
+    .breadcrumb__item:hover { color: var(--text-primary-default); }
+    .breadcrumb__item--current { color: var(--text-default-heading); cursor: default; }
+    .breadcrumb__sep { width: 16px; height: 16px; flex-shrink: 0; color: var(--border-general-default); display: block; }
+
+    /* Two-column layout */
+    .qs-layout { display: flex; gap: var(--spacing-space-m); align-items: flex-start; }
+    .qs-left { flex: 1; min-width: 0; }
+    .qs-right { width: 432px; flex-shrink: 0; display: flex; flex-direction: column; gap: var(--spacing-space-m); }
+
+    /* Quick Notes Card outer */
+    .qnc-card { background: var(--surface-secondary-default-subtle); border: 1px solid var(--border-primary-default); border-radius: var(--corner-radius-corner-4xl); padding: var(--spacing-space-m); gap: var(--spacing-space-m); display: flex; flex-direction: column; }
+
+    /* Subject banner header */
+    .qnc-header { border-radius: var(--corner-radius-corner-2xl); height: 110px; display: flex; align-items: stretch; overflow: hidden; position: relative; width: 100%; }
+    .qnc-header--add-math { background: var(--subjects-add-math-default); border: 1px solid var(--subjects-add-math-focus); }
+    .qnc-header__icon-slot { width: 110px; min-width: 110px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border-radius: 11px 0 0 11px; }
+    .qnc-header__icon-slot svg, .qnc-header__icon-slot img { width: 60px; height: 60px; object-fit: contain; }
+    .qnc-header__content { flex: 1; min-width: 0; padding: var(--spacing-space-m) var(--spacing-space-m) var(--spacing-space-m) 0; display: flex; flex-direction: column; justify-content: center; }
+    .qnc-header__label { border-left: 1px solid var(--subject-default-subtle); padding-left: var(--spacing-component-xl); flex: 1 0 0; display: flex; flex-direction: column; gap: 2px; justify-content: center; }
+    .qnc-header__title { font-size: 24px; font-weight: 700; line-height: 36px; color: var(--text-on-color-heading); margin: 0; }
+    .qnc-header__subtitle { font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-on-color-body); margin: 0; }
+    .qnc-header__deco { position: absolute; right: 0; top: 0; bottom: 0; width: 60%; pointer-events: none; mix-blend-mode: overlay; opacity: 0.5; }
+
+    /* Chapter dropdown */
+    .qnc-chapter { width: 100%; }
+    .qnc-chapter__btn { width: 100%; height: 40px; background: var(--surface-general-default); border: 1px solid var(--border-general-default); border-radius: var(--corner-radius-corner-rounded); padding: 8px 8px 8px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; font-family: var(--font-family); }
+    .qnc-chapter__label { font-size: 14px; font-weight: 600; color: var(--text-default-body); flex: 1; text-align: left; }
+    .qnc-chapter__arrow { width: 24px; height: 24px; flex-shrink: 0; background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border-radius: var(--corner-radius-corner-rounded); display: flex; align-items: center; justify-content: center; }
+    .qnc-chapter__arrow-clip { width: 16px; height: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .qnc-chapter__arrow-clip svg { width: 16px; height: 16px; display: block; color: var(--surface-general-default); }
+    .qnc-chapter__btn:hover .qnc-chapter__arrow { background: var(--surface-primary-focus); }
+
+    /* Topics list */
+    .qnc-topics { display: flex; flex-direction: column; gap: var(--spacing-space-xs); }
+
+    /* Topic group card */
+    .qnc-topic { background: var(--surface-general-default); border: 1px solid var(--border-general-default); border-radius: var(--corner-radius-corner-4xl); overflow: hidden; width: 100%; }
+    .qnc-topic__header { padding: 20px 24px 16px; gap: var(--spacing-space-m); display: flex; align-items: center; cursor: default; }
+    .qnc-topic.is-open .qnc-topic__header { border-bottom: 1px solid var(--border-general-default); }
+    .qnc-topic__thumb { width: 60px; height: 60px; flex-shrink: 0; border-radius: var(--corner-radius-corner-xl); border: 1px solid var(--border-primary-default); overflow: hidden; background: var(--surface-secondary-default-subtle); }
+    .qnc-topic__thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .qnc-topic__title-wrap { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
+    .qnc-topic__title { font-size: 18px; font-weight: 600; line-height: 28px; color: var(--text-default-heading); }
+    .qnc-topic__info { width: 20px; height: 20px; flex-shrink: 0; color: var(--icon-default-default); display: block; }
+    .qnc-topic__toggle { width: 40px; height: 40px; flex-shrink: 0; border: none; box-shadow: inset 0 0 0 1px var(--border-primary-default); border-radius: 108px; background: var(--surface-general-default); display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; color: var(--icon-primary-default); }
+    .qnc-topic__toggle:hover { background: var(--surface-secondary-default-subtle); }
+    .qnc-topic__toggle svg { width: 20px; height: 20px; display: block; }
+
+    /* Toggle icon state */
+    .qnc-topic__toggle .ic-up { display: none; }
+    .qnc-topic__toggle .ic-down { display: block; }
+    .qnc-topic.is-open .qnc-topic__toggle .ic-up { display: block; }
+    .qnc-topic.is-open .qnc-topic__toggle .ic-down { display: none; }
+
+    /* Topic body (collapsible) */
+    .qnc-topic__body { max-height: 0; overflow: hidden; transition: max-height 0.25s ease; }
+    .qnc-topic.is-open .qnc-topic__body { max-height: 2000px; }
+
+    /* Sub-topic container */
+    .qnc-subtopic { border-bottom: 1px solid var(--border-general-default); }
+    .qnc-subtopic:last-child { border-bottom: none; }
+
+    /* Sub-topic header row */
+    .qnc-subtopic__row { padding: 8px 24px; gap: var(--spacing-space-m); display: flex; align-items: center; min-height: 48px; }
+
+    /* Star pill */
+    .star-pill { background: var(--surface-general-default-secondary); border-radius: 108px; padding: 8px 16px; gap: 10px; display: flex; align-items: center; flex-shrink: 0; }
+    .star-pill__stars { display: flex; gap: 4px; align-items: center; }
+    .star-pill__star { display: block; }
+    .star-pill__star--filled { color: #f5c518; }
+    .star-pill__star--empty  { color: var(--border-general-default); }
+    .star-pill__count { font-size: 14px; font-weight: 500; color: var(--text-default-heading); white-space: nowrap; }
+
+    /* Sub-topic title */
+    .qnc-subtopic__title { flex: 1; min-width: 0; font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-default-heading); }
+
+    /* Button Icon (outline circle 32px) */
+    .btn-icon-circle { width: 32px; height: 32px; flex-shrink: 0; border: none; box-shadow: inset 0 0 0 1px var(--border-primary-default); border-radius: 108px; background: var(--surface-general-default); display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; color: var(--icon-primary-default); }
+    .btn-icon-circle:hover { background: var(--surface-secondary-default-subtle); }
+    .btn-icon-circle svg { width: 16px; height: 16px; display: block; }
+    .btn-icon-circle.is-pressing { background: var(--surface-primary-focus); box-shadow: inset 0 0 0 1px var(--border-primary-default); color: var(--surface-general-default); }
+
+    /* Sets action row */
+    .qnc-sets-row { padding: 8px 24px; gap: var(--spacing-space-m); display: flex; align-items: center; }
+    .qnc-sets-btns { display: flex; gap: 8px; align-items: center; }
+
+    /* Primary/M button — DS rule 82: no transitions */
+    .btn-primary-m { height: 32px; background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border: none; border-radius: var(--corner-radius-corner-rounded); padding: 2px 8px; display: flex; align-items: center; gap: 0; cursor: pointer; font-family: var(--font-family); }
+    .btn-primary-m__label { font-size: 12px; font-weight: 600; color: var(--text-primary-on-color); padding: 0 4px; }
+    .btn-primary-m__arrow { width: 20px; height: 20px; flex-shrink: 0; background: #99ebce; border-radius: var(--corner-radius-corner-rounded); display: flex; align-items: center; justify-content: center; padding: 2px; }
+    .btn-primary-m__arrow-clip { width: 16px; height: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .btn-primary-m__arrow-clip svg { width: 16px; height: 16px; display: block; color: var(--border-primary-focus); }
+    .btn-primary-m:hover { background: var(--surface-secondary-default); box-shadow: inset 0 0 0 1px var(--border-secondary-focus); }
+    .btn-primary-m:hover .btn-primary-m__label { color: var(--text-secondary-focus); }
+    .btn-primary-m:hover .btn-primary-m__arrow { background: #e8fbe8; }
+    .btn-primary-m:hover .btn-primary-m__arrow-clip svg { color: var(--text-secondary-focus); }
+    .btn-primary-m.is-pressing, .btn-primary-m:active { background: var(--surface-tertiary-default); box-shadow: inset 0 0 0 1px var(--border-tertiary-focus); }
+    .btn-primary-m.is-pressing .btn-primary-m__label, .btn-primary-m:active .btn-primary-m__label { color: var(--text-primary-default); }
+    .btn-primary-m.is-pressing .btn-primary-m__arrow, .btn-primary-m:active .btn-primary-m__arrow { background: var(--surface-primary-default); }
+    .btn-primary-m.is-pressing .btn-primary-m__arrow-clip svg, .btn-primary-m:active .btn-primary-m__arrow-clip svg { color: var(--surface-tertiary-default); }
+
+    /* Skip pill */
+    .skip-pill { display: flex; align-items: center; gap: 4px; padding: 4px 16px; border: 1px solid var(--border-general-default); border-radius: 108px; background: var(--surface-general-default); flex-shrink: 0; }
+    .skip-pill__text { font-size: 12px; font-weight: 600; color: var(--text-default-body); }
+
+    /* ═══ Right Column ═══ */
+
+    /* Status badges 2×2 grid */
+    .qs-status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-space-xs); }
+    .status-badge { height: 48px; border-radius: 40.5px; padding: 8px; display: flex; align-items: center; gap: 8px; }
+    .status-badge--score  { background: var(--surface-score-default);  box-shadow: inset 0 0 0 1px var(--surface-score-focus); }
+    .status-badge--coins  { background: var(--surface-coins-default);  box-shadow: inset 0 0 0 1px var(--surface-coins-focus); }
+    .status-badge--streak { background: var(--surface-streak-default); box-shadow: inset 0 0 0 1px var(--surface-streak-focus); }
+    .status-badge--lives  { background: var(--surface-lives-default);  box-shadow: inset 0 0 0 1px var(--surface-lives-focus); }
+    .status-badge__icon-slot { width: 32px; height: 32px; flex-shrink: 0; background: rgba(255,255,255,1); border-radius: 999px; display: flex; align-items: center; justify-content: center; }
+    .status-badge__icon-slot img, .status-badge__icon-slot svg { width: 20px; height: 20px; object-fit: contain; display: block; }
+    .status-badge__text { display: flex; flex-direction: column; gap: 0; min-width: 0; }
+    .status-badge__label { font-size: 10px; font-weight: 600; line-height: 14px; color: #ffffff; text-transform: uppercase; letter-spacing: 0.3px; }
+    .status-badge__value { font-size: 16px; font-weight: 700; line-height: 20px; color: #ffffff; }
+
+    /* Panel card */
+    .qs-panel { border: 1px solid var(--border-primary-default); border-radius: var(--corner-radius-corner-4xl); overflow: hidden; }
+    .qs-panel__header { background: var(--surface-secondary-default-subtle); border-bottom: 1px dashed var(--border-primary-default); border-radius: 18px 18px 0 0; padding: var(--spacing-space-m); gap: 10px; display: flex; align-items: center; justify-content: space-between; }
+    .qs-panel__title { font-size: 18px; font-weight: 600; line-height: 28px; color: var(--text-tertiary-default); margin: 0; }
+    .qs-panel__link { font-size: 14px; font-weight: 400; color: var(--text-primary-default); display: flex; align-items: center; gap: 2px; cursor: pointer; text-decoration: none; flex-shrink: 0; }
+    .qs-panel__link svg { width: 16px; height: 16px; display: block; }
+    .qs-panel__body { background: var(--surface-general-default); }
+
+    /* Subject panel */
+    .qs-subject-content { padding: var(--spacing-space-m); display: flex; align-items: center; gap: 12px; }
+    .qs-subject-badge { height: 32px; border-radius: 60px; overflow: hidden; display: flex; align-items: stretch; flex-shrink: 0; background: var(--subjects-add-math-default); border: 1px solid var(--subjects-add-math-focus); }
+    .qs-subject-badge__icon { width: 40px; background: rgba(255,255,255,1); border-radius: 59px 0 0 59px; display: flex; align-items: center; justify-content: center; position: relative; }
+    .qs-subject-badge__icon::after { content: ''; position: absolute; right: -4px; top: 50%; width: 4px; height: 8px; background: var(--subjects-add-math-default); transform: translateY(-50%); clip-path: polygon(0 50%, 100% 0, 100% 100%); }
+    .qs-subject-badge__icon img, .qs-subject-badge__icon svg { width: 20px; height: 20px; display: block; object-fit: contain; }
+    .qs-subject-badge__label { padding: 0 16px 0 16px; display: flex; align-items: center; font-size: 14px; font-weight: 500; color: #f2f2f2; white-space: nowrap; }
+    .qs-subject-name { font-size: 14px; font-weight: 500; color: var(--text-default-heading); }
+
+    /* Progress panel rows */
+    .progress-stat-row { display: flex; align-items: center; gap: var(--spacing-space-m); padding: var(--spacing-space-m); border-bottom: 1px solid var(--border-general-default); }
+    .progress-stat-row:last-child { border-bottom: none; }
+    .progress-stat-row__icon { width: 50px; height: 50px; flex-shrink: 0; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .progress-stat-row__icon img { width: 50px; height: 50px; object-fit: contain; }
+    .progress-stat-row__text { flex: 1; min-width: 0; }
+    .progress-stat-row__label { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-heading); }
+    .progress-stat-row__value { font-size: 18px; font-weight: 700; line-height: 28px; color: var(--text-default-heading); }
+    .progress-stat-row__value--alert { color: #ff4c51; }
+
+    /* Next Badge rows */
+    .next-badge-row { padding: 24px; border-bottom: 1px solid var(--border-general-default); display: flex; flex-direction: column; gap: 8px; }
+    .next-badge-row:last-child { border-bottom: none; }
+    .next-badge-row__top { display: flex; align-items: flex-start; gap: 12px; }
+    .next-badge-row__img { width: 40px; flex-shrink: 0; object-fit: contain; }
+    .next-badge-row__info { flex: 1; min-width: 0; }
+    .next-badge-row__title-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+    .next-badge-row__title { font-size: 14px; font-weight: 600; color: var(--text-default-heading); }
+    .pill-badge-green { background: var(--surface-primary-default); box-shadow: inset 0 0 0 1px var(--border-primary-focus); border-radius: var(--corner-radius-corner-rounded); padding: 2px 8px; flex-shrink: 0; font-size: 12px; font-weight: 500; color: #ffffff; white-space: nowrap; }
+    .next-badge-row__progress-text { font-size: 12px; font-weight: 500; color: var(--text-default-body); }
+
+    /* Progress bar */
+    .progress-bar { height: 8px; background: var(--surface-general-default-secondary); box-shadow: inset 0 0 0 1px var(--border-general-default); border-radius: 108px; overflow: hidden; position: relative; }
+    .progress-bar__fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--surface-primary-default); border-radius: 108px; }
 
     /* Responsive */
     @media (max-width: 1279px) {
-      .practice-grid { grid-template-columns: repeat(2, 1fr); }
-      .practice-card { height: 160px; }
-      .practice-card__image { width: 120px; min-width: 120px; }
-      .practice-card__icon-placeholder { width: 80px; height: 80px; font-size: 22px; }
-      .practice-card__icon-wrap { width: 80px; height: 80px; }
-      .practice-card__title { font-size: 20px; line-height: 30px; }
+      .qs-layout { flex-direction: column; }
+      .qs-right { width: 100%; }
+      .qs-status-grid { grid-template-columns: repeat(4, 1fr); }
     }
     @media (max-width: 767px) {
-      .practice-grid { grid-template-columns: 1fr; }
-      .practice-card__image { width: 100px; min-width: 100px; }
-      .practice-card__icon-placeholder { width: 68px; height: 68px; font-size: 18px; }
-      .practice-card__icon-wrap { width: 68px; height: 68px; }
-      .practice-card__title { font-size: 18px; line-height: 28px; }
+      .qs-status-grid { grid-template-columns: repeat(2, 1fr); }
+      .qnc-header__title { font-size: 18px; line-height: 28px; }
+      .qnc-header__icon-slot { width: 80px; min-width: 80px; }
+      .qnc-subtopic__row { flex-wrap: wrap; }
     }
-
   </style>
+
 </head>
 <body>
 
-
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       NAVBAR â€” Navbar 1.5  (DS node 2339:2617)
-       2-row structure sourced from get_design_context
-  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-    <!-- DS ICON SYMBOLS - Pandai DS 1.5 Iconography page (TLVKe3bgJTdVvuPAzgDq2f)
-       All paths extracted via use_figma. Stroke icons inherit currentColor.
-       Waffle uses fill="currentColor" (filled dots, not stroked). -->
+  <!-- Icon symbol definitions —  hidden SVG defs block -->
   <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <!-- Outline/image (611:3075) --><symbol id="ic-image" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="18" height="18" rx="2" ry="2"/><circle cx="6.5" cy="6.5" r="1.5"/><polyline points="19 13.5 14 8.5 3 19.5"/></symbol>
@@ -2504,726 +2786,488 @@
       <clipPath id="clip-premium"><rect width="20" height="20" fill="white"/></clipPath>
       <symbol id="ic-premium" viewBox="0 0 20 20" fill="none"><g clip-path="url(#clip-premium)"><path d="M8.18945 2.68805C8.90941 1.15493 11.0906 1.15493 11.8105 2.68805L13.4287 6.13629L17.1924 6.71539C18.8009 6.96261 19.4562 8.92502 18.3193 10.0894L15.5332 12.942L16.1758 16.8785C16.4446 18.5264 14.6955 19.7587 13.2344 18.9507L10 17.1627L6.76562 18.9507C5.3045 19.7587 3.55544 18.5264 3.82422 16.8785L4.46582 12.942L1.68066 10.0894C0.543759 8.92502 1.19912 6.96261 2.80762 6.71539L6.57031 6.13629L8.18945 2.68805Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.09473 3.11383C9.45466 2.34708 10.5453 2.34707 10.9053 3.11383L12.6377 6.80328C12.7084 6.95396 12.8492 7.06012 13.0137 7.08551L17.041 7.70367C17.845 7.82751 18.1728 8.80905 17.6045 9.39117L14.6426 12.4244C14.5317 12.5379 14.4814 12.6975 14.5068 12.8541L15.1895 17.0396C15.3238 17.8634 14.4492 18.4793 13.7188 18.0757L10.2422 16.1529C10.0916 16.0696 9.90837 16.0696 9.75781 16.1529L6.28125 18.0757C5.55077 18.4793 4.67621 17.8634 4.81055 17.0396L5.49316 12.8541C5.51863 12.6975 5.46828 12.5379 5.35742 12.4244L2.39551 9.39117C1.82719 8.80905 2.15501 7.82751 2.95898 7.70367L6.98633 7.08551C7.15083 7.06012 7.29156 6.95396 7.3623 6.80328L9.09473 3.11383Z" fill="#FFF200" stroke="#F2B839" stroke-linecap="round" stroke-linejoin="round"/></g></symbol>
 
-
-      <symbol id="ic-video" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></symbol>
-      <symbol id="ic-corner-down-right" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></symbol>
-      <symbol id="ic-file" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 8L14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8ZM14 2V8H20"/></symbol>
+      <!-- Outline/eye — DS 24×24, viewBox -1 -1 26 26 -->
+      <symbol id="ic-eye" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+      <!-- Outline/rotate-ccw — DS 24×24, viewBox -1 -1 26 26 -->
+      <symbol id="ic-rotate-ccw" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4V10H7"/><path d="M3.51 15C4.16 16.84 5.39 18.42 7.01 19.50C8.64 20.58 10.57 21.11 12.52 20.99C14.46 20.88 16.32 20.14 17.81 18.88C19.30 17.62 20.34 15.91 20.77 14.01C21.21 12.10 21.01 10.11 20.21 8.33C19.42 6.55 18.06 5.08 16.35 4.13C14.65 3.19 12.68 2.83 10.74 3.10C8.81 3.37 7.02 4.26 5.64 5.64L1 10"/></symbol>
+      <!-- Outline/chevron-up — 16×16 coord space (reverse of ic-chevron-down) -->
+      <symbol id="ic-chevron-up" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 4 10 L 8 6 L 12 10"/></symbol>
     </defs>
   </svg>
 
+
+  <!-- Navigation Shell — injected at runtime -->
   <section id="Navigation-Shell"></section>
 
-
   <!-- ═══════════════════════════════════════════════════════════════
-       PAGE VIEWPORT — Practice: My Subjects
+       PAGE CONTENT — Quiz: Additional Mathematics
+       DS node: 6488:146563 (TLVKe3bgJTdVvuPAzgDq2f)
   ═══════════════════════════════════════════════════════════════ -->
   <main>
     <div class="page-container">
       <div class="main-content">
 
-        <!-- Breadcrumb — Subject Selection (DS node 7403:226797) -->
-        <section class="bc-row" aria-label="Breadcrumb">
-          <div class="bc-title-group">
-            <span class="bc-title">Subject Selection</span>
-            <div class="bc-sep" aria-hidden="true"></div>
-          </div>
-          <nav class="bc-trail" aria-label="Breadcrumb path">
-            <a href="#" class="bc-link">
-              <svg aria-hidden="true"><use href="#ic-book-open"/></svg>
-              <span>Practise</span>
-              <svg class="bc-chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
-            </a>
-            <span class="bc-current" aria-current="page">Subject Selection</span>
+        <!-- Breadcrumb -->
+        <section id="Breadcrumb-Desktop" class="breadcrumb-section">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a class="breadcrumb__item" href="#">Home</a>
+            <svg class="breadcrumb__sep" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+            <a class="breadcrumb__item" href="#">Quiz</a>
+            <svg class="breadcrumb__sep" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+            <span class="breadcrumb__item breadcrumb__item--current" aria-current="page">Additional Mathematics</span>
           </nav>
         </section>
 
-        <!-- Practice Card Grid — 19 subjects (DS node 5072:104627) -->
-        <section class="practice-grid" aria-label="Practice subjects">
+        <!-- Two-column layout -->
+        <section id="QuizSubject-Desktop" class="qs-layout">
 
-          <!-- 1 · Add Mathematics (DS 5072:104629) — bg #283589 / border #182052 / text white -->
-          <article class="practice-card" style="--subj-bg:#283589;--subj-border:#182052;--subj-bg-hover:#202a6e">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/add-math.svg" alt="" width="100" height="100" class="practice-card__icon-img">
+          <!-- ═══ LEFT: Quick Notes Card ═══ -->
+          <div class="qs-left">
+            <div class="qnc-card">
+
+              <!-- Subject header banner -->
+              <div class="qnc-header qnc-header--add-math" role="img" aria-label="Additional Mathematics">
+                <div class="qnc-header__icon-slot" aria-hidden="true">
+                  <svg width="60" height="60"><use href="#ic-subj-add-math"/></svg>
+                </div>
+                <div class="qnc-header__content">
+                  <div class="qnc-header__label">
+                    <h1 class="qnc-header__title">Additional Mathematics</h1>
+                    <p class="qnc-header__subtitle">7 Chapters Available</p>
+                  </div>
+                </div>
+                <svg class="qnc-header__deco" viewBox="0 0 300 110" aria-hidden="true" preserveAspectRatio="xMaxYMid slice">
+                  <circle cx="260" cy="55" r="80" fill="none" stroke="white" stroke-width="1" opacity="0.6"/>
+                  <circle cx="260" cy="55" r="55" fill="none" stroke="white" stroke-width="1" opacity="0.4"/>
+                  <circle cx="260" cy="55" r="30" fill="none" stroke="white" stroke-width="1" opacity="0.25"/>
+                </svg>
               </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Additional Mathematics</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+
+              <!-- Chapter dropdown -->
+              <div class="qnc-chapter">
+                <button class="qnc-chapter__btn" type="button" aria-haspopup="listbox" aria-expanded="false" id="chapter-btn">
+                  <span class="qnc-chapter__label">Choose Chapter</span>
+                  <div class="qnc-chapter__arrow" aria-hidden="true">
+                    <div class="qnc-chapter__arrow-clip">
+                      <svg><use href="#ic-chevron-down"/></svg>
+                    </div>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
+                </button>
+              </div>
+
+              <!-- Topics list -->
+              <div class="qnc-topics">
+
+                <!-- ═══ Topic 1: Circular Measure (expanded) ═══ -->
+                <div class="qnc-topic is-open">
+                  <div class="qnc-topic__header">
+                    <div class="qnc-topic__thumb" style="background: var(--subjects-add-math-default)" aria-hidden="true"></div>
+                    <div class="qnc-topic__title-wrap">
+                      <span class="qnc-topic__title">Circular Measure</span>
+                      <svg class="qnc-topic__info" aria-label="More info"><use href="#ic-info"/></svg>
+                    </div>
+                    <button class="qnc-topic__toggle" type="button" aria-expanded="true" aria-label="Collapse Circular Measure">
+                      <svg class="ic-up" aria-hidden="true"><use href="#ic-chevron-up"/></svg>
+                      <svg class="ic-down" aria-hidden="true"><use href="#ic-chevron-down"/></svg>
+                    </button>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
+                  <div class="qnc-topic__body">
+
+                    <!-- Sub-topic: Radian -->
+                    <div class="qnc-subtopic">
+                      <div class="qnc-subtopic__row">
+                        <div class="star-pill" aria-label="2 stars earned">
+                          <div class="star-pill__stars" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class="star-pill__star star-pill__star--filled"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class="star-pill__star star-pill__star--filled"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                          </div>
+                          <span class="star-pill__count">2 / 3</span>
+                        </div>
+                        <span class="qnc-subtopic__title">Radian</span>
+                        <button class="btn-icon-circle" type="button" aria-label="Go to Radian">
+                          <svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
+                        </button>
+                      </div>
+                      <div class="qnc-sets-row">
+                        <div class="star-pill">
+                          <div class="star-pill__stars" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class="star-pill__star star-pill__star--filled"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class="star-pill__star star-pill__star--filled"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                          </div>
+                          <span class="star-pill__count">Sets</span>
+                        </div>
+                        <div class="qnc-sets-btns">
+                          <button class="btn-primary-m" type="button"><span class="btn-primary-m__label">Set 1</span><div class="btn-primary-m__arrow"><div class="btn-primary-m__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></div></button>
+                          <button class="btn-icon-circle" type="button" aria-label="Review"><svg aria-hidden="true"><use href="#ic-eye"/></svg></button>
+                          <button class="btn-icon-circle" type="button" aria-label="Retry"><svg aria-hidden="true"><use href="#ic-rotate-ccw"/></svg></button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Sub-topic: Arc Length -->
+                    <div class="qnc-subtopic">
+                      <div class="qnc-subtopic__row">
+                        <div class="star-pill" aria-label="1 star earned">
+                          <div class="star-pill__stars" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class="star-pill__star star-pill__star--filled"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                          </div>
+                          <span class="star-pill__count">1 / 3</span>
+                        </div>
+                        <span class="qnc-subtopic__title">Arc Length and Area of Sector</span>
+                        <button class="btn-icon-circle" type="button" aria-label="Go to Arc Length">
+                          <svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
+                        </button>
+                      </div>
+                      <div class="qnc-sets-row">
+                        <div class="star-pill">
+                          <div class="star-pill__stars" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class="star-pill__star star-pill__star--filled"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                          </div>
+                          <span class="star-pill__count">Sets</span>
+                        </div>
+                        <div class="qnc-sets-btns">
+                          <button class="btn-primary-m" type="button"><span class="btn-primary-m__label">Set 1</span><div class="btn-primary-m__arrow"><div class="btn-primary-m__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></div></button>
+                          <button class="btn-icon-circle" type="button" aria-label="Review"><svg aria-hidden="true"><use href="#ic-eye"/></svg></button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Sub-topic: Problems (not started) -->
+                    <div class="qnc-subtopic">
+                      <div class="qnc-subtopic__row">
+                        <div class="star-pill" aria-label="0 stars">
+                          <div class="star-pill__stars" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                          </div>
+                          <span class="star-pill__count">0 / 3</span>
+                        </div>
+                        <span class="qnc-subtopic__title">Problems involving Circular Measure</span>
+                        <div class="skip-pill" aria-label="Skip for 5 coins">
+                          <span class="skip-pill__text">Skip</span>
+                          <svg width="16" height="16" aria-hidden="true" flex-shrink="0"><use href="#ic-status-coin"/></svg>
+                        </div>
+                      </div>
+                      <div class="qnc-sets-row">
+                        <div class="star-pill">
+                          <div class="star-pill__stars" aria-hidden="true">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
+                          </div>
+                          <span class="star-pill__count">Sets</span>
+                        </div>
+                        <div class="qnc-sets-btns">
+                          <button class="btn-primary-m" type="button"><span class="btn-primary-m__label">Begin</span><div class="btn-primary-m__arrow"><div class="btn-primary-m__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></div></button>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div><!-- end .qnc-topic__body -->
+                </div><!-- end Topic 1 -->
+
+                <!-- ═══ Topic 2: Integration (collapsed) ═══ -->
+                <div class="qnc-topic">
+                  <div class="qnc-topic__header">
+                    <div class="qnc-topic__thumb" style="background: #1a6634" aria-hidden="true"></div>
+                    <div class="qnc-topic__title-wrap">
+                      <span class="qnc-topic__title">Integration</span>
+                      <svg class="qnc-topic__info" aria-label="More info"><use href="#ic-info"/></svg>
+                    </div>
+                    <button class="qnc-topic__toggle" type="button" aria-expanded="false" aria-label="Expand Integration">
+                      <svg class="ic-up" aria-hidden="true"><use href="#ic-chevron-up"/></svg>
+                      <svg class="ic-down" aria-hidden="true"><use href="#ic-chevron-down"/></svg>
+                    </button>
                   </div>
+                  <div class="qnc-topic__body">
+                    <div class="qnc-subtopic">
+                      <div class="qnc-subtopic__row">
+                        <div class="star-pill"><div class="star-pill__stars" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg></div><span class="star-pill__count">0 / 3</span></div>
+                        <span class="qnc-subtopic__title">Indefinite Integral</span>
+                        <button class="btn-icon-circle" type="button" aria-label="Go to Indefinite Integral"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></button>
+                      </div>
+                    </div>
+                    <div class="qnc-subtopic">
+                      <div class="qnc-subtopic__row">
+                        <div class="star-pill"><div class="star-pill__stars" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg></div><span class="star-pill__count">0 / 3</span></div>
+                        <span class="qnc-subtopic__title">Definite Integral</span>
+                        <button class="btn-icon-circle" type="button" aria-label="Go to Definite Integral"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></button>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- end Topic 2 -->
+
+                <!-- ═══ Topic 3: Trigonometric Functions (collapsed) ═══ -->
+                <div class="qnc-topic">
+                  <div class="qnc-topic__header">
+                    <div class="qnc-topic__thumb" style="background: #7300a0" aria-hidden="true"></div>
+                    <div class="qnc-topic__title-wrap">
+                      <span class="qnc-topic__title">Trigonometric Functions</span>
+                      <svg class="qnc-topic__info" aria-label="More info"><use href="#ic-info"/></svg>
+                    </div>
+                    <button class="qnc-topic__toggle" type="button" aria-expanded="false" aria-label="Expand Trigonometric Functions">
+                      <svg class="ic-up" aria-hidden="true"><use href="#ic-chevron-up"/></svg>
+                      <svg class="ic-down" aria-hidden="true"><use href="#ic-chevron-down"/></svg>
+                    </button>
+                  </div>
+                  <div class="qnc-topic__body">
+                    <div class="qnc-subtopic">
+                      <div class="qnc-subtopic__row">
+                        <div class="star-pill"><div class="star-pill__stars" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg></div><span class="star-pill__count">0 / 3</span></div>
+                        <span class="qnc-subtopic__title">Positive and Negative Angles</span>
+                        <button class="btn-icon-circle" type="button" aria-label="Go to topic"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></button>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- end Topic 3 -->
+
+                <!-- ═══ Topic 4: Permutations and Combinations (collapsed) ═══ -->
+                <div class="qnc-topic">
+                  <div class="qnc-topic__header">
+                    <div class="qnc-topic__thumb" style="background: #0072ca" aria-hidden="true"></div>
+                    <div class="qnc-topic__title-wrap">
+                      <span class="qnc-topic__title">Permutations and Combinations</span>
+                      <svg class="qnc-topic__info" aria-label="More info"><use href="#ic-info"/></svg>
+                    </div>
+                    <button class="qnc-topic__toggle" type="button" aria-expanded="false" aria-label="Expand Permutations and Combinations">
+                      <svg class="ic-up" aria-hidden="true"><use href="#ic-chevron-up"/></svg>
+                      <svg class="ic-down" aria-hidden="true"><use href="#ic-chevron-down"/></svg>
+                    </button>
+                  </div>
+                  <div class="qnc-topic__body">
+                    <div class="qnc-subtopic">
+                      <div class="qnc-subtopic__row">
+                        <div class="star-pill"><div class="star-pill__stars" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg></div><span class="star-pill__count">0 / 3</span></div>
+                        <span class="qnc-subtopic__title">Permutations</span>
+                        <button class="btn-icon-circle" type="button" aria-label="Go to Permutations"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></button>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- end Topic 4 -->
+
+              </div><!-- end .qnc-topics -->
+
+            </div><!-- end .qnc-card -->
+          </div><!-- end .qs-left -->
+
+          <!-- ═══ RIGHT COLUMN ═══ -->
+          <div class="qs-right">
+
+            <!-- Status badges 2×2 grid -->
+            <div class="qs-status-grid" role="list">
+
+              <div class="status-badge status-badge--score" role="listitem" aria-label="Score: 68">
+                <div class="status-badge__icon-slot">
+                  <img src="../src/image-repo/page.quiz/subject/assets/P.Trophy.png" width="20" height="24" alt="" aria-hidden="true"
+                    onerror="this.style.display='none'">
+                </div>
+                <div class="status-badge__text">
+                  <span class="status-badge__label">Score</span>
+                  <span class="status-badge__value">68</span>
+                </div>
+              </div>
+
+              <div class="status-badge status-badge--coins" role="listitem" aria-label="Coins: 500" style="--text-on::#404040">
+                <div class="status-badge__icon-slot">
+                  <img src="../src/image-repo/page.quiz/subject/assets/P.Coin.png" width="24" height="24" alt="" aria-hidden="true"
+                    onerror="this.style.display='none'">
+                </div>
+                <div class="status-badge__text">
+                  <span class="status-badge__label" style="color:#404040">Coins</span>
+                  <span class="status-badge__value" style="color:#404040">500</span>
+                </div>
+              </div>
+
+              <div class="status-badge status-badge--streak" role="listitem" aria-label="Streak: 3 days">
+                <div class="status-badge__icon-slot">
+                  <img src="../src/image-repo/page.quiz/subject/assets/P.Streak.png" width="17" height="24" alt="" aria-hidden="true"
+                    onerror="this.style.display='none'">
+                </div>
+                <div class="status-badge__text">
+                  <span class="status-badge__label">Streak</span>
+                  <span class="status-badge__value">3</span>
+                </div>
+              </div>
+
+              <div class="status-badge status-badge--lives" role="listitem" aria-label="Lives: 3">
+                <div class="status-badge__icon-slot">
+                  <img src="../src/image-repo/page.quiz/subject/assets/P.Heart.png" width="22" height="24" alt="" aria-hidden="true"
+                    onerror="this.style.display='none'">
+                </div>
+                <div class="status-badge__text">
+                  <span class="status-badge__label">Lives</span>
+                  <span class="status-badge__value">3</span>
+                </div>
+              </div>
+
+            </div><!-- end .qs-status-grid -->
+
+            <!-- Your Subject panel -->
+            <div class="qs-panel">
+              <div class="qs-panel__header">
+                <h2 class="qs-panel__title">Your Subject</h2>
+                <a class="qs-panel__link" href="#" aria-label="Change subject">
+                  Change Subject
+                  <svg aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+                </a>
+              </div>
+              <div class="qs-panel__body">
+                <div class="qs-subject-content">
+                  <div class="qs-subject-badge" aria-label="Additional Mathematics badge">
+                    <div class="qs-subject-badge__icon">
+                      <svg width="20" height="20" aria-hidden="true"><use href="#ic-subj-add-math"/></svg>
+                    </div>
+                    <span class="qs-subject-badge__label">Add Math</span>
+                  </div>
+                  <span class="qs-subject-name">Additional Mathematics</span>
                 </div>
               </div>
             </div>
-          </article>
 
-          <!-- 2 · Accounting (DS 5072:104628) — bg #0072ca / border #004479 / title #e6f1fa / stats white -->
-          <article class="practice-card" style="--subj-bg:#0072ca;--subj-border:#004479;--subj-title:#e6f1fa;--subj-bg-hover:#005ba2">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/accounting.svg" alt="" width="100" height="100" class="practice-card__icon-img">
+            <!-- Your Progress panel -->
+            <div class="qs-panel">
+              <div class="qs-panel__header">
+                <h2 class="qs-panel__title">Your Progress</h2>
               </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Accounting</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+              <div class="qs-panel__body">
+
+                <div class="progress-stat-row">
+                  <div class="progress-stat-row__icon">
+                    <img src="../src/image-repo/page.quiz/subject/assets/Q.Answered.png" width="50" height="50" alt="" aria-hidden="true" onerror="this.parentElement.textContent='📝'">
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
+                  <div class="progress-stat-row__text">
+                    <div class="progress-stat-row__label">Questions Answered</div>
+                    <div class="progress-stat-row__value">47</div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </article>
 
-          <!-- 3 · Bahasa Melayu (DS 5072:104630) — bg #4d77ff / border #2e4799 / text white -->
-          <article class="practice-card" style="--subj-bg:#4d77ff;--subj-border:#2e4799;--subj-bg-hover:#3e5fcc">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/bahasa-melayu.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Bahasa Melayu</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+                <div class="progress-stat-row">
+                  <div class="progress-stat-row__icon">
+                    <img src="../src/image-repo/page.quiz/subject/assets/Q.Correct.png" width="50" height="50" alt="" aria-hidden="true" onerror="this.parentElement.textContent='✅'">
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
+                  <div class="progress-stat-row__text">
+                    <div class="progress-stat-row__label">Correct</div>
+                    <div class="progress-stat-row__value">32</div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </article>
 
-          <!-- 4 · Biology (DS 5072:104631) — bg #8431d8 / border #4f1d82 / text white -->
-          <article class="practice-card" style="--subj-bg:#8431d8;--subj-border:#4f1d82;--subj-bg-hover:#6a27ad">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/biology.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Biology</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+                <div class="progress-stat-row">
+                  <div class="progress-stat-row__icon">
+                    <img src="../src/image-repo/page.quiz/subject/assets/Q.Incorrect.png" width="50" height="50" alt="" aria-hidden="true" onerror="this.parentElement.textContent='❌'">
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
+                  <div class="progress-stat-row__text">
+                    <div class="progress-stat-row__label">Incorrect</div>
+                    <div class="progress-stat-row__value progress-stat-row__value--alert">INADEQUATE</div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </article>
 
-          <!-- 5 · Business (DS 5072:104632) — bg #efb42b / border #8f6c1a / title+stats #604811 -->
-          <article class="practice-card" style="--subj-bg:#efb42b;--subj-border:#8f6c1a;--subj-title:#604811;--subj-text:#604811;--subj-bg-hover:#bf9022">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/business.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Business</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+                <div class="progress-stat-row">
+                  <div class="progress-stat-row__icon">
+                    <img src="../src/image-repo/page.quiz/subject/assets/Q.Skipped.png" width="50" height="50" alt="" aria-hidden="true" onerror="this.parentElement.textContent='⏭️'">
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
+                  <div class="progress-stat-row__text">
+                    <div class="progress-stat-row__label">Skipped</div>
+                    <div class="progress-stat-row__value">15</div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </article>
 
-          <!-- 6 · Chemistry (DS 5072:104633) — bg #e20082 / border #88004e / text white -->
-          <article class="practice-card" style="--subj-bg:#e20082;--subj-border:#88004e;--subj-bg-hover:#b50068">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/chemistry.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Chemistry</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+            </div><!-- end Progress panel -->
+
+            <!-- Next Badge panel -->
+            <div class="qs-panel">
+              <div class="qs-panel__header">
+                <h2 class="qs-panel__title">Next Badge</h2>
+              </div>
+              <div class="qs-panel__body">
+
+                <div class="next-badge-row">
+                  <div class="next-badge-row__top">
+                    <img class="next-badge-row__img" src="../src/image-repo/page.quiz/subject/assets/badge-bronze.png" width="40" alt="Bronze Badge" onerror="this.style.display='none'">
+                    <div class="next-badge-row__info">
+                      <div class="next-badge-row__title-row">
+                        <span class="next-badge-row__title">Add Math Bronze</span>
+                        <span class="pill-badge-green">10 Sets</span>
+                      </div>
+                      <div class="next-badge-row__progress-text">Complete 4 out of 10 sets</div>
+                    </div>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
+                  <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="40% progress">
+                    <div class="progress-bar__fill" style="width:40%"></div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </article>
 
-          <!-- 7 · Chinese Language (DS 5072:104634) — bg #f94848 / border #952b2b / text white -->
-          <article class="practice-card" style="--subj-bg:#f94848;--subj-border:#952b2b;--subj-bg-hover:#c73a3a">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/chinese-language.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Chinese Language</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
+                <div class="next-badge-row">
+                  <div class="next-badge-row__top">
+                    <img class="next-badge-row__img" src="../src/image-repo/page.quiz/subject/assets/badge-silver.png" width="40" alt="Silver Badge" onerror="this.style.display='none'">
+                    <div class="next-badge-row__info">
+                      <div class="next-badge-row__title-row">
+                        <span class="next-badge-row__title">Add Math Silver</span>
+                        <span class="pill-badge-green">25 Sets</span>
+                      </div>
+                      <div class="next-badge-row__progress-text">Complete 4 out of 25 sets</div>
+                    </div>
                   </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
+                  <div class="progress-bar" role="progressbar" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100" aria-label="16% progress">
+                    <div class="progress-bar__fill" style="width:16%"></div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </article>
 
-          <!-- 8 · Computer Science (DS 5072:104635) — bg #d10070 / border #7d0043 / text white -->
-          <article class="practice-card" style="--subj-bg:#d10070;--subj-border:#7d0043;--subj-bg-hover:#a7005a">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/computer-science.svg" alt="" width="100" height="100" class="practice-card__icon-img">
               </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Computer Science</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
+            </div><!-- end Next Badge panel -->
 
-          <!-- 9 · Economy (DS 5072:104636) — bg #ff5733 / border #99341f / text white -->
-          <article class="practice-card" style="--subj-bg:#ff5733;--subj-border:#99341f;--subj-bg-hover:#cc4629">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/economy.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Economy</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
+          </div><!-- end .qs-right -->
 
-          <!-- 10 · English (DS 5072:104637) — bg #ff4d56 / border #992e34 / text white -->
-          <article class="practice-card" style="--subj-bg:#ff4d56;--subj-border:#992e34;--subj-bg-hover:#cc3e45">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/english.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">English</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
+        </section><!-- end #QuizSubject-Desktop -->
 
-          <!-- 11 · Geography (DS 5072:104638) — bg #77d836 / border #478220 / text white -->
-          <article class="practice-card" style="--subj-bg:#77d836;--subj-border:#478220;--subj-bg-hover:#5fad2b">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/geography.png" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Geography</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 12 · History (DS 5072:104639) — bg #a97c50 / border #654a30 / text white -->
-          <article class="practice-card" style="--subj-bg:#a97c50;--subj-border:#654a30;--subj-bg-hover:#876340">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/history.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">History</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 13 · Islamic Studies (DS 5072:104640) — bg #de4d7f / border #852e4c / text white -->
-          <article class="practice-card" style="--subj-bg:#de4d7f;--subj-border:#852e4c;--subj-bg-hover:#b23e66">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/islamic-studies.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Islamic Studies</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 14 · KAFA (DS 5072:104641) — bg #8ae3a9 / border #538865 / title+stats #375b44 -->
-          <article class="practice-card" style="--subj-bg:#8ae3a9;--subj-border:#538865;--subj-title:#375b44;--subj-text:#375b44;--subj-bg-hover:#6eb687">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/kafa.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">KAFA</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 15 · Mathematics (DS 5072:104642) — bg #42ac7b / border #28674a / text white -->
-          <article class="practice-card" style="--subj-bg:#42ac7b;--subj-border:#28674a;--subj-bg-hover:#358a62">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/mathematics.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Mathematics</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 16 · Moral Studies (DS 5072:104643) — bg #0072ca / border #004479 / text white -->
-          <article class="practice-card" style="--subj-bg:#0072ca;--subj-border:#004479;--subj-bg-hover:#005ba2">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/moral-studies.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Moral Studies</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 17 · Physics (DS 5072:104644) — bg #27a0d7 / border #176081 / text white -->
-          <article class="practice-card" style="--subj-bg:#27a0d7;--subj-border:#176081;--subj-bg-hover:#1f80ac">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/physics.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Physics</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 18 · RBT (DS 5072:104645) — bg #353535 / border #202020 / text white -->
-          <article class="practice-card" style="--subj-bg:#353535;--subj-border:#202020;--subj-bg-hover:#2a2a2a">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/rbt.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Reka Bentuk &amp; Teknologi</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- 19 · Science (DS 5072:104646) — bg #ffd641 / border #998027 / title+stats #66561a -->
-          <article class="practice-card" style="--subj-bg:#ffd641;--subj-border:#998027;--subj-title:#66561a;--subj-text:#66561a;--subj-bg-hover:#ccab34">
-            <div class="practice-card__circles" aria-hidden="true">
-              <div class="practice-card__circle practice-card__circle--1"></div>
-              <div class="practice-card__circle practice-card__circle--2"></div>
-              <div class="practice-card__circle practice-card__circle--3"></div>
-            </div>
-            <div class="practice-card__image">
-              <div class="practice-card__icon-wrap">
-                <img src="../src/image-repo/page.practise/assets/main/PracticeCard/science.svg" alt="" width="100" height="100" class="practice-card__icon-img">
-              </div>
-            </div>
-            <div class="practice-card__content">
-              <div class="practice-card__inner">
-                <h2 class="practice-card__title">Science</h2>
-                <div class="practice-card__stats">
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file"/></svg></span>
-                    <span class="practice-card__stat-label">5 Flashcard</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-file-text"/></svg></span>
-                    <span class="practice-card__stat-label">5 Topical Test</span>
-                  </div>
-                  <div class="practice-card__stat">
-                    <span class="practice-card__stat-icon"><svg aria-hidden="true"><use href="#ic-battle"/></svg></span>
-                    <span class="practice-card__stat-label">5 Practice Exam</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-
-        </section><!-- /.practice-grid -->
-
-      </div><!-- /.main-content -->
-    </div><!-- /.page-container -->
+      </div><!-- end .main-content -->
+    </div><!-- end .page-container -->
   </main>
 
   <footer class="footer" id="zul-footer"></footer>
-
   <div id="zul-nav-bottom"></div>
 
+  <!-- Nav injection — same directory as template, no path fixing needed -->
   <script>
-  // Practice card navigation — click any card to open the Flashcard page (Rule 14: critical first)
-  document.querySelectorAll('.practice-card').forEach(function (card) {
-    card.addEventListener('click', function () {
-      window.location.href = 'practise.flashcard.html';
-    });
-  });
-
   (function () {
     var TPL = '../zul.test.git/zul.page.template.html';
-
     fetch(TPL)
       .then(function (r) { return r.text(); })
       .then(function (html) {
         var parser = new DOMParser();
         var doc = parser.parseFromString(html, 'text/html');
 
-        // Fix image paths: template is one level deep (zul.test.git/),
-        // nadia is two levels deep (Nadia.test.git/Practise/). ../src/ → ../src/
-        function fixPaths(html) {
-          return html.replace(/src="\.\.\/src\//g, 'src="../src/');
+        function fixPaths(h) {
+          return h.replace(/src="\.\.\/src\//g, 'src="../src/');
         }
 
-        // 1. Inject Navigation-Shell contents
+        /* 1. Navigation-Shell */
         var srcShell = doc.getElementById('Navigation-Shell');
         var dstShell = document.getElementById('Navigation-Shell');
         if (srcShell && dstShell) dstShell.innerHTML = fixPaths(srcShell.innerHTML);
 
-        // 2. Inject footer contents
-        var srcFooter = doc.querySelector('footer.footer');
-        var dstFooter = document.getElementById('zul-footer');
-        if (srcFooter && dstFooter) dstFooter.innerHTML = srcFooter.innerHTML;
+        /* 2. Footer */
+        var srcFt = doc.querySelector('footer.footer');
+        var dstFt = document.getElementById('zul-footer');
+        if (srcFt && dstFt) dstFt.innerHTML = srcFt.innerHTML;
 
-        // 3. Inject bottom nav elements
+        /* 3. Bottom nav elements */
         var bottom = document.getElementById('zul-nav-bottom');
         if (bottom) {
           ['NavBar-Bottom', 'mobile-overlay', 'NavMenu-Mobile'].forEach(function (id) {
             var el = doc.getElementById(id);
-            if (el) {
-              el.innerHTML = fixPaths(el.innerHTML);
-              bottom.appendChild(document.adoptNode(el));
-            }
+            if (el) { el.innerHTML = fixPaths(el.innerHTML); bottom.appendChild(document.adoptNode(el)); }
           });
         }
 
-        // 4. Execute template scripts (nav handlers + mobile menu + maximize)
+        /* 4. Run template scripts */
         Array.prototype.forEach.call(doc.querySelectorAll('script'), function (s) {
           if (s.src) return;
           var ns = document.createElement('script');
@@ -3231,34 +3275,37 @@
           document.body.appendChild(ns);
         });
 
-        // 5. Set active nav state — clear template's hardcoded Home active, then set Practice
+        /* 5. Set active nav: Quiz */
         document.querySelectorAll('#NavTopMenu-Desktop .nav-menu-btn').forEach(function (b) {
           b.classList.remove('is-active');
         });
-        var practiceBtn = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="Practice"]');
-        if (practiceBtn) practiceBtn.classList.add('is-active');
+        var quizBtn = document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="Quiz"]');
+        if (quizBtn) quizBtn.classList.add('is-active');
 
-        // 6. Wire Nadia page navigation links (N-C40)
+        /* 6. Wire page navigation links */
         (function () {
-          var BASE = '';
-          var NAV_HREFS = {
-            'Quiz':           BASE + 'quiz.html',
-            'Battle':         BASE + 'battle.html',
-            'Practice':       BASE + 'practise.subject.html',
-            'My Classes':     BASE + 'class.my.classes.html',
-            'Browse Classes': BASE + 'class.browse.classes.html',
-            'Avatar':         BASE + 'rewards.avatar.html',
-            'Coin Quests':    BASE + 'rewards.coin.quest.html',
-            'eVoucher':       BASE + 'rewards.evoucher.html',
-            'Merchandise':    BASE + 'rewards.merchandise.html',
-            'My Rewards':     BASE + 'rewards.my.rewards.html',
+          var ALL_HREFS = {
+            'Home':           '../zul.test.git/zul.home.screen.html',
+            'Quiz':           './quiz.html',
+            'Battle':         './battle.html',
+            'Practice':       './practise.subject.html',
+            'My Classes':     './class.my.classes.html',
+            'Browse Classes': './class.browse.classes.html',
+            'Avatar':         './rewards.avatar.html',
+            'Coin Quests':    './rewards.coin.quest.html',
+            'eVoucher':       './rewards.evoucher.html',
+            'Merchandise':    './rewards.merchandise.html',
+            'My Rewards':     './rewards.my.rewards.html',
           };
-          function link(el, href) {
-            if (el) el.addEventListener('click', function () { window.location.href = href; });
-          }
-          ['Quiz', 'Battle', 'Practice'].forEach(function (label) {
-            link(document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="' + label + '"]'), NAV_HREFS[label]);
+
+          function link(el, href) { if (el) el.addEventListener('click', function () { window.location.href = href; }); }
+
+          /* Desktop pill nav */
+          ['Home', 'Quiz', 'Battle', 'Practice'].forEach(function (label) {
+            if (ALL_HREFS[label]) link(document.querySelector('#NavTopMenu-Desktop .nav-menu-btn[aria-label="' + label + '"]'), ALL_HREFS[label]);
           });
+
+          /* Desktop dropdowns — text match */
           function dropItem(dropId, labelText) {
             var drop = document.getElementById(dropId);
             if (!drop) return null;
@@ -3269,22 +3316,58 @@
             }
             return null;
           }
-          ['My Classes', 'Browse Classes'].forEach(function (label) {
-            link(dropItem('class-dropdown', label), NAV_HREFS[label]);
-          });
-          ['Avatar', 'Coin Quests', 'eVoucher', 'Merchandise', 'My Rewards'].forEach(function (label) {
-            link(dropItem('rewards-dropdown', label), NAV_HREFS[label]);
-          });
+          ['My Classes', 'Browse Classes'].forEach(function (label) { link(dropItem('class-dropdown', label), NADIA_HREFS[label]); });
+          ['Avatar', 'Coin Quests', 'eVoucher', 'Merchandise', 'My Rewards'].forEach(function (label) { link(dropItem('rewards-dropdown', label), NADIA_HREFS[label]); });
+
+          /* Tablet + Mobile menus */
           ['#NavMenu-Tablet', '#NavMenu-Mobile'].forEach(function (menuId) {
-            Object.keys(NAV_HREFS).forEach(function (label) {
-              link(document.querySelector(menuId + ' [aria-label="' + label + '"]'), NAV_HREFS[label]);
+            Object.keys(ALL_HREFS).forEach(function (label) {
+              link(document.querySelector(menuId + ' [aria-label="' + label + '"]'), ALL_HREFS[label]);
             });
           });
         })();
       })
-      .catch(function (err) {
-        console.error('[nav-inject] Failed to load navigation:', err);
+      .catch(function (err) { console.error('[nav-inject] Failed:', err); });
+  })();
+  </script>
+
+  <!-- Page JS: accordion + button interactions -->
+  <script>
+  (function () {
+
+    /* Accordion: only one topic open at a time */
+    document.querySelectorAll('.qnc-topic__toggle').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var topic = btn.closest('.qnc-topic');
+        var wasOpen = topic.classList.contains('is-open');
+        document.querySelectorAll('.qnc-topic').forEach(function (t) {
+          t.classList.remove('is-open');
+          var tog = t.querySelector('.qnc-topic__toggle');
+          if (tog) tog.setAttribute('aria-expanded', 'false');
+        });
+        if (!wasOpen) {
+          topic.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
       });
+    });
+
+    /* is-pressing handlers — Rule 83 */
+    document.querySelectorAll('.btn-primary-m, .btn-icon-circle').forEach(function (btn) {
+      btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+      btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+      btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+    });
+
+    /* Chapter dropdown toggle */
+    var chapterBtn = document.getElementById('chapter-btn');
+    if (chapterBtn) {
+      chapterBtn.addEventListener('click', function () {
+        var open = chapterBtn.getAttribute('aria-expanded') === 'true';
+        chapterBtn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      });
+    }
+
   })();
   </script>
 

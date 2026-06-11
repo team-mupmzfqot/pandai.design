@@ -2124,7 +2124,7 @@
       display:     flex;
       align-items: center;
       gap:         var(--spacing-space-m);
-      min-height:  44px;
+      min-height:  36px;
       flex-shrink: 0;
     }
     .bc-title-group {
@@ -2164,7 +2164,7 @@
       white-space:     nowrap;
     }
     .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
-    .bc-chevron  { width: 20px; height: 20px; flex-shrink: 0; color: var(--border-general-default-secondary); }
+    .bc-chevron  { width: 16px; height: 16px; flex-shrink: 0; color: var(--border-general-default-secondary); }
     .bc-current  {
       font-size:   14px;
       font-weight: 400;
@@ -2325,6 +2325,7 @@
       align-items:     center;
       justify-content: center;
       flex-shrink:     0;
+      background:      rgba(255,255,255,0.12);
     }
     /* Subject icon: 60×60, flex-shrink:0 — wraps the DS icon SVG */
     .fc-subject-icon {
@@ -2337,9 +2338,10 @@
     }
     .fc-subject-icon svg { display: block; flex-shrink: 0; }
     /* Header content (DS: HORIZONTAL, crossAlign:CENTER, tl:0 tr:12 bl:0 br:12)
-       pt:16 r:16 b:16 l:24. P.Fano-Wireframe child is position:absolute → overflow:hidden clips it. */
+       Padding 16px all sides (matches qnc-header__content in quiz.subject.html).
+       border-left provides the divider between icon slot and text content. */
     .fc-qncard__header-content {
-      padding:        16px 16px 16px 24px;
+      padding:        var(--spacing-space-m);
       display:        flex;
       flex-direction: row;
       align-items:    center;
@@ -2349,6 +2351,7 @@
       border-radius:  0 var(--corner-radius-corner-lg) var(--corner-radius-corner-lg) 0;
       position:       relative;
       overflow:       hidden;
+      border-left:    1px solid #eaebf3;
     }
 
     /* Label sub-frame: VERTICAL flex, gap:2, flex:1 (fills remaining width)

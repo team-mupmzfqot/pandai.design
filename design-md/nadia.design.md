@@ -6402,3 +6402,24 @@ Switching between them requires changing: container CSS, `::before` presence, co
 □ Are column widths calc(50%+50px) (overlap) or 50% (non-overlap)?
 □ Mobile: frame wrappers need clip-path:none + stacked layout too
 ```
+
+---
+
+### Rule N-C50 — Breadcrumb - 1.5 canonical sizes: min-height 36px, chevron 16×16 (Session 43, 2026-06-11)
+
+**Source:** syakila.test.git/bookmarks.html (Breadcrumb - 1.5, DS node `5171:142567`).
+
+The DS-correct sizes for the `.bc-` breadcrumb pattern across all Nadia pages:
+
+| Property | Correct | Wrong (was) |
+|---|---|---|
+| `.bc-row` min-height | **36px** | 44px |
+| `.bc-chevron` width + height | **16×16px** | 20×20px |
+
+All other `.bc-` properties are consistent across files and do not need changing.
+
+**Files corrected (Session 43):** `achievement.leaderboard.html`, `practise.subject.html`, `practise.flashcard.html`, `practise.practice.exam.html`, `practise.topical.test.html`.
+
+**Files already correct before this session:** `battle.html`, `class.battle.new.html`, `class.browse.classes.html`, `class.latest.assignments.html`, `class.my.classes.html`, `rewards.avatar.html`, `rewards.coin.quest.html`, `rewards.evoucher.html`, `rewards.merchandise.html`, `rewards.my.rewards.html`.
+
+**Note:** `quiz.question.html` and `quiz.subject.html` use different breadcrumb patterns (`.breadcrumb-bar` / `.breadcrumb`) — not `.bc-` pattern, not covered by this rule.
