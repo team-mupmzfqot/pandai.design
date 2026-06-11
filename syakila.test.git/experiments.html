@@ -4273,11 +4273,11 @@
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
         var card    = btn.closest('.qn-card');
-        if (!card) { window.location.href = 'quickNotes.selections.html'; return; }
+        if (!card) { window.location.href = 'experiments.selections.html'; return; }
         var subject = card.dataset.subject || '';
         var icon    = card.dataset.icon    || '';
         var params  = new URLSearchParams({ subject: subject, icon: icon });
-        window.location.href = 'quickNotes.selections.html?' + params.toString();
+        window.location.href = 'experiments.selections.html?' + params.toString();
       });
     });
 

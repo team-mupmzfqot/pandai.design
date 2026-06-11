@@ -4707,22 +4707,6 @@
       btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
     });
 
-    // Quick Notes view buttons — navigate to selections page (icon button only, not row)
-    document.querySelectorAll('.qn-btn-view').forEach(function (btn) {
-      btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
-      btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
-      btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var card    = btn.closest('.qn-card');
-        if (!card) { window.location.href = 'quickNotes.selections.html'; return; }
-        var subject = card.dataset.subject || '';
-        var icon    = card.dataset.icon    || '';
-        var params  = new URLSearchParams({ subject: subject, icon: icon });
-        window.location.href = 'quickNotes.selections.html?' + params.toString();
-      });
-    });
-
     // Lives/Ruby badge flip — every 4s
     const flipper = document.querySelector('.status-pill-flipper__inner');
     if (flipper) setInterval(() => flipper.classList.toggle('is-flipped'), 3000);
@@ -4975,6 +4959,25 @@
     } catch (e) {
       console.warn('Recent activities carousel error:', e);
     }
+  </script>
+
+  <!-- Chapter navigation — standalone block so it survives the page-builder nav-script strip -->
+  <script>
+    // Quick Notes view buttons — navigate to selections page (icon button only, not row)
+    document.querySelectorAll('.qn-btn-view').forEach(function (btn) {
+      btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+      btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+      btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var card    = btn.closest('.qn-card');
+        if (!card) { window.location.href = 'quickNotes.selections.html'; return; }
+        var subject = card.dataset.subject || '';
+        var icon    = card.dataset.icon    || '';
+        var params  = new URLSearchParams({ subject: subject, icon: icon });
+        window.location.href = 'quickNotes.selections.html?' + params.toString();
+      });
+    });
   </script>
   <nav id="NavBar-Bottom" class="navbar-bottom" aria-label="Mobile navigation">
     <button class="navbar-bottom__btn" type="button" aria-label="Quiz">
