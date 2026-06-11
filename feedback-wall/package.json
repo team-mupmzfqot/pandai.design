@@ -1,0 +1,14 @@
+{
+  "name": "pandai-feedback-wall",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pandai live feedback wall — Cloudflare Worker + Durable Object (real-time sticky notes).",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}
