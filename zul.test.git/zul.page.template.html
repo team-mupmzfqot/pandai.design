@@ -2672,7 +2672,7 @@
     <nav class="navbar-nav-menu" aria-label="Main navigation">
 
       <!-- Home (no chevron) -->
-      <div class="nav-menu-btn is-active" role="button" tabindex="0" aria-label="Home" aria-current="page">
+      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Home">
         <div class="nav-menu-btn__inner">
           <div class="nav-menu-btn__icon-wrap">
             <div class="nav-menu-btn__icon-clip" data-icon="home"><svg aria-hidden="true"><use href="#ic-home"/></svg></div>
@@ -2969,7 +2969,7 @@
 
       <!-- Left column: Home, Quiz, Battle, Practice, Class -->
       <div class="nav-menu-tablet__col">
-        <div class="nav-menu-item is-active" role="button" tabindex="0" aria-label="Home">
+        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Home">
           <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-home"/></svg></span>
           <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
           <span class="nav-menu-item__label">Home</span>
@@ -3674,8 +3674,9 @@
         }
 
         function restoreHome() {
-          var homeBtn = navSection.querySelector('[aria-label="Home"]');
-          if (homeBtn) { homeBtn.classList.add('is-active'); homeBtn.setAttribute('aria-current', 'page'); }
+          /* restore the CURRENT page's nav button (set by the page-nav script), not always Home */
+          var defBtn = navSection.querySelector('[aria-label="' + (window.__navActiveLabel || 'Home') + '"]');
+          if (defBtn) { defBtn.classList.add('is-active'); defBtn.setAttribute('aria-current', 'page'); }
         }
 
         function openDropdown() {
@@ -3759,8 +3760,8 @@
           timer = setTimeout(function () {
             btn.classList.remove('is-active');
             btn.removeAttribute('aria-current');
-            var homeBtn = navSection.querySelector('[aria-label="Home"]');
-            if (homeBtn) { homeBtn.classList.add('is-active'); homeBtn.setAttribute('aria-current', 'page'); }
+            var defBtn = navSection.querySelector('[aria-label="' + (window.__navActiveLabel || 'Home') + '"]');
+            if (defBtn) { defBtn.classList.add('is-active'); defBtn.setAttribute('aria-current', 'page'); }
           }, 3000);
         });
         btn.addEventListener('mouseenter', function () { clearTimeout(timer); });
@@ -4097,7 +4098,7 @@
         <span class="nav-menu-tablet__search-icon"><svg width="24" height="24" aria-hidden="true"><use href="#ic-search"/></svg></span>
       </button>
       <!-- Home — Active state (DS 3427:2464): fill #b5f291, stroke #00a36a, radius 999 -->
-      <div class="nav-menu-item is-active" role="button" tabindex="0" aria-label="Home">
+      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Home">
         <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-home"/></svg></span>
         <span class="nav-menu-item__label">Home</span>
       </div>
@@ -4469,6 +4470,95 @@
       document.addEventListener('mozfullscreenchange',    syncIcon);
 
       /* ESC is handled natively by the browser — fullscreenchange fires on exit */
+    })();
+  </script>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       PAGE NAVIGATION — link menu-bar buttons by label → page file,
+       + active-state sync to the current page (desktop + tablet + mobile)
+  ═══════════════════════════════════════════════════════════════ -->
+  <script>
+    (function () {
+      var NAV = {
+        "Home":"home.html","Quiz":"nadia_Quiz.html","Battle":"nadia_Battle.html","Practice":"nadia_Practise-subject.html",
+        "My Classes":"nadia_Class-MyClasses.html","Browse Classes":"nadia_Class-BrowseClasses.html","Assignments":"nadia_Class-LatestAssignments.html",
+        "Learning Hub":"learningHub.html","Quick Notes":"quickNotes.html","Videos":"videos.html",
+        "Experiments":"experiments.html","Textbooks":"textbook.html","Bookmarks":"bookmarks.html",
+        "Score Card":"score.card.html","Report Card":"report.card.html","History":"history.list.html","Certificates":"certificates.html",
+        "Coin Quests":"nadia_Rewards-CoinQuest.html","My Rewards":"nadia_Rewards-Myrewards.html",
+        "Merchandise":"nadia_Rewards-Merchandise.html","eVoucher":"nadia_Rewards-evoucher.html","Avatar":"nadia_Rewards-avatar.html"
+      };
+      // dropdown/sub item → its top-level group button label (for active highlight)
+      var GROUP = {
+        "My Classes":"Class","Browse Classes":"Class","Assignments":"Class",
+        "Learning Hub":"Learn","Quick Notes":"Learn","Videos":"Learn","Experiments":"Learn","Textbooks":"Learn","Bookmarks":"Learn",
+        "Score Card":"Achievement","Report Card":"Achievement","History":"Achievement","Certificates":"Achievement",
+        "Coin Quests":"Rewards","My Rewards":"Rewards","Merchandise":"Rewards","eVoucher":"Rewards","Avatar":"Rewards"
+      };
+      // sub-pages not in the menu → the top-level group they belong to (active highlight only)
+      var SUBPAGE = {
+        "analysiscard.html":"Achievement","history.month.html":"Achievement",
+        "quicknotes.selections.html":"Learn","quicknotes.view.html":"Learn",
+        "videos.selections.html":"Learn","videos.view.html":"Learn",
+        "experiments.selections.html":"Learn","experiments.view.html":"Learn",
+        "nadia_flashcard.html":"Practice","nadia_practiceexam.html":"Practice","nadia_topicaltest.html":"Practice"
+      };
+      // mobile bottom bar uses short labels; Account toggles the menu (not a navigation)
+      var BOTTOM = { "Quiz":"nadia_Quiz.html", "Practice":"nadia_Practise-subject.html", "Score":"score.card.html" };
+      var BOTTOM_ACTIVE = {
+        "Quiz":["nadia_quiz.html"],
+        "Practice":["nadia_practise-subject.html","nadia_flashcard.html","nadia_practiceexam.html","nadia_topicaltest.html"],
+        "Score":["score.card.html"]
+      };
+
+      function labelOf(el) {
+        var al = (el.getAttribute('aria-label') || '').trim();
+        if (al) return al;
+        var s = el.querySelector('.nav-menu-dropdown__label, .nav-menu-btn__label, .nav-menu-item__label');
+        return s ? s.textContent.trim() : '';
+      }
+
+      function targetFor(el) {
+        if (el.classList.contains('navbar-bottom__btn')) {
+          if (el.id === 'account-btn') return null;                // Account toggles the mobile menu
+          return BOTTOM[labelOf(el)] || null;
+        }
+        if (el.getAttribute('aria-haspopup') === 'true') return null;  // desktop dropdown parent
+        if (el.classList.contains('has-submenu')) return null;         // mobile accordion parent
+        return NAV[labelOf(el)] || null;
+      }
+
+      // 1) Navigate on click (capture phase so it wins over dropdown/accordion toggles)
+      document.addEventListener('click', function (e) {
+        var el = e.target.closest('.nav-menu-btn, .nav-menu-dropdown__item, .nav-menu-item, .navbar-bottom__btn');
+        if (!el) return;
+        var page = targetFor(el);
+        if (page) { e.preventDefault(); window.location.href = page; }
+      }, true);
+
+      // 2) Active-state sync to the current page
+      try {
+        var file = (location.pathname.split('/').pop() || 'home.html').toLowerCase();
+        var curLabel = null;
+        for (var k in NAV) { if (NAV[k].toLowerCase() === file) { curLabel = k; break; } }
+        // top-level button to highlight: group parent for sub-items/sub-pages, else the item itself
+        var topLabel = curLabel ? (GROUP[curLabel] || curLabel) : (SUBPAGE[file] || null);
+        // expose for the nav script's restoreHome / mouseleave-timeout (so they don't snap back to Home)
+        window.__navActiveLabel = topLabel || 'Home';
+        document.querySelectorAll('.nav-menu-btn, .nav-menu-item').forEach(function (el) {
+          var lbl = labelOf(el);
+          var isMatch = (topLabel && (lbl === topLabel || lbl === curLabel));
+          el.classList.toggle('is-active', !!isMatch);
+          if (isMatch) { el.setAttribute('aria-current', 'page'); } else { el.removeAttribute('aria-current'); }
+        });
+        // mobile bottom bar — active for the current page (Quiz / Practice family / Score)
+        document.querySelectorAll('.navbar-bottom__btn').forEach(function (el) {
+          var arr = BOTTOM_ACTIVE[labelOf(el)];
+          var m = !!(arr && arr.indexOf(file) !== -1);
+          el.classList.toggle('is-active', m);
+          if (m) { el.setAttribute('aria-current', 'page'); } else { el.removeAttribute('aria-current'); }
+        });
+      } catch (err) { /* non-critical */ }
     })();
   </script>
 

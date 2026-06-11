@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pandai — Page Template</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
     /* ═══════════════════════════════════════════════════════════════
        Pandai DS 1.5 — Page Template
@@ -1734,7 +1735,7 @@
       visibility:     visible;
     }
 
-    /* Header — DS 3427:2443: h:60, pad t:16 r:16 b:16 l:16, gap:10 */
+    /* Header — 16px padding (space-m), pinned at top */
     .nav-menu-mobile__header {
       display:         flex;
       align-items:     center;
@@ -1753,9 +1754,10 @@
     }
     .nav-menu-mobile__close:hover { color: var(--icon-primary-default); }
 
-    /* Menu — DS 3427:2461: pad t:0 r:16 b:16 l:16, gap:8 */
+    /* Menu — 16px padding (space-m, top 0 — header provides top gap), gap:8. Scrollable fill region so the
+       overflow-hiding logic can measure available vs needed height. */
     .nav-menu-mobile__content {
-      display:     flex;
+      display:        flex;
       flex-direction: column;
       gap:            var(--spacing-space-xs);
       padding:        0 var(--spacing-space-m) var(--spacing-space-m);
@@ -2087,312 +2089,437 @@
       color:  var(--text-disabled-default);
     }
 
-/* ─────────────────────────────────────────────────────
-       NAVBAR MOBILE BOTTOM — Navbar Mobile - 1.5 (DS node 3406:735)
-       Fixed bottom · height 56px · top border #00cc85
-       4 buttons: Quiz / Practice / Score / Account
-       Shown only at mobile (≤767px)
-    ───────────────────────────────────────────────────── */
-    .navbar-bottom {
-      position:        fixed;
-      bottom:          0;
-      left:            0;
-      right:           0;
-      z-index:         400;
-      height:          56px;
-      background:      var(--surface-general-default);
-      border-top:      1px solid var(--border-primary-default);
-      display:         none;
-      align-items:     center;
-      justify-content: center;
-      gap:             var(--spacing-space-xxs);
-      padding:         var(--spacing-space-m);
+  
+    /* ===== carried-over source aliases ===== */
+    :root {
+      --text-primary-focus: #00a36a;
+      --border-primary-default-hover: #66e0b6;
+      --icon-default: #d9d9d9;
+      --corner-pill: 999px;
+      --corner-rounded: 60px;
+      --corner-4xl: 24px;
+      --corner-2xl: 18px;
+      --corner-m: 8px;
+      --space-3xl: 60px;
+      --space-2xl: 28px;
+      --space-xl: 24px;
+      --space-l: 20px;
+      --space-m: 16px;
+      --space-s: 12px;
+      --space-xs: 8px;
+      --space-xxs: 4px;
+      --space-none: 0px;
+      --scale-500: 20px;
+      --font: 'Poppins', sans-serif;
+      --page-bg: var(--surface-general-default);
+      --subjects-chinese-bg: #f94848;
+      --subjects-chinese-border: #c73a3a;
+      --subjects-english-bg: #ff4d56;
+      --subjects-english-border: #cc3e45;
+      --subjects-bm-bg: #4d77ff;
+      --subjects-bm-border: #2e4799;
+      --subjects-math-bg: #42ac7b;
+      --subjects-math-border: #358a62;
+      --subjects-islamic-bg: #de4d7f;
+      --subjects-islamic-border: #b23e66;
+      --subjects-moral-bg: #0072ca;
+      --subjects-moral-border: #005ba2;
+      --subjects-science-bg: #ffd641;
+      --subjects-science-border: #ccab34;
+      --subjects-add-math-bg: #283589;
+      --subjects-add-math-border: #182052;
+      --subjects-biology-bg: #8431d8;
+      --subjects-biology-border: #6a27ad;
+      --subjects-chemistry-bg: #e20082;
+      --subjects-chemistry-border: #b50068;
+      --subjects-physics-bg: #27a0d7;
+      --subjects-physics-border: #1f80ac;
+      --subjects-history-bg: #a97c50;
+      --subjects-history-border: #876340;
+      --subjects-geography-bg: #77d836;
+      --subjects-geography-border: #5fad2b;
+      --subjects-economy-bg: #ff5733;
+      --subjects-economy-border: #cc4629;
+      --subjects-account-bg: #0072ca;
+      --subjects-account-border: #004479;
+      --subjects-business-bg: #efb42b;
+      --subjects-business-border: #bf9022;
+      --subjects-cs-bg: #d10070;
+      --subjects-cs-border: #a7005a;
+      --subjects-kafa-bg: #8ae3a9;
+      --subjects-kafa-border: #6eb687;
+      --subjects-rbt-bg: #353535;
+      --subjects-rbt-border: #2a2a2a;
+      --subjects-science-text: #998027;
+      --subjects-geography-text: #478220;
+      --subjects-kafa-text: #538865;
+      --spacing-space-none: 0px;
+      --icon-primary-focus: #00a36a;
+      --icon-disabled-default: #bfbfbf;
+      --surface-secondary-50: #e8fbe8;
     }
-    /* Button - 1.5 Tertiary/S/Student — all states confirmed from DS nodes
-       1452:8381 Default · 1452:8373 Hover · 3029:20042 Pressed · 1452:8365 Active · 1452:8357 Disabled
-       strokeAlign: INSIDE → box-shadow:inset, never border (Rule 60)
-       Dimensions: h:24px, padding:2px 4px, border-radius:60px (pill) */
-    .navbar-bottom__btn {
+
+    /* ═══════════════ PAGE-SPECIFIC CSS — history.month.html ═══════════════ */
+    /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+       PAGE SHELL
+    â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    .pd-page { flex: 1; padding: var(--space-m) var(--page-padding-x) var(--space-m); }
+
+    /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+       BREADCRUMBS 1.5  DS 837:1033
+    â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    .pd-breadcrumbs15 { display: flex; align-items: center; gap: var(--space-m); min-height: 36px; margin-bottom: var(--space-m); }
+    .pd-breadcrumbs__title { font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
+    .pd-breadcrumbs__sep   { width: 1px; align-self: stretch; background: var(--border-general-default); flex-shrink: 0; }
+    .pd-breadcrumbs__links { display: flex; align-items: center; gap: var(--space-xs); flex-wrap: wrap; }
+    .pd-link15 {
+      display: flex; align-items: center; gap: var(--space-xs);
+      background: none; border: none; padding: 0; cursor: pointer;
+      color: var(--text-default-body);
+    }
+    .pd-link15__icon-home { display: block; width: 20px; height: 20px; flex-shrink: 0; color: var(--text-primary-default); }
+    .pd-link15__text         { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); white-space: nowrap; }
+    .pd-link15__text--parent { color: var(--text-primary-default); }
+    .pd-breadcrumbs__chevron { width: 16px; height: 16px; color: var(--text-primary-default); flex-shrink: 0; }
+
+
+    /* -------------------------------------------------------
+       PAGE SHELL
+    ------------------------------------------------------- */
+    .pd-page { flex: 1; padding: var(--space-m) var(--page-padding-x) var(--space-m); }
+
+    /* -------------------------------------------------------
+       HISTORY MONTH — Primary Card 1.5 (Secondary variant)
+       DS node 5472:118228
+    ------------------------------------------------------- */
+    /* Outer Primary Card — DS node 5472:118228
+       bg: Surface/secondary/default-subtle #e8fbe8
+       border: 1px solid Border/primary/default #00cc85 → strokeAlign INSIDE → inset shadow
+       radius: Corner-4XL 24px · padding: Spacing/space-m 16px · gap: Spacing/space-xs 8px */
+    .hist-outer {
+      background:     var(--surface-secondary-default-subtle);
+      box-shadow:     inset 0 0 0 1px var(--border-primary-default);
+      border-radius:  var(--corner-4xl);
+      padding:        var(--space-m);
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--space-xs);
+    }
+
+    /* -------------------------------------------------------
+       CONTROLS BAR — DS node 5472:118229 — h:40, space-between
+    ------------------------------------------------------- */
+    .hist-controls {
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      height:          40px;
+      gap:             var(--space-m);
+    }
+
+    /* View toggle — Button Group - 1.5 — DS node 665:592 / instance 5472:118230
+       Outer: border:1px solid (DS strokeAlign CENTER). Each part: 115×40px, p:8px.
+       No hover, no transition in DS. */
+    .hist-toggle {
       display:       flex;
       align-items:   center;
-      height:        24px;
-      max-height:    24px;
-      padding:       2px 4px;             /* DS: paddingTop:2 paddingRight:4 paddingBottom:2 paddingLeft:4 */
-      background:    var(--surface-general-default);   /* Default: Surface/general/default #ffffff */
-      border-radius: var(--corner-radius-corner-rounded);   /* 60px pill */
-      box-shadow:    none;                /* Default: no stroke */
-      border:        none;
-      cursor:        pointer;
-      user-select:   none;
-      white-space:   nowrap;
-      transition:    background 0.12s ease, box-shadow 0.12s ease;
+      border:        1px solid var(--border-general-default);
+      border-radius: 108px;
+      overflow:      hidden;
+      flex-shrink:   0;
     }
-    /* Hover: Surface/secondary/default #b5f291 · Border/secondary/focus inset 1px #70bc6f */
-    .navbar-bottom__btn:hover {
-      background: var(--surface-secondary-default);
-      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    .hist-toggle__btn {
+      width:           115px;
+      height:          40px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      padding:         8px;
+      background:      var(--surface-general-default);
+      color:           var(--text-default-body);
+      border:          none;
+      border-right:    1px solid var(--border-general-default);
+      font-family:     var(--font);
+      font-weight:     600;
+      font-size:       14px;
+      line-height:     20px;
+      white-space:     nowrap;
+      cursor:          pointer;
+      user-select:     none;
     }
-    /* Pressed (mousedown): Surface/primary/focus #00a36a · Border/primary/default inset 1px #00cc85 */
-    .navbar-bottom__btn:active {
-      background: var(--surface-primary-focus);
-      box-shadow: inset 0 0 0 1px var(--border-primary-default);
-    }
-    /* Active (currently selected / menu open): Surface/primary/default #00cc85 · Border/primary/focus inset 1px #00a36a */
-    .navbar-bottom__btn.is-active {
-      background: var(--surface-primary-default);
-      box-shadow: inset 0 0 0 1px var(--border-primary-focus);
+    .hist-toggle__btn:last-child { border-right: none; }
+    .hist-toggle__btn.is-active {
+      background:   var(--surface-primary-default);
+      color:        var(--text-primary-on-color);
+      border-right: 1px solid var(--border-primary-focus);
     }
 
-    /* Icon slot: 20×20 wrapper, 16×16 SVG — separate color per state */
-    .navbar-bottom__icon {
-      display: flex; align-items: center; justify-content: center;
-      width: 20px; height: 20px; flex-shrink: 0;
-      color: var(--icon-primary-default);          /* Default: Icon/primary/default #00cc85 */
-      transition: color 0.12s ease;
+    /* Month navigator — DS node 5472:118231 — gap:25px */
+    .hist-nav {
+      display:     flex;
+      align-items: center;
+      gap:         25px;
+      flex-shrink: 0;
     }
-    .navbar-bottom__icon svg { width: 16px; height: 16px; display: block; }
-    .navbar-bottom__btn:hover  .navbar-bottom__icon { color: var(--icon-secondary-hover); }    /* Hover  — Icon/secondary/hover  #70bc6f */
-    .navbar-bottom__btn:active .navbar-bottom__icon { color: var(--icon-primary-default); }   /* Pressed — Icon/primary/default #00cc85 (Arrow vis=false, leading icon confirmed) */
-    .navbar-bottom__btn.is-active .navbar-bottom__icon { color: var(--icon-primary-on-color); } /* Active  — Icon/primary/on-color #e1f9ea */
+    /* Month label — Title/T4: Poppins SemiBold 16px/lh:24 · Text/default/body #666666 */
+    .hist-nav__label {
+      font-size:   16px;
+      font-weight: 600;
+      line-height: 24px;
+      color:       var(--text-default-body);
+      white-space: nowrap;
+      min-width:   96px;
+      text-align:  center;
+    }
+    /* Prev/Next button group — Button Group - 1.5 — DS node 5472:118233
+       border: 1px solid, radius: corner-pill 999px, overflow:hidden. No explicit height. */
+    .hist-nav__btns {
+      display:       flex;
+      align-items:   center;
+      border:        1px solid var(--border-general-default);
+      border-radius: var(--corner-pill);
+      overflow:      hidden;
+      flex-shrink:   0;
+    }
+    /* Each part: 40×40px, padding:8px → 24px icon area. No hover in DS. */
+    .hist-nav__btn {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      width:           40px;
+      height:          40px;
+      padding:         8px;
+      background:      var(--surface-general-default);
+      border:          none;
+      border-right:    1px solid var(--border-general-default);
+      cursor:          pointer;
+      color:           var(--icon-primary-default);
+      flex-shrink:     0;
+    }
+    .hist-nav__btn:last-child { border-right: none; }
 
-    /* Label: 12px SemiBold · px:4px — separate color per state */
-    .navbar-bottom__label {
-      font-family: var(--font-family);
+    /* -------------------------------------------------------
+       CALENDAR GRID — DS node 5472:118234
+       border: 1px solid #d9d9d9, radius: Corner-2XL 18px, overflow:hidden
+    ------------------------------------------------------- */
+    .hist-grid {
+      border:        1px solid var(--border-general-default);
+      border-radius: var(--corner-2xl);
+      overflow:      hidden;
+    }
+    /* Each row is a flex container of 7 equal cells */
+    .hist-row {
+      display: flex;
+      align-items: stretch;
+    }
+    /* Each cell — DS Calendar Month - 1.5 (Type=On Month)
+       bg: Surface/general/default #ffffff
+       right border + bottom border: 1px solid #d9d9d9 · no left/top border
+       padding: t:0 sides:16px b:16px (Spacing/component/md)
+       gap: 8px (Spacing/component/xs) · flex-col · overflow:hidden */
+    .hist-cell {
+      flex:           1 0 0;
+      min-width:      0;
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--space-xs);
+      background:     var(--surface-general-default);
+      border-right:   1px solid var(--border-general-default);
+      border-bottom:  1px solid var(--border-general-default);
+      padding:        0 var(--space-m) var(--space-m);
+      overflow:       hidden;
+      min-height:     302px;
+    }
+    .hist-cell:last-child { border-right: none; }
+    .hist-row:last-child .hist-cell { border-bottom: none; }
+
+    /* Overflow days (outside current month) — lighter date color */
+    .hist-cell--overflow .hist-cell__date { color: var(--text-disabled-default); }
+    .hist-cell--overflow .hist-cell__dayname { color: var(--text-disabled-default); }
+
+    /* Day name row — Row 1 only (showDayName=true)
+       DS: justify-center → text centered | border-bottom inset within cell padding
+       Title/T4: Poppins SemiBold 16px lh:24 · Text/default/body #666666 */
+    .hist-cell__dayname {
+      border-bottom:   1px solid var(--border-general-default);
+      padding:         var(--space-xxs);
+      font-size:       16px;
+      font-weight:     600;
+      line-height:     24px;
+      color:           var(--text-default-body);
+      text-align:      center;
+      white-space:     nowrap;
+      width:           100%;
+      flex-shrink:     0;
+    }
+
+    /* Date number — Title/T1: Poppins Bold 18px/lh:28 · Text/default/body #666666 · right-aligned */
+    .hist-cell__date {
+      font-size:   18px;
+      font-weight: 700;
+      line-height: 28px;
+      color:       var(--text-default-body);
+      text-align:  right;
+      padding:     2px 0;
+      flex-shrink: 0;
+    }
+
+    /* Activity column — flex-col, gap: 8px (Spacing/component/xs) */
+    .hist-cell__activities {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--space-xs);
+    }
+
+    /* Activity bar — DS Activity Bar in Calendar Month - 1.5
+       width:100%, border-radius: Radius/2xl 16px, overflow:hidden
+       padding: 8px 12px (py: Spacing/component/xs, px: Spacing/component/sm)
+       flex-col, gap: 2px (Spacing/component/3xs) */
+    .hist-activity {
+      width:          100%;
+      border-radius:  16px;
+      overflow:       hidden;
+      padding:        var(--space-xs) var(--space-s);
+      display:        flex;
+      flex-direction: column;
+      gap:            2px;
+      flex-shrink:    0;
+    }
+    /* Activity header row — space-between: time + score */
+    .hist-activity__header {
+      display:         flex;
+      align-items:     center;
+      justify-content: space-between;
+      gap:             var(--space-xs);
+    }
+    /* Time + score text — Body/B1: Poppins SemiBold 14px/lh:20 · Text/on-color/heading #ffffff */
+    .hist-activity__time,
+    .hist-activity__score {
+      font-size:   14px;
+      font-weight: 600;
+      line-height: 20px;
+      color:       #ffffff;
+      white-space: nowrap;
+    }
+    /* Label — Body/B5: Poppins SemiBold 12px/lh:18 · Text/on-color/heading #ffffff */
+    .hist-activity__label {
       font-size:   12px;
       font-weight: 600;
       line-height: 18px;
-      color:       var(--text-default-body);        /* Default: Text/default/body #666666 */
-      padding:     0 var(--spacing-space-xxs);
-      transition:  color 0.12s ease;
-    }
-    .navbar-bottom__btn:hover  .navbar-bottom__label { color: var(--text-secondary-focus); }  /* #70bc6f */
-    .navbar-bottom__btn:active .navbar-bottom__label { color: var(--text-primary-default); }  /* #00cc85 */
-    .navbar-bottom__btn.is-active .navbar-bottom__label { color: var(--text-primary-on-color); } /* #e1f9ea */
-
-    /* ─────────────────────────────────────────────────────
-       RESPONSIVE LAYOUT
-       Desktop : ≥ 1440px → desktop navbar, 3-col quiz grid, 60px padding
-       < 1440px           → mobile navbar
-       Tablet  : 768px – 1279px  → 2-col quiz grid, 32px padding
-       Mobile  : < 768px         → 1-col quiz grid, 16px padding
-    ───────────────────────────────────────────────────── */
-
-    #NavBar-Mobile { display: none; padding: 0 var(--page-padding-x); position: relative; z-index: 300;
-                     transition: opacity 0.15s ease; }
-    /* Hamburger click hides the navbar bar while dropdown slides in over the same space */
-    #NavBar-Mobile.is-hidden-for-menu { opacity: 0; pointer-events: none; }
-
-    /* Navbar breakpoint: ≤1319px → show mobile bar, hide desktop navbars */
-    @media (max-width: 1319px) {
-      #NavbarPrimary-Desktop { display: none; }
-      #NavTopMenu-Desktop    { display: none; }
-      #NavBar-Mobile         { display: block; }
-    }
-
-    /* RECENT ACTIVITIES CAROUSEL — Section 6
-       Flex layout: [btn-side] [viewport overflow:hidden] [btn-side]
-       16px padding all around each button — cards never overlap buttons. */
-    #YourRecentActivities-Desktop .primary-card__content {
-      display:     flex;
-      align-items: center;
-      gap:         var(--spacing-space-m);
-      padding:     var(--spacing-space-m);
+      color:       #ffffff;
+      display:     block;
+      white-space: nowrap;
       overflow:    hidden;
     }
-    .recent-carousel__btn-side {
-      flex-shrink: 0;
-      align-self:  stretch;
+    /* Marquee — continuous right-to-left loop. JS duplicates text so -50% = one copy width. */
+    @keyframes hist-label-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .hist-activity__label.is-scrolling {
+      display:   flex;
+      overflow:  visible;
+      width:     max-content;
+      animation: hist-label-scroll var(--marquee-dur, 8s) linear infinite;
+    }
+
+    /* Subject colors on activity bars — bg + border (INSIDE stroke = box-shadow:inset) */
+    .hist-activity--bm       { background: var(--subjects-bm-bg, #4d77ff);       box-shadow: inset 0 0 0 1px var(--subjects-bm-border, #2e4799); }
+    .hist-activity--biology  { background: var(--subjects-biology-bg, #8431d8);  box-shadow: inset 0 0 0 1px var(--subjects-biology-border, #6a27ad); }
+    .hist-activity--english  { background: var(--subjects-english-bg, #ff4d56);  box-shadow: inset 0 0 0 1px var(--subjects-english-border, #cc3e45); }
+    .hist-activity--math     { background: var(--subjects-math-bg, #42ac7b);     box-shadow: inset 0 0 0 1px var(--subjects-math-border, #358a62); }
+    .hist-activity--physics  { background: var(--subjects-physics-bg, #27a0d7);  box-shadow: inset 0 0 0 1px var(--subjects-physics-border, #1f80ac); }
+    .hist-activity--chemistry { background: var(--subjects-chemistry-bg, #e20082); box-shadow: inset 0 0 0 1px var(--subjects-chemistry-border, #b50068); }
+    .hist-activity--history  { background: var(--subjects-history-bg, #a97c50);  box-shadow: inset 0 0 0 1px var(--subjects-history-border, #876340); }
+
+    /* "More" row — flex, gap:8px, items-center
+       caption: Caption/C1 12px Regular #404040 · flex:1
+       icon: Filled/chevron-down clip 16×16 */
+    .hist-cell__more {
       display:     flex;
       align-items: center;
+      gap:         var(--space-xs);
+      padding:     2px 0;
+      cursor:      pointer;
     }
-    .recent-carousel__btn-side .carousel__btn { height: 100%; }
-    .recent-carousel__viewport {
-      flex:      1;
-      min-width: 0;
-      overflow:  hidden;
+    .hist-cell__more-text {
+      flex:        1 0 0;
+      font-size:   12px;
+      font-weight: 400;
+      line-height: 18px;
+      color:       var(--text-default-heading);
     }
-    .recent-carousel__track {
-      display:     flex;
-      gap:         var(--spacing-space-m);
+    .hist-cell__more-icon {
+      width:       16px;
+      height:      16px;
+      overflow:    hidden;
       flex-shrink: 0;
-      transition:  transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      color:       var(--text-default-heading);
     }
-    /* min/max enforced; JS sets exact width per viewport */
-    .recent-carousel__track .quiz-card {
-      flex-shrink: 0;
-      min-width:   300px;
-      max-width:   370px;
+    .hist-cell__more-icon svg { display: block; width: 100%; height: 100%; }
+    .hist-cell__more-icon { transition: transform 0.2s ease; }
+    .hist-cell.is-expanded .hist-cell__more-icon { transform: rotate(180deg); }
+
+    /* Extra activities (4th+) — hidden until cell expanded */
+    .hist-cell__extra {
+      display:        flex;
+      flex-direction: column;
+      gap:            var(--space-xs);
+      max-height:     0;
+      overflow:       hidden;
+      margin-top:     calc(-1 * var(--space-xs));  /* cancel phantom flex gap when collapsed */
+      transition:     max-height 0.25s ease, margin-top 0.25s ease;
+      width:          100%;
+      flex-shrink:    0;
+    }
+    .hist-cell.is-expanded .hist-cell__extra {
+      max-height:  600px;
+      margin-top:  0;
     }
 
-    /* Tablet */
+    /* Footnote — Body/B3: Poppins Regular 14px/lh:20 · Text/default/body #666666 */
+    .hist-footnote {
+      font-size:   14px;
+      font-weight: 400;
+      line-height: 20px;
+      color:       var(--text-default-body);
+      padding-top: var(--space-xs);
+    }
+    .hist-footnote strong { font-weight: 600; }
+
+    /* -------------------------------------------------------
+       RESPONSIVE
+    ------------------------------------------------------- */
     @media (max-width: 1279px) {
-      :root {
-        --page-padding-x:          32px;
-        --check-in-card-max-width: none;
-      }
-      .primary-card__content {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      /* DS Responsives: H1 28px → 24px at tablet */
-      .welcome-text__name { font-size: 24px; line-height: 36px; }
-
-
-      /* Avatar - 1.5 Size=XL on tablet (64×64, node 684:627) */
-      .welcome-avatar { width: 64px; height: 64px; min-width: 64px; min-height: 64px; }
-
-      /* Welcome section — Tablet + Mobile: welcome-row flex-wrap layout
-         Row 1: welcome-text (flex:1) + Avatar-Mobile
-         Row 2: status-badges (full-width)
-         Row 3: check-in-card (full-width)
-         #Welcome-Desktop → display:contents so its children join .welcome-row directly */
-      .welcome-row     { display: flex; flex-wrap: wrap; gap: var(--spacing-space-m); }
-      #Welcome-Desktop { display: contents; }
-      .welcome-text    { order: 1; flex: 1; min-width: 0; text-align: left; }
-      #Avatar-Mobile   { display: flex; flex-shrink: 0; order: 2; }
-      .status-badges   { order: 3; flex-basis: 100%; }
-      .check-in-card   { order: 4; flex-basis: 100%; width: 100%; }
-
-      /* Status badges — each pill fills equal share of the full-width row */
-      .status-pill             { flex: 1; min-width: 0; }
-      .status-pill-flipper     { flex: 1; min-width: 0; }
-      .status-pill-flipper__inner { width: 100%; }
-      .status-pill-face--front { width: 100%; }
+      .pd-page { padding-left: 32px; padding-right: 32px; }
+      .hist-cell { min-height: 100px; padding: 0 var(--space-xs) var(--space-xs); }
+      .hist-cell__date { font-size: 14px; }
+      .hist-cell__dayname { font-size: 12px; }
+      .hist-activity__time, .hist-activity__score { font-size: 12px; }
+      .hist-activity { padding: var(--space-xxs) var(--space-xs); }
     }
-
-    /* Mobile */
     @media (max-width: 767px) {
-      :root {
-        --page-padding-x: var(--spacing-space-m);   /* 16px */
-      }
-      /* DS Responsives: H1→20px, T1/T2→16px, T3/T4/T5→14px at mobile */
-      .welcome-text__name    { font-size: 20px; line-height: 32px; }
-      .static-card__title    { font-size: 16px; line-height: 24px; }
-      .section-header__title { font-size: 16px; line-height: 24px; }
-      /* Status Badge Size=M mobile — each pill fills equal share of the full-width .status-badges row.
-         Icon ellipse, corners, padding, gap all untouched — only text frame fills the pill width. */
-      .status-pill              { height: 32px; max-height: 32px; min-height: unset; min-width: 0; padding: 4px 2px 4px 4px; flex: 1; }
-      .status-pill-flipper      { flex: 1; min-width: 0; }
-      .status-pill-flipper__inner { width: 100%; }
-      .status-pill-face--front  { width: 100%; }
-      .status-pill__label       { display: none; }
-      .status-pill__value       { font-size: 14px; font-weight: 600; line-height: 20px; }
-      .status-pill__icon        { width: 24px; height: 24px; padding: 4px 2px; flex-shrink: 0; }
-      .status-pill__icon svg    { height: 16px; }
-
-      /* Single-column quiz grid */
-      .primary-card__content {
-        grid-template-columns: 1fr;
-      }
-
-      /* Wrap static cards downward — each card full width, wraps to next row, height hugs content */
-      .static-cards-row { flex-wrap: wrap; }
-      .static-cards-row .static-card { flex-basis: 100%; height: auto; }
-      .static-cards-row .static-card .static-card__content { height: auto; }
-
-      /* Carousel — Mobile variant (DS Type=Mobile, node 3060:869)
-         Full-width bleed (no page padding), no nav buttons, no rounded frame, 152px height */
-      #Carousel-Desktop {
-        width:       100vw;
-        min-width:   390px;
-        margin-left: calc(-1 * var(--page-padding-x));
-      }
-      .carousel__content {
-        border-radius: 0;
-      }
-      .carousel__btn-wrap {
-        display: none;
-      }
-      .carousel__card {
-        height:        152px;
-        width:         auto;
-        aspect-ratio:  428 / 186;
-        max-width:     calc(100vw - 32px);
-      }
-      .carousel__track {
-        gap: var(--spacing-space-xs);   /* 8px — DS mobile gap */
-      }
-      /* Indicator — Mobile variant (DS node 3060:881): 88×12px, 8×8px dots, gap 10px, h-padding 4px */
-      .carousel__indicator {
-        padding:     0 4px;   /* horizontal only — dots at y:0 in 12px frame */
-        gap:         10px;
-        height:      12px;
-        align-items: center;
-      }
-      .carousel__dot {
-        width:  8px;
-        height: 8px;
-      }
-
-      /* Quiz card: floor at 300px on mobile */
-      .quiz-card {
-        min-width: 300px;
-      }
-
-
-      /* Subject Badge M variant at mobile — switch Section 4 back to M (16px icon, 24px badge).
-         M badge = 24px tall: 4px top + 16px icon + 4px bottom = 24px. */
-      #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge      { height: 24px; max-height: 24px; }
-      #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__text { font-size: 12px; line-height: 12px; }
-      #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon svg,
-      #YourSelectedSubjects-Desktop .quiz-card__header .subject-badge__icon img { height: 16px; width: auto; }
-
-      /* Status badges: allow wrapping when pills don't fit in a single row */
-      .status-badges { flex-wrap: wrap; }
-
-      /* Avatar - 1.5 Size=L on mobile (48×48) — tablet uses XXL (100×100) */
-      .welcome-avatar { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
-
-      /* Mobile: hide top hamburger navbar → replaced by bottom Navbar Mobile - 1.5 */
-      #NavBar-Mobile { display: none; }
-      body { padding-top: var(--spacing-space-m); }
-
-      /* Mobile bottom navbar visible; desktop footer hidden */
-      .navbar-bottom { display: flex; }
-      .footer        { display: none; }
-      body           { padding-bottom: 56px; }   /* bottom navbar height */
+      .pd-page { padding-left: 16px; padding-right: 16px; }
+      .hist-controls { flex-direction: column; align-items: flex-start; height: auto; gap: var(--space-xs); }
+      .hist-cell { min-height: 64px; padding: 0 var(--space-xxs) var(--space-xxs); }
+      .hist-cell__dayname { font-size: 10px; }
+      .hist-cell__date { font-size: 12px; }
+      .hist-activity { display: none; }
+      .hist-cell__more { display: none; }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
-       PAGE VIEWPORT — placeholder zone for DS component instances
-       Drop Figma DS components here to build page content.
-    ═══════════════════════════════════════════════════════════════ */
-
-    .page-viewport {
-      display:         flex;
-      flex-direction:  column;
-      align-items:     center;
-      justify-content: center;
-      flex:            1;
-      min-height:      0;
-      background:      var(--surface-general-default);
-      box-shadow:      inset 0 0 0 1px var(--border-general-default);
-      border-radius:   var(--corner-radius-corner-4xl);
-    }
-
-    .page-viewport__placeholder {
-      display:         flex;
-      flex-direction:  column;
-      align-items:     center;
-      justify-content: center;
-      gap:             var(--spacing-space-xs);
-      padding:         var(--spacing-space-xl);
-      color:           var(--text-disabled-default);
-      font-size:       14px;
-      font-weight:     500;
-      text-align:      center;
-      pointer-events:  none;
-      user-select:     none;
-    }
-
-    .page-viewport__placeholder svg {
-      width:  24px;
-      height: 24px;
-      color:  var(--text-disabled-default);
-    }
   </style>
 </head>
 <body>
-<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       NAVBAR â€” Navbar 1.5  (DS node 2339:2617)
+       2-row structure sourced from get_design_context
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <!-- DS ICON SYMBOLS - Pandai DS 1.5 Iconography page (TLVKe3bgJTdVvuPAzgDq2f)
+       All paths extracted via use_figma. Stroke icons inherit currentColor.
+       Waffle uses fill="currentColor" (filled dots, not stroked). -->
+  <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <!-- Outline/image (611:3075) --><symbol id="ic-image" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="18" height="18" rx="2" ry="2"/><circle cx="6.5" cy="6.5" r="1.5"/><polyline points="19 13.5 14 8.5 3 19.5"/></symbol>
       <!-- Outline/chevron-down (260:535) — 16×16 clip-space: active area 37.5%/25% inset → M4,6 L8,10 L12,6 --><symbol id="ic-chevron-down" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 4 6 L 8 10 L 12 6"/></symbol>
@@ -2569,10 +2696,73 @@
       <clipPath id="clip-premium"><rect width="20" height="20" fill="white"/></clipPath>
       <symbol id="ic-premium" viewBox="0 0 20 20" fill="none"><g clip-path="url(#clip-premium)"><path d="M8.18945 2.68805C8.90941 1.15493 11.0906 1.15493 11.8105 2.68805L13.4287 6.13629L17.1924 6.71539C18.8009 6.96261 19.4562 8.92502 18.3193 10.0894L15.5332 12.942L16.1758 16.8785C16.4446 18.5264 14.6955 19.7587 13.2344 18.9507L10 17.1627L6.76562 18.9507C5.3045 19.7587 3.55544 18.5264 3.82422 16.8785L4.46582 12.942L1.68066 10.0894C0.543759 8.92502 1.19912 6.96261 2.80762 6.71539L6.57031 6.13629L8.18945 2.68805Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.09473 3.11383C9.45466 2.34708 10.5453 2.34707 10.9053 3.11383L12.6377 6.80328C12.7084 6.95396 12.8492 7.06012 13.0137 7.08551L17.041 7.70367C17.845 7.82751 18.1728 8.80905 17.6045 9.39117L14.6426 12.4244C14.5317 12.5379 14.4814 12.6975 14.5068 12.8541L15.1895 17.0396C15.3238 17.8634 14.4492 18.4793 13.7188 18.0757L10.2422 16.1529C10.0916 16.0696 9.90837 16.0696 9.75781 16.1529L6.28125 18.0757C5.55077 18.4793 4.67621 17.8634 4.81055 17.0396L5.49316 12.8541C5.51863 12.6975 5.46828 12.5379 5.35742 12.4244L2.39551 9.39117C1.82719 8.80905 2.15501 7.82751 2.95898 7.70367L6.98633 7.08551C7.15083 7.06012 7.29156 6.95396 7.3623 6.80328L9.09473 3.11383Z" fill="#FFF200" stroke="#F2B839" stroke-linecap="round" stroke-linejoin="round"/></g></symbol>
 
+      <!-- page-specific symbols -->
+      <symbol id="ic-chevron-down-nav" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 7.5L10 12.5L15 7.5"/>
+    </symbol>
+      <symbol id="ic-chevron-right-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18L15 12L9 6"/></symbol>
+      <symbol id="ic-download" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+      <symbol id="ic-bar-chart-2" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19V13C9 12.7348 8.89464 12.4804 8.70711 12.2929C8.51957 12.1054 8.26522 12 8 12H4C3.73478 12 3.48043 12.1054 3.29289 12.2929C3.10536 12.4804 3 12.7348 3 13V19C3 19.2652 3.10536 19.5196 3.29289 19.7071C3.48043 19.8946 3.73478 20 4 20M9 19C9 19.2652 8.89464 19.5196 8.70711 19.7071C8.51957 19.8946 8.26522 20 8 20H4M9 19C9 19.2652 9.10536 19.5196 9.29289 19.7071C9.48043 19.8946 9.73478 20 10 20H14C14.2652 20 14.5196 19.8946 14.7071 19.7071C14.8946 19.5196 15 19.2652 15 19M9 19V9C9 8.73478 9.10536 8.48043 9.29289 8.29289C9.48043 8.10536 9.73478 8 10 8H14C14.2652 8 14.5196 8.10536 14.7071 8.29289C14.8946 8.48043 15 8.73478 15 9V19M4 20H18M15 19C15 19.2652 15.1054 19.5196 15.2929 19.7071C15.4804 19.8946 15.7348 20 16 20H20C20.2652 20 20.5196 19.8946 20.7071 19.7071C20.8946 19.5196 21 19.2652 21 19V5C21 4.73478 20.8946 4.48043 20.7071 4.29289C20.5196 4.10536 20.2652 4 20 4H16C15.7348 4 15.4804 4.10536 15.2929 4.29289C15.1054 4.48043 15 4.73478 15 5V19Z"/></symbol>
+      <symbol id="logo-pandai-h" viewBox="0 0 116.479 28">
+        <path d="M22.3786 13.9871H26.8511L26.6861 14.2427C24.4175 17.7055 21.4078 20.7217 17.9353 23.0291C20.6343 20.9579 22.3786 17.6796 22.3786 13.9935V13.9871Z" fill="#95E3E6"/>
+        <path d="M26.6861 13.7346L26.8479 13.9871H22.3786C22.3786 10.0389 20.3689 6.55665 17.3366 4.53076C21.0841 6.93529 24.3042 10.1036 26.6731 13.7185L26.6861 13.7346Z" fill="#B4F3BF"/>
+        <path d="M15.6375 3.59547C14.2751 2.99353 12.7702 2.66019 11.1909 2.66019C9.23949 2.66019 7.40453 3.16828 5.80583 4.06149L3.49515 0L3.79612 0.00970874C8.38512 0.346278 12.4466 2.00647 15.6375 3.59547Z" fill="#CAFBDC"/>
+        <path d="M3.49515 0L5.80583 4.06149C2.58576 5.85761 0.330099 9.21359 0.0323639 13.1165C0.271846 8.39159 1.38511 4.07443 3.34304 0.271845L3.48544 0H3.49515Z" fill="#86D9AC"/>
+        <path d="M16.9644 23.6505C16.9223 23.6796 16.877 23.7055 16.835 23.7314L16.7476 23.7799C16.4401 23.9644 16.1295 24.1424 15.8188 24.3107C15.8091 24.3107 15.7994 24.3204 15.7896 24.3236C14.3851 24.9676 12.8285 25.3269 11.1909 25.3269C9.20712 25.3269 7.34305 24.8026 5.72492 23.8803L11.411 13.9871L16.9644 23.6505Z" fill="#76D59F"/>
+        <path d="M22.3786 13.9871V13.9935C22.3786 17.6796 20.6343 20.9579 17.9353 23.0291C17.6149 23.246 17.2913 23.4498 16.9644 23.6505L11.411 13.9871H22.3786Z" fill="#7CD988"/>
+        <path d="M22.3786 13.987H11.411L16.9029 4.25562C17.0485 4.34299 17.1909 4.43361 17.3333 4.5307C20.3657 6.55659 22.3722 10.0388 22.3754 13.987H22.3786Z" fill="#A5E695"/>
+        <path d="M16.8123 4.19737C16.8447 4.21679 16.8738 4.23621 16.9029 4.25563L11.411 13.987L5.80582 4.06145C7.40453 3.16825 9.23948 2.66016 11.1909 2.66016C12.7702 2.66016 14.2751 2.99349 15.6375 3.59543C16.0194 3.78637 16.3883 3.97407 16.7443 4.15854C16.7573 4.16501 16.7702 4.17148 16.7799 4.17796C16.7929 4.18443 16.8026 4.1909 16.8123 4.19737Z" fill="#99EBB2"/>
+        <path d="M11.411 13.9871H0V13.8835C0.00970874 13.6279 0.0194175 13.3754 0.0323625 13.123V13.1165C0.330097 9.21363 2.58576 5.85764 5.80583 4.06152L11.411 13.9871Z" fill="#66D59D"/>
+        <path d="M11.411 13.9871L5.72492 23.8803C2.50162 22.0453 0.262136 18.6408 0.0226537 14.699C0.012945 14.466 0.00647249 14.2298 0 13.9935V13.9871H11.411Z" fill="#4FBE88"/>
+        <path d="M5.72508 23.8802L3.3788 27.9935L3.23964 27.7249C1.28171 23.8414 0.200805 19.466 0.0228119 14.699C0.262294 18.6407 2.50178 22.0453 5.72508 23.8802Z" fill="#82D9DE"/>
+        <path d="M3.37864 27.9935L5.72492 23.8802C7.34304 24.8026 9.20712 25.3269 11.1909 25.3269C12.8285 25.3269 14.3851 24.9676 15.7896 24.3236C12.0453 26.3916 7.97734 27.6181 3.68932 27.9741L3.38188 28V27.9935H3.37864Z" fill="#9DE6F1"/>
+        <path d="M34.6408 23.5923V18.0227H38.9935C40.6667 18.0227 42.123 17.7476 43.3625 17.1942C44.6019 16.644 45.5534 15.8479 46.2136 14.8091C46.8738 13.7703 47.2071 12.5534 47.2071 11.1554C47.2071 9.75731 46.877 8.51783 46.2136 7.4887C45.5534 6.45957 44.6019 5.66993 43.3625 5.11653C42.123 4.56637 40.6667 4.28805 38.9935 4.28805H31.055V23.5826H34.6375L34.6408 23.5923ZM38.8285 14.9936H34.6408V7.33012H38.8285C40.3916 7.33012 41.576 7.66022 42.3851 8.32365C43.1942 8.98385 43.5987 9.93207 43.5987 11.1618C43.5987 12.3916 43.1942 13.3398 42.3851 14C41.576 14.6602 40.3916 14.9936 38.8285 14.9936Z" fill="#444A56"/>
+        <path d="M55.1974 23.7864C56.2071 23.7864 57.1327 23.6117 57.9676 23.2622C58.8026 22.9126 59.5048 22.3884 60.0744 21.6893V23.5923H63.3527V8.87381H59.9094V10.6667C59.3204 10.0227 58.6278 9.53724 57.8285 9.20715C57.0291 8.87705 56.1521 8.712 55.1974 8.712C53.7637 8.712 52.4822 9.02592 51.3527 9.65051C50.2233 10.2751 49.3398 11.1521 48.7055 12.2816C48.0712 13.411 47.754 14.7314 47.754 16.2363C47.754 17.7411 48.0712 19.0648 48.7055 20.2071C49.3398 21.3463 50.2201 22.2298 51.3527 22.8544C52.4822 23.479 53.7637 23.7929 55.1974 23.7929V23.7864ZM55.5825 20.8382C54.3139 20.8382 53.2718 20.4143 52.4531 19.5696C51.6343 18.7249 51.2265 17.6117 51.2265 16.233C51.2265 14.8544 51.6343 13.7444 52.4531 12.8965C53.2718 12.0486 54.3139 11.6279 55.5825 11.6279C56.8511 11.6279 57.8964 12.0518 58.7249 12.8965C59.5502 13.7411 59.9644 14.8544 59.9644 16.233C59.9644 17.6117 59.5502 18.7217 58.7249 19.5696C57.8997 20.4143 56.8511 20.8382 55.5825 20.8382Z" fill="#444A56"/>
+        <path d="M67.521 23.5923V16.1489C67.521 14.7152 67.89 13.6181 68.6246 12.8544C69.3592 12.0906 70.3592 11.712 71.6278 11.712C72.7476 11.712 73.6116 12.0389 74.2168 12.6893C74.822 13.3431 75.1262 14.3107 75.1262 15.5987V23.5923H78.5696V15.1586C78.5696 13.0259 78.0097 11.4175 76.89 10.3334C75.7702 9.24922 74.2815 8.70553 72.4239 8.70553C71.3398 8.70553 70.3657 8.88029 69.5016 9.2298C68.6375 9.57932 67.9223 10.0939 67.3527 10.7735V8.87058H64.0744V23.5923H67.5178H67.521Z" fill="#444A56"/>
+        <path d="M87.1003 23.7864C88.11 23.7864 89.0356 23.6117 89.8706 23.2622C90.7055 22.9126 91.4078 22.3884 91.9773 21.6893V23.5923H95.2848V4.22009H91.8414V10.6926C91.2718 10.0324 90.5825 9.53401 89.7735 9.20391C88.9644 8.87381 88.0744 8.70877 87.1003 8.70877C85.6861 8.70877 84.4142 9.02268 83.2848 9.64728C82.1553 10.2719 81.2686 11.1554 80.6246 12.2945C79.9806 13.4337 79.6602 14.7476 79.6602 16.2363C79.6602 17.7249 79.9806 19.0421 80.6246 20.191C81.2686 21.3398 82.1553 22.2266 83.2848 22.8512C84.4142 23.4758 85.6861 23.7897 87.1003 23.7897V23.7864ZM87.5113 20.8382C86.6861 20.8382 85.9417 20.6505 85.2783 20.2719C84.6181 19.8965 84.0938 19.356 83.7087 18.6602C83.3236 17.9612 83.1294 17.1521 83.1294 16.233C83.1294 15.3139 83.3236 14.5049 83.7087 13.8059C84.0938 13.1068 84.6181 12.5696 85.2783 12.1942C85.9385 11.8188 86.6828 11.6279 87.5113 11.6279C88.3398 11.6279 89.0809 11.8156 89.7443 12.1942C90.4045 12.5696 90.9288 13.1101 91.3139 13.8059C91.699 14.5049 91.8932 15.3139 91.8932 16.233C91.8932 17.1521 91.699 17.9612 91.3139 18.6602C90.9288 19.3592 90.4045 19.8965 89.7443 20.2719C89.0841 20.6473 88.3398 20.8382 87.5113 20.8382Z" fill="#444A56"/>
+        <path d="M103.809 23.7864C104.819 23.7864 105.744 23.6117 106.579 23.2622C107.414 22.9126 108.117 22.3884 108.686 21.6893V23.5923H111.964V8.87381H108.521V10.6667C107.932 10.0227 107.239 9.53724 106.44 9.20715C105.641 8.87705 104.764 8.712 103.809 8.712C102.375 8.712 101.094 9.02592 99.9644 9.65051C98.835 10.2751 97.9515 11.1521 97.3171 12.2816C96.6828 13.411 96.3657 14.7314 96.3657 16.2363C96.3657 17.7411 96.6828 19.0648 97.3171 20.2071C97.9515 21.3463 98.8317 22.2298 99.9644 22.8544C101.094 23.479 102.375 23.7929 103.809 23.7929V23.7864ZM104.194 20.8382C102.926 20.8382 101.883 20.4143 101.065 19.5696C100.246 18.7249 99.8382 17.6117 99.8382 16.233C99.8382 14.8544 100.246 13.7444 101.065 12.8965C101.883 12.0518 102.926 11.6279 104.194 11.6279C105.463 11.6279 106.508 12.0518 107.337 12.8965C108.162 13.7411 108.576 14.8544 108.576 16.233C108.576 17.6117 108.162 18.7217 107.337 19.5696C106.511 20.4143 105.463 20.8382 104.194 20.8382Z" fill="#444A56"/>
+        <path d="M114.725 7.68288C115.22 7.68288 115.625 7.51459 115.942 7.17478C116.259 6.83498 116.417 6.4175 116.417 5.92236C116.417 5.45634 116.256 5.06799 115.932 4.76055C115.608 4.4531 115.207 4.29776 114.725 4.29776C114.243 4.29776 113.845 4.45957 113.518 4.7832C113.194 5.10682 113.032 5.50812 113.032 5.99032C113.032 6.47252 113.194 6.87381 113.518 7.19744C113.841 7.52106 114.243 7.68288 114.725 7.68288Z" fill="#444A56"/>
+        <path d="M116.479 23.6635V8.94501H113.036V23.6635H116.479Z" fill="#444A56"/>
+    </symbol>
+      <symbol id="ic-activity" viewBox="-1 -1 22 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19.0833 9H15.4167L12.6667 17.25L7.16667 0.75L4.41667 9H0.75"/>
+    </symbol>
+      <symbol id="ic-rotate-cw" viewBox="-1 -1 22 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13.5796 7.16489H19.0796V1.66489M19.0796 7.16489L14.8355 3.16822C13.571 1.90298 11.9296 1.08298 10.1586 0.83177C8.38758 0.580565 6.58288 0.911769 5.01647 1.77547C3.45005 2.63918 2.20679 3.98859 1.47402 5.62037C0.741247 7.25214 0.558674 9.07787 0.953811 10.8224C1.34895 12.567 2.30038 14.1359 3.66475 15.2927C5.02912 16.4495 6.73249 17.1315 8.51819 17.2359C10.3039 17.3404 12.0752 16.8617 13.5651 15.8719C15.0551 14.8821 16.1829 13.4348 16.7788 11.7482"/>
+    </symbol>
+      <symbol id="ic-refresh-cw" viewBox="-1 -1 24 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15.4167 7.1645H20.9167V1.6645M20.9167 7.1645L16.6633 3.16783C15.6781 2.18215 14.4593 1.4621 13.1206 1.07487C11.7819 0.687644 10.3668 0.645853 9.0076 0.953401C7.64834 1.26095 6.38915 1.90781 5.34751 2.83363C4.30587 3.75945 3.51574 4.93405 3.05083 6.24783M6.25 10.8312H0.75V16.3312M0.75 10.8312L5.00333 14.8278C5.98852 15.8135 7.20734 16.5336 8.54607 16.9208C9.88481 17.308 11.2998 17.3498 12.6591 17.0423C14.0183 16.7347 15.2775 16.0878 16.3192 15.162C17.3608 14.2362 18.1509 13.0616 18.6158 11.7478"/>
+    </symbol>
+      <symbol id="ic-edit-3" viewBox="-1 -1 20 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M0.75 19.0833H17.25M10.8333 0.75L14.5 4.41667L4.41667 14.5H0.75V10.8333L10.8333 0.75Z"/>
+    </symbol>
+      <symbol id="ic-copy" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3.5 12.6667H2.58333C2.0971 12.6667 1.63079 12.4735 1.28697 12.1297C0.943154 11.7859 0.75 11.3196 0.75 10.8333V2.58333C0.75 2.0971 0.943154 1.63079 1.28697 1.28697C1.63079 0.943154 2.0971 0.75 2.58333 0.75H10.8333C11.3196 0.75 11.7859 0.943154 12.1297 1.28697C12.4735 1.63079 12.6667 2.0971 12.6667 2.58333V3.5M9 7.16667H17.25C18.2625 7.16667 19.0833 7.98748 19.0833 9V17.25C19.0833 18.2625 18.2625 19.0833 17.25 19.0833H9C7.98748 19.0833 7.16667 18.2625 7.16667 17.25V9C7.16667 7.98748 7.98748 7.16667 9 7.16667Z"/>
+    </symbol>
+      <symbol id="ic-check-sm" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17L4 12"/></symbol>
+      <symbol id="ic-filled-star" viewBox="-1 -1 26 26" fill="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="ic-grid" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3L10 3L10 10L3 10Z M14 3L21 3L21 10L14 10Z M14 14L21 14L21 21L14 21Z M3 14L10 14L10 21L3 21Z"/></symbol>
     </defs>
   </svg>
 
-<section id="NavbarPrimary-Desktop">
+  <!-- ═══════════════════════════════════════════════════════════════
+       NAVBAR PRIMARY DESKTOP — Navbar Primary Desktop - 1.5
+       Navbar Primary Desktop - 1.5 / Type=Desktop (node 866:5576)
+       COMPONENT_SET: Navbar Primary Desktop - 1.5 (2337:21975) · only variant: Type=Desktop
+       Logo left · 6 action icons + avatar + notification badge right
+  ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       NAVIGATION SHELL
+       All nav variants wrapped in one section. Fixed elements
+       (NavMenu-Tablet, NavMenu-Mobile, NavBar-Bottom) escape DOM
+       stacking — this section is semantic grouping only.
+       Desktop: NavbarPrimary-Desktop + NavTopMenu-Desktop
+       Tablet:  NavBar-Mobile + NavMenu-Tablet
+       Mobile:  NavBar-Mobile + NavBar-Bottom + NavMenu-Mobile
+  ═══════════════════════════════════════════════════════════════ -->
+  <section id="Navigation-Shell">
+  <section id="NavbarPrimary-Desktop">
     <div class="navbar-primary">
 
       <!-- Logo/Pandai/Logo Horizontal (node 1898:6965): 116×28px overflow-clip container -->
@@ -2947,7 +3137,7 @@
     <nav class="navbar-nav-menu" aria-label="Main navigation">
 
       <!-- Home (no chevron) -->
-      <div class="nav-menu-btn is-active" role="button" tabindex="0" aria-label="Home" aria-current="page">
+      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Home">
         <div class="nav-menu-btn__inner">
           <div class="nav-menu-btn__icon-wrap">
             <div class="nav-menu-btn__icon-clip" data-icon="home"><svg aria-hidden="true"><use href="#ic-home"/></svg></div>
@@ -3009,7 +3199,7 @@
       </div>
 
       <!-- Achievement (with chevron dropdown) -->
-      <div class="nav-menu-btn" role="button" tabindex="0" aria-label="Achievement" aria-haspopup="true">
+      <div class="nav-menu-btn is-active" role="button" tabindex="0" aria-label="Achievement" aria-haspopup="true" aria-current="page">
         <div class="nav-menu-btn__inner">
           <div class="nav-menu-btn__icon-wrap">
             <div class="nav-menu-btn__icon-clip" data-icon="achievement"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></div>
@@ -3244,7 +3434,7 @@
 
       <!-- Left column: Home, Quiz, Battle, Practice, Class -->
       <div class="nav-menu-tablet__col">
-        <div class="nav-menu-item is-active" role="button" tabindex="0" aria-label="Home">
+        <div class="nav-menu-item" role="button" tabindex="0" aria-label="Home">
           <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-home"/></svg></span>
           <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
           <span class="nav-menu-item__label">Home</span>
@@ -3327,7 +3517,7 @@
             <span class="nav-menu-item__label">Bookmarks</span>
           </div>
         </div>
-        <div class="nav-menu-item has-submenu" role="button" tabindex="0" aria-label="Achievement" aria-expanded="false" data-submenu="submenu-achievement">
+        <div class="nav-menu-item has-submenu is-active" role="button" tabindex="0" aria-label="Achievement" aria-expanded="false" data-submenu="submenu-achievement" aria-current="page">
           <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></span>
           <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
           <span class="nav-menu-item__label">Achievement</span>
@@ -3452,24 +3642,478 @@
   <!-- Tablet overlay — Overlay/Overlay-Dark rgba(26,26,26,0.5) · z-index 250
        Behind navbar (300) and dropdown (300), in front of page content (0).
        Click closes the dropdown. -->
-  <div id="tablet-overlay" class="tablet-overlay" aria-hidden="true">
+  <div id="tablet-overlay" class="tablet-overlay" aria-hidden="true"></div>
 
-<main>
-    <div class="page-container">
-      <div class="main-content">
+  </section><!-- end Navigation-Shell -->
 
-        <section id="PageViewport" class="page-viewport" aria-label="Page content area">
-          <div class="page-viewport__placeholder">
-            <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-plus"/></svg>
-            <span>Drop DS component instances here</span>
-          </div>
-        </section>
 
+  <main class="pd-page">
+
+  <!-- BREADCRUMBS 1.5  DS 5472:118227 -->
+  <section id="Breadcrumbs-Desktop">
+    <div class="pd-breadcrumbs15">
+      <h1 class="pd-breadcrumbs__title">History</h1>
+      <div class="pd-breadcrumbs__sep"></div>
+      <div class="pd-breadcrumbs__links">
+        <button class="pd-link15" type="button">
+          <svg class="pd-link15__icon-home" aria-hidden="true"><use href="#ic-book-open"/></svg>
+          <span class="pd-link15__text pd-link15__text--parent">Achievement</span>
+          <svg class="pd-breadcrumbs__chevron" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
+        </button>
+        <span class="pd-link15" style="cursor:default">
+          <span class="pd-link15__text">History</span>
+        </span>
       </div>
     </div>
-  </main>
+  </section>
 
-<footer class="footer">
+  <!-- HISTORY MONTH CALENDAR  DS 5472:118228 -->
+  <section id="HistoryMonth-Desktop">
+    <div class="hist-outer">
+
+      <!-- Controls bar — DS node 5472:118229 -->
+      <div class="hist-controls">
+
+        <!-- View toggle: Month (active) | Week | Lists — DS Button Group - 1.5 node 5472:118230 -->
+        <div class="hist-toggle" role="group" aria-label="View">
+          <button class="hist-toggle__btn is-active" type="button" aria-pressed="true">Month</button>
+          <button class="hist-toggle__btn" type="button" aria-pressed="false">Week</button>
+          <button class="hist-toggle__btn" type="button" aria-pressed="false">Lists</button>
+        </div>
+
+        <!-- Month navigator — DS node 5472:118231 -->
+        <div class="hist-nav">
+          <span class="hist-nav__label" id="hist-month-label">April 2026</span>
+          <div class="hist-nav__btns">
+            <button class="hist-nav__btn" id="hist-prev" type="button" aria-label="Previous month">
+              <svg width="24" height="24" aria-hidden="true"><use href="#ic-chevron-left"/></svg>
+            </button>
+            <button class="hist-nav__btn" id="hist-next" type="button" aria-label="Next month">
+              <svg width="24" height="24" aria-hidden="true"><use href="#ic-chevron-right-sm"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </div><!-- end hist-controls -->
+
+      <!-- Calendar grid — DS node 5472:118234 -->
+      <div class="hist-grid">
+
+        <!-- Row 1 — with day names header (showDayName=true) -->
+        <div class="hist-row">
+
+          <!-- Sun Mar 29 — overflow (outside April) -->
+          <div class="hist-cell hist-cell--overflow">
+            <div class="hist-cell__dayname">Sunday</div>
+            <div class="hist-cell__date">29</div>
+          </div>
+
+          <!-- Mon Mar 30 — overflow -->
+          <div class="hist-cell hist-cell--overflow">
+            <div class="hist-cell__dayname">Monday</div>
+            <div class="hist-cell__date">30</div>
+          </div>
+
+          <!-- Tue Mar 31 — overflow -->
+          <div class="hist-cell hist-cell--overflow">
+            <div class="hist-cell__dayname">Tuesday</div>
+            <div class="hist-cell__date">31</div>
+          </div>
+
+          <!-- Wed Apr 1 -->
+          <div class="hist-cell">
+            <div class="hist-cell__dayname">Wednesday</div>
+            <div class="hist-cell__date">1</div>
+            <div class="hist-cell__activities">
+              <div class="hist-activity hist-activity--bm">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">10:25am</span>
+                  <span class="hist-activity__score">10/10</span>
+                </div>
+                <span class="hist-activity__label">Bahasa Melayu (Daily Quiz)</span>
+              </div>
+              <div class="hist-activity hist-activity--biology">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">2:30pm</span>
+                  <span class="hist-activity__score">8/10</span>
+                </div>
+                <span class="hist-activity__label">Biology (Flashcard)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thu Apr 2 -->
+          <div class="hist-cell">
+            <div class="hist-cell__dayname">Thursday</div>
+            <div class="hist-cell__date">2</div>
+          </div>
+
+          <!-- Fri Apr 3 -->
+          <div class="hist-cell">
+            <div class="hist-cell__dayname">Friday</div>
+            <div class="hist-cell__date">3</div>
+            <div class="hist-cell__activities">
+              <div class="hist-activity hist-activity--english">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">11:00am</span>
+                  <span class="hist-activity__score">5/5</span>
+                </div>
+                <span class="hist-activity__label">English (Battle)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sat Apr 4 -->
+          <div class="hist-cell">
+            <div class="hist-cell__dayname">Saturday</div>
+            <div class="hist-cell__date">4</div>
+          </div>
+
+        </div><!-- end row 1 -->
+
+        <!-- Row 2 — Apr 5–11 -->
+        <div class="hist-row">
+
+          <!-- Sun Apr 5 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">5</div>
+          </div>
+
+          <!-- Mon Apr 6 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">6</div>
+          </div>
+
+          <!-- Tue Apr 7 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">7</div>
+            <div class="hist-cell__activities">
+              <div class="hist-activity hist-activity--bm">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">8:00am</span>
+                  <span class="hist-activity__score">7/10</span>
+                </div>
+                <span class="hist-activity__label">Bahasa Melayu (Daily Quiz)</span>
+              </div>
+              <div class="hist-activity hist-activity--math">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">3:15pm</span>
+                  <span class="hist-activity__score">9/10</span>
+                </div>
+                <span class="hist-activity__label">Mathematics (Flashcard)</span>
+              </div>
+              <div class="hist-activity hist-activity--physics">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">4:00pm</span>
+                  <span class="hist-activity__score">6/10</span>
+                </div>
+                <span class="hist-activity__label">Physics (Daily Quiz)</span>
+              </div>
+            </div>
+            <div class="hist-cell__extra">
+              <div class="hist-activity hist-activity--chemistry">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">5:30pm</span>
+                  <span class="hist-activity__score">8/10</span>
+                </div>
+                <span class="hist-activity__label">Chemistry (Daily Quiz)</span>
+              </div>
+              <div class="hist-activity hist-activity--english">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">7:00pm</span>
+                  <span class="hist-activity__score">4/5</span>
+                </div>
+                <span class="hist-activity__label">English (Battle)</span>
+              </div>
+            </div>
+            <div class="hist-cell__more">
+              <span class="hist-cell__more-text">+2 more</span>
+              <span class="hist-cell__more-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5"/></svg></span>
+            </div>
+          </div>
+
+          <!-- Wed Apr 8 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">8</div>
+            <div class="hist-cell__activities">
+              <div class="hist-activity hist-activity--english">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">10:30am</span>
+                  <span class="hist-activity__score">5/5</span>
+                </div>
+                <span class="hist-activity__label">English (Daily Quiz)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thu Apr 9 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">9</div>
+          </div>
+
+          <!-- Fri Apr 10 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">10</div>
+            <div class="hist-cell__activities">
+              <div class="hist-activity hist-activity--biology">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">9:00am</span>
+                  <span class="hist-activity__score">8/10</span>
+                </div>
+                <span class="hist-activity__label">Biology (Flashcard)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sat Apr 11 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">11</div>
+          </div>
+
+        </div><!-- end row 2 -->
+
+        <!-- Row 3 — Apr 12–18 -->
+        <div class="hist-row">
+
+          <!-- Sun Apr 12 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">12</div>
+          </div>
+
+          <!-- Mon Apr 13 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">13</div>
+          </div>
+
+          <!-- Tue Apr 14 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">14</div>
+            <div class="hist-cell__activities">
+              <div class="hist-activity hist-activity--chemistry">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">8:30am</span>
+                  <span class="hist-activity__score">7/10</span>
+                </div>
+                <span class="hist-activity__label">Chemistry (Daily Quiz)</span>
+              </div>
+              <div class="hist-activity hist-activity--bm">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">2:00pm</span>
+                  <span class="hist-activity__score">9/10</span>
+                </div>
+                <span class="hist-activity__label">Bahasa Melayu (Flashcard)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Wed Apr 15 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">15</div>
+          </div>
+
+          <!-- Thu Apr 16 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">16</div>
+            <div class="hist-cell__activities">
+              <div class="hist-activity hist-activity--english">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">3:30pm</span>
+                  <span class="hist-activity__score">5/5</span>
+                </div>
+                <span class="hist-activity__label">English (Battle)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fri Apr 17 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">17</div>
+          </div>
+
+          <!-- Sat Apr 18 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">18</div>
+            <div class="hist-cell__activities">
+              <div class="hist-activity hist-activity--history">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">10:00am</span>
+                  <span class="hist-activity__score">6/10</span>
+                </div>
+                <span class="hist-activity__label">History (Daily Quiz)</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end row 3 -->
+
+        <!-- Row 4 — Apr 19–25 -->
+        <div class="hist-row">
+
+          <!-- Sun Apr 19 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">19</div>
+          </div>
+
+          <!-- Mon Apr 20 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">20</div>
+          </div>
+
+          <!-- Tue Apr 21 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">21</div>
+            <div class="hist-cell__activities">
+              <div class="hist-activity hist-activity--bm">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">9:00am</span>
+                  <span class="hist-activity__score">8/10</span>
+                </div>
+                <span class="hist-activity__label">Bahasa Melayu (Daily Quiz)</span>
+              </div>
+              <div class="hist-activity hist-activity--biology">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">4:00pm</span>
+                  <span class="hist-activity__score">4/5</span>
+                </div>
+                <span class="hist-activity__label">Biology (Battle)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Wed Apr 22 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">22</div>
+            <div class="hist-cell__activities">
+              <div class="hist-activity hist-activity--physics">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">10:00am</span>
+                  <span class="hist-activity__score">7/10</span>
+                </div>
+                <span class="hist-activity__label">Physics (Flashcard)</span>
+              </div>
+              <div class="hist-activity hist-activity--math">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">3:15pm</span>
+                  <span class="hist-activity__score">9/10</span>
+                </div>
+                <span class="hist-activity__label">Mathematics (Daily Quiz)</span>
+              </div>
+              <div class="hist-activity hist-activity--english">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">4:30pm</span>
+                  <span class="hist-activity__score">5/5</span>
+                </div>
+                <span class="hist-activity__label">English (Battle)</span>
+              </div>
+            </div>
+            <div class="hist-cell__extra">
+              <div class="hist-activity hist-activity--biology">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">7:30pm</span>
+                  <span class="hist-activity__score">6/10</span>
+                </div>
+                <span class="hist-activity__label">Biology (Flashcard)</span>
+              </div>
+            </div>
+            <div class="hist-cell__more">
+              <span class="hist-cell__more-text">+1 more</span>
+              <span class="hist-cell__more-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5L10 12.5L15 7.5"/></svg></span>
+            </div>
+          </div>
+
+          <!-- Thu Apr 23 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">23</div>
+          </div>
+
+          <!-- Fri Apr 24 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">24</div>
+          </div>
+
+          <!-- Sat Apr 25 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">25</div>
+          </div>
+
+        </div><!-- end row 4 -->
+
+        <!-- Row 5 — Apr 26–30 + overflow -->
+        <div class="hist-row">
+
+          <!-- Sun Apr 26 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">26</div>
+          </div>
+
+          <!-- Mon Apr 27 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">27</div>
+          </div>
+
+          <!-- Tue Apr 28 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">28</div>
+            <div class="hist-cell__activities">
+              <div class="hist-activity hist-activity--bm">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">8:30am</span>
+                  <span class="hist-activity__score">9/10</span>
+                </div>
+                <span class="hist-activity__label">Bahasa Melayu (Daily Quiz)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Wed Apr 29 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">29</div>
+            <div class="hist-cell__activities">
+              <div class="hist-activity hist-activity--biology">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">2:00pm</span>
+                  <span class="hist-activity__score">8/10</span>
+                </div>
+                <span class="hist-activity__label">Biology (Flashcard)</span>
+              </div>
+              <div class="hist-activity hist-activity--chemistry">
+                <div class="hist-activity__header">
+                  <span class="hist-activity__time">3:30pm</span>
+                  <span class="hist-activity__score">7/10</span>
+                </div>
+                <span class="hist-activity__label">Chemistry (Daily Quiz)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thu Apr 30 -->
+          <div class="hist-cell">
+            <div class="hist-cell__date">30</div>
+          </div>
+
+          <!-- Fri May 1 — overflow -->
+          <div class="hist-cell hist-cell--overflow">
+            <div class="hist-cell__date">1</div>
+          </div>
+
+          <!-- Sat May 2 — overflow -->
+          <div class="hist-cell hist-cell--overflow">
+            <div class="hist-cell__date">2</div>
+          </div>
+
+        </div><!-- end row 5 -->
+
+      </div><!-- end hist-grid -->
+
+      <!-- Footnote — DS node 5472:118275 -->
+      <p class="hist-footnote">The numbers in the <strong>bracket indicate</strong> the total correct answers over the total submitted answers.</p>
+
+    </div><!-- end hist-outer -->
+  </section>
+
+</main>
+
+  <footer class="footer">
     <div class="footer__inner">
 
         <!-- Left text group -->
@@ -3490,7 +4134,8 @@
     </div>
   </footer>
 
-<script>
+
+  <script>
 
     // Search bar — btn click → open + focus + start 3s timer; inactivity → close + reset btn (Rule 14: critical first)
     (function () {
@@ -3939,8 +4584,9 @@
         }
 
         function restoreHome() {
-          var homeBtn = navSection.querySelector('[aria-label="Home"]');
-          if (homeBtn) { homeBtn.classList.add('is-active'); homeBtn.setAttribute('aria-current', 'page'); }
+          /* restore the CURRENT page's nav button (set by the page-nav script), not always Home */
+          var defBtn = navSection.querySelector('[aria-label="' + (window.__navActiveLabel || 'Home') + '"]');
+          if (defBtn) { defBtn.classList.add('is-active'); defBtn.setAttribute('aria-current', 'page'); }
         }
 
         function openDropdown() {
@@ -4024,8 +4670,8 @@
           timer = setTimeout(function () {
             btn.classList.remove('is-active');
             btn.removeAttribute('aria-current');
-            var homeBtn = navSection.querySelector('[aria-label="Home"]');
-            if (homeBtn) { homeBtn.classList.add('is-active'); homeBtn.setAttribute('aria-current', 'page'); }
+            var defBtn = navSection.querySelector('[aria-label="' + (window.__navActiveLabel || 'Home') + '"]');
+            if (defBtn) { defBtn.classList.add('is-active'); defBtn.setAttribute('aria-current', 'page'); }
           }, 3000);
         });
         btn.addEventListener('mouseenter', function () { clearTimeout(timer); });
@@ -4317,8 +4963,7 @@
       console.warn('Recent activities carousel error:', e);
     }
   </script>
-
-<nav id="NavBar-Bottom" class="navbar-bottom" aria-label="Mobile navigation">
+  <nav id="NavBar-Bottom" class="navbar-bottom" aria-label="Mobile navigation">
     <button class="navbar-bottom__btn" type="button" aria-label="Quiz">
       <span class="navbar-bottom__icon"><svg aria-hidden="true"><use href="#ic-check-circle"/></svg></span>
       <span class="navbar-bottom__label">Quiz</span>
@@ -4363,7 +5008,7 @@
         <span class="nav-menu-tablet__search-icon"><svg width="24" height="24" aria-hidden="true"><use href="#ic-search"/></svg></span>
       </button>
       <!-- Home — Active state (DS 3427:2464): fill #b5f291, stroke #00a36a, radius 999 -->
-      <div class="nav-menu-item is-active" role="button" tabindex="0" aria-label="Home">
+      <div class="nav-menu-item" role="button" tabindex="0" aria-label="Home">
         <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-home"/></svg></span>
         <span class="nav-menu-item__label">Home</span>
       </div>
@@ -4435,7 +5080,7 @@
           <span class="nav-menu-item__label">Bookmarks</span>
         </div>
       </div>
-      <div class="nav-menu-item has-submenu" role="button" tabindex="0" aria-label="Achievement" aria-expanded="false" data-submenu="submenu-m-achievement">
+      <div class="nav-menu-item has-submenu is-active" role="button" tabindex="0" aria-label="Achievement" aria-expanded="false" data-submenu="submenu-m-achievement" aria-current="page">
         <span class="nav-menu-item__icon"><svg aria-hidden="true"><use href="#ic-bar-chart"/></svg></span>
         <span class="nav-menu-check" aria-hidden="true"><svg aria-hidden="true"><use href="#ic-check"/></svg></span>
         <span class="nav-menu-item__label">Achievement</span>
@@ -4551,8 +5196,7 @@
     </div><!-- end nav-menu-mobile__content (Menu frame) -->
 
   </div><!-- end NavMenu-Mobile -->
-
-<script>
+  <script>
     (function () {
       var accountBtn    = document.getElementById('account-btn');
       var mobilePanel   = document.getElementById('NavMenu-Mobile');
@@ -4739,172 +5383,431 @@
     })();
   </script>
 
-<script>
-/* test.page.compiled — Top Menu Bar navigation + persistent active state (v5) */
-(function () {
-  var TOP_ROUTES = {
-    'Home':     'home.html',
-    'Practice': 'practice.html'
-  };
-  var SUB_ROUTES = {
-    'My Classes':       'class-my-classes.html',
-    'Browse Classes':   'class-browse-classes.html',
-    'Learning Hub':     'learn-learning-hub.html',
-    'Quick Notes':      'learn-quick-notes.html',
-    'Score Card':       'achievement-score-card.html',
-    'Report Card':      'achievement-report-card.html',
-    'Coin Quests':      'rewards-coin-quests.html',
-    'My Rewards':       'rewards-my-rewards.html',
-    'Merchandise':      'rewards-merchandise.html',
-    'eVoucher':         'rewards-evoucher.html',
-    'Avatar':           'rewards-avatar.html'
-  };
-  /* Page → parent main-menu label that should show active state */
-  var PAGE_ACTIVE_MAIN = {
-    'home.html':                          'Home',
-    'practice.html':                      'Practice',
-    'class-my-classes.html':              'Class',
-    'class-browse-classes.html':          'Class',
-    'learn-learning-hub.html':            'Learn',
-    'learn-quick-notes.html':             'Learn',
-    'learn-quick-notes-selections.html':  'Learn',
-    'learn-quick-notes-view.html':        'Learn',
-    'achievement-score-card.html':        'Achievement',
-    'achievement-report-card.html':       'Achievement',
-    'achievement-analysis-card.html':     'Achievement',
-    'rewards-coin-quests.html':           'Rewards',
-    'rewards-my-rewards.html':            'Rewards',
-    'rewards-merchandise.html':           'Rewards',
-    'rewards-evoucher.html':              'Rewards',
-    'rewards-avatar.html':                'Rewards'
-  };
+  <!-- ═══════════════════════════════════════════════════════════════
+       PAGE NAVIGATION — link menu-bar buttons by label → page file,
+       + active-state sync to the current page (desktop + tablet + mobile)
+  ═══════════════════════════════════════════════════════════════ -->
+  <script>
+    (function () {
+      var NAV = {
+        "Home":"home.html","Quiz":"nadia_Quiz.html","Battle":"nadia_Battle.html","Practice":"nadia_Practise-subject.html",
+        "My Classes":"nadia_Class-MyClasses.html","Browse Classes":"nadia_Class-BrowseClasses.html","Assignments":"nadia_Class-LatestAssignments.html",
+        "Learning Hub":"learningHub.html","Quick Notes":"quickNotes.html","Videos":"videos.html",
+        "Experiments":"experiments.html","Textbooks":"textbook.html","Bookmarks":"bookmarks.html",
+        "Score Card":"score.card.html","Report Card":"report.card.html","History":"history.list.html","Certificates":"certificates.html",
+        "Coin Quests":"nadia_Rewards-CoinQuest.html","My Rewards":"nadia_Rewards-Myrewards.html",
+        "Merchandise":"nadia_Rewards-Merchandise.html","eVoucher":"nadia_Rewards-evoucher.html","Avatar":"nadia_Rewards-avatar.html"
+      };
+      // dropdown/sub item → its top-level group button label (for active highlight)
+      var GROUP = {
+        "My Classes":"Class","Browse Classes":"Class","Assignments":"Class",
+        "Learning Hub":"Learn","Quick Notes":"Learn","Videos":"Learn","Experiments":"Learn","Textbooks":"Learn","Bookmarks":"Learn",
+        "Score Card":"Achievement","Report Card":"Achievement","History":"Achievement","Certificates":"Achievement",
+        "Coin Quests":"Rewards","My Rewards":"Rewards","Merchandise":"Rewards","eVoucher":"Rewards","Avatar":"Rewards"
+      };
+      // sub-pages not in the menu → the top-level group they belong to (active highlight only)
+      var SUBPAGE = {
+        "analysiscard.html":"Achievement","history.month.html":"Achievement",
+        "quicknotes.selections.html":"Learn","quicknotes.view.html":"Learn",
+        "videos.selections.html":"Learn","videos.view.html":"Learn",
+        "experiments.selections.html":"Learn","experiments.view.html":"Learn",
+        "nadia_flashcard.html":"Practice","nadia_practiceexam.html":"Practice","nadia_topicaltest.html":"Practice"
+      };
+      // mobile bottom bar uses short labels; Account toggles the menu (not a navigation)
+      var BOTTOM = { "Quiz":"nadia_Quiz.html", "Practice":"nadia_Practise-subject.html", "Score":"score.card.html" };
+      var BOTTOM_ACTIVE = {
+        "Quiz":["nadia_quiz.html"],
+        "Practice":["nadia_practise-subject.html","nadia_flashcard.html","nadia_practiceexam.html","nadia_topicaltest.html"],
+        "Score":["score.card.html"]
+      };
 
-  var SEL_A_BTN  = '#NavTopMenu-Desktop .nav-menu-btn';
-  var SEL_A_ITEM = '#NavTopMenu-Desktop .nav-menu-dropdown__item';
-  var SEL_B_BTN  = '.navbar-nav .nav-btn, .menubar-nav .nav-btn';
-  var SEL_B_ITEM = '.nav-subtopic-dropdown__item';
-
-  function nav(href) { return function (e) { e.preventDefault(); e.stopPropagation(); window.location.href = href; }; }
-
-  function currentFile() {
-    var p = window.location.pathname.replace(/[?#].*$/, '');
-    if (p.charAt(p.length - 1) === '/') return 'home.html';
-    var f = p.substring(p.lastIndexOf('/') + 1).toLowerCase();
-    if (!f) return 'home.html';
-    if (f.indexOf('.html') < 0) f += '.html';
-    return f;
-  }
-
-  function wireLinks() {
-    document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
-      if (btn.hasAttribute('aria-haspopup')) return;
-      var href = TOP_ROUTES[(btn.getAttribute('aria-label') || '').trim()];
-      if (href && !btn.dataset.tpcWired) {
-        btn.addEventListener('click', nav(href), true);
-        btn.dataset.tpcWired = '1';
+      function labelOf(el) {
+        var al = (el.getAttribute('aria-label') || '').trim();
+        if (al) return al;
+        var s = el.querySelector('.nav-menu-dropdown__label, .nav-menu-btn__label, .nav-menu-item__label');
+        return s ? s.textContent.trim() : '';
       }
-    });
-    document.querySelectorAll(SEL_A_ITEM).forEach(function (item) {
-      var lbl = item.querySelector('.nav-menu-dropdown__label');
-      if (!lbl) return;
-      var href = SUB_ROUTES[lbl.textContent.trim()];
-      if (href && !item.dataset.tpcWired) {
-        item.addEventListener('click', nav(href), true);
-        item.dataset.tpcWired = '1';
-      }
-    });
-    document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
-      if (btn.hasAttribute('aria-haspopup')) return;
-      var lbl = btn.querySelector('.nav-btn__label');
-      if (!lbl) return;
-      var href = TOP_ROUTES[lbl.textContent.trim()];
-      if (href && !btn.dataset.tpcWired) {
-        btn.addEventListener('click', nav(href), true);
-        btn.dataset.tpcWired = '1';
-      }
-    });
-    document.querySelectorAll(SEL_B_ITEM).forEach(function (item) {
-      var lbl = item.querySelector('.nav-subtopic-dropdown__item-label');
-      if (!lbl) return;
-      var href = SUB_ROUTES[lbl.textContent.trim()];
-      if (!href) return;
-      if (item.tagName === 'A') item.setAttribute('href', href);
-      if (!item.dataset.tpcWired) {
-        item.addEventListener('click', nav(href), true);
-        item.dataset.tpcWired = '1';
-      }
-    });
-  }
 
-  var applying = false;
-  function applyActive() {
-    if (applying) return;
-    applying = true;
-    try {
-      var label = PAGE_ACTIVE_MAIN[currentFile()];
-      document.querySelectorAll(SEL_A_BTN).forEach(function (btn) {
-        var match = !!(label && (btn.getAttribute('aria-label') || '').trim() === label);
-        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
-        if (match) {
-          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
-        } else if (btn.hasAttribute('aria-current')) {
-          btn.removeAttribute('aria-current');
+      function targetFor(el) {
+        if (el.classList.contains('navbar-bottom__btn')) {
+          if (el.id === 'account-btn') return null;                // Account toggles the mobile menu
+          return BOTTOM[labelOf(el)] || null;
         }
-      });
-      document.querySelectorAll(SEL_B_BTN).forEach(function (btn) {
-        var lbl = btn.querySelector('.nav-btn__label');
-        var match = !!(label && lbl && lbl.textContent.trim() === label);
-        if (btn.classList.contains('is-active') !== match) btn.classList.toggle('is-active', match);
-        if (match) {
-          if (btn.getAttribute('aria-current') !== 'page') btn.setAttribute('aria-current', 'page');
-        } else if (btn.hasAttribute('aria-current')) {
-          btn.removeAttribute('aria-current');
-        }
-      });
-    } finally {
-      applying = false;
+        if (el.getAttribute('aria-haspopup') === 'true') return null;  // desktop dropdown parent
+        if (el.classList.contains('has-submenu')) return null;         // mobile accordion parent
+        return NAV[labelOf(el)] || null;
+      }
+
+      // 1) Navigate on click (capture phase so it wins over dropdown/accordion toggles)
+      document.addEventListener('click', function (e) {
+        var el = e.target.closest('.nav-menu-btn, .nav-menu-dropdown__item, .nav-menu-item, .navbar-bottom__btn');
+        if (!el) return;
+        var page = targetFor(el);
+        if (page) { e.preventDefault(); window.location.href = page; }
+      }, true);
+
+      // 2) Active-state sync to the current page
+      try {
+        var file = (location.pathname.split('/').pop() || 'home.html').toLowerCase();
+        var curLabel = null;
+        for (var k in NAV) { if (NAV[k].toLowerCase() === file) { curLabel = k; break; } }
+        // top-level button to highlight: group parent for sub-items/sub-pages, else the item itself
+        var topLabel = curLabel ? (GROUP[curLabel] || curLabel) : (SUBPAGE[file] || null);
+        // expose for the nav script's restoreHome / mouseleave-timeout (so they don't snap back to Home)
+        window.__navActiveLabel = topLabel || 'Home';
+        document.querySelectorAll('.nav-menu-btn, .nav-menu-item').forEach(function (el) {
+          var lbl = labelOf(el);
+          var isMatch = (topLabel && (lbl === topLabel || lbl === curLabel));
+          el.classList.toggle('is-active', !!isMatch);
+          if (isMatch) { el.setAttribute('aria-current', 'page'); } else { el.removeAttribute('aria-current'); }
+        });
+        // mobile bottom bar — active for the current page (Quiz / Practice family / Score)
+        document.querySelectorAll('.navbar-bottom__btn').forEach(function (el) {
+          var arr = BOTTOM_ACTIVE[labelOf(el)];
+          var m = !!(arr && arr.indexOf(file) !== -1);
+          el.classList.toggle('is-active', m);
+          if (m) { el.setAttribute('aria-current', 'page'); } else { el.removeAttribute('aria-current'); }
+        });
+      } catch (err) { /* non-critical */ }
+    })();
+  </script>
+
+
+  <!-- ═══════════════ PAGE-SPECIFIC JS — history.month.html ═══════════════ -->
+  <script>
+  /* â”€â”€ Subject data: DS-confirmed badge colors (CLAUDE.md Rule 17) â”€â”€ */
+  try {
+    const SUBJECT_DATA = {
+      'account':   { name: 'Account',          bg: '#0072ca', border: '#004479', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-account.svg'    },
+      'add-math':  { name: 'Add Math',          bg: '#283589', border: '#182052', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-add-math.svg'   },
+      'bm':        { name: 'Bahasa Melayu',     bg: '#4d77ff', border: '#2e4799', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-bmelayu.svg'    },
+      'biology':   { name: 'Biology',           bg: '#8431d8', border: '#6a27ad', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-biology.svg'    },
+      'chemistry': { name: 'Chemistry',         bg: '#e20082', border: '#b50068', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chemistry.svg'  },
+      'science':   { name: 'Science',           bg: '#ffd641', border: '#ccab34', text: '#998027', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-science.svg'    },
+      'economy':   { name: 'Economy',           bg: '#ff5733', border: '#cc4629', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-economy.svg'    },
+      'english':   { name: 'English',           bg: '#ff4d56', border: '#cc3e45', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-english.svg'    },
+      'geography': { name: 'Geography',         bg: '#77d836', border: '#5fad2b', text: '#478220', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-geography.png'  },
+      'history':   { name: 'History',           bg: '#a97c50', border: '#876340', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-history.svg'    },
+      'islamic':   { name: 'Islamic Studies',   bg: '#de4d7f', border: '#b23e66', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-islamic.svg'    },
+      'kafa':      { name: 'KAFA',              bg: '#8ae3a9', border: '#6eb687', text: '#538865', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-kafa.svg'       },
+      'math':      { name: 'Mathematics',       bg: '#42ac7b', border: '#358a62', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-math.svg'       },
+      'moral':     { name: 'Moral Studies',     bg: '#0072ca', border: '#005ba2', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-moral.svg'      },
+      'cs':        { name: 'Computer Science',  bg: '#d10070', border: '#a7005a', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-comp-science.svg'},
+      'physics':   { name: 'Physics',           bg: '#27a0d7', border: '#1f80ac', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-physics.svg'    },
+      'rbt':       { name: 'RBT',               bg: '#353535', border: '#2a2a2a', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-rbt.svg'        },
+      'chinese':   { name: 'Chinese Language',  bg: '#f94848', border: '#c73a3a', text: '#f2f2f2', icon: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chinese-lang.svg'},
+    };
+
+    function badgeHTML(s, key) {
+      return `<div class="sc-subject-badge sc-badge--${key}">
+        <div class="sc-subject-badge__icon"><img src="${s.icon}" alt="${s.name}"></div>
+        <div class="sc-subject-badge__label">
+          <svg class="sc-subject-badge__pointer" width="4" height="8" viewBox="0 0 4 8" fill="white" aria-hidden="true"><path d="M 0 0 L 4 4 L 0 8 Z"/></svg>
+          ${s.name}
+        </div>
+      </div>`;
     }
-  }
 
-  var observing = false;
-  function startObserver() {
-    if (observing || typeof MutationObserver !== 'function') return;
-    var targets = [];
-    var a = document.getElementById('NavTopMenu-Desktop'); if (a) targets.push(a);
-    document.querySelectorAll('.navbar-nav, .menubar-nav').forEach(function (n) { targets.push(n); });
-    if (!targets.length) return;
-    /* Synchronous re-apply on every batch of mutations — runs as microtask, before paint */
-    var observer = new MutationObserver(applyActive);
-    targets.forEach(function (t) {
-      observer.observe(t, { attributes: true, subtree: true, attributeFilter: ['class', 'aria-current'] });
+    const ALL_PILL_HTML = `<div class="sc-all-pill">All Subjects</div>`;
+
+    function renderBadges(key) {
+      const container = document.getElementById('badge-display');
+      if (key === 'all') {
+        container.innerHTML = ALL_PILL_HTML;
+      } else {
+        const s = SUBJECT_DATA[key];
+        container.innerHTML = s ? badgeHTML(s, key) : ALL_PILL_HTML;
+      }
+    }
+
+    /* â”€â”€ Donut progress animation â”€â”€ */
+    const CIRCUMFERENCE = 2 * Math.PI * 74; // â‰ˆ 464.95 (r=74)
+    const progressCircle = document.getElementById('donut-progress');
+    const donutLabel     = document.getElementById('donut-label');
+    let animFrame = null;
+
+    function animateDonut(targetPct, duration) {
+      if (animFrame) cancelAnimationFrame(animFrame);
+      const start = performance.now();
+      function step(now) {
+        const t       = Math.min((now - start) / duration, 1);
+        const eased   = 1 - Math.pow(1 - t, 3);
+        const current = eased * targetPct;
+        const dash    = (CIRCUMFERENCE * current / 100).toFixed(2);
+        const gap     = (CIRCUMFERENCE - dash).toFixed(2);
+        progressCircle.setAttribute('stroke-dasharray', `${dash} ${gap}`);
+        donutLabel.textContent = current.toFixed(1) + '%';
+        if (t < 1) {
+          animFrame = requestAnimationFrame(step);
+        } else {
+          const fd = (CIRCUMFERENCE * targetPct / 100).toFixed(2);
+          progressCircle.setAttribute('stroke-dasharray', `${fd} ${(CIRCUMFERENCE - fd).toFixed(2)}`);
+          donutLabel.textContent = targetPct.toFixed(1) + '%';
+        }
+      }
+      animFrame = requestAnimationFrame(step);
+    }
+
+    /* â”€â”€ Graph: 7-day (Sunâ†’Sat) animated chart â”€â”€ */
+    /* -- ApexCharts area chart -- */
+    var APEX_DATA = {
+      'all':       [75, 75, 55, 80, 65, 88, 70, 78, 78],
+      'account':   [78, 78, 60, 82, 70, 88, 72, 83, 83],
+      'add-math':  [65, 65, 75, 58, 80, 68, 85, 70, 70],
+      'bm':        [72, 72, 82, 65, 88, 75, 80, 72, 72],
+      'biology':   [82, 82, 70, 90, 75, 92, 80, 88, 88],
+      'chemistry': [60, 60, 72, 55, 70, 78, 63, 72, 72],
+      'science':   [80, 80, 88, 75, 85, 90, 78, 85, 85],
+      'economy':   [50, 50, 62, 45, 58, 68, 52, 62, 62],
+      'english':   [85, 85, 75, 90, 80, 92, 88, 87, 87],
+      'geography': [62, 62, 72, 55, 68, 58, 72, 63, 63],
+      'history':   [80, 80, 88, 75, 90, 82, 88, 80, 80],
+      'islamic':   [75, 75, 85, 70, 80, 88, 75, 82, 82],
+      'kafa':      [70, 70, 80, 65, 75, 83, 70, 77, 77],
+      'math':      [78, 78, 70, 85, 75, 88, 80, 83, 83],
+      'moral':     [45, 45, 58, 40, 53, 63, 50, 58, 58],
+      'cs':        [68, 68, 78, 63, 73, 83, 68, 75, 75],
+      'physics':   [72, 72, 65, 78, 68, 83, 72, 78, 78],
+      'rbt':       [80, 80, 72, 87, 75, 90, 80, 85, 85],
+      'chinese':   [77, 77, 85, 70, 80, 87, 75, 82, 82],
+    };
+
+    var currentGraphKey = 'all';
+    var currentAccentColor = '#28c76f';
+
+    var scoreChart = new ApexCharts(document.getElementById('sc-apexchart'), {
+      chart: {
+        type: 'area',
+        height: '115%',
+        toolbar:    { show: false },
+        background: 'transparent',
+        fontFamily: 'Poppins, sans-serif',
+        animations: { enabled: true, easing: 'easeinout', speed: 900 },
+        sparkline:  { enabled: false },
+        offsetY:    0
+      },
+      series: [{ name: 'Score', data: APEX_DATA['all'] }],
+      xaxis: {
+        categories: ['', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', ''],
+        labels:     { show: false },
+        axisBorder: { show: false },
+        axisTicks:  { show: false }
+      },
+      yaxis: {
+        show:   false,
+        min:    40,
+        labels: { show: false },
+        title:  { text: undefined }
+      },
+      stroke: { curve: 'smooth', width: 1.5, colors: ['#00cc85'] },
+      fill:   { type: 'solid', opacity: 0.15 },
+      markers: {
+        size: 4, colors: ['#ffffff'],
+        strokeColors: '#00cc85', strokeWidth: 2, strokeOpacity: 1, fillOpacity: 1,
+        hover: { size: 6 },
+        discrete: [
+          { seriesIndex: 0, dataPointIndex: 0, size: 0 },
+          { seriesIndex: 0, dataPointIndex: 8, size: 0 }
+        ]
+      },
+      grid:        { show: false, padding: { top: 8, right: 0, bottom: 0, left: 0 } },
+      dataLabels:  { enabled: false },
+      colors:      ['#00cc85'],
+      tooltip: {
+        theme: 'light',
+        x: { show: true },
+        y: { title: { formatter: function() { return 'Score: '; } } }
+      }
     });
-    observing = true;
-  }
+    scoreChart.render();
 
-  function init() {
-    wireLinks();
-    applyActive();
-    startObserver();
-    /* Defeat any deferred init code that re-asserts Home — multiple deferred passes */
-    [0, 50, 150, 400, 1000, 2500].forEach(function (d) { setTimeout(applyActive, d); });
-    /* 5s safety net: re-check every 250ms for 5s after load */
-    var ticks = 0;
-    var iv = setInterval(function () {
-      applyActive();
-      if (++ticks >= 20) clearInterval(iv);
-    }, 250);
-    /* Also re-apply on user interaction */
-    document.addEventListener('click',     function () { setTimeout(applyActive, 0); }, true);
-    document.addEventListener('mouseleave',function () { setTimeout(applyActive, 0); }, true);
-    document.addEventListener('mouseup',   function () { setTimeout(applyActive, 0); }, true);
-  }
+    function animateGraph(key) {
+      currentGraphKey = key;
+      var vals = APEX_DATA[key] || APEX_DATA['all'];
+      scoreChart.updateSeries([{ name: 'Score', data: vals }]);
+    }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+    window.addEventListener('resize', function() { scoreChart.updateOptions({}); });
+    /* â”€â”€ Accent color â€” syncs donut, label, graph line + dots to subject color â”€â”€ */
+    function hexToRgba(hex, alpha) {
+      const r = parseInt(hex.slice(1,3), 16);
+      const g = parseInt(hex.slice(3,5), 16);
+      const b = parseInt(hex.slice(5,7), 16);
+      return `rgba(${r},${g},${b},${alpha})`;
+    }
+
+    function setAccentColor(color) {
+      currentAccentColor = color;
+      document.getElementById('donut-progress').setAttribute('stroke', color);
+      document.getElementById('donut-label').style.color = color;
+      var r = parseInt(color.slice(1,3), 16), g = parseInt(color.slice(3,5), 16), b = parseInt(color.slice(5,7), 16);
+      var lightColor = 'rgba(' + r + ',' + g + ',' + b + ',0.15)';
+      scoreChart.updateOptions({
+        stroke:  { colors: [color] },
+        fill:    { type: 'solid', opacity: 0.15 },
+        colors:  [color],
+        markers: {
+          size: 4, colors: ['#ffffff'],
+          strokeColors: color, strokeWidth: 2, strokeOpacity: 1, fillOpacity: 1,
+          hover: { size: 6 },
+          discrete: [
+            { seriesIndex: 0, dataPointIndex: 0, size: 0 },
+            { seriesIndex: 0, dataPointIndex: 8, size: 0 }
+          ]
+        }
+      }, false, true);
+      document.querySelectorAll('.sc-stat-value, .sc-mid__value, .sc-mini-stat-value').forEach(el => {
+        el.style.color = color;
+      });
+      document.querySelectorAll('.sc-icon-circle').forEach(el => {
+        el.style.background = lightColor;
+        el.style.color = color;
+      });
+    }
+
+    const cardOuter = document.querySelector('.sc-card-outer');
+    function setInnerBorder(color) {
+      if (cardOuter) cardOuter.style.setProperty('--sc-inner-border', color);
+    }
+
+    /* â”€â”€ Filter dropdown â€” expand/collapse + chip selection â”€â”€ */
+    (function() {
+      var SUBJECTS = {
+        'all':       { progress:61.5, label:'All Subjects'     },
+        'account':   { progress:78.0, label:'Account'          },
+        'add-math':  { progress:72.0, label:'Add Math'         },
+        'bm':        { progress:76.0, label:'Bahasa Melayu'    },
+        'biology':   { progress:88.0, label:'Biology'          },
+        'chemistry': { progress:65.0, label:'Chemistry'        },
+        'science':   { progress:85.0, label:'Science'          },
+        'economy':   { progress:55.0, label:'Economy'          },
+        'english':   { progress:90.0, label:'English'          },
+        'geography': { progress:60.0, label:'Geography'        },
+        'history':   { progress:91.0, label:'History'          },
+        'islamic':   { progress:84.0, label:'Islamic Studies'  },
+        'kafa':      { progress:77.0, label:'KAFA'             },
+        'math':      { progress:80.0, label:'Mathematics'      },
+        'rbt':       { progress:82.0, label:'RBT'              },
+        'moral':     { progress:50.0, label:'Moral Studies'    },
+        'cs':        { progress:70.0, label:'Computer Science' },
+        'physics':   { progress:78.0, label:'Physics'          },
+        'chinese':   { progress:80.0, label:'Chinese Language' }
+      };
+      var btn      = document.getElementById('subject-filter-btn');
+      var lbl      = document.getElementById('subject-filter-label');
+      var chipsRow = document.getElementById('sc-subjects-row');
+      if (!btn || !chipsRow) return;
+
+      function openSubjects() {
+        chipsRow.classList.add('is-open');
+        btn.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      function closeSubjects() {
+        chipsRow.classList.remove('is-open');
+        btn.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      function selectSubject(key) {
+        var s = SUBJECTS[key];
+        if (!s) return;
+        if (lbl) lbl.textContent = s.label;
+        chipsRow.querySelectorAll('.sc-subject-chip').forEach(function(chip) {
+          chip.classList.toggle('is-active', chip.dataset.key === key);
+        });
+        var color       = key === 'all' ? '#00cc85' : (SUBJECT_DATA[key] ? SUBJECT_DATA[key].bg     : '#00cc85');
+        var borderColor = key === 'all' ? '#00cc85' : (SUBJECT_DATA[key] ? SUBJECT_DATA[key].border : '#00cc85');
+        renderBadges(key);
+        setAccentColor(color);
+        setInnerBorder(borderColor);
+        animateDonut(s.progress, 900);
+        animateGraph(key);
+        closeSubjects();
+      }
+
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (chipsRow.classList.contains('is-open')) closeSubjects(); else openSubjects();
+      });
+      chipsRow.querySelectorAll('.sc-subject-chip').forEach(function(chip) {
+        chip.addEventListener('click', function() { selectSubject(chip.dataset.key); });
+        chip.addEventListener('mousedown', function() { chip.classList.add('is-pressing'); });
+        chip.addEventListener('mouseup', function() { chip.classList.remove('is-pressing'); });
+        chip.addEventListener('mouseleave', function() { chip.classList.remove('is-pressing'); });
+      });
+      document.addEventListener('click', function(e) {
+        if (!btn.contains(e.target) && !chipsRow.contains(e.target)) closeSubjects();
+      });
+      document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeSubjects(); });
+    })();
+
+    /* Initial render â€” "All" is active on load */
+    renderBadges('all');
+    setAccentColor('#00cc85');
+    setInnerBorder('#00cc85');
+    setTimeout(function() { animateGraph('all'); }, 100);
+
+  } catch(e) { console.warn('Score card init error:', e); }
+
+  /* Month / Week / Lists toggle — navigate to corresponding view */
+  var histToggleNav = { 'Month': 'history.month.html', 'Week': 'history.list.html', 'Lists': 'history.list.html' };
+  document.querySelectorAll('.hist-toggle').forEach(function(group) {
+    var btns = group.querySelectorAll('.hist-toggle__btn');
+    btns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var target = histToggleNav[btn.textContent.trim()];
+        if (target) { window.location.href = target; return; }
+        btns.forEach(function(b) { b.classList.remove('is-active'); b.setAttribute('aria-pressed', 'false'); });
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-pressed', 'true');
+      });
+    });
+  });
+
+  /* Activity label marquee — continuous left-to-right loop, no rewind.
+     Detection runs after layout (rAF) and re-evaluates on resize. */
+  function histInitLabelMarquee(el) {
+    var original = el.getAttribute('data-label') || el.textContent.trim();
+    el.setAttribute('data-label', original);
+    /* Reset to plain state before measuring */
+    el.classList.remove('is-scrolling');
+    el.textContent = original;
+    el.style.removeProperty('--marquee-dur');
+    if (el.scrollWidth <= el.offsetWidth) return;
+    /* Duplicate text: keyframe translates -50% → 0 over one copy width, seamlessly */
+    el.textContent = '';
+    var s1 = document.createElement('span');
+    var s2 = document.createElement('span');
+    s1.textContent = original;
+    s2.textContent = original;
+    s1.style.paddingRight = '40px';
+    s2.style.paddingRight = '40px';
+    el.appendChild(s1);
+    el.appendChild(s2);
+    var dur = Math.max(5, s1.offsetWidth / 15);
+    el.style.setProperty('--marquee-dur', dur.toFixed(1) + 's');
+    el.classList.add('is-scrolling');
   }
-})();
+  function histRefreshAllLabels() {
+    document.querySelectorAll('.hist-activity__label').forEach(histInitLabelMarquee);
+  }
+  requestAnimationFrame(histRefreshAllLabels);
+  var histResizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(histResizeTimer);
+    histResizeTimer = setTimeout(histRefreshAllLabels, 150);
+  });
+
+  /* Calendar cell expand/collapse — critical, registered outside try/catch */
+  document.querySelectorAll('.hist-cell__more').forEach(function(btn) {
+    var cell     = btn.closest('.hist-cell');
+    var textEl   = btn.querySelector('.hist-cell__more-text');
+    var origText = textEl ? textEl.textContent : '';
+    btn.addEventListener('click', function() {
+      var expanded = cell.classList.toggle('is-expanded');
+      if (textEl) textEl.textContent = expanded ? 'Show less' : origText;
+    });
+  });
 </script>
 </body>
 </html>
