@@ -2563,10 +2563,13 @@
     display:         flex;
     flex-direction:  row;
     align-items:     center;
-    justify-content: space-between;
+    justify-content: flex-start;
     width:           100%;
     margin-top:      16px;
+    gap:             8px;
   }
+
+  #goal-next-btn { margin-left: auto; }
 
   /* Previous / Next nav buttons — Button - 1.5 Variant=Primary Size=L (Rule 31 + Rule 40) */
   .goal-nav-btn {
@@ -2639,6 +2642,16 @@
     display:    block;
     flex-shrink: 0;
   }
+
+  /* Goal items — accessible goals are clickable */
+  .goal-item { cursor: default; }
+  .goal-item.is-accessible { cursor: pointer; }
+
+  /* Viewed step — slightly thicker ring on bubble to indicate selection */
+  .goal-item--viewed .goal-bubble--active {
+    box-shadow: inset 0 0 0 2px var(--border-primary-default);
+  }
+
 
   </style>
 </head>
@@ -3795,7 +3808,7 @@
         <section id="GoalsCarousel-Desktop" aria-label="Goals">
 
           <!-- Left nav button — Button Icon 1.5 · 40×40 · #00cc85 · white icon -->
-          <button class="goals-nav-btn" aria-label="Previous goal">
+          <button class="goals-nav-btn" id="goals-prev-btn" aria-label="Previous goal">
             <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-chevron-left"/></svg>
           </button>
 
@@ -4031,14 +4044,14 @@
                     </div>
                   </div>
                 </div>
-                <div class="goal-stat-card">
+                <div class="goal-stat-card goal-stat-card--progress">
                   <div class="goal-stat-card__content">
                     <div class="goal-stat-card__icon">
                       <svg viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ic-trending-up"/></svg>
                     </div>
                     <div class="goal-stat-card__texts">
                       <span class="goal-stat-card__label">Your Progress</span>
-                      <span class="goal-stat-card__value">SUCCESS</span>
+                      <span class="goal-stat-card__value" id="goal-progress-value">SUCCESS</span>
                     </div>
                   </div>
                 </div>
@@ -4052,13 +4065,13 @@
 
               <!-- Nav row — Previous / Next buttons below Your Reward -->
               <div class="goal-detail__nav">
-                <button class="goal-nav-btn" aria-label="Previous goal" type="button">
+                <button class="goal-nav-btn" id="goal-prev-btn" aria-label="Previous goal" type="button" style="display:none">
                   <span class="goal-nav-btn__arrow">
                     <svg width="16" height="16" aria-hidden="true"><use href="#ic-chevron-btn-m-left"/></svg>
                   </span>
                   <span class="goal-nav-btn__label">Previous</span>
                 </button>
-                <button class="goal-nav-btn" aria-label="Next goal" type="button">
+                <button class="goal-nav-btn" id="goal-next-btn" aria-label="Next goal" type="button">
                   <span class="goal-nav-btn__label">Next</span>
                   <span class="goal-nav-btn__arrow">
                     <svg width="16" height="16" aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
@@ -4928,6 +4941,159 @@
     } catch (e) {
       console.warn('Recent activities carousel error:', e);
     }
+
+    // ─── Goals progression — driven by "Your Progress" stat card ───────────────
+    (function () {
+      // Goal data: progress=10 means completed (target=10)
+      var GOALS = [
+        { subject: 'Chinese Language',  badgeClass: 'subject-badge--chinese-lang', imgSrc: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chinese-lang.svg',  imgAlt: 'Chinese Language',  icon: '#ic-target',       target: 10, progress: 10, deadline: '31 May 2026',  reward: '15 Minutes Break'   },
+        { subject: 'Chemistry',          badgeClass: 'subject-badge--chemistry',    imgSrc: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-chemistry.svg',     imgAlt: 'Chemistry',         icon: '#ic-star-24',      target: 10, progress: 0,  deadline: '30 Jun 2026',   reward: '30 Minutes Game Time' },
+        { subject: 'Geography',          badgeClass: 'subject-badge--geography',    imgSrc: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-geography.png',     imgAlt: 'Geography',         icon: '#ic-award',        target: 10, progress: 0,  deadline: '31 Jul 2026',   reward: '1 Hour Screen Time' },
+        { subject: 'Science',            badgeClass: 'subject-badge--science',      imgSrc: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-science.svg',       imgAlt: 'Science',           icon: '#ic-mortar-board', target: 10, progress: 0,  deadline: '31 Aug 2026',   reward: 'Extra Snack'        },
+        { subject: 'Islamic Studies',    badgeClass: 'subject-badge--islamic',      imgSrc: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-islamic.svg',       imgAlt: 'Islamic Studies',   icon: '#ic-trending-up',  target: 10, progress: 0,  deadline: '30 Sep 2026',   reward: 'Movie Night'        },
+        { subject: 'Physics',            badgeClass: 'subject-badge--physics',      imgSrc: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-physics.svg',       imgAlt: 'Physics',           icon: '#ic-flag',         target: 10, progress: 0,  deadline: '31 Oct 2026',   reward: 'New Book'           },
+        { subject: 'Biology',            badgeClass: 'subject-badge--biology',      imgSrc: '../src/image-repo/Achievement/score.card/assets/subject-icons/icon-biology.svg',       imgAlt: 'Biology',           icon: '#ic-shield',       target: 10, progress: 0,  deadline: '30 Nov 2026',   reward: 'Day Trip'           }
+      ];
+
+      // activeStep = index of the first goal not yet completed (the one in progress)
+      function getActiveStep() {
+        for (var i = 0; i < GOALS.length; i++) {
+          if (GOALS[i].progress < GOALS[i].target) return i;
+        }
+        return GOALS.length; // all complete
+      }
+
+      var activeStep  = getActiveStep(); // = 1 on load (Goal 1 already SUCCESS)
+      var viewedStep  = 0;               // start showing Goal 1 (SUCCESS), Previous hidden
+
+      // --- DOM references ---
+      var goalItems     = document.querySelectorAll('.goal-item');
+      var prevBtn       = document.getElementById('goal-prev-btn');
+      var nextBtn       = document.getElementById('goal-next-btn');
+      var progressCard  = document.querySelector('.goal-stat-card--progress');
+      var progressValue = document.getElementById('goal-progress-value');
+      var detailHeading = document.querySelector('.goal-detail__heading');
+      var detailBadge   = document.querySelector('#GoalDetail-Desktop .subject-badge');
+      var detailGoalText   = document.querySelector('.goal-detail__goal-text');
+      var detailRewardVal  = document.querySelector('.goal-detail__reward-value');
+
+      // --- Carousel render ---
+      function renderCarousel() {
+        goalItems.forEach(function (item, i) {
+          var circle = item.querySelector('.goal-icon-circle');
+          var arrow  = item.querySelector('.goal-arrow');
+          var bubble = item.querySelector('.goal-bubble');
+          var badge  = item.querySelector('.subject-badge');
+
+          var isSuccess = GOALS[i].progress >= GOALS[i].target;
+          var isActive  = i === activeStep;
+          var isNext    = i === activeStep + 1 && !isSuccess;
+
+          // Strip all state classes
+          circle.className = 'goal-icon-circle';
+          arrow.className  = 'goal-arrow';
+          bubble.className = 'goal-bubble';
+
+          if (isSuccess || isActive) {
+            circle.classList.add('goal-icon-circle--active');
+            arrow.classList.add('goal-arrow--active');
+            bubble.classList.add('goal-bubble--active');
+            if (badge) badge.classList.remove('subject-badge--disabled');
+            item.classList.add('is-accessible');
+          } else if (isNext) {
+            circle.classList.add('goal-icon-circle--inactive-2');
+            arrow.classList.add('goal-arrow--inactive');
+            bubble.classList.add('goal-bubble--inactive');
+            if (badge) badge.classList.add('subject-badge--disabled');
+            item.classList.remove('is-accessible');
+          } else {
+            circle.classList.add('goal-icon-circle--inactive');
+            arrow.classList.add('goal-arrow--inactive');
+            bubble.classList.add('goal-bubble--inactive');
+            if (badge) badge.classList.add('subject-badge--disabled');
+            item.classList.remove('is-accessible');
+          }
+
+          // Highlight the currently viewed step
+          if (i === viewedStep) {
+            item.classList.add('goal-item--viewed');
+          } else {
+            item.classList.remove('goal-item--viewed');
+          }
+        });
+      }
+
+      // --- Detail card render ---
+      function renderDetail() {
+        var g         = GOALS[viewedStep];
+        var isSuccess = g.progress >= g.target;
+        var isActive  = viewedStep === activeStep;
+
+        // Heading
+        detailHeading.textContent = 'Goal ' + (viewedStep + 1);
+
+        // Subject badge
+        detailBadge.className = 'subject-badge ' + g.badgeClass;
+        var badgeImg  = detailBadge.querySelector('img');
+        var badgeText = detailBadge.querySelector('.subject-badge__text');
+        if (badgeImg)  { badgeImg.src = g.imgSrc; badgeImg.alt = g.imgAlt; }
+        if (badgeText) badgeText.textContent = g.subject;
+
+        // Goal text
+        detailGoalText.innerHTML = 'To complete ' + g.target + ' quizzes for the ' + g.subject + ' subject <strong>before ' + g.deadline + '</strong>';
+
+        // Reward
+        detailRewardVal.textContent = g.reward;
+
+        // Your Progress value + card interactivity
+        if (isSuccess) {
+          progressValue.textContent = 'SUCCESS';
+        } else if (isActive) {
+          progressValue.textContent = Math.round((g.progress / g.target) * 100) + '%';
+        }
+
+        // Previous — hidden on step 0 (first goal)
+        prevBtn.style.display = viewedStep === 0 ? 'none' : '';
+
+        // Next — hidden when on the active (in-progress) step or beyond
+        nextBtn.style.display = viewedStep >= activeStep ? 'none' : '';
+      }
+
+      // --- Previous button ---
+      prevBtn.addEventListener('click', function () {
+        if (viewedStep > 0) {
+          viewedStep--;
+          renderCarousel();
+          renderDetail();
+        }
+      });
+
+      // --- Next button ---
+      nextBtn.addEventListener('click', function () {
+        var next = viewedStep + 1;
+        if (next <= activeStep) {
+          viewedStep = next;
+          renderCarousel();
+          renderDetail();
+        }
+      });
+
+      // --- Carousel item click ---
+      goalItems.forEach(function (item, i) {
+        item.addEventListener('click', function () {
+          var isSuccess = GOALS[i].progress >= GOALS[i].target;
+          var isActive  = i === activeStep;
+          if (!isSuccess && !isActive) return; // locked — ignore
+          viewedStep = i;
+          renderCarousel();
+          renderDetail();
+        });
+      });
+
+      // --- Initial render ---
+      renderCarousel();
+      renderDetail();
+    })();
   </script>
   <nav id="NavBar-Bottom" class="navbar-bottom" aria-label="Mobile navigation">
     <button class="navbar-bottom__btn" type="button" aria-label="Quiz">
