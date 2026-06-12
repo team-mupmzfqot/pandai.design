@@ -2208,17 +2208,15 @@
       width:           100px;
       height:          100px;
       border-radius:   60px;
-      background:      var(--surface-secondary-default);
-      box-shadow:      inset 0 0 0 4px var(--icon-primary-default);
+      background:      var(--surface-primary-default-subtle);
+      box-shadow:      inset 0 0 0 1px var(--border-default);
       flex-shrink:     0;
       overflow:        hidden;
       display:         flex;
       align-items:     center;
       justify-content: center;
-      padding:         16px;
     }
-    .bpc__avatar-img { width: 100%; height: 100%; object-fit: contain; }
-    .bpc__rank-crown img { width: 24px; height: 24px; object-fit: contain; display: block; }
+    .bpc__avatar-img { width: 100%; height: 100%; object-fit: cover; }
 
     /* DS: Body/B1, 14px SemiBold, Text/tertiary/default (#00564c) */
     .bpc__username {
@@ -2228,37 +2226,68 @@
       color:       var(--text-tertiary-default);
     }
 
-    /* DS node 7403:223410 — Status Badge - 1.5: 115×48px, r:40.5px.
-       bg: Yellow/500 (#fece00), border: 1px solid Yellow/600 (#cba500) (strokeAlign CENTER → border:).
-       Label: Body/B7 10px SemiBold white. Value: Title/T3 16px Bold lh:24 white. */
-    .bpc__rank {
-      width:           115px;
-      height:          48px;
-      background:      var(--yellow-500-base);
-      border:          1px solid var(--yellow-600);
-      border-radius:   40.5px;
-      padding:         8px;
-      display:         flex;
-      flex-direction:  row;
-      align-items:     center;
-      justify-content: space-between;
-      flex-shrink:     0;
+    /* Status Pill — DS Status Badge - 1.5 (mirrors quiz.html coins pill) */
+    .status-pill {
+      height:        48px;
+      min-height:    48px;
+      min-width:     115px;
+      background:    var(--surface-primary-default);
+      border:        1px solid var(--border-primary-focus);
+      border-radius: 40.5px;
+      padding:       var(--spacing-space-xs);
+      display:       flex;
+      flex-shrink:   0;
+      cursor:        pointer;
+      user-select:   none;
     }
-    .bpc__rank-texts { display: flex; flex-direction: column; gap: 2px; }
-    .bpc__rank-label { font-size: 10px; font-weight: 600; line-height: 12px; color: var(--text-on-color-heading); }
-    .bpc__rank-value { font-size: 16px; font-weight: 700; line-height: 24px; color: var(--text-on-color-heading); }
-    .bpc__rank-crown {
+    .status-pill--coins { background: #fece00; border-color: #cba500; }
+    /* DS node 2312:10654 — Coins text: stroke #cba500 weight:1 OUTSIDE → 2px CSS (Rule 26) */
+    .status-pill--coins .status-pill__label,
+    .status-pill--coins .status-pill__value {
+      -webkit-text-stroke: 2px #cba500;
+      paint-order:         stroke fill;
+    }
+    .status-pill__content {
+      display:       flex;
+      align-items:   center;
+      gap:           var(--spacing-space-xxs);
+      padding-left:  var(--spacing-space-xs);
+      padding-right: 2px;
+      width:         100%;
+    }
+    .status-pill__texts {
+      display:        flex;
+      flex-direction: column;
+      flex:           1;
+      padding-bottom: var(--spacing-space-xxs);
+    }
+    .status-pill__label {
+      font-size:     10px;
+      font-weight:   600;
+      line-height:   var(--spacing-space-s);
+      color:         var(--text-on-color-heading);
+      margin-bottom: -4px;
+    }
+    .status-pill__value {
+      font-size:     16px;
+      font-weight:   700;
+      line-height:   24px;
+      color:         var(--text-on-color-heading);
+      margin-bottom: -4px;
+    }
+    .status-pill__icon {
       width:           32px;
       height:          32px;
+      padding:         var(--spacing-space-xxs);
       background:      var(--surface-general-default);
       border-radius:   var(--corner-radius-corner-pill);
-      padding:         4px;
       display:         flex;
       align-items:     center;
       justify-content: center;
       flex-shrink:     0;
     }
-    /* crown uses P.Crown.png asset — sized via .bpc__rank-crown img rule above */
+    .status-pill__icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .status-pill__icon svg { height: 24px; width: auto; display: block; flex-shrink: 0; }
 
     /* ── Stats section ─────────────────────────────────────────── */
     /* DS node 7109:130664: flex:1, p:28, gap:8, col, items-end, justify-center */
@@ -2354,7 +2383,7 @@
     /* Start Battle — DS node I6498:146142: Primary/M, FIXED 101×32, padding:2px 8px
        strokeAlign:INSIDE → box-shadow:inset (Rule 60) */
     .btn-start-battle {
-      width:           101px;
+      width:           max-content;
       height:          32px;
       padding:         2px 8px;
       border-radius:   var(--corner-radius-corner-rounded);
@@ -2369,11 +2398,12 @@
       flex-shrink:     0;
     }
     .btn-start-battle__label {
-      padding:     0 4px;
-      font-size:   12px;
-      font-weight: 600;
-      line-height: 18px;
-      color:       var(--text-primary-on-color);
+      padding:      0 4px;
+      font-size:    12px;
+      font-weight:  600;
+      line-height:  18px;
+      color:        var(--text-primary-on-color);
+      white-space:  nowrap;
     }
     /* Arrow — Primary/M: 20×20 circle (#99ebce), padding:2px → 16×16 clip */
     .btn-start-battle__arrow {
@@ -2529,6 +2559,11 @@
       border-radius: var(--corner-radius-corner-2xl);
       box-shadow:    inset 0 0 0 1px var(--border-primary-focus);
       overflow:      hidden;
+      padding:       1px;
+    }
+    .battle-table-wrap {
+      border-radius: 17px; /* inner radius = 18px outer − 1px padding */
+      overflow:      hidden;
     }
 
     /* ── Battle History Table ─────────────────────────────────── */
@@ -2550,10 +2585,12 @@
       text-align:     left;
       border-left:    1px solid var(--border-general-default);
       border-right:   1px solid var(--border-general-default);
-      border-top:     1px solid var(--border-general-default);
-      border-bottom:  none;
+      border-top:     none;
+      border-bottom:  1px solid var(--border-general-default);
       white-space:    nowrap;
     }
+    .battle-table th:first-child { border-left: none; }
+    .battle-table th:last-child  { border-right: none; }
     .battle-table th.col-players { text-align: center; }
     .battle-table td {
       padding:        0 16px;
@@ -2562,16 +2599,21 @@
       font-weight:    400;
       line-height:    20px;
       color:          var(--text-default-heading);
-      border:         1px solid var(--border-general-default);
+      border-left:    1px solid var(--border-general-default);
+      border-right:   1px solid var(--border-general-default);
+      border-top:     none;
+      border-bottom:  none;
       vertical-align: middle;
     }
-    .battle-table tbody td { border-top: none; border-bottom: none; }
+    .battle-table td:first-child { border-left: none; }
+    .battle-table td:last-child  { border-right: none; }
+    .battle-table tbody td { border-top: 1px solid var(--border-general-default); border-bottom: 1px solid var(--border-general-default); }
     .battle-table tbody tr:hover td { background: #fafcfa; }
-    .battle-table tbody tr:last-child td { border-bottom: 1px solid var(--border-general-default); }
+    .battle-table tbody tr:last-child td { border-bottom: none; }
 
     /* Player group — no internal dividers between col 1 (player1), col 2 (VS), col 3 (player2) */
     .battle-table td:nth-child(1) { border-right: none; }
-    .battle-table td:nth-child(2) { border-left: none; border-right: none; padding: 0 4px; }
+    .battle-table td:nth-child(2) { border-left: none; border-right: none; padding: 0; }
     .battle-table td:nth-child(3) { border-left: none; }
 
     /* Player cell (col 1 & 3) — DS: display flex, gap 8px, padding 0 16px via td */
@@ -2971,13 +3013,15 @@
                   <img class="bpc__avatar-img" src="../src/image-repo/page.battle.new/battle/asset/Avatar-Aidan.png" alt="Aidan">
                 </div>
                 <span class="bpc__username">@dianadam</span>
-                <div class="bpc__rank">
-                  <div class="bpc__rank-texts">
-                    <span class="bpc__rank-label">Ranking</span>
-                    <span class="bpc__rank-value">123</span>
-                  </div>
-                  <div class="bpc__rank-crown">
-                    <img src="../src/image-repo/page.battle.new/battle/asset/P.Crown.png" alt="" width="24" height="24">
+                <div class="status-pill status-pill--coins">
+                  <div class="status-pill__content">
+                    <div class="status-pill__texts">
+                      <span class="status-pill__label">Ranking</span>
+                      <span class="status-pill__value">123</span>
+                    </div>
+                    <div class="status-pill__icon">
+                      <svg width="24" height="22" aria-label="Crown" role="img"><use href="#ic-crown"/></svg>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -3044,8 +3088,8 @@
               <!-- Header — DS: HORIZONTAL, SPACE_BETWEEN, CENTER -->
               <div class="primary-card__header">
                 <div class="primary-card__header-left">
-                  <!-- Bookmark icon — DS: Outline/bookmark, 20×20 -->
-                  <svg class="icon-ds-20" aria-hidden="true"><use href="#ic-bookmark"/></svg>
+                  <!-- Bar-chart 3 icon — DS node 1445:7822, 24×24, Icon/tertiary/default -->
+                  <svg class="icon-ds-24" aria-hidden="true" style="color:var(--icon-tertiary-default)"><use href="#ic-bar-chart-3"/></svg>
                   <!-- Title — DS: Title/T2 18px Bold #00564c -->
                   <span class="primary-card__title">Your Battle History</span>
                 </div>
@@ -3060,6 +3104,7 @@
 
               <!-- Content area — DS: bg white, box-shadow inset 1px #00a36a, r:18 -->
               <div class="primary-card__content">
+                <div class="battle-table-wrap">
                 <table class="battle-table">
                   <!-- DS cols: player1=279, vs=50, player2=279, won=100, score=100, subject=220, date=180, action=80 -->
                   <colgroup>
@@ -3289,6 +3334,7 @@
 
                   </tbody>
                 </table>
+                </div><!-- /.battle-table-wrap -->
               </div><!-- end primary-card__content -->
 
             </div><!-- end primary-card -->

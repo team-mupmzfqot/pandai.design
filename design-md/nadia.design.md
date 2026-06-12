@@ -6423,3 +6423,72 @@ All other `.bc-` properties are consistent across files and do not need changing
 **Files already correct before this session:** `battle.html`, `class.browse.classes.html`, `class.latest.assignments.html`, `class.my.classes.html`, `rewards.avatar.html`, `rewards.coin.quest.html`, `rewards.evoucher.html`, `rewards.merchandise.html`, `rewards.my.rewards.html`.
 
 **Note:** `quiz.question.html` and `quiz.subject.html` use different breadcrumb patterns (`.breadcrumb-bar` / `.breadcrumb`) — not `.bc-` pattern, not covered by this rule.
+
+---
+
+### Rule N-C51 — Battle table: outer cell borders removed; VS cell needs `padding: 0` (Session 44, 2026-06-12)
+
+When a `<table>` sits inside a card that uses `box-shadow: inset` for its border, the outermost cell borders must be removed — the card's inset shadow handles all four outer edges.
+
+**Border removal pattern:**
+```css
+/* Header — outer left/right */
+.battle-table th:first-child { border-left: none; }
+.battle-table th:last-child  { border-right: none; }
+/* Body — outer left/right */
+.battle-table td:first-child { border-left: none; }
+.battle-table td:last-child  { border-right: none; }
+/* Body — no bottom on last row */
+.battle-table tbody tr:last-child td { border-bottom: none; }
+/* Header — no top */
+.battle-table th { border-top: none; }
+```
+
+**VS column (center of player group) — special case:**
+```css
+.battle-table td:nth-child(2) { border-left: none; border-right: none; padding: 0; }
+```
+`padding: 0` is required so the inner flex content can center correctly across the full 50px column width. Without it, default cell padding shifts the VS text off-center.
+
+**Why not `border-left/right` on outer cells?** With `border-collapse: collapse`, keeping the outer cell border AND the inset shadow creates two visible lines 1px apart. Removing the outer cell border lets the inset shadow serve as the sole outer boundary.
+
+---
+
+### Rule N-C52 — `box-shadow: inset` corners invisible at corner radius junction — fix with inner wrapper div (Session 44, 2026-06-12)
+
+**Problem:** A content div with `box-shadow: inset 0 0 0 1px`, `border-radius: R`, `overflow: hidden`, and `padding: 1px` shows the green shadow cleanly on straight edges but NOT at corners. At corners, the inset shadow curve (radius R) and the cell clip boundary (radius R−1) converge — the radial gap shrinks to sub-pixel at the extreme corner point, making the shadow invisible there.
+
+**Fix:** Wrap the table in an intermediate div with `overflow: hidden; border-radius: (R − padding)px`. This clips the table at the inner radius, creating a constant `padding`-wide radial gap between the inner clip and the outer shadow — identical on straight edges AND at corners.
+
+```html
+<div class="primary-card__content">
+  <div class="battle-table-wrap">
+    <table class="battle-table">…</table>
+  </div>
+</div>
+```
+
+```css
+/* .primary-card__content: border-radius 18px, padding 1px */
+.battle-table-wrap {
+  border-radius: 17px; /* outer radius (18) − padding (1) */
+  overflow:      hidden;
+}
+```
+
+**Math:** Two concentric arcs at radii r and r+1 always maintain a 1px radial gap — this is constant at every angle, including 90° corners.
+
+**General rule:** Whenever a table (or any block element) sits inside a `box-shadow: inset` + `border-radius` + `overflow: hidden` container with `padding: N px`, wrap the inner element with `overflow: hidden; border-radius: (outer_radius − N)px` to preserve the shadow gap at all corners.
+
+---
+
+### Rule N-C53 — `padding: 1px` on content div exposes inset shadow on all 4 sides (Session 44, 2026-06-12)
+
+The `box-shadow: inset` on a card content div paints ABOVE the element's background but BELOW its children. Table cells with explicit backgrounds (white) cover the shadow wherever cells touch the card's inner edges.
+
+| Padding value | Shadow visible |
+|---|---|
+| `padding-top: 1px` | Top edge only |
+| `padding: 1px` | All 4 sides — top, right, bottom, left |
+
+**Always use `padding: 1px`** (not directional) when the green border should appear on all sides. Must be paired with the wrapper div fix (Rule N-C52) to also show the shadow at corners, not just straight edges.
