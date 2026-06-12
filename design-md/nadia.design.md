@@ -6940,9 +6940,9 @@ grep -n "<style\|</style" file.html
 
 **Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
 
-## Session 49 — quiz.question.html: template CSS sync + Nadia-override guard (2026-06-12)
+## Session 49 cont. — quiz.question.html: template CSS sync + Nadia-override guard (2026-06-12)
 
-### Rule N-C68 — Template sync must NOT override Nadia-specific token choices (Session 49, 2026-06-12)
+### Rule N-C69 — Template sync must NOT override Nadia-specific token choices (Session 49, 2026-06-12)
 
 **Trigger:** "Fetch the latest navbar, menu bar and footer from zul.page.template.html" — diff applied to `quiz.question.html`.
 
@@ -6965,7 +6965,7 @@ Before applying ANY property change from a template CSS diff to a Nadia page:
 | `.profile-dropdown__avatar background` | `var(--surface-primary-default-subtle)` #e1f9ea | `--surface-general-default` #fff | N-C21 |
 | `:root --surface-primary-default-subtle` | `#e1f9ea` (DS confirmed) | `#d9f7ed` (stale) | N-C21 |
 
-**Properties confirmed safe to sync from template (Session 49):**
+**Properties confirmed safe to sync from template (Session 49 cont.):**
 
 | Property | Template value | Notes |
 |---|---|---|

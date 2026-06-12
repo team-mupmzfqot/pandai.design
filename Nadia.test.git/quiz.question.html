@@ -255,7 +255,7 @@
       gap:           var(--spacing-space-2xl);   /* 28px — Spacing/space-2xl */
       padding:       var(--spacing-space-xs) var(--spacing-space-xl);   /* 8px · 24px — DS px-[Spacing/space-xl] */
       height:        72px;   /* DS Navbar Top = 72px (t:8 + 56px content + b:8) */
-      overflow:      hidden;   /* DS clipsContent:true on node 1084:1787 */
+      overflow:      visible;   /* must be visible so Union tail (44×52) clears the navbar bottom edge */
     }
 
     /* Logo/Pandai/Logo Horizontal (node 1898:6965): height-only constraint, width auto */
@@ -476,7 +476,7 @@
       min-height:    56px;
       border-radius: var(--corner-radius-corner-rounded);   /* 60px */
       border:        1px solid var(--border-default);
-      background:    var(--surface-primary-default-subtle);   /* #e1f9ea — DS node 1084:1825 */
+      background:    var(--surface-primary-default-subtle);   /* #e1f9ea — N-C21: Nadia avatar bg (DS confirmed, not from template) */
       overflow:      hidden;
       position:      relative;
       flex-shrink:   0;
@@ -512,14 +512,14 @@
       min-height:  100px;
       flex-shrink: 0;
     }
-    /* P.Premium badge — DS node I1084:1825;6416:70718: 16×16 at top:-1px right:-1px
-       inside Avatar-1.5 (L size = 56×56). Confirmed get_design_context 2026-06-09. */
+    /* P.Premium badge — absolutely positioned top:0 right:0 of avatar frame.
+       Size matches DS: L/Image=16px, XL/Image=20px, XXL/Image=28px */
     .navbar-badge {
       position:        absolute;
-      top:             -1px;
-      right:           -1px;
-      width:           16px;   /* DS: w-[16px] h-[16px] inside Avatar-1.5 */
-      height:          16px;
+      top:             0;
+      right:           0;
+      width:           20px;   /* DS navbar Content frame: P.Premium = 20×20 */
+      height:          20px;
       display:         flex;
       align-items:     center;
       justify-content: center;
@@ -528,7 +528,7 @@
     .navbar-badge svg { width: 100%; height: 100%; }
     /* XXL/Image (profile dropdown, welcome desktop) */
     .profile-dropdown__avatar-wrap .navbar-badge,
-    .welcome-avatar-group .navbar-badge            { width: 28px; height: 28px; top: 0; right: 0; }
+    .welcome-avatar-group .navbar-badge            { width: 28px; height: 28px; }
 
     /* ─── Profile Menu - 1.5 (DS node 3908:3679)
        320px panel · white bg · 1px #00cc85 border · 24px radius · 16px padding · 8px gap
@@ -682,7 +682,7 @@
       height:        100px;
       border-radius: var(--corner-radius-corner-rounded);
       border:        1px solid var(--border-default);
-      background:    var(--surface-primary-default-subtle);   /* #e1f9ea — DS node 1084:1825 */
+      background:    var(--surface-primary-default-subtle);   /* #e1f9ea — N-C21 */
       overflow:      hidden;
     }
     .profile-dropdown__avatar img {
@@ -1687,10 +1687,12 @@
     ───────────────────────────────────────────────────── */
     .nav-menu-mobile {
       position:       fixed;
-      bottom:         72px;  /* 56px navbar + 16px gap — anchored above bottom navbar */
+      /* Hug content height by default; anchored above the bottom navbar, growing
+         upward. Capped so it never gets closer than 8px to the top of the page. */
+      bottom:         64px;                        /* 56px bottom navbar + 8px gap */
+      max-height:     calc(100dvh - 64px - var(--spacing-space-xs));  /* 8px top-of-page cap */
       left:           0;
       width:          300px;
-      max-height:     calc(100dvh - 72px);
       z-index:        500;
       background:     var(--surface-general-default);
       /* DS strokeWeights: top:1 right:1 bottom:1 left:0 — left edge is flat against page */
@@ -1700,7 +1702,7 @@
       /* NO border-left — DS leftWeight:0 */
       border-radius:  0 24px 24px 0;  /* DS: tl:0 tr:24 br:24 bl:0 */
       box-sizing:     border-box;
-      overflow-y:     auto;
+      overflow:       hidden;          /* content scrolls; header stays pinned */
       display:        flex;
       flex-direction: column;
       opacity:        0;
@@ -1733,7 +1735,7 @@
       visibility:     visible;
     }
 
-    /* Header — DS 3427:2443: h:60, pad t:16 r:16 b:16 l:16, gap:10 */
+    /* Header — 16px padding (space-m), pinned at top */
     .nav-menu-mobile__header {
       display:         flex;
       align-items:     center;
@@ -1752,13 +1754,16 @@
     }
     .nav-menu-mobile__close:hover { color: var(--icon-primary-default); }
 
-    /* Menu — DS 3427:2461: pad t:0 r:16 b:16 l:16, gap:8 */
+    /* Menu — 16px padding (space-m, top 0 — header provides top gap), gap:8. Scrollable fill region so the
+       overflow-hiding logic can measure available vs needed height. */
     .nav-menu-mobile__content {
-      display:     flex;
+      display:        flex;
       flex-direction: column;
-      gap:         var(--spacing-space-xs);
-      padding:     0 var(--spacing-space-m) var(--spacing-space-m);
-      flex-shrink: 0;
+      gap:            var(--spacing-space-xs);
+      padding:        0 var(--spacing-space-m) var(--spacing-space-m);
+      flex:           1 1 auto;
+      min-height:     0;
+      overflow-y:     auto;
     }
 
     /* CTA — DS 3427:2477: VERTICAL, pad:8, gap:8, radius:20 (differs from tablet radius:28) */
