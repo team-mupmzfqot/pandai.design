@@ -2332,20 +2332,20 @@
     .an-td:last-child { border-right: none; }
     .an-table tbody tr:last-child .an-td { border-bottom: none; }
     .an-td--chapter { text-align: center; }
-    .an-status { display: flex; align-items: center; }
-    /* Pill Badge - 1.5 Size=S (DS node 602:653, confirmed 2026-06-12) */
-    .an-status-pill {
-      display: inline-flex; align-items: center; justify-content: center;
-      padding: 2px 8px;
-      border-radius: var(--corner-radius-corner-rounded);
-      border: 1px solid transparent;
-      font-family: var(--font-family); font-size: 10px; font-weight: 500; line-height: 12px;
-      color: #ffffff; white-space: nowrap;
+    .an-status { display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 400; line-height: 18px; color: var(--text-default-heading);
     }
-    .an-status-pill--mastery     { background: var(--surface-primary-default);  border-color: var(--border-primary-focus); }
-    .an-status-pill--attention   { background: var(--surface-warning-default);  border-color: var(--border-warning-focus); }
-    .an-status-pill--not-started { background: var(--surface-disabled-primary); border-color: var(--border-disabled-disabled); color: var(--text-disabled-default); }
-    .an-status-pill--basic       { background: var(--surface-alert-default);    border-color: var(--border-alert-focus); }
+    /* Indicator Badge - 1.5 Size=S (DS node 3283:81030) — 4×4 circle, strokeAlign:OUTSIDE white */
+    .an-indicator {
+      width: 4px; height: 4px;
+      border-radius: 60px;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 1px var(--border-on-color);  /* OUTSIDE white stroke per DS Rule 60 */
+    }
+    .an-indicator--mastery     { background: var(--surface-primary-default); }
+    .an-indicator--attention   { background: var(--surface-warning-default); }
+    .an-indicator--not-started { background: var(--surface-disabled-primary); box-shadow: 0 0 0 1px var(--border-disabled-disabled); }
+    .an-indicator--basic       { background: var(--surface-alert-default); }
 
     /* RESPONSIVE */
     @media (max-width: 1319px) {
@@ -3719,7 +3719,7 @@
                     <td class="an-td">100%</td>
                     <td class="an-td">
                       <div class="an-status">
-                        <span class="an-status-pill an-status-pill--mastery">Mastery</span>
+                        <span class="an-indicator an-indicator--mastery"></span>Mastery
                       </div>
                     </td>
                   </tr>
@@ -3729,7 +3729,7 @@
                     <td class="an-td">50%</td>
                     <td class="an-td">
                       <div class="an-status">
-                        <span class="an-status-pill an-status-pill--attention">Need Attention</span>
+                        <span class="an-indicator an-indicator--attention"></span>Need Attention
                       </div>
                     </td>
                   </tr>
@@ -3739,7 +3739,7 @@
                     <td class="an-td">0%</td>
                     <td class="an-td">
                       <div class="an-status">
-                        <span class="an-status-pill an-status-pill--not-started">Not Started</span>
+                        <span class="an-indicator an-indicator--not-started"></span>Not Started
                       </div>
                     </td>
                   </tr>
@@ -3749,7 +3749,7 @@
                     <td class="an-td">67%</td>
                     <td class="an-td">
                       <div class="an-status">
-                        <span class="an-status-pill an-status-pill--basic">Basic Understanding</span>
+                        <span class="an-indicator an-indicator--basic"></span>Basic Understanding
                       </div>
                     </td>
                   </tr>
