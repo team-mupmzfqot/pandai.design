@@ -6878,5 +6878,103 @@ Used in quiz card headers for Form/Chapter labels (e.g. "F.5", "Ch.3").
 
 **Mistake made:** `quiz.html` had no `pill-badge-sm` CSS at all. Added in Session 48.
 
+---
+
+## Session 49 — achievement.leaderboard.html: nav/footer update from template (2026-06-12)
+
+### N-C68 — Full nav+footer update MUST replace the `<style>` block, not just the HTML sections
+
+**Root cause of this session's mistake:** Replaced Navigation-Shell HTML + footer + nav scripts from template, but kept the page's original `<style>` block unchanged. Result: all navigation and footer rendered visually broken.
+
+**Why it breaks:** Every Nadia page `<style>` block contains only `:root` tokens + page-specific styles (~400 lines). The template `<style>` block contains ALL navbar, nav-menu, footer, and layout CSS (~2080 lines). Without those CSS declarations, the HTML is present but completely unstyled.
+
+**Correct procedure for a full nav+footer update from `zul.page.template.html`:**
+
+```
+1. Replace <style> block:
+   a. Take template CSS lines 12–2091 (everything inside <style>, before </style>)
+   b. Append page-specific CSS — starts after :root / .icon-ds / .main-content / .footer
+      (typically at .bc-row / first component class, ~line 170 in original page)
+   c. Close with </style>
+
+2. Replace Navigation-Shell HTML
+   - Strip hardcoded is-active / aria-current from nav items — JS handles active state
+
+3. Keep <main> content unchanged
+
+4. Add </main> close tag if missing (common omission in older pages)
+
+5. Replace footer HTML from template
+
+6. Replace nav main script + NavBar-Bottom + NavMenu-Mobile + mobile scripts from template
+
+7. Replace old NAV_HREFS nav links script with template's var NAV = {…} pattern
+
+8. Preserve page-specific scripts in their own <script> block
+```
+
+**Page-specific CSS boundary:** Starts at the first component class unique to the page (e.g. `.bc-row`). Everything before it — `:root`, `.icon-ds`, `.main-content`, `.footer`, `.footer__inner` — already exists in the template CSS. Do not duplicate.
+
+**Verification check:** After any nav+footer update, run:
+```bash
+grep -n "<style\|</style" file.html
+# </style> must be at line ~2300+, not ~425
+# If </style> is at ~425 → CSS block was NOT replaced → nav will be broken
+```
+
+**Template CSS line reference (`zul.page.template.html`):**
+
+| Section | Lines |
+|---|---|
+| `<style>` open + `:root` + layout | 12–200 |
+| Full navbar + nav-menu CSS | 201–2091 |
+| `</style>` | 2092 |
+| Navigation-Shell HTML | 2299–3182 |
+| Footer HTML | 3206–3225 |
+| Nav main script | 3228–4055 |
+| NavBar-Bottom + overlay + NavMenu-Mobile | 4056–4288 |
+| Mobile menu + maximize scripts | 4289–4474 |
+| Nav links script (`var NAV = {…}`) | 4480–4563 |
+
+**Mistake made (2026-06-12):** Updated HTML sections correctly but left the 413-line `<style>` block untouched. All navbar + nav-menu + footer had no CSS — rendered completely unstyled.
+
+**Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
+
+## Session 49 — quiz.question.html: template CSS sync + Nadia-override guard (2026-06-12)
+
+### Rule N-C68 — Template sync must NOT override Nadia-specific token choices (Session 49, 2026-06-12)
+
+**Trigger:** "Fetch the latest navbar, menu bar and footer from zul.page.template.html" — diff applied to `quiz.question.html`.
+
+**What happened:**
+The template (`zul.page.template.html`) had changed `.navbar-avatar` and `.profile-dropdown__avatar` backgrounds from `var(--surface-primary-default-subtle)` to `var(--surface-general-default)` (white). This was blindly synced to quiz.question.html. Result: avatar backgrounds became white (#fff) — violating Rule N-C21 which mandates `#e1f9ea` (mint green) for Nadia avatar backgrounds.
+
+**Root cause:** nadia.design.md was not checked BEFORE applying template diffs. N-C21 explicitly overrides the avatar background for all Nadia pages.
+
+**Rule:**
+Before applying ANY property change from a template CSS diff to a Nadia page:
+1. Check if that property has a Nadia-specific rule in nadia.design.md
+2. If **yes** → keep the Nadia value. Never apply the template value.
+3. If **no** → apply the template value.
+
+**Properties with Nadia-specific overrides — NEVER sync from template:**
+
+| Property | Nadia value | Template value | Rule |
+|---|---|---|---|
+| `.navbar-avatar background` | `var(--surface-primary-default-subtle)` #e1f9ea | `--surface-general-default` #fff | N-C21 |
+| `.profile-dropdown__avatar background` | `var(--surface-primary-default-subtle)` #e1f9ea | `--surface-general-default` #fff | N-C21 |
+| `:root --surface-primary-default-subtle` | `#e1f9ea` (DS confirmed) | `#d9f7ed` (stale) | N-C21 |
+
+**Properties confirmed safe to sync from template (Session 49):**
+
+| Property | Template value | Notes |
+|---|---|---|
+| `.navbar-primary overflow` | `visible` | Allows dropdowns to clear the navbar bottom edge |
+| `.navbar-badge` size | `20×20` at `top:0 right:0` | DS navbar Content frame confirmed 20×20 (Rule 100) |
+| `.nav-menu-mobile bottom` | `64px` (56px navbar + 8px gap) | Was incorrectly 72px (16px gap) |
+| `.nav-menu-mobile max-height` | `calc(100dvh - 64px - var(--spacing-space-xs))` | 8px top-of-page cap added |
+| `.nav-menu-mobile overflow` | `hidden` (was `overflow-y: auto`) | Content scrolls; header stays pinned |
+| `.nav-menu-mobile__content` | `flex: 1 1 auto; min-height:0; overflow-y:auto` | Was `flex-shrink:0` — makes content scrollable |
+
 **Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
 
