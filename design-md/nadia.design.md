@@ -6763,3 +6763,120 @@ The DS has **two distinct premium label badge variants** used across Rewards pag
 
 **Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
 
+---
+
+### Rule N-C65 — Quiz card CSS: `::after` must be `box-shadow:inset`, `__main` gap=0, `__content` left separator (Session 48, 2026-06-12)
+
+**Confirmed from:** `zul.home.screen.html` source reference + CLAUDE.md Rule 60 (strokeAlign:INSIDE → box-shadow:inset).
+
+Three CSS properties in `.quiz-card` that are easy to get wrong:
+
+| Element | Wrong | Correct |
+|---|---|---|
+| `.quiz-card::after` border | `border: 1px solid var(--card-subject-color)` | `box-shadow: inset 0 0 0 1px var(--card-subject-color, var(--border-default))` |
+| `.quiz-card__main` gap | `gap: var(--spacing-space-xs)` (8px) | `gap: 0` |
+| `.quiz-card__content` separator | (missing) | `box-shadow: inset 1px 0 0 0 var(--card-subject-subtle, transparent)` |
+
+**Full hover state set** (all 5 rules required — missing any one breaks the interaction):
+```css
+.quiz-card:hover { background: var(--card-subject-subtle, var(--surface-general-default)); cursor: pointer; }
+.quiz-card:hover::after { box-shadow: inset 0 0 0 4px var(--card-subject-subtle-hover, var(--border-default)); }
+.quiz-card:hover .quiz-card__content { box-shadow: inset 1px 0 0 0 #ffffff; }
+.quiz-card:hover .pill-badge-sm { background: var(--card-subject-subtle-hover); color: var(--card-subject-color); }
+.quiz-card:hover .quiz-card__subtitle { color: var(--card-subject-color); }
+```
+
+**Mistakes made (Session 48):**
+- `.quiz-card::after` used `border: 1px solid` — violates Rule 60 (strokeAlign:INSIDE). Corrected to `box-shadow: inset`.
+- `.quiz-card__main` gap was `var(--spacing-space-xs)` (8px) — DS specifies 0. Corrected.
+- `.quiz-card__content` was missing `box-shadow: inset 1px 0 0 0` left separator line. Added.
+- All 5 hover state rules were absent. Added.
+
+---
+
+### Rule N-C66 — Quiz card: three required CSS custom properties per subject, all must be in the subject class (Session 48, 2026-06-12)
+
+**Confirmed from:** `zul.home.screen.html` — inline style pattern + hover state CSS reference.
+
+Each `.subject-XXX` class must define **all three** CSS custom properties. Defining only one (as previously done in `quiz.html`) breaks hover states silently — the bg and ring colors fall back to defaults.
+
+| Variable | Role | Example (Add. Math) |
+|---|---|---|
+| `--card-subject-color` | Default border (1px) + hover text/pill fg | `#283589` (full dark subject color) |
+| `--card-subject-subtle` | Hover background | `#eaebf3` (very light tint) |
+| `--card-subject-subtle-hover` | Hover border ring (4px) + pill bg + content separator | `#a9aed0` (medium tint) |
+
+```css
+/* Correct — all three vars */
+.subject-add-math { --card-subject-color: #283589; --card-subject-subtle: #eaebf3; --card-subject-subtle-hover: #a9aed0; }
+
+/* Wrong — only one var, hover state bg and ring fall back silently */
+.subject-add-math { --card-subject-color: #a9aed0; }
+```
+
+**Prior quiz.html error:** only `--card-subject-color` was set, and it used the subtle-hover hex (`#a9aed0`) instead of the full dark color (`#283589`). This gave a lighter default border AND completely silent hover bg/ring.
+
+**Confirmed all 18 subject values (Session 48):**
+
+| Subject | `--card-subject-color` | `--card-subject-subtle` | `--card-subject-subtle-hover` |
+|---|---|---|---|
+| Add. Math | `#283589` | `#eaebf3` | `#a9aed0` |
+| Biology | `#8431d8` | `#f3ebfb` | `#ceadef` |
+| Economy | `#ff5733` | `#ffeeeb` | `#ffbcad` |
+| Chemistry | `#e20082` | `#fce6f3` | `#ed99c6` |
+| English | `#ff4d56` | `#ffedee` | `#ffb8bb` |
+| Moral Studies | `#0072ca` | `#e6f1fa` | `#99c7ea` |
+| Islamic Studies | `#de4d7f` | `#fcedf2` | `#f2b8cc` |
+| Mathematics | `#42ac7b` | `#ecf7f2` | `#b3deca` |
+| Accounting | `#0072ca` | `#e6f1fa` | `#99c7ea` |
+| Physics | `#27a0d7` | `#eaf6fb` | `#a9d9ef` |
+| Business Studies | `#efb42b` | `#fef8ea` | `#f9e1aa` |
+| Computer Science | `#d10070` | `#fbe6f1` | `#ed99c6` |
+| Science | `#ffd641` | `#fffbec` | `#ffefb3` |
+| History | `#a97c50` | `#f7f2ee` | `#ddcbb9` |
+| KAFA | `#8ae3a9` | `#f4fcf7` | `#d0f4dd` |
+| Geography | `#77d836` | `#f2fbeb` | `#c9efaf` |
+| RBT | `#353535` | `#d7d7d7` | `#aeaeae` |
+| Bahasa Melayu | `#4d77ff` | `#f6f9ff` | `#b8c9ff` |
+
+---
+
+### Rule N-C67 — Pill Badge - 1.5 (Small) CSS spec — `pill-badge-sm` (Session 48, 2026-06-12)
+
+**Confirmed from:** DS node `602:460`, zul.home.screen.html implementation.
+
+Used in quiz card headers for Form/Chapter labels (e.g. "F.5", "Ch.3").
+
+```css
+.pill-badge-sm {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  padding:         2px var(--spacing-space-xs);  /* 2px 8px */
+  border-radius:   var(--corner-radius-corner-rounded);  /* 60px pill */
+  background:      var(--surface-disabled-primary);      /* #f2f2f2 */
+  font-size:       10px;   /* DS QuizCard-1.5: Body/B8 */
+  font-weight:     500;
+  line-height:     12px;
+  color:           var(--text-disabled-default);          /* #bfbfbf */
+  white-space:     nowrap;
+  overflow:        hidden;
+}
+```
+
+**Hover state** (defined in `.quiz-card:hover .pill-badge-sm`):
+- `background: var(--card-subject-subtle-hover)` — takes medium tint of the subject color
+- `color: var(--card-subject-color)` — takes full dark subject color
+
+**In HTML:** placed AFTER the subject badge span, still inside `.quiz-card__header`:
+```html
+<div class="quiz-card__header">
+  <span class="subject-badge subject-badge--add-math">...</span>
+  <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.3</span>
+</div>
+```
+
+**Mistake made:** `quiz.html` had no `pill-badge-sm` CSS at all. Added in Session 48.
+
+**Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
+

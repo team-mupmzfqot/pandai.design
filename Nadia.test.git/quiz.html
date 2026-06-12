@@ -2243,15 +2243,32 @@
       cursor:         default;
       position:       relative;
     }
-    /* Border on top of image children via ::after (strokeAlign:INSIDE, Rule 60 + Rule 118) */
+    /* Border on top of image children via ::after (strokeAlign:INSIDE → box-shadow:inset, Rule 60) */
     .quiz-card::after {
-      content:       '';
-      position:      absolute;
-      inset:         0;
-      border:        1px solid var(--card-subject-color, var(--border-default));
-      border-radius: var(--corner-radius-corner-2xl);
+      content:        '';
+      position:       absolute;
+      inset:          0;
+      border-radius:  var(--corner-radius-corner-2xl);
       pointer-events: none;
-      z-index:       1;
+      z-index:        1;
+      box-shadow:     inset 0 0 0 1px var(--card-subject-color, var(--border-default));
+    }
+    .quiz-card:hover {
+      background: var(--card-subject-subtle, var(--surface-general-default));
+      cursor:     pointer;
+    }
+    .quiz-card:hover::after {
+      box-shadow: inset 0 0 0 4px var(--card-subject-subtle-hover, var(--border-default));
+    }
+    .quiz-card:hover .quiz-card__content {
+      box-shadow: inset 1px 0 0 0 #ffffff;
+    }
+    .quiz-card:hover .pill-badge-sm {
+      background: var(--card-subject-subtle-hover);
+      color:      var(--card-subject-color);
+    }
+    .quiz-card:hover .quiz-card__subtitle {
+      color: var(--card-subject-color);
     }
     /* Image column — full card height, cover fill; KAFA uses contain */
     .quiz-card__image {
@@ -2277,11 +2294,12 @@
       gap:            var(--spacing-space-xxs);
       padding:        var(--spacing-space-m);
       align-self:     stretch;
+      box-shadow:     inset 1px 0 0 0 var(--card-subject-subtle, transparent);
     }
     .quiz-card__main {
       display:        flex;
       flex-direction: column;
-      gap:            var(--spacing-space-xs);
+      gap:            0;
       flex:           1;
       min-height:     0;
     }
@@ -2307,6 +2325,22 @@
       display:                -webkit-box;
       -webkit-line-clamp:     2;
       -webkit-box-orient:     vertical;
+    }
+
+    /* Pill Badge - 1.5 (node 602:460) — quiz card uses 10px/12px per DS QuizCard-1.5 spec */
+    .pill-badge-sm {
+      display:         inline-flex;
+      align-items:     center;
+      justify-content: center;
+      padding:         2px var(--spacing-space-xs);
+      border-radius:   var(--corner-radius-corner-rounded);
+      background:      var(--surface-disabled-primary);
+      font-size:       10px;
+      font-weight:     500;
+      line-height:     12px;
+      color:           var(--text-disabled-default);
+      white-space:     nowrap;
+      overflow:        hidden;
     }
 
     /* Subject Badge - 1.5 Size=L (32px) — DS confirmed (CLAUDE.md Rules 17, 20) */
@@ -2365,25 +2399,25 @@
     .subject-badge--kafa      { --badge-border: #6eb687; --badge-bg: #8ae3a9; --badge-text: #538865; }
     .subject-badge--rbt       { --badge-border: #2a2a2a; --badge-bg: #353535; }
 
-    /* Card border color per subject — DS Subjects/*/default-subtle-hover values */
-    .subject-add-math  { --card-subject-color: #a9aed0; }
-    .subject-biology   { --card-subject-color: #ceadef; }
-    .subject-economy   { --card-subject-color: #ffbcad; }
-    .subject-chemistry { --card-subject-color: #ed99c6; }
-    .subject-english   { --card-subject-color: #ffb8bb; }
-    .subject-moral     { --card-subject-color: #99c7ea; }
-    .subject-islamic   { --card-subject-color: #f2b8cc; }
-    .subject-math      { --card-subject-color: #b3deca; }
-    .subject-account   { --card-subject-color: #99c7ea; }
-    .subject-physics   { --card-subject-color: #a9d9ef; }
-    .subject-business  { --card-subject-color: #f9e1aa; }
-    .subject-cs        { --card-subject-color: #ed99c6; }
-    .subject-science   { --card-subject-color: #ffefb3; }
-    .subject-history   { --card-subject-color: #ddcbb9; }
-    .subject-kafa      { --card-subject-color: #d0f4dd; }
-    .subject-geo       { --card-subject-color: #c9efaf; }
-    .subject-rbt       { --card-subject-color: #aeaeae; }
-    .subject-bm        { --card-subject-color: #b8c9ff; }
+    /* Card subject color vars — color=full, subtle=hover-bg, subtle-hover=4px-ring (DS confirmed) */
+    .subject-add-math  { --card-subject-color: #283589; --card-subject-subtle: #eaebf3; --card-subject-subtle-hover: #a9aed0; }
+    .subject-biology   { --card-subject-color: #8431d8; --card-subject-subtle: #f3ebfb; --card-subject-subtle-hover: #ceadef; }
+    .subject-economy   { --card-subject-color: #ff5733; --card-subject-subtle: #ffeeeb; --card-subject-subtle-hover: #ffbcad; }
+    .subject-chemistry { --card-subject-color: #e20082; --card-subject-subtle: #fce6f3; --card-subject-subtle-hover: #ed99c6; }
+    .subject-english   { --card-subject-color: #ff4d56; --card-subject-subtle: #ffedee; --card-subject-subtle-hover: #ffb8bb; }
+    .subject-moral     { --card-subject-color: #0072ca; --card-subject-subtle: #e6f1fa; --card-subject-subtle-hover: #99c7ea; }
+    .subject-islamic   { --card-subject-color: #de4d7f; --card-subject-subtle: #fcedf2; --card-subject-subtle-hover: #f2b8cc; }
+    .subject-math      { --card-subject-color: #42ac7b; --card-subject-subtle: #ecf7f2; --card-subject-subtle-hover: #b3deca; }
+    .subject-account   { --card-subject-color: #0072ca; --card-subject-subtle: #e6f1fa; --card-subject-subtle-hover: #99c7ea; }
+    .subject-physics   { --card-subject-color: #27a0d7; --card-subject-subtle: #eaf6fb; --card-subject-subtle-hover: #a9d9ef; }
+    .subject-business  { --card-subject-color: #efb42b; --card-subject-subtle: #fef8ea; --card-subject-subtle-hover: #f9e1aa; }
+    .subject-cs        { --card-subject-color: #d10070; --card-subject-subtle: #fbe6f1; --card-subject-subtle-hover: #ed99c6; }
+    .subject-science   { --card-subject-color: #ffd641; --card-subject-subtle: #fffbec; --card-subject-subtle-hover: #ffefb3; }
+    .subject-history   { --card-subject-color: #a97c50; --card-subject-subtle: #f7f2ee; --card-subject-subtle-hover: #ddcbb9; }
+    .subject-kafa      { --card-subject-color: #8ae3a9; --card-subject-subtle: #f4fcf7; --card-subject-subtle-hover: #d0f4dd; }
+    .subject-geo       { --card-subject-color: #77d836; --card-subject-subtle: #f2fbeb; --card-subject-subtle-hover: #c9efaf; }
+    .subject-rbt       { --card-subject-color: #353535; --card-subject-subtle: #d7d7d7; --card-subject-subtle-hover: #aeaeae; }
+    .subject-bm        { --card-subject-color: #4d77ff; --card-subject-subtle: #f6f9ff; --card-subject-subtle-hover: #b8c9ff; }
 
     /* Responsive — tablet */
     @media (max-width: 1279px) {
@@ -2688,6 +2722,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--add-math"><span class="subject-badge__icon"><svg width="21" height="24" viewBox="0 0 21 24" aria-hidden="true"><use href="#ic-subj-add-math"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Add. Math</span></span></span>
+                    <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.3</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Trigonometric Functions and Graphs</p></div>
                 </div>
@@ -2701,6 +2736,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--biology"><span class="subject-badge__icon"><svg width="17" height="24" viewBox="0 0 17 24" aria-hidden="true"><use href="#ic-subj-biology"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Biology</span></span></span>
+                    <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.2</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Human Circulatory System</p></div>
                 </div>
@@ -2714,6 +2750,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--economy"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-economy"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Economy</span></span></span>
+                    <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.5</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Theory of Production and Cost</p></div>
                 </div>
@@ -2727,6 +2764,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--chemistry"><span class="subject-badge__icon"><svg width="15" height="24" viewBox="0 0 15 24" aria-hidden="true"><use href="#ic-subj-chemistry"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Chemistry</span></span></span>
+                    <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.4</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Rate of Chemical Reactions</p></div>
                 </div>
@@ -2740,6 +2778,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--english"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-english"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">English</span></span></span>
+                    <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.2</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Reading Comprehension: Narrative Text</p></div>
                 </div>
@@ -2753,6 +2792,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--moral"><span class="subject-badge__icon"><svg width="20" height="24" viewBox="0 0 20 24" aria-hidden="true"><use href="#ic-subj-moral"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Moral Studies</span></span></span>
+                    <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.6</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Human Rights and Responsibilities</p></div>
                 </div>
@@ -2766,6 +2806,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--islamic"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-islamic"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Islamic Studies</span></span></span>
+                    <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.3</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Noble Character in Daily Life</p></div>
                 </div>
@@ -2779,6 +2820,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--math"><span class="subject-badge__icon"><svg width="19" height="24" viewBox="0 0 19 24" aria-hidden="true"><use href="#ic-subj-math"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Mathematics</span></span></span>
+                    <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.5</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Arithmetic and Geometric Progressions</p></div>
                 </div>
@@ -2792,6 +2834,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--account"><span class="subject-badge__icon"><svg width="17" height="24" viewBox="0 0 17 24" aria-hidden="true"><use href="#ic-subj-account"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Accounting</span></span></span>
+                    <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.3</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Financial Statements of Listed Companies</p></div>
                 </div>
@@ -2805,6 +2848,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--physics"><span class="subject-badge__icon"><svg width="22" height="24" viewBox="0 0 22 24" aria-hidden="true"><use href="#ic-subj-physics"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Physics</span></span></span>
+                    <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.5</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Electromagnetic Force and Induction</p></div>
                 </div>
@@ -2818,6 +2862,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--business"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-business"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Business Studies</span></span></span>
+                    <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.7</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Marketing and Promotion Strategies</p></div>
                 </div>
@@ -2831,6 +2876,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--cs"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-cs"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Computer Science</span></span></span>
+                    <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.2</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Algorithms and Data Structures</p></div>
                 </div>
@@ -2844,6 +2890,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--science"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-science"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Science</span></span></span>
+                    <span class="pill-badge-sm">F.3</span><span class="pill-badge-sm">Ch.4</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Photosynthesis and Plant Respiration</p></div>
                 </div>
@@ -2857,6 +2904,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--history"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-history"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">History</span></span></span>
+                    <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.10</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Malaysia and World War II</p></div>
                 </div>
@@ -2870,6 +2918,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--kafa"><span class="subject-badge__icon"><svg width="25" height="24" viewBox="0 0 24.32 24" aria-hidden="true"><use href="#ic-subj-kafa"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">KAFA</span></span></span>
+                    <span class="pill-badge-sm">F.3</span><span class="pill-badge-sm">Ch.6</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Life of Prophet Muhammad SAW</p></div>
                 </div>
@@ -2883,6 +2932,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--geo"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-geo"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Geography</span></span></span>
+                    <span class="pill-badge-sm">F.5</span><span class="pill-badge-sm">Ch.8</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Sustainable Development and Environment</p></div>
                 </div>
@@ -2896,6 +2946,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--rbt"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-rbt"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">RBT</span></span></span>
+                    <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.1</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Innovative Product Design</p></div>
                 </div>
@@ -2909,6 +2960,7 @@
                 <div class="quiz-card__main">
                   <div class="quiz-card__header">
                     <span class="subject-badge subject-badge--bm"><span class="subject-badge__icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-bm"/></svg></span><span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Bahasa Melayu</span></span></span>
+                    <span class="pill-badge-sm">F.4</span><span class="pill-badge-sm">Ch.3</span>
                   </div>
                   <div class="quiz-card__texts"><p class="quiz-card__subtitle">Argumentative Text and Debate</p></div>
                 </div>
