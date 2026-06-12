@@ -6492,3 +6492,223 @@ The `box-shadow: inset` on a card content div paints ABOVE the element's backgro
 | `padding: 1px` | All 4 sides — top, right, bottom, left |
 
 **Always use `padding: 1px`** (not directional) when the green border should appear on all sides. Must be paired with the wrapper div fix (Rule N-C52) to also show the shadow at corners, not just straight edges.
+
+---
+
+### Rule N-C54 — Section header (quest-desc / section title) → Title/T2, not Body/B3 (Session 45, 2026-06-12)
+
+The main descriptive text above a quest/content grid is a **section header title**, not body copy. The DS renders it as **Title/T2** — `18px SemiBold, line-height 28px, color Text/tertiary/default (#00564c)`.
+
+**Confirmed from:** Figma node `28:5461` (Primary Card - 1.5 / Coin Quest section header)
+
+| Property | Wrong (was) | Correct (DS) | Token |
+|---|---|---|---|
+| font-size | `14px` | `18px` | Title/T2 |
+| font-weight | `400` (Regular) | `600` (SemiBold) | Title/T2 |
+| line-height | `20px` | `28px` | Title/T2 |
+| color | `#666666` (text-default-body) | `#00564c` | `--text-tertiary-default` |
+
+```css
+.quest-desc {
+  font-size: 18px; font-weight: 600; line-height: 28px;
+  color: var(--text-tertiary-default);
+}
+```
+
+**Rule:** Any section description that serves as a section title must use Title/T2 (`--text-tertiary-default`). Never use body copy styles on a section header. Always verify via `get_design_context` on the parent card node, not just the text node in isolation.
+
+---
+
+### Rule N-C55 — Label Badge - 1.5: base `line-height: 18px`; Medium/Hard = 14px Body/B2 (Session 45, 2026-06-12)
+
+**Confirmed from:** Figma node `28:5461` — all 8 quest cards, Label Badge - 1.5 component nodes `3755:8902` (Easy), `3755:8980` (Medium), `3755:8978` (Hard), `3755:8925` (Daily/Weekly).
+
+The DS uses **two different type sizes** for difficulty vs. frequency badges:
+
+| Badge type | DS style | font-size | line-height | font-weight |
+|---|---|---|---|---|
+| Easy | Body/B6 | **12px** | **18px** | 500 (Medium) |
+| Medium | Body/B2 | **14px** | **20px** | 500 (Medium) |
+| Hard | Body/B2 | **14px** | **20px** | 500 (Medium) |
+| Daily / Weekly | Body/B6 | **12px** | **18px** | 500 (Medium) |
+
+**What was wrong:** Base `.lbadge` had `line-height: 12px` (incorrect — text was cramped). Medium/Hard inherited `12px` font-size instead of `14px`.
+
+```css
+/* Base — Body/B6 */
+.lbadge { font-size: 12px; font-weight: 500; line-height: 18px; ... }
+
+/* Medium — Body/B2 override */
+.lbadge--medium { font-size: 14px; line-height: 20px; ... }
+
+/* Hard — Body/B2 override */
+.lbadge--hard { font-size: 14px; line-height: 20px; ... }
+```
+
+**Rule:** Never assume all label badge variants share the same type size. Always pull each variant's text node from `get_design_context` on the **parent card node** (Rule 9 / Rule 29).
+
+---
+
+### Rule N-C56 — `--surface-primary-default-subtle` correct value is `#e1f9ea` (Session 45, 2026-06-12)
+
+**Confirmed from:** Figma node `28:5461` — Easy badge bg: `var(--surface/primary/default-subtle, #e1f9ea)`.
+
+The page template was carrying the wrong value `#d9f7ed` for `--surface-primary-default-subtle`. The DS-confirmed hex is **`#e1f9ea`**.
+
+| Token | Wrong | Correct |
+|---|---|---|
+| `--surface-primary-default-subtle` | `#d9f7ed` | `#e1f9ea` |
+
+**Affected files fixed (Session 45):** `rewards.coin.quest.html`, `rewards.avatar.html`, `rewards.evoucher.html`, `rewards.merchandise.html`. `rewards.my.rewards.html` was already correct (fixed in Session 23).
+
+**Rule:** After any DS live-fetch confirms a token value, propagate the correction to **all** Nadia.test.git HTML files in the same commit. Check every file with `grep -r "old-value"` before committing.
+
+
+---
+
+### Rule N-C54 — Rewards section header: Title/T2 (18px SemiBold), NOT Body (14px) (Session 45, 2026-06-12)
+
+The Primary Card header row above the reward cards grid uses **Title/T2** typography — 18px SemiBold, line-height 28px, color `Text/tertiary/default` (`#00564c`). It was incorrectly implemented as 14px Regular (Body/B3).
+
+**Confirmed from Screen file (hkyIerTAdwtaN3edlp3iz8, node 28:5482):**
+
+| Element | Correct | Wrong (was) |
+|---|---|---|
+| font-size | **18px** | 14px |
+| font-weight | **600 (SemiBold)** | 400 (Regular) |
+| line-height | **28px** | 20px |
+| coin icon size | **24×24px** | 18×21px |
+
+**Applies to:** `.merch-header__text`, `.merch-header__stat-label`, `.merch-header__count` — all three use the same Title/T2 style.
+
+**Rule:** Always fetch the actual Screen file node for section header typography before implementing. The Primary Card header row is Title/T2 throughout the Rewards pages — never Body.
+
+---
+
+### Rule N-C55 — Label Badge "Premium Lite" = informative (blue) palette, "Premium" = primary (green) (Session 45, 2026-06-12)
+
+The Rewards pages show two distinct Label Badge - 1.5 variants side by side. They use **different palettes** — never the same class.
+
+| Badge | bg token | bg hex | border token | border hex | text token | text hex |
+|---|---|---|---|---|---|---|
+| **Premium** | `Surface/primary/default-subtle` | `#e1f9ea` | `Border/primary/default` | `#00cc85` | `Text/primary/default` | `#00cc85` |
+| **Premium Lite** | `Surface/informative/default-subtle` | `#e6f6fd` | `Border/informative/default-hover` | `#7fd0f3` | `Text/informative/default` | `#00a2e8` |
+
+**CSS classes (rewards.merchandise.html):**
+```css
+.lbadge-prem { background: var(--surface-primary-default-subtle); border: 1px solid var(--border-primary-default); color: var(--text-primary-default); }
+.lbadge-lite { background: var(--surface-informative-default-subtle); border: 1px solid var(--border-informative-default-hover); color: var(--text-informative-default); }
+```
+
+**New tokens added to `:root`:**
+```css
+--surface-informative-default-subtle:   #e6f6fd;
+--border-informative-default-hover:     #7fd0f3;
+--text-informative-default:             #00a2e8;
+```
+
+**Icon presence:** The DS component file (`TLVKe3bgJTdVvuPAzgDq2f`) shows a `plus-circle` icon inside both badges. The **Screen file** (`hkyIerTAdwtaN3edlp3iz8`) shows **no icon** — text only. The Screen file is always authoritative for what actually renders. Never add icons to badges unless the Screen confirms them.
+
+**Always check the Screen file** (`hkyIerTAdwtaN3edlp3iz8`) to confirm badge palette and icon presence — the DS component file shows all possible variants; the Screen shows what is actually used on that page.
+
+**Mistake made:** Both "Premium" and "Premium Lite" badges used `.lbadge-prem` (green palette). "Premium Lite" must use `.lbadge-lite` (blue informative palette). This affects every Rewards page that shows label badges.
+
+**Applies to:** `rewards.merchandise.html`, `rewards.evoucher.html`, `rewards.my.rewards.html`, `rewards.avatar.html` — audit all Rewards pages for this pattern.
+
+---
+
+### Rule N-C54 — Always fetch DS node for both text content AND typography before any header implementation (Session 45, 2026-06-12)
+
+**Never invent or approximate text content or typography for any section header — always call `get_design_context` on the header node first.**
+
+The Avatar page `Primary Card - 1.5` header (DS node `I7364:80836;2881:36281;7364:80849`) uses **Title/T2** for all three elements, not Body:
+
+| Element | DS spec (correct) | Was wrong |
+|---|---|---|
+| Left text (flex:1) | 18px SemiBold / lh:28px / `var(--text-tertiary-default)` | 14px Regular / lh:20px |
+| "Total redeem this month :" label | 18px SemiBold / lh:28px / `var(--text-tertiary-default)` | 14px Regular / lh:20px |
+| Count "120" | 18px SemiBold / lh:28px / `var(--text-tertiary-default)` | 14px Regular / lh:20px |
+| P.Coin icon | 24×24px | 18×21px |
+
+**Text content** was also invented — HTML had "Collect coins, redeem and enjoy these great rewards!" but DS node `I7364:80836;2881:36281;7364:80850` specifies: **"Personalise your profile with these exclusive avatars!"**
+
+**Root cause:** Header was implemented without fetching DS. Text was paraphrased; typography was guessed as Body/B3 (14px Regular) instead of Title/T2 (18px SemiBold). Section header titles frequently use Title/T2 — never assume Body.
+
+**Corrected CSS:**
+```css
+.avatar-header__text       { font-size: 18px; font-weight: 600; line-height: 28px; color: var(--text-tertiary-default); }  /* Title/T2 */
+.avatar-header__stat-label { font-size: 18px; font-weight: 600; line-height: 28px; color: var(--text-tertiary-default); }  /* Title/T2 */
+.avatar-header__count      { font-size: 18px; font-weight: 600; line-height: 28px; color: var(--text-tertiary-default); }  /* Title/T2 */
+.avatar-header__coin       { width: 24px; height: 24px; }
+```
+
+**Rule:** For any component header row, `get_design_context` must confirm:
+1. **Exact text string** — never invent or paraphrase DS-defined copy
+2. **Text style** — section titles use Title/T2 (18px SemiBold / lh:28px), not Body (14px)
+3. **Icon dimensions** — P.Coin in header context = 24×24px; always verify per usage context
+
+**Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
+
+---
+
+## Session 46 — class.my.classes.html: bc-row alignment + cc__cta right-align (2026-06-12)
+
+### Rule N-C57 — bc-row alignment: outer `flex-start`, breadcrumb interior `center` (Session 46, 2026-06-12)
+
+**Confirmed from:** Figma node `33:13030` (Screen file `hkyIerTAdwtaN3edlp3iz8`).
+
+The breadcrumb row has **two separate alignment contexts** that must not be conflated:
+
+| Element | `align-items` | Why |
+|---|---|---|
+| `.bc-row` (outer container) | `flex-start` | Breadcrumb group and buttons group are top-aligned to each other |
+| `.bc-left` (breadcrumb interior) | `center` | Title (H3 36px), vertical separator (20px), and breadcrumb trail are vertically centred to each other |
+| `.bc-actions` (buttons group) | `center` | Buttons are centred to each other internally |
+
+```css
+.bc-row  { display: flex; align-items: flex-start; gap: var(--spacing-space-s); }
+.bc-left { flex: 1; display: flex; align-items: center; gap: var(--spacing-space-m); }
+```
+
+**Mistake made:** When asked to "top align bc-row to the button", both `.bc-row` AND `.bc-left` were changed to `align-items: flex-start`. This broke the internal breadcrumb layout — the 20px separator and 14px trail text were top-pinned instead of centred against the 24px/36lh title. The correct fix touches only the outer `.bc-row`.
+
+**Rule:** When changing alignment on a flex container, only change the target container. Always verify which node each `align-items` belongs to via `get_design_context` on the Figma node before touching any CSS.
+
+**Applies to:** `class.my.classes.html`, `class.browse.classes.html`, and any future page that uses the Breadcrumb - 1.5 component row pattern.
+
+---
+
+### Rule N-C58 — `justify-content: space-between` becomes left-align with a single child — always use `flex-end` for right-only CTA (Session 46, 2026-06-12)
+
+**Confirmed from:** Figma node `3:54571` — CTA section `1:18035`: `justify-content: flex-end; align-items: center`.
+
+`.cc__cta` was originally `justify-content: space-between` to push the "Premium Only" label left and the "Enter Class" button right. After removing all `.cc__premium` spans, only one child remained. `space-between` with a single flex child behaves identically to `flex-start` — the button appeared left-aligned.
+
+**Fix:** Change to `justify-content: flex-end`.
+
+```css
+/* Wrong — single child under space-between = left-aligned */
+.cc__cta { justify-content: space-between; }
+
+/* Correct — DS confirmed, button right-aligned */
+.cc__cta { justify-content: flex-end; }
+```
+
+**Rule:** Whenever a "Premium Only" label or any left-side sibling is removed from a CTA row, check that the remaining button still aligns correctly. `space-between` silently changes behaviour with child count. Always use `flex-end` when the DS confirms the button should be right-aligned and there is no left-side sibling.
+
+---
+
+### Rule N-C59 — Always fetch Figma BEFORE any alignment or layout change, no matter how small (Session 46, 2026-06-12)
+
+The bc-row alignment mistake (Rule N-C57) happened because a layout change was attempted from the user's description alone ("top aligned to the button") without first fetching `get_design_context` on the Figma node. The fix touched two elements when only one needed changing.
+
+**Mandatory pre-flight for ANY layout/alignment task:**
+```
+1. Read design-md/nadia.design.md (all rules through current session)
+2. Fetch get_design_context on the exact Figma node for that component
+3. Read align-items / justify-content / flex-direction for EACH element in the tree
+4. Only then write or change CSS — touch exactly the elements that differ, no more
+```
+
+A two-minute Figma fetch saves an incorrect commit and a revert. This rule has no exceptions — even "simple" alignment fixes require DS verification.
+
