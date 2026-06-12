@@ -4209,4 +4209,245 @@ var gradeMatch = noGradeFilter || grades.indexOf(card.dataset.grade) !== -1;
 
 ---
 
-*Last updated: 2026-06-05 (Session 18 — Rule 105: Textbooks page DS node 5057:96802, all 4 sections confirmed; fixes: breadcrumb structure, alert rich text, card header removal, table header labels, button SVG removal, other-years border/structure)*
+---
+
+### Rule 106. Goals Carousel — DS node `5376:114328` confirmed specs + geography SVG fix (2026-06-09)
+
+**Source:** `get_design_context` on DS node `5376:114328` (Primary Card - 1.5 wrapping the Milestone row, file `TLVKe3bgJTdVvuPAzgDq2f`).
+
+#### Goal item structure (per goal 1–5)
+- Item frame: `width: 222.05px; height: 169px; padding: 12px; flex-direction: column`
+- Content: `gap: 8px; align-items: center; justify-content: center` (DS token `Spacing/component/xs = 8px`)
+- Icon circle ("Icon" frame): `white bg; border: 2px solid <color>; padding: 8px; border-radius: 60px`
+  - Goal 1 (active): border `#b5f291` (`Border/secondary/default`)
+  - Goal 2: border `#bfbfbf` (`Icon/disabled/default`)
+  - Goals 3–5: border `#d9d9d9` (`Border/general/default`)
+  - Inside: `Outline/image` at `~48.6×48.6px` with `inset: 12.5%` clip
+- Count text: Poppins Medium 15.4px, `#666666` (`--text-default-body`), centered
+- Subject badge: S-size (24px height), same `.subject-badge` component
+
+#### DS badge state vs user intent
+- DS shows Goals 2–5 as **DISABLED** (grey `#f2f2f2` bg, `#bfbfbf` border + text)
+- **User explicitly requested colored badges** for all 5 goals — this is an intentional override of the DS disabled state
+- Goal 1 (Chinese Language): colored `#f94848` bg / `#c73a3a` border / `#f2f2f2` text ← also colored in DS
+
+#### Geography subject icon — use the DS-exported PNG, not the SVG
+- The Figma-exported `icon-geography.svg` (28KB) contained invalid XML: line 6 started with `<491` (digit tag name — illegal XML, invalid SVG)
+- **Correct fix:** Use `icon-geography.png` — the actual DS-exported asset that all other pages already use
+  - File: `src/image-repo/Achievement/score.card/assets/subject-icons/icon-geography.png`
+- **`goal-and-rewards.html`** (line 3807) and **`certificates.html`** (line 3624) both updated to `.png`
+- A hand-crafted simplified SVG was written in a prior session step — that was wrong per Rule 1 ("never recreate"). The `.png` was sitting in the same folder the whole time.
+- CLAUDE.md Rule 17a note "Use simplified DS-colored globe SVG instead" refers to cases where the SVG must be inlined — when an `<img>` tag is used, the `.png` export is the correct choice.
+
+#### Geography text color — S-size vs M-size discrepancy
+- CLAUDE.md Rule 17 documents `--badge-text: #478220` (dark green) for Geography
+- Live DS fetch of S-size badge (node `2339:1355`) → Geography text = `#f2f2f2` (generic light text, NOT `#478220`)
+- `#478220` appears to be M-size only (or L-size); S-size uses the generic `#f2f2f2`
+- **Corrected in `goal-and-rewards.html`**: `.subject-badge--geography { --badge-text: #f2f2f2; }`
+- CLAUDE.md Rule 17 should be updated to clarify this size distinction when confirmed
+
+**Mistakes made:**
+- Assumed geography SVG was valid just because the file existed and had content — must validate XML before using
+- Did not check `syakila.design.md` first before starting work (user reminder)
+
+---
+
+## Session — 2026-06-09 — History List view (history.list.html)
+
+### Task
+Build `syakila.test.git/history.list.html` — the History List screen (DS node `5215:108982`).
+
+### DS node confirmed specs
+- **Screen node:** `5215:108982` (History - List)
+- **Outer card** (`5215:108987`):
+  - `background: #e8fbe8` (`Surface/secondary/default-subtle`)
+  - `box-shadow: inset 0 0 0 1px #00cc85` (`Border/primary/default`, strokeAlign: INSIDE → Rule 60)
+  - `border-radius: 24px` (Corner-4XL)
+  - `padding: 16px`, `gap: 8px` (flex col)
+- **Controls bar** (`5215:108988`): `display:flex; align-items:center; justify-content:space-between; height:40px`
+  - View toggle: Button Group - 1.5, 3 buttons (Month/Week/Lists), `Lists` is active (green bg `#00cc85`)
+  - Week navigator: label `April 3-9, 2026` (Title/T4, 16px SemiBold), prev/next chevron buttons
+- **Day table** (`5215:108993`, `5215:109006`):
+  - `border: 1px solid #d9d9d9`, `border-radius: 18px` (Corner-2XL), `overflow: hidden`
+  - **Header row** (Heading Cell - 1.5): `background: #f2f2f2`, `height: 56px`, `padding: 16px`
+    - Left: day name (Title/T5, 16px Medium) — Right: date string (Title/T5, 16px Medium)
+  - **Body rows**: `min-height: 56px`, `height: 64px` when badge + text present
+    - Time cell: `width: 94px`, `border-right: 1px solid #d9d9d9`, Body/B3 14px Regular
+    - Activity cell: `flex: 1`, `padding: 16px`, `gap: 8px` — Subject Badge L (32px) + description text
+    - Action cell: `border-left: 1px solid #d9d9d9`, `padding: 16px` — Button Primary/M "View"
+- **Subject Badge L (32px)** used in list view (NOT S-size):
+  - Icon slot: white bg, `padding: 4px 8px 4px 12px`, icon `20×20px`
+  - Label: colored bg, `padding: 0 16px 0 12px`, `font-size: 14px`, `font-weight: 500`, `line-height: 20px`
+  - Pointer: `4×8px` white triangle SVG, `position: absolute; left: 0; top: 50%; transform: translateY(-50%)`
+  - Math: `border: 1px solid #358a62`, label bg `#42ac7b`, text `#f2f2f2`
+  - Science: `border: 1px solid #ccab34`, label bg `#ffd641`, text `#998027`
+- **Button Primary/M "View"** — DS node `479:344`:
+  - `height: 32px`, `padding: 2px 8px`, `border-radius: 60px`
+  - bg `#00cc85`, `box-shadow: inset 0 0 0 1px #00a36a` (strokeAlign INSIDE — Rule 60), label `#ffffff`
+  - Arrow circle: 20px, bg `#99ebce`, padding `2px` → 16×16 clip, chevron `#00a36a`
+  - Hover: `#b5f291` bg, `#70bc6f` border/text (Rule 88 — full secondary palette)
+  - Pressed: `#00564c` bg, `#00453d` border, label `#00cc85` (Rule 19 — Tertiary palette)
+  - Button chevron clip symbol: `viewBox="0 0 16 16"`, path `M6 12L10 8L6 4` — inlined SVG (not `<use>`)
+- **Footnote** (`5215:109019`): `font-size: 14px`, `font-weight: 400`, `line-height: 20px`, `color: #666` — mixed bold span
+
+### DS data used
+- `get_design_context` on node `5215:108982` — full JSX reference code
+- `get_variable_defs` on node `5215:108987` — confirmed all token hex values
+- `get_screenshot` on node `5215:108982` — visual reference confirmed
+- Icon paths: `../src/image-repo/Achievement/score.card/assets/subject-icons/icon-math.svg` and `icon-science.svg`
+
+### Implementation approach
+- Copied `history.week.html` as the base (reuses all shared CSS tokens, navbar, SVG defs, footer, JS)
+- Changed `<title>` to "History — Lists — Pandai"
+- Replaced week-specific CSS with `.histl-*` CSS classes for the list layout
+- Replaced `<main>` content with List view: 2 day groups (Sunday Apr 3, Monday Apr 4), each with a header row and body rows
+- Shared controls (`hist-controls`, `hist-toggle`, `hist-nav`) reused — same CSS from week file
+- Added `is-pressing` handlers for `.histl-view-btn` (Rule 83)
+- Added week navigator JS with `histl-prev`/`histl-next`/`histl-week-label` IDs (label-only update, static prototype)
+- Removed week-specific marquee and cell expand/collapse JS (not needed in list view)
+
+### Files modified
+- `syakila.test.git/history.list.html` — **NEW** (created from week template)
+- `design-md/syakila.design.md` — session notes appended (this entry)
+
+---
+
+## Session — 2026-06-12 — Goals page responsive + step progression (goals.html)
+
+### File rename
+`goal-and-rewards.html` → `goals.html`
+
+### Rules confirmed / added this session
+
+#### Rule 107 — Step progression state machine: `activeStep` + `viewedStep`
+Two separate indices drive the Goals page:
+- `activeStep` = index of first incomplete goal (`progress < target`). Auto-computed on load. This is the boundary — user can only navigate up to and including this step.
+- `viewedStep` = index of the step currently displayed in the detail panel. Starts at `0` (first goal, shown as SUCCESS if already complete).
+
+```js
+function getActiveStep() {
+  for (var i = 0; i < GOALS.length; i++) { if (GOALS[i].progress < GOALS[i].target) return i; }
+  return GOALS.length;
+}
+var activeStep = getActiveStep();
+var viewedStep = 0;
+```
+
+- Previous button: `visibility: hidden` when `viewedStep === 0` (preserves space), visible from step 2+
+- Next button: `display: none` when `viewedStep >= activeStep` (no space needed when locked steps follow)
+- Next button: `margin-left: auto` always — pins it to the right regardless of Previous visibility
+- Locked steps (index > activeStep, progress = 0): click does nothing (early return in click handler)
+- "Your Progress" shows `SUCCESS` if complete, else `Math.round((progress/target)*100) + '%'` — display only, NOT a button
+
+#### Rule 108 — Milestone carousel window sliding IIFE
+JS drives `item.style.display` (overrides CSS `nth-child` because inline styles win specificity) with an `offset` pointer:
+
+```js
+var offset = 0;
+function getVisibleCount() {
+  var w = window.innerWidth;
+  if (w >= 1441) return items.length;
+  if (w >= 1320) return 5;
+  if (w >= 1035) return 4;
+  if (w >= 768)  return 3;
+  return 2;
+}
+function renderWindow() {
+  var count = getVisibleCount();
+  offset = Math.max(0, Math.min(offset, items.length - count));
+  items.forEach(function (item, i) {
+    item.style.display = (i >= offset && i < offset + count) ? 'flex' : 'none';
+  });
+  prevCarousel.style.visibility = offset > 0 ? 'visible' : 'hidden';
+  nextCarousel.style.visibility = (offset + count < items.length) ? 'visible' : 'hidden';
+}
+window.addEventListener('resize', function () { offset = 0; renderWindow(); });
+```
+
+`getVisibleCount()` breakpoints must mirror the CSS `nth-child` breakpoints exactly — mismatch causes visible item count to jump.
+
+#### Rule 109 — CSS nth-child step count limits per breakpoint
+
+```css
+/* Default desktop: show max 5 */
+.goals-track .goal-item:nth-child(n+6) { display: none; }
+@media (min-width: 1441px) {
+  .goals-track .goal-item:nth-child(n+6) { display: flex; }
+}
+@media (min-width: 1035px) and (max-width: 1319px) {
+  .goals-track .goal-item:nth-child(n+5) { display: none; }
+}
+@media (min-width: 768px) and (max-width: 1034px) {
+  .goals-track .goal-item:nth-child(n+4) { display: none; }
+}
+@media (max-width: 767px) {
+  .goals-track .goal-item:nth-child(n+3) { display: none; }
+}
+```
+
+JS `item.style.display` overrides these at runtime once the carousel window IIFE runs — CSS is fallback only.
+
+#### Rule 110 — Mobile subject badge in goal carousel: pure pill, no icon slot
+
+DS node `8060:129983` — on mobile (≤767px) the subject badge in the goals carousel shows as a pure text pill for ALL states (active and locked). No icon slot.
+
+```css
+@media (max-width: 767px) {
+  #GoalsCarousel-Desktop .subject-badge {
+    border-radius:   108px;
+    width:           100%;
+    justify-content: center;
+    overflow:        hidden;
+  }
+  #GoalsCarousel-Desktop .subject-badge__icon      { display: none; }
+  #GoalsCarousel-Desktop .subject-badge__label-panel {
+    width:           100%;
+    padding:         0 12px;
+    justify-content: center;
+  }
+  #GoalsCarousel-Desktop .subject-badge__text      { font-size: 12px; font-weight: 600; line-height: 18px; }
+}
+```
+
+#### Rule 111 — Stat cards vertical stack on mobile: fill height with `space-between`
+
+"Your Target" and "Your Progress" stat cards stack vertically on mobile (icon top, label middle, value bottom). The key pattern:
+
+1. Override `height: auto` → `height: 100%` on `.goal-stat-card__content` so it fills the card
+2. `justify-content: space-between` on content — distributes icon and texts group to fill height
+3. `flex: 1` + `justify-content: space-between` on `.goal-stat-card__texts` — distributes label and value within the texts group
+4. `gap: 2px` (reduced from desktop) between icon and texts
+
+```css
+@media (max-width: 767px) {
+  .goal-stat-card__content {
+    flex-direction:  column;
+    align-items:     center;
+    text-align:      center;
+    gap:             2px;
+    height:          100%;
+    justify-content: space-between;
+  }
+  .goal-stat-card__texts {
+    display:         flex;
+    flex-direction:  column;
+    align-items:     center;
+    justify-content: space-between;
+    white-space:     normal;
+    flex:            1;
+    width:           100%;
+  }
+}
+```
+
+**Key insight:** `height: auto` on a flex child makes `justify-content: space-between` collapse to packed content — children are not distributed. Use `height: 100%` so the element expands to the card's inner height, then `space-between` distributes the children across that space. Both cards in the flex row get equal height via `align-items: stretch` (flex default) on the parent row.
+
+**Mistake made:** First tried `height: auto` — children were packed, no distribution. Switching to `height: 100%` fixed it.
+
+### Files modified
+- `syakila.test.git/goals.html` — renamed from `goal-and-rewards.html`; step progression IIFE, carousel window IIFE, mobile responsive CSS added
+- `design-md/syakila.design.md` — session notes appended (this entry)
+
+---
+
+*Last updated: 2026-06-12 (Session 20 — Rules 107–111: step progression state machine, carousel window sliding, nth-child breakpoints, mobile badge pure pill, stat cards vertical fill-height pattern)*

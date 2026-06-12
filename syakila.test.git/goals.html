@@ -1921,6 +1921,7 @@
         --page-padding-x:          32px;
         --check-in-card-max-width: none;
       }
+      #Breadcrumb-Desktop { display: none; }
       .primary-card__content {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -2352,10 +2353,18 @@
   .subject-badge--disabled { --badge-bg: #f2f2f2; --badge-border: #bfbfbf; --badge-text: #bfbfbf; }
   .subject-badge--disabled .subject-badge__icon img { filter: grayscale(1) opacity(0.45); }
 
-  /* Max 5 steps at ≤1440px; items 6+ visible above 1440px to fill width */
+  /* Desktop default: max 5 steps */
   .goals-track .goal-item:nth-child(n+6) { display: none; }
   @media (min-width: 1441px) {
     .goals-track .goal-item:nth-child(n+6) { display: flex; }
+  }
+  /* Tablet large (1035–1319px): show max 4 steps */
+  @media (min-width: 1035px) and (max-width: 1319px) {
+    .goals-track .goal-item:nth-child(n+5) { display: none; }
+  }
+  /* Tablet small (768–1034px): show max 3 steps */
+  @media (min-width: 768px) and (max-width: 1034px) {
+    .goals-track .goal-item:nth-child(n+4) { display: none; }
   }
 
   /* S-size override for goal carousel (24px, DS S variant) */
@@ -2363,6 +2372,34 @@
   #GoalsCarousel-Desktop .subject-badge__icon      { padding: 4px 8px 4px 12px; }
   #GoalsCarousel-Desktop .subject-badge__icon img  { width: 16px; height: 16px; }
   #GoalsCarousel-Desktop .subject-badge__text      { font-size: 12px; line-height: 12px; }
+
+  /* Mobile (≤767px): show max 2 steps */
+  @media (max-width: 767px) {
+    .goals-track .goal-item:nth-child(n+3) { display: none; }
+  }
+
+  /* Mobile variant — DS node 8060:129983 — pure pill, no icon slot for all states */
+  @media (max-width: 767px) {
+    #GoalsCarousel-Desktop .subject-badge {
+      border-radius:   108px;
+      width:           100%;
+      justify-content: center;
+      overflow:        hidden;
+    }
+    #GoalsCarousel-Desktop .subject-badge__icon {
+      display: none;
+    }
+    #GoalsCarousel-Desktop .subject-badge__label-panel {
+      width:           100%;
+      padding:         0 12px;
+      justify-content: center;
+    }
+    #GoalsCarousel-Desktop .subject-badge__text {
+      font-size:   12px;
+      font-weight: 600;
+      line-height: 18px;
+    }
+  }
 
   /* ── Goal Detail Card ────────────────────────────────────────── */
   #GoalDetail-Desktop {
@@ -2524,6 +2561,27 @@
     font-weight: 700;
     line-height: 42px;
     color:       var(--text-primary-default);
+  }
+
+  /* Mobile — stat cards stack vertically: icon top, label middle, value bottom fills card height */
+  @media (max-width: 767px) {
+    .goal-stat-card__content {
+      flex-direction:  column;
+      align-items:     center;
+      text-align:      center;
+      gap:             2px;
+      height:          100%;
+      justify-content: space-between;
+    }
+    .goal-stat-card__texts {
+      display:         flex;
+      flex-direction:  column;
+      align-items:     center;
+      justify-content: space-between;
+      white-space:     normal;
+      flex:            1;
+      width:           100%;
+    }
   }
 
   /* reward section */
@@ -5093,6 +5151,59 @@
       // --- Initial render ---
       renderCarousel();
       renderDetail();
+    })();
+
+    // ─── Goals carousel window — slide visible milestone steps ─────────────
+    (function () {
+      var items        = Array.from(document.querySelectorAll('.goals-track .goal-item'));
+      var prevCarousel = document.getElementById('goals-prev-btn');
+      var nextCarousel = document.querySelector('#GoalsCarousel-Desktop .goals-nav-btn[aria-label="Next goal"]');
+
+      if (!items.length || !prevCarousel || !nextCarousel) return;
+
+      var offset = 0;
+
+      function getVisibleCount() {
+        var w = window.innerWidth;
+        if (w >= 1441) return items.length;
+        if (w >= 1320) return 5;
+        if (w >= 1035) return 4;
+        if (w >= 768)  return 3;
+        return 2;
+      }
+
+      function renderWindow() {
+        var count = getVisibleCount();
+        var total = items.length;
+        offset = Math.max(0, Math.min(offset, total - count));
+
+        items.forEach(function (item, i) {
+          item.style.display = (i >= offset && i < offset + count) ? 'flex' : 'none';
+        });
+
+        // Carousel prev: invisible (keeps space) when at start
+        prevCarousel.style.visibility = offset > 0 ? 'visible' : 'hidden';
+        // Carousel next: invisible when no more items ahead
+        nextCarousel.style.visibility = (offset + count < total) ? 'visible' : 'hidden';
+      }
+
+      prevCarousel.addEventListener('click', function () {
+        offset = Math.max(0, offset - 1);
+        renderWindow();
+      });
+
+      nextCarousel.addEventListener('click', function () {
+        var count = getVisibleCount();
+        offset = Math.min(items.length - count, offset + 1);
+        renderWindow();
+      });
+
+      window.addEventListener('resize', function () {
+        offset = 0;
+        renderWindow();
+      });
+
+      renderWindow();
     })();
   </script>
   <nav id="NavBar-Bottom" class="navbar-bottom" aria-label="Mobile navigation">
