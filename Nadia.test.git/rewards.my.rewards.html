@@ -2188,15 +2188,15 @@
       flex-shrink: 0; flex-wrap: wrap; gap: var(--spacing-space-xs);
     }
     .mr-header__desc {
-      font-size: 14px; font-weight: 400; line-height: 20px;
+      font-size: 18px; font-weight: 600; line-height: 28px;
       color: var(--text-tertiary-default); flex: 1; min-width: 0;
     }
     .mr-header__redeem {
       display: flex; align-items: center; gap: var(--spacing-space-xs);
-      font-size: 14px; font-weight: 400; line-height: 20px;
+      font-size: 18px; font-weight: 600; line-height: 28px;
       color: var(--text-tertiary-default); white-space: nowrap; flex-shrink: 0;
     }
-    .mr-header__coin { width: 18px; height: 21px; flex-shrink: 0; object-fit: contain; }
+    .mr-header__coin { width: 24px; height: 24px; flex-shrink: 0; object-fit: contain; }
 
     /* ── Voucher card grid (DS 3065:43088) ─────────────────────── */
     .mr-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-space-m); }
@@ -2219,7 +2219,8 @@
       font-size: 10px; font-weight: 500; line-height: 12px;
       color: var(--text-primary-default); white-space: nowrap;
     }
-    .mr-badge__icon { width: 10px; height: 10px; flex-shrink: 0; color: var(--text-primary-default); }
+    .mr-badge--informative { color: var(--surface-informative-default); border-color: var(--surface-informative-default); background: #e8f7fd; }
+    .mr-badge__icon { width: 10px; height: 10px; flex-shrink: 0; color: inherit; }
     .mr-badge__icon svg { display: block; width: 100%; height: 100%; }
     .mr-card__title {
       font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text-default-heading);
@@ -2500,6 +2501,8 @@
       <symbol id="ic-video" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></symbol>
       <!-- Outline/corner-down-right (breadcrumb sub-nav link indicator) -->
       <symbol id="ic-corner-down-right" viewBox="-1 -1 22 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 10 20 15 15 20"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></symbol>
+      <!-- Outline/plus-circle (260:1043) — vector at x:2 y:2 in 24×24 frame → viewBox -1 -1 26 26 (Rule 27) -->
+      <symbol id="ic-plus-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/></symbol>
     </defs>
   </svg>
 
@@ -2517,7 +2520,7 @@
         <!-- Breadcrumb — Rewards > My Rewards (DS node 3284:218453) -->
         <section class="bc-row" aria-label="Breadcrumb">
           <div class="bc-left">
-            <span class="bc-title">Rewards</span>
+            <span class="bc-title">My Rewards</span>
             <span class="bc-sep" aria-hidden="true"></span>
             <nav class="bc-trail" aria-label="Breadcrumb">
               <a href="#" class="bc-link">
@@ -2581,7 +2584,7 @@
               <div class="mr-header__redeem">
                 <span>Total redeem this month :</span>
                 <img class="mr-header__coin" src="../src/image-repo/page.rewards/my.rewards/assets/P.Coin.svg" alt="Coin">
-                <span>200</span>
+                <span>120</span>
               </div>
             </div>
 
@@ -2594,8 +2597,8 @@
                 <div class="mr-card__img"><img src="../src/image-repo/page.rewards/my.rewards/assets/MyRewards-1.svg" alt=""></div>
                 <div class="mr-card__body">
                   <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+                    <span class="mr-badge"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium</span>
+                    <span class="mr-badge mr-badge--informative"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium Lite</span>
                   </div>
                   <p class="mr-card__title">Free Drinks Voucher (Medium Size)</p>
                 </div>
@@ -2616,8 +2619,8 @@
                 <div class="mr-card__img"><img src="../src/image-repo/page.rewards/my.rewards/assets/MyRewards-2.svg" alt=""></div>
                 <div class="mr-card__body">
                   <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+                    <span class="mr-badge"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium</span>
+                    <span class="mr-badge mr-badge--informative"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium Lite</span>
                   </div>
                   <p class="mr-card__title">10% Off Electronics Voucher</p>
                 </div>
@@ -2638,8 +2641,8 @@
                 <div class="mr-card__img"><img src="../src/image-repo/page.rewards/my.rewards/assets/MyRewards-3.svg" alt=""></div>
                 <div class="mr-card__body">
                   <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+                    <span class="mr-badge"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium</span>
+                    <span class="mr-badge mr-badge--informative"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium Lite</span>
                   </div>
                   <p class="mr-card__title">1 Month Gaming Pass</p>
                 </div>
@@ -2660,8 +2663,8 @@
                 <div class="mr-card__img"><img src="../src/image-repo/page.rewards/my.rewards/assets/MyRewards-4.svg" alt=""></div>
                 <div class="mr-card__body">
                   <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+                    <span class="mr-badge"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium</span>
+                    <span class="mr-badge mr-badge--informative"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium Lite</span>
                   </div>
                   <p class="mr-card__title">RM5 Food Delivery Discount</p>
                 </div>
@@ -2682,8 +2685,8 @@
                 <div class="mr-card__img"><img src="../src/image-repo/page.rewards/my.rewards/assets/MyRewards-5.svg" alt=""></div>
                 <div class="mr-card__body">
                   <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+                    <span class="mr-badge"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium</span>
+                    <span class="mr-badge mr-badge--informative"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium Lite</span>
                   </div>
                   <p class="mr-card__title">Pandai Premium Access (30 Days)</p>
                 </div>
@@ -2704,8 +2707,8 @@
                 <div class="mr-card__img"><img src="../src/image-repo/page.rewards/my.rewards/assets/MyRewards-6.svg" alt=""></div>
                 <div class="mr-card__body">
                   <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+                    <span class="mr-badge"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium</span>
+                    <span class="mr-badge mr-badge--informative"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium Lite</span>
                   </div>
                   <p class="mr-card__title">Beauty Kit Sample Set</p>
                 </div>
@@ -2726,8 +2729,8 @@
                 <div class="mr-card__img"><img src="../src/image-repo/page.rewards/my.rewards/assets/MyRewards-7.svg" alt=""></div>
                 <div class="mr-card__body">
                   <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+                    <span class="mr-badge"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium</span>
+                    <span class="mr-badge mr-badge--informative"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium Lite</span>
                   </div>
                   <p class="mr-card__title">3 eBooks SPM Collection</p>
                 </div>
@@ -2748,8 +2751,8 @@
                 <div class="mr-card__img"><img src="../src/image-repo/page.rewards/my.rewards/assets/MyRewards-8.svg" alt=""></div>
                 <div class="mr-card__body">
                   <div class="mr-card__badges">
-                    <span class="mr-badge">Premium</span>
-                    <span class="mr-badge">Premium Lite</span>
+                    <span class="mr-badge"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium</span>
+                    <span class="mr-badge mr-badge--informative"><span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>Premium Lite</span>
                   </div>
                   <p class="mr-card__title">Sports Gear Discount Voucher</p>
                 </div>

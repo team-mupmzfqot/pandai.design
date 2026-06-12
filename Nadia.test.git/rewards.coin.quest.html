@@ -21,7 +21,7 @@
       --surface-general-default:         #FFFFFF;
       --surface-primary-default:         #00cc85;
       --surface-primary-focus:           #00a36a;   /* Surface/primary/focus — pressed state bg */
-      --surface-primary-default-subtle:        #d9f7ed;
+      --surface-primary-default-subtle:        #e1f9ea;   /* Surface/primary/default-subtle — DS confirmed (Figma #e1f9ea) */
       --border-primary-default-subtle:         #d9f7ed;   /* Border/primary/default-subtle — Secondary Active arrow */
       --surface-primary-default-subtle-hover:  #99ebce;
       --surface-secondary-default:             #b5f291;  /* Surface/secondary/default */
@@ -2262,8 +2262,8 @@
 
     .quest-desc {
       font-family: 'Poppins', sans-serif;
-      font-size: 14px; font-weight: 400; line-height: 20px;
-      color: var(--text-default-body); margin: 0;
+      font-size: 18px; font-weight: 600; line-height: 28px;
+      color: var(--text-tertiary-default); margin: 0;
     }
 
     /* Quest cards 2-col grid */
@@ -2301,10 +2301,12 @@
     .qc__header     { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     .qc__title      { font-size: 16px; font-weight: 600; line-height: 24px; color: var(--text-default-heading); white-space: nowrap; flex-shrink: 0; }
     .qc__badges     { display: flex; gap: 8px; align-items: center; }
-    .lbadge         { display: inline-flex; align-items: center; justify-content: center; min-height: 24px; border-radius: 60px; padding: 2px 8px; font-size: 12px; font-weight: 500; line-height: 12px; white-space: nowrap; border: 1px solid; }
+    /* Label Badge - 1.5 — DS node 3755:8902 (Easy), 3755:8980 (Medium), 3755:8978 (Hard), 3755:8925 (Daily/Weekly)
+       Easy/Daily = Body/B6 12px Medium lh:18; Medium/Hard = Body/B2 14px Medium lh:20 (DS confirmed from Figma node 28:5461) */
+    .lbadge         { display: inline-flex; align-items: center; justify-content: center; min-height: 24px; border-radius: 60px; padding: 2px 8px; font-size: 12px; font-weight: 500; line-height: 18px; white-space: nowrap; border: 1px solid; }
     .lbadge--easy   { background: var(--surface-primary-default-subtle); border-color: #66e0b6; color: var(--text-primary-default); }
-    .lbadge--medium { background: #fff6ed; border-color: #ffcea0; color: #ff9f43; }
-    .lbadge--hard   { background: #ffeeee; border-color: #ffa5a7; color: #ff4c51; }
+    .lbadge--medium { background: #fff6ed; border-color: #ffcea0; color: #ff9f43; font-size: 14px; line-height: 20px; }
+    .lbadge--hard   { background: #ffeeee; border-color: #ffa5a7; color: #ff4c51; font-size: 14px; line-height: 20px; }
     .lbadge--daily  { background: #e6f6fd; border-color: #7fd0f3; color: #00a2e8; }
     .lbadge--weekly { background: #e6f6fd; border-color: #7fd0f3; color: #00a2e8; }
     .qc__progress   { display: flex; flex-direction: column; gap: 4px; }

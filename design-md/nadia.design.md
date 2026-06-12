@@ -6609,9 +6609,9 @@ The Rewards pages show two distinct Label Badge - 1.5 variants side by side. The
 --text-informative-default:             #00a2e8;
 ```
 
-**Icon presence:** The DS component file (`TLVKe3bgJTdVvuPAzgDq2f`) shows a `plus-circle` icon inside both badges. The **Screen file** (`hkyIerTAdwtaN3edlp3iz8`) shows **no icon** — text only. The Screen file is always authoritative for what actually renders. Never add icons to badges unless the Screen confirms them.
+**Icon presence (confirmed from user instruction + DS component, Session 45):** The DS component file (`TLVKe3bgJTdVvuPAzgDq2f`) shows a `plus-circle` icon inside both "Premium" and "Premium Lite" badges. The Screen file may show text-only in some views. When the user explicitly instructs to add icons, follow the DS component — icons were added in `rewards.my.rewards.html` per user request (all 8 badge pairs). See N-C63 for `ic-plus-circle` symbol spec.
 
-**Always check the Screen file** (`hkyIerTAdwtaN3edlp3iz8`) to confirm badge palette and icon presence — the DS component file shows all possible variants; the Screen shows what is actually used on that page.
+**Always check the Screen file** (`hkyIerTAdwtaN3edlp3iz8`) to confirm badge palette — DS shows all possible variants; Screen shows what is actually used on that page. When Screen and DS component differ on icon presence, follow user instruction.
 
 **Mistake made:** Both "Premium" and "Premium Lite" badges used `.lbadge-prem` (green palette). "Premium Lite" must use `.lbadge-lite` (blue informative palette). This affects every Rewards page that shows label badges.
 
@@ -6717,7 +6717,7 @@ A two-minute Figma fetch saves an incorrect commit and a revert. This rule has n
 
 ---
 
-### Rule N-C57 — Premium vs Premium Lite label badge: two separate palettes (Session 45, 2026-06-12)
+### Rule N-C63 — Premium vs Premium Lite label badge: two separate palettes — confirmed summary (Session 47, 2026-06-12)
 
 **Confirmed from:** Screen file `hkyIerTAdwtaN3edlp3iz8`. See `feedback_label_badge_palette.md` in memory.
 
@@ -6731,4 +6731,35 @@ The DS has **two distinct premium label badge variants** used across Rewards pag
 **Screen file is authoritative for:** which palette each page uses, and whether icons appear inside the badge (DS shows plus-circle; Screen shows text-only for most pages).
 
 **Rule:** Always fetch the parent screen node from `hkyIerTAdwtaN3edlp3iz8` before implementing any premium badge. Never derive palette from DS component alone.
+
+---
+
+### Rule N-C64 — `ic-plus-circle` symbol spec: `viewBox="-1 -1 26 26"`, path from DS node 260:1043 (Session 47, 2026-06-12)
+
+**Confirmed from:** DS file `TLVKe3bgJTdVvuPAzgDq2f`, page `🔰 Iconography`, node `260:1043` (`Outline/plus-circle`). 24×24 frame — viewBox per Rule 27 = `-1 -1 26 26`.
+
+```html
+<symbol id="ic-plus-circle" viewBox="-1 -1 26 26" fill="none" stroke="currentColor"
+  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/>
+</symbol>
+```
+
+**Usage in badge icon slot:**
+```html
+<span class="mr-badge__icon"><svg aria-hidden="true"><use href="#ic-plus-circle"/></svg></span>
+```
+
+```css
+.mr-badge__icon         { width: 10px; height: 10px; flex-shrink: 0; color: inherit; }
+.mr-badge__icon svg     { display: block; width: 100%; height: 100%; }
+```
+
+**Key points:**
+- `stroke="currentColor"` — color inherits from parent badge's `color:` property (cascades automatically for both default green and informative blue variants)
+- `color: inherit` on `.mr-badge__icon` ensures the modifier class (`mr-badge--informative`) cascades its `color:` all the way to the SVG stroke — never hardcode icon color
+- Badge icon size = **10×10px** inside the label badge context (DS confirmed from component node)
+- Symbol must be placed inside `<defs>` before `</defs>` (Rule 90 — never after closing `</svg>`)
+
+**Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
 
