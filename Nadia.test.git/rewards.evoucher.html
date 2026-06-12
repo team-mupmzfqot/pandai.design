@@ -21,7 +21,7 @@
       --surface-general-default:         #FFFFFF;
       --surface-primary-default:         #00cc85;
       --surface-primary-focus:           #00a36a;   /* Surface/primary/focus — pressed state bg */
-      --surface-primary-default-subtle:        #d9f7ed;
+      --surface-primary-default-subtle:        #e1f9ea;   /* Surface/primary/default-subtle — DS confirmed (Figma #e1f9ea) */
       --border-primary-default-subtle:         #d9f7ed;   /* Border/primary/default-subtle — Secondary Active arrow */
       --surface-primary-default-subtle-hover:  #99ebce;
       --surface-secondary-default:             #b5f291;  /* Surface/secondary/default */
@@ -66,6 +66,12 @@
       --border-on-color:          #ffffff;   /* Border/on-color — white border on Number Badge (DS 618:417 updated 2026-05-26) */
       --border-general-default-secondary: #bfbfbf;   /* Border/general/default-secondary — bc-sep, notif dot active (DS node 3655:16650) */
       --border-secondary-default: #b5f291;   /* Border/secondary/default — notif dot focus-visible (DS confirmed template) */
+      --border-informative-default-hover: #7fd0f3;   /* Border/informative/default-hover — Premium Lite badge border (Screen DS confirmed) */
+
+      /* Informative palette */
+      --surface-informative-default:        #00a2e8;   /* Surface/informative/default */
+      --surface-informative-default-subtle: #e6f6fd;   /* Surface/informative/default-subtle — Premium Lite badge bg */
+      --text-informative-default:           #00a2e8;   /* Text/informative/default — Premium Lite badge text */
 
       /* Corner Radius (confirmed from design contexts) */
       --corner-radius-corner-pill:    999px;  /* Corner Radius/corner-pill â€” nav row 2 */
@@ -2302,13 +2308,13 @@
     /* eVoucher header row */
     .evoucher-header {
       display: flex; align-items: center; justify-content: space-between;
-      gap: 16px; flex-shrink: 0; flex-wrap: wrap;
+      gap: 12px; flex-shrink: 0; flex-wrap: wrap;
     }
-    .evoucher-header__text { font-size: 14px; font-weight: 400; line-height: 20px; color: #00564c; flex: 1; min-width: 0; }
-    .evoucher-header__stat { display: flex; align-items: center; gap: var(--sp-xs); flex-shrink: 0; }
-    .evoucher-header__stat-label { font-size: 14px; font-weight: 400; line-height: 20px; color: #00564c; white-space: nowrap; }
-    .evoucher-header__coin { width: 18px; height: 21px; display: block; object-fit: contain; flex-shrink: 0; }
-    .evoucher-header__count { font-size: 14px; font-weight: 400; line-height: 20px; color: #00564c; white-space: nowrap; }
+    .evoucher-header__text { font-size: 18px; font-weight: 600; line-height: 28px; color: var(--text-tertiary-default); flex: 1; min-width: 0; }
+    .evoucher-header__stat { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .evoucher-header__stat-label { font-size: 18px; font-weight: 600; line-height: 28px; color: var(--text-tertiary-default); white-space: nowrap; }
+    .evoucher-header__coin { width: 24px; height: 24px; display: block; object-fit: contain; flex-shrink: 0; }
+    .evoucher-header__count { font-size: 18px; font-weight: 600; line-height: 28px; color: var(--text-tertiary-default); white-space: nowrap; }
 
     /* eVoucher reward cards — 4-col grid */
     .evoucher-grid {
@@ -2329,14 +2335,23 @@
     }
     .rc__badges { display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
 
-    /* Label Badge 1.5 — Premium / Premium Lite (Primary/Success variant, DS node 843:666) */
+    /* Label Badge 1.5 — Premium (green, DS Screen confirmed) */
     .lbadge-prem {
       display: inline-flex; align-items: center;
       padding: 2px 8px; border-radius: 60px;
-      background: #e1f9ea;             /* Surface/primary/default-subtle (Session 23 DS confirmed) */
-      border: 1px solid #66e0b6;       /* Border/primary/default-hover (Session 23 DS confirmed) */
+      background: var(--surface-primary-default-subtle);   /* #e1f9ea */
+      border: 1px solid var(--border-primary-default);     /* #00cc85 — Border/primary/default */
       font-size: 10px; font-weight: 500; line-height: 12px;
-      color: #00cc85; white-space: nowrap; flex-shrink: 0;
+      color: var(--text-primary-default); white-space: nowrap; flex-shrink: 0;
+    }
+    /* Label Badge 1.5 — Premium Lite (blue/informative, DS Screen confirmed) */
+    .lbadge-lite {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px; border-radius: 60px;
+      background: var(--surface-informative-default-subtle);   /* #e6f6fd */
+      border: 1px solid var(--border-informative-default-hover); /* #7fd0f3 */
+      font-size: 10px; font-weight: 500; line-height: 12px;
+      color: var(--text-informative-default); white-space: nowrap; flex-shrink: 0; /* #00a2e8 */
     }
 
     .rc__title {
@@ -2744,7 +2759,7 @@
                         
                         Premium
                       </span>
-                      <span class="lbadge-prem">
+                      <span class="lbadge-lite">
                         
                         Premium Lite
                       </span>
@@ -2780,7 +2795,7 @@
                         
                         Premium
                       </span>
-                      <span class="lbadge-prem">
+                      <span class="lbadge-lite">
                         
                         Premium Lite
                       </span>
@@ -2816,7 +2831,7 @@
                         
                         Premium
                       </span>
-                      <span class="lbadge-prem">
+                      <span class="lbadge-lite">
                         
                         Premium Lite
                       </span>
@@ -2852,7 +2867,7 @@
                         
                         Premium
                       </span>
-                      <span class="lbadge-prem">
+                      <span class="lbadge-lite">
                         
                         Premium Lite
                       </span>
@@ -2888,7 +2903,7 @@
                         
                         Premium
                       </span>
-                      <span class="lbadge-prem">
+                      <span class="lbadge-lite">
                         
                         Premium Lite
                       </span>
@@ -2924,7 +2939,7 @@
                         
                         Premium
                       </span>
-                      <span class="lbadge-prem">
+                      <span class="lbadge-lite">
                         
                         Premium Lite
                       </span>
@@ -2960,7 +2975,7 @@
                         
                         Premium
                       </span>
-                      <span class="lbadge-prem">
+                      <span class="lbadge-lite">
                         
                         Premium Lite
                       </span>
@@ -2996,7 +3011,7 @@
                         
                         Premium
                       </span>
-                      <span class="lbadge-prem">
+                      <span class="lbadge-lite">
                         
                         Premium Lite
                       </span>

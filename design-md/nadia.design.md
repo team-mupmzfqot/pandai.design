@@ -6249,7 +6249,7 @@ Both variants:
 
 ---
 
-*Last updated: 2026-06-09 | Session 41 — nadia_PracticeExam.html built (breadcrumb + tab bar + QN card + table); Body Cell INSIDE stroke (N-C43); N-C40 propagation resolved; Rule N-C42 (subfolder confirmation) added | Branch: staging*
+*Last updated: 2026-06-12 | Session 45 — Label Badge-1.5 line-height + Medium/Hard 14px (N-C55); Section header Title/T2 (N-C54); surface-primary-default-subtle #e1f9ea across all rewards pages (N-C56) | Branch: staging*
 
 ---
 
@@ -6566,7 +6566,9 @@ The page template was carrying the wrong value `#d9f7ed` for `--surface-primary-
 
 ---
 
-### Rule N-C54 — Rewards section header: Title/T2 (18px SemiBold), NOT Body (14px) (Session 45, 2026-06-12)
+## Session 47 — rewards.evoucher.html: header text Title/T2 + badge Premium vs Premium Lite (2026-06-12)
+
+### Rule N-C60 — Rewards section header: Title/T2 (18px SemiBold), NOT Body (14px) (Session 47, 2026-06-12)
 
 The Primary Card header row above the reward cards grid uses **Title/T2** typography — 18px SemiBold, line-height 28px, color `Text/tertiary/default` (`#00564c`). It was incorrectly implemented as 14px Regular (Body/B3).
 
@@ -6585,7 +6587,7 @@ The Primary Card header row above the reward cards grid uses **Title/T2** typogr
 
 ---
 
-### Rule N-C55 — Label Badge "Premium Lite" = informative (blue) palette, "Premium" = primary (green) (Session 45, 2026-06-12)
+### Rule N-C61 — Label Badge "Premium Lite" = informative (blue) palette, "Premium" = primary (green) (Session 47, 2026-06-12)
 
 The Rewards pages show two distinct Label Badge - 1.5 variants side by side. They use **different palettes** — never the same class.
 
@@ -6617,7 +6619,7 @@ The Rewards pages show two distinct Label Badge - 1.5 variants side by side. The
 
 ---
 
-### Rule N-C54 — Always fetch DS node for both text content AND typography before any header implementation (Session 45, 2026-06-12)
+### Rule N-C62 — Always fetch DS node for both text content AND typography before any header implementation (Session 47, 2026-06-12)
 
 **Never invent or approximate text content or typography for any section header — always call `get_design_context` on the header node first.**
 
@@ -6711,4 +6713,22 @@ The bc-row alignment mistake (Rule N-C57) happened because a layout change was a
 ```
 
 A two-minute Figma fetch saves an incorrect commit and a revert. This rule has no exceptions — even "simple" alignment fixes require DS verification.
+
+
+---
+
+### Rule N-C57 — Premium vs Premium Lite label badge: two separate palettes (Session 45, 2026-06-12)
+
+**Confirmed from:** Screen file `hkyIerTAdwtaN3edlp3iz8`. See `feedback_label_badge_palette.md` in memory.
+
+The DS has **two distinct premium label badge variants** used across Rewards pages. They are never interchangeable.
+
+| Badge | bg | border | text | CSS class | font-size |
+|---|---|---|---|---|---|
+| **Premium** | `#e1f9ea` (`--surface-primary-default-subtle`) | `#00cc85` (`--border-primary-default`) | `#00cc85` (`--text-primary-default`) | `.lbadge-prem` | 10px |
+| **Premium Lite** | `#e6f6fd` (`--surface-informative-default-subtle`) | `#7fd0f3` (`--border-informative-default-hover`) | `#00a2e8` (`--text-informative-default`) | `.lbadge-lite` | 10px |
+
+**Screen file is authoritative for:** which palette each page uses, and whether icons appear inside the badge (DS shows plus-circle; Screen shows text-only for most pages).
+
+**Rule:** Always fetch the parent screen node from `hkyIerTAdwtaN3edlp3iz8` before implementing any premium badge. Never derive palette from DS component alone.
 
