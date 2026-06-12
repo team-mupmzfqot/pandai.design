@@ -2478,11 +2478,14 @@
       align-items: center;
       gap:         4px;
     }
-    .primary-card__header-left svg {
-      width:       20px;
-      height:      20px;
-      flex-shrink: 0;
-      color:       var(--icon-primary-default);
+    /* Leading icon slot — DS: 28px wide, centered, icon is 24×24 (icon-ds class) */
+    .primary-card__header-leading {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      width:           28px;
+      height:          100%;
+      flex-shrink:     0;
     }
 
     /* Title — DS: 18px Bold #00564c */
@@ -2642,11 +2645,11 @@
     }
 
     /* VS cell (col 2) — centered P.Battle illustration placeholder */
+    /* display:flex on a <td> breaks row-height contribution in Chrome — use table-native centering */
     .battle-vs-cell {
-      display:         flex;
-      align-items:     center;
-      justify-content: center;
-      color:           var(--text-tertiary-default);
+      text-align:     center;
+      vertical-align: middle;
+      color:          var(--text-tertiary-default);
     }
 
     /* Subject badge — L size (32px), same as nadia_Quiz quiz card header */
@@ -2707,7 +2710,7 @@
 
     /* Result — DS: plain text, 14px/400, won=#18c964, lost=#666666 */
     .battle-result--won  { font-size: 14px; font-weight: 400; line-height: 20px; color: #18c964; }
-    .battle-result--lost { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-default-body); }
+    .battle-result--lost { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-warning-default); }
 
     /* Score — DS: 14px/400/#666666 */
     .battle-score {
@@ -3088,9 +3091,11 @@
               <!-- Header — DS: HORIZONTAL, SPACE_BETWEEN, CENTER -->
               <div class="primary-card__header">
                 <div class="primary-card__header-left">
-                  <!-- Bar-chart 3 icon — DS node 1445:7822, 24×24, Icon/tertiary/default -->
-                  <svg class="icon-ds-24" aria-hidden="true" style="color:var(--icon-tertiary-default)"><use href="#ic-bar-chart-3"/></svg>
-                  <!-- Title — DS: Title/T2 18px Bold #00564c -->
+                  <!-- Leading icon slot — DS: 28px wide container, icon 24×24, Icon/tertiary/default -->
+                  <div class="primary-card__header-leading">
+                    <svg class="icon-ds" aria-hidden="true" style="color:var(--icon-tertiary-default)"><use href="#ic-bar-chart-3"/></svg>
+                  </div>
+                  <!-- Title — DS: Title/T2 18px SemiBold #00564c -->
                   <span class="primary-card__title">Your Battle History</span>
                 </div>
                 <!-- Leaderboard button — Secondary/M, R Arrow visible (DS instance override) -->

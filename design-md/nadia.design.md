@@ -7040,3 +7040,66 @@ Before applying ANY property change from a template CSS diff to a Nadia page:
 
 **Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
 
+
+---
+
+### Rule N-C73 — Never `display: flex` on a `<td>` — use native table-cell centering (Session 50, 2026-06-12)
+
+**Problem:** Setting `display: flex` directly on a `<td>` causes Chrome to compute that cell's height contribution from its content size (e.g. a 24px image) rather than the CSS `height` property (e.g. 56px). In `border-collapse: collapse`, the affected column's borders misalign with adjacent cells — the top border appears visually thicker.
+
+**Fix:** Use native table-cell alignment:
+```css
+/* Wrong — flex on td breaks row height in Chrome */
+.battle-vs-cell { display: flex; align-items: center; justify-content: center; }
+
+/* Correct — table-native, never breaks row height */
+.battle-vs-cell { text-align: center; vertical-align: middle; }
+```
+
+**Rule:** Never set `display: flex` or `display: grid` directly on a `<td>`. If flex layout is needed inside a cell, wrap the content in a `<div>` inside the td and apply flex there.
+
+---
+
+### Rule N-C74 — Descendant `svg` size overrides beat icon-ds class — never put width/height on a parent-class svg rule (Session 50, 2026-06-12)
+
+**Specificity:** `.parent-class svg` = (0,1,1) vs `.icon-ds` = (0,1,0). The descendant rule silently wins — even if the SVG has `class="icon-ds"` (24px), it renders at whatever the descendant rule specifies (e.g. 20px).
+
+**Rule:** Never put `width`/`height` on a `.component svg` selector. Use only the utility classes (`icon-ds` = 24px, `icon-ds-20` = 20px, `icon-ds-16` = 16px) for icon sizing. For a new size, add a utility class — never a descendant override.
+
+**Confirmed classes (battle.html line 181):**
+```css
+.icon-ds    { width: 24px; height: 24px; display: block; flex-shrink: 0; }  /* use for 24×24 icons */
+.icon-ds-20 { width: 20px; height: 20px; display: block; flex-shrink: 0; }
+.icon-ds-16 { width: 16px; height: 16px; display: block; flex-shrink: 0; }
+```
+
+**Mistake made (battle.html):** `.primary-card__header-left svg { width: 20px; height: 20px }` overrode `icon-ds-24` (which also didn't exist). Fix: remove the descendant rule, use `class="icon-ds"`, wrap in 28px leading icon container (N-C75).
+
+---
+
+### Rule N-C75 — Primary Card header: 28px leading icon slot, `icon-ds` class, `text/warning` for Lost result (Session 50, 2026-06-12)
+
+**Source:** DS Screen file `hkyIerTAdwtaN3edlp3iz8`, node `3:49245`, `get_variable_defs` confirmed 2026-06-12.
+
+**Header leading icon slot:**
+```css
+.primary-card__header-leading {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 100%; flex-shrink: 0;
+}
+```
+```html
+<div class="primary-card__header-leading">
+  <svg class="icon-ds" style="color:var(--icon-tertiary-default)"><use href="#ic-bar-chart-3"/></svg>
+</div>
+```
+
+| Token | Value | Usage |
+|---|---|---|
+| `Icon/tertiary/default` | `#00564c` | Leading icon color |
+| `Text/tertiary/default` | `#00564c` | Card title color |
+| `Text/warning/default` | `#ff4c51` | `.battle-result--lost` text color |
+
+**Mistake made:** Used `icon-ds-24` class (doesn't exist) → fell to 20px via descendant rule. Correct class is `icon-ds`. Missing leading icon container div. Lost result used `--text-default-body` (#666) instead of `--text-warning-default` (#ff4c51).
+
+**Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
