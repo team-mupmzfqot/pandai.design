@@ -2130,78 +2130,54 @@
     .bc-link--current { color: var(--text-default-body); }
 
     /* ══════════════════════════════════════════════════════════════
-       BATTLE HERO — Diagonal split hero card
-       DS node 7109:130660 — Two columns with clip-path polygon().
-       Left col: polygon clips RIGHT edge diagonally.
-       Right col: polygon clips LEFT edge diagonally (mirror).
-       Diagonal line: x=50% at top → x=(50%−50px) at bottom ≈ 11.5° from vertical.
-       Both cols are calc(50%+50px) wide and overlap 100px in the centre;
-       clip-paths cut them at the exact same diagonal so no gap appears.
+       BATTLE HERO — Two separate diagonal cards with green stroke border.
+       Each card is 50% wide. Diagonal = 50px over 244px height.
+       Left clips RIGHT edge: polygon(0 0, 100% 0, calc(100%-50px) 100%, 0 100%)
+       Right clips LEFT edge: polygon(50px 0, 100% 0, 100% 100%, 0 100%)
+       Gap between visible edges = ~50px at both top and bottom.
+       Border effect: green frame wrapper (1px) + 1px-inset inner card clip.
     ══════════════════════════════════════════════════════════════ */
     .battle-hero {
-      position:      relative;
-      height:        244px;
-      border-radius: var(--corner-radius-corner-4xl);
-      overflow:      hidden;
-      isolation:     isolate;
-      /* Green base shows only at the 4 rounded corners of the slanted gap —
-         everywhere else is covered by the two column background images. */
-      background:    var(--surface-primary-default);
-    }
-    /* Slanted port separator — white rounded parallelogram over the 40px gap.
-       z-index:3 sits ABOVE both columns so the white pill paints over the
-       column backgrounds; the green card base peeks through only at the 4
-       border-radius corners (the rounded vertices of the slanted gap).
-       skewX(-11.58deg) + transform-origin:top left traces the clip-path
-       diagonal exactly: bottom shears 50px left over 244px height. */
-    .battle-hero::before {
-      content:          '';
-      position:         absolute;
-      left:             calc(50% - 20px);
-      top:              0;
-      bottom:           0;
-      width:            40px;
-      background:       var(--surface-general-default);
-      transform:        skewX(-11.58deg);
-      transform-origin: top left;
-      border-radius:    var(--corner-radius-corner-4xl);
-      z-index:          3;
-      pointer-events:   none;
+      position: relative;
+      height:   244px;
     }
 
-    /* ── Column 1: Profile + Stats ─────────────────────────────── */
-    /* DS Rectangle 333 geometry (node 7403:223378): 680×244, diagonal from (680,0) to (615.122,244).
-       Rounded corners at diagonal endpoints: V1 (top) r=16, V2 (bottom) r=24.
-       Clip path computed dynamically by updateStatCardClip() in JS so radii stay correct
-       at any viewport width. CSS polygon replaced with url(#stat-card-clip). */
+    /* ── Frame wrappers — green border layer, 1px wider than inner card */
+    .battle-hero__left-frame {
+      position:   absolute;
+      left:       0; top: 0; bottom: 0;
+      width:      50%;
+      background: var(--border-primary-default);
+      clip-path:  polygon(0 0, 100% 0, calc(100% - 50px) 100%, 0 100%);
+    }
+    .battle-hero__right-frame {
+      position:   absolute;
+      right:      0; top: 0; bottom: 0;
+      width:      50%;
+      background: var(--border-primary-default);
+      clip-path:  polygon(50px 0, 100% 0, 100% 100%, 0 100%);
+      z-index:    2;
+    }
+
+    /* ── Inner cards — same polygon 1px inset = 1px green border on all edges */
     .battle-hero__left {
       position:            absolute;
-      left: 0; top: 0; bottom: 0;
-      width:               calc(50% + 50px);
-      clip-path:           url(#stat-card-clip);
-      background-image:    url('../src/image-repo/page.battle/assets/Background Battle Stat Card.png');
+      inset:               0;
+      clip-path:           polygon(1px 1px, calc(100% - 1px) 1px, calc(100% - 51px) calc(100% - 1px), 1px calc(100% - 1px));
+      background-image:    url('../src/image-repo/page.battle.new/battle/asset/Background Battle Stat Card.png');
       background-size:     cover;
       background-position: right center;
       display:             flex;
       flex-direction:      row;
       align-items:         stretch;
-      z-index:             1;
     }
-
-    /* ── Column 2: Battle Game ──────────────────────────────────── */
-    /* Width = 50%+50px (right:0). Physical left = 50%−50px of card.
-       Clip cuts left edge: top-left at +70px = card 50%+20px,
-       bottom-left at +20px = card 50%−30px.
-       Both inner edges pulled 20px inward to match left col → 40px gap. */
     .battle-hero__right {
       position:            absolute;
-      right: 0; top: 0; bottom: 0;
-      width:               calc(50% + 50px);
-      clip-path:           polygon(70px 0, 100% 0, 100% 100%, 20px 100%);
-      background-image:    url('../src/image-repo/page.battle/assets/Background Battle Content Card.png');
+      inset:               0;
+      clip-path:           polygon(51px 1px, calc(100% - 1px) 1px, calc(100% - 1px) calc(100% - 1px), 1px calc(100% - 1px));
+      background-image:    url('../src/image-repo/page.battle.new/battle/asset/Background Battle Content Card.png');
       background-size:     cover;
       background-position: center;
-      z-index:             2;
     }
 
     /* ── Profile section ─────────────────────────────────────────
@@ -2232,25 +2208,17 @@
       width:           100px;
       height:          100px;
       border-radius:   60px;
-      background:      var(--surface-primary-default-subtle);
-      border:          1px solid var(--border-default);
+      background:      var(--surface-secondary-default);
+      box-shadow:      inset 0 0 0 4px var(--icon-primary-default);
       flex-shrink:     0;
       overflow:        hidden;
       display:         flex;
-      align-items:     stretch;
-    }
-    .bpc__avatar-inner {
-      flex:            1 0 0;
-      border-radius:   75px;
-      background:      var(--surface-secondary-default);
-      border:          4px solid var(--icon-primary-default);
-      padding:         16px;
-      display:         flex;
       align-items:     center;
       justify-content: center;
-      overflow:        hidden;
+      padding:         16px;
     }
-    .bpc__avatar-img { width: 100%; height: 100%; object-fit: cover; }
+    .bpc__avatar-img { width: 100%; height: 100%; object-fit: contain; }
+    .bpc__rank-crown img { width: 24px; height: 24px; object-fit: contain; display: block; }
 
     /* DS: Body/B1, 14px SemiBold, Text/tertiary/default (#00564c) */
     .bpc__username {
@@ -2290,7 +2258,7 @@
       justify-content: center;
       flex-shrink:     0;
     }
-    .bpc__rank-crown svg { width: 24px; height: 22px; }
+    /* crown uses P.Crown.png asset — sized via .bpc__rank-crown img rule above */
 
     /* ── Stats section ─────────────────────────────────────────── */
     /* DS node 7109:130664: flex:1, p:28, gap:8, col, items-end, justify-center */
@@ -2582,7 +2550,7 @@
       text-align:     left;
       border-left:    1px solid var(--border-general-default);
       border-right:   1px solid var(--border-general-default);
-      border-top:     none;
+      border-top:     1px solid var(--border-general-default);
       border-bottom:  none;
       white-space:    nowrap;
     }
@@ -2599,6 +2567,7 @@
     }
     .battle-table tbody td { border-top: none; border-bottom: none; }
     .battle-table tbody tr:hover td { background: #fafcfa; }
+    .battle-table tbody tr:last-child td { border-bottom: 1px solid var(--border-general-default); }
 
     /* Player group — no internal dividers between col 1 (player1), col 2 (VS), col 3 (player2) */
     .battle-table td:nth-child(1) { border-right: none; }
@@ -2739,9 +2708,6 @@
     ══════════════════════════════════════════════════════════════ */
     @media (max-width: 1279px) {
       :root { --page-padding-x: 32px; }
-      /* Tablet: keep widths + SVG clip (polygon removed — JS updateStatCardClip handles it) */
-      .battle-hero__left  { width: calc(50% + 50px); }
-      .battle-hero__right { width: calc(50% + 50px); clip-path: polygon(70px 0, 100% 0, 100% 100%, 20px 100%); }
       .bpc__profile { width: 240px; max-width: 240px; }
     }
 
@@ -2750,17 +2716,19 @@
     ══════════════════════════════════════════════════════════════ */
     @media (max-width: 767px) {
       :root { --page-padding-x: 16px; }
-      /* Stack cards vertically: remove clip-path, restore to normal flow */
-      .battle-hero        { height: auto; }
-      .battle-hero__left  { position: relative; width: 100%; height: 244px; clip-path: none; left: auto; right: auto; top: auto; bottom: auto; }
-      .battle-hero__right { position: relative; width: 100%; height: 220px; clip-path: none; left: auto; right: auto; top: auto; bottom: auto; }
+      /* Stack cards vertically: remove clips, use full-width bordered rectangles */
+      .battle-hero              { height: auto; display: flex; flex-direction: column; gap: var(--spacing-space-m); }
+      .battle-hero__left-frame  { position: relative; width: 100%; height: 244px; clip-path: none; }
+      .battle-hero__right-frame { position: relative; width: 100%; height: 220px; clip-path: none; z-index: auto; }
+      .battle-hero__left        { clip-path: none; }
+      .battle-hero__right       { clip-path: none; }
       /* Profile adjustments in stacked layout */
-      .bpc__profile       { width: 280px; max-width: 280px; border-radius: 0; }
-      .bpc__stats         { padding: 12px 16px; }
+      .bpc__profile             { width: 280px; max-width: 280px; border-radius: 0; }
+      .bpc__stats               { padding: 12px 16px; }
       /* Crown adjustments in stacked right column */
-      .bgc__crown-lg      { width: 70px; height: 65px; left: auto; right: 100px; top: auto; bottom: 20px; }
-      .bgc__crown-sm      { display: none; }
-      .bgc__content       { padding: 16px; }
+      .bgc__crown-lg            { width: 70px; height: 65px; left: auto; right: 100px; top: auto; bottom: 20px; }
+      .bgc__crown-sm            { display: none; }
+      .bgc__content             { padding: 16px; }
       /* Table */
       .battle-table th, .battle-table td { padding: 0 8px; }
       .battle-cell-name { display: none; }
@@ -2952,15 +2920,6 @@
       <symbol id="ic-premium" viewBox="0 0 20 20" fill="none"><g clip-path="url(#clip-premium)"><path d="M8.18945 2.68805C8.90941 1.15493 11.0906 1.15493 11.8105 2.68805L13.4287 6.13629L17.1924 6.71539C18.8009 6.96261 19.4562 8.92502 18.3193 10.0894L15.5332 12.942L16.1758 16.8785C16.4446 18.5264 14.6955 19.7587 13.2344 18.9507L10 17.1627L6.76562 18.9507C5.3045 19.7587 3.55544 18.5264 3.82422 16.8785L4.46582 12.942L1.68066 10.0894C0.543759 8.92502 1.19912 6.96261 2.80762 6.71539L6.57031 6.13629L8.18945 2.68805Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.09473 3.11383C9.45466 2.34708 10.5453 2.34707 10.9053 3.11383L12.6377 6.80328C12.7084 6.95396 12.8492 7.06012 13.0137 7.08551L17.041 7.70367C17.845 7.82751 18.1728 8.80905 17.6045 9.39117L14.6426 12.4244C14.5317 12.5379 14.4814 12.6975 14.5068 12.8541L15.1895 17.0396C15.3238 17.8634 14.4492 18.4793 13.7188 18.0757L10.2422 16.1529C10.0916 16.0696 9.90837 16.0696 9.75781 16.1529L6.28125 18.0757C5.55077 18.4793 4.67621 17.8634 4.81055 17.0396L5.49316 12.8541C5.51863 12.6975 5.46828 12.5379 5.35742 12.4244L2.39551 9.39117C1.82719 8.80905 2.15501 7.82751 2.95898 7.70367L6.98633 7.08551C7.15083 7.06012 7.29156 6.95396 7.3623 6.80328L9.09473 3.11383Z" fill="#FFF200" stroke="#F2B839" stroke-linecap="round" stroke-linejoin="round"/></g></symbol>
       <!-- Crown vector (DS node 6498:146135, 24×22px) — clipPath in defs per Rule 57 -->
       <clipPath id="clip-crown"><rect width="24" height="22" fill="white"/></clipPath>
-
-      <!-- Stat Card diagonal clip — rounded corners at slanted right edge.
-           Path computed by updateStatCardClip() in JS on load + resize.
-           DS Rectangle 333 geometry: V0(0,0)r24 V1(W,0)r16 V2(W-diag,H)r24 V3(0,H)r24
-           where diag/W = 64.878/680 ≈ 9.54% -->
-      <clipPath id="stat-card-clip" clipPathUnits="userSpaceOnUse">
-        <path id="stat-card-path" d="M 24 0 L 100 0 Z"/>
-      </clipPath>
-
       <symbol id="ic-crown" viewBox="0 0 24 22" fill="none"><g clip-path="url(#clip-crown)"><path d="M22.6422 4.78633L20.4189 6.96853L16.3914 1.56137L12.4661 7.01917L8.43578 1.16406L4.81234 6.56293L1.41016 4.2974L2.73437 12.5161C5.77375 16.323 8.92469 24.9928 21.513 12.3969L22.6422 4.78633Z" fill="#F7BA0B"/><path d="M8.43437 1.16406L4.21094 6.16332L4.81094 6.56293L8.43437 1.16406Z" fill="#F3AE00"/><path d="M8.43359 1.16406L12.4587 6.24711L12.4639 7.01917L8.43359 1.16406Z" fill="#FFEB99"/><path d="M12.4609 6.24727L16.3914 1.56152L12.4661 7.01932L12.4609 6.24727Z" fill="#F3AE00"/><path d="M16.3906 1.56152L20.9853 6.41208L20.4181 6.96868L16.3906 1.56152Z" fill="#FFEB99"/><path d="M22.6422 4.78677L17.6608 15.2434L12.4675 7.31656L6.68453 15.4317L1.41016 4.29785L1.48563 15.7912C1.54141 24.2654 22.7692 24.1305 22.7134 15.6563L22.6417 4.78631L22.6422 4.78677Z" fill="#FED322"/><path d="M22.6419 4.78711L17.1992 14.0587L17.6605 15.2437L22.6419 4.78711Z" fill="#FFEB99"/><path d="M17.1964 14.0582L12.4648 7.31641L17.6581 15.2432L17.1969 14.0582H17.1964Z" fill="#F3AE00"/><path d="M12.4666 7.31641L7.05297 14.1227L6.68359 15.432L12.4666 7.31687V7.31641Z" fill="#FFEB99"/><path d="M7.05391 14.1228L1.41016 4.29785L6.685 15.4317L7.05438 14.1223L7.05391 14.1228Z" fill="#F3AE00"/><path d="M23.9974 5.53273C23.9379 6.29466 23.2615 6.86553 22.4857 6.80752C21.7099 6.74905 21.1287 6.08381 21.1877 5.32188C21.2473 4.55995 21.9246 3.99 22.7004 4.04801C23.4762 4.10648 24.0565 4.7708 23.9974 5.53273Z" fill="#F55858"/><path d="M17.7787 1.86574C17.7191 2.62767 17.0427 3.19854 16.2669 3.14053C15.4912 3.08206 14.9099 2.41681 14.969 1.65489C15.0285 0.892958 15.7059 0.323008 16.4816 0.381016C17.2574 0.439484 17.8377 1.10381 17.7787 1.86574Z" fill="#F55858"/><path d="M9.82944 1.40871C9.76991 2.17064 9.09351 2.74151 8.31772 2.6835C7.54194 2.62549 6.96069 1.95978 7.01976 1.19785C7.07929 0.435927 7.75663 -0.134023 8.53241 -0.0760152C9.30819 -0.017547 9.88851 0.64678 9.82944 1.40871Z" fill="#F55858"/><path d="M2.81388 4.40285C2.75435 5.16478 2.07794 5.73565 1.30216 5.67764C0.526378 5.61963 -0.0553404 4.95392 0.00419084 4.192C0.0637221 3.43007 0.741066 2.86012 1.51685 2.91813C2.29263 2.97659 2.87294 3.64092 2.81388 4.40285Z" fill="#F55858"/><path d="M13.8607 7.54738C13.8012 8.30931 13.1248 8.88018 12.349 8.82217C11.5732 8.7637 10.9919 8.09845 11.051 7.33653C11.1105 6.5746 11.7879 6.00465 12.5637 6.06266C13.3394 6.12112 13.9198 6.78545 13.8607 7.54738Z" fill="#F55858"/></g></symbol>
 
     </defs>
@@ -3002,14 +2961,14 @@
           ══════════════════════════════════════════════════════════ -->
           <section id="BattleBanner-Desktop" class="battle-hero" aria-label="Battle Banner">
 
-            <!-- Column 1: Profile + Stats — left col, clip-path diagonal on right edge -->
+            <!-- Column 1 frame — green border layer, diagonal clip on right edge -->
+            <div class="battle-hero__left-frame">
+            <!-- Column 1: Profile + Stats — inner card, 1px inset polygon -->
             <div class="battle-hero__left">
               <!-- Profile — bg #e8fbe8, 299px, left corners rounded -->
               <div class="bpc__profile">
                 <div class="bpc__avatar">
-                  <div class="bpc__avatar-inner">
-                    <img class="bpc__avatar-img" src="../src/image-repo/page.battle/assets/Avatar-Nadia.png" alt="Aidan Kamaruddin">
-                  </div>
+                  <img class="bpc__avatar-img" src="../src/image-repo/page.battle.new/battle/asset/Avatar-Aidan.png" alt="Aidan">
                 </div>
                 <span class="bpc__username">@dianadam</span>
                 <div class="bpc__rank">
@@ -3018,7 +2977,7 @@
                     <span class="bpc__rank-value">123</span>
                   </div>
                   <div class="bpc__rank-crown">
-                    <svg width="24" height="22" aria-hidden="true"><use href="#ic-crown"/></svg>
+                    <img src="../src/image-repo/page.battle.new/battle/asset/P.Crown.png" alt="" width="24" height="24">
                   </div>
                 </div>
               </div>
@@ -3027,31 +2986,34 @@
               <!-- Stats — flex:1, right-aligned, p:28, gap:8 -->
               <div class="bpc__stats">
                 <div class="bpc__stat-item">
-                  <img class="bpc__stat-icon" src="../src/image-repo/page.battle/assets/P.Medal.png" alt="">
+                  <img class="bpc__stat-icon" src="../src/image-repo/page.battle.new/battle/asset/P.Medal.png" alt="">
                   <div class="bpc__stat-text"><span class="bpc__stat-value">38</span><span class="bpc__stat-label">Wins</span></div>
                 </div>
                 <div class="bpc__stat-item">
-                  <img class="bpc__stat-icon" src="../src/image-repo/page.battle/assets/P.Battle.png" alt="">
+                  <img class="bpc__stat-icon" src="../src/image-repo/page.battle.new/battle/asset/P.Battle.png" alt="">
                   <div class="bpc__stat-text"><span class="bpc__stat-value">89</span><span class="bpc__stat-label">Battle</span></div>
                 </div>
                 <div class="bpc__stat-item">
-                  <img class="bpc__stat-icon" src="../src/image-repo/page.battle/assets/P.Coin.png" alt="">
+                  <img class="bpc__stat-icon" src="../src/image-repo/page.battle.new/battle/asset/P.Coin.png" alt="">
                   <div class="bpc__stat-text"><span class="bpc__stat-value">58</span><span class="bpc__stat-label">Coins collected</span></div>
                 </div>
                 <div class="bpc__stat-item">
-                  <img class="bpc__stat-icon" src="../src/image-repo/page.battle/assets/P.Heart.png" alt="">
+                  <img class="bpc__stat-icon" src="../src/image-repo/page.battle.new/battle/asset/P.Heart.png" alt="">
                   <div class="bpc__stat-text"><span class="bpc__stat-value">3</span><span class="bpc__stat-label">Hearts</span></div>
                 </div>
               </div>
             </div>
+            </div><!-- end battle-hero__left-frame -->
 
-            <!-- Column 2: Battle Game — right col, clip-path diagonal on left edge -->
+            <!-- Column 2 frame — green border layer, diagonal clip on left edge -->
+            <div class="battle-hero__right-frame">
+            <!-- Column 2: Battle Game — inner card, 1px inset polygon -->
             <div class="battle-hero__right">
               <img class="bgc__crown-lg"
-                   src="../src/image-repo/page.battle/assets/P.Crown.png"
+                   src="../src/image-repo/page.battle.new/battle/asset/P.Crown.png"
                    width="119" height="111" alt="">
               <img class="bgc__crown-sm"
-                   src="../src/image-repo/page.battle/assets/P.Crown-sm.png"
+                   src="../src/image-repo/page.battle.new/battle/asset/P.Crown-sm.png"
                    width="39" height="36" alt="">
               <div class="bgc__content">
                 <h2 class="bgc__title">Battle Game</h2>
@@ -3066,6 +3028,7 @@
                 </button>
               </div>
             </div>
+            </div><!-- end battle-hero__right-frame -->
 
           </section><!-- end BattleBanner-Desktop -->
 
@@ -3112,11 +3075,11 @@
                   <thead>
                     <tr>
                       <th colspan="3" class="col-players">Players</th>
-                      <th>Won</th>
+                      <th>Rank</th>
                       <th>Score</th>
                       <th>Subject</th>
                       <th>Last Played</th>
-                      <th>Action</th>
+                      <th>More</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -3125,16 +3088,16 @@
                     <tr>
                       <td>
                         <div class="battle-player-cell">
-                          <div class="player-avatar"><img src="../src/image-repo/Home/Avatar-Aidan.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+                          <div class="player-avatar"><img src="../src/image-repo/page.battle.new/battle/asset/Avatar-Aidan.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
                           <span class="battle-cell-name">Aidan Kamaruddin</span>
                         </div>
                       </td>
                       <td class="battle-vs-cell">
-                        <img src="../src/image-repo/page.battle/assets/P.Battle.png" width="18" height="24" alt="">
+                        <img src="../src/image-repo/page.battle.new/battle/asset/P.Battle.png" width="18" height="24" alt="">
                       </td>
                       <td>
                         <div class="battle-player-cell">
-                          <div class="player-avatar"><img src="../src/image-repo/Home/Avatar-Nadia.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+                          <div class="player-avatar"><img src="../src/image-repo/page.battle.new/battle/asset/Avatar-Syakila.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
                           <span class="battle-cell-name">Syakila Rania</span>
                         </div>
                       </td>
@@ -3154,16 +3117,16 @@
                     <tr>
                       <td>
                         <div class="battle-player-cell">
-                          <div class="player-avatar"><img src="../src/image-repo/Home/Avatar-Aidan.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+                          <div class="player-avatar"><img src="../src/image-repo/page.battle.new/battle/asset/Avatar-Aidan.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
                           <span class="battle-cell-name">Aidan Kamaruddin</span>
                         </div>
                       </td>
                       <td class="battle-vs-cell">
-                        <img src="../src/image-repo/page.battle/assets/P.Battle.png" width="18" height="24" alt="">
+                        <img src="../src/image-repo/page.battle.new/battle/asset/P.Battle.png" width="18" height="24" alt="">
                       </td>
                       <td>
                         <div class="battle-player-cell">
-                          <div class="player-avatar"><img src="../src/image-repo/Home/Avatar-Miss.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+                          <div class="player-avatar"><img src="../src/image-repo/page.battle.new/battle/asset/Avatar-Miss.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
                           <span class="battle-cell-name">Nur Nadia</span>
                         </div>
                       </td>
@@ -3175,7 +3138,7 @@
                           <span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Moral Studies</span></span>
                         </span>
                       </td>
-                      <td><span class="battle-date">3 days ago</span></td>
+                      <td><span class="battle-date">2 weeks ago</span></td>
                       <td style="text-align:center"><button class="btn-action" type="button" aria-label="View battle"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-chevron-right"/></svg></button></td>
                     </tr>
 
@@ -3183,16 +3146,16 @@
                     <tr>
                       <td>
                         <div class="battle-player-cell">
-                          <div class="player-avatar"><img src="../src/image-repo/Home/Avatar-Aidan.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+                          <div class="player-avatar"><img src="../src/image-repo/page.battle.new/battle/asset/Avatar-Aidan.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
                           <span class="battle-cell-name">Aidan Kamaruddin</span>
                         </div>
                       </td>
                       <td class="battle-vs-cell">
-                        <img src="../src/image-repo/page.battle/assets/P.Battle.png" width="18" height="24" alt="">
+                        <img src="../src/image-repo/page.battle.new/battle/asset/P.Battle.png" width="18" height="24" alt="">
                       </td>
                       <td>
                         <div class="battle-player-cell">
-                          <div class="player-avatar"><img src="../src/image-repo/Home/Avatar-Mom.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+                          <div class="player-avatar"><img src="../src/image-repo/page.battle.new/battle/asset/Avatar-Mom.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
                           <span class="battle-cell-name">Hawa Akmal</span>
                         </div>
                       </td>
@@ -3204,7 +3167,7 @@
                           <span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Mathematics</span></span>
                         </span>
                       </td>
-                      <td><span class="battle-date">1 week ago</span></td>
+                      <td><span class="battle-date">2 weeks ago</span></td>
                       <td style="text-align:center"><button class="btn-action" type="button" aria-label="View battle"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-chevron-right"/></svg></button></td>
                     </tr>
 
@@ -3212,16 +3175,16 @@
                     <tr>
                       <td>
                         <div class="battle-player-cell">
-                          <div class="player-avatar"><img src="../src/image-repo/Home/Avatar-Aidan.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+                          <div class="player-avatar"><img src="../src/image-repo/page.battle.new/battle/asset/Avatar-Aidan.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
                           <span class="battle-cell-name">Aidan Kamaruddin</span>
                         </div>
                       </td>
                       <td class="battle-vs-cell">
-                        <img src="../src/image-repo/page.battle/assets/P.Battle.png" width="18" height="24" alt="">
+                        <img src="../src/image-repo/page.battle.new/battle/asset/P.Battle.png" width="18" height="24" alt="">
                       </td>
                       <td>
                         <div class="battle-player-cell">
-                          <div class="player-avatar"><img src="../src/image-repo/Home/Avatar-Nadia.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+                          <div class="player-avatar"><img src="../src/image-repo/page.battle.new/battle/asset/Avatar-Syakila.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
                           <span class="battle-cell-name">Syakila Rania</span>
                         </div>
                       </td>
@@ -3233,7 +3196,7 @@
                           <span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Islamic Studies</span></span>
                         </span>
                       </td>
-                      <td><span class="battle-date">5 days ago</span></td>
+                      <td><span class="battle-date">2 weeks ago</span></td>
                       <td style="text-align:center"><button class="btn-action" type="button" aria-label="View battle"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-chevron-right"/></svg></button></td>
                     </tr>
 
@@ -3241,16 +3204,16 @@
                     <tr>
                       <td>
                         <div class="battle-player-cell">
-                          <div class="player-avatar"><img src="../src/image-repo/Home/Avatar-Aidan.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+                          <div class="player-avatar"><img src="../src/image-repo/page.battle.new/battle/asset/Avatar-Aidan.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
                           <span class="battle-cell-name">Aidan Kamaruddin</span>
                         </div>
                       </td>
                       <td class="battle-vs-cell">
-                        <img src="../src/image-repo/page.battle/assets/P.Battle.png" width="18" height="24" alt="">
+                        <img src="../src/image-repo/page.battle.new/battle/asset/P.Battle.png" width="18" height="24" alt="">
                       </td>
                       <td>
                         <div class="battle-player-cell">
-                          <div class="player-avatar"><img src="../src/image-repo/Home/Avatar-Dad.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+                          <div class="player-avatar"><img src="../src/image-repo/page.battle.new/battle/asset/Avatar-Dad.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
                           <span class="battle-cell-name">Muhsin Kamal</span>
                         </div>
                       </td>
@@ -3262,7 +3225,7 @@
                           <span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Bahasa Melayu</span></span>
                         </span>
                       </td>
-                      <td><span class="battle-date">4 days ago</span></td>
+                      <td><span class="battle-date">2 weeks ago</span></td>
                       <td style="text-align:center"><button class="btn-action" type="button" aria-label="View battle"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-chevron-right"/></svg></button></td>
                     </tr>
 
@@ -3270,16 +3233,16 @@
                     <tr>
                       <td>
                         <div class="battle-player-cell">
-                          <div class="player-avatar"><img src="../src/image-repo/Home/Avatar-Aidan.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+                          <div class="player-avatar"><img src="../src/image-repo/page.battle.new/battle/asset/Avatar-Aidan.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
                           <span class="battle-cell-name">Aidan Kamaruddin</span>
                         </div>
                       </td>
                       <td class="battle-vs-cell">
-                        <img src="../src/image-repo/page.battle/assets/P.Battle.png" width="18" height="24" alt="">
+                        <img src="../src/image-repo/page.battle.new/battle/asset/P.Battle.png" width="18" height="24" alt="">
                       </td>
                       <td>
                         <div class="battle-player-cell">
-                          <div class="player-avatar"><img src="../src/image-repo/Home/Avatar-Sir.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+                          <div class="player-avatar"><img src="../src/image-repo/page.battle.new/battle/asset/Avatar-Mom.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
                           <span class="battle-cell-name">Hawa Akmal</span>
                         </div>
                       </td>
@@ -3289,6 +3252,35 @@
                         <span class="subject-badge subject-badge--rbt">
                           <span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-rbt"/></svg></span>
                           <span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">RBT</span></span>
+                        </span>
+                      </td>
+                      <td><span class="battle-date">2 weeks ago</span></td>
+                      <td style="text-align:center"><button class="btn-action" type="button" aria-label="View battle"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-chevron-right"/></svg></button></td>
+                    </tr>
+
+                    <!-- Row 7 — Aidan vs Syakila Rania, Lost, 4, Science -->
+                    <tr>
+                      <td>
+                        <div class="battle-player-cell">
+                          <div class="player-avatar"><img src="../src/image-repo/page.battle.new/battle/asset/Avatar-Aidan.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+                          <span class="battle-cell-name">Aidan Kamaruddin</span>
+                        </div>
+                      </td>
+                      <td class="battle-vs-cell">
+                        <img src="../src/image-repo/page.battle.new/battle/asset/P.Battle.png" width="18" height="24" alt="">
+                      </td>
+                      <td>
+                        <div class="battle-player-cell">
+                          <div class="player-avatar"><img src="../src/image-repo/page.battle.new/battle/asset/Avatar-Syakila.png" alt="" style="width:100%;height:100%;object-fit:cover;"></div>
+                          <span class="battle-cell-name">Syakila Rania</span>
+                        </div>
+                      </td>
+                      <td><span class="battle-result--lost">Lost</span></td>
+                      <td><span class="battle-score">4</span></td>
+                      <td>
+                        <span class="subject-badge subject-badge--science">
+                          <span class="subject-badge__icon"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#ic-subj-science"/></svg></span>
+                          <span class="subject-badge__label-panel"><span class="subject-badge__pointer"><svg width="4" height="8" viewBox="0 0 4 8" aria-hidden="true"><use href="#ic-subj-pointer"/></svg></span><span class="subject-badge__text">Science</span></span>
                         </span>
                       </td>
                       <td><span class="battle-date">2 weeks ago</span></td>
@@ -3323,46 +3315,7 @@
       btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
     });
 
-    /* updateStatCardClip — SVG clipPath for .battle-hero__left rounded diagonal edge.
-       DS Rectangle 333 (node 7403:223378): 680×244, diagonal from V1(680,0)r16 to V2(615.122,244)r24.
-       diag/W ratio = 64.878/680 ≈ 9.54%. Path recomputed on load + resize.                          */
-    function updateStatCardClip() {
-      var el     = document.querySelector('.battle-hero__left');
-      var pathEl = document.getElementById('stat-card-path');
-      if (!el || !pathEl) return;
-      var W = el.offsetWidth;
-      var H = el.offsetHeight || 244;
-      if (!W || !H) return;
-      var DIAG_RATIO = 64.878 / 680;
-      var diag = DIAG_RATIO * W;
-      // unit vector along diagonal edge from V1→V2
-      var len = Math.sqrt(diag * diag + H * H);
-      var nx  = -diag / len;   // points left (into card)
-      var ny  =  H    / len;   // points down
-      // Tangent points — offset from each vertex along adjacent edges by the corner radius
-      var r16 = 16, r24 = 24;
-      // V1 (W, 0) r16: tangent on top edge (before V1) + tangent on diagonal (after V1)
-      var t1x = W - r16;
-      var t2x = (W + r16 * nx).toFixed(3);
-      var t2y = (    r16 * ny).toFixed(3);
-      // V2 (W-diag, H) r24: tangent on diagonal (before V2) + tangent on bottom edge (after V2)
-      var t3x = ((W - diag) + r24 * (-nx)).toFixed(3);
-      var t3y = (H           + r24 * (-ny)).toFixed(3);
-      var t4x = ((W - diag) - r24).toFixed(3);
-      // Build path: top-left→V1 arc→diagonal→V2 arc→bottom-left→V3 arc→top-left arc
-      var d = 'M 24 0 '
-        + 'L ' + t1x + ' 0 '
-        + 'A ' + r16 + ' ' + r16 + ' 0 0 1 ' + t2x + ' ' + t2y + ' '
-        + 'L ' + t3x + ' ' + t3y + ' '
-        + 'A ' + r24 + ' ' + r24 + ' 0 0 1 ' + t4x + ' ' + H + ' '
-        + 'L 24 ' + H + ' '
-        + 'A 24 24 0 0 1 0 ' + (H - 24) + ' '
-        + 'L 0 24 '
-        + 'A 24 24 0 0 1 24 0 Z';
-      pathEl.setAttribute('d', d);
-    }
-    window.addEventListener('resize', updateStatCardClip);
-    updateStatCardClip();
+
   </script>
 
   <!-- ══════════════════════════════════════════════════════════════

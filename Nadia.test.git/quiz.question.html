@@ -2421,7 +2421,7 @@
       --quiz-pstar-inactive-border:var(--border-disabled-disabled);          /* #bfbfbf */
       --askpbot-bg:                #1b5cff;   /* AskPbot button brand blue */
       --nice-work-color:           #1f9d57;   /* "Nice work" center text */
-      --question-nav-h:            68px;      /* question nav footer height */
+      --question-nav-h:            52px;      /* DS: py:8px + PBot:36px + py:8px = 52px */
     }
 
     /* This page has a question nav footer (68px) above the site footer (60px) */
@@ -2976,7 +2976,7 @@
       left:           0;
       right:          0;
       min-width:      390px;
-      height:         var(--question-nav-h); /* 68px */
+      height:         var(--question-nav-h); /* 52px */
       z-index:        99;
       background:     var(--surface-general-default);
       border-top:     1px solid var(--border-primary-default);
@@ -3025,7 +3025,7 @@
       display:       flex;
       align-items:   center;
       gap:           var(--spacing-space-xxs); /* 4px text slot */
-      padding:       2px 4px;                  /* Size S outer padding */
+      padding:       2px 8px;                  /* Size M outer padding */
       border:        none;
       border-radius: var(--corner-radius-corner-rounded); /* 60px */
       cursor:        pointer;
@@ -3039,22 +3039,19 @@
       padding:     0 var(--spacing-space-xxs); /* 4px text slot */
     }
 
-    /* Arrow circle container (S size = 16px outer, 2px padding → 12px clip) */
+    /* Arrow circle — structural base (sizing set per-button below) */
     .btn-nav__arrow {
-      width:           16px;
-      height:          16px;
       border-radius:   var(--corner-radius-corner-rounded); /* 60px */
       display:         flex;
       align-items:     center;
       justify-content: center;
-      padding:         2px;
       flex-shrink:     0;
     }
 
-    /* 12×12 chevron clip — no extra padding (Rule 16: path encoded in viewBox) */
+    /* 16×16 chevron clip — M size, no extra padding (Rule 16: path encoded in viewBox) */
     .btn-nav__clip {
-      width:    12px;
-      height:   12px;
+      width:    16px;
+      height:   16px;
       overflow: hidden;
       display:  flex;
       align-items: center;
@@ -3071,8 +3068,11 @@
     .btn-nav-prev .btn-nav__label {
       color: var(--text-primary-default); /* #00cc85 */
     }
-    /* Previous arrow circle: outlined (white + 1px inset #00cc85) */
+    /* Previous arrow circle: L Arrow — 18×18, 1px padding → 16×16 clip (Rule 30) */
     .btn-nav-prev .btn-nav__arrow {
+      width:       18px;
+      height:      18px;
+      padding:     1px;
       background:  var(--surface-general-default);
       box-shadow:  inset 0 0 0 1px var(--border-primary-default);
       color:       var(--icon-primary-default); /* chevron color #00cc85 */
@@ -3114,8 +3114,11 @@
     .btn-nav-next .btn-nav__label {
       color: var(--text-primary-on-color); /* white */
     }
-    /* Next arrow: filled circle bg #99ebce + chevron #00a36a */
+    /* Next arrow: R Arrow — 20×20, 2px padding → 16×16 clip (Rule 31) */
     .btn-nav-next .btn-nav__arrow {
+      width:      20px;
+      height:     20px;
+      padding:    2px;
       background: var(--surface-primary-default-subtle-hover); /* #99ebce */
       color:      var(--border-primary-focus);                  /* #00a36a */
     }
@@ -3275,6 +3278,16 @@
       <!-- ic-chevron-btn-left — left-pointing, S size 12×12 clip (mirror of ic-chevron-btn) -->
       <symbol id="ic-chevron-btn-left" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M7.5 9L4.5 6L7.5 3"/>
+      </symbol>
+
+      <!-- ic-chevron-btn-m — right-pointing, M size 16×16 clip, DS node 479:352 -->
+      <symbol id="ic-chevron-btn-m" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 12L10 8L6 4"/>
+      </symbol>
+
+      <!-- ic-chevron-btn-m-left — left-pointing, M size 16×16 clip (mirror of ic-chevron-btn-m) -->
+      <symbol id="ic-chevron-btn-m-left" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 12L6 8L10 4"/>
       </symbol>
 
       <!-- Subject English icon — from quiz.html DS export -->
@@ -3528,10 +3541,10 @@
       <!-- Rule 31: S size — h:24px, p:2px 4px, text 12px SemiBold #00cc85 -->
       <!-- Rule 85: strokeAlign INSIDE → box-shadow:inset, never border: -->
       <button class="btn-nav btn-nav-prev" aria-label="Previous question">
-        <!-- Left arrow circle (outlined: white + 1px inset green) + chevron-left -->
+        <!-- L Arrow (outlined: white + 1px inset green) + chevron-left, M size -->
         <div class="btn-nav__arrow">
           <div class="btn-nav__clip">
-            <svg width="12" height="12" aria-hidden="true"><use href="#ic-chevron-btn-left"/></svg>
+            <svg width="16" height="16" aria-hidden="true"><use href="#ic-chevron-btn-m-left"/></svg>
           </div>
         </div>
         <span class="btn-nav__label">Previous</span>
@@ -3553,10 +3566,10 @@
       <!-- Rule 31: S size — bg #00cc85, inset 1px #00a36a, label white, arrow #99ebce -->
       <button class="btn-nav btn-nav-next" aria-label="Next question">
         <span class="btn-nav__label">Next</span>
-        <!-- Right arrow circle (filled: bg #99ebce) + chevron-right -->
+        <!-- R Arrow (filled: bg #99ebce) + chevron-right, M size -->
         <div class="btn-nav__arrow">
           <div class="btn-nav__clip">
-            <svg width="12" height="12" aria-hidden="true"><use href="#ic-chevron-btn"/></svg>
+            <svg width="16" height="16" aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg>
           </div>
         </div>
       </button>

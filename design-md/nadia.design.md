@@ -6309,26 +6309,26 @@ Class pages use native `<a class="btn-*">` for within-page buttons (Browse Class
 
 ---
 
-## Session 42 — class.battle.new.html: slanted hero rework (2026-06-11)
+## Session 42 — battle.html: slanted hero rework (2026-06-11)
 
-**File:** `Nadia.test.git/class.battle.new.html`
+**File:** `Nadia.test.git/battle.html`
 
-**Context:** Two battle prototype files exist:
-- `battle.html` — original dramatic slanted hero (overlapping columns, `skewX` `::before` separator, single-card `overflow:hidden` container)
-- `class.battle.new.html` — newer page that started with a subtle 25px polygon slant
+**Context:** `battle.html` went through two design iterations before settling on the current approach:
+- First iteration: dramatic slanted hero (overlapping columns, `skewX` `::before` separator, single-card `overflow:hidden` container)
+- Current iteration: two separate bordered cards, frame+inner clip pattern, no corner radius
 
 **Session work:**
-1. Ported the dramatic diagonal slant from `battle.html` into `class.battle.new.html`
+1. Ported the dramatic diagonal slant into the file
 2. Then pivoted: removed single-card approach, added separate green stroke borders per card, removed corner radius
 
-### Rule N-C46 — Battle hero: two-file design history (Session 42, 2026-06-11)
+### Rule N-C46 — Battle hero design history (Session 42, 2026-06-11)
 
-`battle.html` and `class.battle.new.html` are two distinct prototypes of the same Battle page. Always check BOTH files before building or editing the battle hero — they represent different design iterations and diverge in layout approach.
+`battle.html` is the single current target for the Battle page. It uses the two-card bordered approach (frame+inner clip, no corner radius). The earlier single-card `skewX` approach was superseded.
 
-| File | Hero approach | Status |
+| Iteration | Hero approach | Status |
 |---|---|---|
-| `battle.html` | Single `overflow:hidden` card, overlapping columns, `skewX::before` separator | Original dramatic slant |
-| `class.battle.new.html` | Two separate bordered cards, frame+inner clip pattern, no corner radius | Current target |
+| v1 | Single `overflow:hidden` card, overlapping columns, `skewX::before` separator | Superseded |
+| v2 (current) | Two separate bordered cards, frame+inner clip pattern, no corner radius | Current target |
 
 ---
 
@@ -6420,6 +6420,6 @@ All other `.bc-` properties are consistent across files and do not need changing
 
 **Files corrected (Session 43):** `achievement.leaderboard.html`, `practise.subject.html`, `practise.flashcard.html`, `practise.practice.exam.html`, `practise.topical.test.html`.
 
-**Files already correct before this session:** `battle.html`, `class.battle.new.html`, `class.browse.classes.html`, `class.latest.assignments.html`, `class.my.classes.html`, `rewards.avatar.html`, `rewards.coin.quest.html`, `rewards.evoucher.html`, `rewards.merchandise.html`, `rewards.my.rewards.html`.
+**Files already correct before this session:** `battle.html`, `class.browse.classes.html`, `class.latest.assignments.html`, `class.my.classes.html`, `rewards.avatar.html`, `rewards.coin.quest.html`, `rewards.evoucher.html`, `rewards.merchandise.html`, `rewards.my.rewards.html`.
 
 **Note:** `quiz.question.html` and `quiz.subject.html` use different breadcrumb patterns (`.breadcrumb-bar` / `.breadcrumb`) — not `.bc-` pattern, not covered by this rule.

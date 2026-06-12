@@ -2495,12 +2495,9 @@
     .qnc-subtopic__row { padding: 8px 24px; gap: var(--spacing-space-m); display: flex; align-items: center; min-height: 48px; }
 
     /* Star pill */
-    .star-pill { background: var(--surface-general-default-secondary); border-radius: 108px; padding: 8px 16px; gap: 10px; display: flex; align-items: center; flex-shrink: 0; }
-    .star-pill__stars { display: flex; gap: 4px; align-items: center; }
-    .star-pill__star { display: block; }
-    .star-pill__star--filled { color: #f5c518; }
-    .star-pill__star--empty  { color: var(--border-general-default); }
-    .star-pill__count { font-size: 14px; font-weight: 500; color: var(--text-default-heading); white-space: nowrap; }
+    .star-pill { background: var(--surface-general-default-secondary); border-radius: 108px; padding: 8px 16px; gap: 4px; display: flex; align-items: center; flex-shrink: 0; }
+    .star-pill__icon { width: 14px; height: 18px; display: block; flex-shrink: 0; }
+    .star-pill__count { font-size: 12px; font-weight: 500; line-height: 18px; color: var(--text-default-heading); white-space: nowrap; }
 
     /* Sub-topic title */
     .qnc-subtopic__title { flex: 1; min-width: 0; font-size: 14px; font-weight: 500; line-height: 20px; color: var(--text-default-heading); }
@@ -2792,6 +2789,27 @@
       <symbol id="ic-rotate-ccw" viewBox="-1 -1 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4V10H7"/><path d="M3.51 15C4.16 16.84 5.39 18.42 7.01 19.50C8.64 20.58 10.57 21.11 12.52 20.99C14.46 20.88 16.32 20.14 17.81 18.88C19.30 17.62 20.34 15.91 20.77 14.01C21.21 12.10 21.01 10.11 20.21 8.33C19.42 6.55 18.06 5.08 16.35 4.13C14.65 3.19 12.68 2.83 10.74 3.10C8.81 3.37 7.02 4.26 5.64 5.64L1 10"/></symbol>
       <!-- Outline/chevron-up — 16×16 coord space (reverse of ic-chevron-down) -->
       <symbol id="ic-chevron-up" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M 4 10 L 8 6 L 12 10"/></symbol>
+      <!-- P.Star illustrated icons — from quiz.question.html (DS nodes 5340:5952 / 5340:5951) -->
+      <linearGradient id="pstar-grad" x1="1.079" y1="12.887" x2="17.779" y2="12.887" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#FFE887"/>
+        <stop offset="1" stop-color="#FECE00"/>
+      </linearGradient>
+      <clipPath id="pstar-clip"><rect width="18" height="24" fill="white"/></clipPath>
+      <clipPath id="pstar-null-clip"><rect width="18" height="24" fill="white"/></clipPath>
+      <!-- P.Star (active) — gold illustrated star, 18×24px -->
+      <symbol id="ic-pstar" viewBox="0 0 18 24">
+        <g clip-path="url(#pstar-clip)">
+          <path d="M6.49038 2.15935L4.90123 7.37593L1.3429 10.1051C0.0473893 11.107 -0.453541 13.508 0.479226 14.1817L3.0357 16.0299L2.43113 21.1083C2.32748 21.9893 2.58659 22.5593 3.01842 22.7666L4.97032 23.9066L5.54035 22.3002L4.83213 21.8511L7.88953 17.93L11.0678 18.3273C12.2252 18.4655 13.5725 16.3927 13.3479 14.8035L12.7434 10.4333L15.3171 5.61404C15.4208 5.42403 15.4899 5.23402 15.5589 5.04401L15.6971 5.14766L17.269 3.73123L15.2998 2.60846C15.0753 2.453 14.7816 2.41845 14.4534 2.53936L10.8951 3.90397L10.1351 2.31481L10.4287 2.453L10.9297 1.26113L8.89139 0.0692616L8.87412 0.0865364C8.77048 0.0347157 8.63229 0.000169754 8.51138 0.000169754C7.78589 0.000169754 6.88767 0.846567 6.49038 2.15935Z" fill="#FECE00"/>
+          <path d="M8.47743 3.3027L6.89444 8.50737L3.32073 11.2656C2.04954 12.249 1.52188 14.6474 2.45728 15.319L5.02364 17.1898L4.42402 22.2506C4.20816 24.0974 5.5513 24.6251 6.70256 23.138L9.89252 19.0846L13.0585 19.4684C14.2098 19.6123 15.5529 17.5256 15.337 15.9666L14.7374 11.5774L17.3038 6.75649C18.2392 5.00561 17.7115 3.20677 16.4403 3.68646L12.8906 5.05358L11.2836 1.67175C11.1157 1.31198 10.8279 1.1201 10.5161 1.1201C9.79658 1.1201 8.88517 1.98355 8.47743 3.3027Z" fill="url(#pstar-grad)"/>
+        </g>
+      </symbol>
+      <!-- P.Star-Null (inactive) — grey illustrated star, 18×24px -->
+      <symbol id="ic-pstar-null" viewBox="0 0 18 24">
+        <g clip-path="url(#pstar-null-clip)">
+          <path d="M6.6231 2.14978L5.00151 7.34299L1.37056 10.06C0.0486155 11.0573 -0.462537 13.4476 0.489265 14.1182L3.09791 15.9582L2.481 21.0139C2.37524 21.8909 2.63963 22.4583 3.08028 22.6647L5.07202 23.7996L5.65367 22.2004L4.93101 21.7533L8.0508 17.8498L11.294 18.2453C12.4749 18.3829 13.8497 16.3193 13.6206 14.7373L13.0037 10.3867L15.63 5.58899C15.7357 5.39983 15.8062 5.21068 15.8767 5.02152L16.0177 5.1247L17.6217 3.71462L15.6123 2.59687C15.3832 2.44211 15.0836 2.40772 14.7487 2.52809L11.1177 3.88658L10.3422 2.30454L10.6418 2.44211L11.153 1.25558L9.07311 0.0690536L9.05548 0.0862503C8.94973 0.0346622 8.80872 0.000270844 8.68534 0.000270844C7.94505 0.000270844 7.0285 0.842876 6.6231 2.14978Z" fill="#82868B"/>
+          <path d="M8.65003 3.28788L7.03473 8.46923L3.38809 11.2151C2.09096 12.1941 1.55253 14.5818 2.50702 15.2504L5.12575 17.1128L4.5139 22.1509C4.29363 23.9894 5.66418 24.5147 6.83894 23.0343L10.094 18.9991L13.3246 19.3811C14.4993 19.5244 15.8699 17.4471 15.6496 15.895L15.0378 11.5255L17.6565 6.7262C18.611 4.98316 18.0726 3.19237 16.7754 3.66991L13.1533 5.03092L11.5135 1.66423C11.3422 1.30607 11.0485 1.11505 10.7303 1.11505C9.9961 1.11505 9.06609 1.97463 8.65003 3.28788Z" fill="#D8D6DE"/>
+        </g>
+      </symbol>
     </defs>
   </svg>
 
@@ -2877,12 +2895,7 @@
                     <div class="qnc-subtopic">
                       <div class="qnc-subtopic__row">
                         <div class="star-pill" aria-label="2 stars earned">
-                          <div class="star-pill__stars" aria-hidden="true">
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class="star-pill__star star-pill__star--filled"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class="star-pill__star star-pill__star--filled"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                          </div>
-                          <span class="star-pill__count">2 / 3</span>
+                          <svg class="star-pill__icon" viewBox="0 0 18 24" aria-hidden="true"><use href="#ic-pstar"/></svg><span class="star-pill__count">2 / 3</span>
                         </div>
                         <span class="qnc-subtopic__title">Radian</span>
                         <button class="btn-icon-circle" type="button" aria-label="Go to Radian">
@@ -2891,12 +2904,7 @@
                       </div>
                       <div class="qnc-sets-row">
                         <div class="star-pill">
-                          <div class="star-pill__stars" aria-hidden="true">
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class="star-pill__star star-pill__star--filled"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class="star-pill__star star-pill__star--filled"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                          </div>
-                          <span class="star-pill__count">Sets</span>
+                          <svg class="star-pill__icon" viewBox="0 0 18 24" aria-hidden="true"><use href="#ic-pstar"/></svg><span class="star-pill__count">Sets</span>
                         </div>
                         <div class="qnc-sets-btns">
                           <button class="btn-primary-m" type="button"><span class="btn-primary-m__label">Set 1</span><div class="btn-primary-m__arrow"><div class="btn-primary-m__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></div></button>
@@ -2910,12 +2918,7 @@
                     <div class="qnc-subtopic">
                       <div class="qnc-subtopic__row">
                         <div class="star-pill" aria-label="1 star earned">
-                          <div class="star-pill__stars" aria-hidden="true">
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class="star-pill__star star-pill__star--filled"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                          </div>
-                          <span class="star-pill__count">1 / 3</span>
+                          <svg class="star-pill__icon" viewBox="0 0 18 24" aria-hidden="true"><use href="#ic-pstar"/></svg><span class="star-pill__count">1 / 3</span>
                         </div>
                         <span class="qnc-subtopic__title">Arc Length and Area of Sector</span>
                         <button class="btn-icon-circle" type="button" aria-label="Go to Arc Length">
@@ -2924,12 +2927,7 @@
                       </div>
                       <div class="qnc-sets-row">
                         <div class="star-pill">
-                          <div class="star-pill__stars" aria-hidden="true">
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class="star-pill__star star-pill__star--filled"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                          </div>
-                          <span class="star-pill__count">Sets</span>
+                          <svg class="star-pill__icon" viewBox="0 0 18 24" aria-hidden="true"><use href="#ic-pstar"/></svg><span class="star-pill__count">Sets</span>
                         </div>
                         <div class="qnc-sets-btns">
                           <button class="btn-primary-m" type="button"><span class="btn-primary-m__label">Set 1</span><div class="btn-primary-m__arrow"><div class="btn-primary-m__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></div></button>
@@ -2942,12 +2940,7 @@
                     <div class="qnc-subtopic">
                       <div class="qnc-subtopic__row">
                         <div class="star-pill" aria-label="0 stars">
-                          <div class="star-pill__stars" aria-hidden="true">
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                          </div>
-                          <span class="star-pill__count">0 / 3</span>
+                          <svg class="star-pill__icon" viewBox="0 0 18 24" aria-hidden="true"><use href="#ic-pstar-null"/></svg><span class="star-pill__count">0 / 3</span>
                         </div>
                         <span class="qnc-subtopic__title">Problems involving Circular Measure</span>
                         <div class="skip-pill" aria-label="Skip for 5 coins">
@@ -2957,12 +2950,7 @@
                       </div>
                       <div class="qnc-sets-row">
                         <div class="star-pill">
-                          <div class="star-pill__stars" aria-hidden="true">
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg>
-                          </div>
-                          <span class="star-pill__count">Sets</span>
+                          <svg class="star-pill__icon" viewBox="0 0 18 24" aria-hidden="true"><use href="#ic-pstar-null"/></svg><span class="star-pill__count">Sets</span>
                         </div>
                         <div class="qnc-sets-btns">
                           <button class="btn-primary-m" type="button"><span class="btn-primary-m__label">Begin</span><div class="btn-primary-m__arrow"><div class="btn-primary-m__arrow-clip"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></div></div></button>
@@ -2989,14 +2977,14 @@
                   <div class="qnc-topic__body">
                     <div class="qnc-subtopic">
                       <div class="qnc-subtopic__row">
-                        <div class="star-pill"><div class="star-pill__stars" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg></div><span class="star-pill__count">0 / 3</span></div>
+                        <div class="star-pill"><svg class="star-pill__icon" viewBox="0 0 18 24" aria-hidden="true"><use href="#ic-pstar-null"/></svg><span class="star-pill__count">0 / 3</span></div>
                         <span class="qnc-subtopic__title">Indefinite Integral</span>
                         <button class="btn-icon-circle" type="button" aria-label="Go to Indefinite Integral"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></button>
                       </div>
                     </div>
                     <div class="qnc-subtopic">
                       <div class="qnc-subtopic__row">
-                        <div class="star-pill"><div class="star-pill__stars" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg></div><span class="star-pill__count">0 / 3</span></div>
+                        <div class="star-pill"><svg class="star-pill__icon" viewBox="0 0 18 24" aria-hidden="true"><use href="#ic-pstar-null"/></svg><span class="star-pill__count">0 / 3</span></div>
                         <span class="qnc-subtopic__title">Definite Integral</span>
                         <button class="btn-icon-circle" type="button" aria-label="Go to Definite Integral"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></button>
                       </div>
@@ -3020,7 +3008,7 @@
                   <div class="qnc-topic__body">
                     <div class="qnc-subtopic">
                       <div class="qnc-subtopic__row">
-                        <div class="star-pill"><div class="star-pill__stars" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg></div><span class="star-pill__count">0 / 3</span></div>
+                        <div class="star-pill"><svg class="star-pill__icon" viewBox="0 0 18 24" aria-hidden="true"><use href="#ic-pstar-null"/></svg><span class="star-pill__count">0 / 3</span></div>
                         <span class="qnc-subtopic__title">Positive and Negative Angles</span>
                         <button class="btn-icon-circle" type="button" aria-label="Go to topic"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></button>
                       </div>
@@ -3044,7 +3032,7 @@
                   <div class="qnc-topic__body">
                     <div class="qnc-subtopic">
                       <div class="qnc-subtopic__row">
-                        <div class="star-pill"><div class="star-pill__stars" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" class="star-pill__star star-pill__star--empty"><path d="M7 1L8.8 5.2L13.5 5.6L10.1 8.5L11.1 13L7 10.5L2.9 13L3.9 8.5L0.5 5.6L5.2 5.2Z"/></svg></div><span class="star-pill__count">0 / 3</span></div>
+                        <div class="star-pill"><svg class="star-pill__icon" viewBox="0 0 18 24" aria-hidden="true"><use href="#ic-pstar-null"/></svg><span class="star-pill__count">0 / 3</span></div>
                         <span class="qnc-subtopic__title">Permutations</span>
                         <button class="btn-icon-circle" type="button" aria-label="Go to Permutations"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></button>
                       </div>
