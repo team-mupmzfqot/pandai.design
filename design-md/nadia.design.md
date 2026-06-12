@@ -6978,3 +6978,65 @@ Before applying ANY property change from a template CSS diff to a Nadia page:
 
 **Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
 
+---
+
+## Session 50 — quiz.subject.html: QNC card header icon + fano wireframe (2026-06-12)
+
+### Rule N-C70 — QNC header icon is a filled colored PNG (`Border/[Subject]`), NOT an SVG symbol (Session 50, 2026-06-12)
+
+**Trigger:** "follow the qnc header from this figma, also fetch the filled logo from figma" — `get_design_context` on Screen file node `3:46834`.
+
+**DS confirmation:** Header icon col (`I3:46834;2339:5074`) contains `BorderAddMath` component at **60×60px** — a filled, colored icon with subject-brand colors. DS node `4888:92060` in `TLVKe3bgJTdVvuPAzgDq2f`.
+
+**Rule:** The `#ic-subj-*` SVG symbols (outline drawings from the Iconography page) are for **subject badges only** — pill badges, quiz card badges. The QNC header icon slot uses the DS `Border/[Subject]` component — a **filled, colored PNG**.
+
+**Implementation:**
+1. Export via `exportAsync({ format: 'PNG', constraint: { type: 'SCALE', value: 2 } })` on the `Border/[Subject]` DS component node
+2. Save to `src/image-repo/page.quiz/subject/qnc-header/[subject]-icon.png`
+3. Render as `<img src="../src/image-repo/page.quiz/subject/qnc-header/[subject]-icon.png" width="60" height="60" alt="">` — NOT `<svg><use href="#ic-subj-*"/></svg>`
+
+**Confirmed DS nodes (Add Math, `TLVKe3bgJTdVvuPAzgDq2f`):**
+| Component | DS node | Dimensions |
+|---|---|---|
+| `Border/AddMath` | `4888:92060` | 24×24 native (scales to 60×60 via CSS) |
+
+**Mistake made:** Used `<svg width="60" height="60"><use href="#ic-subj-add-math"/></svg>` — outline icon on dark background looked wrong. DS uses the filled colored `Border/AddMath` component.
+
+---
+
+### Rule N-C71 — QNC `P.Fano-Wireframe` must use `top:-201px; bottom:-201px; right:-25px; aspect-ratio:1/1` — never `top:0; height:110px` (Session 50, 2026-06-12)
+
+**Trigger:** "seems like still not okay" after using `height: 110px` copied from Syakila's file.
+
+**DS confirmation:** Screen file node `I3:46834;5173:77576` (`P.Fano-Wireframe`):
+- `position: absolute; top: -201px; bottom: -201px; right: -25px`
+- `aspect-ratio: 333.87 / 333.87 ≈ 1 / 1` — square
+- `mix-blend-mode: overlay; opacity: 0.5`
+
+**How it works:** With both `top` and `bottom` set negatively on an absolutely positioned element and `height: auto`, browser calculates height = `parent_height + 201 + 201 = 110 + 402 = 512px`. `aspect-ratio: 1/1` makes width = 512px. Large centered square that visually overflows the header (clipped by `overflow:hidden` on the header container).
+
+**Correct CSS:**
+```css
+.qnc-header__fano { position: absolute; top: -201px; bottom: -201px; right: -25px; aspect-ratio: 1 / 1; mix-blend-mode: overlay; opacity: 0.5; pointer-events: none; }
+```
+
+**Mistake made:** Used `top:0; height:110px` copied from Syakila's quickNotes.selections.html. Syakila simplified the DS position. Always fetch from DS Screen file directly.
+
+---
+
+### Rule N-C72 — Always fetch from DS Screen file directly — never copy positioning from sibling prototype pages (Session 50, 2026-06-12)
+
+**Rule:** When the user provides a Figma URL, always call `get_design_context` on the **exact node ID** in that file. Never adapt from a sibling prototype (Syakila's files, Zul's files) — they may have simplified or made custom choices that differ from DS spec.
+
+**Workflow:**
+```
+1. get_design_context on the exact Figma node (Screen file or DS file)
+2. Extract every property directly — position, dimensions, token values
+3. Implement from the DS spec, not from session memory or sibling files
+4. If a sibling file was referenced previously, treat it as context only — re-verify against DS
+```
+
+**Confirmed instance:** `P.Fano-Wireframe` DS position (`top:-201px; bottom:-201px`) was correct in Screen file (`hkyIerTAdwtaN3edlp3iz8`, node `3:46834`) but Syakila's file used `top:0; height:110px`. Copying from Syakila cost two additional sessions.
+
+**Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
+
