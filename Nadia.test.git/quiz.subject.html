@@ -2423,15 +2423,31 @@
       --subject-default-subtle: #eaebf3;               /* Subject/default-subtle — header label border */
       --spacing-component-xl: 24px;                    /* Spacing/component/xl */
       --icon-default-default: #808080;                 /* Icon/default/default */
+      --icon-disabled-default: #bfbfbf;               /* Icon/disabled/default — breadcrumb chevron */
+      --border-general-default-secondary: #bfbfbf;   /* Border/general/default-secondary — breadcrumb vertical divider */
+      /* Modal palette additions */
+      --purple-500-base: #7367f0;   /* Purple/500-(Base) — Streak modal header */
+      --purple-600:      #5c52c0;   /* Purple/600 — Streak header border */
+      --yellow-500-base: #fece00;   /* Yellow/500-(Base) — Coins modal header */
+      --yellow-600:      #cba500;   /* Yellow/600 — Coins header border */
+      --pink-500-base:   #ff5c98;   /* Pink/500-(Base) — Lives modal header */
+      --pink-600:        #cc4a7a;   /* Pink/600 — Lives header border */
+      --red-500-base:    #ff4c51;   /* Red/500-(Base) — "Unlimited Lives" text */
+      --border-secondary-default-hover:        #baf3b9;   /* Border/secondary/default-hover — Streak pill outer border */
+      --border-secondary-default-subtle-hover: #d1f7d1;   /* Border/secondary/default-subtle-hover — inactive streak day border */
     }
 
-    /* Breadcrumb */
+    /* Breadcrumb — DS Breadcrumb-1.5 Default, Figma node 69:13027 */
     .breadcrumb-section { padding: 8px 0 4px; }
-    .breadcrumb { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 400; color: var(--text-default-body); flex-wrap: wrap; }
-    .breadcrumb__item { color: var(--text-default-body); cursor: pointer; text-decoration: none; }
-    .breadcrumb__item:hover { color: var(--text-primary-default); }
-    .breadcrumb__item--current { color: var(--text-default-heading); cursor: default; }
-    .breadcrumb__sep { width: 16px; height: 16px; flex-shrink: 0; color: var(--border-general-default); display: block; }
+    .bc-row { display: flex; align-items: center; gap: var(--spacing-space-m); min-height: 36px; }
+    .bc-title-group { display: flex; align-items: center; gap: var(--spacing-space-m); flex-shrink: 0; align-self: stretch; }
+    .bc-title { font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 500; line-height: 36px; color: var(--text-tertiary-default); white-space: nowrap; }
+    .bc-vsep { width: 1px; height: 20px; background: var(--border-general-default-secondary); flex-shrink: 0; }
+    .bc-trail { display: flex; align-items: center; gap: var(--spacing-space-xs); flex-wrap: wrap; }
+    .bc-link { display: inline-flex; align-items: center; gap: var(--spacing-space-xs); font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 400; line-height: 20px; color: var(--text-primary-default); text-decoration: none; white-space: nowrap; }
+    .bc-link svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .bc-chevron { color: var(--icon-disabled-default); }
+    .bc-link--current { color: var(--text-default-body); cursor: default; }
 
     /* Two-column layout */
     .qs-layout { display: flex; gap: var(--spacing-space-m); align-items: flex-start; }
@@ -2535,16 +2551,19 @@
 
     /* Status badges 2×2 grid */
     .qs-status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-space-xs); }
-    .status-badge { height: 48px; border-radius: 40.5px; padding: 8px; display: flex; align-items: center; gap: 8px; }
-    .status-badge--score  { background: var(--surface-score-default);  box-shadow: inset 0 0 0 1px var(--surface-score-focus); }
-    .status-badge--coins  { background: var(--surface-coins-default);  box-shadow: inset 0 0 0 1px var(--surface-coins-focus); }
-    .status-badge--streak { background: var(--surface-streak-default); box-shadow: inset 0 0 0 1px var(--surface-streak-focus); }
-    .status-badge--lives  { background: var(--surface-lives-default);  box-shadow: inset 0 0 0 1px var(--surface-lives-focus); }
-    .status-badge__icon-slot { width: 32px; height: 32px; flex-shrink: 0; background: rgba(255,255,255,1); border-radius: 999px; display: flex; align-items: center; justify-content: center; }
-    .status-badge__icon-slot img, .status-badge__icon-slot svg { width: 20px; height: 20px; object-fit: contain; display: block; }
-    .status-badge__text { display: flex; flex-direction: column; gap: 0; min-width: 0; }
-    .status-badge__label { font-size: 10px; font-weight: 600; line-height: 14px; color: #ffffff; text-transform: uppercase; letter-spacing: 0.3px; }
-    .status-badge__value { font-size: 16px; font-weight: 700; line-height: 20px; color: #ffffff; }
+    .status-badge { height: 48px; min-height: 48px; border-radius: 40.5px; padding: var(--spacing-space-xs); display: flex; flex-shrink: 0; cursor: pointer; user-select: none; }
+    .status-badge--score  { background: var(--surface-primary-default); border: 1px solid var(--border-primary-focus); }
+    .status-badge--coins  { background: #fece00; border: 1px solid #cba500; }
+    .status-badge--streak { background: #7367f0; border: 1px solid #5c52c0; }
+    .status-badge--lives  { background: #ff5c98; border: 1px solid #cc4a7a; }
+    .status-badge--coins .status-badge__label,
+    .status-badge--coins .status-badge__value { -webkit-text-stroke: 2px #cba500; paint-order: stroke fill; }
+    .status-badge__content { display: flex; align-items: center; gap: var(--spacing-space-xxs); padding-left: var(--spacing-space-xs); padding-right: 2px; width: 100%; }
+    .status-badge__texts { display: flex; flex-direction: column; flex: 1; padding-bottom: var(--spacing-space-xxs); }
+    .status-badge__label { font-size: 10px; font-weight: 600; line-height: var(--spacing-space-s); color: var(--text-on-color-heading); margin-bottom: -4px; }
+    .status-badge__value { font-size: 16px; font-weight: 700; line-height: 24px; color: var(--text-on-color-heading); margin-bottom: -4px; }
+    .status-badge__icon-slot { width: 32px; height: 32px; padding: var(--spacing-space-xxs); flex-shrink: 0; background: var(--surface-general-default); border-radius: var(--corner-radius-corner-pill); display: flex; align-items: center; justify-content: center; }
+    .status-badge__icon-slot img, .status-badge__icon-slot svg { width: 100%; height: 100%; object-fit: contain; display: block; }
 
     /* Panel card */
     .qs-panel { border: 1px solid var(--border-primary-default); border-radius: var(--corner-radius-corner-4xl); overflow: hidden; }
@@ -2600,6 +2619,619 @@
       .qnc-header__icon-slot { width: 80px; min-width: 80px; }
       .qnc-subtopic__row { flex-wrap: wrap; }
     }
+
+    /* ── Status Badge Modals (node 5628:52018) ──────────────────────────── */
+    .modal-overlay {
+      position:         fixed;
+      inset:            0;
+      background:       var(--overlay-dark);
+      z-index:          500;
+      display:          flex;
+      align-items:      center;
+      justify-content:  center;
+      opacity:          0;
+      pointer-events:   none;
+      transition:       opacity 0.22s ease;
+    }
+    .modal-overlay.is-open {
+      opacity:        1;
+      pointer-events: auto;
+    }
+    .modal-overlay.is-closing {
+      opacity:        0;
+      pointer-events: none;
+    }
+
+    .modal-panel {
+      display:    none;
+      position:   relative;
+      width:      430px;
+      max-width:  calc(100vw - 32px);
+    }
+    .modal-panel.is-open  { display: block; }
+
+    .modal-panel.is-open .modal-card {
+      animation: modalIn 0.28s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+    }
+    .modal-panel.is-closing .modal-card {
+      animation: modalOut 0.18s ease-in both;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    }
+    @keyframes modalOut {
+      from { opacity: 1; transform: translateY(0)    scale(1);    }
+      to   { opacity: 0; transform: translateY(12px) scale(0.97); }
+    }
+
+    .modal-card {
+      background:    var(--surface-general-default);
+      border:              1px solid var(--border-primary-default);
+      border-radius:       var(--corner-radius-corner-rounded) var(--corner-radius-corner-4xl) var(--corner-radius-corner-rounded) var(--corner-radius-corner-rounded);
+      padding:             24px 16px;
+      position:            relative;
+      display:       flex;
+      flex-direction: column;
+      gap:           24px;
+    }
+    .modal-panel--lives .modal-card { gap: 28px; }
+
+    .modal-card__corner {
+      position: absolute;
+      width:    75px;
+      height:   75.5px;
+      top:      -1px;
+      right:    -1px;
+      pointer-events: none;
+    }
+    .modal-card__corner img { width: 100%; height: 100%; display: block; }
+
+    .modal-close {
+      position:       absolute;
+      top:            9.5px;
+      right:          9px;
+      background:     var(--surface-general-default);
+      border:         none;
+      padding:        2px;
+      border-radius:  108px;
+      box-shadow:     inset 0 0 0 1px var(--icon-primary-default);
+      display:        flex;
+      align-items:    center;
+      justify-content: center;
+      cursor:         pointer;
+      z-index:        2;
+    }
+    .modal-close svg { display: block; width: 24px; height: 24px; color: var(--icon-primary-default); }
+    .modal-close:hover { background: var(--surface-secondary-default-subtle); }
+
+    .modal-header {
+      display:         flex;
+      justify-content: center;
+    }
+    .modal-header__pill {
+      display:         flex;
+      flex-direction:  column;
+      align-items:     center;
+      gap:             0;
+      padding:         8px 24px;
+      border-radius:   108px;
+      border:          1px solid transparent;
+    }
+    .modal-header__title {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    24px;
+      line-height:  36px;
+      color:        var(--text-on-color-heading);
+      white-space:  nowrap;
+    }
+    .modal-header__sub {
+      font-family:  var(--font-family);
+      font-weight:  600;
+      font-size:    14px;
+      line-height:  20px;
+      color:        var(--text-on-color-heading);
+    }
+    .modal-header--score {
+      display:      flex;
+      align-items:  center;
+      gap:          0;
+    }
+    .modal-header__pill--score {
+      flex-direction:  row;
+      align-items:     center;
+      gap:             10px;
+      background:      var(--surface-primary-default);
+      padding:         8px 8px 8px 24px;
+      border:          none;
+      box-shadow:      inset 0 0 0 1px var(--border-primary-focus);
+    }
+    .modal-header__score-texts { display: flex; flex-direction: column; align-items: flex-start; }
+    .modal-header__score-value {
+      background:    var(--surface-general-default);
+      border:        none;
+      box-shadow:    inset 0 0 0 1px var(--border-primary-focus);
+      border-radius: 108px;
+      padding:       8px 16px;
+      font-family:   var(--font-family);
+      font-weight:   700;
+      font-size:     24px;
+      line-height:   36px;
+      color:         var(--text-primary-default);
+      white-space:   nowrap;
+    }
+    .modal-header__pill--streak {
+      background:  var(--purple-500-base);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--purple-600);
+    }
+    .modal-header__pill--lives {
+      background:  var(--pink-500-base);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--pink-600);
+    }
+    .modal-header__pill--coins {
+      background:  var(--yellow-500-base);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--yellow-600);
+    }
+    .modal-panel--coins .modal-header__title {
+      -webkit-text-stroke: 2px var(--yellow-600);
+      paint-order:         stroke fill;
+    }
+    .modal-panel--coins .modal-card {
+      gap: 8px;
+    }
+
+    .modal-content-slot {
+      display:        flex;
+      flex-direction: column;
+      gap:            16px;
+      align-items:    center;
+      width:          100%;
+    }
+
+    .modal-score-content {
+      display:         flex;
+      gap:             8px;
+      align-items:     center;
+      justify-content: center;
+      padding:         0 8px;
+      width:           100%;
+    }
+    .modal-trophy-wrap {
+      flex:     1 0 0;
+      min-width: 0;
+      padding:  10px;
+    }
+    .modal-trophy {
+      aspect-ratio:    100 / 140;
+      position:        relative;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+    }
+    .modal-trophy__img {
+      width:      100%;
+      height:     100%;
+      object-fit: contain;
+      display:    block;
+    }
+    .modal-stats {
+      width:          274px;
+      min-width:      274px;
+      display:        flex;
+      flex-direction: column;
+      gap:            4px;
+    }
+    .modal-stat-row {
+      display:     flex;
+      gap:         12px;
+      align-items: flex-start;
+      padding:     12px;
+    }
+    .modal-stat-ribbon {
+      position:   relative;
+      width:      37px;
+      min-width:  28px;
+      align-self: stretch;
+      display:    flex;
+      flex-direction: column;
+      align-items:    center;
+      gap:            10px;
+      padding:        2px 4px 4px;
+    }
+    .modal-stat-ribbon__bg {
+      position: absolute;
+      top:      0;
+      left:     0;
+      width:    37px;
+      height:   40px;
+    }
+    .modal-stat-ribbon__bg > div { position: relative; height: 100%; }
+    .modal-stat-ribbon__bg img,
+    .modal-stat-ribbon__bg svg { display: block; width: 100%; height: 100%; }
+    .modal-stat-ribbon__num {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    16px;
+      line-height:  24px;
+      color:        var(--text-primary-on-color);
+      text-align:   center;
+      white-space:  nowrap;
+      position:     relative;
+      z-index:      1;
+    }
+    .modal-stat-texts {
+      flex:           1 0 0;
+      min-width:      0;
+      display:        flex;
+      flex-direction: column;
+      gap:            4px;
+    }
+    .modal-stat-title {
+      font-family: var(--font-family);
+      font-weight: 700;
+      font-size:   16px;
+      line-height: 24px;
+      color:       var(--text-default-heading);
+      width:       100%;
+    }
+    .modal-stat-caption {
+      font-family: var(--font-family);
+      font-size:   10px;
+      line-height: 12px;
+      color:       var(--text-default-caption);
+      width:       100%;
+    }
+    .modal-stat-caption--inline {
+      display:   flex;
+      flex-wrap: wrap;
+      gap:       0 4px;
+      font-size: 10px;
+      line-height: 12px;
+      color:     var(--text-default-caption);
+      white-space: nowrap;
+    }
+    .modal-stat-caption--inline .highlight {
+      font-weight: 600;
+      color:       var(--text-primary-default);
+    }
+    .modal-divider {
+      background:    var(--surface-general-default-secondary);
+      height:        1px;
+      border-radius: 60px;
+      width:         100%;
+      flex-shrink:   0;
+    }
+
+    .modal-image-block {
+      display:        flex;
+      flex-direction: column;
+      align-items:    center;
+      gap:            8px;
+      width:          100%;
+    }
+    .modal-image-wrap {
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      padding:         8px;
+      width:           95px;
+      height:          114px;
+      box-sizing:      border-box;
+      flex-shrink:     0;
+    }
+    .modal-text-center {
+      display:        flex;
+      flex-direction: column;
+      align-items:    center;
+      text-align:     center;
+    }
+    .modal-big-text {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    24px;
+      line-height:  36px;
+      color:        var(--text-default-heading);
+      white-space:  nowrap;
+    }
+    .modal-lives-sub {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    24px;
+      line-height:  36px;
+      color:        var(--red-500-base);
+      white-space:  nowrap;
+    }
+    .modal-lives-label {
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    16px;
+      line-height:  24px;
+      color:        var(--text-default-heading);
+    }
+
+    .modal-streak-pill {
+      background:    var(--surface-secondary-default-subtle);
+      border:        none;
+      box-shadow:    inset 0 0 0 1px var(--border-secondary-default-hover);
+      border-radius: 60px;
+      display:       flex;
+      gap:           8px;
+      align-items:   center;
+      padding:       8px;
+      flex-shrink:   0;
+    }
+    .modal-day {
+      width:           38px;
+      height:          38px;
+      border-radius:   60px;
+      display:         flex;
+      align-items:     center;
+      justify-content: center;
+      flex-shrink:     0;
+      font-family:     var(--font-family);
+      font-weight:     600;
+      font-size:       12px;
+      line-height:     18px;
+    }
+    .modal-day--active {
+      background:  var(--surface-primary-default);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--border-primary-focus);
+      color:       var(--text-on-color-heading);
+    }
+    .modal-day--inactive {
+      background:  var(--surface-secondary-default-hover);
+      border:      none;
+      box-shadow:  inset 0 0 0 1px var(--border-secondary-default-subtle-hover);
+      color:       var(--text-secondary-focus);
+    }
+
+    .modal-streak-body {
+      display:        flex;
+      flex-direction: column;
+      gap:            8px;
+      width:          100%;
+      align-items:    center;
+    }
+
+    .modal-coins-content {
+      display:        flex;
+      flex-direction: column;
+      width:          100%;
+    }
+    .modal-coins-row {
+      display:         flex;
+      gap:             8px;
+      align-items:     flex-start;
+      justify-content: center;
+      padding:         16px 16px 16px 0;
+    }
+    .modal-coins-img {
+      width:        92px;
+      height:       92px;
+      padding:      8px;
+      display:      flex;
+      align-items:  center;
+      justify-content: center;
+      flex-shrink:  0;
+      box-sizing:   border-box;
+    }
+    .modal-coins-texts {
+      display:        flex;
+      flex-direction: column;
+      align-items:    flex-start;
+      min-width:      170px;
+    }
+    .modal-coins-label {
+      font-family: var(--font-family);
+      font-weight: 700;
+      font-size:   16px;
+      line-height: 24px;
+      color:       var(--text-default-heading);
+      width:       100%;
+    }
+    .modal-coins-value {
+      display:      flex;
+      gap:          4px;
+      align-items:  flex-start;
+      font-family:  var(--font-family);
+      font-weight:  700;
+      font-size:    24px;
+      line-height:  36px;
+      color:        var(--text-default-heading);
+      white-space:  nowrap;
+      width:        100%;
+    }
+    .modal-coins-cta {
+      padding-top: 8px;
+      width:       100%;
+    }
+
+    .modal-btn-sec {
+      display:       inline-flex;
+      align-items:   center;
+      justify-content: center;
+      height:        24px;
+      max-height:    24px;
+      padding:       2px 4px 2px 4px;
+      background:    var(--surface-general-default);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+      border:        none;
+      border-radius: var(--corner-radius-corner-rounded);
+      cursor:        pointer;
+      gap:           0;
+      font-family:   var(--font-family);
+    }
+    .modal-btn-sec:hover {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .modal-btn-sec:active,
+    .modal-btn-sec.is-pressing {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec__label {
+      font-family:  var(--font-family);
+      font-weight:  600;
+      font-size:    12px;
+      line-height:  18px;
+      color:        var(--text-primary-default);
+      white-space:  nowrap;
+      padding:      0 4px;
+    }
+    .modal-btn-sec:hover .modal-btn-sec__label { color: var(--text-secondary-focus); }
+    .modal-btn-sec:active .modal-btn-sec__label,
+    .modal-btn-sec.is-pressing .modal-btn-sec__label { color: var(--text-primary-default); }
+    .modal-btn-sec__arrow {
+      display:         flex;
+      align-items:     center;
+      justify-content: flex-end;
+      width:           16px;
+      height:          16px;
+      padding:         2px;
+      border-radius:   60px;
+      background:      var(--surface-general-default);
+      box-shadow:      inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec:hover .modal-btn-sec__arrow {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .modal-btn-sec:active .modal-btn-sec__arrow,
+    .modal-btn-sec.is-pressing .modal-btn-sec__arrow {
+      background:  var(--surface-primary-focus);
+      box-shadow:  inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec__arrow svg { display: block; width: 12px; height: 12px; color: var(--icon-primary-default); }
+    .modal-btn-sec:hover .modal-btn-sec__arrow svg { color: var(--text-secondary-focus); }
+    .modal-btn-sec:active .modal-btn-sec__arrow svg,
+    .modal-btn-sec.is-pressing .modal-btn-sec__arrow svg { color: var(--icon-primary-default); }
+
+    .modal-btn-group {
+      display:         flex;
+      gap:             8px;
+      align-items:     flex-end;
+      justify-content: center;
+      width:           100%;
+    }
+    .modal-btn-sec-l {
+      display:       inline-flex;
+      align-items:   center;
+      justify-content: center;
+      padding:       8px 12px;
+      background:    var(--surface-general-default);
+      box-shadow:    inset 0 0 0 1px var(--border-primary-default);
+      border:        none;
+      border-radius: var(--corner-radius-corner-rounded);
+      cursor:        pointer;
+      flex-shrink:   0;
+      font-family:   var(--font-family);
+      gap:           0;
+    }
+    .modal-btn-sec-l:hover {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .modal-btn-sec-l:active,
+    .modal-btn-sec-l.is-pressing {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec-l__label {
+      font-family:  var(--font-family);
+      font-weight:  600;
+      font-size:    14px;
+      line-height:  20px;
+      color:        var(--text-primary-default);
+      white-space:  nowrap;
+      padding:      0 8px;
+    }
+    .modal-btn-sec-l:hover .modal-btn-sec-l__label { color: var(--text-secondary-focus); }
+    .modal-btn-sec-l:active .modal-btn-sec-l__label,
+    .modal-btn-sec-l.is-pressing .modal-btn-sec-l__label { color: var(--text-primary-default); }
+    .modal-btn-sec-l__arrow {
+      display:         flex;
+      align-items:     center;
+      justify-content: flex-end;
+      width:           24px;
+      height:          24px;
+      padding:         4px;
+      border-radius:   60px;
+      background:      var(--surface-general-default);
+      box-shadow:      inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec-l:hover .modal-btn-sec-l__arrow {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .modal-btn-sec-l:active .modal-btn-sec-l__arrow,
+    .modal-btn-sec-l.is-pressing .modal-btn-sec-l__arrow {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-sec-l__arrow svg { display: block; width: 16px; height: 16px; color: var(--icon-primary-default); }
+    .modal-btn-sec-l:hover .modal-btn-sec-l__arrow svg { color: var(--text-secondary-focus); }
+    .modal-btn-sec-l:active .modal-btn-sec-l__arrow svg,
+    .modal-btn-sec-l.is-pressing .modal-btn-sec-l__arrow svg { color: var(--icon-primary-default); }
+
+    .modal-btn-pri-l {
+      display:       inline-flex;
+      align-items:   center;
+      justify-content: center;
+      height:        40px;
+      padding:       8px 12px;
+      background:    var(--surface-primary-default);
+      border:        none;
+      box-shadow:    inset 0 0 0 1px var(--border-primary-focus);
+      border-radius: var(--corner-radius-corner-rounded);
+      cursor:        pointer;
+      flex-shrink:   0;
+      font-family:   var(--font-family);
+      gap:           0;
+    }
+    .modal-btn-pri-l:hover {
+      background: var(--surface-secondary-default);
+      box-shadow: inset 0 0 0 1px var(--border-secondary-focus);
+    }
+    .modal-btn-pri-l:active,
+    .modal-btn-pri-l.is-pressing {
+      background: var(--surface-primary-focus);
+      box-shadow: inset 0 0 0 1px var(--border-primary-default);
+    }
+    .modal-btn-pri-l__label {
+      font-family:  var(--font-family);
+      font-weight:  600;
+      font-size:    14px;
+      line-height:  20px;
+      color:        var(--text-primary-on-color);
+      white-space:  nowrap;
+      padding:      0 8px;
+    }
+    .modal-btn-pri-l:hover .modal-btn-pri-l__label { color: var(--text-secondary-focus); }
+    .modal-btn-pri-l:active .modal-btn-pri-l__label,
+    .modal-btn-pri-l.is-pressing .modal-btn-pri-l__label { color: var(--text-primary-default); }
+    .modal-btn-pri-l__arrow {
+      display:         flex;
+      align-items:     center;
+      justify-content: flex-end;
+      width:           24px;
+      height:          24px;
+      padding:         4px;
+      border-radius:   60px;
+      background:      var(--surface-primary-default-subtle-hover);
+    }
+    .modal-btn-pri-l:hover .modal-btn-pri-l__arrow { background: var(--surface-secondary-default-subtle); }
+    .modal-btn-pri-l:active .modal-btn-pri-l__arrow,
+    .modal-btn-pri-l.is-pressing .modal-btn-pri-l__arrow { background: var(--surface-primary-default); }
+    .modal-btn-pri-l__arrow svg { display: block; width: 16px; height: 16px; color: var(--border-primary-focus); }
+    .modal-btn-pri-l:hover .modal-btn-pri-l__arrow svg { color: var(--text-secondary-focus); }
+    .modal-btn-pri-l:active .modal-btn-pri-l__arrow svg,
+    .modal-btn-pri-l.is-pressing .modal-btn-pri-l__arrow svg { color: var(--border-primary-focus); }
   </style>
 
 </head>
@@ -2810,6 +3442,8 @@
           <path d="M8.65003 3.28788L7.03473 8.46923L3.38809 11.2151C2.09096 12.1941 1.55253 14.5818 2.50702 15.2504L5.12575 17.1128L4.5139 22.1509C4.29363 23.9894 5.66418 24.5147 6.83894 23.0343L10.094 18.9991L13.3246 19.3811C14.4993 19.5244 15.8699 17.4471 15.6496 15.895L15.0378 11.5255L17.6565 6.7262C18.611 4.98316 18.0726 3.19237 16.7754 3.66991L13.1533 5.03092L11.5135 1.66423C11.3422 1.30607 11.0485 1.11505 10.7303 1.11505C9.9961 1.11505 9.06609 1.97463 8.65003 3.28788Z" fill="#D8D6DE"/>
         </g>
       </symbol>
+      <!-- Stat Ribbon (Score Modal number ribbon bg) — DS node 5627:50055 -->
+      <symbol id="ic-stat-ribbon" viewBox="0 0 37 39"><path d="M4 0.5H33C34.933 0.5 36.5 2.067 36.5 4V36.6455C36.4999 37.7815 35.2865 38.5048 34.2871 37.9648L18.7373 29.5605L18.5 29.4316L18.2627 29.5605L2.71289 37.9648C1.71354 38.5048 0.500054 37.7815 0.5 36.6455V4C0.5 2.067 2.067 0.5 4 0.5Z" fill="#00CC85" stroke="#00A36A"/></symbol>
     </defs>
   </svg>
 
@@ -2825,15 +3459,22 @@
     <div class="page-container">
       <div class="main-content">
 
-        <!-- Breadcrumb -->
+        <!-- Breadcrumb — DS node 69:13027 -->
         <section id="Breadcrumb-Desktop" class="breadcrumb-section">
-          <nav class="breadcrumb" aria-label="Breadcrumb">
-            <a class="breadcrumb__item" href="#">Home</a>
-            <svg class="breadcrumb__sep" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
-            <a class="breadcrumb__item" href="#">Quiz</a>
-            <svg class="breadcrumb__sep" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
-            <span class="breadcrumb__item breadcrumb__item--current" aria-current="page">Additional Mathematics</span>
-          </nav>
+          <div class="bc-row">
+            <div class="bc-title-group">
+              <span class="bc-title">Additional Mathematics Quiz</span>
+              <span class="bc-vsep" aria-hidden="true"></span>
+            </div>
+            <nav class="bc-trail" aria-label="Breadcrumb">
+              <a class="bc-link" href="#">
+                <svg aria-hidden="true"><use href="#ic-check-circle"/></svg>
+                Quiz
+                <svg class="bc-chevron" aria-hidden="true"><use href="#ic-chevron-right"/></svg>
+              </a>
+              <span class="bc-link bc-link--current" aria-current="page">Additional Mathematics Quiz</span>
+            </nav>
+          </div>
         </section>
 
         <!-- Two-column layout -->
@@ -3047,47 +3688,55 @@
             <!-- Status badges 2×2 grid -->
             <div class="qs-status-grid" role="list">
 
-              <div class="status-badge status-badge--score" role="listitem" aria-label="Score: 68">
-                <div class="status-badge__icon-slot">
-                  <img src="../src/image-repo/page.quiz/subject/assets/P.Trophy.png" width="20" height="24" alt="" aria-hidden="true"
-                    onerror="this.style.display='none'">
-                </div>
-                <div class="status-badge__text">
-                  <span class="status-badge__label">Score</span>
-                  <span class="status-badge__value">68</span>
-                </div>
-              </div>
-
-              <div class="status-badge status-badge--coins" role="listitem" aria-label="Coins: 500" style="--text-on::#404040">
-                <div class="status-badge__icon-slot">
-                  <img src="../src/image-repo/page.quiz/subject/assets/P.Coin.png" width="24" height="24" alt="" aria-hidden="true"
-                    onerror="this.style.display='none'">
-                </div>
-                <div class="status-badge__text">
-                  <span class="status-badge__label" style="color:#404040">Coins</span>
-                  <span class="status-badge__value" style="color:#404040">500</span>
+              <div id="pill-score" class="status-badge status-badge--score" role="listitem" aria-label="Score: 68">
+                <div class="status-badge__content">
+                  <div class="status-badge__texts">
+                    <span class="status-badge__label">Score</span>
+                    <span class="status-badge__value">68</span>
+                  </div>
+                  <div class="status-badge__icon-slot">
+                    <img src="../src/image-repo/page.quiz/subject/assets/P.Trophy.png" width="24" height="24" alt="" aria-hidden="true"
+                      onerror="this.style.display='none'">
+                  </div>
                 </div>
               </div>
 
-              <div class="status-badge status-badge--streak" role="listitem" aria-label="Streak: 3 days">
-                <div class="status-badge__icon-slot">
-                  <img src="../src/image-repo/page.quiz/subject/assets/P.Streak.png" width="17" height="24" alt="" aria-hidden="true"
-                    onerror="this.style.display='none'">
-                </div>
-                <div class="status-badge__text">
-                  <span class="status-badge__label">Streak</span>
-                  <span class="status-badge__value">3</span>
+              <div id="pill-coins" class="status-badge status-badge--coins" role="listitem" aria-label="Coins: 500">
+                <div class="status-badge__content">
+                  <div class="status-badge__texts">
+                    <span class="status-badge__label">Coins</span>
+                    <span class="status-badge__value">500</span>
+                  </div>
+                  <div class="status-badge__icon-slot">
+                    <img src="../src/image-repo/page.quiz/subject/assets/P.Coin.png" width="24" height="24" alt="" aria-hidden="true"
+                      onerror="this.style.display='none'">
+                  </div>
                 </div>
               </div>
 
-              <div class="status-badge status-badge--lives" role="listitem" aria-label="Lives: 3">
-                <div class="status-badge__icon-slot">
-                  <img src="../src/image-repo/page.quiz/subject/assets/P.Heart.png" width="22" height="24" alt="" aria-hidden="true"
-                    onerror="this.style.display='none'">
+              <div id="pill-streak" class="status-badge status-badge--streak" role="listitem" aria-label="Streak: 3 days">
+                <div class="status-badge__content">
+                  <div class="status-badge__texts">
+                    <span class="status-badge__label">Streak</span>
+                    <span class="status-badge__value">3</span>
+                  </div>
+                  <div class="status-badge__icon-slot">
+                    <img src="../src/image-repo/page.quiz/subject/assets/P.Streak.png" width="24" height="24" alt="" aria-hidden="true"
+                      onerror="this.style.display='none'">
+                  </div>
                 </div>
-                <div class="status-badge__text">
-                  <span class="status-badge__label">Lives</span>
-                  <span class="status-badge__value">3</span>
+              </div>
+
+              <div id="pill-lives" class="status-badge status-badge--lives" role="listitem" aria-label="Lives: 3">
+                <div class="status-badge__content">
+                  <div class="status-badge__texts">
+                    <span class="status-badge__label">Lives</span>
+                    <span class="status-badge__value">3</span>
+                  </div>
+                  <div class="status-badge__icon-slot">
+                    <img src="../src/image-repo/page.quiz/subject/assets/P.Heart.png" width="24" height="24" alt="" aria-hidden="true"
+                      onerror="this.style.display='none'">
+                  </div>
                 </div>
               </div>
 
@@ -3362,6 +4011,255 @@
     }
 
   })();
+  </script>
+
+  <!-- Status Badge Modals — ported from zul.home.screen.html -->
+  <div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true">
+
+    <!-- Score Modal -->
+    <div id="modal-score" class="modal-panel modal-panel--score">
+      <div class="modal-card">
+        <div class="modal-card__corner"><img src="../src/image-repo/page.home/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
+        <div class="modal-content-slot">
+          <div class="modal-header">
+            <div class="modal-header__pill modal-header__pill--score">
+              <div class="modal-header__score-texts">
+                <span class="modal-header__title">Goal &amp; Score</span>
+                <span class="modal-header__sub">This Year Score</span>
+              </div>
+              <div class="modal-header__score-value">100,000</div>
+            </div>
+          </div>
+          <div class="modal-score-content">
+            <div class="modal-trophy-wrap">
+              <div class="modal-trophy">
+                <img class="modal-trophy__img" src="../src/image-repo/page.home/assets/main/StatusBadgeModal/score-trophy.png" alt="">
+              </div>
+            </div>
+            <div class="modal-stats">
+              <div class="modal-stat-row">
+                <div class="modal-stat-ribbon">
+                  <div class="modal-stat-ribbon__bg"><svg viewBox="0 0 37 39" aria-hidden="true"><use href="#ic-stat-ribbon"/></svg></div>
+                  <span class="modal-stat-ribbon__num">100</span>
+                </div>
+                <div class="modal-stat-texts">
+                  <p class="modal-stat-title">Today's Score</p>
+                  <p class="modal-stat-caption">Your score is just 5 less than previous day</p>
+                </div>
+              </div>
+              <div class="modal-divider"></div>
+              <div class="modal-stat-row">
+                <div class="modal-stat-ribbon">
+                  <div class="modal-stat-ribbon__bg"><svg viewBox="0 0 37 39" aria-hidden="true"><use href="#ic-stat-ribbon"/></svg></div>
+                  <span class="modal-stat-ribbon__num">1/9</span>
+                </div>
+                <div class="modal-stat-texts">
+                  <p class="modal-stat-title">Today's Quiz Goal</p>
+                  <div class="modal-stat-caption--inline">
+                    <span>It will only take about </span>
+                    <span class="highlight">4 more minutes</span>
+                    <span>to complete your goal </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-streak-pill">
+            <div class="modal-day modal-day--active">M</div>
+            <div class="modal-day modal-day--active">T</div>
+            <div class="modal-day modal-day--inactive">W</div>
+            <div class="modal-day modal-day--inactive">T</div>
+            <div class="modal-day modal-day--inactive">F</div>
+            <div class="modal-day modal-day--inactive">S</div>
+            <div class="modal-day modal-day--inactive">S</div>
+          </div>
+        </div>
+        <div class="modal-btn-group">
+          <button class="modal-btn-sec-l" type="button">
+            <span class="modal-btn-sec-l__label">Change Goal</span>
+            <span class="modal-btn-sec-l__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+          </button>
+          <button class="modal-btn-pri-l" type="button">
+            <span class="modal-btn-pri-l__label">Score</span>
+            <span class="modal-btn-pri-l__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coins Modal -->
+    <div id="modal-coins" class="modal-panel modal-panel--coins">
+      <div class="modal-card">
+        <div class="modal-card__corner"><img src="../src/image-repo/page.home/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
+        <div class="modal-header">
+          <div class="modal-header__pill modal-header__pill--coins">
+            <span class="modal-header__title">Coins &amp; Ruby</span>
+          </div>
+        </div>
+        <div class="modal-coins-content">
+          <div class="modal-coins-row">
+            <div class="modal-coins-img">
+              <svg width="76" height="76" aria-hidden="true"><use href="#ic-status-coin"/></svg>
+            </div>
+            <div class="modal-coins-texts">
+              <p class="modal-coins-label">You have</p>
+              <div class="modal-coins-value"><span>500</span><span>Coins</span></div>
+              <div class="modal-coins-cta">
+                <button class="modal-btn-sec" type="button">
+                  <span class="modal-btn-sec__label">Claim more coins</span>
+                  <span class="modal-btn-sec__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-divider"></div>
+          <div class="modal-coins-row">
+            <div class="modal-coins-img">
+              <svg width="76" height="76" aria-hidden="true"><use href="#ic-status-ruby"/></svg>
+            </div>
+            <div class="modal-coins-texts">
+              <p class="modal-coins-label">Ruby This Month</p>
+              <div class="modal-coins-value"><span>9,000</span><span>Ruby</span></div>
+              <div class="modal-coins-cta">
+                <button class="modal-btn-sec" type="button">
+                  <span class="modal-btn-sec__label">Collect more Ruby</span>
+                  <span class="modal-btn-sec__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn"/></svg></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Streak Modal -->
+    <div id="modal-streak" class="modal-panel modal-panel--streak">
+      <div class="modal-card">
+        <div class="modal-card__corner"><img src="../src/image-repo/page.home/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
+        <div class="modal-streak-body">
+          <div class="modal-header">
+            <div class="modal-header__pill modal-header__pill--streak">
+              <span class="modal-header__title">Streak</span>
+            </div>
+          </div>
+          <div class="modal-image-block">
+            <div class="modal-image-wrap">
+              <svg width="69.417" height="98" aria-hidden="true"><use href="#ic-status-streak"/></svg>
+            </div>
+            <p class="modal-big-text">3 Day Streak</p>
+            <div class="modal-streak-pill">
+              <div class="modal-day modal-day--active">M</div>
+              <div class="modal-day modal-day--active">T</div>
+              <div class="modal-day modal-day--active">W</div>
+              <div class="modal-day modal-day--inactive">T</div>
+              <div class="modal-day modal-day--inactive">F</div>
+              <div class="modal-day modal-day--inactive">S</div>
+              <div class="modal-day modal-day--inactive">S</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-btn-group">
+          <button class="modal-btn-sec-l" type="button">
+            <span class="modal-btn-sec-l__label">View More</span>
+            <span class="modal-btn-sec-l__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+          </button>
+          <button class="modal-btn-pri-l" type="button">
+            <span class="modal-btn-pri-l__label">Answer Quiz</span>
+            <span class="modal-btn-pri-l__arrow"><svg aria-hidden="true"><use href="#ic-chevron-btn-m"/></svg></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lives Modal -->
+    <div id="modal-lives" class="modal-panel modal-panel--lives">
+      <div class="modal-card">
+        <div class="modal-card__corner"><img src="../src/image-repo/page.home/assets/main/StatusBadgeModal/modal-corner.svg" alt=""></div>
+        <button class="modal-close" aria-label="Close"><svg aria-hidden="true"><use href="#ic-x"/></svg></button>
+        <div class="modal-header">
+          <div class="modal-header__pill modal-header__pill--lives">
+            <span class="modal-header__title">Lives</span>
+          </div>
+        </div>
+        <div class="modal-image-block">
+          <div class="modal-image-wrap">
+            <img src="../src/image-repo/page.home/assets/main/StatusBadgeModal/lives-heart.png" alt="Heart" style="width:88px;height:98px;display:block;flex-shrink:0;object-fit:contain;">
+          </div>
+          <div class="modal-text-center">
+            <p class="modal-lives-label">You have</p>
+            <p class="modal-lives-sub">Unlimited Lives</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- /Status Badge Modals -->
+
+  <!-- Modal JS — placed AFTER modal DOM (Rule 62) -->
+  <script>
+    (function () {
+      var overlay   = document.getElementById('modal-overlay');
+      var panels    = document.querySelectorAll('.modal-panel');
+      var closeTimer = null;
+
+      function openModal(id) {
+        if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+        panels.forEach(function (p) { p.classList.remove('is-open', 'is-closing'); });
+        overlay.classList.remove('is-closing');
+        var target = document.getElementById(id);
+        if (target) target.classList.add('is-open');
+        overlay.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeAll() {
+        if (closeTimer) return;
+        var openPanel = document.querySelector('.modal-panel.is-open');
+        overlay.classList.add('is-closing');
+        if (openPanel) openPanel.classList.add('is-closing');
+        closeTimer = setTimeout(function () {
+          closeTimer = null;
+          panels.forEach(function (p) { p.classList.remove('is-open', 'is-closing'); });
+          overlay.classList.remove('is-open', 'is-closing');
+          document.body.style.overflow = '';
+        }, 220);
+      }
+
+      var pillMap = {
+        'pill-score':  'modal-score',
+        'pill-coins':  'modal-coins',
+        'pill-streak': 'modal-streak',
+        'pill-lives':  'modal-lives'
+      };
+      Object.keys(pillMap).forEach(function (pillId) {
+        var el = document.getElementById(pillId);
+        if (el) el.addEventListener('click', function () { openModal(pillMap[pillId]); });
+      });
+
+      document.querySelectorAll('.modal-close').forEach(function (btn) {
+        btn.addEventListener('click', function (e) { e.stopPropagation(); closeAll(); });
+      });
+
+      document.querySelectorAll('.modal-card').forEach(function (card) {
+        card.addEventListener('click', function (e) { e.stopPropagation(); });
+      });
+
+      overlay.addEventListener('click', closeAll);
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeAll();
+      });
+
+      document.querySelectorAll('.modal-btn-sec, .modal-btn-sec-l, .modal-btn-pri-l').forEach(function (btn) {
+        btn.addEventListener('mousedown',  function () { btn.classList.add('is-pressing'); });
+        btn.addEventListener('mouseup',    function () { btn.classList.remove('is-pressing'); });
+        btn.addEventListener('mouseleave', function () { btn.classList.remove('is-pressing'); });
+      });
+    })();
   </script>
 
 </body>

@@ -7268,3 +7268,62 @@ Nav injection copies `innerHTML` of `#Navigation-Shell` only — it does NOT cop
 **Mistake made:** `quiz.question.html` had none of `quiz.html`'s 90+ symbols → all navbar icons blank. Fixed by inserting 168 symbol lines. Removed 1 duplicate `ic-gift` (kept 20×20 nav version).
 
 **Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
+
+---
+
+### Rule N-C81 — Status badge DS spec: texts LEFT, icon RIGHT — never icon-left (Session 53, 2026-06-15)
+
+**Source:** DS Screen file `hkyIerTAdwtaN3edlp3iz8`, node `3:46836`, `get_design_context` confirmed 2026-06-15. Reference implementation: `zul.test.git/zul.home.screen.html` `.status-pill`.
+
+**Correct StatusBadge - 1.5 anatomy (DS confirmed):**
+
+| Property | Correct | Wrong (was in quiz.subject.html) |
+|---|---|---|
+| Icon position | RIGHT side (texts → icon) | LEFT side (icon → text) |
+| Label case | Normal case | `text-transform: uppercase` |
+| Label letter-spacing | none | `0.3px` |
+| Label line-height | `12px` (`--spacing-space-s`) | `14px` |
+| Label margin-bottom | `-4px` (overlaps value) | none |
+| Value line-height | `24px` | `20px` |
+| Border | `border: 1px solid` | `box-shadow: inset 0 0 0 1px` |
+| Coins text | white + `-webkit-text-stroke: 2px #cba500; paint-order: stroke fill` | `color: #404040` inline style |
+| Inner wrapper | `.status-badge__content { pl:8px pr:2px gap:4px }` | none |
+| Icon slot image | `width: 100%; height: 100%; object-fit: contain` | `width: 20px; height: 20px` |
+
+**Confirmed border colors:**
+- Score: bg `#00cc85`, border `#00a36a`
+- Coins: bg `#fece00`, border `#cba500`
+- Streak: bg `#7367f0`, border `#5c52c0`
+- Lives: bg `#ff5c98`, border `#cc4a7a`
+
+**Correct HTML structure:**
+```html
+<div id="pill-score" class="status-badge status-badge--score">
+  <div class="status-badge__content">
+    <div class="status-badge__texts">
+      <span class="status-badge__label">Score</span>
+      <span class="status-badge__value">68</span>
+    </div>
+    <div class="status-badge__icon-slot">
+      <img src="..." width="24" height="24">
+    </div>
+  </div>
+</div>
+```
+
+**Mistake made:** `quiz.subject.html` had icon on the left, label uppercase with letter-spacing, wrong line-heights, `box-shadow: inset` border, and dark inline text on coins instead of white + stroke.
+
+---
+
+### Rule N-C82 — Broken/corrupt PNG assets: replace via `mcp__figma__download_assets` + `curl` (Session 53, 2026-06-15)
+
+When a prototype image asset is a tiny corrupt file (e.g. 4853 bytes where 15–90K is expected), the correct fix is:
+
+1. Locate the DS node in Figma (`use_figma` `findAll` on the correct page — e.g. `🖼️ Graphic Element (WIP)`)
+2. Call `mcp__figma__download_assets` with `fileKey`, `nodeId`, `defaultFormat: "png"`, `defaultScale: 2`
+3. The tool returns an `export.url` — download directly: `curl -s "<url>" -o "<target-path>"`
+4. Verify: `ls -la <target-path>` — expect byte count matching `sizeBytes` from the tool response
+
+**Never** attempt base64 chunked encoding via `use_figma exportAsync` for large images — context window truncates base64 output. `mcp__figma__download_assets` handles the transfer cleanly via URL.
+
+**Confirmed (2026-06-15):** `add-math.png` was 4853 bytes (corrupt). DS node `1795:28564` (`Type=Add Maths`, `🖼️ Graphic Element (WIP)` page, file `TLVKe3bgJTdVvuPAzgDq2f`). Downloaded via `mcp__figma__download_assets` → 91550 bytes.
