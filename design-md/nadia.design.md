@@ -7103,3 +7103,168 @@ Before applying ANY property change from a template CSS diff to a Nadia page:
 **Mistake made:** Used `icon-ds-24` class (doesn't exist) → fell to 20px via descendant rule. Correct class is `icon-ds`. Missing leading icon container div. Lost result used `--text-default-body` (#666) instead of `--text-warning-default` (#ff4c51).
 
 **Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
+
+
+---
+
+### Rule N-C76 — Status pill porting: always pull full HTML/CSS/JS block from `zul.home.screen.html` (Session 51, 2026-06-15)
+
+**Reference implementation:** `zul.test.git/zul.home.screen.html` is the authoritative source for all status pill + modal markup. When adding status pills to any non-home page, port the following exactly — never rebuild from scratch or approximate.
+
+**What to port (complete checklist):**
+
+| Item | Source location in zul.home.screen.html | Notes |
+|---|---|---|
+| `id` attributes on pills | `id="pill-score"`, `id="pill-coins"`, `id="pill-streak"`, `id="pill-lives"` | Required for JS pill→modal mapping |
+| `:root` modal color tokens | lines ~132–140 | `--purple-500-base`, `--purple-600`, `--yellow-500-base`, `--yellow-600`, `--pink-500-base`, `--pink-600`, `--red-500-base`, `--border-secondary-default-subtle-hover` |
+| `ic-stat-ribbon` SVG symbol | line ~4075 | Green bookmark ribbon used in Score modal stats |
+| Modal CSS (~260 lines) | lines ~336–994 | `.modal-overlay`, `.modal-panel`, `.modal-card`, `.modal-header__pill--*`, `.modal-btn-*` etc. |
+| Modal HTML (4 panels) | lines ~6618–6836 | `#modal-score`, `#modal-coins`, `#modal-streak`, `#modal-lives` inside `#modal-overlay` |
+| Modal JS IIFE | lines ~6840–6909 | pill→modal mapping, close button, overlay click, ESC key, `.is-pressing`, Lives/Ruby flipper |
+
+**4 pill types — always all four, in this order:**
+1. `#pill-score` → `status-pill--score` (green) → opens `#modal-score`
+2. `#pill-coins` → `status-pill--coins` (yellow) → opens `#modal-coins`
+3. `#pill-streak` → `status-pill--streak` (purple) → opens `#modal-streak`
+4. `#pill-lives` → Lives/Ruby flipper → opens `#modal-lives`
+
+**Never substitute a second Score pill for Streak.** quiz.html previously had `status-pill--score` (value 3,120) as the third pill — that was wrong. The third pill is always Streak.
+
+**Modal asset paths** (from `Nadia.test.git/`): `../src/image-repo/page.home/assets/main/StatusBadgeModal/`
+- `modal-corner.svg` — decorative top-right corner on every modal card
+- `score-trophy.png` — trophy image in Score modal
+- `lives-heart.png` — heart image in Lives modal
+
+**Workflow:**
+```
+1. Read zul.home.screen.html for the exact pill IDs, modal HTML, CSS, JS
+2. grep the target page for missing :root tokens → add the modal color tokens block
+3. Add ic-stat-ribbon symbol inside <svg><defs> (after ic-x)
+4. Replace/fix pill HTML → add IDs, fix pill types
+5. Insert modal CSS after status-pill-face--back CSS block
+6. Insert modal HTML + JS before </body>
+```
+
+**Confirmed instance (2026-06-15, quiz.html):** All 6 items above were missing. Added in one pass. Commit `656e681`.
+
+---
+
+### Rule N-C77 — Lives/Ruby is a flipper, not two static pills — `id="pill-lives"`, flips every 4s, always opens Lives modal (Session 51, 2026-06-15)
+
+The Lives and Ruby badges are **not two separate pills**. They are one `id="pill-lives"` flipper element containing two `.status-pill-face` divs.
+
+**Correct HTML structure:**
+```html
+<div id="pill-lives" class="status-pill-flipper">
+  <div class="status-pill-flipper__inner">
+    <div class="status-pill status-pill--lives status-pill-face status-pill-face--front">
+      <!-- Lives content -->
+    </div>
+    <div class="status-pill status-pill--ruby status-pill-face status-pill-face--back">
+      <!-- Ruby content -->
+    </div>
+  </div>
+</div>
+```
+
+**JS (registered inside the modal IIFE, after all other handlers):**
+```js
+var flipper = document.querySelector('#pill-lives .status-pill-flipper__inner');
+if (flipper) setInterval(function () { flipper.classList.toggle('is-flipped'); }, 4000);
+```
+
+**Rules:**
+- Flip interval = **4000ms** (4s).
+- Click on `#pill-lives` (any face) always opens `#modal-lives`. Ruby has no separate modal.
+- Never implement as two static pills side by side — wastes a flex slot and breaks pill count.
+
+**Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
+
+---
+
+### Rule N-C78 — Quiz question nav footer: DS-confirmed specs — Size M buttons, 44px bottom offset (Session 52, 2026-06-15)
+
+**Source:** DS Screen file `hkyIerTAdwtaN3edlp3iz8`, node `3:47128`, `get_design_context` confirmed 2026-06-15.
+
+**Container:**
+- `position: fixed; bottom: 44px; left: 0; right: 0; z-index: 99`
+- Background: white (`Surface/general/default`)
+- Border: `border-top/left/right: 1px solid var(--border-primary-default)` (no bottom)
+- Border-radius: `24px 24px 0 0` (top corners only)
+- Height: `52px` = `py:8px + center-row:36px + py:8px`
+- Inner padding: `8px 16px` (`py:space-xs px:space-m`) — NOT `16px 28px`
+- `body { padding-bottom: calc(44px + 52px) }` — 44px offset + 52px bar height
+
+**Previous button — Secondary/M (node 3:47131):**
+- `height: 32px; max-height: 32px` — Size M, NOT Size S (24px)
+- `padding: 2px 8px; border-radius: 60px`
+- Background: white, `box-shadow: inset 0 0 0 1px var(--border-primary-default)` (strokeAlign INSIDE)
+- Label: 12px SemiBold, `var(--text-primary-default)` (#00cc85)
+- L Arrow: `20×20px; padding: 2px` → 16×16 clip
+
+**Next button — Primary/M (node 3:47203):**
+- Same dimensions as Previous
+- Background: `var(--surface-primary-default)` (#00cc85), border: `var(--border-primary-focus)` (#00a36a)
+- Label: white (`var(--text-primary-on-color)`)
+- R Arrow: `20×20px; padding: 2px; bg: #99ebce` → 16×16 clip
+
+**Center section (node 72:74973):**
+- `display: flex; align-items: center; gap: 16px; height: 36px; overflow: hidden`
+- Message: 14px Medium, `var(--text-primary-default)` (#00cc85)
+- Message text: `"Nice work !"` — with trailing space before `!`
+- PBot: `width: 50px; height: 50px; flex-shrink: 0; object-fit: contain` — clipped to 36px by parent `overflow: hidden`
+- PBot asset: `../src/image-repo/page.quiz/question/Pbot%20Illustration.svg`
+
+**Mistakes made:**
+- Buttons were Size S (24px) — DS is Size M (32px). Always confirm size from `get_design_context`.
+- Inner padding was `16px 28px` — DS is `8px 16px`.
+- Message color `#1f9d57` was invented — DS uses `Text/primary/default` (#00cc85).
+- Center gap was 8px — DS is 16px. PBot was 80×36px — DS is 50×50px.
+- L Arrow was 18×18/1px — DS shows 20×20/2px for M size (same as R Arrow).
+- `bottom: 0` hid nav footer behind system bar — correct is `bottom: 44px`.
+
+---
+
+### Rule N-C79 — Progress slider icon circles: `border: 1px solid`, NOT `box-shadow: inset` — absolute child centering depends on it (Session 52, 2026-06-15)
+
+**Source:** DS Screen file `hkyIerTAdwtaN3edlp3iz8`, node `3:47090`, `get_design_context` confirmed 2026-06-15.
+
+The progress slider icon container (56×56px circle) uses **strokeAlign CENTER** in the DS → CSS `border: 1px solid`. Never `box-shadow: inset`.
+
+**Why this matters — absolute child centering:**
+
+The inner white circle (`left: 3px; top: 3px; width: 48px; height: 48px`) is absolutely positioned inside the 56×56 outer circle. With global `box-sizing: border-box`:
+
+| Outer border mechanism | Content area | Right gap | Centered? |
+|---|---|---|---|
+| `border: 1px solid` | 54×54px | 54−3−48 = **3px** | ✅ Yes |
+| `box-shadow: inset` | 56×56px (no real border) | 56−3−48 = **5px** | ❌ No |
+
+With `box-shadow: inset`, inner is 3px top-left but 5px bottom-right — visually off-center.
+
+**Correct CSS:**
+```css
+.progress-slider__icon--active   { border: 1px solid var(--border-primary-focus); }
+.progress-slider__icon--inactive { border: 1px solid var(--border-disabled-disabled); }
+.progress-slider__icon-inner     { position: absolute; top: 3px; left: 3px; width: 48px; height: 48px; }
+```
+
+**Rule:** Before using `box-shadow: inset` on a circle with absolutely-positioned children, check `use_figma` `strokeAlign`. CENTER → `border: 1px solid`. INSIDE → `box-shadow: inset`. The choice directly affects how children are positioned.
+
+---
+
+### Rule N-C80 — Nav injection chain: consuming page must own ALL SVG symbols its injected nav uses (Session 52, 2026-06-15)
+
+Nav injection copies `innerHTML` of `#Navigation-Shell` only — it does NOT copy the `<svg><defs>` block from the source file. All `<use href="#ic-*">` references in the injected nav must resolve in the **consuming page's own** defs block.
+
+**quiz.question.html chain:** `quiz.question.html` → fetches `quiz.html` → `quiz.html`'s script fetches `zul.page.template.html`. The full nav populates correctly, but all icon symbols must be in `quiz.question.html`'s own `<svg><defs>`.
+
+**Checklist when wiring a new page to an injection source:**
+1. Identify the injection source (e.g. `quiz.html`)
+2. Extract every `<symbol id="ic-*">` from that source's `<svg><defs>` block
+3. Copy all missing symbols into the consuming page's own `<svg><defs>` (before `</defs>`)
+4. Check for duplicate symbol IDs — remove the duplicate, keep the correct version (nav version wins over standalone iconography version)
+
+**Mistake made:** `quiz.question.html` had none of `quiz.html`'s 90+ symbols → all navbar icons blank. Fixed by inserting 168 symbol lines. Removed 1 duplicate `ic-gift` (kept 20×20 nav version).
+
+**Always before starting any design, making any changes, or making any decisions — refer to DS & nadia.design.md first. No exceptions.**
